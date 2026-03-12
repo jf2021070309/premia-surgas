@@ -55,10 +55,11 @@ define('SECRET_KEY', 'Surgas_2024_$ecure_T0ken_Key!');
 
 // BASE_URL: automática según entorno
 if (getenv('MYSQL_URL')) {
-    // Producción Railway: tomar host y protocolo del servidor
-    $scheme   = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
-    $httpHost = $_SERVER['HTTP_HOST'] ?? 'localhost';
-    define('BASE_URL', $scheme . '://' . $httpHost . '/');
+    // Railway hace proxy HTTPS → el PHP interno ve HTTP.
+    // Los headers reales son X-Forwarded-Proto / X-Forwarded-Host.
+    $proto    = $_SERVER['HTTP_X_FORWARDED_PROTO'] ?? 'https';
+    $httpHost = $_SERVER['HTTP_X_FORWARDED_HOST']  ?? ($_SERVER['HTTP_HOST'] ?? 'localhost');
+    define('BASE_URL', $proto . '://' . $httpHost . '/');
 } else {
     define('BASE_URL', 'http://localhost/premia-surgas/');
 }
