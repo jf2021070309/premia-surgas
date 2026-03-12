@@ -103,35 +103,41 @@
     }
 
     async function shareWhatsApp() {
+        const btn = event.currentTarget;
+        const originalText = btn.innerText;
+        btn.innerText = "Preparando...";
+        
         const message = `¡Hola! 🔥 Aquí tienes tu tarjeta de cliente de *Gas Express Surgas*.\n\n👤 *Cliente:* ${clienteNombre}\n🆔 *Código:* ${clienteCodigo}\n\nPresenta este QR en tus compras para acumular puntos y canjear premios. ¡Gracias por tu preferencia! 🏠✨`;
-        
+
         try {
-            // 1. Intentar compartir imagen + texto (Solo funciona en Móviles/Browsers modernos con HTTPS)
-            if (navigator.share && navigator.canShare) {
-                const canvas = await captureCard();
-                const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
-                const file = new File([blob], 'tarjeta_surgas.png', { type: 'image/png' });
-
-                if (navigator.canShare({ files: [file] })) {
-                    await navigator.share({
-                        files: [file],
-                        title: 'Tarjeta Surgas',
-                        text: message
-                    });
-                    return; // Éxito en compartir imagen
+            // 1. Intentar copiar imagen al portapapeles (Para que el usuario solo tenga que PEGAR)
+            const canvas = await captureCard();
+            canvas.toBlob(async (blob) => {
+                try {
+                    const data = [new ClipboardItem({ [blob.type]: blob })];
+                    await navigator.clipboard.write(data);
+                    // Mostrar un pequeño aviso visual o notificación si fuera necesario
+                } catch (err) {
+                    console.warn("No se pudo copiar al portapapeles automáticamente.");
                 }
-            }
-        } catch (e) {
-            console.error("Error sharing image:", e);
-        }
+            });
 
-        // 2. Fallback: Si no se puede enviar la imagen (como en PC), enviar solo el texto directo al chat
-        const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-        const waUrl = isMobile 
-            ? `https://wa.me/51${clienteCelular}?text=${encodeURIComponent(message)}`
-            : `https://web.whatsapp.com/send?phone=51${clienteCelular}&text=${encodeURIComponent(message)}`;
-        
-        window.open(waUrl, '_blank');
+            // 2. Abrir el chat directamente
+            const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+            const waUrl = isMobile 
+                ? `https://wa.me/51${clienteCelular}?text=${encodeURIComponent(message)}`
+                : `https://web.whatsapp.com/send?phone=51${clienteCelular}&text=${encodeURIComponent(message)}`;
+            
+            window.open(waUrl, '_blank');
+            
+            alert("✅ ¡Imagen de tarjeta copiada!\n\nSe ha abierto el chat. Solo tienes que 'Pegar' (Ctrl+V) para enviar la tarjeta junto con el mensaje.");
+
+        } catch (e) {
+            console.error(e);
+            alert("Error al procesar la tarjeta.");
+        } finally {
+            btn.innerText = originalText;
+        }
     }
 </script>
 </body>
