@@ -4,7 +4,7 @@ require_once __DIR__ . '/../models/ClienteModel.php';
 class TiendaController {
 
     public function index(): void {
-        $this->requireAuth();
+        // Permitir acceso público para que los clientes vean los premios
         
         $premios = [
             'bajo' => [

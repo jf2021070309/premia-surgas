@@ -243,7 +243,11 @@
 <body>
     <div class="store-header">
         <div class="back-nav">
-            <a href="<?= BASE_URL ?>panel" class="btn-back">← Volver al Panel</a>
+            <?php if (isset($_SESSION['id_usuario'])): ?>
+                <a href="<?= BASE_URL ?>panel" class="btn-back">← Volver al Panel</a>
+            <?php else: ?>
+                <a href="javascript:history.back()" class="btn-back">← Volver</a>
+            <?php endif; ?>
         </div>
         <h1 class="store-title">Portal de Premios</h1>
         <p class="store-subtitle">Canjea tus puntos por recompensas increíbles</p>

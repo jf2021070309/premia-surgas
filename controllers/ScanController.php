@@ -10,6 +10,26 @@ class ScanController {
      * Valida QR y registra una venta / muestra perfil del cliente.
      */
     public function index(): void {
+        $codigo = $_GET['c'] ?? '';
+        $token  = $_GET['t'] ?? '';
+
+        if ($codigo && $token) {
+            $clienteModel = new ClienteModel();
+            $cliente = $clienteModel->findByCodigo($codigo);
+
+            if ($cliente && $cliente['token'] === $token) {
+                // Escenario 1: El cliente ve su propia información
+                $ventaModel = new VentaModel();
+                $ventas = $ventaModel->getByCliente($cliente['id']);
+                $this->render('scan/perfil_cliente', [
+                    'cliente' => $cliente,
+                    'ventas'  => $ventas
+                ]);
+                return;
+            }
+        }
+
+        // Escenario 2: El conductor escanea el QR del cliente
         $this->requireAuth();
         $this->render('scan/index');
     }
