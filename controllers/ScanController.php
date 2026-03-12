@@ -61,25 +61,23 @@ class ScanController {
 
         $clienteId = (int) ($data['cliente_id'] ?? 0);
         $puntos    = (int) ($data['puntos'] ?? 0);
-        $motivo    = trim($data['motivo'] ?? 'Carga de puntos');
 
         if (!$clienteId || !$puntos) {
             $this->json(['success' => false, 'message' => 'Datos incompletos.']);
         }
 
-        require_once __DIR__ . '/../models/MovimientoModel.php';
-        $movModel     = new MovimientoModel();
+        $ventaModel   = new VentaModel();
         $clienteModel = new ClienteModel();
 
-        // 1. Registrar movimiento
-        $ok = $movModel->create($clienteId, $_SESSION['id_usuario'], $puntos, $motivo);
+        // 1. Registrar "venta" con monto 0 (carga manual de puntos)
+        $idVenta = $ventaModel->create($clienteId, $_SESSION['id_usuario'], 0, $puntos);
 
-        if ($ok) {
+        if ($idVenta) {
             // 2. Actualizar puntos totales del cliente
             $clienteModel->sumarPuntos($clienteId, $puntos);
             $this->json(['success' => true, 'message' => 'Puntos registrados correctamente.']);
         } else {
-            $this->json(['success' => false, 'message' => 'Error al registrar movimiento.']);
+            $this->json(['success' => false, 'message' => 'Error al registrar puntos.']);
         }
     }
 

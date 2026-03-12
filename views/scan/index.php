@@ -7,126 +7,264 @@
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/main.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #4b1282;
-            --secondary: #2d0b4e;
-        }
-        body { font-family: 'Outfit', sans-serif; background: #f4f7f6; }
-        .register-header {
+        :root { --primary: #4b1282; --secondary: #2d0b4e; --success: #27ae60; --danger: #e74c3c; }
+        body { font-family: 'Outfit', sans-serif; background: #fdfdfd; margin: 0; padding: 0; color: #333; }
+        
+        /* Layout */
+        .header {
             background: linear-gradient(135deg, var(--secondary), var(--primary));
-            color: white; padding: 2rem 1rem; text-align: center;
-            border-radius: 0 0 2rem 2rem; margin-bottom: 2rem;
+            color: white; padding: 1.5rem; text-align: center; border-radius: 0 0 2rem 2rem;
+            position: relative; box-shadow: 0 4px 15px rgba(75, 18, 130, 0.2);
         }
-        .scanner-container {
-            max-width: 500px; margin: 0 auto; background: white;
-            padding: 1.5rem; border-radius: 1.5rem; box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; letter-spacing: 1px; }
+        .back-nav { position: absolute; left: 15px; top: 18px; }
+        .btn-back { color: white; text-decoration: none; font-size: 1.2rem; }
+
+        .container { padding: 1.5rem; max-width: 500px; margin: 0 auto; }
+        
+        /* Views */
+        .v-screen { display: none; animation: fadeIn 0.3s ease; }
+        .v-screen.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Components */
+        .card { background: white; padding: 1.5rem; border-radius: 1.5rem; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 1.5rem; border: 1px solid #f0f0f0; }
+        .section-title { font-size: 0.9rem; font-weight: 700; color: #888; text-transform: uppercase; margin-bottom: 1rem; display: block; }
+        
+        .client-info-box { background: #f8f0ff; padding: 1rem; border-radius: 1rem; border: 1px dashed var(--primary); margin-bottom: 1rem; }
+        .client-name { font-size: 1.2rem; font-weight: 700; color: var(--primary); display: block; }
+        .client-detail { font-size: 0.9rem; color: #666; }
+
+        .btn { 
+            width: 100%; padding: 1rem; border-radius: 12px; font-weight: 700; cursor: pointer; 
+            border: none; transition: all 0.2s; font-size: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;
         }
-        #reader { width: 100%; border-radius: 1rem; overflow: hidden; border: none !important; }
-        .btn-scan {
-            width: 100%; padding: 1rem; background: var(--primary); color: white;
-            border: none; border-radius: 12px; font-weight: 600; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-top: 1rem;
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-secondary { background: #f0f0f0; color: #555; }
+        .btn-success { background: var(--success); color: white; }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; color: #555; }
+        .form-control { 
+            width: 100%; padding: 0.8rem; border: 1.5px solid #eee; border-radius: 10px; 
+            font-family: inherit; font-size: 1rem; box-sizing: border-box;
         }
-        .client-data-card {
-            margin-top: 1.5rem; padding: 1.5rem; background: #fff; border-radius: 1rem;
-            border-left: 5px solid var(--primary); display: none;
+        .form-control:focus { outline: none; border-color: var(--primary); }
+
+        /* Operations List */
+        .ops-list { margin-top: 1rem; border-top: 1px solid #eee; padding-top: 1rem; }
+        .op-item { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 0.8rem; background: #fff; border-radius: 10px; margin-bottom: 0.5rem; border: 1px solid #f5f5f5;
         }
-        .points-selector {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1.5rem 0;
+        .op-info b { display: block; color: var(--primary); }
+        .op-info span { font-size: 0.8rem; color: #888; }
+        .op-pts { font-weight: 700; color: var(--success); }
+
+        .total-box { 
+            background: var(--secondary); color: white; padding: 1rem; border-radius: 12px; 
+            text-align: center; margin: 1.5rem 0;
         }
-        .point-btn {
-            padding: 1rem; border: 2px solid #eee; border-radius: 12px;
-            background: white; font-weight: 700; font-size: 1.2rem; cursor: pointer;
-            transition: all 0.2s; color: var(--primary);
-        }
-        .point-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
-        .form-control {
-            width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 1rem;
-            font-family: inherit;
-        }
-        .btn-save {
-            width: 100%; padding: 1rem; background: #27ae60; color: white;
-            border: none; border-radius: 12px; font-weight: 700; cursor: pointer;
-            font-size: 1.1rem; display: none;
-        }
-        .status-msg { margin-top: 1rem; text-align: center; font-weight: 600; }
-        .back-nav { position: absolute; top: 20px; left: 20px; }
-        .btn-back {
-            background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3);
-            color: white; padding: 0.5rem 1rem; border-radius: 2rem; text-decoration: none;
-        }
+        .total-box span { font-size: 0.9rem; opacity: 0.8; }
+        .total-box b { font-size: 1.8rem; display: block; }
+
+        /* Scanner */
+        #reader { width: 100%; border-radius: 1rem; overflow: hidden; }
+        .scan-msg { text-align: center; color: #666; margin-top: 1rem; }
     </style>
 </head>
 <body>
-    <div class="register-header">
+
+    <div class="header">
         <div class="back-nav">
-            <a href="<?= BASE_URL ?>panel" class="btn-back">← Volver</a>
+            <a href="<?= BASE_URL ?>panel" class="btn-back">✕</a>
         </div>
-        <h1>Registrar Puntos</h1>
-        <p>Escanea el QR del cliente para asignar puntos</p>
+        <h1 id="header-title">Registrar Puntos</h1>
     </div>
 
     <div class="container" id="app">
-        <div class="scanner-container">
-            <div id="reader"></div>
-            <button id="start-btn" class="btn-scan">
-                <span>📷</span> Abrir Cámara para Escanear
+        
+        <!-- PANTALLA 1: INICIO -->
+        <div id="screen-start" class="v-screen active">
+            <button class="btn btn-primary" onclick="initScanner()" style="margin-bottom: 1.5rem; height: 80px; font-size: 1.2rem;">
+                <span>📷</span> Escanear QR del cliente
             </button>
 
-            <div id="client-info" class="client-data-card">
-                <h3 style="margin-bottom: 0.5rem;">Datos del Cliente</h3>
-                <p><strong>Nombre:</strong> <span id="client-name">-</span></p>
-                <p><strong>Celular:</strong> <span id="client-phone">-</span></p>
-                <input type="hidden" id="client-id">
-
-                <div class="points-selector">
-                    <button class="point-btn" data-pts="5">+5</button>
-                    <button class="point-btn" data-pts="10">+10</button>
-                    <button class="point-btn" data-pts="15">+15</button>
+            <div class="card">
+                <span class="section-title">Cliente</span>
+                <div class="client-info-box" style="background: #f5f5f5; border-color: #ddd;">
+                    <span class="client-name" style="color: #888;">No seleccionado</span>
                 </div>
 
-                <label style="font-size: 0.85rem; color: #666; margin-bottom: 0.3rem; display: block;">Motivo (Opcional)</label>
-                <input type="text" id="motivo" class="form-control" placeholder="Ej: Compra de balón 10kg">
+                <hr style="border: none; border-top: 1px solid #eee; margin: 1.5rem 0;">
 
-                <button id="save-btn" class="btn-save">Guardar Puntos</button>
+                <div class="form-group">
+                    <label>Tipo operación:</label>
+                    <select id="op-type" class="form-control" disabled>
+                        <option value="5">Recarga gas Normal (+5 pts)</option>
+                        <option value="10">Recarga gas Premium (+10 pts)</option>
+                        <option value="2">Accesorio / Otros (+2 pts)</option>
+                    </select>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label>Cantidad:</label>
+                        <input type="number" id="op-qty" class="form-control" value="1" min="1" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label>Subtotal:</label>
+                        <div id="op-subtotal" style="padding: 0.8rem; font-weight: 700; color: var(--primary);">-</div>
+                    </div>
+                </div>
+
+                <button class="btn btn-secondary" disabled>Agregar</button>
             </div>
-            
-            <div id="status" class="status-msg"></div>
+
+            <div class="ops-list">
+                <span class="section-title">Operaciones</span>
+                <div style="text-align: center; color: #aaa; padding: 1rem;">( vacío )</div>
+            </div>
+
+            <div class="total-box">
+                <span>TOTAL PUNTOS</span>
+                <b id="total-pts">0</b>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <button class="btn btn-success" disabled>Guardar</button>
+                <a href="<?= BASE_URL ?>panel" class="btn btn-secondary">Cancelar</a>
+            </div>
         </div>
+
+        <!-- PANTALLA 2: ESCANEANDO -->
+        <div id="screen-scan" class="v-screen">
+            <div class="card">
+                <div id="reader"></div>
+                <div class="scan-msg">📷 Apunte al QR del cliente</div>
+            </div>
+            <button class="btn btn-danger" onclick="stopScanner()">Cancelar</button>
+        </div>
+
+        <!-- PANTALLA 3: CLIENTE ENCONTRADO -->
+        <div id="screen-main" class="v-screen">
+            <button class="btn btn-secondary" onclick="initScanner()" style="margin-bottom: 1.5rem;">
+                <span>📷</span> Escanear otro QR
+            </button>
+
+            <div class="card">
+                <span class="section-title">Cliente</span>
+                <div class="client-info-box">
+                    <span id="res-name" class="client-name">-</span>
+                    <span id="res-phone" class="client-detail">-</span>
+                    <input type="hidden" id="client-id">
+                </div>
+
+                <hr style="border: none; border-top: 1px solid #eee; margin: 1.5rem 0;">
+
+                <div class="form-group">
+                    <label>Tipo operación:</label>
+                    <select id="main-op-type" class="form-control" onchange="updateSubtotal()">
+                        <option value="5">Recarga gas Normal (+5 pts)</option>
+                        <option value="10">Recarga gas Premium (+10 pts)</option>
+                        <option value="2">Accesorio / Otros (+2 pts)</option>
+                    </select>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label>Cantidad:</label>
+                        <input type="number" id="main-op-qty" class="form-control" value="1" min="1" oninput="updateSubtotal()">
+                    </div>
+                    <div class="form-group">
+                        <label>Puntos unidad:</label>
+                        <div id="main-op-unit" style="padding: 0.8rem; font-weight: 700; color: #666;">5</div>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="addOperation()">+ Agregar Operación</button>
+            </div>
+
+            <div class="ops-list">
+                <span class="section-title">Operaciones</span>
+                <div id="ops-container">
+                    <!-- Dinámico -->
+                </div>
+            </div>
+
+            <div class="total-box">
+                <span>TOTAL PUNTOS</span>
+                <b id="main-total-pts">0</b>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <button id="save-all-btn" class="btn btn-success" onclick="saveAll()">Guardar Todo</button>
+                <button class="btn btn-secondary" onclick="location.reload()">Cancelar</button>
+            </div>
+        </div>
+
+        <!-- PANTALLA 4: NO ENCONTRADO -->
+        <div id="screen-error" class="v-screen">
+            <div class="card" style="text-align: center; border-top: 5px solid var(--danger);">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">😕</div>
+                <h2 style="margin: 0; color: var(--danger);">Cliente no encontrado</h2>
+                <p style="color: #666;">El QR escaneado no coincide con ningún cliente registrado en nuestro sistema.</p>
+                
+                <div style="margin-top: 2rem; display: flex; flex-direction: column; gap: 0.8rem;">
+                    <a href="<?= BASE_URL ?>clientes/nuevo" class="btn btn-primary">➕ Registrar nuevo cliente</a>
+                    <button class="btn btn-secondary" onclick="initScanner()">📷 Escanear otra vez</button>
+                    <button class="btn btn-danger" onclick="location.reload()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script src="https://unpkg.com/html5-qrcode"></script>
     <script>
         const baseUrl = '<?= BASE_URL ?>';
-        const startBtn = document.getElementById('start-btn');
-        const readerDiv = document.getElementById('reader');
-        const clientInfo = document.getElementById('client-info');
-        const saveBtn = document.getElementById('save-btn');
-        const statusDiv = document.getElementById('status');
-        
         let html5QrCode;
-        let selectedPoints = 0;
+        let operations = [];
+        let running = false;
 
-        // Iniciar Escáner
-        startBtn.addEventListener('click', () => {
-            startBtn.style.display = 'none';
-            html5QrCode = new Html5Qrcode("reader");
+        function showScreen(id) {
+            document.querySelectorAll('.v-screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
             
+            // Actualizar título si es necesario
+            const titles = {
+                'screen-start': 'Registrar Puntos',
+                'screen-scan': 'Escanear QR',
+                'screen-main': 'Registrar Puntos',
+                'screen-error': 'Error'
+            };
+            document.getElementById('header-title').innerText = titles[id];
+        }
+
+        async function initScanner() {
+            showScreen('screen-scan');
+            html5QrCode = new Html5Qrcode("reader");
             const config = { fps: 10, qrbox: { width: 250, height: 250 } };
             
-            html5QrCode.start(
-                { facingMode: "environment" }, 
-                config,
-                onScanSuccess
-            ).catch(err => {
-                statusDiv.innerText = "Error al abrir cámara: " + err;
-                startBtn.style.display = 'block';
-            });
-        });
+            try {
+                await html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess);
+            } catch (err) {
+                alert("Error cámara: " + err);
+                showScreen('screen-start');
+            }
+        }
+
+        function stopScanner() {
+            if (html5QrCode) {
+                html5QrCode.stop().then(() => showScreen('screen-start'));
+            } else {
+                showScreen('screen-start');
+            }
+        }
 
         function onScanSuccess(decodedText) {
-            // El QR puede ser una URL o solo el código
-            // Intentamos extraer el código CLI-XXXXXX
             let codigo = decodedText;
             if (decodedText.includes('c=')) {
                 const urlParams = new URLSearchParams(decodedText.split('?')[1]);
@@ -136,13 +274,11 @@
             }
 
             html5QrCode.stop().then(() => {
-                readerDiv.style.display = 'none';
                 buscarCliente(codigo);
             });
         }
 
         async function buscarCliente(codigo) {
-            statusDiv.innerHTML = "🔍 Buscando cliente...";
             try {
                 const res = await fetch(baseUrl + 'scan/buscar', {
                     method: 'POST',
@@ -152,67 +288,116 @@
                 const data = await res.json();
 
                 if (data.success) {
-                    document.getElementById('client-name').innerText = data.cliente.nombre;
-                    document.getElementById('client-phone').innerText = data.cliente.celular;
+                    document.getElementById('res-name').innerText = data.cliente.nombre;
+                    document.getElementById('res-phone').innerText ='Cel: ' + data.cliente.celular;
                     document.getElementById('client-id').value = data.cliente.id;
-                    clientInfo.style.display = 'block';
-                    statusDiv.innerHTML = "✅ Cliente identificado";
+                    showScreen('screen-main');
+                    updateSubtotal();
                 } else {
-                    statusDiv.innerHTML = "❌ " + data.message;
-                    startBtn.style.display = 'block';
-                    readerDiv.style.display = 'block';
+                    showScreen('screen-error');
                 }
             } catch (e) {
-                statusDiv.innerHTML = "❌ Error de conexión";
+                alert("Error de conexión");
+                showScreen('screen-start');
             }
         }
 
-        // Selección de puntos
-        document.querySelectorAll('.point-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.point-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                selectedPoints = parseInt(btn.dataset.pts);
-                saveBtn.style.display = 'block';
+        function updateSubtotal() {
+            const unit = parseInt(document.getElementById('main-op-type').value);
+            const qty = parseInt(document.getElementById('main-op-qty').value) || 1;
+            document.getElementById('main-op-unit').innerText = unit + ' pts';
+        }
+
+        function addOperation() {
+            const select = document.getElementById('main-op-type');
+            const typeName = select.options[select.selectedIndex].text.split(' (')[0];
+            const unit = parseInt(select.value);
+            const qty = parseInt(document.getElementById('main-op-qty').value) || 1;
+            const subtotal = unit * qty;
+
+            operations.push({ name: typeName, unit, qty, subtotal });
+            renderOperations();
+            
+            // Reset qty
+            document.getElementById('main-op-qty').value = 1;
+        }
+
+        function removeOperation(index) {
+            operations.splice(index, 1);
+            renderOperations();
+        }
+
+        function renderOperations() {
+            const container = document.getElementById('ops-container');
+            if (operations.length === 0) {
+                container.innerHTML = '<div style="text-align: center; color: #aaa; padding: 1rem;">( vacío )</div>';
+                document.getElementById('main-total-pts').innerText = '0';
+                document.getElementById('save-all-btn').disabled = true;
+                return;
+            }
+
+            let html = '';
+            let total = 0;
+            operations.forEach((op, i) => {
+                total += op.subtotal;
+                html += `
+                    <div class="op-item">
+                        <div class="op-info">
+                            <b>${op.name} x${op.qty}</b>
+                            <span>${op.unit} pts c/u</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div class="op-pts">+${op.subtotal}</div>
+                            <button onclick="removeOperation(${i})" style="background:none; border:none; color:#ff4444; font-size:1.2rem;">✕</button>
+                        </div>
+                    </div>
+                `;
             });
-        });
 
-        // Guardar Puntos
-        saveBtn.addEventListener('click', async () => {
-            const clienteId = document.getElementById('client-id').value;
-            const motivo = document.getElementById('motivo').value;
+            container.innerHTML = html;
+            document.getElementById('main-total-pts').innerText = total;
+            document.getElementById('save-all-btn').disabled = false;
+        }
 
-            if (!selectedPoints) return alert("Selecciona los puntos");
+        async function saveAll() {
+            if (running) return;
+            const total = parseInt(document.getElementById('main-total-pts').innerText);
+            const clientId = document.getElementById('client-id').value;
 
-            saveBtn.disabled = true;
-            saveBtn.innerText = "Guardando...";
+            if (total <= 0) return alert("Agrega al menos una operación");
+
+            running = true;
+            const btn = document.getElementById('save-all-btn');
+            btn.innerText = "Guardando...";
+            btn.disabled = true;
 
             try {
                 const res = await fetch(baseUrl + 'scan/registrar', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
-                        cliente_id: clienteId, 
-                        puntos: selectedPoints,
-                        motivo: motivo 
+                        cliente_id: clientId, 
+                        puntos: total
                     })
                 });
                 const data = await res.json();
 
                 if (data.success) {
-                    statusDiv.innerHTML = "🎉 ¡Puntos registrados exitosamente!";
-                    clientInfo.style.display = 'none';
-                    setTimeout(() => window.location.href = baseUrl + 'panel', 2000);
+                    alert("✅ Puntos registrados exitosamente");
+                    window.location.href = baseUrl + 'panel';
                 } else {
-                    alert(data.message);
-                    saveBtn.disabled = false;
-                    saveBtn.innerText = "Guardar Puntos";
+                    alert("❌ " + data.message);
+                    running = false;
+                    btn.innerText = "Guardar Todo";
+                    btn.disabled = false;
                 }
             } catch (e) {
-                alert("Error al guardar");
-                saveBtn.disabled = false;
+                alert("Error al conectar con servidor");
+                running = false;
+                btn.innerText = "Guardar Todo";
+                btn.disabled = false;
             }
-        });
+        }
     </script>
 </body>
 </html>
