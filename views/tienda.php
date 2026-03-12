@@ -266,14 +266,22 @@
                     <?php foreach ($nivel['items'] as $item): ?>
                         <div class="prize-card">
                             <div class="prize-image-container">
-                                <img src="<?= BASE_URL ?>assets/premios/<?= $item['img'] ?>" alt="<?= $item['nombre'] ?>" class="prize-image">
+                                <img src="<?= BASE_URL ?>assets/premios/<?= $item['imagen'] ?>" alt="<?= $item['nombre'] ?>" class="prize-image">
                             </div>
                             <div class="prize-info">
                                 <h3 class="prize-name"><?= $item['nombre'] ?></h3>
+                                <p style="font-size: 0.8rem; color: #7f8c8d; margin: 0.3rem 0; line-height: 1.3; height: 2.6em; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
+                                    <?= htmlspecialchars($item['descripcion']) ?>
+                                </p>
                                 <div class="prize-points">
                                     <?= number_format($item['puntos']) ?> <span>puntos</span>
                                 </div>
-                                <button class="btn-redeem">Canjear Premio</button>
+                                <div style="font-size: 0.8rem; color: <?= $item['stock'] > 0 ? '#27ae60' : '#e74c3c' ?>; font-weight: 600; margin-top: 0.3rem;">
+                                    Stock: <?= $item['stock'] ?> unidades
+                                </div>
+                                <button class="btn-redeem" <?= $item['stock'] <= 0 ? 'disabled style="background:#ccc"' : '' ?>>
+                                    <?= $item['stock'] > 0 ? 'Canjear Premio' : 'Agotado' ?>
+                                </button>
                             </div>
                         </div>
                     <?php endforeach; ?>
