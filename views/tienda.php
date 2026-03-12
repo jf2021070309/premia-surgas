@@ -32,7 +32,7 @@
         .store-header {
             padding: 2rem 1rem;
             text-align: center;
-            background: linear-gradient(135deg, #2d0b4e, #4b1282);
+            background: linear-gradient(135deg, #4a0c0c, #821515);
             color: white;
             border-radius: 0 0 2rem 2rem;
             margin-bottom: 2rem;

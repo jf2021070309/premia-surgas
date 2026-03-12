@@ -7,13 +7,13 @@
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/main.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #4b1282; --secondary: #2d0b4e; --accent: #f39c12; }
+        :root { --primary: #821515; --secondary: #4a0c0c; --accent: #f39c12; }
         body { font-family: 'Outfit', sans-serif; background: #f4f7f6; margin: 0; color: #333; }
         
         .header {
             background: linear-gradient(135deg, var(--secondary), var(--primary));
             color: white; padding: 2.5rem 1.5rem; text-align: center;
-            border-radius: 0 0 2.5rem 2.5rem; box-shadow: 0 10px 30px rgba(75, 18, 130, 0.2);
+            border-radius: 0 0 2.5rem 2.5rem; box-shadow: 0 10px 30px rgba(130, 21, 21, 0.2);
         }
         .profile-avatar {
             width: 80px; height: 80px; background: white; color: var(--primary);

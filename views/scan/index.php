@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/main.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #4b1282; --secondary: #2d0b4e; --success: #27ae60; --danger: #e74c3c; }
+        :root { --primary: #821515; --secondary: #4a0c0c; --success: #27ae60; --danger: #e74c3c; }
         body { font-family: 'Outfit', sans-serif; background: #fdfdfd; margin: 0; padding: 0; color: #333; }
         
         /* Layout */
