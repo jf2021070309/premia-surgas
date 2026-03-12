@@ -66,20 +66,6 @@ if (getenv('MYSQL_URL')) {
 define('QR_PATH', __DIR__ . '/../qr/');
 define('QR_URL',  BASE_URL . 'qr/');
 
-// ============================================================
-// CONEXIÓN MYSQL
-// ============================================================
-
-$conn = new mysqli($host, $user, $pass, $db, (int)$port);
-
-if ($conn->connect_error) {
-    die("Error de conexión MySQL: " . $conn->connect_error);
-}
-
-$conn->set_charset(DB_CHARSET);
-
-// sincronizar zona horaria MySQL
-$conn->query("SET time_zone = '-05:00'");
 
 
 // ============================================================
