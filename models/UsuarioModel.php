@@ -10,7 +10,7 @@ class UsuarioModel {
 
     public function findByCredentials(string $usuario, string $password): ?array {
         $stmt = $this->db->prepare(
-            "SELECT id, nombre, password, rol, estado
+            "SELECT id, nombre, usuario, password, rol, estado
              FROM usuarios
              WHERE usuario = ? LIMIT 1"
         );

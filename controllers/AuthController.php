@@ -27,6 +27,7 @@ class AuthController {
         if ($user) {
             $_SESSION['id_usuario']       = $user['id'];
             $_SESSION['nombre_usuario']   = $user['nombre'];
+            $_SESSION['usuario']          = $user['usuario'];
             $_SESSION['rol']              = $user['rol'];
             $this->json(['success' => true]);
         } else {

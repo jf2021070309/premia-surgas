@@ -22,8 +22,8 @@
             <div class="user-profile-compact">
                 <div class="user-avatar-circle"><?= substr($_SESSION['nombre_usuario'], 0, 1) ?></div>
                 <div class="user-details">
-                    <span class="role">Conductor</span>
-                    <span class="name"><?= htmlspecialchars($_SESSION['nombre_usuario']) ?></span>
+                    <span class="role"><?= htmlspecialchars(strtoupper($_SESSION['rol'])) ?></span>
+                    <span class="name" style="font-weight: 800;"><?= htmlspecialchars($_SESSION['usuario'] ?? $_SESSION['nombre_usuario']) ?></span>
                 </div>
                 <a href="<?= BASE_URL ?>logout">
                     <button class="btn-logout-minimal">Salir</button>
@@ -50,7 +50,7 @@
             <a href="<?= BASE_URL ?>clientes/nuevo" class="menu-card">
                 <div class="menu-card-icon">➕</div>
                 <div class="menu-card-label">Nuevo Cliente</div>
-                <p style="font-size: 0.72rem; color: #888; margin-top: 0.3rem;">Suma nuevos conductores al equipo.</p>
+                <p style="font-size: 0.72rem; color: #888; margin-top: 0.3rem;">Suma nuevos clientes al equipo.</p>
             </a>
             <a href="<?= BASE_URL ?>clientes/lista" class="menu-card">
                 <div class="menu-card-icon">👥</div>
