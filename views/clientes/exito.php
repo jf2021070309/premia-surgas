@@ -128,8 +128,12 @@
                 }
             }
 
-            // Fallback: WhatsApp Web/App (solo texto)
-            const waUrl = `https://wa.me/${clienteCelular}?text=${encodeURIComponent(message)}`;
+            // Fallback: Determinar si es móvil o PC para WhatsApp Web
+            const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+            const waUrl = isMobile 
+                ? `https://wa.me/${clienteCelular}?text=${encodeURIComponent(message)}`
+                : `https://web.whatsapp.com/send?phone=${clienteCelular}&text=${encodeURIComponent(message)}`;
+            
             window.open(waUrl, '_blank');
 
         } catch (e) {
