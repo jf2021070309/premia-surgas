@@ -102,9 +102,35 @@
         }
     }
 
-    function shareWhatsApp() {
+    async function shareWhatsApp() {
         const message = `¡Hola! 🔥 Aquí tienes tu tarjeta de cliente de *Gas Express Surgas*.\n\n👤 *Cliente:* ${clienteNombre}\n🆔 *Código:* ${clienteCodigo}\n\nPresenta este QR en tus compras para acumular puntos y canjear premios. ¡Gracias por tu preferencia! 🏠✨`;
-        const waUrl = `https://wa.me/51${clienteCelular}?text=${encodeURIComponent(message)}`;
+        
+        try {
+            // 1. Intentar compartir imagen + texto (Solo funciona en Móviles/Browsers modernos con HTTPS)
+            if (navigator.share && navigator.canShare) {
+                const canvas = await captureCard();
+                const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+                const file = new File([blob], 'tarjeta_surgas.png', { type: 'image/png' });
+
+                if (navigator.canShare({ files: [file] })) {
+                    await navigator.share({
+                        files: [file],
+                        title: 'Tarjeta Surgas',
+                        text: message
+                    });
+                    return; // Éxito en compartir imagen
+                }
+            }
+        } catch (e) {
+            console.error("Error sharing image:", e);
+        }
+
+        // 2. Fallback: Si no se puede enviar la imagen (como en PC), enviar solo el texto directo al chat
+        const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+        const waUrl = isMobile 
+            ? `https://wa.me/51${clienteCelular}?text=${encodeURIComponent(message)}`
+            : `https://web.whatsapp.com/send?phone=51${clienteCelular}&text=${encodeURIComponent(message)}`;
+        
         window.open(waUrl, '_blank');
     }
 </script>
