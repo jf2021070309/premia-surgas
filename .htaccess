@@ -1,0 +1,11 @@
+Options -Indexes
+
+RewriteEngine On
+
+# Servir archivos y directorios reales directamente
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Todo lo demás pasa por el FrontController
+RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]

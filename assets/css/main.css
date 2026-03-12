@@ -1,0 +1,305 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ─── Reset & Base ─────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+    --primary:    #e67e22;
+    --primary-dk: #d35400;
+    --dark:       #2c3e50;
+    --dark2:      #34495e;
+    --bg:         #f0f2f5;
+    --card:       #ffffff;
+    --text:       #333;
+    --muted:      #6c757d;
+    --success:    #27ae60;
+    --error:      #e74c3c;
+    --radius:     12px;
+    --shadow:     0 4px 20px rgba(0,0,0,.08);
+    --transition: .2s ease;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* ─── Topbar ────────────────────────────────────────── */
+.topbar {
+    background: var(--dark);
+    color: #fff;
+    padding: .9rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(0,0,0,.2);
+}
+.topbar-logo { font-weight: 700; font-size: 1.1rem; letter-spacing: .5px; }
+.topbar-logo span { color: var(--primary); }
+.topbar-user { font-size: .85rem; color: #ccc; }
+.topbar-actions { display: flex; gap: .6rem; align-items: center; }
+.btn-logout {
+    background: rgba(255,255,255,.12);
+    border: none;
+    color: #fff;
+    padding: .4rem .9rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: .85rem;
+    transition: background var(--transition);
+}
+.btn-logout:hover { background: var(--error); }
+
+/* ─── Layout ────────────────────────────────────────── */
+.container   { max-width: 800px; margin: 0 auto; padding: 1.5rem; }
+.card        { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 2rem; }
+.card-title  { font-size: 1.2rem; font-weight: 600; color: var(--dark); margin-bottom: 1.5rem; }
+
+/* ─── Forms ─────────────────────────────────────────── */
+.form-group        { margin-bottom: 1.2rem; }
+.form-group label  { display: block; font-weight: 500; margin-bottom: .4rem; font-size: .9rem; }
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: .75rem 1rem;
+    border: 1.5px solid #dde0e6;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 1rem;
+    transition: border-color var(--transition);
+    background: #fafbfc;
+}
+.form-group input:focus,
+.form-group select:focus { outline: none; border-color: var(--primary); background: #fff; }
+
+/* ─── Buttons ───────────────────────────────────────── */
+.btn {
+    display: inline-block;
+    padding: .8rem 1.6rem;
+    border-radius: 8px;
+    border: none;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background var(--transition), transform var(--transition);
+    text-align: center;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+.btn-primary   { background: var(--primary); color: #fff; }
+.btn-primary:hover { background: var(--primary-dk); }
+.btn-dark      { background: var(--dark); color: #fff; }
+.btn-dark:hover { background: var(--dark2); }
+.btn-outline   { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
+.btn-full      { width: 100%; }
+
+/* ─── Alerts ────────────────────────────────────────── */
+.alert { padding: .9rem 1.2rem; border-radius: 8px; margin-bottom: 1rem; font-size: .9rem; }
+.alert-error   { background: #fdeaea; color: var(--error); }
+.alert-success { background: #eafaf1; color: var(--success); border-left: 4px solid var(--success); }
+.alert-info    { background: #eaf4ff; color: #2980b9; }
+
+/* ─── Menu Grid ─────────────────────────────────────── */
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1.2rem;
+    margin-top: 1.5rem;
+}
+.menu-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 2rem 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: transform var(--transition), box-shadow var(--transition);
+    border: 2px solid transparent;
+}
+.menu-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,.12); border-color: var(--primary); }
+.menu-card-icon { font-size: 2.2rem; margin-bottom: .8rem; }
+.menu-card-label { font-weight: 600; color: var(--dark); font-size: .95rem; }
+
+/* ─── QR Card ───────────────────────────────────────── */
+.qr-card { text-align: center; }
+.qr-code-box {
+    border: 2px dashed var(--primary);
+    border-radius: var(--radius);
+    display: inline-block;
+    padding: 1rem;
+    margin: 1.5rem 0;
+}
+.qr-code-box img { display: block; width: 220px; height: 220px; }
+.badge-code {
+    display: inline-block;
+    background: var(--dark);
+    color: #fff;
+    padding: .4rem 1.2rem;
+    border-radius: 20px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    font-size: 1rem;
+    margin: .6rem 0;
+}
+.action-row { display: flex; gap: .8rem; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem; }
+
+/* ─── Cliente Perfil ─────────────────────────────────── */
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    margin-bottom: 1.5rem;
+}
+.profile-avatar {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; font-weight: 700;
+}
+.profile-info h2 { font-size: 1.2rem; color: var(--dark); }
+.profile-info p  { color: var(--muted); font-size: .9rem; }
+.stats-row { display: flex; gap: 1rem; margin: 1.2rem 0; flex-wrap: wrap; }
+.stat-box { flex: 1; min-width: 100px; background: var(--bg); border-radius: 8px; padding: .9rem; text-align: center; }
+.stat-box strong { display: block; font-size: 1.5rem; color: var(--primary); }
+.stat-box span   { font-size: .8rem; color: var(--muted); }
+
+/* ─── Table ─────────────────────────────────────────── */
+.table-wrap { overflow-x: auto; }
+table  { width: 100%; border-collapse: collapse; font-size: .9rem; }
+th, td { padding: .75rem 1rem; text-align: left; border-bottom: 1px solid #eee; }
+th     { background: var(--bg); font-weight: 600; color: var(--dark); }
+tr:hover td { background: #fafbfc; }
+
+/* ─── Print ─────────────────────────────────────────── */
+@media print {
+    body  { background: #fff; }
+    .topbar, .no-print { display: none !important; }
+    .container { max-width: 100%; padding: 0; }
+}
+
+/* ════════════════════════════════════════════════════
+   RESPONSIVE — Mobile First
+   ════════════════════════════════════════════════════ */
+
+/* ── Base móvil (< 600px) ── */
+@media (max-width: 600px) {
+
+    /* Topbar compacto */
+    .topbar {
+        padding: .7rem 1rem;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+    .topbar-logo { font-size: .95rem; }
+    .topbar-user { display: none; }           /* oculta el nombre en pantalla muy chica */
+    .btn-logout  { padding: .4rem .7rem; font-size: .8rem; }
+
+    /* Contenedor sin márgenes exagerados */
+    .container {
+        padding: .85rem;
+        max-width: 100% !important;
+    }
+
+    /* Tarjeta con menos padding */
+    .card { padding: 1.25rem 1rem; border-radius: 10px; }
+    .card-title { font-size: 1rem; margin-bottom: 1rem; }
+
+    /* Formularios — inputs más grandes para dedo */
+    .form-group { margin-bottom: 1rem; }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: .85rem 1rem;
+        font-size: 1rem;           /* evita el zoom automático de iOS */
+        border-radius: 10px;
+        min-height: 48px;
+    }
+
+    /* Botones — altura mínima táctil (44 px recomendado por Apple/Google) */
+    .btn {
+        padding: .85rem 1.2rem;
+        font-size: .95rem;
+        min-height: 48px;
+        border-radius: 10px;
+    }
+
+    /* Menú del panel: 2 columnas en teléfono */
+    .menu-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: .85rem;
+        margin-top: 1rem;
+    }
+    .menu-card { padding: 1.4rem 1rem; }
+    .menu-card-icon { font-size: 1.8rem; margin-bottom: .5rem; }
+    .menu-card-label { font-size: .85rem; }
+
+    /* Fila de acciones: columna en móvil */
+    .action-row {
+        flex-direction: column;
+        gap: .7rem;
+    }
+    .action-row .btn,
+    .action-row a.btn { width: 100%; justify-content: center; }
+
+    /* QR más pequeño en pantalla chica */
+    .qr-code-box { padding: .75rem; margin: 1rem 0; }
+    .qr-code-box img { width: 180px; height: 180px; }
+    #qrcode canvas, #qrcode img { width: 180px !important; height: 180px !important; }
+
+    /* Badge código */
+    .badge-code { font-size: .9rem; padding: .35rem 1rem; }
+
+    /* Perfil de cliente */
+    .profile-header { gap: .8rem; }
+    .profile-avatar  { width: 48px; height: 48px; font-size: 1.2rem; flex-shrink: 0; }
+    .profile-info h2 { font-size: 1rem; }
+    .profile-info p  { font-size: .8rem; }
+
+    /* Stats row: 3 cajas pequeñas */
+    .stats-row { gap: .6rem; }
+    .stat-box { padding: .7rem .5rem; }
+    .stat-box strong { font-size: 1.2rem; }
+    .stat-box span   { font-size: .72rem; }
+
+    /* Tabla: scroll horizontal + texto más chico */
+    .table-wrap { -webkit-overflow-scrolling: touch; }
+    th, td { padding: .6rem .7rem; font-size: .82rem; white-space: nowrap; }
+
+    /* Cabecera Login centrado sin overflow */
+    .login-wrap { padding: 1rem; }
+}
+
+/* ── Teléfonos medianos (360 – 480 px) ── */
+@media (min-width: 360px) and (max-width: 480px) {
+    .menu-grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* ── Tablet / Phablet (600 – 768 px) ── */
+@media (min-width: 600px) and (max-width: 768px) {
+    .container { padding: 1.25rem; }
+    .menu-grid { grid-template-columns: repeat(2, 1fr); }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea { min-height: 46px; }
+
+    .action-row { flex-wrap: wrap; }
+}
+
+/* ── Safe-area iOS (notch / barra inferior) ── */
+@supports (padding: env(safe-area-inset-bottom)) {
+    body { padding-bottom: env(safe-area-inset-bottom); }
+    .topbar {
+        padding-left:  max(1rem, env(safe-area-inset-left));
+        padding-right: max(1rem, env(safe-area-inset-right));
+    }
+}
