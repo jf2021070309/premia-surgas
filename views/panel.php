@@ -38,10 +38,14 @@
                 <div class="menu-card-icon">📋</div>
                 <div class="menu-card-label">Lista de Clientes</div>
             </a>
-            <div class="menu-card" @click="goScan">
+            <a href="<?= BASE_URL ?>scan" class="menu-card">
                 <div class="menu-card-icon">📷</div>
-                <div class="menu-card-label">Escanear QR</div>
-            </div>
+                <div class="menu-card-label">Registrar Puntos</div>
+            </a>
+            <a href="<?= BASE_URL ?>tienda" class="menu-card">
+                <div class="menu-card-icon">🎁</div>
+                <div class="menu-card-label">Tienda de Premios</div>
+            </a>
             <div class="menu-card" style="position:relative;">
                 <div class="menu-card-icon">📊</div>
                 <div class="menu-card-label">Estadísticas</div>

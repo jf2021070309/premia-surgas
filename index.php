@@ -35,8 +35,13 @@ $routes = [
     ['GET',  'qr/generate',  'QrController',     'generate'],
 
     // —— Scan (escaneo de QR) ——
-    ['GET',  'scan',         'ScanController',   'index'],
-    ['POST', 'scan/venta',   'ScanController',   'venta'],
+    ['GET',  'scan',           'ScanController',   'index'],
+    ['POST', 'scan/buscar',    'ScanController',   'buscar'],
+    ['POST', 'scan/registrar', 'ScanController',   'registrar'],
+    ['POST', 'scan/venta',     'ScanController',   'venta'],
+
+    // —— Tienda ——
+    ['GET',  'tienda',       'TiendaController', 'index'],
 ];
 
 $matched = false;

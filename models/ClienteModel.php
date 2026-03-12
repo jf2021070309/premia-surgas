@@ -15,6 +15,12 @@ class ClienteModel {
         return $stmt->fetch() ?: null;
     }
 
+    public function findByCodigo(string $codigo): ?array {
+        $stmt = $this->db->prepare("SELECT * FROM clientes WHERE codigo = ? LIMIT 1");
+        $stmt->execute([$codigo]);
+        return $stmt->fetch() ?: null;
+    }
+
     public function findById(int $id): ?array {
         $stmt = $this->db->prepare("SELECT * FROM clientes WHERE id = ? LIMIT 1");
         $stmt->execute([$id]);
