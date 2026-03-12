@@ -42,21 +42,104 @@
     </div>
 
     <div class="action-row no-print" style="margin-top:1.2rem">
-        <a href="<?= BASE_URL ?>clientes/imprimir?id=<?= $cliente['id'] ?>" target="_blank" class="btn btn-dark">🖨 Imprimir Tarjeta</a>
-        <a href="<?= BASE_URL ?>clientes/nuevo" class="btn btn-outline">+ Nuevo Cliente</a>
-        <a href="<?= BASE_URL ?>panel" class="btn btn-primary">Continuar</a>
+        <button onclick="downloadCard()" class="btn btn-dark" style="background:#444">💾 Descargar Imagen</button>
+        <button onclick="shareWhatsApp()" class="btn" style="background:#25D366; color:white">🟢 Compartir WhatsApp</button>
+        
+        <div style="width:100%; height:1px; background:#eee; margin: 0.5rem 0;"></div>
+        
+        <a href="<?= BASE_URL ?>clientes/imprimir?id=<?= $cliente['id'] ?>" target="_blank" class="btn btn-outline" style="border-color:#444; color:#444">🖨 Imprimir</a>
+        <a href="<?= BASE_URL ?>clientes/nuevo" class="btn btn-outline">+ Nuevo</a>
+        <a href="<?= BASE_URL ?>panel" class="btn btn-primary">Ir al Panel</a>
     </div>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
 <script>
-    new QRCode(document.getElementById('qrcode'), {
+    const clienteNombre = "<?= addslashes($cliente['nombre']) ?>";
+    const clienteCelular = "<?= addslashes($cliente['celular']) ?>";
+    const clienteCodigo = "<?= addslashes($cliente['codigo']) ?>";
+
+    // Generar QR
+    const qr = new QRCode(document.getElementById('qrcode'), {
         text: '<?= addslashes($scanUrl) ?>',
-        width: 200,
-        height: 200,
+        width: 220,
+        height: 220,
         colorDark: '#1a1a1a',
         colorLight: '#ffffff',
-        correctLevel: QRCode.CorrectLevel.M
+        correctLevel: QRCode.CorrectLevel.H
     });
+
+    async function captureCard() {
+        const card = document.querySelector('.qr-card');
+        // Pequeño delay para asegurar que el QR esté renderizado si se acaba de cargar
+        return await html2canvas(card, {
+            scale: 2, // Mejor calidad
+            backgroundColor: '#f0f2f5',
+            logging: false,
+            useCORS: true
+        });
+    }
+
+    async function downloadCard() {
+        const btn = event.currentTarget;
+        const originalText = btn.innerText;
+        btn.innerText = "Generando...";
+        btn.disabled = true;
+
+        try {
+            const canvas = await captureCard();
+            const link = document.createElement('a');
+            link.download = `Tarjeta_Surgas_${clienteNombre.replace(/\s+/g, '_')}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        } catch (e) {
+            alert("Error al generar la imagen.");
+        } finally {
+            btn.innerText = originalText;
+            btn.disabled = false;
+        }
+    }
+
+    async function shareWhatsApp() {
+        const btn = event.currentTarget;
+        const originalText = btn.innerText;
+        btn.innerText = "Preparando...";
+        btn.disabled = true;
+
+        const message = `¡Hola! 🔥 Aquí tienes tu tarjeta de cliente de *Gas Express Surgas*.\n\n👤 *Cliente:* ${clienteNombre}\n🆔 *Código:* ${clienteCodigo}\n\nPresenta este QR en tus compras para acumular puntos y canjear premios. ¡Gracias por tu preferencia! 🏠✨`;
+
+        try {
+            const canvas = await captureCard();
+            
+            // Intentar compartir nativamente (Móvil)
+            if (navigator.share && navigator.canShare) {
+                const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+                const file = new File([blob], 'tarjeta_surgas.png', { type: 'image/png' });
+
+                if (navigator.canShare({ files: [file] })) {
+                    await navigator.share({
+                        files: [file],
+                        title: 'Tarjeta Surgas',
+                        text: message
+                    });
+                    return;
+                }
+            }
+
+            // Fallback: WhatsApp Web/App (solo texto)
+            const waUrl = `https://wa.me/${clienteCelular}?text=${encodeURIComponent(message)}`;
+            window.open(waUrl, '_blank');
+
+        } catch (e) {
+            console.error(e);
+            alert("Error al compartir.");
+        } finally {
+            btn.innerText = originalText;
+            btn.disabled = false;
+        }
+    }
 </script>
 </body>
 </html>
