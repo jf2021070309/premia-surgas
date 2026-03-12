@@ -41,18 +41,20 @@ $routes = [
 
 $matched = false;
 foreach ($routes as [$routeMethod, $pattern, $controllerName, $action]) {
-    if ($method === $routeMethod && $url === $pattern) {
-        $controllerFile = __DIR__ . "/controllers/{$controllerName}.php";
-        if (!file_exists($controllerFile)) {
-            http_response_code(500);
-            die("Controlador no encontrado: {$controllerName}");
-        }
-        require_once $controllerFile;
-        $controller = new $controllerName();
-        $controller->$action();
-        $matched = true;
-        break;
+    if ($method !== $routeMethod || $url !== $pattern) continue;
+
+
+    // ── Ruta normal con controlador ───────────────────────
+    $controllerFile = __DIR__ . "/controllers/{$controllerName}.php";
+    if (!file_exists($controllerFile)) {
+        http_response_code(500);
+        die("Controlador no encontrado: {$controllerName}");
     }
+    require_once $controllerFile;
+    $controller = new $controllerName();
+    $controller->$action();
+    $matched = true;
+    break;
 }
 
 if (!$matched) {
