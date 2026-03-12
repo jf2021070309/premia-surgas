@@ -102,47 +102,10 @@
         }
     }
 
-    async function shareWhatsApp() {
-        const btn = event.currentTarget;
-        const originalText = btn.innerText;
-        btn.innerText = "Preparando...";
-        btn.disabled = true;
-
+    function shareWhatsApp() {
         const message = `¡Hola! 🔥 Aquí tienes tu tarjeta de cliente de *Gas Express Surgas*.\n\n👤 *Cliente:* ${clienteNombre}\n🆔 *Código:* ${clienteCodigo}\n\nPresenta este QR en tus compras para acumular puntos y canjear premios. ¡Gracias por tu preferencia! 🏠✨`;
-
-        try {
-            const canvas = await captureCard();
-            
-            // Intentar compartir nativamente (Móvil)
-            if (navigator.share && navigator.canShare) {
-                const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
-                const file = new File([blob], 'tarjeta_surgas.png', { type: 'image/png' });
-
-                if (navigator.canShare({ files: [file] })) {
-                    await navigator.share({
-                        files: [file],
-                        title: 'Tarjeta Surgas',
-                        text: message
-                    });
-                    return;
-                }
-            }
-
-            // Fallback: Determinar si es móvil o PC para WhatsApp Web
-            const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-            const waUrl = isMobile 
-                ? `https://wa.me/${clienteCelular}?text=${encodeURIComponent(message)}`
-                : `https://web.whatsapp.com/send?phone=${clienteCelular}&text=${encodeURIComponent(message)}`;
-            
-            window.open(waUrl, '_blank');
-
-        } catch (e) {
-            console.error(e);
-            alert("Error al compartir.");
-        } finally {
-            btn.innerText = originalText;
-            btn.disabled = false;
-        }
+        const waUrl = `https://wa.me/51${clienteCelular}?text=${encodeURIComponent(message)}`;
+        window.open(waUrl, '_blank');
     }
 </script>
 </body>
