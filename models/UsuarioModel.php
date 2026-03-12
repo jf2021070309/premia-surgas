@@ -17,7 +17,7 @@ class UsuarioModel {
         $stmt->execute([$usuario]);
         $row = $stmt->fetch();
 
-        if ($row && $row['password'] === md5($password) && $row['estado'] == 1) {
+        if ($row && $row['password'] === hash('sha256', $password) && $row['estado'] == 1) {
             return $row;
         }
         return null;

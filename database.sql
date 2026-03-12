@@ -139,7 +139,7 @@ INSERT INTO usuarios (
 VALUES (
     'Administrador',
     'admin',
-    MD5('123456'),
+    SHA2('123456', 256),
     'admin'
 );
 
@@ -155,7 +155,7 @@ INSERT INTO usuarios (
 VALUES (
     'Conductor 1',
     'conductor1',
-    MD5('123456'),
+    SHA2('123456', 256),
     'conductor'
 );
 

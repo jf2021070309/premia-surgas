@@ -1,16 +1,127 @@
 <?php
-// ─── Base de datos ───────────────────────────────────────
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'surgas');
-define('DB_USER', 'root');
-define('DB_PASS', '');
+// ============================================================
+// config/conexion.php
+// Compatible con Railway, XAMPP, Hosting y Localhost
+// ============================================================
 
-// ─── Seguridad ───────────────────────────────────────────
+define('DB_CHARSET', 'utf8mb4');
+
+// ============================================================
+// Detectar Railway mediante MYSQL_URL
+// ============================================================
+
+$mysql_url = getenv('MYSQL_URL');
+
+if ($mysql_url) {
+
+    // ✅ PRODUCCIÓN (Railway)
+    $parts = parse_url($mysql_url);
+
+    $host = $parts['host'];
+    $port = $parts['port'] ?? 3306;
+    $user = $parts['user'];
+    $pass = $parts['pass'];
+    $db   = ltrim($parts['path'], '/');
+
+} else {
+
+    // ✅ LOCAL (XAMPP / Hosting normal)
+
+    $host = 'localhost';
+    $port = 3306;
+    $user = 'root';
+    $pass = '';
+    $db   = 'surgas';
+
+}
+
+// ============================================================
+// CONSTANTES DE BD (compatibilidad con Database.php / PDO)
+// ============================================================
+
+define('DB_HOST', $host);
+define('DB_PORT', (int)$port);
+define('DB_NAME', $db);
+define('DB_USER', $user);
+define('DB_PASS', $pass);
+
+// ============================================================
+// CONFIGURACIÓN GLOBAL
+// ============================================================
+
+date_default_timezone_set('America/Lima');
+
 define('SECRET_KEY', 'Surgas_2024_$ecure_T0ken_Key!');
 
-// ─── URL base (con slash final) ──────────────────────────
-define('BASE_URL', 'http://localhost/PremiaSurgas/');
+// BASE_URL: automática según entorno
+if (getenv('MYSQL_URL')) {
+    // Producción Railway: tomar host y protocolo del servidor
+    $scheme   = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+    $httpHost = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    define('BASE_URL', $scheme . '://' . $httpHost . '/');
+} else {
+    define('BASE_URL', 'http://localhost/premia-surgas/');
+}
 
-// ─── Ruta QR ─────────────────────────────────────────────
 define('QR_PATH', __DIR__ . '/../qr/');
 define('QR_URL',  BASE_URL . 'qr/');
+
+// ============================================================
+// CONEXIÓN MYSQL
+// ============================================================
+
+$conn = new mysqli($host, $user, $pass, $db, (int)$port);
+
+if ($conn->connect_error) {
+    die("Error de conexión MySQL: " . $conn->connect_error);
+}
+
+$conn->set_charset(DB_CHARSET);
+
+// sincronizar zona horaria MySQL
+$conn->query("SET time_zone = '-05:00'");
+
+
+// ============================================================
+// HELPERS
+// ============================================================
+
+function json_response(bool $ok, $data = null, int $status = 200, string $message = ''): void {
+
+    http_response_code($status);
+
+    header('Content-Type: application/json; charset=utf-8');
+    header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+    header('Access-Control-Allow-Headers: Content-Type');
+
+    echo json_encode([
+        'ok'      => $ok,
+        'data'    => $data,
+        'message' => $message,
+    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+    exit;
+}
+
+function e(string $str): string {
+    return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
+}
+
+function hoy(): string {
+    return date('Y-m-d');
+}
+
+function redirigir(string $url): void {
+    header('Location: ' . $url);
+    exit;
+}
+
+function moneda(float $valor): string {
+    return 'S/ ' . number_format($valor, 2);
+}
+
+function get_json_body(): array {
+    $raw = file_get_contents('php://input');
+    return json_decode($raw, true) ?? [];
+}
