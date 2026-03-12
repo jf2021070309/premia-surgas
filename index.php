@@ -9,8 +9,8 @@ session_start();
 $url    = trim($_GET['url'] ?? '', '/');
 $method = $_SERVER['REQUEST_METHOD'];
 
-// Normalizar: quitar query string del url param
-$url = strtok($url, '?');
+// Normalizar: quitar query string del url param (strtok devuelve false con string vacío)
+$url = (string) strtok($url, '?');
 
 // ─── Router ──────────────────────────────────────────────
 // Formato de rutas: [METHOD, pattern, Controlador, accion]
