@@ -19,12 +19,19 @@
 
                 <div class="form-group">
                     <label>Nombre Completo</label>
-                    <input type="text" name="nombre" value="<?= htmlspecialchars($cliente['nombre']) ?>" required>
+                    <input type="text" name="nombre" value="<?= htmlspecialchars($cliente['nombre']) ?>" required
+                           pattern="[A-Za-zñÑáéíóúÁÉÍÓÚ\s]+" 
+                           title="Solo se permiten letras y espacios"
+                           oninput="this.value = this.value.replace(/[^A-Za-zñÑáéíóúÁÉÍÓÚ\s]/g, '')">
                 </div>
 
                 <div class="form-group">
                     <label>Celular</label>
-                    <input type="text" name="celular" value="<?= htmlspecialchars($cliente['celular']) ?>" required>
+                    <input type="text" name="celular" value="<?= htmlspecialchars($cliente['celular']) ?>" required
+                           pattern="\d{9}" 
+                           maxlength="9"
+                           title="Debe tener exactamente 9 dígitos"
+                           oninput="this.value = this.value.replace(/\D/g, '').slice(0, 9)">
                 </div>
 
                 <div class="form-group">
@@ -34,7 +41,18 @@
 
                 <div class="form-group">
                     <label>Distrito</label>
-                    <input type="text" name="distrito" value="<?= htmlspecialchars($cliente['distrito']) ?>">
+                    <select name="distrito" class="form-control">
+                        <option value="">-- Seleccionar --</option>
+                        <?php 
+                        $distritos = [
+                            "Tacna (capital)", "Alto de la Alianza", "Calana", "Ciudad Nueva", 
+                            "Coronel Gregorio Albarracín Lanchipa", "Inclán", "La Yarada-Los Palos", 
+                            "Pachía", "Palca", "Pocollay", "Sama"
+                        ];
+                        foreach ($distritos as $d): ?>
+                            <option value="<?= $d ?>" <?= $cliente['distrito'] == $d ? 'selected' : '' ?>><?= $d ?></option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
 
                 <div class="form-group">

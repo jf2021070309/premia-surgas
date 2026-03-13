@@ -111,6 +111,7 @@
             }
             ?>
             <a href="<?= $urlVolver ?>" class="btn-back">← Volver</a>
+            <a href="<?= BASE_URL ?>tienda/historial" class="btn-back ms-2">🕒 Historial</a>
         </div>
         <h1 class="display-5 fw-bold">Tienda de Premios</h1>
         <p class="lead opacity-75">¡Gracias por tu preferencia! Elige tu recompensa.</p>

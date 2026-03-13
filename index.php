@@ -61,6 +61,7 @@ $routes = [
 
     // —— Tienda ——
     ['GET',  'tienda',       'TiendaController', 'index'],
+    ['GET',  'tienda/historial', 'TiendaController', 'historial'],
     ['POST', 'tienda/canjear', 'TiendaController', 'canjear'],
 
     // —— Reportes ——

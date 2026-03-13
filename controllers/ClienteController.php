@@ -24,6 +24,17 @@ class ClienteController {
             exit;
         }
 
+        // Validaciones extra
+        if (!preg_match('/^[A-Za-zñÑáéíóúÁÉÍÓÚ\s]+$/u', $nombre)) {
+            echo json_encode(['success' => false, 'message' => 'El nombre solo debe contener letras.']);
+            exit;
+        }
+
+        if (!preg_match('/^\d{9}$/', $celular)) {
+            echo json_encode(['success' => false, 'message' => 'El celular debe tener exactamente 9 dígitos.']);
+            exit;
+        }
+
         $model = new ClienteModel();
 
         // Celular duplicado → devolver el existente
@@ -100,12 +111,27 @@ class ClienteController {
         $model = new ClienteModel();
 
         $data = [
-            'nombre'    => $_POST['nombre'] ?? '',
-            'celular'   => $_POST['celular'] ?? '',
-            'direccion' => $_POST['direccion'] ?? '',
-            'distrito'  => $_POST['distrito'] ?? '',
+            'nombre'    => trim($_POST['nombre'] ?? ''),
+            'celular'   => trim($_POST['celular'] ?? ''),
+            'direccion' => trim($_POST['direccion'] ?? ''),
+            'distrito'  => trim($_POST['distrito'] ?? ''),
             'estado'    => (int)($_POST['estado'] ?? 1),
         ];
+
+        if (!$data['nombre'] || !$data['celular']) {
+            $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'Nombre y celular son obligatorios.'];
+            $this->redirect('clientes/editar?id=' . $id);
+        }
+
+        if (!preg_match('/^[A-Za-zñÑáéíóúÁÉÍÓÚ\s]+$/u', $data['nombre'])) {
+            $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'El nombre solo debe contener letras.'];
+            $this->redirect('clientes/editar?id=' . $id);
+        }
+
+        if (!preg_match('/^\d{9}$/', $data['celular'])) {
+            $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'El celular debe tener exactamente 9 dígitos.'];
+            $this->redirect('clientes/editar?id=' . $id);
+        }
 
         if ($model->update($id, $data)) {
             $_SESSION['flash'] = ['type' => 'success', 'title' => '¡Éxito!', 'message' => 'Cliente actualizado correctamente.'];

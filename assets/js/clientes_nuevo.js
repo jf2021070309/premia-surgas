@@ -11,6 +11,12 @@ new Vue({
         mensaje:        ''
     },
     methods: {
+        validateName(e) {
+            this.form.nombre = e.target.value.replace(/[^A-Za-zñÑáéíóúÁÉÍÓÚ\s]/g, '');
+        },
+        validatePhone(e) {
+            this.form.celular = e.target.value.replace(/\D/g, '').slice(0, 9);
+        },
         async guardar() {
             this.error   = '';
             this.loading = true;

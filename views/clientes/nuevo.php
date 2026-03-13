@@ -39,11 +39,18 @@
             <form @submit.prevent="guardar">
                 <div class="form-group">
                     <label>Nombre Completo *</label>
-                    <input type="text" v-model="form.nombre" required placeholder="Ej. Juan Pérez">
+                    <input type="text" v-model="form.nombre" @input="validateName" required 
+                           pattern="[A-Za-zñÑáéíóúÁÉÍÓÚ\s]+" 
+                           title="Solo se permiten letras y espacios" 
+                           placeholder="Ej. Juan Pérez">
                 </div>
                 <div class="form-group">
                     <label>Celular *</label>
-                    <input type="tel" v-model="form.celular" required placeholder="987 654 321">
+                    <input type="tel" v-model="form.celular" @input="validatePhone" required 
+                           pattern="\d{9}" 
+                           maxlength="9"
+                           title="Debe tener exactamente 9 dígitos" 
+                           placeholder="987 654 321">
                 </div>
                 <div class="form-group">
                     <label>Dirección</label>
@@ -51,7 +58,20 @@
                 </div>
                 <div class="form-group">
                     <label>Distrito</label>
-                    <input type="text" v-model="form.distrito" placeholder="Ej. Los Olivos">
+                    <select v-model="form.distrito" class="form-control">
+                        <option value="">-- Seleccionar --</option>
+                        <option value="Tacna (capital)">Tacna (capital)</option>
+                        <option value="Alto de la Alianza">Alto de la Alianza</option>
+                        <option value="Calana">Calana</option>
+                        <option value="Ciudad Nueva">Ciudad Nueva</option>
+                        <option value="Coronel Gregorio Albarracín Lanchipa">Coronel Gregorio Albarracín Lanchipa</option>
+                        <option value="Inclán">Inclán</option>
+                        <option value="La Yarada-Los Palos">La Yarada-Los Palos</option>
+                        <option value="Pachía">Pachía</option>
+                        <option value="Palca">Palca</option>
+                        <option value="Pocollay">Pocollay</option>
+                        <option value="Sama">Sama</option>
+                    </select>
                 </div>
                 <button type="submit" class="btn btn-primary btn-full" :disabled="loading">
                     {{ loading ? 'Guardando...' : 'Guardar Cliente' }}

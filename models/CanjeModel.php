@@ -48,4 +48,16 @@ class CanjeModel {
                 LIMIT $limit";
         return $this->db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function getByCliente(int $clienteId): array {
+        $stmt = $this->db->prepare(
+            "SELECT c.*, p.nombre as premio_nombre, p.imagen as premio_imagen, p.descripcion as premio_descripcion
+             FROM canjes c
+             JOIN premios p ON c.premio_id = p.id
+             WHERE c.cliente_id = ?
+             ORDER BY c.fecha DESC"
+        );
+        $stmt->execute([$clienteId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

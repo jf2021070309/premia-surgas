@@ -102,6 +102,24 @@ class TiendaController {
         redirigir(BASE_URL . 'tienda');
     }
 
+    public function historial(): void {
+        $this->requireAuth();
+
+        require_once __DIR__ . '/../models/ClienteModel.php';
+        $clienteModel = new ClienteModel();
+        $id_cliente = $_SESSION['id_cliente'] ?? $_SESSION['id_usuario'] ?? null;
+        $cliente = $clienteModel->findById($id_cliente);
+
+        require_once __DIR__ . '/../models/CanjeModel.php';
+        $canjeModel = new CanjeModel();
+        $canjes = $canjeModel->getByCliente($id_cliente);
+
+        $this->render('tienda_historial', [
+            'cliente' => $cliente,
+            'canjes' => $canjes
+        ]);
+    }
+
     private function render(string $view, array $data = []): void {
         extract($data);
         require __DIR__ . "/../views/{$view}.php";
