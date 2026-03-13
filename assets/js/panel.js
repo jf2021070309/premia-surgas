@@ -1,6 +1,14 @@
 new Vue({
     el: '#app',
+    data: {
+        showModal: false,
+        detail: {}
+    },
     methods: {
+        verDetalle(notif) {
+            this.detail = notif;
+            this.showModal = true;
+        },
         goScan() {
             const codigo = prompt('Ingresa la URL del QR o el código del cliente:');
             if (codigo) {

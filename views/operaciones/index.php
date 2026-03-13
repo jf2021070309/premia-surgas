@@ -84,7 +84,7 @@
                         </td>
                         <td style="text-align: center;">
                             <button class="btn-action btn-edit" onclick="editOp(<?= htmlspecialchars(json_encode($op)) ?>)">✏️</button>
-                            <a href="<?= BASE_URL ?>operaciones/delete?id=<?= $op['id'] ?>" class="btn-action btn-delete" onclick="return confirm('¿Inactivar esta operación?')">🗑️</a>
+                            <a href="javascript:void(0)" class="btn-action btn-delete" onclick="confirmDelete('<?= BASE_URL ?>operaciones/delete?id=<?= $op['id'] ?>')">🗑️</a>
                         </td>
                     </tr>
                     <?php endforeach; ?>
@@ -158,6 +158,25 @@
 
         window.onclick = function(event) {
             if (event.target == modal) closeModal();
+        }
+
+        function confirmDelete(url) {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "¿Inactivar esta operación?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#821515',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Sí, inactivar',
+                cancelButtonText: 'Cancelar',
+                reverseButtons: true,
+                borderRadius: '1.5rem'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = url;
+                }
+            });
         }
     </script>
 

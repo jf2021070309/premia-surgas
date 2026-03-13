@@ -39,4 +39,13 @@ class CanjeModel {
             return false;
         }
     }
+    public function getRecientes(int $limit = 5): array {
+        $sql = "SELECT c.*, cl.nombre as cliente_nombre, cl.celular as cliente_celular, p.nombre as premio_nombre, p.imagen as premio_imagen
+                FROM canjes c
+                JOIN clientes cl ON c.cliente_id = cl.id
+                JOIN premios p ON c.premio_id = p.id
+                ORDER BY c.fecha DESC
+                LIMIT $limit";
+        return $this->db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

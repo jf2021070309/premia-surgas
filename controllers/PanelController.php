@@ -1,16 +1,27 @@
 <?php
 require_once __DIR__ . '/../models/ClienteModel.php';
 require_once __DIR__ . '/../models/VentaModel.php';
+require_once __DIR__ . '/../models/CanjeModel.php';
 
 class PanelController {
 
     public function index(): void {
         $this->requireAuth();
-        $model  = new ClienteModel();
+        $model   = new ClienteModel();
         $totales = [
             'clientes' => count($model->getAll()),
         ];
-        $this->render('panel', ['totales' => $totales]);
+
+        $notificaciones = [];
+        if ($_SESSION['rol'] === 'admin') {
+            $canjeModel = new CanjeModel();
+            $notificaciones = $canjeModel->getRecientes(5);
+        }
+
+        $this->render('panel', [
+            'totales'        => $totales,
+            'notificaciones' => $notificaciones
+        ]);
     }
 
     // ── helpers ──────────────────────────────────────────────────

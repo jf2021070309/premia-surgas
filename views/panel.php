@@ -10,10 +10,39 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         [v-cloak]{display:none}
+        .notif-card {
+            background: white; border-radius: 1.5rem; padding: 1.2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid #f0f0f0;
+            margin-bottom: 1rem; cursor: pointer; transition: all 0.3s ease;
+            display: flex; align-items: center; gap: 1rem;
+        }
+        .notif-card:hover { transform: translateX(5px); border-color: var(--primary); }
+        .notif-icon { 
+            width: 45px; height: 45px; border-radius: 12px; background: #fffcf0; 
+            color: #f39c12; display: flex; align-items: center; justify-content: center; font-size: 1.4rem;
+        }
+        .notif-icon.full { background: #f0fdf4; color: #22c55e; }
+        .notif-icon.mix { background: #fdf2f2; color: #ef4444; }
+        .notif-content { flex: 1; }
+        .notif-title { font-weight: 700; color: #333; font-size: 0.95rem; margin-bottom: 0.1rem; }
+        .notif-sub { color: #888; font-size: 0.8rem; }
+        
+        /* Modal Detallado */
+        .modal-mask {
+            position: fixed; z-index: 9998; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); display: flex; transition: opacity 0.3s ease; backdrop-filter: blur(5px);
+        }
+        .modal-wrapper { width: 100%; max-width: 450px; margin: auto; padding: 1.5rem; }
+        .modal-container {
+            background-color: #fff; border-radius: 2rem; box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            transition: all 0.3s ease; overflow: hidden;
+        }
+        .modal-header-notif { background: var(--primary); color: white; padding: 2rem 1.5rem; text-align: center; }
+        .modal-body-notif { padding: 2rem; }
+        
         @media (max-width: 600px) {
             .panel-title   { font-size: 1.1rem !important; margin: .8rem 0 .3rem !important; }
             .panel-subtitle { font-size: .82rem !important; margin-bottom: .7rem !important; }
-            /* Formularios dentro del panel: evitar zoom iOS */
             input, select, textarea { font-size: 16px !important; }
         }
     </style>
@@ -134,7 +163,84 @@
                 <?php endif; ?>
             </div>
         </div>
+
+        <?php if ($_SESSION['rol'] === 'admin' && !empty($notificaciones)): ?>
+        <div class="section-header" style="margin-top: 3rem;">
+            <h3 class="section-title">Notificaciones de Canjes</h3>
+            <p style="font-size: 0.8rem; color: #888; margin: 0;">Últimos canjes solicitados por clientes</p>
+        </div>
+
+        <div class="notif-list">
+            <?php foreach ($notificaciones as $n): 
+                $esMix = $n['monto'] > 0;
+            ?>
+            <div class="notif-card" @click="verDetalle(<?= htmlspecialchars(json_encode($n)) ?>)">
+                <div class="notif-icon <?= $esMix ? 'mix' : 'full' ?>">
+                    <i class='bx <?= $esMix ? 'bx-coin-stack' : 'bx-gift' ?>'></i>
+                </div>
+                <div class="notif-content">
+                    <div class="notif-title"><?= htmlspecialchars($n['cliente_nombre']) ?></div>
+                    <div class="notif-sub">Canjeó: <b><?= htmlspecialchars($n['premio_nombre']) ?></b></div>
+                </div>
+                <div style="text-align: right;">
+                    <div class="badge <?= $esMix ? 'badge-danger' : 'badge-success' ?>" style="font-size: 0.65rem; padding: 0.3rem 0.6rem;">
+                        <?= $esMix ? 'Puntos + S/' . $n['monto'] : 'Canje Full' ?>
+                    </div>
+                    <div style="font-size: 0.7rem; color: #bbb; margin-top: 0.3rem;"><?= date('H:i', strtotime($n['fecha'])) ?></div>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+        <?php endif; ?>
     </div>
+
+    <!-- Modal Detalle Canje -->
+    <transition name="modal" v-if="showModal">
+        <div class="modal-mask" @click="showModal = false">
+            <div class="modal-wrapper" @click.stop>
+                <div class="modal-container">
+                    <div class="modal-header-notif">
+                        <div style="width: 80px; height: 80px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; font-size: 2.5rem;">
+                            <i class='bx bx-receipt'></i>
+                        </div>
+                        <h3 style="margin: 0; font-weight: 800;">Detalle del Canje</h3>
+                    </div>
+                    <div class="modal-body-notif">
+                        <div style="margin-bottom: 1.5rem; border-bottom: 1px dashed #eee; padding-bottom: 1rem;">
+                            <small style="color: #999; text-transform: uppercase; font-weight: 700; letter-spacing: 1px;">Cliente</small>
+                            <div style="font-size: 1.2rem; font-weight: 800; color: #333; margin-top: 0.2rem;">{{ detail.cliente_nombre }}</div>
+                            <div style="color: #666; font-size: 0.9rem;"><i class='bx bx-phone'></i> {{ detail.cliente_celular }}</div>
+                        </div>
+
+                        <div style="margin-bottom: 1.5rem; display: flex; gap: 1rem; align-items: center;">
+                            <img :src="'<?= BASE_URL ?>assets/premios/' + detail.premio_imagen" style="width: 60px; height: 60px; object-fit: contain; background: #f8fafc; border-radius: 12px; padding: 0.5rem;">
+                            <div>
+                                <small style="color: #999; text-transform: uppercase; font-weight: 700; font-size: 0.7rem;">Premio Solicitado</small>
+                                <div style="font-weight: 700; color: #333;">{{ detail.premio_nombre }}</div>
+                            </div>
+                        </div>
+
+                        <div style="background: #f8fafc; border-radius: 1.5rem; padding: 1.2rem;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span style="color: #666;">Puntos Usados:</span>
+                                <b style="color: var(--primary);">{{ detail.puntos_usados }} pts</b>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span style="color: #666;">Monto Pagado:</span>
+                                <b :style="{ color: detail.monto > 0 ? '#ef4444' : '#22c55e' }">
+                                    {{ detail.monto > 0 ? 'S/ ' + detail.monto : 'GRATIS (Full)' }}
+                                </b>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 2rem;">
+                            <button class="btn btn-primary w-100" style="padding: 1rem; border-radius: 1rem;" @click="showModal = false">Cerrar Notificación</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </transition>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
