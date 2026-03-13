@@ -81,6 +81,54 @@ class ClienteController {
         $this->render('clientes/lista', ['clientes' => $clientes]);
     }
 
+    public function editar(): void {
+        $this->requireAdmin();
+        $id = (int)($_GET['id'] ?? 0);
+        $model = new ClienteModel();
+        $cliente = $model->findById($id);
+
+        if (!$cliente) {
+            $this->redirect('clientes/lista');
+        }
+
+        $this->render('clientes/editar', ['cliente' => $cliente]);
+    }
+
+    public function update(): void {
+        $this->requireAdmin();
+        $id = (int)($_POST['id'] ?? 0);
+        $model = new ClienteModel();
+
+        $data = [
+            'nombre'    => $_POST['nombre'] ?? '',
+            'celular'   => $_POST['celular'] ?? '',
+            'direccion' => $_POST['direccion'] ?? '',
+            'distrito'  => $_POST['distrito'] ?? '',
+            'estado'    => (int)($_POST['estado'] ?? 1),
+        ];
+
+        if ($model->update($id, $data)) {
+            $_SESSION['flash'] = ['type' => 'success', 'title' => '¡Éxito!', 'message' => 'Cliente actualizado correctamente.'];
+            $this->redirect('clientes/lista');
+        } else {
+            $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo actualizar el cliente.'];
+            $this->redirect('clientes/lista');
+        }
+    }
+
+    public function cambiarEstado(): void {
+        $this->requireAdmin();
+        $id = (int)($_GET['id'] ?? 0);
+        $estado = (int)($_GET['v'] ?? 1);
+        $model = new ClienteModel();
+        if ($model->setEstado($id, $estado)) {
+            $_SESSION['flash'] = ['type' => 'success', 'title' => '¡Hecho!', 'message' => ($estado ? 'Cliente activado.' : 'Cliente inactivado.')];
+        } else {
+            $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo cambiar el estado.'];
+        }
+        $this->redirect('clientes/lista');
+    }
+
     // ── helpers ──────────────────────────────────────────────────
 
     private function render(string $view, array $data = []): void {
@@ -96,6 +144,14 @@ class ClienteController {
     private function requireAuth(): void {
         if (!isset($_SESSION['id_usuario'])) {
             header('Location: ' . BASE_URL . 'login');
+            exit;
+        }
+    }
+
+    private function requireAdmin(): void {
+        $this->requireAuth();
+        if ($_SESSION['rol'] !== 'admin') {
+            header('Location: ' . BASE_URL . 'panel');
             exit;
         }
     }

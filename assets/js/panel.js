@@ -6,6 +6,22 @@ new Vue({
             if (codigo) {
                 window.location.href = 'scan?c=' + encodeURIComponent(codigo);
             }
+        },
+        logout() {
+            Swal.fire({
+                title: '¿Cerrar sesión?',
+                text: "Esperamos verte pronto de nuevo.",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: 'var(--primary)',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Sí, salir',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = 'logout';
+                }
+            });
         }
     }
 });

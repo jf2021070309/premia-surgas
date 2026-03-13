@@ -51,6 +51,27 @@ class ClienteModel {
         return (int) $this->db->lastInsertId();
     }
 
+    public function update(int $id, array $data): bool {
+        $stmt = $this->db->prepare(
+            "UPDATE clientes 
+             SET nombre = :nombre, celular = :celular, direccion = :direccion, distrito = :distrito, estado = :estado
+             WHERE id = :id"
+        );
+        return $stmt->execute([
+            ':id'        => $id,
+            ':nombre'    => $data['nombre'],
+            ':celular'   => $data['celular'],
+            ':direccion' => $data['direccion'],
+            ':distrito'  => $data['distrito'],
+            ':estado'    => $data['estado'],
+        ]);
+    }
+
+    public function setEstado(int $id, int $estado): bool {
+        $stmt = $this->db->prepare("UPDATE clientes SET estado = ? WHERE id = ?");
+        return $stmt->execute([$estado, $id]);
+    }
+
     public function getAll(): array {
         $stmt = $this->db->query("SELECT c.*, u.nombre as conductor FROM clientes c LEFT JOIN usuarios u ON u.id = c.creado_por ORDER BY c.id DESC");
         return $stmt->fetchAll();

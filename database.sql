@@ -36,6 +36,7 @@ CREATE TABLE clientes (
     token VARCHAR(255),
 
     puntos INT DEFAULT 0,
+    estado TINYINT DEFAULT 1,
 
     creado_por INT,
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

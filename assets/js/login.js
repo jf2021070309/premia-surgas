@@ -12,12 +12,28 @@ new Vue({
             try {
                 const res = await axios.post('login', this.form);
                 if (res.data.success) {
-                    window.location.href = 'panel';
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Bienvenido!',
+                        text: 'Sesión iniciada correctamente',
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => {
+                        window.location.href = 'panel';
+                    });
                 } else {
-                    this.error = res.data.message;
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Acceso Denegado',
+                        text: res.data.message
+                    });
                 }
             } catch (e) {
-                this.error = 'Error de conexión con el servidor.';
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error de Conexión',
+                    text: 'No se pudo establecer contacto con el servidor.'
+                });
             } finally {
                 this.loading = false;
             }

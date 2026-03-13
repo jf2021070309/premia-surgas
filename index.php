@@ -30,6 +30,25 @@ $routes = [
     ['GET',  'clientes/exito',    'ClienteController', 'exito'],
     ['GET',  'clientes/imprimir', 'ClienteController', 'imprimir'],
     ['GET',  'clientes/lista',    'ClienteController', 'lista'],
+    ['GET',  'clientes/editar',   'ClienteController', 'editar'],
+    ['POST', 'clientes/update',   'ClienteController', 'update'],
+    ['GET',  'clientes/estado',   'ClienteController', 'cambiarEstado'],
+
+    // —— Productos (Admin) ——
+    ['GET',  'productos',          'ProductoController', 'index'],
+    ['GET',  'productos/nuevo',    'ProductoController', 'nuevo'],
+    ['POST', 'productos/create',   'ProductoController', 'create'],
+    ['GET',  'productos/editar',   'ProductoController', 'editar'],
+    ['POST', 'productos/update',   'ProductoController', 'update'],
+    ['GET',  'productos/delete',   'ProductoController', 'delete'],
+
+    // —— Conductores (Admin) ——
+    ['GET',  'conductores',          'ConductorController', 'index'],
+    ['GET',  'conductores/nuevo',    'ConductorController', 'nuevo'],
+    ['POST', 'conductores/create',   'ConductorController', 'create'],
+    ['GET',  'conductores/editar',   'ConductorController', 'editar'],
+    ['POST', 'conductores/update',   'ConductorController', 'update'],
+    ['GET',  'conductores/delete',   'ConductorController', 'delete'],
 
     // —— QR ——
     ['GET',  'qr/generate',  'QrController',     'generate'],
@@ -42,6 +61,9 @@ $routes = [
 
     // —— Tienda ——
     ['GET',  'tienda',       'TiendaController', 'index'],
+
+    // —— Reportes ——
+    ['GET',  'reportes',     'ReporteController', 'index'],
 ];
 
 $matched = false;

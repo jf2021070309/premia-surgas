@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS clientes (
     distrito VARCHAR(100),
     token VARCHAR(255),
     puntos INT DEFAULT 0,
+    estado TINYINT DEFAULT 1,
     creado_por INT,
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (creado_por) REFERENCES usuarios(id)

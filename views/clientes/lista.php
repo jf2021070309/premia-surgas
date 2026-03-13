@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clientes — PremiaSurgas</title>
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>[v-cloak]{display:none}</style>
 </head>
 <body>
@@ -45,6 +46,13 @@
                                 <a :href="'<?= BASE_URL ?>clientes/exito?id=' + c.id" title="Ver QR">🎫</a>
                                 &nbsp;
                                 <a :href="'<?= BASE_URL ?>clientes/imprimir?id=' + c.id" target="_blank" title="Imprimir">🖨</a>
+                                <?php if ($_SESSION['rol'] === 'admin'): ?>
+                                &nbsp;
+                                <a :href="'<?= BASE_URL ?>clientes/editar?id=' + c.id" title="Editar">✏️</a>
+                                &nbsp;
+                                <a v-if="c.estado == 1" href="#" @click.prevent="toggleEstado(c.id, 0)" title="Inactivar">🚫</a>
+                                <a v-else href="#" @click.prevent="toggleEstado(c.id, 1)" title="Activar">✅</a>
+                                <?php endif; ?>
                             </td>
                         </tr>
                         <tr v-if="filtrados.length === 0">
@@ -60,7 +68,38 @@
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
 <script>
 var CLIENTES = <?= json_encode($clientes) ?>;
+
+function toggleEstadoCli(id, v) {
+    const text = v ? '¿Activar este cliente?' : '¿Inactivar este cliente?';
+    Swal.fire({
+        title: 'Confirmar',
+        text: text,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: 'var(--primary)',
+        confirmButtonText: 'Sí, proceder'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = '<?= BASE_URL ?>clientes/estado?id=' + id + '&v=' + v;
+        }
+    });
+}
 </script>
+
+<?php if (isset($_SESSION['flash'])): ?>
+<script>
+    Swal.fire({
+        icon: '<?= $_SESSION['flash']['type'] ?>',
+        title: '<?= $_SESSION['flash']['title'] ?>',
+        text: '<?= $_SESSION['flash']['message'] ?>',
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000
+    });
+</script>
+<?php unset($_SESSION['flash']); endif; ?>
+
 <script src="<?= BASE_URL ?>assets/js/clientes_lista.js"></script>
 </body>
 </html>

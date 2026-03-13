@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel — PremiaSurgas</title>
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         [v-cloak]{display:none}
         @media (max-width: 600px) {
@@ -25,7 +26,7 @@
                     <span class="role"><?= htmlspecialchars(strtoupper($_SESSION['rol'])) ?></span>
                     <span class="name" style="font-weight: 800;"><?= htmlspecialchars($_SESSION['usuario'] ?? $_SESSION['nombre_usuario']) ?></span>
                 </div>
-                <a href="<?= BASE_URL ?>logout">
+                <a href="#" @click.prevent="logout">
                     <button class="btn-logout-minimal">Salir</button>
                 </a>
             </div>
@@ -36,7 +37,9 @@
             Premia<span style="color: #ffbc58;">Surgas</span>
         </div>
         
-        <h2 style="font-size: 1.8rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 0.4rem;">Panel del Conductor</h2>
+        <h2 style="font-size: 1.8rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 0.4rem;">
+            <?= $_SESSION['rol'] === 'admin' ? 'Panel de Control' : 'Panel del Conductor' ?>
+        </h2>
         <p style="opacity: 0.9; font-size: 1rem; font-weight: 400;">Bienvenido de nuevo. ¿Qué haremos hoy?</p>
     </div>
 
@@ -67,6 +70,18 @@
                 <div class="menu-card-label">Tienda</div>
                 <p style="font-size: 0.72rem; color: #888; margin-top: 0.3rem;">Descubre recompensas exclusivas.</p>
             </a>
+            <?php if ($_SESSION['rol'] === 'admin'): ?>
+            <a href="<?= BASE_URL ?>productos" class="menu-card" style="border-top: 3px solid #ffbc58;">
+                <div class="menu-card-icon">🎁</div>
+                <div class="menu-card-label">Gestionar Premios</div>
+                <p style="font-size: 0.72rem; color: #888; margin-top: 0.3rem;">CRUD de productos y stock.</p>
+            </a>
+            <a href="<?= BASE_URL ?>conductores" class="menu-card" style="border-top: 3px solid #ffbc58;">
+                <div class="menu-card-icon">🚚</div>
+                <div class="menu-card-label">Conductores</div>
+                <p style="font-size: 0.72rem; color: #888; margin-top: 0.3rem;">Gestionar equipo de reparto.</p>
+            </a>
+            <?php endif; ?>
         </div>
 
         <div class="section-header">
@@ -99,7 +114,7 @@
                 <div class="divider-v"></div>
 
                 <div class="stat-item" style="flex: 0.5; justify-content: flex-end;">
-                    <a href="#" class="btn btn-primary" style="font-size: 0.8rem; padding: 0.7rem 1.2rem; border-radius: 50px; box-shadow: 0 4px 15px rgba(130, 21, 21, 0.2);">
+                    <a href="<?= BASE_URL ?>reportes" class="btn btn-primary" style="font-size: 0.8rem; padding: 0.7rem 1.2rem; border-radius: 50px; box-shadow: 0 4px 15px rgba(130, 21, 21, 0.2);">
                         Ver Reportes
                     </a>
                 </div>

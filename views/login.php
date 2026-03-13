@@ -35,7 +35,6 @@
         </div>
 
         <div class="card">
-            <div v-if="error" class="alert alert-error">{{ error }}</div>
 
             <form @submit.prevent="handleLogin">
                 <div class="form-group">
@@ -57,6 +56,7 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="<?= BASE_URL ?>assets/js/login.js"></script>
