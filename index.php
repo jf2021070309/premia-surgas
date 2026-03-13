@@ -61,9 +61,20 @@ $routes = [
 
     // —— Tienda ——
     ['GET',  'tienda',       'TiendaController', 'index'],
+    ['POST', 'tienda/canjear', 'TiendaController', 'canjear'],
 
     // —— Reportes ——
     ['GET',  'reportes',     'ReporteController', 'index'],
+
+    // —— Configuración ——
+    ['GET',  'configuraciones',        'ConfiguracionController', 'index'],
+    ['POST', 'configuraciones/update', 'ConfiguracionController', 'update'],
+
+    // —— Tipos de Operaciones ——
+    ['GET',    'operaciones',        'OperacionController', 'index'],
+    ['POST',   'operaciones/create', 'OperacionController', 'create'],
+    ['POST',   'operaciones/update', 'OperacionController', 'update'],
+    ['GET',    'operaciones/delete', 'OperacionController', 'delete'],
 ];
 
 $matched = false;

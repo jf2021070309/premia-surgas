@@ -221,33 +221,47 @@ a { color: inherit; text-decoration: none; }
 }
 .menu-card {
     background: var(--card);
-    border-radius: 1rem;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.02);
-    padding: 1rem 1rem; /* Ultra compact */
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    padding: 1.5rem 1rem;
     text-align: center;
     cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-    border: 1px solid rgba(0,0,0,0.03);
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    border: 1px solid rgba(0,0,0,0.05);
+    position: relative;
+    overflow: hidden;
+}
+.menu-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 4px;
+    background: transparent;
+    transition: background 0.3s;
 }
 .menu-card:hover { 
-    transform: translateY(-5px); 
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08); /* Neutral shadow, no red/purple tint */
-    border-color: rgba(0,0,0,0.08); 
+    transform: translateY(-8px); 
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06); 
+    border-color: rgba(130, 21, 21, 0.1); 
+}
+.menu-card:hover::after {
+    background: var(--primary);
 }
 
 .menu-card-icon { 
-    font-size: 2.2rem; 
-    margin: 0 auto 0.6rem; 
-    background: #fdfdfd;
-    width: 60px; height: 60px;
+    font-size: 2rem; 
+    margin: 0 auto 1.2rem; 
+    background: rgba(130, 21, 21, 0.03);
+    width: 65px; height: 65px;
     display: flex; align-items: center; justify-content: center;
-    border-radius: 1.2rem;
-    transition: all 0.3s;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+    border-radius: 1.5rem;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    color: var(--primary);
+    border: 1px solid rgba(130, 21, 21, 0.05);
 }
 .menu-card:hover .menu-card-icon { 
     transform: scale(1.1); 
-    /* No background change to avoid 'purple' perception */
+    background: var(--primary);
+    color: white;
 }
 .menu-card-label { 
     font-weight: 700; 
@@ -259,11 +273,11 @@ a { color: inherit; text-decoration: none; }
 
 .stats-container {
     background: white;
-    border-radius: 1rem;
-    padding: 1.2rem 2rem;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.02);
-    border: 1px solid rgba(0,0,0,0.03);
-    margin: 1rem 0 2rem;
+    border-radius: 1.5rem;
+    padding: 1.5rem 2.5rem;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+    border: 1px solid rgba(0,0,0,0.05);
+    margin: 1.5rem 0 2.5rem;
 }
 .stats-flex {
     display: flex;

@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel — PremiaSurgas</title>
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/main.css">
+    <!-- Boxicons for elegant icons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         [v-cloak]{display:none}
@@ -33,8 +35,8 @@
         </div>
         
         <div class="logo-text" style="font-size: 1.6rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.4rem; margin-bottom: 0.5rem;">
-            <span style="font-size: 1.4rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));">🔥</span>
-            Premia<span style="color: #ffbc58;">Surgas</span>
+            <i class='bx bxs-hot' style="color: #ffbc58; font-size: 1.8rem;"></i>
+            PremiaSurgas
         </div>
         
         <h2 style="font-size: 1.8rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 0.4rem;">
@@ -51,35 +53,45 @@
 
         <div class="menu-grid">
             <a href="<?= BASE_URL ?>clientes/nuevo" class="menu-card">
-                <div class="menu-card-icon">➕</div>
+                <div class="menu-card-icon"><i class='bx bx-user-plus'></i></div>
                 <div class="menu-card-label">Nuevo Cliente</div>
                 <p style="font-size: 0.72rem; color: #888; margin-top: 0.3rem;">Suma nuevos clientes al equipo.</p>
             </a>
             <a href="<?= BASE_URL ?>clientes/lista" class="menu-card">
-                <div class="menu-card-icon">👥</div>
+                <div class="menu-card-icon"><i class='bx bx-group'></i></div>
                 <div class="menu-card-label">Directorio</div>
                 <p style="font-size: 0.72rem; color: #888; margin-top: 0.3rem;">Toda tu base de datos a un clic.</p>
             </a>
             <a href="<?= BASE_URL ?>scan" class="menu-card">
-                <div class="menu-card-icon">🎯</div>
+                <div class="menu-card-icon"><i class='bx bx-qr-scan'></i></div>
                 <div class="menu-card-label">Suma Puntos</div>
                 <p style="font-size: 0.72rem; color: #888; margin-top: 0.3rem;">¡Premiarlos es muy sencillo!</p>
             </a>
             <a href="<?= BASE_URL ?>tienda" class="menu-card">
-                <div class="menu-card-icon">🛍️</div>
+                <div class="menu-card-icon"><i class='bx bx-shopping-bag'></i></div>
                 <div class="menu-card-label">Tienda</div>
                 <p style="font-size: 0.72rem; color: #888; margin-top: 0.3rem;">Descubre recompensas exclusivas.</p>
             </a>
             <?php if ($_SESSION['rol'] === 'admin'): ?>
-            <a href="<?= BASE_URL ?>productos" class="menu-card" style="border-top: 3px solid #ffbc58;">
-                <div class="menu-card-icon">🎁</div>
+            <a href="<?= BASE_URL ?>productos" class="menu-card">
+                <div class="menu-card-icon"><i class='bx bx-gift'></i></div>
                 <div class="menu-card-label">Gestionar Premios</div>
                 <p style="font-size: 0.72rem; color: #888; margin-top: 0.3rem;">CRUD de productos y stock.</p>
             </a>
-            <a href="<?= BASE_URL ?>conductores" class="menu-card" style="border-top: 3px solid #ffbc58;">
-                <div class="menu-card-icon">🚚</div>
+            <a href="<?= BASE_URL ?>conductores" class="menu-card">
+                <div class="menu-card-icon"><i class='bx bxs-truck'></i></div>
                 <div class="menu-card-label">Conductores</div>
                 <p style="font-size: 0.72rem; color: #888; margin-top: 0.3rem;">Gestionar equipo de reparto.</p>
+            </a>
+            <a href="<?= BASE_URL ?>configuraciones" class="menu-card">
+                <div class="menu-card-icon"><i class='bx bx-cog'></i></div>
+                <div class="menu-card-label">Parámetros</div>
+                <p style="font-size: 0.72rem; color: #888; margin-top: 0.3rem;">Configurar puntos y equivalencias.</p>
+            </a>
+            <a href="<?= BASE_URL ?>operaciones" class="menu-card">
+                <div class="menu-card-icon"><i class='bx bx-wrench'></i></div>
+                <div class="menu-card-label">Gestión Operaciones</div>
+                <p style="font-size: 0.72rem; color: #888; margin-top: 0.3rem;">Personalizar tipos de canje.</p>
             </a>
             <?php endif; ?>
         </div>
@@ -92,7 +104,7 @@
         <div class="stats-container">
             <div class="stats-flex">
                 <div class="stat-item">
-                    <div class="stat-icon">📊</div>
+                    <div class="stat-icon"><i class='bx bx-pie-chart-alt-2'></i></div>
                     <div class="stat-content">
                         <span class="stat-lbl">Alcance Total</span>
                         <b class="stat-val"><?= $totales['clientes'] ?></b>
@@ -103,7 +115,7 @@
                 <div class="divider-v"></div>
 
                 <div class="stat-item">
-                    <div class="stat-icon">⏳</div>
+                    <div class="stat-icon"><i class='bx bx-time-five'></i></div>
                     <div class="stat-content">
                         <span class="stat-lbl">&Uacute;ltima Actividad</span>
                         <b class="stat-val" style="font-size: 1.1rem; color: var(--muted);"><?= date('H:i') ?></b>
@@ -111,6 +123,7 @@
                     </div>
                 </div>
 
+                <?php if ($_SESSION['rol'] === 'admin'): ?>
                 <div class="divider-v"></div>
 
                 <div class="stat-item" style="flex: 0.5; justify-content: flex-end;">
@@ -118,6 +131,7 @@
                         Ver Reportes
                     </a>
                 </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>

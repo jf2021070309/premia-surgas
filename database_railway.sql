@@ -74,6 +74,8 @@ CREATE TABLE IF NOT EXISTS canjes (
     cliente_id INT,
     premio_id INT,
     puntos_usados INT,
+    monto DECIMAL(10,2) DEFAULT 0,
+    monto DECIMAL(10,2) DEFAULT 0,
     fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (cliente_id) REFERENCES clientes(id),
     FOREIGN KEY (premio_id) REFERENCES premios(id)
@@ -90,6 +92,37 @@ CREATE TABLE IF NOT EXISTS sesiones_qr (
     fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (cliente_id) REFERENCES clientes(id)
 );
+
+-- =========================
+-- TABLA CONFIGURACIONES
+-- =========================
+
+CREATE TABLE IF NOT EXISTS configuraciones (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    clave VARCHAR(50) UNIQUE,
+    valor VARCHAR(255),
+    descripcion VARCHAR(255)
+);
+
+INSERT IGNORE INTO configuraciones (clave, valor, descripcion) VALUES
+('puntos_por_sol', '1', 'Cantidad de puntos otorgados por cada Sol de compra.'),
+('monto_por_punto', '0.05', 'Equivalencia en Soles de cada punto para canjes mixtos.');
+
+-- =========================
+-- TABLA TIPOS_OPERACIONES
+-- =========================
+
+CREATE TABLE IF NOT EXISTS tipos_operaciones (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100),
+    puntos INT,
+    estado TINYINT DEFAULT 1
+);
+
+INSERT IGNORE INTO tipos_operaciones (nombre, puntos) VALUES
+('Recarga gas Normal', 5),
+('Recarga gas Premium', 10),
+('Accesorio / Otros', 2);
 
 -- =========================
 -- DATOS INICIALES

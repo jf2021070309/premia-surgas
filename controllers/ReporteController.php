@@ -24,7 +24,8 @@ class ReporteController {
             'ventasConductor'  => $model->getVentasPorConductor(),
             'canjesRecientes'  => $model->getCanjesRecientes(),
             'premiosPopulares' => $model->getPremiosPopulares(),
-            'ventasGrafico'    => $model->getVentasUltimosDias(15)
+            'ventasGrafico'    => $model->getVentasUltimosDias(15),
+            'canjesGrafico'    => $model->getCanjesUltimosDias(15)
         ];
 
         require_once __DIR__ . '/../views/reportes/index.php';

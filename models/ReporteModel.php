@@ -61,8 +61,17 @@ class ReporteModel {
     }
 
     public function getVentasUltimosDias(int $dias = 7): array {
-        $sql = "SELECT DATE(fecha) as dia, SUM(monto) as total, SUM(puntos) as puntos
+        $sql = "SELECT DATE(fecha) as dia, SUM(puntos) as puntos
                 FROM ventas
+                WHERE fecha >= DATE_SUB(NOW(), INTERVAL $dias DAY)
+                GROUP BY DATE(fecha)
+                ORDER BY dia ASC";
+        return $this->db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getCanjesUltimosDias(int $dias = 7): array {
+        $sql = "SELECT DATE(fecha) as dia, SUM(puntos_usados) as puntos
+                FROM canjes
                 WHERE fecha >= DATE_SUB(NOW(), INTERVAL $dias DAY)
                 GROUP BY DATE(fecha)
                 ORDER BY dia ASC";

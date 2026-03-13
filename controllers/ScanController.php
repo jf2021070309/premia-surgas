@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../models/ClienteModel.php';
 require_once __DIR__ . '/../models/VentaModel.php';
+require_once __DIR__ . '/../models/ConfiguracionModel.php';
+require_once __DIR__ . '/../models/TipoOperacionModel.php';
 require_once __DIR__ . '/../config/config.php';
 
 class ScanController {
@@ -31,7 +33,11 @@ class ScanController {
 
         // Escenario 2: El conductor escanea el QR del cliente
         $this->requireAuth();
-        $this->render('scan/index');
+        
+        $opModel = new TipoOperacionModel();
+        $operaciones = $opModel->getActive();
+
+        $this->render('scan/index', ['operaciones' => $operaciones]);
     }
 
     /**
@@ -119,8 +125,11 @@ class ScanController {
             exit;
         }
 
-        // 1 punto por cada sol
-        $puntos = (int) floor($monto);
+        // Obtener factor de puntos desde configuración
+        $configModel = new ConfiguracionModel();
+        $factor = (float) ($configModel->getValor('puntos_por_sol') ?? 1);
+
+        $puntos = (int) floor($monto * $factor);
 
         $ventaModel   = new VentaModel();
         $clienteModel = new ClienteModel();

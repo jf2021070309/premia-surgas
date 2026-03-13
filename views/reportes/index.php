@@ -8,169 +8,152 @@
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/main.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        .card-stat { border: none; border-radius: 15px; transition: transform 0.3s; }
-        .card-stat:hover { transform: translateY(-5px); }
-        .bg-gradient-primary { background: linear-gradient(45deg, var(--primary), var(--primary-dk)); color: white; }
-        .bg-gradient-success { background: linear-gradient(45deg, #1cc88a, #13855c); color: white; }
-        .bg-gradient-info { background: linear-gradient(45deg, #36b9cc, #258391); color: white; }
-        .bg-gradient-warning { background: linear-gradient(45deg, #f6c23e, #dda20a); color: white; }
-        .topbar { margin-bottom: 0; }
-        table { font-size: 0.9rem; }
+        html, body { height: 100%; overflow: hidden; background: #f0f2f5; font-family: 'Outfit', sans-serif; }
+        .main-wrapper { display: flex; flex-direction: column; height: 100vh; padding: 1rem; gap: 1rem; }
+        
+        .topbar-compact { 
+            background: #2d3436; color: white; border-radius: 1rem; padding: 0.6rem 1.2rem;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .stat-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+        .stat-card-mini { 
+            background: white; border-radius: 1rem; padding: 0.8rem 1.2rem; border: none;
+            display: flex; align-items: center; gap: 1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        }
+        .stat-icon-box { 
+            width: 40px; height: 40px; border-radius: 0.8rem; display: flex; 
+            align-items: center; justify-content: center; font-size: 1.2rem;
+        }
+
+        .dashboard-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 1rem; flex-grow: 1; overflow: hidden; }
+        
+        .rpt-card { 
+            background: white; border-radius: 1.5rem; display: flex; flex-direction: column; overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+        }
+        .rpt-header { padding: 1rem 1.5rem; border-bottom: 1px solid #f1f4f8; display: flex; justify-content: space-between; align-items: center; background: white !important; text-align: left !important; box-shadow: none !important; margin-bottom: 0 !important; }
+        .rpt-body { padding: 1rem; flex-grow: 1; overflow-y: auto; }
+        .rpt-title { font-size: 1rem; font-weight: 700; margin: 0; color: #2d3436; text-transform: none !important; }
+
+        .table-sm-custom { font-size: 0.82rem; margin: 0; }
+        .table-sm-custom th { color: #888; font-weight: 600; text-transform: uppercase; font-size: 0.7rem; border: none; }
+        .table-sm-custom td { vertical-align: middle; border-color: #f8f9fa; }
+
+        .prize-row { display: flex; align-items: center; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid #f8f9fa; }
+        .prize-row:last-child { border: none; }
     </style>
 </head>
-<body class="bg-light">
+<body>
 
-    <div class="topbar">
-        <div class="container-fluid d-flex justify-content-between align-items-center">
+    <div class="main-wrapper">
+        <div class="topbar-compact shadow-sm">
             <div>
-                <a href="<?= BASE_URL ?>panel" class="text-white text-decoration-none fs-4 me-3">←</a>
-                <span class="topbar-logo text-white">📊 Dashboard de Reportes</span>
+                <a href="<?= BASE_URL ?>panel" class="text-white text-decoration-none me-3">←</a>
+                <span class="fw-bold">Reportes de Fidelización</span>
             </div>
-            <div class="text-white small">
-                Actualizado: <?= date('d/m/Y H:i') ?>
-            </div>
+            <div class="small opacity-75">Actualizado: <?= date('d/m H:i') ?></div>
         </div>
-    </div>
 
-    <div class="container mt-4 pb-5">
-        
-        <!-- Tarjetas de Resumen -->
-        <div class="row g-3 mb-4">
-            <div class="col-md-3">
-                <div class="card card-stat bg-gradient-primary shadow-sm h-100">
-                    <div class="card-body">
-                        <h6 class="text-white-50">Ventas Totales</h6>
-                        <h3>S/ <?= number_format($data['resumen']['total_ventas'], 2) ?></h3>
-                        <div class="small">Ingresos acumulados</div>
-                    </div>
+        <!-- Mini Stats -->
+        <div class="stat-bar">
+            <div class="stat-card-mini">
+                <div class="stat-icon-box" style="background: #dcfce7; color: #166534;">🌟</div>
+                <div>
+                    <div class="small text-muted fw-bold" style="font-size: 0.7rem;">PUNTOS EMITIDOS</div>
+                    <div class="h5 mb-0 fw-bold"><?= number_format($data['resumen']['puntos_emitidos']) ?></div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="card card-stat bg-gradient-success shadow-sm h-100">
-                    <div class="card-body">
-                        <h6 class="text-white-50">Puntos Emitidos</h6>
-                        <h3><?= number_format($data['resumen']['puntos_emitidos']) ?></h3>
-                        <div class="small">Fidelización activa</div>
-                    </div>
+            <div class="stat-card-mini">
+                <div class="stat-icon-box" style="background: #e0f2fe; color: #0369a1;">🛍️</div>
+                <div>
+                    <div class="small text-muted fw-bold" style="font-size: 0.7rem;">CANJES REALIZADOS</div>
+                    <div class="h5 mb-0 fw-bold"><?= number_format($data['resumen']['puntos_canjeados']) ?></div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="card card-stat bg-gradient-info shadow-sm h-100">
-                    <div class="card-body">
-                        <h6 class="text-white-50">Puntos Canjeados</h6>
-                        <h3><?= number_format($data['resumen']['puntos_canjeados']) ?></h3>
-                        <div class="small">Premios entregados</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card card-stat bg-gradient-warning shadow-sm h-100">
-                    <div class="card-body">
-                        <h6 class="text-white-50">Clientes Activos</h6>
-                        <h3><?= $data['resumen']['total_clientes'] ?></h3>
-                        <div class="small">Directorio actual</div>
-                    </div>
+            <div class="stat-card-mini">
+                <div class="stat-icon-box" style="background: #fef3c7; color: #92400e;">👥</div>
+                <div>
+                    <div class="small text-muted fw-bold" style="font-size: 0.7rem;">CLIENTES ACTIVOS</div>
+                    <div class="h5 mb-0 fw-bold"><?= $data['resumen']['total_clientes'] ?></div>
                 </div>
             </div>
         </div>
 
-        <div class="row g-4">
-            <!-- Gráfico de Ventas -->
-            <div class="col-lg-8">
-                <div class="card border-0 shadow-sm rounded-4 h-100">
-                    <div class="card-header bg-white border-0 pt-4 px-4">
-                        <h5 class="mb-0">Ventas y Puntos (Últimos 15 días)</h5>
+        <div class="dashboard-grid">
+            <!-- Columna Izquierda: Gráfico y Canjes -->
+            <div style="display: flex; flex-direction: column; gap: 1rem; overflow: hidden;">
+                <div class="rpt-card" style="flex: 1.2;">
+                    <div class="rpt-header">
+                        <h2 class="rpt-title">Movimiento de Puntos (15 días)</h2>
                     </div>
-                    <div class="card-body px-4 pb-4">
-                        <canvas id="ventasChart" style="max-height: 300px;"></canvas>
+                    <div class="rpt-body d-flex align-items-center">
+                        <canvas id="puntosChart" style="width: 100%; max-height: 100%;"></canvas>
+                    </div>
+                </div>
+
+                <div class="rpt-card" style="flex: 1;">
+                    <div class="rpt-header">
+                        <h2 class="rpt-title">Últimos Canjes</h2>
+                    </div>
+                    <div class="rpt-body">
+                        <table class="table table-sm-custom">
+                            <thead>
+                                <tr><th>Fecha</th><th>Cliente</th><th>Premio</th><th>Puntos</th></tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach($data['canjesRecientes'] as $c): ?>
+                                <tr>
+                                    <td><?= date('d/m', strtotime($c['fecha'])) ?></td>
+                                    <td><b><?= $c['cliente'] ?></b></td>
+                                    <td><?= $c['premio'] ?></td>
+                                    <td class="text-danger fw-bold">-<?= $c['puntos_usados'] ?></td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
 
-            <!-- Premios Populares -->
-            <div class="col-lg-4">
-                <div class="card border-0 shadow-sm rounded-4 h-100">
-                    <div class="card-header bg-white border-0 pt-4 px-4">
-                        <h5 class="mb-0">Top Premios</h5>
+            <!-- Columna Derecha: Conductores y Top Premios -->
+            <div style="display: flex; flex-direction: column; gap: 1rem; overflow: hidden;">
+                <div class="rpt-card" style="flex: 1;">
+                    <div class="rpt-header">
+                        <h2 class="rpt-title">Ranking Conductores</h2>
                     </div>
-                    <div class="card-body">
-                        <div class="list-group list-group-flush">
-                            <?php foreach($data['premiosPopulares'] as $p): ?>
-                            <div class="list-group-item border-0 d-flex justify-content-between align-items-center px-0">
-                                <div>
-                                    <h6 class="mb-0"><?= $p['nombre'] ?></h6>
-                                    <small class="text-muted"><?= $p['veces_canjeado'] ?> canjes</small>
-                                </div>
-                                <span class="badge bg-light text-primary rounded-pill"><?= $p['puntos_totales'] ?> pts</span>
+                    <div class="rpt-body">
+                        <table class="table table-sm-custom">
+                            <thead>
+                                <tr><th>Nombre</th><th class="text-center">Ops</th><th class="text-end">Puntos</th></tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach($data['ventasConductor'] as $v): ?>
+                                <tr>
+                                    <td><b><?= $v['nombre'] ?></b></td>
+                                    <td class="text-center"><?= $v['cantidad_ventas'] ?></td>
+                                    <td class="text-end fw-bold text-success"><?= number_format($v['total_puntos'] ?? 0) ?></td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="rpt-card" style="flex: 1;">
+                    <div class="rpt-header">
+                        <h2 class="rpt-title">Premios más Canjeados</h2>
+                    </div>
+                    <div class="rpt-body">
+                        <?php foreach($data['premiosPopulares'] as $p): ?>
+                        <div class="prize-row">
+                            <div>
+                                <div class="fw-bold" style="font-size: 0.85rem;"><?= $p['nombre'] ?></div>
+                                <div class="small text-muted" style="font-size: 0.72rem;"><?= $p['veces_canjeado'] ?> entregados</div>
                             </div>
-                            <?php endforeach; ?>
+                            <span class="badge rounded-pill bg-light text-dark" style="font-size: 0.7rem;"><?= $p['puntos_totales'] ?> pts</span>
                         </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Ventas por Conductor -->
-            <div class="col-md-6">
-                <div class="card border-0 shadow-sm rounded-4 h-100">
-                    <div class="card-header bg-white border-0 pt-4 px-4">
-                        <h5 class="mb-0">Rendimiento por Conductor</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Nombre</th>
-                                        <th>Ventas</th>
-                                        <th>Monto</th>
-                                        <th>Puntos</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach($data['ventasConductor'] as $v): ?>
-                                    <tr>
-                                        <td><?= $v['nombre'] ?></td>
-                                        <td><?= $v['cantidad_ventas'] ?></td>
-                                        <td>S/ <?= number_format($v['total_monto'], 2) ?></td>
-                                        <td><?= number_format($v['total_puntos'] ?? 0) ?></td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Canjes Recientes -->
-            <div class="col-md-6">
-                <div class="card border-0 shadow-sm rounded-4 h-100">
-                    <div class="card-header bg-white border-0 pt-4 px-4">
-                        <h5 class="mb-0">Últimos Canjes</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Fecha</th>
-                                        <th>Cliente</th>
-                                        <th>Premio</th>
-                                        <th>Puntos</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach($data['canjesRecientes'] as $c): ?>
-                                    <tr>
-                                        <td><?= date('d/m/H:i', strtotime($c['fecha'])) ?></td>
-                                        <td><?= $c['cliente'] ?></td>
-                                        <td><?= $c['premio'] ?></td>
-                                        <td><span class="text-danger">-<?= $c['puntos_usados'] ?></span></td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </div>
+                        <?php endforeach; ?>
                     </div>
                 </div>
             </div>
@@ -178,36 +161,59 @@
     </div>
 
     <script>
-    const ctx = document.getElementById('ventasChart').getContext('2d');
-    const chartData = <?= json_encode($data['ventasGrafico']) ?>;
+    const ctx = document.getElementById('puntosChart').getContext('2d');
+    const chartVentas = <?= json_encode($data['ventasGrafico']) ?>;
+    const chartCanjes = <?= json_encode($data['canjesGrafico']) ?>;
     
+    // Unir fechas únicas de ambos conjuntos de datos
+    const allLabels = [...new Set([...chartVentas.map(v => v.dia), ...chartCanjes.map(c => c.dia)])].sort();
+    
+    const dataVentas = allLabels.map(label => {
+        const found = chartVentas.find(v => v.dia === label);
+        return found ? found.puntos : 0;
+    });
+
+    const dataCanjes = allLabels.map(label => {
+        const found = chartCanjes.find(c => c.dia === label);
+        return found ? found.puntos : 0;
+    });
+
     new Chart(ctx, {
-        type: 'line',
+        type: 'bar',
         data: {
-            labels: chartData.map(d => d.dia.split('-').slice(1).reverse().join('/')),
+            labels: allLabels.map(l => l.split('-').slice(2).join('/')),
             datasets: [{
-                label: 'Monto Ventas (S/)',
-                data: chartData.map(d => d.total),
-                borderColor: '#821515',
-                backgroundColor: 'rgba(130, 21, 21, 0.1)',
-                fill: true,
-                tension: 0.3
+                label: 'Emitidos',
+                data: dataVentas,
+                backgroundColor: '#258391',
+                borderRadius: 4
             }, {
-                label: 'Puntos Emitidos',
-                data: chartData.map(d => d.puntos),
-                borderColor: '#258391',
-                borderDash: [5, 5],
-                fill: false,
-                tension: 0.3
+                label: 'Canjeados',
+                data: dataCanjes,
+                backgroundColor: '#d63031',
+                borderRadius: 4
             }]
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             plugins: {
-                legend: { position: 'top' }
+                legend: { 
+                    display: true,
+                    position: 'top',
+                    labels: { boxWidth: 12, font: { size: 10 } }
+                }
             },
             scales: {
-                y: { beginAtZero: true }
+                y: { 
+                    beginAtZero: true,
+                    grid: { color: '#f0f0f0' },
+                    ticks: { font: { size: 10 } }
+                },
+                x: { 
+                    grid: { display: false },
+                    ticks: { font: { size: 10 } }
+                }
             }
         }
     });

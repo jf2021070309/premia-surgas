@@ -88,9 +88,16 @@
         
         <!-- PANTALLA 1: INICIO -->
         <div id="screen-start" class="v-screen active">
-            <button class="btn btn-primary" onclick="initScanner()" style="margin-bottom: 1.5rem; height: 80px; font-size: 1.2rem;">
-                <span>📷</span> Escanear QR del cliente
+            <button class="btn btn-primary" onclick="initScanner()" style="margin-bottom: 0.8rem; height: 60px; font-size: 1.1rem;">
+                <span>📷</span> Escanear con cámara
             </button>
+            
+            <div style="margin-bottom: 1.5rem;">
+                <input type="file" id="qr-input-file" accept="image/*" style="display: none;" onchange="onFileChange(event)">
+                <button class="btn btn-secondary" onclick="document.getElementById('qr-input-file').click()" style="height: 60px; font-size: 1.1rem; border: 2px dashed #ccc; background: #fff; color: #666;">
+                    <span>📁</span> Subir imagen de QR
+                </button>
+            </div>
 
             <div class="card">
                 <span class="section-title">Cliente</span>
@@ -103,9 +110,9 @@
                 <div class="form-group">
                     <label>Tipo operación:</label>
                     <select id="op-type" class="form-control" disabled>
-                        <option value="5">Recarga gas Normal (+5 pts)</option>
-                        <option value="10">Recarga gas Premium (+10 pts)</option>
-                        <option value="2">Accesorio / Otros (+2 pts)</option>
+                        <?php foreach ($operaciones as $op): ?>
+                            <option value="<?= $op['puntos'] ?>"><?= htmlspecialchars($op['nombre']) ?> (+<?= $op['puntos'] ?> pts)</option>
+                        <?php endforeach; ?>
                     </select>
                 </div>
 
@@ -167,9 +174,9 @@
                 <div class="form-group">
                     <label>Tipo operación:</label>
                     <select id="main-op-type" class="form-control" onchange="updateSubtotal()">
-                        <option value="5">Recarga gas Normal (+5 pts)</option>
-                        <option value="10">Recarga gas Premium (+10 pts)</option>
-                        <option value="2">Accesorio / Otros (+2 pts)</option>
+                        <?php foreach ($operaciones as $op): ?>
+                            <option value="<?= $op['puntos'] ?>"><?= htmlspecialchars($op['nombre']) ?> (+<?= $op['puntos'] ?> pts)</option>
+                        <?php endforeach; ?>
                     </select>
                 </div>
 
@@ -180,7 +187,7 @@
                     </div>
                     <div class="form-group">
                         <label>Puntos unidad:</label>
-                        <div id="main-op-unit" style="padding: 0.8rem; font-weight: 700; color: #666;">5</div>
+                        <div id="main-op-unit" style="padding: 0.8rem; font-weight: 700; color: #666;">-</div>
                     </div>
                 </div>
 
@@ -222,6 +229,7 @@
 
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://unpkg.com/html5-qrcode"></script>
     <script>
         const baseUrl = '<?= BASE_URL ?>';
@@ -245,15 +253,53 @@
 
         async function initScanner() {
             showScreen('screen-scan');
-            html5QrCode = new Html5Qrcode("reader");
+            if (!html5QrCode) {
+                html5QrCode = new Html5Qrcode("reader");
+            }
             const config = { fps: 10, qrbox: { width: 250, height: 250 } };
             
             try {
                 await html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess);
             } catch (err) {
-                alert("Error cámara: " + err);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error de Cámara',
+                    text: err,
+                    confirmButtonColor: '#821515'
+                });
                 showScreen('screen-start');
             }
+        }
+
+        async function onFileChange(event) {
+            if (event.target.files.length === 0) return;
+            
+            const imageFile = event.target.files[0];
+            if (!html5QrCode) {
+                html5QrCode = new Html5Qrcode("reader");
+            }
+
+            // Feedback visual
+            Swal.fire({
+                title: 'Procesando QR...',
+                html: 'Leyendo imagen, por favor espera.',
+                allowOutsideClick: false,
+                didOpen: () => { Swal.showLoading(); }
+            });
+
+            try {
+                const decodedText = await html5QrCode.scanFile(imageFile, false);
+                Swal.close();
+                onScanSuccess(decodedText);
+            } catch (err) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error de Lectura',
+                    text: 'No se pudo encontrar un código QR válido en la imagen. Intenta con una foto más clara o de frente.',
+                    confirmButtonColor: '#821515'
+                });
+            }
+            event.target.value = '';
         }
 
         function stopScanner() {
@@ -273,9 +319,15 @@
                 codigo = decodedText.split('/').pop();
             }
 
-            html5QrCode.stop().then(() => {
+            // Si el escáner está activo (cámara), lo detenemos. 
+            // Si es escaneo de archivo, no hay nada que detener.
+            if (html5QrCode && html5QrCode.getState() === 2) { // 2 = Scanning
+                html5QrCode.stop().then(() => {
+                    buscarCliente(codigo);
+                });
+            } else {
                 buscarCliente(codigo);
-            });
+            }
         }
 
         async function buscarCliente(codigo) {
@@ -297,7 +349,12 @@
                     showScreen('screen-error');
                 }
             } catch (e) {
-                alert("Error de conexión");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error de Conexión',
+                    text: 'No se pudo contactar con el servidor.',
+                    confirmButtonColor: '#821515'
+                });
                 showScreen('screen-start');
             }
         }
@@ -364,7 +421,14 @@
             const total = parseInt(document.getElementById('main-total-pts').innerText);
             const clientId = document.getElementById('client-id').value;
 
-            if (total <= 0) return alert("Agrega al menos una operación");
+            if (total <= 0) {
+                return Swal.fire({
+                    icon: 'warning',
+                    title: 'Operación vacía',
+                    text: 'Agrega al menos una operación antes de guardar.',
+                    confirmButtonColor: '#821515'
+                });
+            }
 
             running = true;
             const btn = document.getElementById('save-all-btn');
@@ -383,16 +447,33 @@
                 const data = await res.json();
 
                 if (data.success) {
-                    alert("✅ Puntos registrados exitosamente");
-                    window.location.href = baseUrl + 'panel';
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Éxito!',
+                        text: 'Puntos registrados exitosamente',
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => {
+                        window.location.href = baseUrl + 'panel';
+                    });
                 } else {
-                    alert("❌ " + data.message);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: data.message,
+                        confirmButtonColor: '#821515'
+                    });
                     running = false;
                     btn.innerText = "Guardar Todo";
                     btn.disabled = false;
                 }
             } catch (e) {
-                alert("Error al conectar con servidor");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error de Servidor',
+                    text: 'Ocurrió un fallo al procesar la solicitud.',
+                    confirmButtonColor: '#821515'
+                });
                 running = false;
                 btn.innerText = "Guardar Todo";
                 btn.disabled = false;
