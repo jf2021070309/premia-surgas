@@ -21,6 +21,12 @@ class ScanController {
 
             if ($cliente && $cliente['token'] === $token) {
                 // Escenario 1: El cliente ve su propia información
+                // Seteamos sesión de cliente para que pueda entrar a la tienda
+                $_SESSION['id_cliente'] = $cliente['id'];
+                $_SESSION['nombre_cliente'] = $cliente['nombre'];
+                $_SESSION['codigo_cliente'] = $codigo;
+                $_SESSION['token_cliente']  = $token;
+
                 $ventaModel = new VentaModel();
                 $ventas = $ventaModel->getByCliente($cliente['id']);
                 $this->render('scan/perfil_cliente', [

@@ -104,7 +104,13 @@
 <div id="app" v-cloak>
     <div class="store-header">
         <div class="back-nav">
-            <a href="<?= BASE_URL ?>panel" class="btn-back">← Volver</a>
+            <?php 
+            $urlVolver = BASE_URL . 'panel';
+            if (isset($_SESSION['id_cliente']) && isset($_SESSION['codigo_cliente'])) {
+                $urlVolver = BASE_URL . 'scan?c=' . $_SESSION['codigo_cliente'] . '&t=' . $_SESSION['token_cliente'];
+            }
+            ?>
+            <a href="<?= $urlVolver ?>" class="btn-back">← Volver</a>
         </div>
         <h1 class="display-5 fw-bold">Tienda de Premios</h1>
         <p class="lead opacity-75">¡Gracias por tu preferencia! Elige tu recompensa.</p>

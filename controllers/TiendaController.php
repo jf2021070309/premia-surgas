@@ -9,7 +9,8 @@ class TiendaController {
         
         require_once __DIR__ . '/../models/ClienteModel.php';
         $clienteModel = new ClienteModel();
-        $cliente = $clienteModel->findById($_SESSION['id_usuario']);
+        $id_cliente = $_SESSION['id_cliente'] ?? $_SESSION['id_usuario'] ?? null;
+        $cliente = $clienteModel->findById($id_cliente);
 
         require_once __DIR__ . '/../models/PremioModel.php';
         $premioModel = new PremioModel();
@@ -81,7 +82,8 @@ class TiendaController {
         require_once __DIR__ . '/../models/CanjeModel.php';
         $canjeModel = new CanjeModel();
 
-        $result = $canjeModel->registrar($_SESSION['id_usuario'], $premioId, $puntosUsados, $monto);
+        $id_cliente = $_SESSION['id_cliente'] ?? $_SESSION['id_usuario'] ?? null;
+        $result = $canjeModel->registrar($id_cliente, $premioId, $puntosUsados, $monto);
 
         if ($result) {
             $_SESSION['flash'] = [
@@ -106,7 +108,7 @@ class TiendaController {
     }
 
     private function requireAuth(): void {
-        if (!isset($_SESSION['id_usuario'])) {
+        if (!isset($_SESSION['id_usuario']) && !isset($_SESSION['id_cliente'])) {
             header('Location: ' . BASE_URL . 'login');
             exit;
         }
