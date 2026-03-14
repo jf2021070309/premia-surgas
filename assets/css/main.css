@@ -230,7 +230,7 @@ a {
 .panel-header {
     background: #420202;
     color: white;
-    padding: 1.5rem 2.5rem 7rem;
+    padding: 1.5rem 2.5rem 5.5rem;
     border-radius: 0 0 3.5rem 3.5rem;
     position: relative;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
@@ -241,7 +241,7 @@ a {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 3.5rem;
+    margin-bottom: 2.5rem;
 }
 
 /* Logo Side */
@@ -256,6 +256,20 @@ a {
     object-fit: contain;
     filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
 }
+
+/* Logo Replacement Text */
+.header-logo-text-premium {
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    display: flex;
+    gap: 0.4rem;
+    line-height: 1;
+    user-select: none;
+}
+
+.text-orange { color: #ff6b00; }
+.text-white { color: #ffffff; }
 
 /* Search Side */
 .header-search-side {
@@ -394,7 +408,7 @@ a {
 /* Hero Side */
 .header-hero-content {
     text-align: center;
-    padding-bottom: 2rem;
+    padding-bottom: 1.5rem;
 }
 
 .hero-main-title {
@@ -771,22 +785,23 @@ tr:hover td {
 
     /* ── Image Header Responsive ── */
     .header-top-row {
-        flex-direction: column;
+        flex-direction: row;
+        justify-content: space-between;
         align-items: center;
-        gap: 1.2rem;
-        margin-bottom: 2rem;
-        text-align: center;
+        gap: 0.5rem;
+        margin-bottom: 1.6rem;
+        text-align: left;
     }
 
     .header-logo-side {
-        width: 100%;
-        justify-content: center;
+        width: auto;
+        justify-content: flex-start;
     }
 
     .header-user-side {
-        width: 100%;
-        justify-content: center;
-        gap: 0.8rem;
+        width: auto;
+        justify-content: flex-end;
+        gap: 0.5rem;
     }
 
     .header-main-logo {
@@ -796,7 +811,7 @@ tr:hover td {
     /* Old user pill removed */
 
     .header-hero-content {
-        padding: 1rem 0;
+        padding: 0.75rem 0;
     }
 
     .hero-main-title {
@@ -806,13 +821,13 @@ tr:hover td {
 
     .hero-welcome-msg {
         font-size: 0.85rem;
-        margin-bottom: 2rem;
+        margin-bottom: 1.2rem;
         /* Reduced from 3.5rem */
         opacity: 0.8;
     }
 
     .panel-header {
-        padding: 1rem 1rem 5rem;
+        padding: 1rem 1rem 4.5rem;
         /* Reduced bottom padding from 6rem */
         border-radius: 0 0 2rem 2rem;
     }

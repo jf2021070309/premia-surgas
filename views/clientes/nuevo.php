@@ -14,10 +14,10 @@
     <div class="panel-header">
         <div class="header-top-row">
             <div class="header-logo-side">
-                <a href="<?= BASE_URL ?>panel" style="color:#fff; font-size:1.6rem; margin-right:1.2rem; display:flex; align-items:center; transition:0.3s;" title="Volver al Panel">
-                    <i class='bx bx-left-arrow-alt'></i>
+                <a href="<?= BASE_URL ?>panel" style="text-decoration:none; display:flex; align-items:center; gap:10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); padding: 8px 20px; border-radius:100px; color: white; transition:0.3s;" title="Volver al Panel">
+                    <i class='bx bx-left-arrow-alt' style="font-size: 1.5rem;"></i>
+                    <span style="font-weight: 700; font-size: 0.9rem; letter-spacing: 0.5px;">VOLVER</span>
                 </a>
-                <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" alt="PremiaSurgas" class="header-main-logo">
             </div>
 
             <div class="header-user-side">
@@ -34,9 +34,15 @@
                 </div>
             </div>
         </div>
+
+        <!-- Título principal estilo Hero (debajo de la botonera) -->
+        <div class="header-hero-content">
+            <h1 class="hero-main-title">Nuevo Cliente</h1>
+            <p class="hero-welcome-msg">Completa los datos para registrar un nuevo cliente en el sistema</p>
+        </div>
     </div>
 
-    <div class="container" style="max-width:700px">
+    <div class="container" style="max-width:700px; margin-top: -1.5rem;">
 
         <!-- Éxito después de guardar -->
         <div v-if="clienteGuardado" class="card" style="text-align:center; margin-top:2rem">
