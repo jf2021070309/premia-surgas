@@ -56,22 +56,21 @@
                 <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" alt="PremiaSurgas" class="header-main-logo">
             </div>
 
-            <div class="header-search-side">
-                <div class="search-box-pill">
-                    <i class='bx bx-search'></i>
-                    <input type="text" placeholder="Buscar clientes o premios...">
-                </div>
-            </div>
+            <!-- Search Bar Removed -->
+            <div class="header-search-side" style="display:none;"></div> 
 
             <div class="header-user-side">
-                <div class="user-pill-glamor">
-                    <div class="user-avatar-tiny"><?= substr($_SESSION['nombre_usuario'], 0, 1) ?></div>
-                    <div class="user-info-tiny">
-                        <span class="u-role"><?= htmlspecialchars(strtoupper($_SESSION['rol'])) ?></span>
-                        <span class="u-name"><?= htmlspecialchars($_SESSION['usuario'] ?? $_SESSION['nombre_usuario']) ?></span>
+                <div class="user-card-integrated">
+                    <div class="u-avatar"><?= substr($_SESSION['nombre_usuario'], 0, 1) ?></div>
+                    <div class="u-details">
+                        <span class="u-role-tag"><?= htmlspecialchars(strtoupper($_SESSION['rol'])) ?></span>
+                        <span class="u-name-val"><?= htmlspecialchars($_SESSION['usuario'] ?? $_SESSION['nombre_usuario']) ?></span>
                     </div>
+                    <div class="u-divider"></div>
+                    <button @click="logout" class="u-logout-btn" title="Cerrar Sesión">
+                        <i class='bx bx-log-out'></i>
+                    </button>
                 </div>
-                <button @click="logout" class="btn-exit-outline">Salir</button>
             </div>
         </div>
 
@@ -87,55 +86,55 @@
     <div class="container">
         
         <div class="section-header">
-            <h3 class="section-title">Acciones Principales</h3>
+            <h3 class="section-title light">Acciones Principales</h3>
         </div>
 
         <div class="menu-grid">
             <a href="<?= BASE_URL ?>clientes/nuevo" class="menu-card">
                 <div class="menu-card-icon"><i class='bx bx-user-plus'></i></div>
                 <div class="menu-card-label">Nuevo Cliente</div>
-                <p style="font-size: 0.72rem; color: #888; margin-top: 0.3rem;">Suma nuevos clientes al equipo.</p>
+                <p>Suma nuevos clientes al equipo.</p>
             </a>
             <a href="<?= BASE_URL ?>clientes/lista" class="menu-card">
                 <div class="menu-card-icon"><i class='bx bx-group'></i></div>
                 <div class="menu-card-label">Directorio</div>
-                <p style="font-size: 0.72rem; color: #888; margin-top: 0.3rem;">Toda tu base de datos a un clic.</p>
+                <p>Toda tu base de datos a un clic.</p>
             </a>
             <a href="<?= BASE_URL ?>scan" class="menu-card">
                 <div class="menu-card-icon"><i class='bx bx-qr-scan'></i></div>
                 <div class="menu-card-label">Suma Puntos</div>
-                <p style="font-size: 0.72rem; color: #888; margin-top: 0.3rem;">¡Premiarlos es muy sencillo!</p>
+                <p>¡Premiarlos es muy sencillo!</p>
             </a>
             <a href="<?= BASE_URL ?>tienda" class="menu-card">
                 <div class="menu-card-icon"><i class='bx bx-shopping-bag'></i></div>
                 <div class="menu-card-label">Tienda</div>
-                <p style="font-size: 0.72rem; color: #888; margin-top: 0.3rem;">Descubre recompensas exclusivas.</p>
+                <p>Descubre recompensas exclusivas.</p>
             </a>
             <?php if ($_SESSION['rol'] === 'admin'): ?>
             <a href="<?= BASE_URL ?>productos" class="menu-card">
                 <div class="menu-card-icon"><i class='bx bx-gift'></i></div>
                 <div class="menu-card-label">Gestionar Premios</div>
-                <p style="font-size: 0.72rem; color: #888; margin-top: 0.3rem;">CRUD de productos y stock.</p>
+                <p>CRUD de productos y stock.</p>
             </a>
             <a href="<?= BASE_URL ?>conductores" class="menu-card">
                 <div class="menu-card-icon"><i class='bx bxs-truck'></i></div>
                 <div class="menu-card-label">Conductores</div>
-                <p style="font-size: 0.72rem; color: #888; margin-top: 0.3rem;">Gestionar equipo de reparto.</p>
+                <p>Gestionar equipo de reparto.</p>
             </a>
             <a href="<?= BASE_URL ?>configuraciones" class="menu-card">
                 <div class="menu-card-icon"><i class='bx bx-cog'></i></div>
                 <div class="menu-card-label">Parámetros</div>
-                <p style="font-size: 0.72rem; color: #888; margin-top: 0.3rem;">Configurar puntos y equivalencias.</p>
+                <p>Configurar puntos y equivalencias.</p>
             </a>
             <a href="<?= BASE_URL ?>operaciones" class="menu-card">
                 <div class="menu-card-icon"><i class='bx bx-wrench'></i></div>
                 <div class="menu-card-label">Gestión Operaciones</div>
-                <p style="font-size: 0.72rem; color: #888; margin-top: 0.3rem;">Personalizar tipos de canje.</p>
+                <p>Personalizar tipos de canje.</p>
             </a>
             <a href="<?= BASE_URL ?>canjes-admin" class="menu-card">
-                <div class="menu-card-icon"><i class='bx bx-check-double' style="color: #2ecc71;"></i></div>
+                <div class="menu-card-icon"><i class='bx bx-check-double'></i></div>
                 <div class="menu-card-label">Entregas Canjes</div>
-                <p style="font-size: 0.72rem; color: #888; margin-top: 0.3rem;">Controlar productos entregados.</p>
+                <p>Controlar productos entregados.</p>
             </a>
             <?php endif; ?>
         </div>

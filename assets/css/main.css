@@ -88,11 +88,16 @@ a {
 /* ─── Layout ────────────────────────────────────────── */
 .container {
     max-width: 1100px;
-    margin: -8rem auto 0;
-    /* Compact overlap to match first image */
+    margin: 2rem auto 0;
+    /* Standard margin for pages without deep headers */
     padding: 0 1.5rem 3rem;
     position: relative;
     z-index: 100;
+}
+
+/* Elite Overlap: Only when preceded by panel-header */
+.panel-header+.container {
+    margin-top: -8rem;
 }
 
 .card {
@@ -307,7 +312,7 @@ a {
     border-radius: 100px;
     gap: 0.8rem;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 .user-card-integrated:hover {
@@ -334,7 +339,7 @@ a {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    line-height: 1.1;
+    line-height: 1.2;
 }
 
 .u-role-tag {
@@ -343,7 +348,7 @@ a {
     color: rgba(255, 255, 255, 0.5);
     text-transform: uppercase;
     letter-spacing: 0.8px;
-    margin-bottom: 2px;
+    margin-bottom: 1px;
 }
 
 .u-name-val {
@@ -409,7 +414,8 @@ a {
     align-items: center;
     justify-content: space-between;
     margin-bottom: 1rem;
-    margin-top: 2rem;
+    margin-top: 0.5rem;
+    /* Pegado para la primera sección */
 }
 
 .section-title {
@@ -423,8 +429,9 @@ a {
 }
 
 .section-title.light {
-    color: rgba(255, 255, 255, 0.45);
-    /* Light for header bg */
+    color: #ffffff;
+    opacity: 0.9;
+    /* Pure white for header bg */
 }
 
 /* ─── Elite Menu Grid ─── */
@@ -477,6 +484,13 @@ a {
     color: var(--text);
     font-size: 0.95rem;
     letter-spacing: -0.01em;
+}
+
+.menu-card p {
+    font-size: 0.72rem;
+    color: #888;
+    margin-top: 0.3rem;
+    line-height: 1.3;
 }
 
 .stats-container {
@@ -709,23 +723,46 @@ tr:hover td {
         font-size: .95rem;
     }
 
-    .topbar-user {
-        display: none;
+    /* Integrated User Card Mobile */
+    .user-card-integrated {
+        padding: 0.25rem 0.25rem 0.25rem 0.8rem;
+        gap: 0.5rem;
     }
 
-    /* oculta el nombre en pantalla muy chica */
-    .btn-logout {
-        padding: .4rem .7rem;
-        font-size: .8rem;
+    .u-avatar {
+        width: 28px;
+        height: 28px;
+        font-size: 0.8rem;
     }
 
-    /* Contenedor sin márgenes exagerados */
-    /* Contenedor sin márgenes exagerados */
+    .u-name-val {
+        font-size: 0.75rem;
+    }
+
+    .u-role-tag {
+        font-size: 0.55rem;
+    }
+
+    .u-logout-btn {
+        width: 30px;
+        height: 30px;
+    }
+
+    .u-logout-btn i {
+        font-size: 1rem;
+    }
+
+    /* Contenedor responsivo */
     .container {
         padding: 0 1rem 2rem;
         max-width: 100% !important;
+        margin-top: 1rem;
+        /* Default for mobile */
+    }
+
+    /* Elite Overlap Mobile */
+    .panel-header+.container {
         margin-top: -3.5rem;
-        /* Reduced overlap for mobile visibility */
     }
 
     /* ── Image Header Responsive ── */
@@ -752,17 +789,7 @@ tr:hover td {
         height: 30px;
     }
 
-    .user-pill-glamor {
-        padding: 0.25rem 0.8rem;
-    }
-
-    .u-name {
-        font-size: 0.75rem;
-    }
-
-    .u-role {
-        font-size: 0.6rem;
-    }
+    /* Old user pill removed */
 
     .header-hero-content {
         padding: 1rem 0;
