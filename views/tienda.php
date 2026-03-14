@@ -116,13 +116,15 @@
         <h1 class="display-5 fw-bold">Tienda de Premios</h1>
         <p class="lead opacity-75">¡Gracias por tu preferencia! Elige tu recompensa.</p>
         
+        <?php if (isset($_SESSION['id_cliente']) && !isset($_SESSION['rol'])): ?>
         <div class="user-balance-pill shadow-sm">
             <span style="font-size: 1.5rem;">⭐</span>
             <div class="text-start">
                 <div class="small opacity-75 fw-600">TU SALDO</div>
-                <div class="h5 mb-0 fw-800"><?= number_format($cliente['puntos']) ?> Puntos</div>
+                <div class="h5 mb-0 fw-800"><?= number_format($cliente['puntos'] ?? 0) ?> Puntos</div>
             </div>
         </div>
+        <?php endif; ?>
     </div>
 
     <div class="container mt-4">
