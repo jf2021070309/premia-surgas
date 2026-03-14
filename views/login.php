@@ -85,20 +85,21 @@
 
         .btn-submit {
             width: 100%;
-            padding: 1rem;
+            padding: 1.1rem;
             border: none;
             border-radius: 0.75rem;
             background: #821515;
             color: white;
-            font-weight: 600;
+            font-weight: 400;
             font-size: 1rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.6rem;
             cursor: pointer;
             transition: all 0.3s;
             font-family: inherit;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         .btn-submit:hover { 
             background: #6b1111; 
@@ -147,9 +148,8 @@
                 </div>
 
                 <button type="submit" class="btn-submit" :disabled="loading">
-                    <i class='bx bx-log-in-circle' v-if="!loading"></i>
-                    <span v-if="loading">Verificando...</span>
-                    <span v-else>Iniciar Sesión</span>
+                    <span v-if="loading">VERIFICANDO...</span>
+                    <span v-else>INICIAR SESIÓN</span>
                 </button>
             </form>
         </div>
