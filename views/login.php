@@ -6,20 +6,23 @@
     <title>Iniciar Sesión — PremiaSurgas</title>
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/main.css">
     <style>
-        body { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
-        .login-wrap { width: 100%; max-width: 420px; padding: 1.5rem; }
-        .login-header { text-align: center; margin-bottom: 2rem; }
-        .login-header .logo-icon { font-size: 3rem; }
-        .login-header h1 { font-size: 1.7rem; color: var(--dark); }
-        .login-header h1 span { color: var(--primary); }
-        .login-header p { color: var(--muted); font-size: .9rem; margin-top: .3rem; }
+        body { 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh; 
+            background-color: #520006;
+            margin: 0;
+        }
+        .login-wrap { width: 100%; max-width: 440px; padding: 1.5rem; box-sizing: border-box; }
+        .login-header { text-align: center; margin-bottom: 2.5rem; }
+        .login-logo { width: 100%; max-width: 320px; height: auto; margin-bottom: 0.5rem; }
+        .login-header p { color: rgba(255,255,255,0.8); font-size: .95rem; margin-top: .3rem; }
         [v-cloak] { display: none; }
         @media (max-width: 600px) {
-            body { align-items: flex-start; padding-top: 2rem; }
-            .login-wrap  { padding: 1rem; }
-            .login-header { margin-bottom: 1.5rem; }
-            .login-header .logo-icon { font-size: 2.2rem; }
-            .login-header h1 { font-size: 1.4rem; }
+            .login-wrap  { padding: 1.2rem; }
+            .login-header { margin-bottom: 2rem; }
+            .login-logo { max-width: 280px; }
             /* Evita zoom auto de iOS en inputs */
             input { font-size: 16px !important; }
         }
@@ -29,8 +32,7 @@
 <div id="app" v-cloak>
     <div class="login-wrap">
         <div class="login-header">
-            <div class="logo-icon">🔥</div>
-            <h1>Premia<span>Surgas</span></h1>
+            <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" alt="Logo PremiaSurgas" class="login-logo">
             <p>Acceso para conductores y administradores</p>
         </div>
 
