@@ -102,6 +102,7 @@ CREATE TABLE canjes (
     monto DECIMAL(10,2) DEFAULT 0,
 
     fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    estado ENUM('pendiente', 'entregado') DEFAULT 'pendiente',
 
     FOREIGN KEY (cliente_id) REFERENCES clientes(id),
     FOREIGN KEY (premio_id) REFERENCES premios(id)
