@@ -5,14 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Cliente — PremiaSurgas</title>
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/main.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
-    <div class="topbar">
-        <a href="<?= BASE_URL ?>clientes/lista" style="color:#fff; font-size:1.3rem; margin-right:.8rem">←</a>
-        <span class="topbar-logo">✏️ Editar Cliente</span>
+    <div class="panel-header">
+        <div class="header-top-row">
+            <div class="header-logo-side">
+                <a href="<?= BASE_URL ?>clientes/lista" style="color:#fff; font-size:1.6rem; margin-right:1.2rem; display:flex; align-items:center; transition:0.3s;" title="Volver a la Lista">
+                    <i class='bx bx-left-arrow-alt'></i>
+                </a>
+                <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" alt="PremiaSurgas" class="header-main-logo">
+            </div>
+        </div>
+        <div class="header-hero-content">
+            <h1 class="hero-main-title">Editar Cliente</h1>
+            <p class="hero-welcome-msg">Modifica el perfil del cliente y sus preferencias.</p>
+        </div>
     </div>
 
-    <div class="container" style="max-width: 500px; margin-top: 2rem;">
+    <div class="container" style="max-width: 500px">
         <div class="card">
             <form action="<?= BASE_URL ?>clientes/update" method="POST" style="padding: 1.5rem;">
                 <input type="hidden" name="id" value="<?= $cliente['id'] ?>">

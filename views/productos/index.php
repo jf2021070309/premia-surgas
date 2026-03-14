@@ -8,6 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/main.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <style>
         [v-cloak] { display: none; }
         .dropzone-area {
@@ -43,25 +44,32 @@
 </head>
 <body>
 <div id="app" v-cloak>
-    <div class="topbar">
-        <div class="container-fluid d-flex flex-wrap justify-content-between align-items-center py-2">
-            <div class="d-flex align-items-center mb-2 mb-md-0">
-                <a href="<?= BASE_URL ?>panel" class="text-white text-decoration-none fs-4 me-3">←</a>
-                <span class="topbar-logo text-white">🎁 Productos</span>
+    <div class="panel-header">
+        <div class="header-top-row">
+            <div class="header-logo-side">
+                <a href="<?= BASE_URL ?>panel" style="color:#fff; font-size:1.6rem; margin-right:1.2rem; display:flex; align-items:center; transition:0.3s;" title="Volver al Panel">
+                    <i class='bx bx-left-arrow-alt'></i>
+                </a>
+                <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" alt="PremiaSurgas" class="header-main-logo">
             </div>
-            <div class="d-flex flex-wrap gap-2 align-items-center">
-                <div class="input-group input-group-sm" style="width: 250px;">
+            <div class="header-user-side">
+                <button class="btn btn-primary shadow-sm" style="border-radius:100px; padding:0.5rem 1.2rem; font-weight:700;" @click="nuevoProducto">
+                    <i class='bx bx-plus-circle me-1'></i> Nuevo Premio
+                </button>
+            </div>
+        </div>
+        <div class="header-hero-content">
+            <h1 class="hero-main-title">Listado de Premios</h1>
+            <div class="d-flex flex-wrap gap-2 justify-content-center mt-3">
+                <div class="input-group input-group-sm shadow-sm" style="width: 250px; border-radius:10px; overflow:hidden;">
                     <span class="input-group-text bg-white border-0">🔍</span>
                     <input type="text" class="form-control border-0" placeholder="Buscar producto..." v-model="busqueda">
                 </div>
-                <select class="form-select form-select-sm border-0" style="width: 130px;" v-model="filtroEstado">
-                    <option value="todos">Todos</option>
-                    <option value="1">Activos</option>
-                    <option value="0">Inactivos</option>
+                <select class="form-select form-select-sm border-0 shadow-sm" style="width: 130px; border-radius:10px;" v-model="filtroEstado">
+                    <option value="todos">Todos los Estados</option>
+                    <option value="1">Solo Activos</option>
+                    <option value="0">Solo Inactivos</option>
                 </select>
-                <button class="btn btn-primary btn-sm" @click="nuevoProducto">
-                    + Nuevo
-                </button>
             </div>
         </div>
     </div>

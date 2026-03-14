@@ -7,19 +7,33 @@
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/main.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>[v-cloak]{display:none}</style>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>[v-cloak]{display:none}</style>
 </head>
 <body>
 <div id="app" v-cloak>
-    <div class="topbar">
-        <a href="<?= BASE_URL ?>panel" style="color:#fff; font-size:1.3rem; margin-right:.8rem">←</a>
-        <span class="topbar-logo">📋 Lista de Clientes</span>
-        <div class="topbar-actions">
-            <a href="<?= BASE_URL ?>clientes/nuevo" class="btn btn-primary" style="padding:.4rem 1rem;font-size:.85rem">+ Nuevo</a>
+    <div class="panel-header">
+        <div class="header-top-row">
+            <div class="header-logo-side">
+                <a href="<?= BASE_URL ?>panel" style="color:#fff; font-size:1.6rem; margin-right:1.2rem; display:flex; align-items:center; transition:0.3s;" title="Volver al Panel">
+                    <i class='bx bx-left-arrow-alt'></i>
+                </a>
+                <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" alt="PremiaSurgas" class="header-main-logo">
+            </div>
+            <div class="header-user-side">
+                <a href="<?= BASE_URL ?>clientes/nuevo" class="btn btn-primary shadow-sm" style="border-radius:100px; padding:0.5rem 1.2rem; font-weight:700;">
+                    <i class='bx bx-plus-circle me-1'></i> Nuevo Cliente
+                </a>
+            </div>
+        </div>
+        <div class="header-hero-content">
+            <h1 class="hero-main-title">Directorio de Clientes</h1>
+            <p class="hero-welcome-msg">Gestiona y consulta la base de datos de fidelización.</p>
         </div>
     </div>
 
     <div class="container">
-        <div class="card" style="margin-top:1.5rem; padding:1rem">
+        <div class="card" style="padding:1rem">
             <input type="text" v-model="busqueda" placeholder="🔍 Buscar por nombre, celular o código..."
                    style="width:100%; padding:.7rem 1rem; border:1.5px solid #dde0e6; border-radius:8px; font-family:inherit; font-size:.95rem; margin-bottom:1rem; box-sizing:border-box">
 

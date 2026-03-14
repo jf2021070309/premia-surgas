@@ -5,13 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nuevo Cliente — PremiaSurgas</title>
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/main.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <style>[v-cloak]{display:none}</style>
 </head>
 <body>
 <div id="app" v-cloak>
-    <div class="topbar">
-        <a href="<?= BASE_URL ?>panel" style="color:#fff; font-size:1.3rem; margin-right:.8rem">←</a>
-        <span class="topbar-logo">📝 Registrar Cliente</span>
+    <div class="panel-header">
+        <div class="header-top-row">
+            <div class="header-logo-side">
+                <a href="<?= BASE_URL ?>panel" style="color:#fff; font-size:1.6rem; margin-right:1.2rem; display:flex; align-items:center; transition:0.3s;" title="Volver al Panel">
+                    <i class='bx bx-left-arrow-alt'></i>
+                </a>
+                <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" alt="PremiaSurgas" class="header-main-logo">
+            </div>
+        </div>
+        <div class="header-hero-content">
+            <h1 class="hero-main-title">Registrar Cliente</h1>
+            <p class="hero-welcome-msg">Ingresa los datos para sumar un nuevo cliente al sistema.</p>
+        </div>
     </div>
 
     <div class="container" style="max-width:560px">
@@ -31,51 +42,76 @@
         </div>
 
         <!-- Formulario -->
-        <div v-else class="card" style="margin-top:2rem">
-            <div class="card-title">Datos del Cliente</div>
+        <div v-else class="card elite-form-card animate-fade-in">
+            <div class="card-header-premium">
+                <i class='bx bx-user-pin'></i>
+                <span>Datos de Registro</span>
+            </div>
 
             <div v-if="error" class="alert alert-error">{{ error }}</div>
 
-            <form @submit.prevent="guardar">
-                <div class="form-group">
-                    <label>Nombre Completo *</label>
-                    <input type="text" v-model="form.nombre" @input="validateName" required 
-                           pattern="[A-Za-zñÑáéíóúÁÉÍÓÚ\s]+" 
-                           title="Solo se permiten letras y espacios" 
-                           placeholder="Ej. Juan Pérez">
+            <form @submit.prevent="guardar" class="premium-form">
+                <div class="form-group-modern">
+                    <label><i class='bx bx-id-card'></i> Nombre Completo *</label>
+                    <div class="input-wrapper">
+                        <input type="text" v-model="form.nombre" @input="validateName" required 
+                               pattern="[A-Za-zñÑáéíóúÁÉÍÓÚ\s]+" 
+                               title="Solo se permiten letras y espacios" 
+                               placeholder="Ej. Juan Pérez">
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Celular *</label>
-                    <input type="tel" v-model="form.celular" @input="validatePhone" required 
-                           pattern="\d{9}" 
-                           maxlength="9"
-                           title="Debe tener exactamente 9 dígitos" 
-                           placeholder="987 654 321">
+
+                <div class="form-group-modern">
+                    <label><i class='bx bx-phone'></i> Número de Celular *</label>
+                    <div class="input-wrapper">
+                        <input type="tel" v-model="form.celular" @input="validatePhone" required 
+                               pattern="\d{9}" 
+                               maxlength="9"
+                               title="Debe tener exactamente 9 dígitos" 
+                               placeholder="987 654 321">
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Dirección</label>
-                    <input type="text" v-model="form.direccion" placeholder="Av. Principal 123">
+
+                <div class="row-modern">
+                    <div class="form-group-modern">
+                        <label><i class='bx bx-map-pin'></i> Dirección</label>
+                        <div class="input-wrapper">
+                            <input type="text" v-model="form.direccion" placeholder="Av. Principal 123">
+                        </div>
+                    </div>
+
+                    <div class="form-group-modern">
+                        <label><i class='bx bx-buildings'></i> Distrito</label>
+                        <div class="input-wrapper">
+                            <select v-model="form.distrito" class="form-control-modern">
+                                <option value="">-- Seleccionar --</option>
+                                <option value="Tacna (capital)">Tacna (capital)</option>
+                                <option value="Alto de la Alianza">Alto de la Alianza</option>
+                                <option value="Calana">Calana</option>
+                                <option value="Ciudad Nueva">Ciudad Nueva</option>
+                                <option value="Coronel Gregorio Albarracín Lanchipa">Coronel Gregorio Albarracín Lanchipa</option>
+                                <option value="Inclán">Inclán</option>
+                                <option value="La Yarada-Los Palos">La Yarada-Los Palos</option>
+                                <option value="Pachía">Pachía</option>
+                                <option value="Palca">Palca</option>
+                                <option value="Pocollay">Pocollay</option>
+                                <option value="Sama">Sama</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Distrito</label>
-                    <select v-model="form.distrito" class="form-control">
-                        <option value="">-- Seleccionar --</option>
-                        <option value="Tacna (capital)">Tacna (capital)</option>
-                        <option value="Alto de la Alianza">Alto de la Alianza</option>
-                        <option value="Calana">Calana</option>
-                        <option value="Ciudad Nueva">Ciudad Nueva</option>
-                        <option value="Coronel Gregorio Albarracín Lanchipa">Coronel Gregorio Albarracín Lanchipa</option>
-                        <option value="Inclán">Inclán</option>
-                        <option value="La Yarada-Los Palos">La Yarada-Los Palos</option>
-                        <option value="Pachía">Pachía</option>
-                        <option value="Palca">Palca</option>
-                        <option value="Pocollay">Pocollay</option>
-                        <option value="Sama">Sama</option>
-                    </select>
+
+                <div class="form-footer-actions">
+                    <button type="submit" class="btn-premium-submit" :disabled="loading">
+                        <span v-if="!loading">
+                            <i class='bx bx-save'></i> Registrar Cliente Ahora
+                        </span>
+                        <span v-else>
+                            <i class='bx bx-loader-alt bx-spin'></i> Procesando...
+                        </span>
+                    </button>
+                    <p class="form-hint">Campos marcados con (*) son obligatorios</p>
                 </div>
-                <button type="submit" class="btn btn-primary btn-full" :disabled="loading">
-                    {{ loading ? 'Guardando...' : 'Guardar Cliente' }}
-                </button>
             </form>
         </div>
 
