@@ -152,7 +152,7 @@
     <div class="container">
         <div class="points-card">
             <span class="points-label"><i class='bx bx-medal'></i> Tienes acumulados</span>
-            <b class="points-value"><?= $cliente['puntos'] ?></b>
+            <b class="points-value"><?= (int) ($cliente['puntos'] ?? 0) ?></b>
             <span class="points-suffix">Puntos Surgas</span>
         </div>
 

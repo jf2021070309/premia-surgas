@@ -234,8 +234,8 @@
     new Vue({
         el: '#app',
         data: {
-            saldo: <?= $cliente['puntos'] ?>,
-            montoPorPunto: <?= $montoPorPunto ?>,
+            saldo: <?= (int) ($cliente['puntos'] ?? 0) ?>,
+            montoPorPunto: <?= (float) ($montoPorPunto ?? 0.05) ?>,
             selected: {},
             tipo: 'total',
             pct: 50,
