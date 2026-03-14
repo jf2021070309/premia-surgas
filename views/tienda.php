@@ -231,7 +231,7 @@
                                 <span>Puntos ({{ pct }}%)</span>
                                 <b>{{ puntosDcto }} pts</b>
                             </div>
-                            <input type="range" class="form-range" v-model="pct" min="10" max="90" step="10">
+                            <input type="range" class="form-range" v-model="pct" min="0" :max="maxSliderPct" step="1">
                             <div class="d-flex justify-content-between mt-2">
                                 <span>Pagarás:</span>
                                 <b class="text-danger">S/ {{ montoEfectivo }}</b>
@@ -273,11 +273,21 @@
             saldoInsuficiente() {
                 return this.saldo < this.selected.puntos;
             },
+            maxSliderPct() {
+                if (!this.selected.puntos) return 0;
+                // El porcentaje máximo es el menor entre 90% y lo que el saldo del cliente permita
+                const pctSaldo = (this.saldo / this.selected.puntos) * 100;
+                return Math.min(90, Math.floor(pctSaldo));
+            },
             puntosDcto() {
-                return Math.round(this.selected.puntos * (this.pct / 100));
+                if (!this.selected.puntos) return 0;
+                // Calculamos puntos según porcentaje del slider
+                let pts = Math.round(this.selected.puntos * (this.pct / 100));
+                // Pero nunca más de lo que tiene el cliente
+                return Math.min(pts, this.saldo);
             },
             montoEfectivo() {
-                // Cálculo dinámico según parámetro del sistema
+                if (!this.selected.puntos) return 0;
                 const puntosRestantes = this.selected.puntos - this.puntosDcto;
                 return (puntosRestantes * this.montoPorPunto).toFixed(2);
             }
@@ -286,6 +296,12 @@
             abrirCanje(prize) {
                 this.selected = prize;
                 this.tipo = this.saldo < prize.puntos ? 'descuento' : 'total';
+                
+                // Al abrir, ajustamos el pct al máximo permitido
+                this.$nextTick(() => {
+                    this.pct = this.maxSliderPct;
+                });
+
                 this.modal = new bootstrap.Modal(document.getElementById('modalCanje'));
                 this.modal.show();
             }
