@@ -69,8 +69,9 @@
 
             <form @submit.prevent="guardar" class="premium-form">
                 <div class="form-group-modern">
-                    <label><i class='bx bx-id-card'></i> Nombre Completo *</label>
+                    <label>Nombre Completo *</label>
                     <div class="input-wrapper">
+                        <i class='bx bx-id-card'></i>
                         <input type="text" v-model="form.nombre" @input="validateName" required 
                                pattern="[A-Za-zñÑáéíóúÁÉÍÓÚ\s]+" 
                                title="Solo se permiten letras y espacios" 
@@ -79,8 +80,9 @@
                 </div>
 
                 <div class="form-group-modern">
-                    <label><i class='bx bx-phone'></i> Número de Celular *</label>
+                    <label>Número de Celular *</label>
                     <div class="input-wrapper">
+                        <i class='bx bx-phone'></i>
                         <input type="tel" v-model="form.celular" @input="validatePhone" required 
                                pattern="\d{9}" 
                                maxlength="9"
@@ -91,15 +93,17 @@
 
                 <div class="row-modern">
                     <div class="form-group-modern">
-                        <label><i class='bx bx-map-pin'></i> Dirección</label>
+                        <label>Dirección</label>
                         <div class="input-wrapper">
+                            <i class='bx bx-map-pin'></i>
                             <input type="text" v-model="form.direccion" placeholder="Av. Principal 123">
                         </div>
                     </div>
 
                     <div class="form-group-modern">
-                        <label><i class='bx bx-buildings'></i> Distrito</label>
+                        <label>Distrito</label>
                         <div class="input-wrapper">
+                            <i class='bx bx-buildings'></i>
                             <select v-model="form.distrito" class="form-control-modern">
                                 <option value="">-- Seleccionar --</option>
                                 <option value="Tacna (capital)">Tacna (capital)</option>
