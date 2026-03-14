@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/main.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root {
             --low: #2ecc71;
@@ -272,6 +273,68 @@
 
 <?php if (isset($_SESSION['flash'])): ?>
 <script>
+    <?php if ($_SESSION['flash']['type'] === 'success'): ?>
+        const duration = 3 * 1000;
+        const animationEnd = Date.now() + duration;
+        const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+        function randomInRange(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+
+        const interval = setInterval(function() {
+            const timeLeft = animationEnd - Date.now();
+
+            if (timeLeft <= 0) {
+                return clearInterval(interval);
+            }
+
+            const particleCount = 50 * (timeLeft / duration);
+            // since particles fall down, start a bit higher than random
+            confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+            confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+        }, 250);
+
+        Swal.fire({
+            title: '<h2 style="color: #821515; font-weight: 800; margin-bottom: 0;">¡EXCELENTE CANJE!</h2>',
+            html: `
+                <div style="padding: 1rem;">
+                    <p style="font-size: 1.2rem; color: #333; margin-bottom: 1.5rem;">
+                        <b>¡Felicidades!</b> Acabas de canjear un premio increíble.
+                    </p>
+                    <div style="background: #f8f9fa; border-radius: 15px; padding: 1.5rem; border: 1px dashed #821515; margin-bottom: 1.5rem;">
+                        <p style="margin-bottom: 0.5rem; color: #666;">Para reclamar tu producto:</p>
+                        <h4 style="color: #821515; font-weight: 700; margin-bottom: 1rem;">📍 Ven a la planta principal</h4>
+                        <p style="margin-bottom: 0.5rem; color: #666;">O escríbenos por WhatsApp:</p>
+                        <a href="https://wa.me/51931187102" target="_blank" style="text-decoration: none; background: #25D366; color: white; padding: 0.8rem 1.5rem; border-radius: 50px; display: inline-flex; align-items: center; gap: 10px; font-weight: 600;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.06 3.973L0 16l4.204-1.102a7.934 7.934 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/>
+                            </svg>
+                            931187102
+                        </a>
+                    </div>
+                    <p style="font-size: 0.9rem; color: #888;">¡Gracias por ser parte de PremiaSurgas!</p>
+                </div>
+            `,
+            showConfirmButton: true,
+            confirmButtonText: '¡ENTENDIDO!',
+            confirmButtonColor: '#821515',
+            width: '400px',
+            padding: '1.5rem',
+            background: '#fff',
+            backdrop: `rgba(130, 21, 21, 0.6)`,
+            showClass: {
+                popup: 'animate__animated animate__zoomIn'
+            },
+            hideClass: {
+                popup: 'animate__animated animate__fadeOutDown'
+            },
+            customClass: {
+                title: 'text-dark',
+                popup: 'rounded-5 border-0 shadow-lg'
+            }
+        });
+    <?php else: ?>
     Swal.fire({
         icon: '<?= $_SESSION['flash']['type'] ?>',
         title: '<?= $_SESSION['flash']['title'] ?>',
@@ -279,6 +342,7 @@
         timer: 3000,
         timerProgressBar: true
     });
+    <?php endif; ?>
 </script>
 <?php unset($_SESSION['flash']); endif; ?>
 </body>
