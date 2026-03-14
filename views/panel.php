@@ -50,31 +50,41 @@
 <body>
 <div id="app" v-cloak>
     <div class="panel-header">
-        <div class="panel-header-actions">
-            <div class="user-profile-compact">
-                <div class="user-avatar-circle"><?= substr($_SESSION['nombre_usuario'], 0, 1) ?></div>
-                <div class="user-details">
-                    <span class="role"><?= htmlspecialchars(strtoupper($_SESSION['rol'])) ?></span>
-                    <span class="name" style="font-weight: 800;"><?= htmlspecialchars($_SESSION['usuario'] ?? $_SESSION['nombre_usuario']) ?></span>
+        <!-- Header Top Row: Logo, Search, Profile -->
+        <div class="header-top-row">
+            <div class="header-logo-side">
+                <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" alt="PremiaSurgas" class="header-main-logo">
+            </div>
+
+            <div class="header-search-side">
+                <div class="search-box-pill">
+                    <i class='bx bx-search'></i>
+                    <input type="text" placeholder="Buscar clientes o premios...">
                 </div>
-                <a href="#" @click.prevent="logout">
-                    <button class="btn-logout-minimal">Salir</button>
-                </a>
+            </div>
+
+            <div class="header-user-side">
+                <div class="user-pill-glamor">
+                    <div class="user-avatar-tiny"><?= substr($_SESSION['nombre_usuario'], 0, 1) ?></div>
+                    <div class="user-info-tiny">
+                        <span class="u-role"><?= htmlspecialchars(strtoupper($_SESSION['rol'])) ?></span>
+                        <span class="u-name"><?= htmlspecialchars($_SESSION['usuario'] ?? $_SESSION['nombre_usuario']) ?></span>
+                    </div>
+                </div>
+                <button @click="logout" class="btn-exit-outline">Salir</button>
             </div>
         </div>
-        
-        <div class="logo-text" style="font-size: 1.6rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.4rem; margin-bottom: 0.5rem;">
-            <i class='bx bxs-hot' style="color: #ffbc58; font-size: 1.8rem;"></i>
-            PremiaSurgas
+
+        <!-- Header Hero Content -->
+        <div class="header-hero-content">
+            <h1 class="hero-main-title">
+                <?= $_SESSION['rol'] === 'admin' ? 'Panel de Control' : 'Panel del Conductor' ?>
+            </h1>
+            <p class="hero-welcome-msg">Bienvenido de nuevo. ¿Qué haremos hoy?</p>
         </div>
-        
-        <h2 style="font-size: 1.8rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 0.4rem;">
-            <?= $_SESSION['rol'] === 'admin' ? 'Panel de Control' : 'Panel del Conductor' ?>
-        </h2>
-        <p style="opacity: 0.9; font-size: 1rem; font-weight: 400;">Bienvenido de nuevo. ¿Qué haremos hoy?</p>
     </div>
 
-    <div class="container" style="max-width: 1000px; padding-bottom: 3rem;">
+    <div class="container">
         
         <div class="section-header">
             <h3 class="section-title">Acciones Principales</h3>
