@@ -116,7 +116,7 @@
         <h1 class="display-5 fw-bold">Tienda de Premios</h1>
         <p class="lead opacity-75">¡Gracias por tu preferencia! Elige tu recompensa.</p>
         
-        <?php if (isset($_SESSION['id_cliente']) && !isset($_SESSION['rol'])): ?>
+        <?php if (isset($_SESSION['id_cliente'])): ?>
         <div class="user-balance-pill shadow-sm">
             <span style="font-size: 1.5rem;">⭐</span>
             <div class="text-start">
