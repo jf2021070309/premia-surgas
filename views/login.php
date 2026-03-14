@@ -12,30 +12,33 @@
             align-items: center; 
             justify-content: center; 
             min-height: 100vh; 
-            background-color: #520006;
+            background: radial-gradient(circle at center, #520006 0%, #3a0004 100%);
             margin: 0;
             font-family: 'Lexend', sans-serif;
+            color: #333;
         }
-        .login-wrap { width: 100%; max-width: 440px; padding: 1.5rem; box-sizing: border-box; }
-        .login-header { text-align: center; margin-bottom: 2.5rem; }
+        .login-wrap { width: 100%; max-width: 420px; padding: 1.5rem; box-sizing: border-box; }
+        .login-header { text-align: center; margin-bottom: 2.2rem; }
         .login-logo { 
             width: 100%; 
-            max-width: 380px; 
+            max-width: 360px; 
             height: auto; 
-            margin-bottom: 0.8rem;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.2));
             animation: fadeInScale 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
         .login-header p { 
-            color: rgba(255,255,255,0.8); 
-            font-size: 1.15rem; 
-            margin-top: 0.2rem; 
+            color: rgba(255,255,255,0.7); 
+            font-size: 1rem; 
+            margin: 0; 
             font-weight: 300;
             opacity: 0;
+            letter-spacing: 0.5px;
             animation: fadeIn 1s ease 0.3s forwards;
         }
 
         @keyframes fadeInScale {
-            from { opacity: 0; transform: scale(0.9) translateY(-10px); }
+            from { opacity: 0; transform: scale(0.95) translateY(-10px); }
             to { opacity: 1; transform: scale(1) translateY(0); }
         }
         @keyframes fadeIn {
@@ -45,76 +48,77 @@
         
         .card { 
             background: white; 
-            border-radius: 1rem; 
-            padding: 2.2rem; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-            border: 1px solid #eee;
+            border-radius: 0.8rem; 
+            padding: 2.5rem; 
+            box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
         }
         
-        .form-label { display: block; font-weight: 500; font-size: 0.9rem; color: #555; margin-bottom: 0.6rem; }
+        .form-label { display: block; font-weight: 500; font-size: 0.85rem; color: #666; margin-bottom: 0.7rem; text-transform: uppercase; letter-spacing: 0.8px; }
         
-        .input-group { position: relative; margin-bottom: 1.5rem; }
+        .input-group { position: relative; margin-bottom: 1.8rem; }
         .input-group i { 
             position: absolute; 
-            left: 1.1rem; 
+            left: 1.25rem; 
             top: 50%; 
             transform: translateY(-50%); 
-            font-size: 1.2rem; 
-            color: #aaa;
-            transition: color 0.3s;
+            font-size: 1.3rem; 
+            color: #cbd5e0;
+            transition: all 0.3s ease;
         }
         .form-control {
             width: 100%;
-            padding: 0.9rem 1rem 0.9rem 3rem !important;
-            border: 1.5px solid #eaeaea !important;
-            background: #fafafa !important;
-            border-radius: 0.75rem !important;
+            padding: 1.1rem 1rem 1.1rem 3.4rem !important;
+            border: 1.5px solid #edf2f7 !important;
+            background: #f8fafc !important;
+            border-radius: 0.6rem !important;
             box-sizing: border-box;
-            transition: all 0.3s;
-            font-size: 0.95rem;
-            color: #333;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 1rem;
+            color: #2d3748;
             font-family: inherit;
         }
         .form-control:focus {
             background: white !important;
             border-color: #821515 !important;
             outline: none;
-            box-shadow: 0 0 0 4px rgba(130, 21, 21, 0.05);
+            box-shadow: 0 0 0 4px rgba(130, 21, 21, 0.08);
         }
         .input-group:focus-within i { color: #821515; }
 
         .btn-submit {
             width: 100%;
-            padding: 1.1rem;
+            padding: 1.25rem;
             border: none;
-            border-radius: 0.75rem;
+            border-radius: 0.6rem;
             background: #821515;
             color: white;
             font-weight: 400;
-            font-size: 1rem;
+            font-size: 0.95rem;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             font-family: inherit;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1.5px;
+            box-shadow: 0 4px 12px rgba(82, 21, 21, 0.2);
         }
         .btn-submit:hover { 
             background: #6b1111; 
-            transform: translateY(-1px);
-            box-shadow: 0 5px 15px rgba(130, 21, 21, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(82, 21, 21, 0.3);
         }
         .btn-submit:active { transform: translateY(0); }
         
         [v-cloak] { display: none; }
         
         @media (max-width: 600px) {
-            .login-wrap { padding: 1.2rem; }
-            .card { padding: 1.8rem 1.4rem; border-radius: 0.8rem; }
-            .login-logo { max-width: 310px; }
-            .login-header p { font-size: 1rem; }
+            .login-wrap { padding: 1.5rem; }
+            .card { padding: 2rem 1.5rem; border-radius: 0.75rem; }
+            .login-logo { max-width: 320px; }
+            .login-header p { font-size: 0.9rem; }
             input { font-size: 16px !important; }
         }
     </style>
