@@ -230,7 +230,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
     <script>
         const baseUrl = '<?= BASE_URL ?>';
         let html5QrCode;
@@ -241,14 +241,13 @@
             document.querySelectorAll('.v-screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             
-            // Actualizar título si es necesario
             const titles = {
                 'screen-start': 'Registrar Puntos',
                 'screen-scan': 'Escanear QR',
                 'screen-main': 'Registrar Puntos',
                 'screen-error': 'Error'
             };
-            document.getElementById('header-title').innerText = titles[id];
+            document.getElementById('header-title').innerText = titles[id] || 'Surgas';
         }
 
         async function initScanner() {
@@ -256,15 +255,20 @@
             if (!html5QrCode) {
                 html5QrCode = new Html5Qrcode("reader");
             }
-            const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+            const config = { 
+                fps: 15, 
+                qrbox: { width: 250, height: 250 },
+                aspectRatio: 1.0
+            };
             
             try {
                 await html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess);
             } catch (err) {
+                console.error("Scanner Error:", err);
                 Swal.fire({
                     icon: 'error',
                     title: 'Error de Cámara',
-                    text: err,
+                    text: 'No se pudo acceder a la cámara. Verifica los permisos.',
                     confirmButtonColor: '#821515'
                 });
                 showScreen('screen-start');
@@ -279,7 +283,6 @@
                 html5QrCode = new Html5Qrcode("reader");
             }
 
-            // Feedback visual
             Swal.fire({
                 title: 'Procesando QR...',
                 html: 'Leyendo imagen, por favor espera.',
@@ -288,14 +291,17 @@
             });
 
             try {
+                // Intentar leer con configuración experimental para mayor precisión
                 const decodedText = await html5QrCode.scanFile(imageFile, false);
                 Swal.close();
                 onScanSuccess(decodedText);
             } catch (err) {
+                console.error("File Scan Error:", err);
                 Swal.fire({
                     icon: 'error',
                     title: 'Error de Lectura',
-                    text: 'No se pudo encontrar un código QR válido en la imagen. Intenta con una foto más clara o de frente.',
+                    text: 'No se detectó un código QR. Asegúrate de que la imagen sea clara y el código esté centrado.',
+                    footer: '<small>Error técnico: ' + err + '</small>',
                     confirmButtonColor: '#821515'
                 });
             }

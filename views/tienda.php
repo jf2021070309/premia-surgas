@@ -141,7 +141,7 @@
                     <?php foreach ($nivel['items'] as $item): ?>
                         <div class="prize-card shadow-sm h-100">
                             <div class="prize-image-container">
-                                <img src="<?= BASE_URL ?>assets/premios/<?= $item['imagen'] ?>" alt="<?= $item['nombre'] ?>" class="prize-image">
+                                <img src="<?= BASE_URL ?>assets/premios/<?= $item['imagen'] ?>" alt="<?= htmlspecialchars($item['nombre']) ?>" class="prize-image">
                             </div>
                             <div class="prize-info">
                                 <h3 class="prize-name"><?= $item['nombre'] ?></h3>
