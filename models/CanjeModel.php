@@ -49,6 +49,11 @@ class CanjeModel {
         return $this->db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function actualizarEstado(int $id, string $estado): bool {
+        $stmt = $this->db->prepare("UPDATE canjes SET estado = ? WHERE id = ?");
+        return $stmt->execute([$estado, $id]);
+    }
+
     public function getByCliente(int $clienteId): array {
         $stmt = $this->db->prepare(
             "SELECT c.*, p.nombre as premio_nombre, p.imagen as premio_imagen, p.descripcion as premio_descripcion

@@ -67,6 +67,10 @@ $routes = [
     // —— Reportes ——
     ['GET',  'reportes',     'ReporteController', 'index'],
 
+    // —— Gestión de Canjes (Admin) ——
+    ['GET',  'canjes-admin',            'CanjeAdminController', 'index'],
+    ['POST', 'canjes-admin/actualizar', 'CanjeAdminController', 'actualizarEstado'],
+
     // —— Configuración ——
     ['GET',  'configuraciones',        'ConfiguracionController', 'index'],
     ['POST', 'configuraciones/update', 'ConfiguracionController', 'update'],

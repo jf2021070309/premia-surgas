@@ -41,7 +41,7 @@ class ReporteModel {
     }
 
     public function getCanjesRecientes(int $limit = 10): array {
-        $sql = "SELECT c.fecha, cl.nombre as cliente, p.nombre as premio, c.puntos_usados
+        $sql = "SELECT c.id, c.fecha, cl.nombre as cliente, p.nombre as premio, c.puntos_usados, c.estado
                 FROM canjes c
                 JOIN clientes cl ON c.cliente_id = cl.id
                 JOIN premios p ON c.premio_id = p.id

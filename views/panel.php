@@ -132,6 +132,11 @@
                 <div class="menu-card-label">Gestión Operaciones</div>
                 <p style="font-size: 0.72rem; color: #888; margin-top: 0.3rem;">Personalizar tipos de canje.</p>
             </a>
+            <a href="<?= BASE_URL ?>canjes-admin" class="menu-card">
+                <div class="menu-card-icon"><i class='bx bx-check-double' style="color: #2ecc71;"></i></div>
+                <div class="menu-card-label">Entregas Canjes</div>
+                <p style="font-size: 0.72rem; color: #888; margin-top: 0.3rem;">Controlar productos entregados.</p>
+            </a>
             <?php endif; ?>
         </div>
 
