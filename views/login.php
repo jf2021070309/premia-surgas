@@ -16,10 +16,32 @@
             margin: 0;
             font-family: 'Lexend', sans-serif;
         }
-        .login-wrap { width: 100%; max-width: 410px; padding: 1.5rem; box-sizing: border-box; }
-        .login-header { text-align: center; margin-bottom: 2rem; }
-        .login-logo { width: 100%; max-width: 300px; height: auto; margin-bottom: 0.5rem; }
-        .login-header p { color: rgba(255,255,255,0.7); font-size: 0.9rem; margin-top: 0.2rem; font-weight: 300; }
+        .login-wrap { width: 100%; max-width: 440px; padding: 1.5rem; box-sizing: border-box; }
+        .login-header { text-align: center; margin-bottom: 2.5rem; }
+        .login-logo { 
+            width: 100%; 
+            max-width: 380px; 
+            height: auto; 
+            margin-bottom: 0.8rem;
+            animation: fadeInScale 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        .login-header p { 
+            color: rgba(255,255,255,0.8); 
+            font-size: 1.15rem; 
+            margin-top: 0.2rem; 
+            font-weight: 300;
+            opacity: 0;
+            animation: fadeIn 1s ease 0.3s forwards;
+        }
+
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.9) translateY(-10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
         
         .card { 
             background: white; 
@@ -90,7 +112,8 @@
         @media (max-width: 600px) {
             .login-wrap { padding: 1.2rem; }
             .card { padding: 1.8rem 1.4rem; border-radius: 0.8rem; }
-            .login-logo { max-width: 260px; }
+            .login-logo { max-width: 310px; }
+            .login-header p { font-size: 1rem; }
             input { font-size: 16px !important; }
         }
     </style>
