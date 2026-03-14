@@ -436,12 +436,15 @@
             btn.disabled = true;
 
             try {
+                const detalleString = operations.map(op => `${op.name} x${op.qty} (+${op.subtotal} pts)`).join(', ');
+                console.log('Enviando detalle:', detalleString);
                 const res = await fetch(baseUrl + 'scan/registrar', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
                         cliente_id: clientId, 
-                        puntos: total
+                        puntos: total,
+                        detalle: detalleString
                     })
                 });
                 const data = await res.json();

@@ -58,6 +58,7 @@ CREATE TABLE ventas (
 
     monto DECIMAL(10,2),
     puntos INT,
+    detalle VARCHAR(255),
 
     fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 

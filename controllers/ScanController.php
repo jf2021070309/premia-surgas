@@ -93,6 +93,7 @@ class ScanController {
 
         $clienteId = (int) ($data['cliente_id'] ?? 0);
         $puntos    = (int) ($data['puntos'] ?? 0);
+        $detalle   = trim($data['detalle'] ?? '');
 
         if (!$clienteId || !$puntos) {
             $this->json(['success' => false, 'message' => 'Datos incompletos.']);
@@ -102,7 +103,7 @@ class ScanController {
         $clienteModel = new ClienteModel();
 
         // 1. Registrar "venta" con monto 0 (carga manual de puntos)
-        $idVenta = $ventaModel->create($clienteId, $_SESSION['id_usuario'], 0, $puntos);
+        $idVenta = $ventaModel->create($clienteId, $_SESSION['id_usuario'], 0, $puntos, $detalle);
 
         if ($idVenta) {
             // 2. Actualizar puntos totales del cliente
@@ -140,7 +141,7 @@ class ScanController {
         $ventaModel   = new VentaModel();
         $clienteModel = new ClienteModel();
 
-        $ventaModel->create($clienteId, $_SESSION['id_usuario'], $monto, $puntos);
+        $ventaModel->create($clienteId, $_SESSION['id_usuario'], $monto, $puntos, "Compra por monto: S/ $monto (+$puntos pts)");
         $clienteModel->sumarPuntos($clienteId, $puntos);
 
         echo json_encode(['success' => true, 'puntos_sumados' => $puntos]);

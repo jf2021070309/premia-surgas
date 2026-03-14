@@ -8,12 +8,12 @@ class VentaModel {
         $this->db = Database::getConnection();
     }
 
-    public function create(int $clienteId, int $conductorId, float $monto, int $puntos): int {
+    public function create(int $clienteId, int $conductorId, float $monto, int $puntos, ?string $detalle = null): int {
         $stmt = $this->db->prepare(
-            "INSERT INTO ventas (cliente_id, conductor_id, monto, puntos)
-             VALUES (?, ?, ?, ?)"
+            "INSERT INTO ventas (cliente_id, conductor_id, monto, puntos, detalle)
+             VALUES (?, ?, ?, ?, ?)"
         );
-        $stmt->execute([$clienteId, $conductorId, $monto, $puntos]);
+        $stmt->execute([$clienteId, $conductorId, $monto, $puntos, $detalle]);
         return (int) $this->db->lastInsertId();
     }
 
@@ -26,6 +26,6 @@ class VentaModel {
              ORDER BY v.fecha DESC"
         );
         $stmt->execute([$clienteId]);
-        return $stmt->fetchAll();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
