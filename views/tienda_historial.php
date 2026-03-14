@@ -40,14 +40,32 @@
 </head>
 <body>
     <div class="container">
-        <div class="history-header">
-            <div class="back-nav">
-                <a href="<?= BASE_URL ?>tienda" class="btn-back">← Volver a Tienda</a>
+    <div class="panel-header" style="margin-bottom: 2rem;">
+        <div class="header-top-row">
+            <div class="header-logo-side">
+                <a href="<?= BASE_URL ?>tienda" style="color:#fff; font-size:1.6rem; margin-right:1.2rem; display:flex; align-items:center; transition:0.3s;" title="Volver a la Tienda">
+                    <i class='bx bx-left-arrow-alt'></i>
+                </a>
+                <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" alt="PremiaSurgas" class="header-main-logo">
             </div>
-            <h1 class="display-6 fw-bold mb-1">Tu Historial de Canjes</h1>
-            <p class="opacity-75">Revisa todos los premios que has obtenido</p>
-        </div>
 
+            <div class="header-user-side">
+                <div class="user-card-integrated">
+                    <div class="u-avatar"><?= substr($_SESSION['nombre_usuario'] ?? $_SESSION['usuario'] ?? 'U', 0, 1) ?></div>
+                    <div class="u-details">
+                        <span class="u-role-tag">CLIENTE</span>
+                        <span class="u-name-val"><?= htmlspecialchars($_SESSION['usuario'] ?? $_SESSION['nombre_usuario'] ?? 'Usuario') ?></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="header-hero-content" style="padding-bottom: 2rem;">
+            <h1 class="hero-main-title" style="font-size: 2rem !important;">Tu Historial de Canjes</h1>
+            <p class="hero-welcome-msg">Revisa todos los premios que has obtenido.</p>
+        </div>
+    </div>
+
+    <div class="container" style="max-width: 800px; padding-top: 0;">
         <?php if (empty($canjes)): ?>
             <div class="empty-state">
                 <span style="font-size: 4rem;">📦</span>

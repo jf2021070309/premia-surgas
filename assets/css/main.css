@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
 /* ─── Reset & Base ─────────────────────────────────── */
 *,
@@ -27,7 +27,7 @@
 }
 
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Outfit', sans-serif;
     background: radial-gradient(circle at top right, #ffffff, #f8f9fc);
     background-attachment: fixed;
     color: var(--text);
@@ -765,7 +765,8 @@ tr:hover td {
 
     /* Elite Overlap Mobile */
     .panel-header+.container {
-        margin-top: -4.5rem; /* Subirlo más para reducir espacio */
+        margin-top: -4.5rem;
+        /* Subirlo más para reducir espacio */
     }
 
     /* ── Image Header Responsive ── */
@@ -805,12 +806,14 @@ tr:hover td {
 
     .hero-welcome-msg {
         font-size: 0.85rem;
-        margin-bottom: 2rem; /* Reduced from 3.5rem */
+        margin-bottom: 2rem;
+        /* Reduced from 3.5rem */
         opacity: 0.8;
     }
 
     .panel-header {
-        padding: 1rem 1rem 5rem; /* Reduced bottom padding from 6rem */
+        padding: 1rem 1rem 5rem;
+        /* Reduced bottom padding from 6rem */
         border-radius: 0 0 2rem 2rem;
     }
 
@@ -1187,6 +1190,7 @@ tr:hover td {
         opacity: 0;
         transform: translateY(30px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -1198,9 +1202,11 @@ tr:hover td {
         grid-template-columns: 1fr;
         gap: 0;
     }
+
     .premium-form {
         padding: 1.5rem;
     }
+
     .card-header-premium {
         padding: 1.2rem 1.5rem;
     }

@@ -258,6 +258,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+<script> var BASE_URL = '<?= BASE_URL ?>'; </script>
 <script src="<?= BASE_URL ?>assets/js/panel.js"></script>
 </body>
 </html>

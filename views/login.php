@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión — PremiaSurgas</title>
-    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <style>
         body { 
@@ -14,7 +14,7 @@
             min-height: 100vh; 
             background: radial-gradient(circle at center, #520006 0%, #3a0004 100%);
             margin: 0;
-            font-family: 'Lexend', sans-serif;
+            font-family: 'Outfit', sans-serif;
             color: #333;
         }
         .login-wrap { width: 100%; max-width: 420px; padding: 1.5rem; box-sizing: border-box; }
@@ -86,31 +86,38 @@
         }
         .input-group:focus-within i { color: #821515; }
 
-        .btn-submit {
+        .btn-premium-submit {
             width: 100%;
-            padding: 1.25rem;
+            padding: 1.1rem;
+            background: linear-gradient(135deg, #821515, #b31919);
             border: none;
-            border-radius: 0.6rem;
-            background: #821515;
+            border-radius: 16px;
             color: white;
-            font-weight: 400;
-            font-size: 0.95rem;
+            font-weight: 700;
+            font-size: 1rem;
             display: flex;
             align-items: center;
             justify-content: center;
+            gap: 10px;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            font-family: inherit;
+            box-shadow: 0 10px 30px rgba(130, 21, 21, 0.25);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             text-transform: uppercase;
-            letter-spacing: 1.5px;
-            box-shadow: 0 4px 12px rgba(82, 21, 21, 0.2);
+            letter-spacing: 1px;
         }
-        .btn-submit:hover { 
-            background: #6b1111; 
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(82, 21, 21, 0.3);
+        .btn-premium-submit:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(130, 21, 21, 0.35);
+            background: linear-gradient(135deg, #961a1a, #c71d1d);
         }
-        .btn-submit:active { transform: translateY(0); }
+        .btn-premium-submit:active:not(:disabled) {
+            transform: scale(0.98);
+        }
+        .btn-premium-submit:disabled {
+            background: #d1d5db;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
         
         [v-cloak] { display: none; }
         
@@ -151,7 +158,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn-submit" :disabled="loading">
+                <button type="submit" class="btn-premium-submit" :disabled="loading">
                     <span v-if="loading">VERIFICANDO...</span>
                     <span v-else>INICIAR SESIÓN</span>
                 </button>

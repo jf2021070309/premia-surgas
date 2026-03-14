@@ -6,6 +6,7 @@
     <title>Nuevo Cliente — PremiaSurgas</title>
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/main.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>[v-cloak]{display:none}</style>
 </head>
 <body>
@@ -18,14 +19,24 @@
                 </a>
                 <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" alt="PremiaSurgas" class="header-main-logo">
             </div>
-        </div>
-        <div class="header-hero-content">
-            <h1 class="hero-main-title">Registrar Cliente</h1>
-            <p class="hero-welcome-msg">Ingresa los datos para sumar un nuevo cliente al sistema.</p>
+
+            <div class="header-user-side">
+                <div class="user-card-integrated">
+                    <div class="u-avatar"><?= substr($_SESSION['nombre_usuario'], 0, 1) ?></div>
+                    <div class="u-details">
+                        <span class="u-role-tag"><?= htmlspecialchars(strtoupper($_SESSION['rol'])) ?></span>
+                        <span class="u-name-val"><?= htmlspecialchars($_SESSION['usuario'] ?? $_SESSION['nombre_usuario']) ?></span>
+                    </div>
+                    <div class="u-divider"></div>
+                    <button @click="logout" class="u-logout-btn" title="Cerrar Sesión">
+                        <i class='bx bx-log-out'></i>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="container" style="max-width:560px">
+    <div class="container" style="max-width:700px">
 
         <!-- Éxito después de guardar -->
         <div v-if="clienteGuardado" class="card" style="text-align:center; margin-top:2rem">
@@ -103,11 +114,9 @@
 
                 <div class="form-footer-actions">
                     <button type="submit" class="btn-premium-submit" :disabled="loading">
-                        <span v-if="!loading">
-                            <i class='bx bx-save'></i> Registrar Cliente Ahora
-                        </span>
+                        <span v-if="!loading">REGISTRAR</span>
                         <span v-else>
-                            <i class='bx bx-loader-alt bx-spin'></i> Procesando...
+                            <i class='bx bx-loader-alt bx-spin'></i> ESPERE...
                         </span>
                     </button>
                     <p class="form-hint">Campos marcados con (*) son obligatorios</p>

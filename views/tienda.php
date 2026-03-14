@@ -103,27 +103,52 @@
 </head>
 <body>
 <div id="app" v-cloak>
-    <div class="store-header">
-        <div class="back-nav">
-            <?php 
-            $urlVolver = BASE_URL . 'panel';
-            if (isset($_SESSION['id_cliente']) && isset($_SESSION['codigo_cliente'])) {
-                $urlVolver = BASE_URL . 'scan?c=' . $_SESSION['codigo_cliente'] . '&t=' . $_SESSION['token_cliente'];
-            }
-            ?>
-            <a href="<?= $urlVolver ?>" class="btn-back">← Volver</a>
-            <a href="<?= BASE_URL ?>tienda/historial" class="btn-back ms-2">🕒 Historial</a>
-        </div>
-        <h1 class="display-5 fw-bold">Tienda de Premios</h1>
-        <p class="lead opacity-75">¡Gracias por tu preferencia! Elige tu recompensa.</p>
-        
-        <?php if (isset($_SESSION['id_cliente'])): ?>
-        <div class="user-balance-pill shadow-sm">
-            <span style="font-size: 1.5rem;">⭐</span>
-            <div class="text-start">
-                <div class="small opacity-75 fw-600">TU SALDO</div>
-                <div class="h5 mb-0 fw-800"><?= number_format($cliente['puntos'] ?? 0) ?> Puntos</div>
+    <div class="panel-header">
+        <div class="header-top-row">
+            <div class="header-logo-side">
+                <?php 
+                $urlVolver = BASE_URL . 'panel';
+                if (isset($_SESSION['id_cliente']) && isset($_SESSION['codigo_cliente'])) {
+                    $urlVolver = BASE_URL . 'scan?c=' . $_SESSION['codigo_cliente'] . '&t=' . $_SESSION['token_cliente'];
+                }
+                ?>
+                <a href="<?= $urlVolver ?>" style="color:#fff; font-size:1.6rem; margin-right:1.2rem; display:flex; align-items:center; transition:0.3s;" title="Volver">
+                    <i class='bx bx-left-arrow-alt'></i>
+                </a>
+                <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" alt="PremiaSurgas" class="header-main-logo">
             </div>
+
+            <div class="header-user-side">
+                <a href="<?= BASE_URL ?>tienda/historial" class="btn btn-outline-light shadow-sm me-3" style="border-radius:100px; padding:0.5rem 1.2rem; font-weight:600; border-color: rgba(255,255,255,0.3);">
+                    <i class='bx bx-time-five'></i> Historial
+                </a>
+                
+                <?php if (isset($_SESSION['usuario']) || isset($_SESSION['nombre_usuario'])): ?>
+                <div class="user-card-integrated">
+                    <div class="u-avatar"><?= substr($_SESSION['nombre_usuario'] ?? $_SESSION['usuario'], 0, 1) ?></div>
+                    <div class="u-details">
+                        <span class="u-role-tag"><?= htmlspecialchars(strtoupper($_SESSION['rol'] ?? 'CLIENTE')) ?></span>
+                        <span class="u-name-val"><?= htmlspecialchars($_SESSION['usuario'] ?? $_SESSION['nombre_usuario']) ?></span>
+                    </div>
+                </div>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <?php if (isset($_SESSION['id_cliente'])): ?>
+        <div class="header-hero-content" style="padding-bottom: 2rem;">
+            <div class="user-balance-pill shadow-sm" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); padding: 0.8rem 2rem; border-radius: 50px;">
+                <span style="font-size: 1.8rem; margin-right: 0.5rem;">⭐</span>
+                <div class="text-start">
+                    <div class="small opacity-75 fw-600" style="font-size: 0.7rem; letter-spacing: 1px;">TU SALDO ACTUAL</div>
+                    <div class="h4 mb-0 fw-800" style="color: #fff;"><?= number_format($cliente['puntos'] ?? 0) ?> Puntos</div>
+                </div>
+            </div>
+        </div>
+        <?php else: ?>
+        <div class="header-hero-content" style="padding-bottom: 2.5rem;">
+            <h1 class="hero-main-title">Tienda de Premios</h1>
+            <p class="hero-welcome-msg">Canjea tus puntos por increíbles recompensas.</p>
         </div>
         <?php endif; ?>
     </div>

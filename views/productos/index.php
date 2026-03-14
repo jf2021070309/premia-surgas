@@ -52,15 +52,26 @@
                 </a>
                 <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" alt="PremiaSurgas" class="header-main-logo">
             </div>
+
             <div class="header-user-side">
-                <button class="btn btn-primary shadow-sm" style="border-radius:100px; padding:0.5rem 1.2rem; font-weight:700;" @click="nuevoProducto">
-                    <i class='bx bx-plus-circle me-1'></i> Nuevo Premio
+                <button class="btn btn-primary shadow-sm me-3" style="border-radius:100px; padding:0.5rem 1.2rem; font-weight:700;" @click="nuevoProducto">
+                    <i class='bx bx-plus-circle'></i> Nuevo Premio
                 </button>
+                <div class="user-card-integrated">
+                    <div class="u-avatar"><?= substr($_SESSION['nombre_usuario'], 0, 1) ?></div>
+                    <div class="u-details">
+                        <span class="u-role-tag"><?= htmlspecialchars(strtoupper($_SESSION['rol'])) ?></span>
+                        <span class="u-name-val"><?= htmlspecialchars($_SESSION['usuario'] ?? $_SESSION['nombre_usuario']) ?></span>
+                    </div>
+                    <div class="u-divider"></div>
+                    <button @click="logout" class="u-logout-btn" title="Cerrar Sesión">
+                        <i class='bx bx-log-out'></i>
+                    </button>
+                </div>
             </div>
         </div>
-        <div class="header-hero-content">
-            <h1 class="hero-main-title">Listado de Premios</h1>
-            <div class="d-flex flex-wrap gap-2 justify-content-center mt-3">
+        <div class="header-hero-content" style="padding: 1rem 0;">
+            <div class="d-flex flex-wrap gap-2 justify-content-center">
                 <div class="input-group input-group-sm shadow-sm" style="width: 250px; border-radius:10px; overflow:hidden;">
                     <span class="input-group-text bg-white border-0">🔍</span>
                     <input type="text" class="form-control border-0" placeholder="Buscar producto..." v-model="busqueda">
@@ -300,6 +311,22 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         window.location.href = '<?= BASE_URL ?>productos/delete?id=' + id;
+                    }
+                });
+            },
+            logout() {
+                Swal.fire({
+                    title: '¿Cerrar sesión?',
+                    text: "Esperamos verte pronto de nuevo.",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: 'var(--primary)',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Sí, salir',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '<?= BASE_URL ?>logout';
                     }
                 });
             }

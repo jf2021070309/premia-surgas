@@ -6,6 +6,7 @@
     <title><?= $titulo ?> — PremiaSurgas</title>
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/main.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <div class="panel-header">
@@ -16,14 +17,24 @@
                 </a>
                 <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" alt="PremiaSurgas" class="header-main-logo">
             </div>
-        </div>
-        <div class="header-hero-content">
-            <h1 class="hero-main-title"><?= $conductor ? 'Editar Conductor' : 'Crear Conductor' ?></h1>
-            <p class="hero-welcome-msg">Administra los accesos del equipo de reparto.</p>
+
+            <div class="header-user-side">
+                <div class="user-card-integrated">
+                    <div class="u-avatar"><?= substr($_SESSION['nombre_usuario'], 0, 1) ?></div>
+                    <div class="u-details">
+                        <span class="u-role-tag"><?= htmlspecialchars(strtoupper($_SESSION['rol'])) ?></span>
+                        <span class="u-name-val"><?= htmlspecialchars($_SESSION['usuario'] ?? $_SESSION['nombre_usuario']) ?></span>
+                    </div>
+                    <div class="u-divider"></div>
+                    <a href="javascript:void(0)" onclick="confirmLogout()" class="u-logout-btn" title="Cerrar Sesión" style="text-decoration:none; display:flex; align-items:center; justify-content:center;">
+                        <i class='bx bx-log-out'></i>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="container" style="max-width: 500px">
+    <div class="container" style="max-width: 700px">
         <div class="card elite-form-card animate-fade-in">
             <div class="card-header-premium">
                 <i class='bx bxs-truck'></i>
@@ -78,5 +89,23 @@
             </form>
         </div>
     </div>
+    <script>
+        function confirmLogout() {
+            Swal.fire({
+                title: '¿Cerrar sesión?',
+                text: "Esperamos verte pronto de nuevo.",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: 'var(--primary)',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Sí, salir',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '<?= BASE_URL ?>logout';
+                }
+            });
+        }
+    </script>
 </body>
 </html>

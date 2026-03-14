@@ -20,15 +20,23 @@
                 </a>
                 <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" alt="PremiaSurgas" class="header-main-logo">
             </div>
+
             <div class="header-user-side">
-                <a href="<?= BASE_URL ?>clientes/nuevo" class="btn btn-primary shadow-sm" style="border-radius:100px; padding:0.5rem 1.2rem; font-weight:700;">
-                    <i class='bx bx-plus-circle me-1'></i> Nuevo Cliente
+                <a href="<?= BASE_URL ?>clientes/nuevo" class="btn btn-primary shadow-sm me-3" style="border-radius:100px; padding:0.5rem 1.2rem; font-weight:700;">
+                    <i class='bx bx-plus-circle'></i> Nuevo
                 </a>
+                <div class="user-card-integrated">
+                    <div class="u-avatar"><?= substr($_SESSION['nombre_usuario'], 0, 1) ?></div>
+                    <div class="u-details">
+                        <span class="u-role-tag"><?= htmlspecialchars(strtoupper($_SESSION['rol'])) ?></span>
+                        <span class="u-name-val"><?= htmlspecialchars($_SESSION['usuario'] ?? $_SESSION['nombre_usuario']) ?></span>
+                    </div>
+                    <div class="u-divider"></div>
+                    <button @click="logout" class="u-logout-btn" title="Cerrar Sesión">
+                        <i class='bx bx-log-out'></i>
+                    </button>
+                </div>
             </div>
-        </div>
-        <div class="header-hero-content">
-            <h1 class="hero-main-title">Directorio de Clientes</h1>
-            <p class="hero-welcome-msg">Gestiona y consulta la base de datos de fidelización.</p>
         </div>
     </div>
 
@@ -98,6 +106,7 @@ function toggleEstadoCli(id, v) {
         }
     });
 }
+var BASE_URL = '<?= BASE_URL ?>';
 </script>
 
 <?php if (isset($_SESSION['flash'])): ?>
