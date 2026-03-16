@@ -32,17 +32,97 @@
             position: relative;
         }
 
-        .user-balance-pill {
+        /* ── Balance Widget ── */
+        .balance-widget {
+            text-align: center;
+            padding: 1.2rem 0 2rem;
+        }
+        .balance-pill {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+        }
+        /* Fila superior: etiqueta */
+        .balance-top-row {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-bottom: 0.4rem;
+        }
+        .balance-label {
+            font-size: 1rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.45);
+            font-weight: 600;
+        }
+        /* Fila del medio: estrella + número */
+        .balance-mid-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .balance-star-wrap {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #fcd34d, #f59e0b);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 0 0 0 rgba(252,211,77,0.55);
+            animation: starPulse 2.6s ease-in-out infinite;
+        }
+        .balance-star-wrap i {
+            font-size: 2.2rem;
+            color: #fff;
+            filter: drop-shadow(0 1px 3px rgba(0,0,0,0.25));
+        }
+        @keyframes starPulse {
+            0%  { box-shadow: 0 0 0 0    rgba(252,211,77,0.55); }
+            55% { box-shadow: 0 0 0 16px rgba(252,211,77,0);     }
+            100%{ box-shadow: 0 0 0 0    rgba(252,211,77,0);     }
+        }
+        .balance-number {
+            font-size: 5.5rem;
+            font-weight: 800;
+            color: #fff;
+            line-height: 1;
+            letter-spacing: -4px;
+            text-shadow: 0 2px 40px rgba(252,211,77,0.35);
+        }
+        .balance-unit {
+            font-size: 1.3rem;
+            font-weight: 400;
+            color: rgba(255,255,255,0.5);
+            align-self: flex-end;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+        /* Divisor */
+        .balance-divider {
+            width: 60px;
+            height: 1px;
             background: rgba(255,255,255,0.15);
-            backdrop-filter: blur(10px);
-            padding: 0.6rem 1.5rem;
-            border-radius: 50px;
+            margin: 0.55rem auto;
+        }
+        /* Enlace historial */
+        .balance-hist {
             display: inline-flex;
             align-items: center;
-            gap: 0.8rem;
-            margin-top: 1rem;
-            border: 1px solid rgba(255,255,255,0.2);
+            gap: 5px;
+            font-size: 0.68rem;
+            color: rgba(255,255,255,0.4);
+            text-decoration: none;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            transition: color 0.25s;
         }
+        .balance-hist i { font-size: 0.9rem; }
+        .balance-hist:hover { color: #fcd34d; }
 
         .level-section { margin-bottom: 4rem; }
         .level-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; border-bottom: 2px solid #eee; padding-bottom: 0.5rem; }
@@ -119,19 +199,6 @@
                 </a>
             </div>
 
-            <?php if (isset($_SESSION['id_cliente'])): ?>
-            <div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 10;">
-                <div class="user-balance-pill shadow-sm" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); padding: 0.5rem 1.5rem; border-radius: 50px; display: flex; align-items: center; gap: 0.8rem; margin: 0;">
-                    <span style="font-size: 1.8rem;">⭐</span>
-                    <div class="text-center" style="display: flex; flex-direction: column; align-items: center;">
-                        <span class="small opacity-75 fw-600" style="font-size: 0.65rem; letter-spacing: 1px;">TU SALDO ACTUAL</span>
-                        <span class="h5 mb-0 fw-800" style="color: #fff; line-height: 1.2; font-size: 1.3rem; margin-top: 2px;"><?= number_format($cliente['puntos'] ?? 0) ?> Puntos</span>
-                        <a href="<?= BASE_URL ?>tienda/historial" class="hover-underline" style="color: #fff; font-size: 0.75rem; text-decoration: none; opacity: 0.9; margin-top: 2px;">Historial</a>
-                    </div>
-                </div>
-            </div>
-            <?php endif; ?>
-
             <div class="header-user-side">
                 <?php if (isset($_SESSION['rol']) && in_array(strtolower($_SESSION['rol']), ['admin', 'conductor'])): ?>
                 <!-- Conductores y Admins ven su tarjeta -->
@@ -169,7 +236,25 @@
             <p class="hero-welcome-msg">Canjea tus puntos por increíbles recompensas.</p>
         </div>
         <?php else: ?>
-        <div style="padding-bottom: 2rem;"></div>
+        <div class="balance-widget">
+            <div class="balance-pill">
+                <!-- Label superior -->
+                <div class="balance-top-row">
+                    <span class="balance-label">Tu saldo actual</span>
+                </div>
+                <!-- Número central -->
+                <div class="balance-mid-row">
+                    <div class="balance-star-wrap"><i class='bx bxs-star'></i></div>
+                    <span class="balance-number"><?= number_format($cliente['puntos'] ?? 0) ?></span>
+                    <span class="balance-unit">puntos</span>
+                </div>
+                <!-- Divisor + historial -->
+                <div class="balance-divider"></div>
+                <a href="<?= BASE_URL ?>tienda/historial" class="balance-hist">
+                    <i class='bx bx-history'></i> Ver historial
+                </a>
+            </div>
+        </div>
         <?php endif; ?>
     </div>
 
