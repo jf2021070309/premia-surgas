@@ -24,105 +24,181 @@
         [v-cloak] { display: none; }
         .container { max-width: 1400px !important; margin: 0 auto; padding: 1.5rem; }
 
-        .store-header {
-            padding: 3rem 1rem; text-align: center;
-            background: linear-gradient(135deg, #4a0c0c, #821515);
-            color: white; border-radius: 0 0 3rem 3rem;
-            margin-bottom: 2rem; box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+        /* ── Store Header Refinement ── */
+        .panel-header {
+            background: linear-gradient(180deg, #420202 0%, #2d0101 100%);
+            color: white;
+            padding: 1.5rem 2rem 4rem;
+            border-radius: 0 0 3.5rem 3.5rem;
             position: relative;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
         }
 
-        /* ── Balance Widget ── */
-        .balance-widget {
-            text-align: center;
-            padding: 1.2rem 0 2rem;
+        /* ── Premium Balance Widget ── */
+        .balance-premium {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem 0;
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
         }
-        .balance-pill {
+
+        .balance-label-premium {
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.45);
+            margin-bottom: 2rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            width: 100%;
+            text-align: center;
+        }
+
+        .balance-main-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            width: 100%;
+        }
+
+        /* Mascot Container & Animations */
+        .mascot-container {
+            position: relative;
+            width: 240px;
+            height: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .mascot-img {
+            width: 100%;
+            height: auto;
+            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
+            animation: mascotFloat 4s ease-in-out infinite;
+            z-index: 2;
+        }
+
+        @keyframes mascotFloat {
+            0%, 100% { transform: translateY(0) rotate(0); }
+            50% { transform: translateY(-15px) rotate(2deg); }
+        }
+
+        /* Points Typography */
+        .points-display-premium {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 0;
+            text-align: center;
         }
-        /* Fila superior: etiqueta */
-        .balance-top-row {
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            margin-bottom: 0.4rem;
-        }
-        .balance-label {
-            font-size: 1rem;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.45);
-            font-weight: 600;
-        }
-        /* Fila del medio: estrella + número */
-        .balance-mid-row {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        .balance-star-wrap {
-            width: 72px;
-            height: 72px;
-            border-radius: 50%;
-            background: linear-gradient(145deg, #fcd34d, #f59e0b);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            box-shadow: 0 0 0 0 rgba(252,211,77,0.55);
-            animation: starPulse 2.6s ease-in-out infinite;
-        }
-        .balance-star-wrap i {
-            font-size: 2.2rem;
-            color: #fff;
-            filter: drop-shadow(0 1px 3px rgba(0,0,0,0.25));
-        }
-        @keyframes starPulse {
-            0%  { box-shadow: 0 0 0 0    rgba(252,211,77,0.55); }
-            55% { box-shadow: 0 0 0 16px rgba(252,211,77,0);     }
-            100%{ box-shadow: 0 0 0 0    rgba(252,211,77,0);     }
-        }
-        .balance-number {
-            font-size: 5.5rem;
+
+        .points-number-premium {
+            font-size: 8.5rem;
             font-weight: 800;
-            color: #fff;
-            line-height: 1;
+            line-height: 0.8;
             letter-spacing: -4px;
-            text-shadow: 0 2px 40px rgba(252,211,77,0.35);
+            color: #fff;
+            margin: 0;
+            text-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            animation: numberReveal 1s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
         }
-        .balance-unit {
-            font-size: 1.3rem;
-            font-weight: 400;
-            color: rgba(255,255,255,0.5);
-            align-self: flex-end;
-            margin-bottom: 10px;
-            letter-spacing: 2px;
+
+        @keyframes numberReveal {
+            from { opacity: 0; transform: translateX(20px) scale(0.9); }
+            to { opacity: 1; transform: translateX(0) scale(1); }
         }
-        /* Divisor */
-        .balance-divider {
-            width: 60px;
-            height: 1px;
-            background: rgba(255,255,255,0.15);
-            margin: 0.55rem auto;
+
+        .points-unit-premium {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #fff;
+            margin-top: -5px;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            opacity: 0.9;
         }
-        /* Enlace historial */
-        .balance-hist {
+
+        /* Responsive Balance */
+        @media (max-width: 768px) {
+            .balance-main-content {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+            .points-display-premium {
+                align-items: center;
+                text-align: center;
+            }
+            .points-number-premium {
+                font-size: 6.5rem;
+            }
+            .mascot-container {
+                width: 180px;
+            }
+        }
+
+        /* History Link Premium */
+        .history-link-premium {
+            margin-top: 2rem;
+            text-decoration: none;
             display: inline-flex;
             align-items: center;
-            gap: 5px;
-            font-size: 0.68rem;
-            color: rgba(255,255,255,0.4);
-            text-decoration: none;
-            font-weight: 500;
-            letter-spacing: 1.5px;
+            gap: 10px;
+            padding: 8px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 2px;
             text-transform: uppercase;
-            transition: color 0.25s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .balance-hist i { font-size: 0.9rem; }
-        .balance-hist:hover { color: #fcd34d; }
+
+        .history-link-premium i {
+            font-size: 1.1rem;
+            transition: transform 0.3s;
+        }
+
+        .history-link-premium:hover {
+            color: #fff;
+            letter-spacing: 3px;
+        }
+
+        .history-link-premium:hover i {
+            transform: rotate(-360deg);
+        }
+
+        /* ── Pill Nav Overrides ── */
+        .back-nav-pill {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 8px 18px;
+            border-radius: 100px;
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-nav-pill:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            color: #fff;
+            transform: translateX(-3px);
+        }
 
         .level-section { margin-bottom: 4rem; }
         .level-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; border-bottom: 2px solid #eee; padding-bottom: 0.5rem; }
@@ -193,9 +269,9 @@
                     $urlVolver = BASE_URL . 'scan?c=' . $_SESSION['codigo_cliente'] . '&t=' . $_SESSION['token_cliente'];
                 }
                 ?>
-                <a href="<?= $urlVolver ?>" style="text-decoration:none; display:flex; align-items:center; gap:8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); padding: 6px 16px; border-radius:100px; color: white; transition:0.3s;" title="Volver">
-                    <i class='bx bx-arrow-back' style="font-size: 1.4rem;"></i>
-                    <span style="font-weight: 700; font-size: 0.85rem; letter-spacing: 0.5px;">VOLVER</span>
+                <a href="<?= $urlVolver ?>" class="back-nav-pill" title="Volver">
+                    <i class='bx bx-arrow-back'></i>
+                    <span>VOLVER</span>
                 </a>
             </div>
 
@@ -236,24 +312,24 @@
             <p class="hero-welcome-msg">Canjea tus puntos por increíbles recompensas.</p>
         </div>
         <?php else: ?>
-        <div class="balance-widget">
-            <div class="balance-pill">
-                <!-- Label superior -->
-                <div class="balance-top-row">
-                    <span class="balance-label">Tu saldo actual</span>
+        <div class="balance-premium">
+            <span class="balance-label-premium">Tu saldo actual</span>
+            
+            <div class="balance-main-content">
+                <div class="mascot-container">
+                    <!-- Mascot Image (Stars are included in the image) -->
+                    <img src="<?= BASE_URL ?>assets/premios/gas.png" alt="Mascota Surgas" class="mascot-img">
                 </div>
-                <!-- Número central -->
-                <div class="balance-mid-row">
-                    <div class="balance-star-wrap"><i class='bx bxs-star'></i></div>
-                    <span class="balance-number"><?= number_format($cliente['puntos'] ?? 0) ?></span>
-                    <span class="balance-unit">puntos</span>
+
+                <div class="points-display-premium">
+                    <h1 class="points-number-premium">{{ animatedSaldo.toLocaleString() }}</h1>
+                    <span class="points-unit-premium">puntos</span>
                 </div>
-                <!-- Divisor + historial -->
-                <div class="balance-divider"></div>
-                <a href="<?= BASE_URL ?>tienda/historial" class="balance-hist">
-                    <i class='bx bx-history'></i> Ver historial
-                </a>
             </div>
+
+            <a href="<?= BASE_URL ?>tienda/historial" class="history-link-premium">
+                <i class='bx bx-history'></i> VER HISTORIAL
+            </a>
         </div>
         <?php endif; ?>
     </div>
@@ -368,6 +444,7 @@
         el: '#app',
         data: {
             saldo: <?= (int) ($cliente['puntos'] ?? 0) ?>,
+            animatedSaldo: 0,
             montoPorPunto: <?= (float) ($montoPorPunto ?? 0.05) ?>,
             selected: {},
             tipo: 'total',
@@ -413,6 +490,18 @@
         },
         mounted() {
             if (this.saldo < this.selected.puntos) this.tipo = 'descuento';
+            
+            // Animación de entrada para el saldo
+            let target = this.saldo;
+            let step = Math.ceil(target / 50);
+            let timer = setInterval(() => {
+                if (this.animatedSaldo + step >= target) {
+                    this.animatedSaldo = target;
+                    clearInterval(timer);
+                } else {
+                    this.animatedSaldo += step;
+                }
+            }, 20);
         }
     });
 </script>
