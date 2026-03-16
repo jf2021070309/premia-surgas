@@ -47,11 +47,11 @@
         }
 
         .balance-label-premium {
-            font-size: 0.85rem;
+            font-size: 1.1rem;
             font-weight: 700;
-            letter-spacing: 5px;
+            letter-spacing: 6px;
             text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.45);
+            color: rgba(255, 255, 255, 0.5);
             margin-bottom: 2rem;
             text-shadow: 0 2px 4px rgba(0,0,0,0.2);
             width: 100%;
@@ -200,46 +200,227 @@
             transform: translateX(-3px);
         }
 
-        .level-section { margin-bottom: 4rem; }
-        .level-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; border-bottom: 2px solid #eee; padding-bottom: 0.5rem; }
-        .level-badge { width: 15px; height: 15px; border-radius: 50%; }
-        .level-title { font-size: 1.8rem; font-weight: 700; color: #333; }
+        /* ── Level Section & Header ── */
+        .level-section { 
+            margin-bottom: 6rem; 
+            animation: slideUpFade 0.8s ease backwards;
+        }
+        
+        .level-header { 
+            display: flex; 
+            align-items: center; 
+            gap: 1.5rem; 
+            margin-bottom: 3.5rem; 
+            padding: 1.5rem;
+            background: #f1f3f5;
+            border-radius: 2rem;
+            border: 1px solid rgba(0,0,0,0.02);
+        }
 
-        .prizes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem; }
+        .level-badge { 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: #1a1a1a;
+            position: relative;
+        }
+        
+        .level-badge::after { display: none; }
+
+        .level-info-header {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .level-title { 
+            font-size: 1.65rem; 
+            font-weight: 850; 
+            color: #1a1a1a; 
+            letter-spacing: -1px;
+            margin: 0;
+            line-height: 1;
+        }
+
+        .level-subtitle {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .level-points-range { display: none; }
+
+        /* ── Modern Prize Card Grid ── */
+        .prizes-grid { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 1.2rem; 
+        }
+
+        @media (min-width: 992px) {
+            .prizes-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (min-width: 1400px) {
+            .prizes-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
         
         .prize-card {
-            background: white; border-radius: 2rem; overflow: hidden;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 1px solid rgba(0,0,0,0.03);
-            display: flex; flex-direction: column;
+            background: white; 
+            border-radius: 1.5rem; 
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            border: 1px solid #f0f0f0;
+            display: flex; 
+            flex-direction: column;
+            position: relative;
         }
-        .prize-card:hover { transform: translateY(-15px); box-shadow: 0 25px 50px rgba(0,0,0,0.1); }
-        
-        .prize-image-container { height: 200px; display: flex; align-items: center; justify-content: center; padding: 1.5rem; background: #fff; }
-        .prize-image { width: 100%; height: 100%; object-fit: contain; }
-        
-        .prize-info { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; }
-        .prize-name { font-size: 1.1rem; font-weight: 700; color: #2d3436; margin-bottom: 0.5rem; }
-        .prize-points { font-size: 1.4rem; font-weight: 800; color: #e67e22; }
-        .prize-points span { font-size: 0.7rem; text-transform: uppercase; color: #999; }
 
-        .btn-redeem {
-            margin-top: auto; width: 100%; padding: 0.8rem; border: none;
-            border-radius: 1rem; background: #2d3436; color: white;
-            font-weight: 700; transition: all 0.3s;
+        .prize-card:hover { 
+            transform: translateY(-8px); 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08); 
+            border-color: #e0e0e0;
         }
-        .btn-redeem:hover:not(:disabled) { background: #000; transform: scale(1.02); }
+        
+        .prize-image-container { 
+            height: 180px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            padding: 1.5rem; 
+            background: radial-gradient(circle at center, #ffffff 0%, #fbfbfb 100%);
+            position: relative;
+        }
 
-        /* Level Colors */
-        .level-low .level-badge { background: var(--low); }
-        .level-low .prize-card { border-top: 5px solid var(--low); }
-        .level-medium .level-badge { background: var(--medium); }
-        .level-medium .prize-card { border-top: 5px solid var(--medium); }
-        .level-high .level-badge { background: var(--high); }
-        .level-high .prize-card { border-top: 5px solid var(--high); }
-        .level-vip .level-badge { background: var(--vip); }
-        .level-vip .prize-card { border-top: 5px solid var(--vip); }
+        .prize-image { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: contain; 
+            transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+            z-index: 1;
+        }
+
+        .prize-card:hover .prize-image {
+            transform: scale(1.08) rotate(1deg);
+        }
+        
+        .prize-info { 
+            padding: 1.2rem; 
+            flex-grow: 1; 
+            display: flex; 
+            flex-direction: column; 
+            background: white;
+            border-top: 1px solid #f8f8f8;
+        }
+
+        .prize-name { 
+            font-size: 1.15rem; 
+            font-weight: 700; 
+            color: #1a1a1a; 
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .prize-desc {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 1.2rem;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .prize-meta-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 1.2rem;
+            margin-top: auto;
+        }
+
+        .prize-points-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 0px;
+        }
+
+        .prize-points-val { 
+            font-size: 1.5rem; 
+            font-weight: 800; 
+            color: #ff9800; 
+            line-height: 1;
+        }
+
+        .prize-points-lbl {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #748da6;
+            margin-top: 2px;
+        }
+
+        .stock-badge {
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .stock-badge.available { background: #f8f9fa; color: #1a1a1a; border: 1px solid #eee; }
+        .stock-badge.empty { background: #feebeb; color: #e74c3c; }
+
+        .btn-redeem-modern {
+            width: 100%; 
+            padding: 0.8rem; 
+            border: none;
+            border-radius: 0.8rem; 
+            background: #1a1a1a; 
+            color: white;
+            font-weight: 700; 
+            font-size: 0.85rem;
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .btn-redeem-modern i { font-size: 1rem; }
+
+        .btn-redeem-modern:hover:not(:disabled) { 
+            background: #000; 
+            transform: scale(1.02);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        .btn-redeem-modern:disabled {
+            background: #f1f3f5;
+            color: #adb5bd;
+            cursor: not-allowed;
+        }
+
+        /* Level Colors via CSS Variables */
+        .level-low { --lvl-color: #1a1a1a; }
+        .level-medium { --lvl-color: #1a1a1a; }
+        .level-high { --lvl-color: #1a1a1a; }
+        .level-vip { --lvl-color: #1a1a1a; }
+
+        .level-badge { color: #1a1a1a !important; }
 
         .back-nav { position: absolute; top: 20px; left: 20px; }
         .btn-back { background: rgba(255,255,255,0.1); color: white; padding: 0.5rem 1.2rem; border-radius: 50px; text-decoration: none; border: 1px solid rgba(255,255,255,0.2); }
@@ -339,29 +520,44 @@
             <?php if (!empty($nivel['items'])): ?>
             <section class="level-section <?= $nivel['clase'] ?>">
                 <div class="level-header">
-                    <span class="level-badge shadow-sm"></span>
-                    <h2 class="level-title"><?= $nivel['titulo'] ?></h2>
-                    <span class="ms-auto text-muted small fw-600"><i><?= $nivel['puntos'] ?></i></span>
+                    <div class="level-badge">
+                        <i class='bx bx-award'></i>
+                    </div>
+                    <div class="level-info-header">
+                        <span class="level-subtitle">Categoría</span>
+                        <h2 class="level-title"><?= $nivel['titulo'] ?></h2>
+                    </div>
+                    <div class="level-points-range">
+                        <?= $nivel['puntos'] ?>
+                    </div>
                 </div>
-
+                
                 <div class="prizes-grid">
                     <?php foreach ($nivel['items'] as $item): ?>
-                        <div class="prize-card shadow-sm h-100">
+                        <div class="prize-card shadow-sm">
                             <div class="prize-image-container">
                                 <img src="<?= BASE_URL ?>assets/premios/<?= $item['imagen'] ?>" alt="<?= htmlspecialchars($item['nombre']) ?>" class="prize-image">
                             </div>
                             <div class="prize-info">
                                 <h3 class="prize-name"><?= $item['nombre'] ?></h3>
-                                <p class="text-muted small mb-3"><?= htmlspecialchars($item['descripcion']) ?></p>
-                                <div class="prize-points mb-2">
-                                    <?= number_format($item['puntos']) ?> <span>puntos</span>
+                                <p class="prize-desc"><?= htmlspecialchars($item['descripcion']) ?></p>
+                                
+                                <div class="prize-meta-row">
+                                    <div class="prize-points-wrap">
+                                        <span class="prize-points-val"><?= number_format($item['puntos']) ?></span>
+                                        <span class="prize-points-lbl">puntos</span>
+                                    </div>
+                                    
+                                    <div class="stock-badge <?= $item['stock'] > 0 ? 'available' : 'empty' ?>">
+                                        <i class='bx <?= $item['stock'] > 0 ? 'bx-check-circle' : 'bx-x-circle' ?>'></i>
+                                        <?= $item['stock'] > 0 ? "Stock: {$item['stock']}" : "Agotado" ?>
+                                    </div>
                                 </div>
-                                <div class="small fw-600 mb-3 <?= $item['stock'] > 0 ? 'text-success' : 'text-danger' ?>">
-                                    <?= $item['stock'] > 0 ? "Stock: {$item['stock']} unidades" : "Agotado" ?>
-                                </div>
-                                <button class="btn-redeem" 
+
+                                <button class="btn-redeem-modern" 
                                         @click="abrirCanje(<?= htmlspecialchars(json_encode($item)) ?>)"
                                         <?= $item['stock'] <= 0 ? 'disabled' : '' ?>>
+                                    <i class='bx bxs-gift'></i>
                                     Canjear Premio
                                 </button>
                             </div>
