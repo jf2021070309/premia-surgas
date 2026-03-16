@@ -8,6 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/main.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
@@ -104,7 +105,7 @@
 <body>
 <div id="app" v-cloak>
     <div class="panel-header">
-        <div class="header-top-row">
+        <div class="header-top-row" style="position: relative; align-items: center; min-height: 60px;">
             <div class="header-logo-side">
                 <?php 
                 $urlVolver = BASE_URL . 'panel';
@@ -112,44 +113,63 @@
                     $urlVolver = BASE_URL . 'scan?c=' . $_SESSION['codigo_cliente'] . '&t=' . $_SESSION['token_cliente'];
                 }
                 ?>
-                <a href="<?= $urlVolver ?>" style="color:#fff; font-size:1.6rem; margin-right:1.2rem; display:flex; align-items:center; transition:0.3s;" title="Volver">
-                    <i class='bx bx-left-arrow-alt'></i>
+                <a href="<?= $urlVolver ?>" style="text-decoration:none; display:flex; align-items:center; gap:8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); padding: 6px 16px; border-radius:100px; color: white; transition:0.3s;" title="Volver">
+                    <i class='bx bx-arrow-back' style="font-size: 1.4rem;"></i>
+                    <span style="font-weight: 700; font-size: 0.85rem; letter-spacing: 0.5px;">VOLVER</span>
                 </a>
-                <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" alt="PremiaSurgas" class="header-main-logo">
             </div>
 
-            <div class="header-user-side">
-                <a href="<?= BASE_URL ?>tienda/historial" class="btn btn-outline-light shadow-sm me-3" style="border-radius:100px; padding:0.5rem 1.2rem; font-weight:600; border-color: rgba(255,255,255,0.3);">
-                    <i class='bx bx-time-five'></i> Historial
-                </a>
-                
-                <?php if (isset($_SESSION['usuario']) || isset($_SESSION['nombre_usuario'])): ?>
-                <div class="user-card-integrated">
-                    <div class="u-avatar"><?= substr($_SESSION['nombre_usuario'] ?? $_SESSION['usuario'], 0, 1) ?></div>
-                    <div class="u-details">
-                        <span class="u-role-tag"><?= htmlspecialchars(strtoupper($_SESSION['rol'] ?? 'CLIENTE')) ?></span>
-                        <span class="u-name-val"><?= htmlspecialchars($_SESSION['usuario'] ?? $_SESSION['nombre_usuario']) ?></span>
+            <?php if (isset($_SESSION['id_cliente'])): ?>
+            <div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 10;">
+                <div class="user-balance-pill shadow-sm" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); padding: 0.5rem 1.5rem; border-radius: 50px; display: flex; align-items: center; gap: 0.8rem; margin: 0;">
+                    <span style="font-size: 1.8rem;">⭐</span>
+                    <div class="text-center" style="display: flex; flex-direction: column; align-items: center;">
+                        <span class="small opacity-75 fw-600" style="font-size: 0.65rem; letter-spacing: 1px;">TU SALDO ACTUAL</span>
+                        <span class="h5 mb-0 fw-800" style="color: #fff; line-height: 1.2; font-size: 1.3rem; margin-top: 2px;"><?= number_format($cliente['puntos'] ?? 0) ?> Puntos</span>
+                        <a href="<?= BASE_URL ?>tienda/historial" class="hover-underline" style="color: #fff; font-size: 0.75rem; text-decoration: none; opacity: 0.9; margin-top: 2px;">Historial</a>
                     </div>
+                </div>
+            </div>
+            <?php endif; ?>
+
+            <div class="header-user-side">
+                <?php if (isset($_SESSION['rol']) && in_array(strtolower($_SESSION['rol']), ['admin', 'conductor'])): ?>
+                <!-- Conductores y Admins ven su tarjeta -->
+                <div class="user-card-integrated">
+                    <div class="u-avatar"><?= substr($_SESSION['nombre_usuario'] ?? $_SESSION['usuario'] ?? 'U', 0, 1) ?></div>
+                    <div class="u-details">
+                        <span class="u-role-tag"><?= htmlspecialchars(strtoupper($_SESSION['rol'])) ?></span>
+                        <span class="u-name-val"><?= htmlspecialchars($_SESSION['usuario'] ?? $_SESSION['nombre_usuario'] ?? 'Usuario') ?></span>
+                    </div>
+                    <div class="u-divider"></div>
+                    <button onclick="confirmarLogoutStore()" class="u-logout-btn" title="Cerrar Sesión">
+                        <i class='bx bx-log-out'></i>
+                    </button>
+                </div>
+                <?php elseif (isset($_SESSION['id_cliente'])): ?>
+                <!-- Clientes ven su tarjeta -->
+                <div class="user-card-integrated">
+                    <div class="u-avatar"><?= strtoupper(substr($cliente['nombre'] ?? $cliente['codigo'] ?? 'C', 0, 1)) ?></div>
+                    <div class="u-details">
+                        <span class="u-role-tag">CLIENTE</span>
+                        <span class="u-name-val"><?= htmlspecialchars($cliente['nombre'] ?? $cliente['codigo'] ?? 'Cliente') ?></span>
+                    </div>
+                    <div class="u-divider"></div>
+                    <a href="<?= BASE_URL ?>scan?c=<?= $_SESSION['codigo_cliente'] ?>&t=<?= $_SESSION['token_cliente'] ?>" class="u-logout-btn" title="Salir de la tienda">
+                        <i class='bx bx-log-out'></i>
+                    </a>
                 </div>
                 <?php endif; ?>
             </div>
         </div>
 
-        <?php if (isset($_SESSION['id_cliente'])): ?>
-        <div class="header-hero-content" style="padding-bottom: 2rem;">
-            <div class="user-balance-pill shadow-sm" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); padding: 0.8rem 2rem; border-radius: 50px;">
-                <span style="font-size: 1.8rem; margin-right: 0.5rem;">⭐</span>
-                <div class="text-start">
-                    <div class="small opacity-75 fw-600" style="font-size: 0.7rem; letter-spacing: 1px;">TU SALDO ACTUAL</div>
-                    <div class="h4 mb-0 fw-800" style="color: #fff;"><?= number_format($cliente['puntos'] ?? 0) ?> Puntos</div>
-                </div>
-            </div>
-        </div>
-        <?php else: ?>
+        <?php if (!isset($_SESSION['id_cliente'])): ?>
         <div class="header-hero-content" style="padding-bottom: 2.5rem;">
             <h1 class="hero-main-title">Tienda de Premios</h1>
             <p class="hero-welcome-msg">Canjea tus puntos por increíbles recompensas.</p>
         </div>
+        <?php else: ?>
+        <div style="padding-bottom: 2rem;"></div>
         <?php endif; ?>
     </div>
 
@@ -387,5 +407,24 @@
     <?php endif; ?>
 </script>
 <?php unset($_SESSION['flash']); endif; ?>
+
+<script>
+    function confirmarLogoutStore() {
+        Swal.fire({
+            title: '¿Cerrar sesión?',
+            text: "Saldrás del sistema.",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#821515',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Sí, salir',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '<?= BASE_URL ?>logout';
+            }
+        });
+    }
+</script>
 </body>
 </html>

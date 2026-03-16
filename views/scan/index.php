@@ -183,7 +183,13 @@
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                     <div class="form-group">
                         <label>Cantidad:</label>
-                        <input type="number" id="main-op-qty" class="form-control" value="1" min="1" oninput="updateSubtotal()">
+                        <select id="main-op-qty" class="form-control" onchange="updateSubtotal()">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label>Puntos unidad:</label>
