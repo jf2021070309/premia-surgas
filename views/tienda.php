@@ -26,7 +26,7 @@
 
         /* ── Store Header Refinement ── */
         .panel-header {
-            background: linear-gradient(180deg, #420202 0%, #2d0101 100%);
+            background: radial-gradient(circle at center, #5e0a0a 0%, #2b0303 100%);
             color: white;
             padding: 1.5rem 2rem 4rem;
             border-radius: 0 0 3.5rem 3.5rem;
@@ -154,7 +154,7 @@
             padding: 8px 0;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             color: rgba(255, 255, 255, 0.4);
-            font-size: 0.75rem;
+            font-size: 0.95rem;
             font-weight: 700;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -291,11 +291,12 @@
         }
         
         .prize-image-container { 
-            height: 180px; 
+            aspect-ratio: 1 / 1;
+            height: auto;
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            padding: 1.5rem; 
+            padding: 0.8rem; 
             background: radial-gradient(circle at center, #ffffff 0%, #fbfbfb 100%);
             position: relative;
         }
@@ -371,13 +372,13 @@
         }
 
         .stock-badge {
-            font-size: 0.65rem;
+            font-size: 0.8rem;
             font-weight: 700;
-            padding: 4px 10px;
+            padding: 6px 12px;
             border-radius: 6px;
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
         }
 
         .stock-badge.available { background: #f8f9fa; color: #1a1a1a; border: 1px solid #eee; }

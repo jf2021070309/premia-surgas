@@ -16,7 +16,7 @@
         body { 
             font-family: 'Outfit', sans-serif; 
             background: #2b0303;
-            background: radial-gradient(circle at top center, #5e0a0a 0%, #2b0303 100%);
+            background: radial-gradient(circle at center, #5e0a0a 0%, #2b0303 100%);
             background-attachment: fixed;
             margin: 0; 
             color: white; 
@@ -38,7 +38,7 @@
 
         .header-wrapper h1 { 
             margin: 0; 
-            font-size: 2.6rem; 
+            font-size: 2.3rem; 
             font-weight: 700;
             letter-spacing: -1px;
             color: white;
@@ -46,7 +46,7 @@
 
         .tu-saldo {
             margin-top: 2.5rem;
-            font-size: 1.15rem;
+            font-size: 1.0rem;
             font-weight: 700;
             letter-spacing: 6px;
             text-transform: uppercase;
@@ -63,7 +63,7 @@
         }
 
         .mascot-container {
-            width: 240px;
+            width: 210px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -83,9 +83,13 @@
 
         .points-box {
             text-align: center;
+            min-width: 140px; /* Fixed width prevents shifting during counting */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         .points-large {
-            font-size: 8.5rem;
+            font-size: 7.5rem;
             font-weight: 800;
             line-height: 0.8;
             display: block;
@@ -93,7 +97,7 @@
             text-shadow: 0 10px 40px rgba(0,0,0,0.3);
         }
         .points-label-text {
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             font-weight: 700;
             letter-spacing: 6px;
             text-transform: uppercase;
@@ -106,14 +110,14 @@
             background: #000000;
             color: white; 
             text-decoration: none; 
-            padding: 1.25rem 3rem; 
-            border-radius: 1.5rem;
+            padding: 1rem 2.5rem; 
+            border-radius: 1.2rem;
             display: flex; align-items: center; justify-content: center; gap: 0.8rem;
-            font-weight: 700; font-size: 1.1rem; 
-            box-shadow: 0 15px 45px rgba(0,0,0,0.6);
+            font-weight: 700; font-size: 1rem; 
+            box-shadow: 0 12px 35px rgba(0,0,0,0.5);
             transition: all 0.3s ease;
-            width: 95%;
-            max-width: 440px;
+            width: 90%;
+            max-width: 380px;
             margin: 0 auto 3.5rem;
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -159,8 +163,8 @@
 
         .section-title { 
             display: flex; align-items: center; gap: 8px;
-            font-size: 1.1rem; font-weight: 700; color: white; 
-            margin: 2rem 0 1.5rem; padding-left: 0; 
+            font-size: 1.25rem; font-weight: 700; color: white; 
+            margin: 2.5rem 0 1.5rem; padding-left: 0; 
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
@@ -379,7 +383,8 @@
                     pointsElement.textContent = Math.floor(pointsTarget).toLocaleString();
                     clearInterval(timer);
                 } else {
-                    pointsElement.textContent = Math.floor(currentPoints).toLocaleString();
+                    // Update only text content to avoid layout re-calculation if possible
+                    pointsElement.textContent = Math.floor(currentPoints);
                 }
             }, intervalTime);
         });
