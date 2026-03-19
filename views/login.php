@@ -18,19 +18,19 @@
             font-family: 'Outfit', sans-serif;
             color: #333;
         }
-        .login-wrap { width: 100%; max-width: 440px; padding: 2rem; box-sizing: border-box; }
-        .login-header { text-align: center; margin-bottom: 3.5rem; }
+        .login-wrap { width: 100%; max-width: 440px; padding: 1.5rem; box-sizing: border-box; }
+        .login-header { text-align: center; margin-bottom: 1.8rem; }
         .login-logo { 
             width: 100%; 
-            max-width: 320px; 
+            max-width: 280px; 
             height: auto; 
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
             filter: drop-shadow(0 10px 20px rgba(0,0,0,0.4));
             animation: fadeInScale 1s cubic-bezier(0.2, 1, 0.3, 1) forwards;
         }
         .login-header p { 
             color: rgba(255,255,255,0.45); 
-            font-size: 0.95rem; 
+            font-size: 0.85rem; 
             margin: 0; 
             font-weight: 300;
             letter-spacing: 1px;
@@ -51,7 +51,7 @@
         .card { 
             background: #fff; 
             border-radius: 28px; 
-            padding: 3.5rem 2.8rem; 
+            padding: 2.5rem 2.8rem; 
             box-shadow: 0 40px 100px rgba(0,0,0,0.5);
             border: 1px solid rgba(255,255,255,0.1);
         }
@@ -59,14 +59,14 @@
         .form-label { 
             display: block; 
             font-weight: 600; 
-            font-size: 0.72rem; 
+            font-size: 0.7rem; 
             color: #aaa; 
-            margin-bottom: 0.8rem; 
+            margin-bottom: 0.6rem; 
             text-transform: uppercase; 
             letter-spacing: 2px; 
         }
         
-        .input-group { position: relative; margin-bottom: 2.2rem; }
+        .input-group { position: relative; margin-bottom: 1.6rem; }
         .input-group i { 
             position: absolute; 
             left: 0; 
@@ -78,14 +78,14 @@
         }
         .form-control {
             width: 100%;
-            padding: 0.8rem 0 0.8rem 2.5rem !important;
+            padding: 0.7rem 0 0.7rem 2.5rem !important;
             border: none !important;
             border-bottom: 1.5px solid #eee !important;
             background: transparent !important;
             border-radius: 0 !important;
             box-sizing: border-box;
             transition: all 0.4s ease;
-            font-size: 1.05rem;
+            font-size: 1rem;
             color: #2d3748;
             font-family: inherit;
         }
