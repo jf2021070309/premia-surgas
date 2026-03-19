@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel — PremiaSurgas</title>
-    <link rel="icon" type="image/png" href="<?= BASE_URL ?>assets/premios/icono.png">
+    <link rel="icon" type="image/png" href="<?= BASE_URL ?>assets/premios/icono.png?v=<?= time() ?>">
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/main.css">
     <!-- Boxicons for elegant icons -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
