@@ -9,6 +9,60 @@ class ClienteController {
         $this->render('clientes/nuevo');
     }
 
+    public function registro(): void {
+        $this->render('clientes/registro');
+    }
+
+    public function registerPublic(): void {
+        header('Content-Type: application/json');
+
+        $data     = json_decode(file_get_contents('php://input'), true);
+        $dni      = trim($data['dni']      ?? '');
+        $nombre   = trim($data['nombre']   ?? '');
+        $celular  = trim($data['celular']  ?? '');
+        $password = trim($data['password'] ?? '');
+        $dep      = trim($data['departamento'] ?? 'Tacna');
+
+        if (!$dni || !$nombre || !$celular || !$password) {
+            echo json_encode(['success' => false, 'message' => 'Todos los campos son obligatorios.']);
+            exit;
+        }
+
+        if (strlen($dni) !== 8) {
+            echo json_encode(['success' => false, 'message' => 'El DNI debe tener 8 dígitos.']);
+            exit;
+        }
+
+        $model = new ClienteModel();
+
+        // Validar si ya existe
+        if ($model->findByDni($dni)) {
+            echo json_encode(['success' => false, 'message' => 'Este DNI ya está registrado. Por favor inicia sesión.']);
+            exit;
+        }
+
+        $codigo = $model->generarCodigo();
+        $token  = hash_hmac('sha256', $codigo, SECRET_KEY);
+
+        $id = $model->create([
+            'codigo'       => $codigo,
+            'dni'          => $dni,
+            'nombre'       => $nombre,
+            'razon_social' => null,
+            'tipo_cliente' => 'Normal',
+            'ruc'          => null,
+            'celular'      => $celular,
+            'direccion'    => '',
+            'departamento' => $dep,
+            'token'        => $token,
+            'password'     => hash('sha256', $password),
+            'creado_por'   => null,
+        ]);
+
+        echo json_encode(['success' => true, 'message' => 'Registro exitoso. Ya puedes iniciar sesión.']);
+        exit;
+    }
+
     public function create(): void {
         $this->requireAuth();
         header('Content-Type: application/json');

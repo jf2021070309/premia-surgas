@@ -25,6 +25,8 @@ $routes = [
     ['GET',  'panel',       'PanelController',   'index'],
 
     // —— Clientes ——
+    ['GET',  'registro',          'ClienteController', 'registro'],
+    ['POST', 'clientes/register', 'ClienteController', 'registerPublic'],
     ['GET',  'clientes/nuevo',    'ClienteController', 'nuevo'],
     ['POST', 'clientes/create',   'ClienteController', 'create'],
     ['GET',  'clientes/exito',    'ClienteController', 'exito'],

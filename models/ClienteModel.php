@@ -48,8 +48,8 @@ class ClienteModel {
 
     public function create(array $data): int {
         $stmt = $this->db->prepare(
-            "INSERT INTO clientes (codigo, dni, nombre, razon_social, tipo_cliente, ruc, celular, direccion, departamento, token, creado_por)
-             VALUES (:codigo, :dni, :nombre, :razon_social, :tipo_cliente, :ruc, :celular, :direccion, :departamento, :token, :creado_por)"
+            "INSERT INTO clientes (codigo, dni, nombre, razon_social, tipo_cliente, ruc, celular, direccion, departamento, token, password, creado_por)
+             VALUES (:codigo, :dni, :nombre, :razon_social, :tipo_cliente, :ruc, :celular, :direccion, :departamento, :token, :password, :creado_por)"
         );
         $stmt->execute([
             ':codigo'       => $data['codigo'],
@@ -62,6 +62,7 @@ class ClienteModel {
             ':direccion'    => $data['direccion'],
             ':departamento' => $data['departamento'],
             ':token'        => $data['token'],
+            ':password'     => $data['password'] ?? null,
             ':creado_por'   => $data['creado_por'],
         ]);
         return (int) $this->db->lastInsertId();
@@ -95,6 +96,12 @@ class ClienteModel {
     public function getAll(): array {
         $stmt = $this->db->query("SELECT c.*, u.nombre as conductor FROM clientes c LEFT JOIN usuarios u ON u.id = c.creado_por ORDER BY c.id DESC");
         return $stmt->fetchAll();
+    }
+
+    public function loginCliente(string $dni, string $password): ?array {
+        $stmt = $this->db->prepare("SELECT * FROM clientes WHERE dni = ? AND password = ? LIMIT 1");
+        $stmt->execute([$dni, hash('sha256', $password)]);
+        return $stmt->fetch() ?: null;
     }
 
     public function sumarPuntos(int $id, int $puntos): void {

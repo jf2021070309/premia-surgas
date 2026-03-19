@@ -50,6 +50,7 @@ CREATE TABLE IF NOT EXISTS clientes (
     departamento ENUM('Tacna', 'Moquegua', 'Arequipa', 'Ilo') NULL DEFAULT NULL,
 
     token VARCHAR(255),
+    password VARCHAR(255) NULL,
 
     puntos INT DEFAULT 0,
     estado TINYINT DEFAULT 1,

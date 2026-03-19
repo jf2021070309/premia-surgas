@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../models/UsuarioModel.php';
+require_once __DIR__ . '/../models/ClienteModel.php';
 
 class AuthController {
 
@@ -11,18 +12,20 @@ class AuthController {
     }
 
     public function doLogin(): void {
-        $this->requireJson();
+        header('Content-Type: application/json');
 
         $data     = json_decode(file_get_contents('php://input'), true);
         $usuario  = trim($data['usuario'] ?? '');
         $password = trim($data['password'] ?? '');
 
         if (!$usuario || !$password) {
-            $this->json(['success' => false, 'message' => 'Complete todos los campos.']);
+            echo json_encode(['success' => false, 'message' => 'Complete todos los campos.']);
+            exit;
         }
 
-        $model  = new UsuarioModel();
-        $user   = $model->findByCredentials($usuario, $password);
+        // 1. Intentar con tabla Usuarios (Admin/Conductor)
+        $model = new UsuarioModel();
+        $user  = $model->findByCredentials($usuario, $password);
 
         if ($user) {
             $_SESSION['id_usuario']       = $user['id'];
@@ -30,10 +33,26 @@ class AuthController {
             $_SESSION['usuario']          = $user['usuario'];
             $_SESSION['rol']              = $user['rol'];
             $_SESSION['departamento']     = $user['departamento'];
-            $this->json(['success' => true]);
-        } else {
-            $this->json(['success' => false, 'message' => 'Usuario o contraseña incorrectos.']);
+            echo json_encode(['success' => true, 'redirect' => 'panel']);
+            exit;
         }
+
+        // 2. Intentar con tabla Clientes (DNI)
+        $clienteModel = new ClienteModel();
+        $cliente      = $clienteModel->loginCliente($usuario, $password);
+
+        if ($cliente) {
+            $_SESSION['id_usuario']       = $cliente['id'];
+            $_SESSION['nombre_usuario']   = $cliente['nombre'];
+            $_SESSION['usuario']          = $cliente['dni'];
+            $_SESSION['rol']              = 'cliente';
+            $_SESSION['departamento']     = $cliente['departamento'];
+            echo json_encode(['success' => true, 'redirect' => 'scan/perfil/' . $cliente['token']]);
+            exit;
+        }
+
+        echo json_encode(['success' => false, 'message' => 'Usuario o contraseña incorrectos.']);
+        exit;
     }
 
     public function logout(): void {

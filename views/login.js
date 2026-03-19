@@ -23,7 +23,7 @@ createApp({
                             timer: 1500,
                             showConfirmButton: false
                         }).then(() => {
-                            window.location.href = 'panel';
+                            window.location.href = res.data.redirect || 'panel';
                         });
                     } else {
                         Swal.fire({
@@ -47,7 +47,7 @@ createApp({
                             timer: 1500,
                             showConfirmButton: false
                         }).then(() => {
-                            window.location.href = 'panel';
+                            window.location.href = data.redirect || 'panel';
                         });
                     } else {
                         Swal.fire({

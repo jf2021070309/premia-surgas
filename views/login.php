@@ -40,8 +40,12 @@
         }
 
         @keyframes fadeInScale {
-            from { opacity: 0; transform: scale(0.9) translateY(-15px); }
+            from { opacity: 0; transform: scale(0.9) translateY(-10px); }
             to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        @keyframes fadeInCard {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         @keyframes fadeIn {
             from { opacity: 0; }
@@ -54,6 +58,8 @@
             padding: 2.5rem 2.8rem; 
             box-shadow: 0 40px 100px rgba(0,0,0,0.5);
             border: 1px solid rgba(255,255,255,0.1);
+            animation: fadeInCard 0.8s cubic-bezier(0.2, 1, 0.3, 1) 0.2s forwards;
+            opacity: 0;
         }
         
         .form-label { 
@@ -190,6 +196,14 @@
                     <span v-if="loading">Verificando...</span>
                     <span v-else>Iniciar sesión</span>
                 </button>
+
+                <!-- Enlace de registro para clientes -->
+                <div style="text-align: center; margin-top: 2rem;">
+                    <p style="color: #666; font-size: 0.9rem; font-weight: 300;">
+                        ¿Eres cliente nuevo? 
+                        <a href="<?= BASE_URL ?>registro" style="color: #000; font-weight: 700; text-decoration: none; margin-left: 5px;">Regístrate aquí</a>
+                    </p>
+                </div>
             </form>
         </div>
     </div>
