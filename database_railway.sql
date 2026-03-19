@@ -3,6 +3,17 @@
 -- No hace DROP/CREATE DATABASE, usa la BD existente
 -- ============================================================
 
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS canjes;
+DROP TABLE IF EXISTS ventas;
+DROP TABLE IF EXISTS sesiones_qr;
+DROP TABLE IF EXISTS clientes;
+DROP TABLE IF EXISTS usuarios;
+DROP TABLE IF EXISTS premios;
+DROP TABLE IF EXISTS configuraciones;
+DROP TABLE IF EXISTS tipos_operaciones;
+SET FOREIGN_KEY_CHECKS = 1;
+
 -- =========================
 -- TABLA USUARIOS
 -- admin / conductor
@@ -14,6 +25,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
     usuario VARCHAR(50) UNIQUE,
     password VARCHAR(255),
     rol ENUM('admin','conductor') NOT NULL,
+    departamento ENUM('Tacna', 'Moquegua', 'Arequipa', 'Ilo') NULL DEFAULT NULL,
     estado TINYINT DEFAULT 1,
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -28,10 +40,14 @@ CREATE TABLE IF NOT EXISTS clientes (
     id INT AUTO_INCREMENT PRIMARY KEY,
 
     codigo VARCHAR(20) UNIQUE,
+    dni VARCHAR(15) NULL UNIQUE,
     nombre VARCHAR(100),
+    razon_social VARCHAR(150) NULL,
+    tipo_cliente ENUM('Normal', 'Restaurante', 'Punto de Venta') DEFAULT 'Normal',
+    ruc VARCHAR(15) NULL,
     celular VARCHAR(20),
     direccion VARCHAR(150),
-    distrito VARCHAR(100),
+    departamento ENUM('Tacna', 'Moquegua', 'Arequipa', 'Ilo') NULL DEFAULT NULL,
 
     token VARCHAR(255),
 
