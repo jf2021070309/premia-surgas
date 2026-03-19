@@ -6,23 +6,13 @@ createApp({
             form: { tipo_cliente: 'Normal', dni: '', ruc: '', razon_social: '', nombre: '', celular: '', direccion: '' },
             loading: false,
             error: '',
-            clienteGuardado: false,
-            codigoGenerado: '',
-            clienteId: null,
-            esExistente: false,
-            mensaje: '',
             buscandoDni: false,
             buscandoRuc: false
         };
     },
     methods: {
         onChangeTipo() {
-            if (this.form.tipo_cliente === 'Normal') {
-                this.form.ruc = '';
-                this.form.razon_social = '';
-            } else {
-                this.form.dni = '';
-            }
+            // Se eliminó la limpieza de campos para que persistan los datos si se cambia de tipo y se vuelve
         },
         validateDni(e) {
             this.form.dni = e.target.value.replace(/\D/g, '').slice(0, 8);
@@ -85,11 +75,28 @@ createApp({
                 if (typeof axios !== 'undefined') {
                     const res = await axios.post(url, this.form);
                     if (res.data.success) {
-                        this.codigoGenerado = res.data.codigo;
-                        this.clienteId = res.data.id;
-                        this.esExistente = !!res.data.existing;
-                        this.mensaje = res.data.message || '';
-                        this.clienteGuardado = true;
+                        if (res.data.existing) {
+                            if (typeof Swal !== 'undefined') {
+                                Swal.fire({
+                                    icon: 'info',
+                                    title: 'Cliente ya registrado',
+                                    text: res.data.message || 'Este cliente ya se encuentra en el sistema.',
+                                    confirmButtonText: 'Ver Perfil / QR',
+                                    confirmButtonColor: 'var(--primary)',
+                                    background: '#fff',
+                                    customClass: {
+                                        popup: 'swal2-premium'
+                                    }
+                                }).then(() => {
+                                    window.location.href = BASE_URL + 'clientes/exito?id=' + res.data.id;
+                                });
+                            } else {
+                                alert(res.data.message || 'Cliente ya registrado.');
+                                window.location.href = BASE_URL + 'clientes/exito?id=' + res.data.id;
+                            }
+                        } else {
+                            window.location.href = BASE_URL + 'clientes/exito?id=' + res.data.id;
+                        }
                     } else {
                         this.error = res.data.message;
                     }
@@ -101,11 +108,24 @@ createApp({
                     });
                     const data = await response.json();
                     if (data.success) {
-                        this.codigoGenerado = data.codigo;
-                        this.clienteId = data.id;
-                        this.esExistente = !!data.existing;
-                        this.mensaje = data.message || '';
-                        this.clienteGuardado = true;
+                        if (data.existing) {
+                             if (typeof Swal !== 'undefined') {
+                                Swal.fire({
+                                    icon: 'info',
+                                    title: 'Cliente ya registrado',
+                                    text: data.message || 'Este cliente ya se encuentra en el sistema.',
+                                    confirmButtonText: 'Ver Perfil / QR',
+                                    confirmButtonColor: 'var(--primary)'
+                                }).then(() => {
+                                    window.location.href = BASE_URL + 'clientes/exito?id=' + data.id;
+                                });
+                            } else {
+                                alert(data.message || 'Cliente ya registrado.');
+                                window.location.href = BASE_URL + 'clientes/exito?id=' + data.id;
+                            }
+                        } else {
+                            window.location.href = BASE_URL + 'clientes/exito?id=' + data.id;
+                        }
                     } else {
                         this.error = data.message;
                     }

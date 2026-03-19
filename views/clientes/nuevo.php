@@ -44,22 +44,8 @@
 
     <div class="container" style="max-width:700px; margin-top: -1.5rem;">
 
-        <!-- Éxito después de guardar -->
-        <div v-if="clienteGuardado" class="card" style="text-align:center; margin-top:2rem">
-            <div style="font-size:3rem; margin-bottom:1rem">✅</div>
-            <div class="alert alert-success" v-if="esExistente">{{ mensaje }}</div>
-            <h2 style="color:var(--dark); margin-bottom:.5rem">{{ form.nombre }}</h2>
-            <div class="badge-code">{{ codigoGenerado }}</div>
-            <p style="color:var(--muted); font-size:.88rem; margin:.8rem 0">Cliente registrado correctamente</p>
-            <div class="action-row">
-                <a :href="'<?= BASE_URL ?>clientes/exito?id=' + clienteId" class="btn btn-primary">Ver QR</a>
-                <a :href="'<?= BASE_URL ?>clientes/imprimir?id=' + clienteId" target="_blank" class="btn btn-dark">Imprimir</a>
-                <a href="<?= BASE_URL ?>clientes/nuevo" class="btn btn-outline">Nuevo</a>
-            </div>
-        </div>
-
         <!-- Formulario -->
-        <div v-else class="card elite-form-card animate-fade-in">
+        <div class="card elite-form-card animate-fade-in">
             <div class="card-header-premium">
                 <i class='bx bx-user-pin'></i>
                 <span>Datos de Registro</span>
@@ -178,6 +164,6 @@
 <script>
     var BASE_URL = '<?= BASE_URL ?>';
 </script>
-<script src="<?= BASE_URL ?>views/clientes/nuevo.js"></script>
+<script src="<?= BASE_URL ?>views/clientes/nuevo.js?v=<?= time() ?>"></script>
 </body>
 </html>
