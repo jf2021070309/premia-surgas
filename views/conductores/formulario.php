@@ -71,6 +71,19 @@
                 </div>
 
                 <div class="form-group-modern">
+                    <label><i class='bx bx-map'></i> Departamento</label>
+                    <div class="input-wrapper">
+                        <select name="departamento" class="form-control-modern" required>
+                            <option value="">-- Seleccionar --</option>
+                            <option value="Tacna" <?= ($conductor['departamento'] ?? '') == 'Tacna' ? 'selected' : '' ?>>Tacna</option>
+                            <option value="Moquegua" <?= ($conductor['departamento'] ?? '') == 'Moquegua' ? 'selected' : '' ?>>Moquegua</option>
+                            <option value="Arequipa" <?= ($conductor['departamento'] ?? '') == 'Arequipa' ? 'selected' : '' ?>>Arequipa</option>
+                            <option value="Ilo" <?= ($conductor['departamento'] ?? '') == 'Ilo' ? 'selected' : '' ?>>Ilo</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group-modern">
                     <label><i class='bx bx-toggle-right'></i> Estado de Cuenta</label>
                     <div class="input-wrapper">
                         <select name="estado" class="form-control-modern">

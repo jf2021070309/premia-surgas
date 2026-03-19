@@ -15,6 +15,7 @@ CREATE TABLE usuarios (
     password VARCHAR(255),
     rol ENUM('admin','conductor') NOT NULL,
     estado TINYINT DEFAULT 1,
+    departamento ENUM('Tacna', 'Moquegua', 'Arequipa', 'Ilo') NULL,
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -28,10 +29,14 @@ CREATE TABLE clientes (
     id INT AUTO_INCREMENT PRIMARY KEY,
 
     codigo VARCHAR(20) UNIQUE,
+    dni VARCHAR(15) UNIQUE NULL,
     nombre VARCHAR(100),
+    razon_social VARCHAR(150) NULL,
+    tipo_cliente ENUM('Normal', 'Restaurante', 'Punto de Venta') DEFAULT 'Normal',
+    ruc VARCHAR(15) UNIQUE NULL,
     celular VARCHAR(20),
     direccion VARCHAR(150),
-    distrito VARCHAR(100),
+    departamento ENUM('Tacna', 'Moquegua', 'Arequipa', 'Ilo') NULL,
 
     token VARCHAR(255),
 

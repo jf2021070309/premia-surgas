@@ -43,7 +43,10 @@
     <div class="card-print">
         <h1>&#x1F525; GAS EXPRESS SURGAS</h1>
         <h2><?= htmlspecialchars($cliente['nombre']) ?></h2>
-        <div class="cd"><?= htmlspecialchars($cliente['codigo']) ?></div>
+        <div class="cd">
+            <?= $cliente['tipo_cliente'] === 'Normal' ? 'DNI: ' : 'RUC: ' ?> <?= htmlspecialchars($cliente['tipo_cliente'] === 'Normal' ? ($cliente['dni'] ?? '—') : ($cliente['ruc'] ?? '—')) ?><br>
+            CÓDIGO: <?= htmlspecialchars($cliente['codigo']) ?>
+        </div>
         <div id="qrcode-print"></div>
         <p>Acumula puntos en cada compra &#x1F381;</p>
     </div>

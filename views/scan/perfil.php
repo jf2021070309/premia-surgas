@@ -89,13 +89,13 @@
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
 var CLIENTE_ID = <?= (int)$cliente['id'] ?>;
 var VENTAS     = <?= json_encode($ventas) ?>;
 var BASE_URL   = '<?= BASE_URL ?>';
 </script>
-<script src="<?= BASE_URL ?>assets/js/scan_perfil.js"></script>
+<script src="<?= BASE_URL ?>views/scan/perfil.js"></script>
 </body>
 </html>

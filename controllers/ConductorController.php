@@ -21,10 +21,11 @@ class ConductorController {
         
         $data = [
             'nombre'   => $_POST['nombre'] ?? '',
-            'usuario'  => $_POST['usuario'] ?? '',
-            'password' => $_POST['password'] ?? '',
-            'rol'      => 'conductor',
-            'estado'   => (int)($_POST['estado'] ?? 1),
+            'usuario'      => $_POST['usuario'] ?? '',
+            'password'     => $_POST['password'] ?? '',
+            'rol'          => 'conductor',
+            'estado'       => (int)($_POST['estado'] ?? 1),
+            'departamento' => $_POST['departamento'] ?? null,
         ];
 
         if ($model->create($data)) {
@@ -55,9 +56,10 @@ class ConductorController {
         $model = new UsuarioModel();
         
         $data = [
-            'nombre'  => $_POST['nombre'] ?? '',
-            'usuario' => $_POST['usuario'] ?? '',
-            'estado'  => (int)($_POST['estado'] ?? 1),
+            'nombre'       => $_POST['nombre'] ?? '',
+            'usuario'      => $_POST['usuario'] ?? '',
+            'estado'       => (int)($_POST['estado'] ?? 1),
+            'departamento' => $_POST['departamento'] ?? null,
         ];
 
         if (!empty($_POST['password'])) {

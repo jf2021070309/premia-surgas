@@ -13,20 +13,43 @@ class ClienteController {
         $this->requireAuth();
         header('Content-Type: application/json');
 
-        $data    = json_decode(file_get_contents('php://input'), true);
-        $nombre  = trim($data['nombre']   ?? '');
-        $celular = trim($data['celular']  ?? '');
-        $dir     = trim($data['direccion'] ?? '');
-        $dist    = trim($data['distrito'] ?? '');
+        $data         = json_decode(file_get_contents('php://input'), true);
+        $tipo_cliente = trim($data['tipo_cliente'] ?? 'Normal');
+        $dni          = trim($data['dni']      ?? '');
+        $ruc          = trim($data['ruc']      ?? '');
+        $razon_social = trim($data['razon_social'] ?? '');
+        $nombre       = trim($data['nombre']   ?? '');
+        $celular      = trim($data['celular']  ?? '');
+        $dir          = trim($data['direccion'] ?? '');
+        $dep          = $_SESSION['departamento'] ?? null;
 
         if (!$nombre || !$celular) {
-            echo json_encode(['success' => false, 'message' => 'Nombre y celular son obligatorios.']);
+            echo json_encode(['success' => false, 'message' => 'El Nombre del Contacto y el celular son obligatorios.']);
             exit;
         }
 
+        if ($tipo_cliente === 'Normal') {
+            if (!$dni || !preg_match('/^\d{8}$/', $dni)) {
+                echo json_encode(['success' => false, 'message' => 'El DNI debe tener exactamente 8 dígitos.']);
+                exit;
+            }
+            $ruc = null; // Clean ruc for Normal
+            $razon_social = null;
+        } else {
+            if (!$ruc || !preg_match('/^\d{11}$/', $ruc)) {
+                echo json_encode(['success' => false, 'message' => 'El RUC debe tener exactamente 11 dígitos.']);
+                exit;
+            }
+            if (!$razon_social) {
+                echo json_encode(['success' => false, 'message' => 'La Razón Social es obligatoria para empresas.']);
+                exit;
+            }
+            $dni = null; // Clean dni for Empresas
+        }
+
         // Validaciones extra
-        if (!preg_match('/^[A-Za-zñÑáéíóúÁÉÍÓÚ\s]+$/u', $nombre)) {
-            echo json_encode(['success' => false, 'message' => 'El nombre solo debe contener letras.']);
+        if ($tipo_cliente === 'Normal' && !preg_match('/^[A-Za-zñÑáéíóúÁÉÍÓÚ\s]+$/u', $nombre)) {
+            echo json_encode(['success' => false, 'message' => 'El nombre de persona solo debe contener letras.']);
             exit;
         }
 
@@ -37,13 +60,40 @@ class ClienteController {
 
         $model = new ClienteModel();
 
+        // Validar DNI / RUC duplicado
+        if ($tipo_cliente === 'Normal') {
+            $existenteDni = $model->findByDni($dni);
+            if ($existenteDni) {
+                echo json_encode([
+                    'success' => true,
+                    'existing' => true,
+                    'message' => 'El cliente ya estaba registrado por DNI.',
+                    'id'      => $existenteDni['id'],
+                    'codigo'  => $existenteDni['codigo'],
+                ]);
+                exit;
+            }
+        } else {
+            $existenteRuc = $model->findByRuc($ruc);
+            if ($existenteRuc) {
+                echo json_encode([
+                    'success' => true,
+                    'existing' => true,
+                    'message' => 'El cliente ya estaba registrado por RUC.',
+                    'id'      => $existenteRuc['id'],
+                    'codigo'  => $existenteRuc['codigo'],
+                ]);
+                exit;
+            }
+        }
+
         // Celular duplicado → devolver el existente
         $existente = $model->findByCelular($celular);
         if ($existente) {
             echo json_encode([
                 'success' => true,
                 'existing' => true,
-                'message' => 'El cliente ya estaba registrado.',
+                'message' => 'El cliente ya estaba registrado por celular.',
                 'id'      => $existente['id'],
                 'codigo'  => $existente['codigo'],
             ]);
@@ -54,13 +104,17 @@ class ClienteController {
         $token  = hash_hmac('sha256', $codigo, SECRET_KEY);
 
         $id = $model->create([
-            'codigo'     => $codigo,
-            'nombre'     => $nombre,
-            'celular'    => $celular,
-            'direccion'  => $dir,
-            'distrito'   => $dist,
-            'token'      => $token,
-            'creado_por' => $_SESSION['id_usuario'],
+            'codigo'       => $codigo,
+            'dni'          => $dni,
+            'nombre'       => $nombre,
+            'razon_social' => $razon_social,
+            'tipo_cliente' => $tipo_cliente,
+            'ruc'          => $ruc,
+            'celular'      => $celular,
+            'direccion'    => $dir,
+            'departamento' => $dep,
+            'token'        => $token,
+            'creado_por'   => $_SESSION['id_usuario'],
         ]);
 
         echo json_encode(['success' => true, 'id' => $id, 'codigo' => $codigo]);
@@ -109,21 +163,49 @@ class ClienteController {
         $this->requireAdmin();
         $id = (int)($_POST['id'] ?? 0);
         $model = new ClienteModel();
+        
+        $clienteOriginal = $model->findById($id);
+        if (!$clienteOriginal) {
+            $this->redirect('clientes/lista');
+        }
 
         $data = [
-            'nombre'    => trim($_POST['nombre'] ?? ''),
-            'celular'   => trim($_POST['celular'] ?? ''),
-            'direccion' => trim($_POST['direccion'] ?? ''),
-            'distrito'  => trim($_POST['distrito'] ?? ''),
-            'estado'    => (int)($_POST['estado'] ?? 1),
+            'tipo_cliente' => trim($_POST['tipo_cliente'] ?? 'Normal'),
+            'dni'          => trim($_POST['dni'] ?? ''),
+            'ruc'          => trim($_POST['ruc'] ?? ''),
+            'razon_social' => trim($_POST['razon_social'] ?? ''),
+            'nombre'       => trim($_POST['nombre'] ?? ''),
+            'celular'      => trim($_POST['celular'] ?? ''),
+            'direccion'    => trim($_POST['direccion'] ?? ''),
+            'departamento' => $clienteOriginal['departamento'], // Keep orginal department
+            'estado'       => (int)($_POST['estado'] ?? 1),
         ];
 
         if (!$data['nombre'] || !$data['celular']) {
-            $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'Nombre y celular son obligatorios.'];
+            $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'El nombre del contacto y celular son obligatorios.'];
             $this->redirect('clientes/editar?id=' . $id);
         }
 
-        if (!preg_match('/^[A-Za-zñÑáéíóúÁÉÍÓÚ\s]+$/u', $data['nombre'])) {
+        if ($data['tipo_cliente'] === 'Normal') {
+            if (!$data['dni'] || !preg_match('/^\d{8}$/', $data['dni'])) {
+                $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'El DNI debe tener exactamente 8 dígitos.'];
+                $this->redirect('clientes/editar?id=' . $id);
+            }
+            $data['ruc'] = null;
+            $data['razon_social'] = null;
+        } else {
+            if (!$data['ruc'] || !preg_match('/^\d{11}$/', $data['ruc'])) {
+                $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'El RUC debe tener exactamente 11 dígitos.'];
+                $this->redirect('clientes/editar?id=' . $id);
+            }
+            if (!$data['razon_social']) {
+                $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'La Razón Social es obligatoria.'];
+                $this->redirect('clientes/editar?id=' . $id);
+            }
+            $data['dni'] = null;
+        }
+
+        if ($data['tipo_cliente'] === 'Normal' && !preg_match('/^[A-Za-zñÑáéíóúÁÉÍÓÚ\s]+$/u', $data['nombre'])) {
             $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'El nombre solo debe contener letras.'];
             $this->redirect('clientes/editar?id=' . $id);
         }
@@ -153,6 +235,117 @@ class ClienteController {
             $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo cambiar el estado.'];
         }
         $this->redirect('clientes/lista');
+    }
+
+    public function consultarDni(): void {
+        header('Content-Type: application/json; charset=utf-8');
+        
+        $dni = $_GET['dni'] ?? null;
+        
+        if (!$dni || strlen($dni) !== 8 || !is_numeric($dni)) {
+            echo json_encode(['success' => false, 'message' => 'DNI inválido.']);
+            exit;
+        }
+
+        $url = 'https://eldni.com/pe/buscar-datos-por-dni';
+        $cookieFile = tempnam(sys_get_temp_dir(), 'cookie');
+        $userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36';
+
+        // PASO 1: Obtener Token
+        $ch = curl_init($url);
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_COOKIEJAR      => $cookieFile,
+            CURLOPT_USERAGENT      => $userAgent,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_SSL_VERIFYPEER => false,
+        ]);
+        $html = curl_exec($ch);
+        curl_close($ch);
+
+        if (!preg_match('/name="_token"\s+value="([^"]+)"/i', $html, $matches)) {
+            if (file_exists($cookieFile)) unlink($cookieFile);
+            echo json_encode(['success' => false, 'message' => 'Error de token CSRF.']);
+            exit;
+        }
+        $token = $matches[1];
+
+        // PASO 2: POST
+        $ch = curl_init($url);
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST           => true,
+            CURLOPT_POSTFIELDS     => http_build_query(['_token' => $token, 'dni' => $dni]),
+            CURLOPT_COOKIEFILE     => $cookieFile,
+            CURLOPT_USERAGENT      => $userAgent,
+            CURLOPT_REFERER        => $url,
+            CURLOPT_SSL_VERIFYPEER => false,
+        ]);
+        $response = curl_exec($ch);
+        $err = curl_error($ch);
+        curl_close($ch);
+        if (file_exists($cookieFile)) unlink($cookieFile);
+
+        if ($err) {
+            echo json_encode(['success' => false, 'message' => 'Error conexión servidor externo.']);
+            exit;
+        }
+
+        // PASO 3: Extraer
+        if (preg_match('/<td>'.$dni.'<\/td>\s*<td>(.*?)<\/td>\s*<td>(.*?)<\/td>\s*<td>(.*?)<\/td>/is', $response, $m)) {
+            $n = trim(strip_tags($m[1]));
+            $ap = trim(strip_tags($m[2]));
+            $am = trim(strip_tags($m[3]));
+            $nombreC = mb_convert_case(mb_strtolower(trim("$n $ap $am"), 'UTF-8'), MB_CASE_TITLE, 'UTF-8');
+            echo json_encode(['success' => true, 'data' => ['nombre_completo' => $nombreC]]);
+            exit;
+        } elseif (preg_match('/<samp class="inline-block">(.*?)<\/samp>/is', $response, $sm)) {
+            $nombreC = mb_convert_case(mb_strtolower(trim(strip_tags($sm[1])), 'UTF-8'), MB_CASE_TITLE, 'UTF-8');
+            echo json_encode(['success' => true, 'data' => ['nombre_completo' => $nombreC]]);
+            exit;
+        }
+
+        echo json_encode(['success' => false, 'message' => 'No se encontraron resultados para el DNI ' . $dni]);
+        exit;
+    }
+
+    public function consultarRuc(): void {
+        header('Content-Type: application/json; charset=utf-8');
+        
+        $ruc = $_GET['ruc'] ?? null;
+        if (!$ruc || strlen($ruc) !== 11 || !is_numeric($ruc)) {
+            echo json_encode(['success' => false, 'message' => 'RUC inválido.']);
+            exit;
+        }
+
+        $url = 'https://api.apis.net.pe/v1/ruc?numero=' . $ruc;
+
+        $ch = curl_init($url);
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT => 5,
+            CURLOPT_SSL_VERIFYPEER => false,
+        ]);
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($httpCode === 200 && $response) {
+            $data = json_decode($response, true);
+            if (isset($data['nombre']) && $data['nombre']) {
+                echo json_encode([
+                    'success' => true,
+                    'data' => [
+                        'razon_social' => trim($data['nombre']),
+                        'direccion'    => trim($data['direccion'] ?? '')
+                    ]
+                ]);
+                exit;
+            }
+        }
+
+        echo json_encode(['success' => false, 'message' => 'RUC no encontrado o API no disponible. Digite manualmente.']);
+        exit;
     }
 
     // ── helpers ──────────────────────────────────────────────────

@@ -19,6 +19,9 @@
     <div class="card qr-card" style="margin-top:2rem">
         <div style="font-size:.8rem; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:.5rem">GAS EXPRESS SURGAS</div>
         <h2 style="color:var(--dark); font-size:1.4rem; margin-bottom:.4rem"><?= htmlspecialchars($cliente['nombre']) ?></h2>
+        <div style="font-size:0.95rem; font-weight: 500; color: #555; margin-bottom: 0.5rem;">
+            <?= $cliente['tipo_cliente'] === 'Normal' ? 'DNI' : 'RUC' ?>: <?= htmlspecialchars($cliente['tipo_cliente'] === 'Normal' ? ($cliente['dni'] ?? '—') : ($cliente['ruc'] ?? '—')) ?>
+        </div>
         <div class="badge-code"><?= htmlspecialchars($cliente['codigo']) ?></div>
 
         <?php
@@ -29,7 +32,7 @@
         </div>
 
         <p style="color:var(--muted); font-size:.88rem;">
-            📍 <?= htmlspecialchars($cliente['distrito'] ?: '—') ?> &nbsp;|&nbsp;
+            📍 <?= htmlspecialchars($cliente['departamento'] ?? '—') ?> &nbsp;|&nbsp;
             📞 <?= htmlspecialchars($cliente['celular']) ?>
         </p>
         <p style="color:var(--muted); font-size:.88rem; margin-top:.4rem">

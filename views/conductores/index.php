@@ -83,51 +83,12 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 <script>
-    new Vue({
-        el: '#app',
-        data: {
-            conductores: <?= json_encode($conductores) ?>,
-            busqueda: '',
-            filtroEstado: 'todos'
-        },
-        computed: {
-            conductoresFiltrados() {
-                let list = this.conductores;
-                if (this.filtroEstado !== 'todos') {
-                    list = list.filter(c => c.estado == this.filtroEstado);
-                }
-                if (this.busqueda) {
-                    const q = this.busqueda.toLowerCase();
-                    list = list.filter(c => 
-                        c.nombre.toLowerCase().includes(q) || 
-                        c.usuario.toLowerCase().includes(q)
-                    );
-                }
-                return list;
-            }
-        },
-        methods: {
-            confirmInactivar(id) {
-                Swal.fire({
-                    title: '¿Estás seguro?',
-                    text: "El conductor ya no podrá usar el sistema hasta que sea reactivado.",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: 'var(--primary)',
-                    cancelButtonColor: '#6c757d',
-                    confirmButtonText: 'Sí, inactivar',
-                    cancelButtonText: 'Cancelar'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = '<?= BASE_URL ?>conductores/delete?id=' + id;
-                    }
-                })
-            }
-        }
-    });
+    var CONDUCTORES = <?= json_encode($conductores) ?>;
+    var BASE_URL = '<?= BASE_URL ?>';
 </script>
+<script src="<?= BASE_URL ?>views/conductores/index.js"></script>
 
 <?php if (isset($_SESSION['flash'])): ?>
 <script>

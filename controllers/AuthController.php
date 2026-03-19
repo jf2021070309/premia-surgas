@@ -29,6 +29,7 @@ class AuthController {
             $_SESSION['nombre_usuario']   = $user['nombre'];
             $_SESSION['usuario']          = $user['usuario'];
             $_SESSION['rol']              = $user['rol'];
+            $_SESSION['departamento']     = $user['departamento'];
             $this->json(['success' => true]);
         } else {
             $this->json(['success' => false, 'message' => 'Usuario o contraseña incorrectos.']);

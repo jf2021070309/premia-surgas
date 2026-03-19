@@ -21,6 +21,18 @@ class ClienteModel {
         return $stmt->fetch() ?: null;
     }
 
+    public function findByDni(string $dni): ?array {
+        $stmt = $this->db->prepare("SELECT * FROM clientes WHERE dni = ? LIMIT 1");
+        $stmt->execute([$dni]);
+        return $stmt->fetch() ?: null;
+    }
+
+    public function findByRuc(string $ruc): ?array {
+        $stmt = $this->db->prepare("SELECT * FROM clientes WHERE ruc = ? LIMIT 1");
+        $stmt->execute([$ruc]);
+        return $stmt->fetch() ?: null;
+    }
+
     public function findById(int $id): ?array {
         $stmt = $this->db->prepare("SELECT * FROM clientes WHERE id = ? LIMIT 1");
         $stmt->execute([$id]);
@@ -36,17 +48,21 @@ class ClienteModel {
 
     public function create(array $data): int {
         $stmt = $this->db->prepare(
-            "INSERT INTO clientes (codigo, nombre, celular, direccion, distrito, token, creado_por)
-             VALUES (:codigo, :nombre, :celular, :direccion, :distrito, :token, :creado_por)"
+            "INSERT INTO clientes (codigo, dni, nombre, razon_social, tipo_cliente, ruc, celular, direccion, departamento, token, creado_por)
+             VALUES (:codigo, :dni, :nombre, :razon_social, :tipo_cliente, :ruc, :celular, :direccion, :departamento, :token, :creado_por)"
         );
         $stmt->execute([
-            ':codigo'     => $data['codigo'],
-            ':nombre'     => $data['nombre'],
-            ':celular'    => $data['celular'],
-            ':direccion'  => $data['direccion'],
-            ':distrito'   => $data['distrito'],
-            ':token'      => $data['token'],
-            ':creado_por' => $data['creado_por'],
+            ':codigo'       => $data['codigo'],
+            ':dni'          => $data['dni'] ?? null,
+            ':nombre'       => $data['nombre'],
+            ':razon_social' => $data['razon_social'] ?? null,
+            ':tipo_cliente' => $data['tipo_cliente'],
+            ':ruc'          => $data['ruc'] ?? null,
+            ':celular'      => $data['celular'],
+            ':direccion'    => $data['direccion'],
+            ':departamento' => $data['departamento'],
+            ':token'        => $data['token'],
+            ':creado_por'   => $data['creado_por'],
         ]);
         return (int) $this->db->lastInsertId();
     }
@@ -54,16 +70,20 @@ class ClienteModel {
     public function update(int $id, array $data): bool {
         $stmt = $this->db->prepare(
             "UPDATE clientes 
-             SET nombre = :nombre, celular = :celular, direccion = :direccion, distrito = :distrito, estado = :estado
+             SET dni = :dni, nombre = :nombre, razon_social = :razon_social, tipo_cliente = :tipo_cliente, ruc = :ruc, celular = :celular, direccion = :direccion, departamento = :departamento, estado = :estado
              WHERE id = :id"
         );
         return $stmt->execute([
-            ':id'        => $id,
-            ':nombre'    => $data['nombre'],
-            ':celular'   => $data['celular'],
-            ':direccion' => $data['direccion'],
-            ':distrito'  => $data['distrito'],
-            ':estado'    => $data['estado'],
+            ':id'           => $id,
+            ':dni'          => $data['dni'] ?? null,
+            ':nombre'       => $data['nombre'],
+            ':razon_social' => $data['razon_social'] ?? null,
+            ':tipo_cliente' => $data['tipo_cliente'],
+            ':ruc'          => $data['ruc'] ?? null,
+            ':celular'      => $data['celular'],
+            ':direccion'    => $data['direccion'],
+            ':departamento' => $data['departamento'],
+            ':estado'       => $data['estado'],
         ]);
     }
 

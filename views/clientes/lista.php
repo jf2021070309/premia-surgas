@@ -47,7 +47,7 @@
             <div style="display: flex; gap: 1rem; margin-bottom: 1.2rem; align-items: center; flex-wrap: wrap;">
                 <div style="position: relative; flex: 1; min-width: 250px;">
                     <i class='bx bx-search' style="position: absolute; left: 1.1rem; top: 50%; transform: translateY(-50%); color: #a1a5b7; font-size: 1.3rem;"></i>
-                    <input type="text" v-model="busqueda" placeholder="Buscar por nombre o celular..."
+                    <input type="text" v-model="busqueda" placeholder="Buscar por DNI/RUC, nombre o celular..."
                            style="width:100%; padding:.85rem 1rem .85rem 3rem; border:1px solid #e4e6ef; border-radius:8px; font-family:inherit; font-size:.95rem; color:#3f4254; box-sizing:border-box; outline:none; transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.02);"
                            onfocus="this.style.borderColor='var(--primary)'; this.style.boxShadow='0 4px 12px rgba(130,21,21,0.1)'" onblur="this.style.borderColor='#e4e6ef'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.02)'">
                 </div>
@@ -61,17 +61,30 @@
                     <thead>
                         <tr>
                             <th>Nombre</th>
+                            <th>Tipo</th>
                             <th>Celular</th>
-                            <th>Distrito</th>
+                            <th>Documento</th>
+                            <th>Dep.</th>
                             <th>Puntos</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="c in filtrados" :key="c.id">
-                            <td>{{ c.nombre }}</td>
+                            <td>
+                                <div>{{ c.tipo_cliente === 'Normal' ? c.nombre : (c.razon_social || c.nombre) }}</div>
+                                <div v-if="c.tipo_cliente !== 'Normal'" style="font-size:0.75rem; color:var(--muted);">
+                                    <i class="bx bx-user" style="font-size:0.75rem;"></i> {{ c.nombre }}
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge" :class="c.tipo_cliente === 'Normal' ? 'badge-primary' : 'badge-warning'" style="font-size:0.75rem; padding: 3px 6px; border-radius: 4px; background: var(--bg-soft); border: 1px solid var(--border-color); color: var(--dark);">
+                                    <i :class="c.tipo_cliente === 'Normal' ? 'bx bx-user' : 'bx bx-buildings'"></i> {{ c.tipo_cliente || 'Normal' }}
+                                </span>
+                            </td>
                             <td>{{ c.celular }}</td>
-                            <td>{{ c.distrito || '—' }}</td>
+                            <td>{{ c.ruc || c.dni || '—' }}</td>
+                            <td>{{ c.departamento || '—' }}</td>
                             <td><strong style="color:var(--primary)">{{ c.puntos }}</strong></td>
                             <td style="display: flex; gap: 8px; align-items: center;">
                                 <a :href="'<?= BASE_URL ?>clientes/exito?id=' + c.id" title="Ver Nuevo Carnet" style="color: #0ea5e9; font-size: 1.15rem; background: #e0f2fe; padding: 5px; border-radius: 6px; display: inline-flex; transition: 0.3s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
@@ -103,25 +116,9 @@
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 <script>
 var CLIENTES = <?= json_encode($clientes) ?>;
-
-function toggleEstadoCli(id, v) {
-    const text = v ? '¿Activar este cliente?' : '¿Inactivar este cliente?';
-    Swal.fire({
-        title: 'Confirmar',
-        text: text,
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonColor: 'var(--primary)',
-        confirmButtonText: 'Sí, proceder'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            window.location.href = '<?= BASE_URL ?>clientes/estado?id=' + id + '&v=' + v;
-        }
-    });
-}
 var BASE_URL = '<?= BASE_URL ?>';
 </script>
 
@@ -139,6 +136,6 @@ var BASE_URL = '<?= BASE_URL ?>';
 </script>
 <?php unset($_SESSION['flash']); endif; ?>
 
-<script src="<?= BASE_URL ?>assets/js/clientes_lista.js"></script>
+<script src="<?= BASE_URL ?>views/clientes/lista.js"></script>
 </body>
 </html>

@@ -635,73 +635,13 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 <script>
-    new Vue({
-        el: '#app',
-        data: {
-            saldo: <?= (int) ($cliente['puntos'] ?? 0) ?>,
-            animatedSaldo: 0,
-            montoPorPunto: <?= (float) ($montoPorPunto ?? 0.05) ?>,
-            selected: {},
-            tipo: 'total',
-            pct: 50,
-            modal: null
-        },
-        computed: {
-            saldoInsuficiente() {
-                return this.saldo < this.selected.puntos;
-            },
-            maxSliderPct() {
-                if (!this.selected.puntos) return 0;
-                // El porcentaje máximo es el menor entre 90% y lo que el saldo del cliente permita
-                const pctSaldo = (this.saldo / this.selected.puntos) * 100;
-                return Math.min(90, Math.floor(pctSaldo));
-            },
-            puntosDcto() {
-                if (!this.selected.puntos) return 0;
-                // Calculamos puntos según porcentaje del slider
-                let pts = Math.round(this.selected.puntos * (this.pct / 100));
-                // Pero nunca más de lo que tiene el cliente
-                return Math.min(pts, this.saldo);
-            },
-            montoEfectivo() {
-                if (!this.selected.puntos) return 0;
-                const puntosRestantes = this.selected.puntos - this.puntosDcto;
-                return (puntosRestantes * this.montoPorPunto).toFixed(2);
-            }
-        },
-        methods: {
-            abrirCanje(prize) {
-                this.selected = prize;
-                this.tipo = this.saldo < prize.puntos ? 'descuento' : 'total';
-                
-                // Al abrir, ajustamos el pct al máximo permitido
-                this.$nextTick(() => {
-                    this.pct = this.maxSliderPct;
-                });
-
-                this.modal = new bootstrap.Modal(document.getElementById('modalCanje'));
-                this.modal.show();
-            }
-        },
-        mounted() {
-            if (this.saldo < this.selected.puntos) this.tipo = 'descuento';
-            
-            // Animación de entrada para el saldo
-            let target = this.saldo;
-            let step = Math.ceil(target / 50);
-            let timer = setInterval(() => {
-                if (this.animatedSaldo + step >= target) {
-                    this.animatedSaldo = target;
-                    clearInterval(timer);
-                } else {
-                    this.animatedSaldo += step;
-                }
-            }, 20);
-        }
-    });
+    var CLIENTE_PUNTOS = <?= (int) ($cliente['puntos'] ?? 0) ?>;
+    var MONTO_POR_PUNTO = <?= (float) ($montoPorPunto ?? 0.05) ?>;
+    var BASE_URL = '<?= BASE_URL ?>';
 </script>
+<script src="<?= BASE_URL ?>views/tienda.js"></script>
 
 <?php if (isset($_SESSION['flash'])): ?>
 <script>

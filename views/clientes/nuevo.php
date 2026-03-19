@@ -69,13 +69,70 @@
 
             <form @submit.prevent="guardar" class="premium-form">
                 <div class="form-group-modern">
-                    <label>Nombre Completo *</label>
+                    <label>Tipo de Cliente</label>
+                    <div class="input-wrapper">
+                        <i class='bx bx-category'></i>
+                        <select v-model="form.tipo_cliente" class="form-control-modern" @change="onChangeTipo">
+                            <option value="Normal">Personal (Normal)</option>
+                            <option value="Restaurante">Restaurante</option>
+                            <option value="Punto de Venta">Punto de Venta</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group-modern" v-if="form.tipo_cliente === 'Normal'">
+                    <label>
+                        DNI * 
+                        <span v-if="buscandoDni" style="color:var(--primary); font-size:0.8rem; margin-left:8px;">
+                            <i class='bx bx-loader-alt bx-spin'></i> Buscando...
+                        </span>
+                    </label>
                     <div class="input-wrapper">
                         <i class='bx bx-id-card'></i>
+                        <input type="text" v-model="form.dni" @input="validateDni" :required="form.tipo_cliente === 'Normal'" 
+                               pattern="\d{8}" 
+                               maxlength="8"
+                               title="Debe tener exactamente 8 dígitos" 
+                               placeholder="Ej. 12345678"
+                               :disabled="buscandoDni">
+                    </div>
+                </div>
+
+                <div class="form-group-modern" v-else>
+                    <label>
+                        RUC *
+                        <span v-if="buscandoRuc" style="color:var(--primary); font-size:0.8rem; margin-left:8px;">
+                            <i class='bx bx-loader-alt bx-spin'></i> Buscando...
+                        </span>
+                    </label>
+                    <div class="input-wrapper">
+                        <i class='bx bx-building-house'></i>
+                        <input type="text" v-model="form.ruc" @input="validateRuc" :required="form.tipo_cliente !== 'Normal'" 
+                               pattern="\d{11}" 
+                               maxlength="11"
+                               title="Debe tener exactamente 11 dígitos" 
+                               placeholder="Ej. 20123456789"
+                               :disabled="buscandoRuc">
+                    </div>
+                </div>
+
+                <div class="form-group-modern" v-if="form.tipo_cliente !== 'Normal'">
+                    <label>Razón Social / Nombre Comercial *</label>
+                    <div class="input-wrapper">
+                        <i class='bx bx-buildings'></i>
+                        <input type="text" v-model="form.razon_social" :required="form.tipo_cliente !== 'Normal'" 
+                               placeholder="Ej. Pollería El Buen Sabor S.A.C.">
+                    </div>
+                </div>
+
+                <div class="form-group-modern">
+                    <label>{{ form.tipo_cliente === 'Normal' ? 'Nombre Completo' : 'Nombre del Contacto / Encargado' }} *</label>
+                    <div class="input-wrapper">
+                        <i class='bx bx-user'></i>
                         <input type="text" v-model="form.nombre" @input="validateName" required 
                                pattern="[A-Za-zñÑáéíóúÁÉÍÓÚ\s]+" 
                                title="Solo se permiten letras y espacios" 
-                               placeholder="Ej. Juan Pérez">
+                               :placeholder="form.tipo_cliente === 'Normal' ? 'Ej. Juan Pérez' : 'Ej. Carlos Gómez'">
                     </div>
                 </div>
 
@@ -91,33 +148,12 @@
                     </div>
                 </div>
 
-                <div class="row-modern">
+                <div class="row-modern" style="grid-template-columns: 1fr;">
                     <div class="form-group-modern">
                         <label>Dirección</label>
                         <div class="input-wrapper">
                             <i class='bx bx-map-pin'></i>
                             <input type="text" v-model="form.direccion" placeholder="Av. Principal 123">
-                        </div>
-                    </div>
-
-                    <div class="form-group-modern">
-                        <label>Distrito</label>
-                        <div class="input-wrapper">
-                            <i class='bx bx-buildings'></i>
-                            <select v-model="form.distrito" class="form-control-modern">
-                                <option value="">-- Seleccionar --</option>
-                                <option value="Tacna (capital)">Tacna (capital)</option>
-                                <option value="Alto de la Alianza">Alto de la Alianza</option>
-                                <option value="Calana">Calana</option>
-                                <option value="Ciudad Nueva">Ciudad Nueva</option>
-                                <option value="Coronel Gregorio Albarracín Lanchipa">Coronel Gregorio Albarracín Lanchipa</option>
-                                <option value="Inclán">Inclán</option>
-                                <option value="La Yarada-Los Palos">La Yarada-Los Palos</option>
-                                <option value="Pachía">Pachía</option>
-                                <option value="Palca">Palca</option>
-                                <option value="Pocollay">Pocollay</option>
-                                <option value="Sama">Sama</option>
-                            </select>
                         </div>
                     </div>
                 </div>
@@ -137,11 +173,11 @@
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
     var BASE_URL = '<?= BASE_URL ?>';
 </script>
-<script src="<?= BASE_URL ?>assets/js/clientes_nuevo.js"></script>
+<script src="<?= BASE_URL ?>views/clientes/nuevo.js"></script>
 </body>
 </html>

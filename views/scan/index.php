@@ -94,9 +94,16 @@
             
             <div style="margin-bottom: 1.5rem;">
                 <input type="file" id="qr-input-file" accept="image/*" style="display: none;" onchange="onFileChange(event)">
-                <button class="btn btn-secondary" onclick="document.getElementById('qr-input-file').click()" style="height: 60px; font-size: 1.1rem; border: 2px dashed #ccc; background: #fff; color: #666;">
+                <button class="btn btn-secondary" onclick="document.getElementById('qr-input-file').click()" style="height: 60px; font-size: 1.1rem; border: 2px dashed #ccc; background: #fff; color: #666; margin-bottom: 1rem;">
                     <span>📁</span> Subir imagen de QR
                 </button>
+                
+                <div style="display: flex; gap: 0.5rem; align-items: stretch;">
+                    <input type="tel" id="manual-dni" class="form-control" placeholder="O ingresa el DNI (8 dígitos)" maxlength="8" style="border: 2px solid #ddd; font-weight: 600;">
+                    <button class="btn btn-primary" onclick="buscarPorDni()" style="width: auto; padding: 0 1.5rem; border-radius: 10px;">
+                        <i class='bx bx-search'></i> Buscar
+                    </button>
+                </div>
             </div>
 
             <div class="card">
@@ -237,6 +244,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script>
         const baseUrl = '<?= BASE_URL ?>';
         let html5QrCode;
@@ -331,15 +339,27 @@
                 codigo = decodedText.split('/').pop();
             }
 
-            // Si el escáner está activo (cámara), lo detenemos. 
-            // Si es escaneo de archivo, no hay nada que detener.
-            if (html5QrCode && html5QrCode.getState() === 2) { // 2 = Scanning
+            if (html5QrCode && html5QrCode.getState() === 2) {
                 html5QrCode.stop().then(() => {
                     buscarCliente(codigo);
                 });
             } else {
                 buscarCliente(codigo);
             }
+        }
+
+        function buscarPorDni() {
+            const dni = document.getElementById('manual-dni').value.trim();
+            if (!/^\d{8}$/.test(dni)) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'DNI Inválido',
+                    text: 'El DNI debe contener exactamente 8 dígitos numéricos.',
+                    confirmButtonColor: '#821515'
+                });
+                return;
+            }
+            buscarCliente(dni);
         }
 
         async function buscarCliente(codigo) {

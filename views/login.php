@@ -168,8 +168,8 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="<?= BASE_URL ?>assets/js/login.js"></script>
+<script src="<?= BASE_URL ?>views/login.js"></script>
 </body>
 </html>

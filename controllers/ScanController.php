@@ -61,16 +61,26 @@ class ScanController {
 
         $clienteModel = new ClienteModel();
         
-        // Intentar buscar por código primero
+        // Intentar buscar por código ("CLI-...")
         $cliente = $clienteModel->findByCodigo($codigo);
         
-        // Si no se encuentra y es numérico, intentar buscar por ID
-        if (!$cliente && is_numeric($codigo)) {
+        // Si no se encuentra y es numérico de 8 dígitos, buscar por DNI
+        if (!$cliente && preg_match('/^\d{8}$/', $codigo)) {
+            $cliente = $clienteModel->findByDni($codigo);
+        }
+
+        // Buscar por RUC si son 11 dígitos
+        if (!$cliente && preg_match('/^\d{11}$/', $codigo)) {
+            $cliente = $clienteModel->findByRuc($codigo);
+        }
+
+        // Si no se encuentra y es numérico general, buscar por ID antiguo
+        if (!$cliente && is_numeric($codigo) && strlen($codigo) < 8) {
             $cliente = $clienteModel->findById((int)$codigo);
         }
 
         if (!$cliente) {
-            $this->json(['success' => false, 'message' => 'Cliente no reconocido. El QR debe contener el código (CLI-XXXXXX) o el ID numérico del cliente.']);
+            $this->json(['success' => false, 'message' => 'Cliente o Empresa no reconocido. Ingrese el DNI (8) o RUC (11 dígitos) o escanee un QR válido.']);
         }
 
         $this->json([
