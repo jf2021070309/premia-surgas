@@ -241,75 +241,69 @@ class ClienteController {
         header('Content-Type: application/json; charset=utf-8');
         
         $dni = $_GET['dni'] ?? null;
+        
         if (!$dni || strlen($dni) !== 8 || !is_numeric($dni)) {
             echo json_encode(['success' => false, 'message' => 'DNI inválido.']);
             exit;
         }
 
-        // --- Intento 1: API de apis.net.pe (Más fiable en producción) ---
-        $url = 'https://api.apis.net.pe/v1/dni?numero=' . $dni;
-        $ch = curl_init($url);
-        curl_setopt_array($ch, [
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT        => 5,
-            CURLOPT_SSL_VERIFYPEER => false,
-        ]);
-        $response = curl_exec($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-
-        if ($httpCode === 200 && $response) {
-            $data = json_decode($response, true);
-            if (isset($data['nombre']) && $data['nombre']) {
-                $nombreC = mb_convert_case(mb_strtolower(trim($data['nombre']), 'UTF-8'), MB_CASE_TITLE, 'UTF-8');
-                echo json_encode(['success' => true, 'data' => ['nombre_completo' => $nombreC]]);
-                exit;
-            }
-        }
-
-        // --- Intento 2: Fallback Scraper (Por si la API falla o excede límites) ---
-        $urlScraper = 'https://eldni.com/pe/buscar-datos-por-dni';
+        $url = 'https://eldni.com/pe/buscar-datos-por-dni';
         $cookieFile = tempnam(sys_get_temp_dir(), 'cookie');
         $userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36';
 
-        $ch = curl_init($urlScraper);
+        // PASO 1: Obtener Token
+        $ch = curl_init($url);
         curl_setopt_array($ch, [
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_COOKIEJAR      => $cookieFile,
             CURLOPT_USERAGENT      => $userAgent,
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_TIMEOUT        => 5,
+            CURLOPT_TIMEOUT        => 10,
         ]);
         $html = curl_exec($ch);
         curl_close($ch);
 
-        if (preg_match('/name="_token"\s+value="([^"]+)"/i', $html, $mTok)) {
-            $token = $mTok[1];
-            $ch = curl_init($urlScraper);
-            curl_setopt_array($ch, [
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_POST           => true,
-                CURLOPT_POSTFIELDS     => http_build_query(['_token' => $token, 'dni' => $dni]),
-                CURLOPT_COOKIEFILE     => $cookieFile,
-                CURLOPT_USERAGENT      => $userAgent,
-                CURLOPT_REFERER        => $urlScraper,
-                CURLOPT_SSL_VERIFYPEER => false,
-                CURLOPT_TIMEOUT        => 5,
-            ]);
-            $respS = curl_exec($ch);
-            curl_close($ch);
+        if (!preg_match('/name="_token"\s+value="([^"]+)"/i', $html, $matches)) {
             if (file_exists($cookieFile)) unlink($cookieFile);
-
-            if (preg_match('/<td>'.$dni.'<\/td>\s*<td>(.*?)<\/td>\s*<td>(.*?)<\/td>\s*<td>(.*?)<\/td>/is', $respS, $m)) {
-                $nombreC = mb_convert_case(mb_strtolower(trim($m[1]." ".$m[2]." ".$m[3]), 'UTF-8'), MB_CASE_TITLE, 'UTF-8');
-                echo json_encode(['success' => true, 'data' => ['nombre_completo' => $nombreC]]);
-                exit;
-            }
+            echo json_encode(['success' => false, 'message' => 'Error de token CSRF.']);
+            exit;
         }
+        $token = $matches[1];
+
+        // PASO 2: POST
+        $ch = curl_init($url);
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST           => true,
+            CURLOPT_POSTFIELDS     => http_build_query(['_token' => $token, 'dni' => $dni]),
+            CURLOPT_COOKIEFILE     => $cookieFile,
+            CURLOPT_USERAGENT      => $userAgent,
+            CURLOPT_REFERER        => $url,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_TIMEOUT        => 10,
+        ]);
+        $response = curl_exec($ch);
+        $err = curl_error($ch);
+        curl_close($ch);
         if (file_exists($cookieFile)) unlink($cookieFile);
 
-        echo json_encode(['success' => false, 'message' => 'No se pudo obtener datos automáticamente. Digite manualmente.']);
+        if ($err) {
+            echo json_encode(['success' => false, 'message' => 'Error conexión servidor externo.']);
+            exit;
+        }
+
+        // PASO 3: Extraer
+        if (preg_match('/<td>'.$dni.'<\/td>\s*<td>(.*?)<\/td>\s*<td>(.*?)<\/td>\s*<td>(.*?)<\/td>/is', $response, $m)) {
+            $n = trim(strip_tags($m[1]));
+            $ap = trim(strip_tags($m[2]));
+            $am = trim(strip_tags($m[3]));
+            $nombreC = mb_convert_case(mb_strtolower(trim("$n $ap $am"), 'UTF-8'), MB_CASE_TITLE, 'UTF-8');
+            echo json_encode(['success' => true, 'data' => ['nombre_completo' => $nombreC]]);
+            exit;
+        }
+
+        echo json_encode(['success' => false, 'message' => 'No se encontraron resultados para el DNI ' . $dni]);
         exit;
     }
 
