@@ -185,13 +185,15 @@ INSERT IGNORE INTO usuarios (
     nombre,
     usuario,
     password,
-    rol
+    rol,
+    departamento
 )
 VALUES (
     'Administrador',
     'admin',
     SHA2('123456', 256),
-    'admin'
+    'admin',
+    'Tacna'
 );
 
 
@@ -201,13 +203,15 @@ INSERT IGNORE INTO usuarios (
     nombre,
     usuario,
     password,
-    rol
+    rol,
+    departamento
 )
 VALUES (
     'Conductor 1',
     'conductor1',
     SHA2('123456', 256),
-    'conductor'
+    'conductor',
+    'Tacna'
 );
 
 
