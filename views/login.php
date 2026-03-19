@@ -13,33 +13,34 @@
             align-items: center; 
             justify-content: center; 
             min-height: 100vh; 
-            background: radial-gradient(circle at center, #520006 0%, #3a0004 100%);
+            background: radial-gradient(circle at center, #52060a 0%, #1a0203 100%);
             margin: 0;
             font-family: 'Outfit', sans-serif;
             color: #333;
         }
-        .login-wrap { width: 100%; max-width: 420px; padding: 1.5rem; box-sizing: border-box; }
-        .login-header { text-align: center; margin-bottom: 2.2rem; }
+        .login-wrap { width: 100%; max-width: 440px; padding: 2rem; box-sizing: border-box; }
+        .login-header { text-align: center; margin-bottom: 3.5rem; }
         .login-logo { 
             width: 100%; 
-            max-width: 360px; 
+            max-width: 320px; 
             height: auto; 
-            margin-bottom: 1rem;
-            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.2));
-            animation: fadeInScale 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            margin-bottom: 1.5rem;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.4));
+            animation: fadeInScale 1s cubic-bezier(0.2, 1, 0.3, 1) forwards;
         }
         .login-header p { 
-            color: rgba(255,255,255,0.7); 
-            font-size: 1rem; 
+            color: rgba(255,255,255,0.45); 
+            font-size: 0.95rem; 
             margin: 0; 
             font-weight: 300;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            animation: fadeIn 1.2s ease 0.5s forwards;
             opacity: 0;
-            letter-spacing: 0.5px;
-            animation: fadeIn 1s ease 0.3s forwards;
         }
 
         @keyframes fadeInScale {
-            from { opacity: 0; transform: scale(0.95) translateY(-10px); }
+            from { opacity: 0; transform: scale(0.9) translateY(-15px); }
             to { opacity: 1; transform: scale(1) translateY(0); }
         }
         @keyframes fadeIn {
@@ -48,75 +49,102 @@
         }
         
         .card { 
-            background: white; 
-            border-radius: 0.8rem; 
-            padding: 2.5rem; 
-            box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+            background: #fff; 
+            border-radius: 28px; 
+            padding: 3.5rem 2.8rem; 
+            box-shadow: 0 40px 100px rgba(0,0,0,0.5);
             border: 1px solid rgba(255,255,255,0.1);
         }
         
-        .form-label { display: block; font-weight: 500; font-size: 0.85rem; color: #666; margin-bottom: 0.7rem; text-transform: uppercase; letter-spacing: 0.8px; }
+        .form-label { 
+            display: block; 
+            font-weight: 600; 
+            font-size: 0.72rem; 
+            color: #aaa; 
+            margin-bottom: 0.8rem; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+        }
         
-        .input-group { position: relative; margin-bottom: 1.8rem; }
+        .input-group { position: relative; margin-bottom: 2.2rem; }
         .input-group i { 
             position: absolute; 
-            left: 1.25rem; 
+            left: 0; 
             top: 50%; 
             transform: translateY(-50%); 
-            font-size: 1.3rem; 
-            color: #cbd5e0;
+            font-size: 1.1rem; 
+            color: #ddd;
             transition: all 0.3s ease;
         }
         .form-control {
             width: 100%;
-            padding: 1.1rem 1rem 1.1rem 3.4rem !important;
-            border: 1.5px solid #edf2f7 !important;
-            background: #f8fafc !important;
-            border-radius: 0.6rem !important;
+            padding: 0.8rem 0 0.8rem 2.5rem !important;
+            border: none !important;
+            border-bottom: 1.5px solid #eee !important;
+            background: transparent !important;
+            border-radius: 0 !important;
             box-sizing: border-box;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            font-size: 1rem;
+            transition: all 0.4s ease;
+            font-size: 1.05rem;
             color: #2d3748;
             font-family: inherit;
         }
         .form-control:focus {
-            background: white !important;
-            border-color: #821515 !important;
+            border-bottom-color: #000 !important;
             outline: none;
-            box-shadow: 0 0 0 4px rgba(130, 21, 21, 0.08);
         }
-        .input-group:focus-within i { color: #821515; }
-
-        .btn-premium-submit {
+        .input-group:focus-within i { color: #000; }
+        .btn-premium-submit {
             width: 100%;
-            padding: 1.1rem;
-            background: linear-gradient(135deg, #821515, #b31919);
-            border: none;
-            border-radius: 16px;
+            padding: 1.2rem;
+            background: #0a0a0a;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 14px;
             color: white;
-            font-weight: 700;
-            font-size: 1rem;
+            font-weight: 500;
+            font-size: 1.05rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
             cursor: pointer;
-            box-shadow: 0 10px 30px rgba(130, 21, 21, 0.25);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Outfit', sans-serif;
+        }
+        .btn-premium-submit::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(
+                to right,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.12) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: skewX(-25deg);
+            animation: shine 3s infinite ease-in-out;
+        }
+        @keyframes shine {
+            0% { left: -120%; }
+            20% { left: 180%; }
+            100% { left: 180%; }
         }
         .btn-premium-submit:hover:not(:disabled) {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(130, 21, 21, 0.35);
-            background: linear-gradient(135deg, #961a1a, #c71d1d);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+            border-color: rgba(255,255,255,0.2);
         }
         .btn-premium-submit:active:not(:disabled) {
             transform: scale(0.98);
         }
         .btn-premium-submit:disabled {
-            background: #d1d5db;
-            box-shadow: none;
+            background: #222;
+            opacity: 0.5;
             cursor: not-allowed;
         }
         
@@ -124,9 +152,8 @@
         
         @media (max-width: 600px) {
             .login-wrap { padding: 1.5rem; }
-            .card { padding: 2rem 1.5rem; border-radius: 0.75rem; }
+            .card { padding: 2.5rem 1.8rem; border-radius: 1.2rem; }
             .login-logo { max-width: 320px; }
-            .login-header p { font-size: 0.9rem; }
             input { font-size: 16px !important; }
         }
     </style>
@@ -146,7 +173,7 @@
                     <div class="input-group">
                         <i class='bx bx-user'></i>
                         <input type="text" v-model="form.usuario" class="form-control"
-                               required autocomplete="username" placeholder="Ingresa tu usuario">
+                                required autocomplete="username" placeholder="Ingresa tu usuario">
                     </div>
                 </div>
                 
@@ -155,16 +182,18 @@
                     <div class="input-group">
                         <i class='bx bx-lock-alt'></i>
                         <input type="password" v-model="form.password" class="form-control"
-                               required autocomplete="current-password" placeholder="••••••••">
+                                required autocomplete="current-password" placeholder="••••••••">
                     </div>
                 </div>
 
                 <button type="submit" class="btn-premium-submit" :disabled="loading">
-                    <span v-if="loading">VERIFICANDO...</span>
-                    <span v-else>INICIAR SESIÓN</span>
+                    <span v-if="loading">Verificando...</span>
+                    <span v-else>Iniciar sesión</span>
                 </button>
             </form>
         </div>
+    </div>
+</div>>
     </div>
 </div>
 
