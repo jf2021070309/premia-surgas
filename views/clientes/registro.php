@@ -55,7 +55,13 @@
             font-size: 1rem; color: #2d3748; font-family: inherit;
         }
         .form-control:focus { border-bottom-color: #000 !important; outline: none; }
-        .input-group:focus-within i { color: #000; }
+        .input-group:focus-within i.main-icon { color: #000; }
+        .password-toggle { 
+            position: absolute; right: 0; top: 50%; transform: translateY(-50%); 
+            font-size: 1.2rem !important; color: #ccc !important; cursor: pointer; 
+            transition: color 0.3s; z-index: 10;
+        }
+        .password-toggle:hover { color: #000 !important; }
 
         .btn-premium-submit {
             width: 100%; max-width: 320px; margin: 1.5rem auto 0; padding: 1.1rem; 
@@ -90,12 +96,12 @@
                 <div class="form-row">
                     <div class="input-group">
                         <label class="form-label">DNI</label>
-                        <i class='bx bx-id-card'></i>
+                        <i class='bx bx-id-card main-icon'></i>
                         <input type="text" v-model="form.dni" class="form-control" maxlength="8" required placeholder="8 dígitos" @input="onDniInput">
                     </div>
                     <div class="input-group">
                         <label class="form-label">Celular</label>
-                        <i class='bx bx-phone'></i>
+                        <i class='bx bx-phone main-icon'></i>
                         <input type="text" v-model="form.celular" class="form-control" maxlength="9" required placeholder="9 dígitos">
                     </div>
                 </div>
@@ -107,14 +113,14 @@
                             <i class='bx bx-loader-alt bx-spin'></i> Buscando...
                         </span>
                     </label>
-                    <i class='bx bx-user'></i>
+                    <i class='bx bx-user main-icon'></i>
                     <input type="text" v-model="form.nombre" class="form-control" required placeholder="Se llenará solo al poner el DNI">
                 </div>
 
                 <div class="form-row">
                     <div class="input-group">
                         <label class="form-label">Departamento</label>
-                        <i class='bx bx-map'></i>
+                        <i class='bx bx-map main-icon'></i>
                         <select v-model="form.departamento" class="form-control" required>
                             <option value="Tacna">Tacna</option>
                             <option value="Ilo">Ilo</option>
@@ -125,8 +131,9 @@
                     </div>
                     <div class="input-group">
                         <label class="form-label">Nueva Contraseña</label>
-                        <i class='bx bx-lock-alt'></i>
-                        <input type="password" v-model="form.password" class="form-control" required placeholder="••••••••">
+                        <i class='bx bx-lock-alt main-icon'></i>
+                        <input :type="showPassword ? 'text' : 'password'" v-model="form.password" class="form-control" required placeholder="••••••••">
+                        <i :class="['bx', showPassword ? 'bx-hide' : 'bx-show', 'password-toggle']" @click="showPassword = !showPassword"></i>
                     </div>
                 </div>
 
@@ -161,6 +168,7 @@
                     departamento: 'Tacna',
                     password: ''
                 },
+                showPassword: false,
                 loading: false,
                 buscandoDni: false
             }

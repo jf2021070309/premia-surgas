@@ -1237,3 +1237,19 @@ tr:hover td {
         padding: 1.2rem 1.5rem;
     }
 }
+
+/* Password Toggle Style */
+.password-toggle-modern {
+    position: absolute;
+    right: 1.15rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #a0a5b1;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    z-index: 10;
+}
+.password-toggle-modern:hover {
+    color: var(--primary);
+}

@@ -48,7 +48,13 @@
             font-size: 1rem; color: #2d3748; font-family: inherit;
         }
         .form-control:focus { border-bottom-color: #000 !important; outline: none; }
-        .input-group:focus-within i { color: #000; }
+        .input-group:focus-within i.main-icon { color: #000; }
+        .password-toggle { 
+            position: absolute; right: 0; top: 50%; transform: translateY(-50%); 
+            font-size: 1.2rem !important; color: #ccc !important; cursor: pointer; 
+            transition: color 0.3s; z-index: 10;
+        }
+        .password-toggle:hover { color: #000 !important; }
 
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
         @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; gap: 0; } }
@@ -96,14 +102,15 @@
                     <form @submit.prevent="handleLogin">
                         <div class="input-group">
                             <label class="form-label">Usuario / DNI</label>
-                            <i class='bx bx-user'></i>
+                            <i class='bx bx-user main-icon'></i>
                             <input type="text" v-model="form.usuario" class="form-control" required placeholder="Ingresa tu usuario o DNI">
                         </div>
                         
                         <div class="input-group">
                             <label class="form-label">Contraseña</label>
-                            <i class='bx bx-lock-alt'></i>
-                            <input type="password" v-model="form.password" class="form-control" required placeholder="••••••••">
+                            <i class='bx bx-lock-alt main-icon'></i>
+                            <input :type="showPassword ? 'text' : 'password'" v-model="form.password" class="form-control" required placeholder="••••••••">
+                            <i :class="['bx', showPassword ? 'bx-hide' : 'bx-show', 'password-toggle']" @click="showPassword = !showPassword"></i>
                         </div>
 
                         <button type="submit" class="btn-premium-submit" :disabled="loading">
@@ -127,12 +134,12 @@
                         <div class="form-row">
                             <div class="input-group">
                                 <label class="form-label">DNI</label>
-                                <i class='bx bx-id-card'></i>
+                                <i class='bx bx-id-card main-icon'></i>
                                 <input type="text" v-model="regForm.dni" class="form-control" maxlength="8" required placeholder="8 dígitos" @input="onDniInput">
                             </div>
                             <div class="input-group">
                                 <label class="form-label">Celular</label>
-                                <i class='bx bx-phone'></i>
+                                <i class='bx bx-phone main-icon'></i>
                                 <input type="text" v-model="regForm.celular" class="form-control" maxlength="9" required placeholder="9 dígitos">
                             </div>
                         </div>
@@ -142,14 +149,14 @@
                                 Nombre Completo 
                                 <span v-if="buscandoDni" style="color:#000;font-size:0.65rem;margin-left:10px;"><i class='bx bx-loader-alt bx-spin'></i></span>
                             </label>
-                            <i class='bx bx-user'></i>
+                            <i class='bx bx-user main-icon'></i>
                             <input type="text" v-model="regForm.nombre" class="form-control" required placeholder="Se llenará solo">
                         </div>
 
                         <div class="form-row">
                             <div class="input-group">
                                 <label class="form-label">Departamento</label>
-                                <i class='bx bx-map'></i>
+                                <i class='bx bx-map main-icon'></i>
                                 <select v-model="regForm.departamento" class="form-control" required>
                                     <option value="Tacna">Tacna</option>
                                     <option value="Ilo">Ilo</option>
@@ -160,8 +167,9 @@
                             </div>
                             <div class="input-group">
                                 <label class="form-label">Contraseña</label>
-                                <i class='bx bx-lock-alt'></i>
-                                <input type="password" v-model="regForm.password" class="form-control" required placeholder="••••••••">
+                                <i class='bx bx-lock-alt main-icon'></i>
+                                <input :type="showPasswordReg ? 'text' : 'password'" v-model="regForm.password" class="form-control" required placeholder="••••••••">
+                                <i :class="['bx', showPasswordReg ? 'bx-hide' : 'bx-show', 'password-toggle']" @click="showPasswordReg = !showPasswordReg"></i>
                             </div>
                         </div>
 
@@ -194,6 +202,8 @@
                 mode: 'login',
                 form: { usuario: '', password: '' },
                 regForm: { dni: '', nombre: '', celular: '', departamento: 'Tacna', password: '' },
+                showPassword: false,
+                showPasswordReg: false,
                 loading: false,
                 buscandoDni: false
             };

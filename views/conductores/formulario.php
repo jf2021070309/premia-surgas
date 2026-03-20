@@ -63,7 +63,8 @@
                 <div class="form-group-modern">
                     <label><i class='bx bx-lock-alt'></i> Contraseña <?= $conductor ? '(opcional)' : '' ?></label>
                     <div class="input-wrapper">
-                        <input type="password" name="password" <?= $conductor ? '' : 'required' ?> placeholder="••••••••">
+                        <input type="password" name="password" id="input-password" <?= $conductor ? '' : 'required' ?> placeholder="••••••••" style="padding-right: 3.2rem;">
+                        <i class='bx bx-show password-toggle-modern' id="btn-toggle-pass"></i>
                     </div>
                     <?php if($conductor): ?>
                         <p class="form-hint" style="margin-top:0.3rem">Dejar en blanco para mantener la actual</p>
@@ -119,6 +120,18 @@
                 }
             });
         }
+
+        // Toggle Password
+        document.getElementById('btn-toggle-pass').addEventListener('click', function() {
+            var input = document.getElementById('input-password');
+            if (input.type === 'password') {
+                input.type = 'text';
+                this.classList.replace('bx-show', 'bx-hide');
+            } else {
+                input.type = 'password';
+                this.classList.replace('bx-hide', 'bx-show');
+            }
+        });
     </script>
 </body>
 </html>
