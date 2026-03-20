@@ -129,7 +129,6 @@
 
                 <!-- FORM REGISTRO -->
                 <div v-else key="register">
-                    <h2 class="section-title">Crear Cuenta</h2>
                     <form @submit.prevent="handleRegistro">
                         <div class="form-row">
                             <div class="input-group">

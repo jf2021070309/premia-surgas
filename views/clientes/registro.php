@@ -90,7 +90,6 @@
 <div id="app" v-cloak>
     <div class="login-wrap">
         <div class="card">
-            <h2 class="section-title">Crear Cuenta</h2>
             <form @submit.prevent="handleRegistro">
                 
                 <div class="form-row">
