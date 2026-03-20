@@ -480,7 +480,7 @@
                         <span class="u-name-val"><?= htmlspecialchars($cliente['nombre'] ?? $cliente['codigo'] ?? 'Cliente') ?></span>
                     </div>
                     <div class="u-divider"></div>
-                    <a href="<?= BASE_URL ?>scan?c=<?= $_SESSION['codigo_cliente'] ?>&t=<?= $_SESSION['token_cliente'] ?>" class="u-logout-btn" title="Salir de la tienda">
+                    <a href="<?= BASE_URL ?>logout" class="u-logout-btn" title="Cerrar Sesión">
                         <i class='bx bx-log-out'></i>
                     </a>
                 </div>

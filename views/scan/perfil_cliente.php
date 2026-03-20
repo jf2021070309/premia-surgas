@@ -282,11 +282,36 @@
         }
 
         .footer { text-align: center; padding: 2.5rem 0; color: rgba(255,255,255,0.4); font-size: 0.85rem; line-height: 1.6; }
+        
+        .logout-btn-client {
+            position: absolute;
+            top: 2rem;
+            right: 1.5rem;
+            color: rgba(255,255,255,0.3);
+            font-size: 1.6rem;
+            transition: all 0.3s;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.05);
+        }
+        .logout-btn-client:hover {
+            color: #ff4d4d;
+            background: rgba(255,77,77,0.1);
+            transform: scale(1.1) rotate(90deg);
+        }
     </style>
 </head>
 <body>
 
     <div class="header-wrapper">
+        <a href="<?= BASE_URL ?>logout" class="logout-btn-client" title="Cerrar Sesión">
+            <i class='bx bx-log-out'></i>
+        </a>
         <div class="profile-avatar"><?= strtoupper(substr($cliente['nombre'], 0, 1)) ?></div>
         <h1>¡Hola, <?= explode(' ', $cliente['nombre'])[0] ?>!</h1>
         
