@@ -6,6 +6,9 @@ class AuthController {
 
     public function login(): void {
         if (isset($_SESSION['id_usuario'])) {
+            if ($_SESSION['rol'] === 'cliente' && isset($_SESSION['codigo_cliente'])) {
+                $this->redirect('scan?c=' . $_SESSION['codigo_cliente'] . '&t=' . $_SESSION['token_cliente']);
+            }
             $this->redirect('panel');
         }
         $this->render('login');
@@ -47,7 +50,14 @@ class AuthController {
             $_SESSION['usuario']          = $cliente['dni'];
             $_SESSION['rol']              = 'cliente';
             $_SESSION['departamento']     = $cliente['departamento'];
-            echo json_encode(['success' => true, 'redirect' => 'scan/perfil/' . $cliente['token']]);
+            
+            // Datos específicos de cliente para redirección
+            $_SESSION['id_cliente']     = $cliente['id'];
+            $_SESSION['nombre_cliente'] = $cliente['nombre'];
+            $_SESSION['codigo_cliente'] = $cliente['codigo'];
+            $_SESSION['token_cliente']  = $cliente['token'];
+
+            echo json_encode(['success' => true, 'redirect' => 'scan?c=' . $cliente['codigo'] . '&t=' . $cliente['token']]);
             exit;
         }
 
