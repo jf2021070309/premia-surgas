@@ -1117,7 +1117,7 @@ tr:hover td {
     width: 100%;
 }
 
-.input-wrapper > i.bx {
+.input-wrapper > i.bx:not(.password-toggle-modern) {
     position: absolute;
     left: 1.15rem;
     top: 50%;

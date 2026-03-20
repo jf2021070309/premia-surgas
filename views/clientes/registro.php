@@ -46,7 +46,7 @@
 
         .form-label { display: block; font-weight: 600; font-size: 0.7rem; color: #aaa; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1.5px; }
         .input-group { position: relative; margin-bottom: 1.5rem; }
-        .input-group i { position: absolute; left: 0; top: 50%; transform: translateY(-50%); font-size: 1.1rem; color: #ddd; transition: all 0.3s; }
+        .input-group i.main-icon { position: absolute; left: 0; top: 50%; transform: translateY(-50%); font-size: 1.1rem; color: #ddd; transition: all 0.3s; }
         
         .form-control {
             width: 100%; padding: 0.7rem 0 0.7rem 2.2rem !important; border: none !important;
