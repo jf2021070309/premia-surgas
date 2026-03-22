@@ -392,6 +392,10 @@
     </div>
 
     <script>
+        const BASE_URL = '<?= BASE_URL ?>';
+    </script>
+    <script src="<?= BASE_URL ?>assets/js/session_check.js"></script>
+    <script>
         // Points Counter Animation
         document.addEventListener('DOMContentLoaded', () => {
             const pointsTarget = <?= (int) ($cliente['puntos'] ?? 0) ?>;

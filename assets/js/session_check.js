@@ -1,7 +1,7 @@
 (function() {
-    // Verificar cada 10 segundos
+    // Verificar cada 5 segundos
     let lastStatusCheck = Date.now();
-    let checkInterval = 10000; 
+    let checkInterval = 5000; 
 
     function checkSession() {
         fetch(BASE_URL + 'auth/check', {

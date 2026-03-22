@@ -101,6 +101,7 @@
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
-    </div>
+    <script> const BASE_URL = '<?= BASE_URL ?>'; </script>
+    <script src="<?= BASE_URL ?>assets/js/session_check.js"></script>
 </body>
 </html>
