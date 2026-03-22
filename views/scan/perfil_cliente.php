@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Mi Perfil VIP — PremiaSurgas</title>
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/main.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -38,7 +38,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            touch-action: none; /* Crucial for mobile drag */
+            touch-action: none; /* Crucial for mobile drag to prevent scroll */
             user-select: none;
         }
 
@@ -48,8 +48,9 @@
             height: 100%;
             transform-style: preserve-3d;
             will-change: transform;
-            /* Initially positioned slightly tilted for 3D look */
-            transform: rotateY(-15deg) rotateX(10deg);
+            /* Perfectly straight initially */
+            transform: rotateY(0deg) rotateX(0deg);
+            transition: transform 0.1s linear; /* Very slight transition for manual drag smoothness */
         }
 
         .card-front, .card-back {
@@ -140,10 +141,9 @@
     <!-- TARJETA MOTOR 3D 360° -->
     <div class="vip-card-stage" id="cardStage">
         <div class="vip-card-inner" id="cardInner">
-            <!-- CARA FRONTAL -->
             <div class="card-front">
                 <div class="card-shine"></div>
-                <div class="card-top">
+                <div class="card-header">
                     <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" class="card-logo">
                     <span class="membership-tag">VIP ELITE</span>
                 </div>
@@ -161,7 +161,6 @@
                 </div>
             </div>
 
-            <!-- CARA TRASERA -->
             <div class="card-back">
                 <div class="qr-wrapper">
                     <div id="qrcode"></div>
@@ -200,26 +199,30 @@
         let isDragging = false;
         let lastX = 0;
         let lastY = 0;
-        let rotY = -15; // Initial values
-        let rotX = 10;
+        let rotY = 0; // RECTO INICIALMENTE
+        let rotX = 0;
 
-        // --- MOTOR DE ROTACIÓN LIBRE (360°) ---
         const startDrag = (e) => {
             isDragging = true;
-            lastX = e.clientX || e.touches[0].clientX;
-            lastY = e.clientY || e.touches[0].clientY;
-            inner.style.transition = 'none'; // Smooth manual control
+            // Manejar tanto mouse como touch
+            lastX = e.clientX || (e.touches ? e.touches[0].clientX : 0);
+            lastY = e.clientY || (e.touches ? e.touches[0].clientY : 0);
+            inner.style.transition = 'none';
         };
 
         const moveDrag = (e) => {
             if (!isDragging) return;
+            
+            // Prevenir scroll en dispositivos móviles al arrastrar la tarjeta
+            if (e.cancelable) e.preventDefault();
+
             const currentX = e.clientX || (e.touches ? e.touches[0].clientX : 0);
             const currentY = e.clientY || (e.touches ? e.touches[0].clientY : 0);
             
             const deltaX = currentX - lastX;
             const deltaY = currentY - lastY;
 
-            rotY += deltaX * 0.5; // Sensitivity
+            rotY += deltaX * 0.5; 
             rotX -= deltaY * 0.5;
 
             inner.style.transform = `rotateY(${rotY}deg) rotateX(${rotX}deg)`;
@@ -231,25 +234,28 @@
         const endDrag = () => {
             if (!isDragging) return;
             isDragging = false;
-            inner.style.transition = 'transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+            // Añadir transición suave al soltar
+            inner.style.transition = 'transform 0.4s ease-out';
         };
 
+        // Eventos de Mouse
         stage.addEventListener('mousedown', startDrag);
-        window.addEventListener('mousemove', moveDrag);
+        window.addEventListener('mousemove', moveDrag, { passive: false });
         window.addEventListener('mouseup', endDrag);
 
-        stage.addEventListener('touchstart', startDrag);
-        window.addEventListener('touchmove', moveDrag);
+        // Eventos de Touch
+        stage.addEventListener('touchstart', startDrag, { passive: false });
+        window.addEventListener('touchmove', moveDrag, { passive: false });
         window.addEventListener('touchend', endDrag);
 
-        // --- Generar QR ---
-        const qrUrl = '<?= BASE_URL ?>scan?c=<?= urlencode($cliente['codigo']) ?>&t=<?= urlencode($cliente['token']) ?>';
+        // QR
         new QRCode(document.getElementById("qrcode"), { 
-            text: qrUrl, width: 140, height: 140, colorDark: "#000", colorLight: "#fff",
+            text: '<?= BASE_URL ?>scan?c=<?= urlencode($cliente['codigo']) ?>&t=<?= urlencode($cliente['token']) ?>', 
+            width: 140, height: 140, colorDark: "#000", colorLight: "#fff",
             correctLevel: QRCode.CorrectLevel.H 
         });
 
-        // --- Animación de Puntos ---
+        // Puntos
         const ptsTarget = <?= (int)($cliente['puntos'] ?? 0) ?>;
         const ptsElem = document.getElementById('pts-count');
         let current = 0;
@@ -263,7 +269,6 @@
                 ptsElem.textContent = Math.floor(current).toLocaleString();
             }
         }, dur / jumps);
-
     </script>
     <script> const BASE_URL = '<?= BASE_URL ?>'; </script>
     <script src="<?= BASE_URL ?>assets/js/session_check.js"></script>
