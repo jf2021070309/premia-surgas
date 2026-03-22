@@ -27,6 +27,12 @@
             min-height: 100vh;
             overflow-x: hidden;
         }
+
+        ::selection {
+            background: rgba(130, 21, 21, 0.2);
+            color: var(--primary);
+        }
+
         
         /* Layout */
         .header-wrapper {
@@ -98,6 +104,7 @@
             box-shadow: 0 25px 50px rgba(0,0,0,0.6);
             border: 1px solid rgba(255, 255, 255, 0.1);
             overflow: hidden;
+            color: white; /* Forzar texto blanco dentro de la tarjeta */
         }
 
         /* LADO FRONTAL: BLACK METALLIC */
