@@ -36,6 +36,21 @@ try {
         } catch(Exception $e) {}
     }
 
+    // ─── SESION ID ────────────────────────
+    echo "Verificando session_id en usuarios...\n";
+    $cols = $db->query("SHOW COLUMNS FROM usuarios LIKE 'session_id'")->fetchAll();
+    if(count($cols) == 0) {
+        $db->exec("ALTER TABLE usuarios ADD COLUMN session_id VARCHAR(255) NULL");
+        echo "session_id añadido a usuarios.\n";
+    }
+
+    echo "Verificando session_id en clientes...\n";
+    $cols = $db->query("SHOW COLUMNS FROM clientes LIKE 'session_id'")->fetchAll();
+    if(count($cols) == 0) {
+        $db->exec("ALTER TABLE clientes ADD COLUMN session_id VARCHAR(255) NULL");
+        echo "session_id añadido a clientes.\n";
+    }
+
     echo "Migración completada.\n";
 } catch(Exception $e) {
     echo "Error: " . $e->getMessage() . "\n";
