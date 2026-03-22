@@ -79,6 +79,12 @@ class AuthController {
         $this->redirect('login');
     }
 
+    public function checkSession(): void {
+        header('Content-Type: application/json');
+        echo json_encode(['valid' => true]);
+        exit;
+    }
+
     // ── helpers ──────────────────────────────────────────────────
 
     private function render(string $view, array $data = []): void {

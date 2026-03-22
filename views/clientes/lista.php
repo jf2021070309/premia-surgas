@@ -121,6 +121,7 @@
 var CLIENTES = <?= json_encode($clientes) ?>;
 var BASE_URL = '<?= BASE_URL ?>';
 </script>
+<script src="<?= BASE_URL ?>assets/js/session_check.js"></script>
 
 <?php if (isset($_SESSION['flash'])): ?>
 <script>

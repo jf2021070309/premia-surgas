@@ -246,7 +246,8 @@
     <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script>
-        const baseUrl = '<?= BASE_URL ?>';
+        const BASE_URL = '<?= BASE_URL ?>';
+        const baseUrl = BASE_URL;
         let html5QrCode;
         let operations = [];
         let running = false;
@@ -515,5 +516,6 @@
             }
         }
     </script>
+    <script src="<?= BASE_URL ?>assets/js/session_check.js"></script>
 </body>
 </html>

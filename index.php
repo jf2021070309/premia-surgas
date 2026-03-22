@@ -18,6 +18,17 @@ if (isset($_SESSION['id_usuario']) && isset($_SESSION['session_id'])) {
 
     if ($userSession !== $_SESSION['session_id']) {
         session_destroy();
+        
+        // Si es una petición AJAX (Fetch/Axios/XHR)
+        $isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+        
+        if ($isAjax || (isset($_SERVER['HTTP_ACCEPT']) && str_contains($_SERVER['HTTP_ACCEPT'], 'application/json'))) {
+            header('Content-Type: application/json');
+            http_response_code(401);
+            echo json_encode(['success' => false, 'error' => 'session_expired']);
+            exit;
+        }
+
         header('Location: ' . BASE_URL . 'login?error=session_expired');
         exit;
     }
@@ -101,7 +112,7 @@ $routes = [
     ['GET',    'operaciones',        'OperacionController', 'index'],
     ['POST',   'operaciones/create', 'OperacionController', 'create'],
     ['POST',   'operaciones/update', 'OperacionController', 'update'],
-    ['GET',    'operaciones/delete', 'OperacionController', 'delete'],
+    ['GET',    'auth/check',          'AuthController',   'checkSession'],
 ];
 
 $matched = false;

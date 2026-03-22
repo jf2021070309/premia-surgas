@@ -641,6 +641,7 @@
     var MONTO_POR_PUNTO = <?= (float) ($montoPorPunto ?? 0.05) ?>;
     var BASE_URL = '<?= BASE_URL ?>';
 </script>
+<script src="<?= BASE_URL ?>assets/js/session_check.js"></script>
 <script src="<?= BASE_URL ?>views/tienda.js"></script>
 
 <?php if (isset($_SESSION['flash'])): ?>

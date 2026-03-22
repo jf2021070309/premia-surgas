@@ -260,6 +260,7 @@
 
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 <script> var BASE_URL = '<?= BASE_URL ?>'; </script>
+<script src="<?= BASE_URL ?>assets/js/session_check.js"></script>
 <script src="<?= BASE_URL ?>views/panel.js"></script>
 </body>
 </html>
