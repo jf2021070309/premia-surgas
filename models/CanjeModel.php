@@ -16,18 +16,36 @@ class CanjeModel {
         try {
             $this->db->beginTransaction();
 
-            // 1. Insertar el canje
+            // 1. Verificar puntos del cliente con bloqueo (FOR UPDATE)
+            $stmt = $this->db->prepare("SELECT puntos FROM clientes WHERE id = ? FOR UPDATE");
+            $stmt->execute([$clienteId]);
+            $puntosActuales = (int) $stmt->fetchColumn();
+
+            if ($puntosActuales < $puntosUsados) {
+                throw new Exception("Puntos insuficientes.");
+            }
+
+            // 2. Verificar stock del premio con bloqueo (FOR UPDATE)
+            $stmt = $this->db->prepare("SELECT stock FROM premios WHERE id = ? FOR UPDATE");
+            $stmt->execute([$premioId]);
+            $stockActual = (int) $stmt->fetchColumn();
+
+            if ($stockActual <= 0) {
+                throw new Exception("Sin stock disponible.");
+            }
+
+            // 3. Insertar el canje
             $stmt = $this->db->prepare(
-                "INSERT INTO canjes (cliente_id, premio_id, puntos_usados, monto) 
-                 VALUES (?, ?, ?, ?)"
+                "INSERT INTO canjes (cliente_id, premio_id, puntos_usados, monto, estado) 
+                 VALUES (?, ?, ?, ?, 'pendiente')"
             );
             $stmt->execute([$clienteId, $premioId, $puntosUsados, $monto]);
 
-            // 2. Descontar puntos al cliente
+            // 4. Descontar puntos al cliente
             $stmt = $this->db->prepare("UPDATE clientes SET puntos = puntos - ? WHERE id = ?");
             $stmt->execute([$puntosUsados, $clienteId]);
 
-            // 3. Restar stock del premio
+            // 5. Restar stock del premio
             $stmt = $this->db->prepare("UPDATE premios SET stock = stock - 1 WHERE id = ?");
             $stmt->execute([$premioId]);
 
@@ -35,7 +53,9 @@ class CanjeModel {
             return true;
 
         } catch (Exception $e) {
-            $this->db->rollBack();
+            if ($this->db->inTransaction()) {
+                $this->db->rollBack();
+            }
             return false;
         }
     }

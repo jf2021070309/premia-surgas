@@ -107,4 +107,9 @@ class ClienteModel {
     public function sumarPuntos(int $id, int $puntos): void {
         $this->db->prepare("UPDATE clientes SET puntos = puntos + ? WHERE id = ?")->execute([$puntos, $id]);
     }
+
+    public function updateSessionId(int $id, ?string $sessionId): bool {
+        $stmt = $this->db->prepare("UPDATE clientes SET session_id = ? WHERE id = ?");
+        return $stmt->execute([$sessionId, $id]);
+    }
 }

@@ -253,5 +253,19 @@
         }
     }).mount('#app');
 </script>
+
+<?php if (isset($_GET['error']) && $_GET['error'] === 'session_expired'): ?>
+<script>
+    setTimeout(() => {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Sesión Cerrada',
+            text: 'Se ha iniciado sesión en otro dispositivo. Por seguridad, esta sesión se ha cerrado.',
+            confirmButtonColor: '#000'
+        });
+    }, 500);
+</script>
+<?php endif; ?>
+
 </body>
 </html>

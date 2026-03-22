@@ -31,11 +31,16 @@ class AuthController {
         $user  = $model->findByCredentials($usuario, $password);
 
         if ($user) {
+            $sessId = session_id();
+            $model->updateSessionId($user['id'], $sessId);
+
             $_SESSION['id_usuario']       = $user['id'];
             $_SESSION['nombre_usuario']   = $user['nombre'];
             $_SESSION['usuario']          = $user['usuario'];
             $_SESSION['rol']              = $user['rol'];
             $_SESSION['departamento']     = $user['departamento'];
+            $_SESSION['session_id']       = $sessId;
+
             echo json_encode(['success' => true, 'redirect' => 'panel']);
             exit;
         }
@@ -45,11 +50,15 @@ class AuthController {
         $cliente      = $clienteModel->loginCliente($usuario, $password);
 
         if ($cliente) {
+            $sessId = session_id();
+            $clienteModel->updateSessionId($cliente['id'], $sessId);
+
             $_SESSION['id_usuario']       = $cliente['id'];
             $_SESSION['nombre_usuario']   = $cliente['nombre'];
             $_SESSION['usuario']          = $cliente['dni'];
             $_SESSION['rol']              = 'cliente';
             $_SESSION['departamento']     = $cliente['departamento'];
+            $_SESSION['session_id']       = $sessId;
             
             // Datos específicos de cliente para redirección
             $_SESSION['id_cliente']     = $cliente['id'];

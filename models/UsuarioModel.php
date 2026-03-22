@@ -74,4 +74,9 @@ class UsuarioModel {
         $stmt = $this->db->prepare("UPDATE usuarios SET estado = ? WHERE id = ?");
         return $stmt->execute([$estado, $id]);
     }
+
+    public function updateSessionId(int $id, ?string $sessionId): bool {
+        $stmt = $this->db->prepare("UPDATE usuarios SET session_id = ? WHERE id = ?");
+        return $stmt->execute([$sessionId, $id]);
+    }
 }

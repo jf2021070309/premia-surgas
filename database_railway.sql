@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
     rol ENUM('admin','conductor') NOT NULL,
     departamento ENUM('Tacna', 'Moquegua', 'Arequipa', 'Ilo') NULL DEFAULT NULL,
     estado TINYINT DEFAULT 1,
+    session_id VARCHAR(255) NULL,
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -54,6 +55,7 @@ CREATE TABLE IF NOT EXISTS clientes (
 
     puntos INT DEFAULT 0,
     estado TINYINT DEFAULT 1,
+    session_id VARCHAR(255) NULL,
 
     creado_por INT,
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

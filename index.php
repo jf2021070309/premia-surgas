@@ -5,6 +5,24 @@ require_once __DIR__ . '/config/Database.php';
 
 session_start();
 
+// ─── Verificación de Sesión Única ────────────────────────
+if (isset($_SESSION['id_usuario']) && isset($_SESSION['session_id'])) {
+    $db = Database::getConnection();
+    $id = $_SESSION['id_usuario'];
+    $rol = $_SESSION['rol'] ?? 'cliente';
+    
+    $table = ($rol === 'cliente') ? 'clientes' : 'usuarios';
+    $stmt = $db->prepare("SELECT session_id FROM $table WHERE id = ?");
+    $stmt->execute([$id]);
+    $userSession = $stmt->fetchColumn();
+
+    if ($userSession !== $_SESSION['session_id']) {
+        session_destroy();
+        header('Location: ' . BASE_URL . 'login?error=session_expired');
+        exit;
+    }
+}
+
 // ─── Resolve route ───────────────────────────────────────
 $url    = trim($_GET['url'] ?? '', '/');
 $method = $_SERVER['REQUEST_METHOD'];

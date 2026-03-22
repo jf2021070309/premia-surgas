@@ -16,6 +16,7 @@ CREATE TABLE usuarios (
     rol ENUM('admin','conductor') NOT NULL,
     estado TINYINT DEFAULT 1,
     departamento ENUM('Tacna', 'Moquegua', 'Arequipa', 'Ilo') NULL,
+    session_id VARCHAR(255) NULL,
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -42,6 +43,7 @@ CREATE TABLE clientes (
 
     puntos INT DEFAULT 0,
     estado TINYINT DEFAULT 1,
+    session_id VARCHAR(255) NULL,
 
     creado_por INT,
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
