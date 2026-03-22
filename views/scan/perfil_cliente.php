@@ -11,17 +11,19 @@
     <style>
         :root { 
             --primary: #821515; 
-            --dark-bg: #050505;
-            --silver-text: linear-gradient(135deg, #a8a8a8 0%, #ffffff 50%, #a8a8a8 100%);
+            --bg-color: #f7f9fc;
+            --text-main: #1a1c1e;
+            --silver-text: linear-gradient(135deg, #1a1a1a 0%, #444444 50%, #1a1a1a 100%);
             --silver-metal: linear-gradient(135deg, #70706F, #E9E9E7, #70706F, #E9E9E7, #70706F);
+            --card-silver: linear-gradient(135deg, #a8a8a8 0%, #ffffff 50%, #a8a8a8 100%);
         }
         body { 
             font-family: 'Outfit', sans-serif; 
-            background: var(--dark-bg);
-            background: radial-gradient(circle at top right, #1a1a1a 0%, #050505 100%);
+            background: var(--bg-color);
+            background: radial-gradient(circle at top right, #ffffff 0%, #eef2f7 100%);
             background-attachment: fixed;
             margin: 0; 
-            color: white; 
+            color: var(--text-main); 
             min-height: 100vh;
             overflow-x: hidden;
         }
@@ -44,12 +46,12 @@
 
         .profile-avatar {
             width: 55px; height: 55px; 
-            background: linear-gradient(135deg, #333, #111);
-            border: 1px solid rgba(255,255,255,0.1);
+            background: linear-gradient(135deg, #111, #333);
+            border: 2px solid white;
             color: #fff;
             border-radius: 50%; display: flex; align-items: center; justify-content: center;
             font-size: 1.6rem; font-weight: 700;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
         }
 
         .greeting-text h1 { 
@@ -143,7 +145,7 @@
         .client-code { font-family: 'Courier New', Courier, monospace; font-size: 0.9rem; letter-spacing: 2.5px; opacity: 0.6; }
         
         .points-box { text-align: right; }
-        .points-val { font-size: 2.4rem; font-weight: 800; line-height: 1; display: block; background: var(--silver-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .points-val { font-size: 2.4rem; font-weight: 800; line-height: 1; display: block; background: var(--card-silver); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .points-unit { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; opacity: 0.6; }
 
         /* LADO TRASERO: QR & INFO */
@@ -171,14 +173,14 @@
 
         /* Botón Tienda */
         .btn-store {
-            background: linear-gradient(135deg, #fff, #e0e0e0);
-            color: #000; 
+            background: #111;
+            color: #fff; 
             text-decoration: none; 
             padding: 1.2rem 2.5rem; 
             border-radius: 100px;
             display: flex; align-items: center; justify-content: center; gap: 0.8rem;
             font-weight: 800; font-size: 1rem; 
-            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
             transition: all 0.3s ease;
             width: 85%;
             max-width: 380px;
@@ -187,24 +189,25 @@
             letter-spacing: 2px;
             border: none;
         }
-        .btn-store:hover { background: #fff; transform: translateY(-3px); box-shadow: 0 20px 50px rgba(0,0,0,0.7); }
+        .btn-store:hover { background: #000; transform: translateY(-3px); box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
 
         /* Historial */
         .container { padding: 0 1.5rem 4rem; max-width: 500px; margin: 0 auto; }
         .section-title { font-size: 1rem; font-weight: 700; margin-bottom: 1.2rem; opacity: 0.8; letter-spacing: 1px; }
-        .history-card { background: rgba(255,255,255,0.03); border-radius: 2rem; border: 1px solid rgba(255,255,255,0.05); overflow: hidden; }
-        .history-item { padding: 1.25rem 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.03); transition: 0.3s; }
-        .history-item:active { background: rgba(255,255,255,0.05); }
+        .history-card { background: white; border-radius: 2rem; border: 1px solid #eef2f7; box-shadow: 0 10px 30px rgba(0,0,0,0.03); overflow: hidden; }
+        .history-item { padding: 1.25rem 1.5rem; border-bottom: 1px solid #f0f4f8; transition: 0.3s; }
+        .history-item:active { background: #f8fafd; }
         .history-main-row { display: flex; justify-content: space-between; align-items: center; }
-        .item-name { font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 10px; }
-        .item-pts { color: #fff; font-weight: 800; font-size: 1.1rem; }
+        .item-name { font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 10px; color: #444; }
+        .item-name i { color: var(--primary); font-size: 1.1rem; }
+        .item-pts { color: var(--text-main); font-weight: 800; font-size: 1.1rem; }
         .history-date { font-size: 0.75rem; opacity: 0.4; margin-top: 4px; padding-left: 28px; }
 
-        .footer { text-align: center; padding: 3rem 0; color: rgba(255,255,255,0.2); font-size: 0.75rem; }
+        .footer { text-align: center; padding: 3rem 0; color: rgba(0,0,0,0.3); font-size: 0.75rem; }
         
         .logout-btn-client {
-            position: absolute; top: 2.2rem; right: 1.5rem; color: rgba(255,255,255,0.3);
-            background: rgba(255,255,255,0.05); width: 40px; height: 40px; border-radius: 12px;
+            position: absolute; top: 2.2rem; right: 1.5rem; color: rgba(0,0,0,0.4);
+            background: rgba(0,0,0,0.05); width: 40px; height: 40px; border-radius: 12px;
             display: flex; align-items: center; justify-content: center;
         }
 
