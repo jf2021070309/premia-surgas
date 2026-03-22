@@ -3,328 +3,331 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Perfil - PremiaSurgas</title>
+    <title>Mi Perfil — PremiaSurgas</title>
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/main.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <style>
         :root { 
-            --primary: #c41c1c; 
-            --primary-light: #ff3e3e;
-            --bg-color: #0d0101;
-            --glass: rgba(255, 255, 255, 0.08);
-            --glass-border: rgba(255, 255, 255, 0.15);
-            --text-silver: linear-gradient(135deg, #a8a8a8 0%, #ffffff 50%, #a8a8a8 100%);
+            --primary: #821515; 
+            --dark-bg: #050505;
+            --silver-text: linear-gradient(135deg, #a8a8a8 0%, #ffffff 50%, #a8a8a8 100%);
+            --silver-metal: linear-gradient(135deg, #70706F, #E9E9E7, #70706F, #E9E9E7, #70706F);
         }
-
         body { 
             font-family: 'Outfit', sans-serif; 
-            background-color: var(--bg-color);
-            background-image: 
-                radial-gradient(circle at 50% -20%, #4a0808 0%, transparent 70%),
-                radial-gradient(circle at 0% 100%, #1a0505 0%, transparent 50%);
+            background: var(--dark-bg);
+            background: radial-gradient(circle at top right, #1a1a1a 0%, #050505 100%);
             background-attachment: fixed;
-            margin: 0; color: white; min-height: 100vh;
+            margin: 0; 
+            color: white; 
+            min-height: 100vh;
             overflow-x: hidden;
         }
-
-        .container {
-            max-width: 480px;
+        
+        /* Layout */
+        .header-wrapper {
+            padding: 2.5rem 1.5rem 1rem;
+            text-align: left;
+            position: relative;
+            max-width: 500px;
             margin: 0 auto;
-            padding: 0 1.2rem;
-            position: relative;
         }
 
-        /* --- NEW HEADER DESIGN --- */
-        .profile-header {
-            padding: 3.5rem 0 2rem;
+        .user-greeting {
             display: flex;
-            flex-direction: column;
             align-items: center;
-            text-align: center;
+            gap: 15px;
+            margin-bottom: 2rem;
         }
 
-        .avatar-container {
+        .profile-avatar {
+            width: 55px; height: 55px; 
+            background: linear-gradient(135deg, #333, #111);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 1.6rem; font-weight: 700;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+        }
+
+        .greeting-text h1 { 
+            margin: 0; 
+            font-size: 1.6rem; 
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: var(--silver-text);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .greeting-text p { margin: 0; font-size: 0.85rem; opacity: 0.5; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* --- 3D FLIP CARD BLACK EDITION --- */
+        .vip-card-container {
+            perspective: 1500px;
+            margin: 0 auto 3rem;
+            max-width: 420px;
+            width: 92%;
+            height: 250px; /* Base height for mobile aspect ratio */
+            cursor: pointer;
+        }
+
+        .vip-card-inner {
             position: relative;
-            margin-bottom: 1.2rem;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
         }
 
-        .avatar-ring {
-            width: 86px; height: 86px;
-            border-radius: 30px;
-            padding: 4px;
-            background: linear-gradient(135deg, var(--primary), #5a0808);
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 15px 35px rgba(196, 28, 28, 0.3);
-            transform: rotate(-5deg);
+        .vip-card-container.is-flipped .vip-card-inner {
+            transform: rotateY(180deg);
         }
 
-        .avatar-main {
-            width: 100%; height: 100%;
-            background: #111;
-            border-radius: 26px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 2.2rem; font-weight: 800; color: white;
-            transform: rotate(5deg);
-        }
-
-        .online-dot {
-            position: absolute; bottom: 5px; right: 5px;
-            width: 18px; height: 18px; background: #2ecc71;
-            border: 4px solid var(--bg-color); border-radius: 50%;
-            box-shadow: 0 0 10px #2ecc71;
-        }
-
-        .profile-header p {
-            font-size: 0.75rem; text-transform: uppercase; letter-spacing: 3px;
-            margin: 0; opacity: 0.6; font-weight: 700; color: #ff9999;
-        }
-        .profile-header h1 {
-            font-size: 1.7rem; font-weight: 900; margin: 8px 0 0;
-            background: var(--text-silver); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-
-        .logout-float {
-            position: absolute; top: 3.5rem; right: 1.2rem;
-            background: var(--glass); border: 1px solid var(--glass-border);
-            width: 46px; height: 46px; border-radius: 16px;
-            display: flex; align-items: center; justify-content: center;
-            color: white; font-size: 1.3rem; transition: 0.3s;
-        }
-        .logout-float:hover { background: var(--primary); transform: translateY(-3px); }
-
-        /* --- CARD SECTION --- */
-        .card-perspective {
-            perspective: 2000px;
-            margin: 1rem auto 3rem;
-        }
-
-        .card-inner-3d {
-            position: relative; width: 100%; height: 260px;
-            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            transform-style: preserve-3d; cursor: pointer;
-        }
-
-        .card-perspective.is-flipped .card-inner-3d { transform: rotateY(180deg); }
-
-        .f-side, .b-side {
-            position: absolute; width: 100%; height: 100%;
-            backface-visibility: hidden; border-radius: 32px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
-            border: 1px solid rgba(255,255,255,0.15);
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             overflow: hidden;
         }
 
-        .f-side {
-            background: #000 linear-gradient(135deg, #111, #000);
-            display: flex; flex-direction: column; justify-content: space-between; padding: 2rem;
+        /* LADO FRONTAL: BLACK METALLIC */
+        .card-front {
+            background: #0a0a0a;
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(255,255,255,0.05) 0%, transparent 40%),
+                linear-gradient(45deg, #0a0a0a 0%, #1a1a1a 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 1.8rem;
         }
 
-        .card-logo-top { height: 32px; filter: brightness(0) invert(1); }
-        .card-chip { width: 45px; height: 35px; background: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728); border-radius: 8px; margin-bottom: 2rem; }
+        /* Efecto de Brillo Silver */
+        .card-shine {
+            position: absolute;
+            top: 0; left: -100%;
+            width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            transform: skewX(-25deg);
+            animation: cardShineEffect 8s infinite;
+        }
+        @keyframes cardShineEffect { 0% { left: -150%; } 15% { left: 150%; } 100% { left: 150%; } }
+
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start; }
+        .card-logo { height: 26px; filter: brightness(0) invert(1) opacity(0.8); }
         
-        .card-name-v { font-size: 1.4rem; font-weight: 700; letter-spacing: 1px; color: #fff; }
-        .card-code-v { font-family: 'Courier New', monospace; font-size: 1rem; letter-spacing: 3px; opacity: 0.6; margin-top: 5px; }
+        .membership-badge {
+            font-size: 0.65rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            background: var(--silver-metal);
+            color: #111;
+            padding: 6px 14px;
+            border-radius: 50px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .card-middle { text-align: left; }
+        .label-small { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.4; margin-bottom: 4px; }
+        .holder-name { font-size: 1.25rem; font-weight: 700; color: #fff; letter-spacing: 1px; }
+
+        .card-footer { display: flex; justify-content: space-between; align-items: flex-end; }
+        .client-code { font-family: 'Courier New', Courier, monospace; font-size: 0.9rem; letter-spacing: 2.5px; opacity: 0.6; }
         
-        .card-pts-v { text-align: right; }
-        .card-pts-v span { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.5; }
-        .card-pts-val { font-size: 2.8rem; font-weight: 900; line-height: 1; display: block; background: var(--text-silver); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .points-box { text-align: right; }
+        .points-val { font-size: 2.4rem; font-weight: 800; line-height: 1; display: block; background: var(--silver-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .points-unit { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; opacity: 0.6; }
 
-        .b-side {
-            background: #0a0a0a; transform: rotateY(180deg);
-            display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2.5rem;
-        }
-        .qr-frame { background: #fff; padding: 12px; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
-
-        /* --- NOTABLE CHANGES --- */
-        .action-highlight {
-            background: linear-gradient(135deg, var(--primary), #8a0b0b);
-            padding: 1.8rem; border-radius: 35px;
-            margin-bottom: 3rem; position: relative;
-            overflow: hidden; box-shadow: 0 20px 40px rgba(196, 28, 28, 0.4);
-            display: flex; align-items: center; justify-content: space-between;
-            text-decoration: none; border: 1px solid rgba(255,255,255,0.2);
-        }
-        .action-highlight::before {
-            content: ''; position: absolute; top: -50%; left: -50%;
-            width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-        }
-        .action-text-h h3 { margin: 0; font-size: 1.4rem; font-weight: 900; color: #fff; }
-        .action-text-h p { margin: 5px 0 0; font-size: 0.9rem; opacity: 0.9; font-weight: 500; }
-        .action-btn-h { width: 56px; height: 56px; background: #fff; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; color: var(--primary); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
-
-        .section-title {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 1.5rem; padding: 0 0.5rem;
-        }
-        .section-title h2 { font-size: 1.3rem; font-weight: 800; margin: 0; }
-        .section-title a { font-size: 0.85rem; color: var(--primary-light); text-decoration: none; font-weight: 700; }
-
-        .history-card {
-            background: var(--glass); backdrop-filter: blur(20px);
-            border: 1.5px solid var(--glass-border); border-radius: 30px;
-            padding: 0.8rem; margin-bottom: 5rem;
+        /* LADO TRASERO: QR & INFO */
+        .card-back {
+            background: #111;
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            background-image: 
+                radial-gradient(circle at center, #1a1a1a 0%, #0a0a0a 100%);
         }
 
-        .history-row {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 1.2rem; border-radius: 22px; transition: 0.3s;
+        .qr-container {
+            background: white;
+            padding: 12px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        .history-row:hover { background: rgba(255,255,255,0.04); }
+        #qrcode img { display: block; }
         
-        .history-icon-v {
-            width: 48px; height: 48px; border-radius: 16px;
-            background: rgba(196, 28, 28, 0.15); color: var(--primary-light);
-            display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
+        .qr-help { margin-top: 1.5rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.6; }
+
+        /* Botón Tienda */
+        .btn-store {
+            background: linear-gradient(135deg, #fff, #e0e0e0);
+            color: #000; 
+            text-decoration: none; 
+            padding: 1.2rem 2.5rem; 
+            border-radius: 100px;
+            display: flex; align-items: center; justify-content: center; gap: 0.8rem;
+            font-weight: 800; font-size: 1rem; 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
+            width: 85%;
+            max-width: 380px;
+            margin: 0 auto 3.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border: none;
+        }
+        .btn-store:hover { background: #fff; transform: translateY(-3px); box-shadow: 0 20px 50px rgba(0,0,0,0.7); }
+
+        /* Historial */
+        .container { padding: 0 1.5rem 4rem; max-width: 500px; margin: 0 auto; }
+        .section-title { font-size: 1rem; font-weight: 700; margin-bottom: 1.2rem; opacity: 0.8; letter-spacing: 1px; }
+        .history-card { background: rgba(255,255,255,0.03); border-radius: 2rem; border: 1px solid rgba(255,255,255,0.05); overflow: hidden; }
+        .history-item { padding: 1.25rem 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.03); transition: 0.3s; }
+        .history-item:active { background: rgba(255,255,255,0.05); }
+        .history-main-row { display: flex; justify-content: space-between; align-items: center; }
+        .item-name { font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+        .item-pts { color: #fff; font-weight: 800; font-size: 1.1rem; }
+        .history-date { font-size: 0.75rem; opacity: 0.4; margin-top: 4px; padding-left: 28px; }
+
+        .footer { text-align: center; padding: 3rem 0; color: rgba(255,255,255,0.2); font-size: 0.75rem; }
+        
+        .logout-btn-client {
+            position: absolute; top: 2.2rem; right: 1.5rem; color: rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.05); width: 40px; height: 40px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
         }
 
-        .history-info-v h4 { margin: 0; font-size: 1rem; font-weight: 700; }
-        .history-info-v p { margin: 4px 0 0; font-size: 0.8rem; opacity: 0.5; }
-
-        .pts-v { font-weight: 900; font-size: 1.2rem; }
-        .pts-v.pos { color: #2ecc71; }
-        .pts-v.neg { color: #ff5e5e; }
-
-        .footer-tag { text-align: center; padding: 2rem 0; opacity: 0.4; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; }
-
+        .flip-hint { margin-top: -1.5rem; text-align: center; font-size: 0.7rem; opacity: 0.4; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2rem; }
+        
         [v-cloak] { display: none; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- Float Logout -->
-        <a href="<?= BASE_URL ?>logout" class="logout-float">
+    <div class="header-wrapper">
+        <a href="<?= BASE_URL ?>logout" class="logout-btn-client" title="Cerrar Sesión">
             <i class='bx bx-log-out'></i>
         </a>
-
-        <!-- Header -->
-        <header class="profile-header">
-            <div class="avatar-container">
-                <div class="avatar-ring">
-                    <div class="avatar-main"><?= strtoupper(substr($cliente['nombre'], 0, 1)) ?></div>
-                </div>
-                <div class="online-dot"></div>
-            </div>
-            <p>Membership Pass</p>
-            <h1>Hola, <?= htmlspecialchars($cliente['nombre']) ?></h1>
-        </header>
-
-        <!-- Virtual Card -->
-        <div class="card-perspective" id="passCard">
-            <div class="card-inner-3d">
-                <div class="f-side">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                        <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" class="card-logo-top">
-                        <div style="font-size: 0.65rem; font-weight: 800; background: rgba(255,255,255,0.1); padding: 6px 14px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.2);">ELITE MEMBER</div>
-                    </div>
-                    
-                    <div style="flex-grow: 1; display: flex; align-items: flex-end;">
-                        <div style="flex: 1;">
-                            <div class="card-name-v"><?= htmlspecialchars($cliente['nombre']) ?></div>
-                            <div class="card-code-v"><?= htmlspecialchars($cliente['codigo']) ?></div>
-                        </div>
-                        <div class="card-pts-v">
-                            <span>Balance</span>
-                            <b class="card-pts-val" id="count-pts">0</b>
-                        </div>
-                    </div>
-                </div>
-                <div class="b-side">
-                    <div class="qr-frame">
-                        <div id="v-qrcode"></div>
-                    </div>
-                    <p style="margin-top: 1.5rem; font-size: 0.8rem; opacity: 0.7; font-weight: 600;">ESCANEAME PARA ACUMULAR</p>
-                </div>
+        <div class="user-greeting">
+            <div class="profile-avatar"><?= strtoupper(substr($cliente['nombre'], 0, 1)) ?></div>
+            <div class="greeting-text">
+                <p>Digital Membership</p>
+                <h1>¡Hola, <?= explode(' ', $cliente['nombre'])[0] ?>!</h1>
             </div>
         </div>
+    </div>
 
-        <div style="text-align: center; font-size: 0.85rem; opacity: 0.6; margin-bottom: 2.5rem; font-weight: 500;">
-            <i class='bx bx-rotate-right bx-spin-slow' style="vertical-align: middle; font-size: 1.2rem;"></i> Toca para girar la tarjeta
-        </div>
-
-        <!-- Main CTA -->
-        <a href="<?= BASE_URL ?>tienda" class="action-highlight">
-            <div class="action-text-h">
-                <h3>Ir a Canjear</h3>
-                <p>Descubre tus premios disponibles</p>
+    <!-- VIP CARD BLACK EDITION (3D FLIP) -->
+    <div class="vip-card-container" id="profileCard">
+        <div class="vip-card-inner">
+            <!-- FRONT SIDE -->
+            <div class="card-front">
+                <div class="card-shine"></div>
+                <div class="card-header">
+                    <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" class="card-logo">
+                    <span class="membership-badge">ELITE MEMBER</span>
+                </div>
+                <div class="card-middle">
+                    <div class="label-small">Titular de Cuenta</div>
+                    <div class="holder-name"><?= htmlspecialchars($cliente['nombre']) ?></div>
+                </div>
+                <div class="card-footer">
+                    <div class="client-code"><?= htmlspecialchars($cliente['codigo']) ?></div>
+                    <div class="points-box">
+                        <span class="label-small">Saldo Actual</span>
+                        <b class="points-val" id="points-counter">0</b>
+                        <span class="points-unit">pts surgas</span>
+                    </div>
+                </div>
             </div>
-            <div class="action-btn-h">
-                <i class='bx bxs-gift'></i>
+
+            <!-- BACK SIDE -->
+            <div class="card-back">
+                <div class="qr-container">
+                    <div id="qrcode"></div>
+                </div>
+                <div class="qr-help">Muestra para acumular</div>
             </div>
-        </a>
-
-        <!-- History -->
-        <div class="section-title">
-            <h2>Actividad</h2>
-            <a href="#">Ver historial</a>
         </div>
+    </div>
 
+    <div class="flip-hint"><i class='bx bx-refresh'></i> Toca la tarjeta para ver tu QR</div>
+
+    <a href="<?= BASE_URL ?>tienda" class="btn-store">
+        <i class='bx bxs-shopping-bag'></i> Ir a la tienda
+    </a>
+
+    <div class="container">
+        <div class="section-title">Actividad Reciente</div>
         <div class="history-card">
             <?php if (empty($ventas)): ?>
-                <div style="padding: 4rem 2rem; text-align: center; opacity: 0.3;">
-                    No tiene movimientos recientes
-                </div>
+                <div style="padding: 3rem 2rem; text-align: center; opacity: 0.3; font-size: 0.9rem;">No hay movimientos recientes.</div>
             <?php else: ?>
-                <?php foreach (array_slice($ventas, 0, 5) as $v): 
-                    $isPos = $v['puntos'] >= 0;
-                ?>
-                <div class="history-row">
-                    <div style="display: flex; align-items: center; gap: 15px;">
-                        <div class="history-icon-v">
-                            <i class='bx <?= $isPos ? 'bx-bolt-circle' : 'bx-shopping-bag' ?>'></i>
+                <?php foreach (array_slice($ventas, 0, 4) as $v): ?>
+                <div class="history-item">
+                    <div class="history-main-row">
+                        <div class="item-name">
+                            <i class='bx bx-check-circle'></i>
+                            <?= htmlspecialchars($v['detalle'] ?: 'Operación') ?>
                         </div>
-                        <div class="history-info-v">
-                            <h4><?= htmlspecialchars($v['detalle'] ?: 'Transacción') ?></h4>
-                            <p><?= date('d/m/Y', strtotime($v['fecha'])) ?></p>
-                        </div>
+                        <span class="item-pts">+<?= $v['puntos'] ?></span>
                     </div>
-                    <div class="pts-v <?= $isPos ? 'pos' : 'neg' ?>">
-                        <?= $isPos ? '+' : '' ?><?= $v['puntos'] ?>
-                    </div>
+                    <span class="history-date"><?= date('d/m/Y', strtotime($v['fecha'])) ?></span>
                 </div>
                 <?php endforeach; ?>
             <?php endif; ?>
         </div>
-
-        <div class="footer-tag">
-            &copy; <?= date('Y') ?> SURGAS PREMIUM
+        
+        <div class="footer">
+            &copy; <?= date('Y') ?> Surgas — Premium Digital Member Card
         </div>
     </div>
 
     <script>
-        const passCard = document.getElementById('passCard');
-        passCard.addEventListener('click', () => {
-            passCard.classList.toggle('is-flipped');
+        const cardContainer = document.getElementById('profileCard');
+        cardContainer.addEventListener('click', () => {
+            cardContainer.classList.toggle('is-flipped');
         });
 
-        const qrText = '<?= BASE_URL ?>scan?c=<?= urlencode($cliente['codigo']) ?>&t=<?= urlencode($cliente['token']) ?>';
-        new QRCode(document.getElementById("v-qrcode"), {
-            text: qrText,
-            width: 160,
-            height: 160,
+        // Generar QR en el reverso
+        const qrContent = '<?= BASE_URL ?>scan?c=<?= urlencode($cliente['codigo']) ?>&t=<?= urlencode($cliente['token']) ?>';
+        new QRCode(document.getElementById("qrcode"), {
+            text: qrContent,
+            width: 150,
+            height: 150,
             colorDark : "#000000",
             colorLight : "#ffffff",
             correctLevel : QRCode.CorrectLevel.H
         });
 
-        const targetP = <?= (int) ($cliente['puntos'] ?? 0) ?>;
-        const elP = document.getElementById('count-pts');
-        let currentP = 0;
-        const animDuration = 1500;
-        const stepsCount = 60;
-        const animInterval = animDuration / stepsCount;
+        // Points Animation
+        const pointsTarget = <?= (int) ($cliente['puntos'] ?? 0) ?>;
+        const pointsElement = document.getElementById('points-counter');
+        let currentPoints = 0;
+        const duration = 1500;
+        const steps = 60;
+        const interval = duration / steps;
         
-        const timerP = setInterval(() => {
-            currentP += targetP / stepsCount;
-            if (currentP >= targetP) {
-                elP.textContent = Math.floor(targetP).toLocaleString();
-                clearInterval(timerP);
+        const counterTimer = setInterval(() => {
+            currentPoints += pointsTarget / steps;
+            if (currentPoints >= pointsTarget) {
+                pointsElement.textContent = Math.floor(pointsTarget).toLocaleString();
+                clearInterval(counterTimer);
             } else {
-                elP.textContent = Math.floor(currentP).toLocaleString();
+                pointsElement.textContent = Math.floor(currentPoints).toLocaleString();
             }
-        }, animInterval);
+        }, interval);
     </script>
     <script> const BASE_URL = '<?= BASE_URL ?>'; </script>
     <script src="<?= BASE_URL ?>assets/js/session_check.js"></script>
