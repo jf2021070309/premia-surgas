@@ -36,28 +36,38 @@
         
         /* Layout */
         .header-wrapper {
-            padding: 2.5rem 1.5rem 1rem;
-            text-align: left;
+            background: linear-gradient(135deg, var(--primary) 0%, #4a0b0b 100%);
+            padding: 3.5rem 1.5rem 7rem;
+            color: white;
             position: relative;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+            box-shadow: 0 15px 40px rgba(130, 21, 21, 0.2);
+            margin-bottom: 0;
+        }
+
+        .header-content {
             max-width: 500px;
             margin: 0 auto;
+            position: relative;
         }
 
         .user-greeting {
             display: flex;
             align-items: center;
             gap: 15px;
-            margin-bottom: 2rem;
+            margin-bottom: 0;
         }
 
         .profile-avatar {
             width: 55px; height: 55px; 
-            background: linear-gradient(135deg, #111, #333);
-            border: 2px solid white;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.3);
             color: #fff;
             border-radius: 50%; display: flex; align-items: center; justify-content: center;
             font-size: 1.6rem; font-weight: 700;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
         }
 
         .greeting-text h1 { 
@@ -65,20 +75,19 @@
             font-size: 1.6rem; 
             font-weight: 700;
             letter-spacing: -0.5px;
-            background: var(--silver-text);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: #fff;
         }
-        .greeting-text p { margin: 0; font-size: 0.85rem; opacity: 0.5; text-transform: uppercase; letter-spacing: 1px; }
+        .greeting-text p { margin: 0; font-size: 0.85rem; opacity: 0.7; text-transform: uppercase; letter-spacing: 1px; color: #fff; }
 
         /* --- 3D FLIP CARD BLACK EDITION --- */
         .vip-card-container {
             perspective: 1500px;
-            margin: 0 auto 3rem;
+            margin: -4.5rem auto 3rem;
             max-width: 420px;
             width: 92%;
             height: 250px; /* Base height for mobile aspect ratio */
             cursor: pointer;
+            z-index: 10;
         }
 
         .vip-card-inner {
@@ -213,9 +222,10 @@
         .footer { text-align: center; padding: 3rem 0; color: rgba(0,0,0,0.3); font-size: 0.75rem; }
         
         .logout-btn-client {
-            position: absolute; top: 2.2rem; right: 1.5rem; color: rgba(0,0,0,0.4);
-            background: rgba(0,0,0,0.05); width: 40px; height: 40px; border-radius: 12px;
+            position: absolute; top: -0.5rem; right: 0; color: rgba(255,255,255,0.6);
+            background: rgba(255,255,255,0.1); width: 40px; height: 40px; border-radius: 12px;
             display: flex; align-items: center; justify-content: center;
+            backdrop-filter: blur(10px);
         }
 
         .flip-hint { margin-top: -1.5rem; text-align: center; font-size: 0.7rem; opacity: 0.4; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2rem; }
@@ -226,14 +236,16 @@
 <body>
 
     <div class="header-wrapper">
-        <a href="<?= BASE_URL ?>logout" class="logout-btn-client" title="Cerrar Sesión">
-            <i class='bx bx-log-out'></i>
-        </a>
-        <div class="user-greeting">
-            <div class="profile-avatar"><?= strtoupper(substr($cliente['nombre'], 0, 1)) ?></div>
-            <div class="greeting-text">
-                <p>Digital Membership</p>
-                <h1>¡Hola, <?= explode(' ', $cliente['nombre'])[0] ?>!</h1>
+        <div class="header-content">
+            <a href="<?= BASE_URL ?>logout" class="logout-btn-client" title="Cerrar Sesión">
+                <i class='bx bx-log-out'></i>
+            </a>
+            <div class="user-greeting">
+                <div class="profile-avatar"><?= strtoupper(substr($cliente['nombre'], 0, 1)) ?></div>
+                <div class="greeting-text">
+                    <p>Digital Membership</p>
+                    <h1>¡Hola, <?= explode(' ', $cliente['nombre'])[0] ?>!</h1>
+                </div>
             </div>
         </div>
     </div>
