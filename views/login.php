@@ -259,10 +259,13 @@
     setTimeout(() => {
         Swal.fire({
             icon: 'warning',
-            title: 'Sesión Cerrada',
-            text: 'Se ha iniciado sesión en otro dispositivo. Por seguridad, esta sesión se ha cerrado.',
-            confirmButtonColor: '#000'
+            title: '¿Iniciaste sesión en otro lugar?',
+            text: 'Detectamos que tu cuenta se abrió en un nuevo dispositivo. Por seguridad, hemos cerrado esta sesión para evitar accesos simultáneos.',
+            confirmButtonColor: '#000',
+            confirmButtonText: 'Entendido'
         });
+        // Limpiar la URL para evitar que el mensaje salga al refrescar
+        window.history.replaceState({}, document.title, window.location.pathname);
     }, 500);
 </script>
 <?php endif; ?>

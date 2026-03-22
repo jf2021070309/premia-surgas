@@ -12,195 +12,281 @@
             --primary: #821515; 
             --secondary: #2b0303; 
             --accent: #f39c12; 
+            --gold: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+            --silver: linear-gradient(135deg, #70706F, #E9E9E7, #70706F, #E9E9E7, #70706F);
+            --bronze: linear-gradient(135deg, #804A00, #C08040, #804A00, #C08040, #804A00);
         }
         body { 
             font-family: 'Outfit', sans-serif; 
             background: #2b0303;
-            background: radial-gradient(circle at center, #5e0a0a 0%, #2b0303 100%);
+            background: radial-gradient(circle at top right, #5e0a0a 0%, #2b0303 100%);
             background-attachment: fixed;
             margin: 0; 
             color: white; 
             min-height: 100vh;
+            overflow-x: hidden;
         }
         
         .header-wrapper {
             padding: 2.5rem 1.5rem 1rem;
-            text-align: center;
+            text-align: left;
             position: relative;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .user-greeting {
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
         .profile-avatar {
-            width: 70px; height: 70px; background: #f39c12; color: #fff;
+            width: 55px; height: 55px; background: rgba(255,255,255,0.1); 
+            border: 1px solid rgba(255,255,255,0.2); color: #fff;
             border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 2.2rem; font-weight: 700; margin: 0 auto 1.5rem;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+            font-size: 1.6rem; font-weight: 700;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
         }
 
-        .header-wrapper h1 { 
+        .greeting-text h1 { 
             margin: 0; 
-            font-size: 2.3rem; 
+            font-size: 1.6rem; 
             font-weight: 700;
-            letter-spacing: -1px;
+            letter-spacing: -0.5px;
             color: white;
         }
-
-        .tu-saldo {
-            margin-top: 2.5rem;
-            font-size: 1.0rem;
-            font-weight: 700;
-            letter-spacing: 6px;
-            text-transform: uppercase;
-            opacity: 0.8;
-            color: #eee;
+        .greeting-text p {
+            margin: 0;
+            font-size: 0.9rem;
+            opacity: 0.6;
         }
 
-        .points-hero {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-            margin: 1.5rem 0 2rem;
+        /* --- TARJETA VIP PREMIUM --- */
+        .vip-card-container {
+            perspective: 1000px;
+            margin: 0 auto 2.5rem;
+            max-width: 420px;
+            width: 92%;
         }
 
-        .mascot-container {
-            width: 210px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-        .mascot-container img {
-            width: 100%;
-            height: auto;
-            filter: drop-shadow(0 15px 30px rgba(0,0,0,0.6));
-            animation: mascotFloat 4s ease-in-out infinite;
-        }
-
-        @keyframes mascotFloat {
-            0%, 100% { transform: translateY(0) rotate(0); }
-            50% { transform: translateY(-15px) rotate(2deg); }
-        }
-
-        .points-box {
-            text-align: center;
-            min-width: 140px; /* Fixed width prevents shifting during counting */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .points-large {
-            font-size: 7.5rem;
-            font-weight: 800;
-            line-height: 0.8;
-            display: block;
-            color: white;
-            text-shadow: 0 10px 40px rgba(0,0,0,0.3);
-        }
-        .points-label-text {
-            font-size: 1.4rem;
-            font-weight: 700;
-            letter-spacing: 6px;
-            text-transform: uppercase;
-            display: block;
-            margin-top: 10px;
-            color: rgba(255,255,255,0.9);
-        }
-
-        .btn-store {
-            background: #000000;
-            color: white; 
-            text-decoration: none; 
-            padding: 1rem 2.5rem; 
-            border-radius: 1.2rem;
-            display: flex; align-items: center; justify-content: center; gap: 0.8rem;
-            font-weight: 700; font-size: 1rem; 
-            box-shadow: 0 12px 35px rgba(0,0,0,0.5);
-            transition: all 0.3s ease;
-            width: 90%;
-            max-width: 380px;
-            margin: 0 auto 3.5rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            border: none;
+        .vip-card {
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 24px;
+            padding: 1.8rem;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+            aspect-ratio: 1.6 / 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.4s ease;
         }
-        
-        .btn-store::after {
+
+        .vip-card::before {
             content: '';
             position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at bottom left, rgba(130, 21, 21, 0.3) 0%, transparent 50%);
+            z-index: 0;
+        }
+
+        /* Efecto de Brillo (Shine) */
+        .card-shine {
+            position: absolute;
             top: 0;
-            left: -150%;
+            left: -100%;
             width: 50%;
             height: 100%;
             background: linear-gradient(
                 90deg, 
                 transparent, 
-                rgba(255, 255, 255, 0.15), 
+                rgba(255, 255, 255, 0.1), 
                 transparent
             );
-            transform: skewX(-20deg);
-            animation: shine 4s infinite;
+            transform: skewX(-25deg);
+            animation: cardShineEffect 6s infinite;
+            z-index: 1;
         }
 
-        @keyframes shine {
+        @keyframes cardShineEffect {
             0% { left: -150%; }
-            25% { left: 150%; }
+            20% { left: 150%; }
             100% { left: 150%; }
         }
 
-        .btn-store i { font-size: 1.4rem; }
-        .btn-store:hover { background: #111; transform: translateY(-3px); box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
-        .btn-store:active { transform: scale(0.96); }
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            z-index: 2;
+        }
+
+        .card-logo {
+            height: 28px;
+            opacity: 0.9;
+            filter: brightness(0) invert(1);
+        }
+
+        .membership-level {
+            font-size: 0.65rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: rgba(255,255,255,0.1);
+            padding: 5px 12px;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+        }
+        /* Dinámicos */
+        .level-platinum { background: var(--silver); color: #333; border: none; }
+        .level-gold { background: var(--gold); color: #442e00; border: none; }
+        .level-bronze { background: var(--bronze); color: #fff; border: none; }
+
+        .card-middle {
+            margin-top: 1rem;
+            z-index: 2;
+        }
+
+        .card-holder-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            opacity: 0.5;
+            margin-bottom: 2px;
+        }
+
+        .card-holder-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .card-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            z-index: 2;
+        }
+
+        .card-id {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            opacity: 0.7;
+        }
+
+        .card-points-display {
+            text-align: right;
+        }
+
+        .card-points-val {
+            font-size: 2.2rem;
+            font-weight: 800;
+            line-height: 1;
+            display: block;
+        }
+
+        .card-points-lbl {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            opacity: 0.7;
+        }
+
+        /* Chip Holográfico */
+        .card-chip {
+            width: 40px;
+            height: 30px;
+            background: linear-gradient(135deg, #fce abb, #f8b500);
+            border-radius: 6px;
+            position: relative;
+            margin-top: 10px;
+            opacity: 0.8;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+        .card-chip::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                linear-gradient(90deg, transparent 50%, rgba(0,0,0,0.1) 50%),
+                linear-gradient(rgba(0,0,0,0.1) 50%, transparent 50%);
+            background-size: 8px 8px;
+        }
+
+        /* --- BOTÓN TIENDA --- */
+        .btn-store {
+            background: #fff;
+            color: #000; 
+            text-decoration: none; 
+            padding: 1.1rem 2rem; 
+            border-radius: 100px;
+            display: flex; align-items: center; justify-content: center; gap: 0.8rem;
+            font-weight: 800; font-size: 1rem; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: 90%;
+            max-width: 380px;
+            margin: 0 auto 3rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border: none;
+        }
+        .btn-store:hover { 
+            transform: translateY(-5px) scale(1.02); 
+            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+            background: var(--accent);
+            color: white;
+        }
+        .btn-store i { font-size: 1.3rem; }
 
         .container { 
-            padding: 0 1.5rem 3rem; 
+            padding: 0 1.5rem 4rem; 
             max-width: 500px; 
             margin: 0 auto; 
-            background: transparent;
-            color: white;
         }
 
         .section-title { 
-            display: flex; align-items: center; gap: 8px;
-            font-size: 1.25rem; font-weight: 700; color: white; 
-            margin: 2.5rem 0 1.5rem; padding-left: 0; 
+            display: flex; align-items: center; justify-content: space-between;
+            font-size: 1.1rem; font-weight: 700; color: white; 
+            margin: 0 0 1.2rem;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
+            letter-spacing: 1px;
+            opacity: 0.9;
         }
-        .section-title::before {
-            content: '';
-            display: block;
-            width: 5px;
-            height: 24px;
-            background: #ff3333;
-            box-shadow: 8px 0 0 #ff3333;
-            margin-right: 15px;
-            border-radius: 2px;
-        }
-        .section-title i { display: none; }
 
         .history-card { 
-            background: #ffffff; 
-            border-radius: 1.8rem; 
-            padding: 0;
-            border: none;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            color: #333;
-            margin-top: 1rem;
-            overflow: hidden; /* Fixes overlapping corners */
+            background: rgba(255, 255, 255, 0.03); 
+            backdrop-filter: blur(10px);
+            border-radius: 2rem; 
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            color: white;
+            overflow: hidden;
         }
 
-        
         .history-item { 
-            display: block; 
-            padding: 1.25rem 1.5rem; 
-            border-bottom: 1px solid #f6f6f6; 
+            padding: 1.4rem 1.6rem; 
+            border-bottom: 1px solid rgba(255,255,255,0.03); 
             transition: all 0.3s ease;
-            position: relative;
+            cursor: pointer;
         }
         .history-item:last-child { border-bottom: none; }
-        .history-item.has-details:hover { background: #fafafa; }
+        .history-item:active { background: rgba(255,255,255,0.05); }
         
         .history-main-row {
             display: flex;
@@ -208,102 +294,65 @@
             align-items: center;
         }
 
-        .history-info-titles {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .history-info-titles i { color: #cbd5e0; font-size: 1.2rem; }
-
         .item-name { 
-            font-size: 1rem; 
-            font-weight: 700; 
-            color: #2c3e50;
+            font-size: 0.95rem; 
+            font-weight: 600; 
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
         }
+        .item-name i { color: var(--accent); font-size: 1.2rem; }
         
         .item-pts { 
-            color: var(--primary); 
+            color: #4ade80; 
             font-weight: 800; 
             font-size: 1.1rem;
-            background: rgba(130, 21, 21, 0.05);
-            padding: 4px 10px;
-            border-radius: 8px;
         }
         
-        .history-date { display: block; font-size: 0.85rem; color: #aab; margin-top: 6px; font-weight: 400; }
+        .history-date { font-size: 0.8rem; opacity: 0.4; margin-top: 4px; display: block; padding-left: 31px; }
 
-        .btn-expand {
-            font-size: 0.65rem; 
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            background: #f4f6f8;
-            color: #555;
-            padding: 8px 16px;
-            border-radius: 50px;
-            border: 1px solid #eee;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .btn-expand:hover {
-            background: #e9ecef;
-            border-color: #ddd;
-        }
-        
-        .history-item.active { background: #fafafa; }
-        .history-item.active .btn-expand { background: #eee; }
+        .btn-expand-min { font-size: 0.7rem; opacity: 0.5; }
 
         .detail-list { 
             margin-top: 1rem; 
-            padding: 1rem 0 0.5rem 0; 
-            border-top: 1px dashed #eee;
-            width: 100%;
+            padding: 1rem 0 0.5rem 31px; 
+            border-top: 1px solid rgba(255,255,255,0.05);
         }
         .detail-subitem { 
-            font-size: 0.95rem; 
-            padding: 0.6rem 0; 
+            font-size: 0.85rem; 
+            padding: 0.4rem 0; 
             display: flex;
             justify-content: space-between;
-            align-items: center;
-        }
-        .sub-name { color: #555; font-weight: 500; }
-        .sub-pts { 
-            color: #555; 
-            font-weight: 700; 
-            font-size: 0.95rem;
-            background: #f0f2f5;
-            padding: 2px 8px;
-            border-radius: 6px;
+            opacity: 0.8;
         }
 
-        .footer { text-align: center; padding: 2.5rem 0; color: rgba(255,255,255,0.4); font-size: 0.85rem; line-height: 1.6; }
+        .footer { text-align: center; padding: 2rem 0; color: rgba(255,255,255,0.3); font-size: 0.8rem; }
         
         .logout-btn-client {
             position: absolute;
-            top: 2rem;
+            top: 2.2rem;
             right: 1.5rem;
-            color: rgba(255,255,255,0.3);
-            font-size: 1.6rem;
-            transition: all 0.3s;
-            z-index: 100;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
+            color: rgba(255,255,255,0.4);
+            font-size: 1.4rem;
+            transition: 0.3s;
             background: rgba(255,255,255,0.05);
+            width: 40px; height: 40px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
         }
-        .logout-btn-client:hover {
-            color: #ff4d4d;
-            background: rgba(255,77,77,0.1);
-            transform: scale(1.1) rotate(90deg);
+
+        /* Mascot Float */
+        .mascot-profile {
+            position: fixed;
+            bottom: -20px;
+            right: -20px;
+            width: 150px;
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: -1;
+            filter: grayscale(1);
         }
+
+        [v-cloak] { display: none; }
     </style>
 </head>
 <body>
@@ -312,54 +361,81 @@
         <a href="<?= BASE_URL ?>logout" class="logout-btn-client" title="Cerrar Sesión">
             <i class='bx bx-log-out'></i>
         </a>
-        <div class="profile-avatar"><?= strtoupper(substr($cliente['nombre'], 0, 1)) ?></div>
-        <h1>¡Hola, <?= explode(' ', $cliente['nombre'])[0] ?>!</h1>
         
-        <div class="tu-saldo">Tu saldo actual</div>
-        
-        <div class="points-hero">
-            <div class="mascot-container">
-                <img src="<?= BASE_URL ?>assets/premios/gas.png" alt="Mascota Surgas">
-            </div>
-            <div class="points-box">
-                <b class="points-large" id="points-counter">0</b>
-                <span class="points-label-text">Puntos</span>
+        <div class="user-greeting">
+            <div class="profile-avatar"><?= strtoupper(substr($cliente['nombre'], 0, 1)) ?></div>
+            <div class="greeting-text">
+                <p>Bienvenido de nuevo,</p>
+                <h1><?= explode(' ', $cliente['nombre'])[0] ?></h1>
             </div>
         </div>
-
-        <a href="<?= BASE_URL ?>tienda" class="btn-store">
-            <i class='bx bxs-shopping-bag'></i> Ir a la tienda
-        </a>
     </div>
 
-    <div class="container">
+    <!-- TARJETA VIP ELITE -->
+    <div class="vip-card-container">
+        <?php 
+            $pts = (int)($cliente['puntos'] ?? 0);
+            $levelClass = 'level-bronze';
+            $levelName  = 'MIEMBRO BRONCE';
+            if ($pts > 1500) { $levelClass = 'level-platinum'; $levelName = 'MIEMBRO PLATINUM'; }
+            elseif ($pts > 500) { $levelClass = 'level-gold'; $levelName = 'MIEMBRO GOLD'; }
+        ?>
+        <div class="vip-card">
+            <div class="card-shine"></div>
+            
+            <div class="card-top">
+                <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" class="card-logo">
+                <span class="membership-level <?= $levelClass ?>"><?= $levelName ?></span>
+            </div>
 
-        <div class="section-title"><i class='bx bx-history'></i> Mi Historial Reciente</div>
+            <div class="card-middle">
+                <div class="card-holder-label">Titular de Cuenta</div>
+                <div class="card-holder-name"><?= htmlspecialchars($cliente['nombre']) ?></div>
+                <div class="card-chip"></div>
+            </div>
+
+            <div class="card-bottom">
+                <div class="card-id"><?= htmlspecialchars($cliente['codigo']) ?></div>
+                <div class="card-points-display">
+                    <span class="card-points-lbl">Saldo Total</span>
+                    <b class="card-points-val" id="points-counter">0</b>
+                    <span class="card-points-lbl">Puntos Surgas</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a href="<?= BASE_URL ?>tienda" class="btn-store shadow-lg">
+        <i class='bx bxs-shopping-bag'></i> Explorar Recompensas
+    </a>
+
+    <div class="container">
+        <div class="section-title">
+            <span>Actividad Reciente</span>
+            <i class='bx bx-chevron-right' style="opacity:0.3"></i>
+        </div>
         
         <div class="history-card">
             <?php if (empty($ventas)): ?>
-                <div style="padding: 2rem; text-align: center; color: #ccc;">Aún no tienes movimientos registrados.</div>
+                <div style="padding: 3rem 2rem; text-align: center; opacity: 0.4; font-size: 0.9rem;">
+                    <i class='bx bx-info-circle' style="font-size: 2rem; display: block; margin-bottom: 0.5rem;"></i>
+                    Aún no tienes movimientos registrados.
+                </div>
             <?php else: ?>
                 <?php foreach (array_slice($ventas, 0, 5) as $v): 
                     $detalleRaw = $v['detalle'] ?? '';
                     $conceptos = array_filter(explode(', ', $detalleRaw));
                     $esMultiple = count($conceptos) > 1;
                 ?>
-                <div class="history-item <?= $esMultiple ? 'has-details' : '' ?>" <?= $esMultiple ? 'onclick="toggleDetail(this)"' : '' ?>>
+                <div class="history-item" <?= $esMultiple ? 'onclick="toggleDetail(this)"' : '' ?>>
                     <div class="history-main-row">
-                        <div class="history-info-titles">
-                            <span class="item-name">
-                                <i class='bx <?= $esMultiple ? 'bx-list-plus' : 'bx-badge-check' ?>'></i>
-                                <?= $esMultiple ? 'Carga de puntos' : htmlspecialchars($detalleRaw ?: ($v['monto'] > 0 ? 'Compra realizada' : 'Carga de puntos')) ?>
-                            </span>
-                            <span class="item-pts">+<?= $v['puntos'] ?></span>
+                        <div class="item-name">
+                            <i class='bx <?= $v['monto'] > 0 ? 'bx-plus-circle' : 'bx-gift' ?>'></i>
+                            <?= $esMultiple ? 'Carga de puntos múltiple' : htmlspecialchars($detalleRaw ?: 'Operación del sistema') ?>
                         </div>
-                        <?php if ($esMultiple): ?>
-                            <span class="btn-expand">Ver más ▼</span>
-                        <?php endif; ?>
+                        <span class="item-pts">+<?= $v['puntos'] ?></span>
                     </div>
-                    
-                    <span class="history-date"><?= date('d/m/Y', strtotime($v['fecha'])) ?></span>
+                    <span class="history-date"><?= date('d M, Y', strtotime($v['fecha'])) ?></span>
 
                     <?php if ($esMultiple): ?>
                         <div class="detail-list" style="display: none;">
@@ -372,10 +448,8 @@
                                 }
                             ?>
                                 <div class="detail-subitem">
-                                    <span class="sub-name"><?= $nombreItem ?></span>
-                                    <?php if ($ptsItem): ?>
-                                        <span class="sub-pts"><?= $ptsItem ?></span>
-                                    <?php endif; ?>
+                                    <span><?= $nombreItem ?></span>
+                                    <span style="font-weight:700"><?= $ptsItem ?></span>
                                 </div>
                             <?php endforeach; ?>
                         </div>
@@ -386,22 +460,20 @@
         </div>
         
         <div class="footer">
-            PremiaSurgas &copy; <?= date('Y') ?> <br>
-            ¡Sigue acumulando para canjear increíbles premios!
+            PremiaSurgas Digital Member Card <br>
+            &copy; <?= date('Y') ?> Surgas S.A.
         </div>
     </div>
 
-    <script>
-        const BASE_URL = '<?= BASE_URL ?>';
-    </script>
-    <script src="<?= BASE_URL ?>assets/js/session_check.js"></script>
+    <img src="<?= BASE_URL ?>assets/premios/gas.png" class="mascot-profile" alt="Mascota">
+
     <script>
         // Points Counter Animation
         document.addEventListener('DOMContentLoaded', () => {
             const pointsTarget = <?= (int) ($cliente['puntos'] ?? 0) ?>;
             const pointsElement = document.getElementById('points-counter');
             let currentPoints = 0;
-            const duration = 1500; // 1.5 seconds
+            const duration = 2000; 
             const steps = 60;
             const increment = pointsTarget / steps;
             const intervalTime = duration / steps;
@@ -412,25 +484,21 @@
                     pointsElement.textContent = Math.floor(pointsTarget).toLocaleString();
                     clearInterval(timer);
                 } else {
-                    // Update only text content to avoid layout re-calculation if possible
-                    pointsElement.textContent = Math.floor(currentPoints);
+                    pointsElement.textContent = Math.floor(currentPoints).toLocaleString();
                 }
             }, intervalTime);
         });
 
         function toggleDetail(el) {
             const list = el.querySelector('.detail-list');
-            const btn = el.querySelector('.btn-expand');
             if (list.style.display === 'none') {
                 list.style.display = 'block';
-                el.classList.add('active');
-                if(btn) btn.innerHTML = 'VER MENOS ▲';
             } else {
                 list.style.display = 'none';
-                el.classList.remove('active');
-                if(btn) btn.innerHTML = 'VER MÁS ▼';
             }
         }
     </script>
+    <script> const BASE_URL = '<?= BASE_URL ?>'; </script>
+    <script src="<?= BASE_URL ?>assets/js/session_check.js"></script>
 </body>
 </html>
