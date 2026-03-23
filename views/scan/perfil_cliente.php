@@ -12,13 +12,14 @@
         :root { 
             --primary: #1e57a3; 
             --primary-dark: #003f83;
-            --secondary: #78c02c; 
+            --secondary: #2e7d32; 
             --bg-page: #f8f9fa;
             --surface: #ffffff;
             --text-main: #191c1d;
-            --text-muted: #555c66;
-            --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.05);
-            --shadow-header: 0 4px 15px rgba(30, 87, 163, 0.2);
+            --text-muted: #424751;
+            --sidebar-w: 260px;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.02);
+            --shadow-md: 0 10px 30px rgba(0,0,0,0.04);
         }
         body { 
             font-family: 'Manrope', sans-serif; 
@@ -26,106 +27,135 @@
             margin: 0; 
             color: var(--text-main); 
             min-height: 100vh;
+            display: flex;
             overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
         }
 
-        @keyframes fadeInScale {
-            from { opacity: 0; transform: scale(0.95) translateY(10px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
-        .animate-dash { animation: fadeInScale 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        .delay-1 { animation-delay: 0.1s; }
-        .delay-2 { animation-delay: 0.2s; }
-        .delay-3 { animation-delay: 0.3s; }
-
-        
-        /* Dashboard Architecture */
-        .dashboard-header {
-            background: var(--primary);
-            padding: 3rem 1.5rem 5rem;
+        /* --- DASHBOARD LAYOUT --- */
+        .sidebar {
+            width: var(--sidebar-w);
+            background: var(--primary-dark);
+            height: 100vh;
+            position: fixed;
+            left: 0; top: 0;
+            display: flex; flex-direction: column;
             color: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            position: relative;
+            z-index: 100;
         }
-        .profile-pic {
-            width: 80px; height: 80px;
-            background: #fff;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 2.2rem; font-weight: 800; color: var(--primary);
-            margin-bottom: 1rem;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-            border: 4px solid rgba(255,255,255,0.2);
-        }
-        .user-title { font-size: 1.4rem; font-weight: 800; margin: 0; letter-spacing: -0.5px; }
-        .user-role { font-size: 0.8rem; opacity: 0.7; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
-        
-        .dash-exit {
-            position: absolute; top: 1.5rem; right: 1.5rem;
-            color: white; font-size: 1.4rem; text-decoration: none;
-            opacity: 0.8; transition: 0.3s;
-        }
-        .dash-exit:hover { opacity: 1; transform: scale(1.1); }
-
-        /* Overlapping Stats Card */
-        .stats-card {
-            background: var(--surface);
-            margin: -2.5rem 1.5rem 0;
-            padding: 2rem 1rem;
-            border-radius: 20px;
-            box-shadow: var(--shadow-card);
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            position: relative;
-            z-index: 5;
-        }
-        .stat-item { text-align: center; position: relative; }
-        .stat-item:first-child::after {
-            content: ''; position: absolute; right: 0; top: 20%; height: 60%; width: 1px; background: #eee;
-        }
-        .stat-val { font-size: 2rem; font-weight: 800; color: var(--primary); display: block; line-height: 1; }
-        .stat-label { font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 8px; display: block; }
-        .tier-val { color: var(--secondary); text-transform: uppercase; }
-
-        /* Action Grid */
-        .dash-grid {
-            padding: 2rem 1.5rem;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.2rem;
-        }
-        .dash-btn {
-            background: var(--surface);
-            padding: 1.8rem 1rem;
-            border-radius: 20px;
+        .sidebar-header { padding: 2.5rem 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); text-align: center; }
+        .sidebar-logo { width: 50px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.1); margin-bottom: 1rem; }
+        .sidebar-nav { padding: 2rem 0; flex-grow: 1; }
+        .nav-link { 
+            display: flex; align-items: center; gap: 15px;
+            padding: 1rem 1.5rem;
+            color: rgba(255,255,255,0.7);
             text-decoration: none;
-            display: flex; flex-direction: column; align-items: center; gap: 15px;
-            box-shadow: var(--shadow-card);
+            font-weight: 700; font-size: 0.9rem;
             transition: 0.3s;
-            border-bottom: 3px solid transparent;
         }
-        .dash-btn:hover { transform: translateY(-5px); border-bottom-color: var(--secondary); }
-        .dash-btn i { font-size: 2.2rem; color: var(--primary); }
-        .dash-btn span { font-size: 0.85rem; font-weight: 800; color: var(--text-main); text-transform: uppercase; }
-        .btn-green { background: #f0fdf4; }
-        .btn-green i { color: var(--secondary); }
+        .nav-link:hover, .nav-link.active { color: white; background: rgba(255,255,255,0.05); }
+        .nav-link i { font-size: 1.2rem; }
 
-        /* Card Section */
-        .dash-card-sec {
-            padding: 0 1.5rem 4rem;
+        .sidebar-footer { padding: 1.5rem; border-top: 1px solid rgba(255,255,255,0.05); }
+        .btn-logout { 
+            display: flex; align-items: center; gap: 10px;
+            color: #ff9999; text-decoration: none; font-weight: 700; font-size: 0.85rem;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            margin-left: var(--sidebar-w);
+            padding: 2.5rem;
+            max-width: 1400px;
+        }
+
+        /* --- TOP BAR --- */
+        .top-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 3rem;
+        }
+        .page-title { margin: 0; font-size: 1.8rem; font-weight: 800; color: var(--primary-dark); }
+        .user-pill { 
+            display: flex; align-items: center; gap: 12px; 
+            background: white; padding: 8px 16px; border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+        }
+        .pill-name { font-size: 0.9rem; font-weight: 800; color: var(--text-main); }
+
+        /* --- PROFILE HEADER CARD (DASHBOARD STYLE) --- */
+        .profile-board {
+            background: white;
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow-md);
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
+            margin-bottom: 2.5rem;
+            position: relative;
+            overflow: hidden;
         }
-        .section-tag { align-self: flex-start; margin-bottom: 1.2rem; font-size: 0.8rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; }
+        .board-info { display: flex; align-items: center; gap: 2.5rem; }
+        .board-avatar {
+            width: 120px; height: 120px;
+            background: #f0f4f8; border-radius: 20px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 3rem; font-weight: 800; color: var(--primary);
+        }
+        .board-text h2 { margin: 0; font-size: 2.2rem; font-weight: 800; color: var(--primary-dark); }
+        .board-text p { margin: 5px 0 0; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem; }
+        .badge-platinum { 
+            margin-top: 15px; display: inline-block;
+            background: #eef2f7; color: var(--primary);
+            padding: 6px 14px; border-radius: 100px;
+            font-size: 0.75rem; font-weight: 800; letter-spacing: 1px;
+        }
 
-        .dash-footer { text-align: center; padding: 2rem 0; font-size: 0.7rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
+        /* 3D CARD ON THE RIGHT */
+        .board-right { position: relative; z-index: 10; }
 
-        /* --- 3D FLIP CARD BLACK EDITION --- */
+        /* --- STATS ROW --- */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+        }
+        .stat-card {
+            background: white; padding: 2rem; border-radius: 24px;
+            box-shadow: var(--shadow-sm);
+            display: flex; flex-direction: column; gap: 10px;
+            transition: 0.3s;
+        }
+        .stat-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
+        .stat-card .label { font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; }
+        .stat-card .value { font-size: 2.5rem; font-weight: 800; color: var(--primary-dark); }
+        .stat-card .trend { font-size: 0.8rem; font-weight: 700; color: var(--secondary); }
+
+        /* Mobile Adjustments */
+        @media (max-width: 1100px) {
+            .profile-board { flex-direction: column; text-align: center; gap: 2rem; }
+            .board-info { flex-direction: column; gap: 1.5rem; }
+            .stats-row { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .main-content { margin-left: 0; padding: 1.5rem; }
+            .board-text h2 { font-size: 1.6rem; }
+            .vip-card-container { transform: scale(0.8); }
+        }
+
+                .vip-card-container { width: 340px; height: 200px; perspective: 1000px; cursor: pointer; }
+        .vip-card-inner { position: relative; width: 100%; height: 100%; text-align: left; transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform-style: preserve-3d; }
+        .is-flipped .vip-card-inner { transform: rotateY(180deg); }
+        .card-front, .card-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,63,131,0.1); border: 1px solid rgba(0,0,0,0.02); }
+        .card-front { background: linear-gradient(135deg, #1e57a3 0%, #003f83 100%); color: #fff; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; }
+        .label-v { font-size: 0.55rem; text-transform: uppercase; letter-spacing: 2px; color: rgba(255,255,255,0.5); font-weight: 700; }
+        .holder-v { font-size: 1.1rem; font-weight: 800; color: #fff; text-transform: uppercase; margin-top: 4px; }
+        .card-back { background: #fff; transform: rotateY(180deg); display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .qr-container { background: #fff; padding: 10px; border-radius: 12px; }
+        .qr-help { margin-top: 10px; font-size: 0.65rem; font-weight: 800; color: var(--primary); opacity: 0.6; }
+  /* --- 3D FLIP CARD BLACK EDITION --- */
         .vip-card-container {
             perspective: 1500px;
             margin: -4.5rem auto 3rem;
@@ -251,80 +281,108 @@
     </style>
 </head>
 <body>
-    <div class="dash-wrapper">
-        <!-- HEADER (BLUE) -->
-        <header class="dashboard-header">
-            <a href="<?= BASE_URL ?>logout" class="dash-exit" title="Salir">
-                <i class='bx bx-log-out'></i>
-            </a>
-            <div class="profile-pic">
-                <?= strtoupper(substr($cliente['nombre'], 0, 1)) ?>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <i class='bx bxs-user-circle' style="font-size: 2.5rem;"></i>
             </div>
-            <h1 class="user-title"><?= strtoupper($cliente['nombre']) ?></h1>
-            <span class="user-role">Member since 2018</span>
+            <div style="font-weight: 800; font-size: 0.8rem; letter-spacing: 1px;">SURGAS PRESTIGE</div>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-link active"><i class='bx bxs-dashboard'></i> Dashboard</a>
+            <a href="<?= BASE_URL ?>tienda" class="nav-link"><i class='bx bxs-gift'></i> Rewards</a>
+            <a href="#" class="nav-link"><i class='bx bx-history'></i> History</a>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="<?= BASE_URL ?>logout" class="btn-logout">
+                <i class='bx bx-log-out'></i> Salir
+            </a>
+        </div>
+    </aside>
+
+    <!-- CONTENT -->
+    <main class="main-content">
+        <header class="top-bar">
+            <h1 class="page-title">Client Dashboard</h1>
+            <div class="user-pill">
+                <div style="width: 24px; height: 24px; background: #eef2f7; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 800; color: var(--primary);">
+                    <?= substr($cliente['nombre'], 0, 1) ?>
+                </div>
+                <span class="pill-name"><?= explode(' ', $cliente['nombre'])[0] ?></span>
+            </div>
         </header>
 
-        <!-- OVERLAPPING STATS CARD -->
-        <div class="stats-card animate-dash delay-1">
-            <div class="stat-item">
-                <b class="stat-val" id="points-counter">0</b>
-                <span class="stat-label">Points Balance</span>
+        <!-- PROFILE BOARD (WIDE CARD) -->
+        <section class="profile-board">
+            <div class="board-info">
+                <div class="board-avatar">
+                   <?= strtoupper(substr($cliente['nombre'], 0, 1)) ?>
+                </div>
+                <div class="board-text">
+                    <h2><?= strtoupper($cliente['nombre']) ?></h2>
+                    <p>Executive Membership</p>
+                    <span class="badge-platinum"><?= ($pts >= 2500) ? "PLATINUM STATUS" : (($pts >= 1000) ? "GOLD STATUS" : "SILVER STATUS") ?></span>
+                </div>
             </div>
-            <div class="stat-item">
-                <?php 
-                    $pts = (int)($cliente['puntos'] ?? 0);
-                    $tier = ($pts >= 2500) ? "Platinum" : (($pts >= 1000) ? "Gold" : "Silver");
-                ?>
-                <b class="stat-val tier-val"><?= $tier ?></b>
-                <span class="stat-label">Current Tier</span>
-            </div>
-        </div>
 
-        <!-- DASH ACTION GRID -->
-        <div class="dash-grid animate-dash delay-2">
-            <a href="<?= BASE_URL ?>tienda" class="dash-btn btn-green">
-                <i class='bx bxs-gift'></i>
-                <span>Rewards</span>
-            </a>
-            <a href="#" class="dash-btn">
-                <i class='bx bx-history'></i>
-                <span>History</span>
-            </a>
-        </div>
-
-        <!-- 3D VIP ID SECTION -->
-        <div class="dash-card-sec animate-dash delay-3">
-            <span class="section-tag">Digital VIP Card</span>
-            <div class="vip-card-container" id="profileCard">
-                <div class="vip-card-inner">
-                    <div class="card-front">
-                        <div class="card-header">
-                            <span style="font-size: 0.8rem; font-weight: 800; letter-spacing: 2px;">SURGAS PRESTIGE</span>
-                            <span class="membership-badge">VIP ELITE</span>
+            <!-- RIGHT SIDE 3D CARD -->
+            <div class="board-right">
+                <div class="vip-card-container" id="profileCard">
+                    <div class="vip-card-inner">
+                        <div class="card-front">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span style="font-size: 0.7rem; font-weight: 800; letter-spacing: 1.5px;">PRESTIGE ID</span>
+                                <i class='bx bxs-chip' style="font-size: 1.5rem; opacity: 0.5;"></i>
+                            </div>
+                            <div>
+                                <div class="label-v">Titular Name</div>
+                                <div class="holder-v"><?= htmlspecialchars($cliente['nombre']) ?></div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                                <span style="font-family: monospace; font-size: 0.7rem; opacity: 0.5;"><?= htmlspecialchars($cliente['codigo']) ?></span>
+                                <i class='bx bx-fingerprint' style="font-size: 1.4rem; opacity: 0.3;"></i>
+                            </div>
                         </div>
-                        <div class="card-middle">
-                            <div class="label-small">Titular Membership</div>
-                            <div class="holder-name"><?= htmlspecialchars($cliente['nombre']) ?></div>
+                        <div class="card-back">
+                            <div class="qr-container">
+                                <div id="qrcode"></div>
+                            </div>
+                            <div class="qr-help">MUESTRA PARA ACUMULAR</div>
                         </div>
-                        <div class="card-footer" style="display: flex; justify-content: space-between; align-items: flex-end;">
-                            <div style="font-family: monospace; font-size: 0.8rem; opacity: 0.5;"><?= htmlspecialchars($cliente['codigo']) ?></div>
-                            <i class='bx bx-landscape' style="font-size: 1.2rem; opacity: 0.5;"></i>
-                        </div>
-                    </div>
-                    <div class="card-back">
-                        <div class="qr-container">
-                            <div id="qrcode"></div>
-                        </div>
-                        <div class="qr-help">MUESTRA PARA ACUMULAR</div>
                     </div>
                 </div>
             </div>
+        </section>
+
+        <!-- STATS ROW -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <span class="label">Points Balance</span>
+                <b class="value" id="points-counter">0</b>
+                <span class="trend"><i class='bx bx-trending-up'></i> +120 hoy</span>
+            </div>
+            <div class="stat-card">
+                <span class="label">Tier Status</span>
+                <?php 
+                    $p_now = $pts;
+                    $p_max = ($pts >= 2500) ? 5000 : (($pts >= 1000) ? 2500 : 1000);
+                    $perc = ($p_now / $p_max) * 100;
+                ?>
+                <b class="value"><?= number_format($perc, 1) ?>%</b>
+                <span class="label" style="font-size: 0.65rem;">Hacia el siguiente nivel</span>
+            </div>
+            <div class="stat-card">
+                <span class="label">Recent Activity</span>
+                <b class="value" style="font-size: 1.2rem; margin-top: 10px;">Carga de Gasolina</b>
+                <span class="label" style="font-size: 0.65rem;">Hace 2 horas</span>
+            </div>
         </div>
 
-        <div class="dash-footer">
-            Azure Corporate &bull; Digital Dashboard &bull; <?= date('Y') ?>
+        <div style="text-align: center; margin-top: 4rem; font-size: 0.7rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">
+            Surgas Dashboard &bull; Digital Ecosystem &bull; <?= date('Y') ?>
         </div>
-    </div>
+    </main>
 
 
     <script>
