@@ -173,8 +173,6 @@ class TiendaController {
 
         if (@move_uploaded_file($_FILES['comprobante']['tmp_name'], $targetFile)) {
             try {
-                require_once __DIR__ . '/../config/Database.php';
-                $db = Database::getConnection();
                 $stmt = $db->prepare("INSERT INTO recargas (cliente_id, puntos, monto, comprobante) VALUES (?, ?, ?, ?)");
                 $stmt->execute([$id_cliente, $puntos, $monto, $fileName]);
                 echo json_encode(['success' => true]);
@@ -182,7 +180,15 @@ class TiendaController {
                 echo json_encode(['success' => false, 'message' => 'Error BD: ' . $e->getMessage()]);
             }
         } else {
-            echo json_encode(['success' => false, 'message' => 'No se pudo guardar el archivo en el servidor. Revisa límites de PHP.']);
+            $errCode = $_FILES['comprobante']['error'] ?? 'unknown';
+            $msg = 'No se pudo guardar el archivo en el servidor.';
+            if ($errCode === 1) $msg .= ' El archivo es demasiado grande (limite PHP).';
+            if ($errCode === 3) $msg .= ' La subida fue parcial.';
+            if ($errCode === 4) $msg .= ' No se recibió ningún archivo.';
+            if ($errCode === 6) $msg .= ' Falta carpeta temporal.';
+            if ($errCode === 7) $msg .= ' Error al escribir en disco.';
+            
+            echo json_encode(['success' => false, 'message' => $msg . " (Error: $errCode)"]);
         }
     }
 
