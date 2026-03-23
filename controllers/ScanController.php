@@ -29,9 +29,21 @@ class ScanController {
 
                 $ventaModel = new VentaModel();
                 $ventas = $ventaModel->getByCliente($cliente['id']);
+
+                // Fetch approved recharges to show in history
+                $stmtRecargas = Database::getConnection()->prepare("SELECT puntos, fecha, 'Recarga Aprobada' as detalle FROM recargas WHERE cliente_id = ? AND estado = 'aprobado' ORDER BY fecha DESC");
+                $stmtRecargas->execute([$cliente['id']]);
+                $recargasHistory = $stmtRecargas->fetchAll(PDO::FETCH_ASSOC);
+
+                // Merge and sort both arrays by date descending
+                $historial = array_merge($ventas, $recargasHistory);
+                usort($historial, function($a, $b) {
+                    return strtotime($b['fecha']) - strtotime($a['fecha']);
+                });
+
                 $this->render('scan/perfil_cliente', [
                     'cliente' => $cliente,
-                    'ventas'  => $ventas
+                    'ventas'  => $historial
                 ]);
                 return;
             }
