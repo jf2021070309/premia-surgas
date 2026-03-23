@@ -106,7 +106,15 @@ createApp({
                 method: 'POST',
                 body: formData
             })
-            .then(res => res.json())
+            .then(async res => {
+                const text = await res.text();
+                try {
+                    return JSON.parse(text);
+                } catch(e) {
+                    console.error("No se pudo parsear JSON:", text);
+                    throw new Error("El servidor no respondió con un formato válido. " + text.substring(0, 100));
+                }
+            })
             .then(data => {
                 if (data.success) {
                     Swal.fire({
@@ -127,7 +135,7 @@ createApp({
             })
             .catch(err => {
                 console.error(err);
-                Swal.fire('Error', 'No se pudo conectar con el servidor', 'error');
+                Swal.fire('Error de Conexión', err.message || 'No se pudo conectar con el servidor', 'error');
             });
         }
     },
