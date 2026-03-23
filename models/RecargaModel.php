@@ -44,12 +44,20 @@ class RecargaModel {
                 throw new Exception("Recarga no válida o ya procesada.");
             }
 
-            // 2. Si es aprobación, sumar puntos al cliente
+            // 2. Si es aprobación, sumar puntos al cliente de forma súper robusta
             if ($estado === 'aprobado') {
-                $puntosRaw = str_replace(',', '', $recarga['puntos']);
-                $puntosRecarga = (int) $puntosRaw;
-                $stmt = $this->db->prepare("UPDATE clientes SET puntos = puntos + ? WHERE id = ?");
-                $stmt->execute([$puntosRecarga, $recarga['cliente_id']]);
+                // Quitar absolutamente todo lo que no sea número (comas, puntos, espacios)
+                $puntosLimpios = (int) preg_replace('/[^0-9]/', '', (string)$recarga['puntos']);
+                
+                // Obtener saldo actual para suma controlada (evita fallos de coma en MySQL)
+                $stmtSaldo = $this->db->prepare("SELECT puntos FROM clientes WHERE id = ?");
+                $stmtSaldo->execute([$recarga['cliente_id']]);
+                $saldoActual = (int) ($stmtSaldo->fetchColumn() ?: 0);
+                
+                $nuevoSaldo = $saldoActual + $puntosLimpios;
+
+                $stmtUpd = $this->db->prepare("UPDATE clientes SET puntos = ? WHERE id = ?");
+                $stmtUpd->execute([$nuevoSaldo, $recarga['cliente_id']]);
             }
 
             // 3. Actualizar estado de la recarga
