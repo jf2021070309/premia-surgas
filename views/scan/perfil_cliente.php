@@ -302,6 +302,7 @@
     </aside>
 
     <!-- CONTENT -->
+    <?php $pts = (int)($cliente['puntos'] ?? 0); ?>
     <main class="main-content">
         <header class="top-bar">
             <h1 class="page-title">Client Dashboard</h1>
