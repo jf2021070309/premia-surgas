@@ -128,34 +128,43 @@ class TiendaController {
             return;
         }
 
+        ob_clean(); // Asegura de que no haya basura en el buffer
+        header('Access-Control-Allow-Origin: *');
+        header('Content-Type: application/json; charset=utf-8');
+
         $puntos = (int)($_POST['puntos'] ?? 0);
         $monto = (float)($_POST['monto'] ?? 0);
         $id_cliente = $_SESSION['id_cliente'] ?? $_SESSION['id_usuario'] ?? null;
 
         if (!$id_cliente || !$puntos || !isset($_FILES['comprobante'])) {
-            header('Content-Type: application/json');
-            echo json_encode(['success' => false, 'message' => 'Datos insuficientes']);
+            echo json_encode(['success' => false, 'message' => 'Faltan datos de la recarga']);
             return;
         }
 
         $uploadDir = __DIR__ . '/../assets/uploads/comprobantes/';
-        if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
+        if (!is_dir($uploadDir)) {
+            if (!@mkdir($uploadDir, 0777, true)) {
+                echo json_encode(['success' => false, 'message' => 'Error de permisos al crear directorio de subida']);
+                return;
+            }
+        }
 
         $fileExtension = pathinfo($_FILES['comprobante']['name'], PATHINFO_EXTENSION);
         $fileName = 'recarga_' . time() . '_' . $id_cliente . '.' . $fileExtension;
         $targetFile = $uploadDir . $fileName;
 
-        if (move_uploaded_file($_FILES['comprobante']['tmp_name'], $targetFile)) {
-            require_once __DIR__ . '/../config/Database.php';
-            $db = Database::getConnection();
-            $stmt = $db->prepare("INSERT INTO recargas (cliente_id, puntos, monto, comprobante) VALUES (?, ?, ?, ?)");
-            $stmt->execute([$id_cliente, $puntos, $monto, $fileName]);
-
-            header('Content-Type: application/json');
-            echo json_encode(['success' => true]);
+        if (@move_uploaded_file($_FILES['comprobante']['tmp_name'], $targetFile)) {
+            try {
+                require_once __DIR__ . '/../config/Database.php';
+                $db = Database::getConnection();
+                $stmt = $db->prepare("INSERT INTO recargas (cliente_id, puntos, monto, comprobante) VALUES (?, ?, ?, ?)");
+                $stmt->execute([$id_cliente, $puntos, $monto, $fileName]);
+                echo json_encode(['success' => true]);
+            } catch (Exception $e) {
+                echo json_encode(['success' => false, 'message' => 'Error BD: ' . $e->getMessage()]);
+            }
         } else {
-            header('Content-Type: application/json');
-            echo json_encode(['success' => false, 'message' => 'Error al subir comprobante']);
+            echo json_encode(['success' => false, 'message' => 'No se pudo guardar el archivo en el servidor. Revisa límites de PHP.']);
         }
     }
 
@@ -180,6 +189,13 @@ class TiendaController {
 
     private function requireAuth(): void {
         if (!isset($_SESSION['id_usuario']) && !isset($_SESSION['id_cliente'])) {
+            $isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+            if ($isAjax || (isset($_SERVER['HTTP_ACCEPT']) && str_contains($_SERVER['HTTP_ACCEPT'], 'application/json'))) {
+                header('Content-Type: application/json');
+                http_response_code(401);
+                echo json_encode(['success' => false, 'message' => 'Sesión expirada']);
+                exit;
+            }
             header('Location: ' . BASE_URL . 'login');
             exit;
         }
