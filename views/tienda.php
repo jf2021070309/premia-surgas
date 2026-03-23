@@ -426,18 +426,37 @@
         .back-nav { position: absolute; top: 20px; left: 20px; }
         .btn-back { background: rgba(255,255,255,0.1); color: white; padding: 0.5rem 1.2rem; border-radius: 50px; text-decoration: none; border: 1px solid rgba(255,255,255,0.2); }
 
-        /* Modal Styles */
-        .modal-content { border-radius: 2rem; border: none; overflow: hidden; }
-        .modal-header { background: #f8f9fa; border: none; padding: 2rem 2rem 1rem; }
-        .option-card {
-            border: 2px solid #eee; border-radius: 1.2rem; padding: 1.2rem; cursor: pointer;
-            transition: all 0.3s; margin-bottom: 1rem; position: relative;
+        /* Comprar Puntos Button Style */
+        .btn-buy-pts {
+            background: white; color: var(--primary); border: 2px solid var(--primary);
+            padding: 8px 18px; border-radius: 100px; font-weight: 800; font-size: 0.85rem;
+            text-transform: uppercase; letter-spacing: 1px; transition: 0.3s;
+            display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
+            box-shadow: 0 4px 15px rgba(130, 21, 21, 0.1);
         }
-        .option-card.active { border-color: var(--primary); background: rgba(130, 21, 21, 0.05); }
-        .option-card:hover:not(.disabled) { border-color: #ddd; }
-        .option-card.disabled { opacity: 0.5; cursor: not-allowed; }
-        .option-check { position: absolute; top: 1rem; right: 1rem; color: var(--primary); font-size: 1.2rem; display: none; }
-        .option-card.active .option-check { display: block; }
+        .btn-buy-pts:hover { 
+            background: var(--primary); color: white; transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(130, 21, 21, 0.2);
+        }
+
+        .buy-card {
+            border: 2px solid #eee; border-radius: 1.5rem; padding: 1.5rem; cursor: pointer;
+            transition: 0.3s; text-align: center; background: #fff;
+        }
+        .buy-card:hover { border-color: var(--primary); transform: translateY(-5px); }
+        .buy-card.active { border-color: var(--primary); background: rgba(130, 21, 21, 0.05); }
+        .buy-pts-val { font-size: 2rem; font-weight: 800; color: var(--primary); display: block; }
+        .buy-price-val { font-size: 1.1rem; font-weight: 700; color: #444; }
+
+        .payment-qr-wrap {
+            background: #fff; border: 2px dashed #ddd; border-radius: 20px;
+            padding: 2rem; text-align: center; margin-bottom: 1.5rem;
+        }
+        .yape-logo { width: 80px; margin-bottom: 1rem; }
+        .evidence-upload {
+            border: 2px dashed #821515; background: #fff9f9; border-radius: 15px;
+            padding: 2rem; text-align: center; position: relative; cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -509,9 +528,14 @@
                 </div>
             </div>
 
-            <a href="<?= BASE_URL ?>tienda/historial" class="history-link-premium">
-                <i class='bx bx-history'></i> VER HISTORIAL
-            </a>
+            <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem;">
+                <button @click="abrirCompra()" class="btn-buy-pts">
+                    <i class='bx bxs-cart-add'></i> COMPRAR PUNTOS
+                </button>
+                <a href="<?= BASE_URL ?>tienda/historial" class="history-link-premium" style="margin-top: 0;">
+                    <i class='bx bx-history'></i> VER HISTORIAL
+                </a>
+            </div>
         </div>
         <?php endif; ?>
     </div>
@@ -568,6 +592,79 @@
             </section>
             <?php endif; ?>
         <?php endforeach; ?>
+    </div>
+
+    <!-- Modal Buy Points Selection -->
+    <div class="modal fade" id="modalComprarPuntos" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content shadow-lg">
+                <div class="modal-header">
+                    <h4 class="modal-title fw-bold" style="color: var(--primary);">Recargar Puntos</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <p class="text-center text-muted mb-4">Selecciona el paquete de puntos que deseas adquirir:</p>
+                    <div class="row g-3">
+                        <div v-for="pkg in paquetes" :key="pkg.id" class="col-md-4">
+                            <div @click="seleccionarPaquete(pkg)" :class="['buy-card', selectedPkg.id === pkg.id ? 'active' : '']">
+                                <span class="buy-pts-val">{{ pkg.pts }}</span>
+                                <span class="text-uppercase small fw-bold text-muted mb-2 d-block">Puntos Surgas</span>
+                                <div class="buy-price-val">S/ {{ pkg.price }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4">
+                    <button :disabled="!selectedPkg.pts" @click="irAPago()" class="btn btn-primary w-100 py-3 rounded-4 shadow-sm fw-bold">
+                        CONTINUAR AL PAGO
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Digital Payment (Yape Ficticio) -->
+    <div class="modal fade" id="modalPagoPuntos" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content shadow-lg">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold">Finalizar Compra</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="payment-qr-wrap">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Logo_Yape.svg" class="yape-logo" alt="Yape">
+                        <div class="mb-3">
+                            <h6 class="fw-bold mb-1">Monto a pagar:</h6>
+                            <span class="h3 fw-bold text-primary">S/ {{ selectedPkg.price }}</span>
+                        </div>
+                        <img :src="'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=YAPE_FICTICIO_SURGAS_' + selectedPkg.price" alt="QR Yape" class="img-fluid rounded shadow-sm">
+                        <p class="small text-muted mt-3">Escanea el QR o yapea al número: <br><b>931 187 102</b></p>
+                    </div>
+
+                    <div class="evidence-section">
+                        <label class="fw-bold mb-2">Adjuntar Comprobante (Captura):</label>
+                        <div class="evidence-upload" @click="$refs.fileInput.click()">
+                            <input type="file" ref="fileInput" class="d-none" @change="onFileSelected" accept="image/*">
+                            <div v-if="!filePreview">
+                                <i class='bx bx-cloud-upload' style="font-size: 2.5rem; color: var(--primary);"></i>
+                                <p class="mb-0 mt-2 fw-bold">Haz clic para subir imagen</p>
+                                <span class="small text-muted">JPG, PNG ó Captura de pantalla</span>
+                            </div>
+                            <div v-else>
+                                <img :src="filePreview" class="img-fluid rounded" style="max-height: 150px;">
+                                <p class="mb-0 mt-2 small text-success fw-bold">¡Imagen seleccionada!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4">
+                    <button :disabled="!evidenceFile" @click="confirmarPago()" class="btn btn-success w-100 py-3 rounded-4 shadow-sm fw-bold">
+                        ENVIAR PARA VERIFICACIÓN
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Modal canje -->

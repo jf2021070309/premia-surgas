@@ -9,7 +9,21 @@ createApp({
             selected: {},
             tipo: 'total',
             pct: 50,
-            modal: null
+            modal: null,
+            // Buy Points Logic
+            selectedPkg: {},
+            paquetes: [
+                { id: 1, pts: 1000, price: 50.00 },
+                { id: 2, pts: 2500, price: 120.00 },
+                { id: 3, pts: 5000, price: 230.00 },
+                { id: 4, pts: 10000, price: 450.00 },
+                { id: 5, pts: 20000, price: 850.00 },
+                { id: 6, pts: 50000, price: 2000.00 }
+            ],
+            modalBuy: null,
+            modalPay: null,
+            evidenceFile: null,
+            filePreview: null
         };
     },
     computed: {
@@ -45,6 +59,55 @@ createApp({
                 this.modal = new bootstrap.Modal(document.getElementById('modalCanje'));
                 this.modal.show();
             }
+        },
+        // Buy Points Methods
+        abrirCompra() {
+            this.modalBuy = new bootstrap.Modal(document.getElementById('modalComprarPuntos'));
+            this.modalBuy.show();
+        },
+        seleccionarPaquete(pkg) {
+            this.selectedPkg = pkg;
+        },
+        irAPago() {
+            this.modalBuy.hide();
+            this.modalPay = new bootstrap.Modal(document.getElementById('modalPagoPuntos'));
+            this.modalPay.show();
+        },
+        onFileSelected(event) {
+            const file = event.target.files[0];
+            if (file) {
+                this.evidenceFile = file;
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    this.filePreview = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        },
+        confirmarPago() {
+            Swal.fire({
+                title: 'Enviando comprobante...',
+                text: 'Estamos procesando tu solicitud de recarga.',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            // Simulamos envio
+            setTimeout(() => {
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Comprobante enviado!',
+                    text: 'En breve verificaremos tu pago y se cargarán los puntos a tu cuenta.',
+                    confirmButtonColor: '#821515'
+                }).then(() => {
+                    this.modalPay.hide();
+                    this.evidenceFile = null;
+                    this.filePreview = null;
+                    this.selectedPkg = {};
+                });
+            }, 2000);
         }
     },
     mounted() {
