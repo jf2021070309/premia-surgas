@@ -179,6 +179,32 @@
             </div>
         </div>
 
+        <?php if ($_SESSION['rol'] === 'admin' && !empty($notificaciones_recargas)): ?>
+        <div class="section-header" style="margin-top: 3rem;">
+            <h3 class="section-title">Nuevas Recargas de Puntos</h3>
+            <p style="font-size: 0.8rem; color: #888; margin: 0;">Clientes que han enviado comprobante de pago</p>
+        </div>
+        <div class="notif-list">
+            <?php foreach ($notificaciones_recargas as $r): ?>
+            <div class="notif-card" onclick="location.href='<?= BASE_URL ?>recargas-admin'">
+                <div class="notif-icon" style="background: #eef2ff; color: #4f46e5;">
+                    <i class='bx bx-wallet'></i>
+                </div>
+                <div class="notif-content">
+                    <div class="notif-title"><?= htmlspecialchars($r['cliente_nombre']) ?></div>
+                    <div class="notif-sub">Solicita recarga de: <b><?= $r['puntos'] ?> puntos</b></div>
+                </div>
+                <div style="text-align: right;">
+                    <div class="badge badge-warning" style="font-size: 0.65rem; padding: 0.3rem 0.6rem; background: #fffbeb; color: #d97706; border: 1px solid #fde68a;">
+                        Pendiente Revisar
+                    </div>
+                    <div style="font-size: 0.7rem; color: #bbb; margin-top: 0.3rem;"><?= date('H:i', strtotime($r['fecha'])) ?></div>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+        <?php endif; ?>
+
         <?php if ($_SESSION['rol'] === 'admin' && !empty($notificaciones)): ?>
         <div class="section-header" style="margin-top: 3rem;">
             <h3 class="section-title">Notificaciones de Canjes</h3>

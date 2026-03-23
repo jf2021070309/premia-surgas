@@ -95,7 +95,8 @@ $routes = [
     // —— Tienda ——
     ['GET',  'tienda',       'TiendaController', 'index'],
     ['GET',  'tienda/historial', 'TiendaController', 'historial'],
-    ['POST', 'tienda/canjear', 'TiendaController', 'canjear'],
+    ['POST', 'tienda/recargar', 'TiendaController', 'recargar'],
+    ['GET',  'tienda/check-pendientes', 'TiendaController', 'checkPendientes'],
 
     // —— Reportes ——
     ['GET',  'reportes',     'ReporteController', 'index'],

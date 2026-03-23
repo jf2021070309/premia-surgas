@@ -120,6 +120,59 @@ class TiendaController {
         ]);
     }
 
+    public function recargar(): void {
+        $this->requireAuth();
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Content-Type: application/json');
+            echo json_encode(['success' => false, 'message' => 'Método no permitido']);
+            return;
+        }
+
+        $puntos = (int)($_POST['puntos'] ?? 0);
+        $monto = (float)($_POST['monto'] ?? 0);
+        $id_cliente = $_SESSION['id_cliente'] ?? $_SESSION['id_usuario'] ?? null;
+
+        if (!$id_cliente || !$puntos || !isset($_FILES['comprobante'])) {
+            header('Content-Type: application/json');
+            echo json_encode(['success' => false, 'message' => 'Datos insuficientes']);
+            return;
+        }
+
+        $uploadDir = __DIR__ . '/../assets/uploads/comprobantes/';
+        if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
+
+        $fileExtension = pathinfo($_FILES['comprobante']['name'], PATHINFO_EXTENSION);
+        $fileName = 'recarga_' . time() . '_' . $id_cliente . '.' . $fileExtension;
+        $targetFile = $uploadDir . $fileName;
+
+        if (move_uploaded_file($_FILES['comprobante']['tmp_name'], $targetFile)) {
+            require_once __DIR__ . '/../config/Database.php';
+            $db = Database::getConnection();
+            $stmt = $db->prepare("INSERT INTO recargas (cliente_id, puntos, monto, comprobante) VALUES (?, ?, ?, ?)");
+            $stmt->execute([$id_cliente, $puntos, $monto, $fileName]);
+
+            header('Content-Type: application/json');
+            echo json_encode(['success' => true]);
+        } else {
+            header('Content-Type: application/json');
+            echo json_encode(['success' => false, 'message' => 'Error al subir comprobante']);
+        }
+    }
+
+    public function checkPendientes(): void {
+        $this->requireAuth();
+        $id_cliente = $_SESSION['id_cliente'] ?? $_SESSION['id_usuario'] ?? null;
+        
+        require_once __DIR__ . '/../config/Database.php';
+        $db = Database::getConnection();
+        $stmt = $db->prepare("SELECT COUNT(*) FROM recargas WHERE cliente_id = ? AND estado = 'pendiente'");
+        $stmt->execute([$id_cliente]);
+        $count = (int)$stmt->fetchColumn();
+
+        header('Content-Type: application/json');
+        echo json_encode(['pendientes' => $count > 0]);
+    }
+
     private function render(string $view, array $data = []): void {
         extract($data);
         require __DIR__ . "/../views/{$view}.php";

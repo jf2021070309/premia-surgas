@@ -528,6 +528,11 @@
                 </div>
             </div>
 
+            <div v-show="tienePendiente" class="alert alert-warning border-0 shadow-sm mt-3 text-center" style="border-radius: 1.5rem; background: #fffbeb; color: #d97706; border: 1px solid #fef3c7 !important;">
+                <i class='bx bx-time-five'></i> 
+                <b>Recarga en proceso:</b> El administrador está verificando tu comprobante. Los puntos se cargarán tras la validación.
+            </div>
+
             <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem;">
                 <button @click="abrirCompra()" class="btn-buy-pts">
                     <i class='bx bxs-cart-add'></i> COMPRAR PUNTOS

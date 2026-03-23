@@ -23,7 +23,8 @@ createApp({
             modalBuy: null,
             modalPay: null,
             evidenceFile: null,
-            filePreview: null
+            filePreview: null,
+            tienePendiente: false
         };
     },
     computed: {
@@ -85,32 +86,59 @@ createApp({
             }
         },
         confirmarPago() {
+            if (!this.evidenceFile) return;
+
             Swal.fire({
                 title: 'Enviando comprobante...',
-                text: 'Estamos procesando tu solicitud de recarga.',
+                text: 'Procesando tu solicitud de recarga.',
                 allowOutsideClick: false,
                 didOpen: () => {
                     Swal.showLoading();
                 }
             });
 
-            // Simulamos envio
-            setTimeout(() => {
-                Swal.fire({
-                    icon: 'success',
-                    title: '¡Comprobante enviado!',
-                    text: 'En breve verificaremos tu pago y se cargarán los puntos a tu cuenta.',
-                    confirmButtonColor: '#821515'
-                }).then(() => {
-                    this.modalPay.hide();
-                    this.evidenceFile = null;
-                    this.filePreview = null;
-                    this.selectedPkg = {};
-                });
-            }, 2000);
+            const formData = new FormData();
+            formData.append('puntos', this.selectedPkg.pts);
+            formData.append('monto', this.selectedPkg.price);
+            formData.append('comprobante', this.evidenceFile);
+
+            fetch(`${BASE_URL}tienda/recargar`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'info',
+                        title: '¡Recarga en espera!',
+                        text: 'Tu solicitud ha sido enviada. El administrador revisará el comprobante para validar la recarga. Este proceso no es instantáneo.',
+                        confirmButtonColor: '#821515'
+                    }).then(() => {
+                        this.modalPay.hide();
+                        this.evidenceFile = null;
+                        this.filePreview = null;
+                        this.selectedPkg = {};
+                        this.tienePendiente = true;
+                    });
+                } else {
+                    Swal.fire('Error', data.message || 'Error al procesar la recarga', 'error');
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                Swal.fire('Error', 'No se pudo conectar con el servidor', 'error');
+            });
         }
     },
     mounted() {
+        // Check pending recharges
+        fetch(`${BASE_URL}tienda/check-pendientes`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.pendientes) this.tienePendiente = true;
+        });
+
         if (this.saldo < this.selected.puntos) this.tipo = 'descuento';
         
         let target = this.saldo;
