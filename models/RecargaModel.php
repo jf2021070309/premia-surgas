@@ -46,7 +46,8 @@ class RecargaModel {
 
             // 2. Si es aprobación, sumar puntos al cliente
             if ($estado === 'aprobado') {
-                $puntosRecarga = (int) $recarga['puntos'];
+                $puntosRaw = str_replace(',', '', $recarga['puntos']);
+                $puntosRecarga = (int) $puntosRaw;
                 $stmt = $this->db->prepare("UPDATE clientes SET puntos = puntos + ? WHERE id = ?");
                 $stmt->execute([$puntosRecarga, $recarga['cliente_id']]);
             }

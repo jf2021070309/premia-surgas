@@ -97,8 +97,9 @@ createApp({
                 }
             });
 
+            const rawPts = String(this.selectedPkg.pts).replace(/,/g, '');
             const formData = new FormData();
-            formData.append('puntos', this.selectedPkg.pts);
+            formData.append('puntos', rawPts);
             formData.append('monto', this.selectedPkg.price);
             formData.append('comprobante', this.evidenceFile);
 

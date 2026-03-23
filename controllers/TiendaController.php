@@ -150,7 +150,8 @@ class TiendaController {
             FOREIGN KEY (validado_por) REFERENCES usuarios(id)
         )");
 
-        $puntos = (int)($_POST['puntos'] ?? 0);
+        $puntosRaw = $_POST['puntos'] ?? '0';
+        $puntos = (int) str_replace(',', '', $puntosRaw);
         $monto = (float)($_POST['monto'] ?? 0);
         $id_cliente = $_SESSION['id_cliente'] ?? $_SESSION['id_usuario'] ?? null;
 
