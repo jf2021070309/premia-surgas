@@ -128,9 +128,27 @@ class TiendaController {
             return;
         }
 
-        ob_clean(); // Asegura de que no haya basura en el buffer
+        ob_clean();
         header('Access-Control-Allow-Origin: *');
         header('Content-Type: application/json; charset=utf-8');
+
+        require_once __DIR__ . '/../config/Database.php';
+        $db = Database::getConnection();
+
+        // Asegurar que la tabla existe (Auto-migración)
+        $db->exec("CREATE TABLE IF NOT EXISTS recargas (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            cliente_id INT,
+            puntos INT,
+            monto DECIMAL(10,2),
+            comprobante VARCHAR(255),
+            estado ENUM('pendiente', 'aprobado', 'rechazado') DEFAULT 'pendiente',
+            fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            fecha_validacion TIMESTAMP NULL,
+            validado_por INT,
+            FOREIGN KEY (cliente_id) REFERENCES clientes(id),
+            FOREIGN KEY (validado_por) REFERENCES usuarios(id)
+        )");
 
         $puntos = (int)($_POST['puntos'] ?? 0);
         $monto = (float)($_POST['monto'] ?? 0);
@@ -174,6 +192,22 @@ class TiendaController {
         
         require_once __DIR__ . '/../config/Database.php';
         $db = Database::getConnection();
+
+        // Auto-migración también aquí por si acaso
+        $db->exec("CREATE TABLE IF NOT EXISTS recargas (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            cliente_id INT,
+            puntos INT,
+            monto DECIMAL(10,2),
+            comprobante VARCHAR(255),
+            estado ENUM('pendiente', 'aprobado', 'rechazado') DEFAULT 'pendiente',
+            fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            fecha_validacion TIMESTAMP NULL,
+            validado_por INT,
+            FOREIGN KEY (cliente_id) REFERENCES clientes(id),
+            FOREIGN KEY (validado_por) REFERENCES usuarios(id)
+        )");
+
         $stmt = $db->prepare("SELECT COUNT(*) FROM recargas WHERE cliente_id = ? AND estado = 'pendiente'");
         $stmt->execute([$id_cliente]);
         $count = (int)$stmt->fetchColumn();
