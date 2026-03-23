@@ -128,7 +128,7 @@ class TiendaController {
             return;
         }
 
-        ob_clean();
+        if (ob_get_length()) ob_clean();
         header('Access-Control-Allow-Origin: *');
         header('Content-Type: application/json; charset=utf-8');
 
