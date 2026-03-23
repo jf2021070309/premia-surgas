@@ -108,15 +108,17 @@
         .act-date { font-size: 0.75rem; color: #aaa; font-weight: 600; }
         .act-pts { font-weight: 800; font-size: 1.1rem; color: var(--primary); }
 
-        /* 3D CARD OVERRIDE FOR BURGUNDY */
+        /* 3D CARD OVERRIDE (S PRESTIGE STYLE) */
         .vip-card-container { width: 340px; height: 200px; perspective: 1000px; cursor: pointer; }
         .vip-card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform-style: preserve-3d; }
         .is-flipped .vip-card-inner { transform: rotateY(180deg); }
-        .card-front, .card-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 20px; overflow: hidden; box-shadow: 0 15px 40px rgba(0,0,0,0.2); }
-        .card-front { background: linear-gradient(135deg, #222 0%, #050505 100%); color: #fff; padding: 1.8rem; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid rgba(255,255,255,0.1); }
+        .card-front, .card-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 20px; overflow: hidden; box-shadow: 0 15px 40px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); }
+        .card-front { background: #000; color: #fff; padding: 1.8rem; display: flex; flex-direction: column; justify-content: space-between; }
         .pts-card-box { margin-top: 10px; }
-        .pts-card-lbl { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: rgba(255,255,255,0.4); font-weight: 800; }
-        .pts-card-val { font-size: 2.2rem; font-weight: 800; color: #fff; display: block; line-height: 1; margin-top: 4px; }
+        .pts-card-lbl { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: rgba(255,255,255,0.4); font-weight: 800; display: block; margin-bottom: 4px; }
+        .pts-card-val { font-size: 2.2rem; font-weight: 800; color: #fff; line-height: 1; letter-spacing: -1px; }
+        .chip-icon { position: absolute; top: 1.5rem; right: 1.5rem; font-size: 1.8rem; opacity: 0.3; }
+        .fingerprint-icon { position: absolute; bottom: 1.5rem; right: 1.5rem; font-size: 1.5rem; opacity: 0.2; }
         
         @media (max-width: 1000px) {
             .sidebar { display: none; }
@@ -288,12 +290,12 @@
                 <div class="vip-card-container" id="profileCard">
                     <div class="vip-card-inner">
                         <div class="card-front">
-                            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                                <div style="display: flex; align-items: center; gap: 10px;">
-                                    <div style="width: 35px; height: 35px; background: rgba(255,255,255,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.8rem; border: 1px solid rgba(255,255,255,0.2);">S</div>
-                                    <span style="font-weight: 800; font-size: 0.75rem; letter-spacing: 2px;">PRESTIGE</span>
-                                </div>
-                                <i class='bx bxs-chip' style="font-size: 1.8rem; opacity: 0.3;"></i>
+                            <i class='bx bxs-chip chip-icon'></i>
+                            <i class='bx bx-fingerprint fingerprint-icon'></i>
+
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div style="width: 32px; height: 32px; background: rgba(255,255,255,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.8rem; border: 1px solid rgba(255,255,255,0.2);">S</div>
+                                <span style="font-weight: 800; font-size: 0.8rem; letter-spacing: 2px; color: #fff;">PRESTIGE</span>
                             </div>
 
                             <div class="pts-card-box">
@@ -301,11 +303,8 @@
                                 <b class="pts-card-val" id="points-counter">0</b>
                             </div>
 
-                            <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                                <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.6);">
-                                    <?= htmlspecialchars($cliente['codigo']) ?>
-                                </div>
-                                <i class='bx bx-fingerprint' style="font-size: 1.5rem; opacity: 0.2;"></i>
+                            <div style="font-size: 0.75rem; font-weight: 700; opacity: 0.6; letter-spacing: 1px;">
+                                <?= htmlspecialchars($cliente['codigo']) ?>
                             </div>
                         </div>
                         <div class="card-back" style="background: white; transform: rotateY(180deg); display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 20px;">
