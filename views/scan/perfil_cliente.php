@@ -5,113 +5,128 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Perfil — PremiaSurgas</title>
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/main.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <style>
         :root { 
-            --primary: #2d0404; 
-            --secondary: #2e7d32; 
-            --bg-page: #2d0404;
-            --surface: #ffffff;
-            --text-main: #191c1d;
-            --text-label: #8e8e8e;
-            --shadow-card: 0 10px 40px rgba(0, 0, 0, 0.1);
+            --primary: #821515; 
+            --bg-color: #f7f9fc;
+            --text-main: #1a1c1e;
+            --silver-text: linear-gradient(135deg, #1a1a1a 0%, #444444 50%, #1a1a1a 100%);
+            --silver-metal: linear-gradient(135deg, #70706F, #E9E9E7, #70706F, #E9E9E7, #70706F);
+            --card-silver: linear-gradient(135deg, #a8a8a8 0%, #ffffff 50%, #a8a8a8 100%);
         }
         body { 
             font-family: 'Outfit', sans-serif; 
-            background: var(--bg-page);
+            background: var(--bg-color);
+            background: radial-gradient(circle at top right, #ffffff 0%, #eef2f7 100%);
+            background-attachment: fixed;
             margin: 0; 
             color: var(--text-main); 
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
             overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
         }
 
-        /* --- BURGUNDY GLASS ARCHITECTURE --- */
-        .page-header {
-            padding: 3rem 1.5rem 5rem;
+        ::selection {
+            background: rgba(130, 21, 21, 0.2);
+            color: var(--primary);
+        }
+
+        
+        /* Layout */
+        .header-wrapper {
+            background: linear-gradient(135deg, var(--primary) 0%, #4a0b0b 100%);
+            padding: 3.5rem 1.5rem 7rem;
             color: white;
-            text-align: right;
             position: relative;
-        }
-        .header-bg-text {
-            position: absolute; top: 1.5rem; right: 1.5rem;
-            font-size: 0.75rem; font-weight: 800; opacity: 0.6; letter-spacing: 2px;
-            text-transform: uppercase; text-decoration: none; color: white;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+            box-shadow: 0 15px 40px rgba(130, 21, 21, 0.2);
+            margin-bottom: 0;
         }
 
-        .main-container {
-            flex-grow: 1;
-            background: var(--surface);
-            margin-top: -3rem;
-            border-top-left-radius: 40px;
-            border-top-right-radius: 40px;
-            padding: 2.5rem 2rem;
-            box-shadow: 0 -10px 30px rgba(0,0,0,0.1);
+        .header-content {
+            max-width: 500px;
+            margin: 0 auto;
             position: relative;
-            z-index: 5;
         }
 
-        /* Profile Data Styles (Reference Image) */
-        .profile-field {
-            margin-bottom: 2rem;
-            border-bottom: 1px solid #f0f0f0;
-            padding-bottom: 1rem;
+        .user-greeting {
             display: flex;
             align-items: center;
-            gap: 1.2rem;
+            gap: 15px;
+            margin-bottom: 0;
         }
-        .field-icon { font-size: 1.5rem; color: #ddd; }
-        .field-content { flex-grow: 1; }
-        .field-label { 
-            font-size: 0.75rem; font-weight: 800; color: var(--text-label); 
-            text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px; display: block;
-        }
-        .field-value { font-size: 1.1rem; font-weight: 600; color: var(--text-main); }
 
-        /* Actions */
-        .reward-btn {
-            background: var(--secondary);
-            color: white;
-            padding: 1.2rem;
-            border-radius: 20px;
-            text-decoration: none;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            font-weight: 800; font-size: 1rem;
-            box-shadow: 0 8px 20px rgba(46, 125, 50, 0.2);
-            transition: 0.3s;
-            margin-top: 1rem;
+        .profile-avatar {
+            width: 55px; height: 55px; 
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: #fff;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 1.6rem; font-weight: 700;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
         }
-        .reward-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(46, 125, 50, 0.3); }
 
-        .footer-tag { text-align: center; margin-top: 3rem; font-size: 0.7rem; color: #ddd; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; opacity: 0.4; }
-        /* --- 3D VIP CARD (BURGUNDY PRESTIGE) --- */
+        .greeting-text h1 { 
+            margin: 0; 
+            font-size: 1.6rem; 
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: #fff;
+        }
+        .greeting-text p { margin: 0; font-size: 0.85rem; opacity: 0.7; text-transform: uppercase; letter-spacing: 1px; color: #fff; }
+
+        /* --- 3D FLIP CARD BLACK EDITION --- */
         .vip-card-container {
             perspective: 1500px;
-            margin: -5rem auto 2.5rem;
-            width: 340px;
-            height: 200px;
+            margin: -4.5rem auto 3rem;
+            max-width: 420px;
+            width: 92%;
+            height: 250px; /* Base height for mobile aspect ratio */
             cursor: pointer;
-            z-index: 20;
+            z-index: 10;
         }
-        .vip-card-inner { position: relative; width: 100%; height: 100%; text-align: left; transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform-style: preserve-3d; }
-        .is-flipped .vip-card-inner { transform: rotateY(180deg); }
-        .card-front, .card-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 24px; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
-        .card-front { 
-            background: linear-gradient(135deg, #1a1a1a 0%, #000 100%); 
-            color: #fff; padding: 1.8rem; display: flex; flex-direction: column; justify-content: space-between; 
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .card-pts-box { margin-top: 10px; }
-        .card-pts-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2.5px; color: rgba(255,255,255,0.4); font-weight: 800; display: block; margin-bottom: 4px; }
-        .card-pts-val { font-size: 2.2rem; font-weight: 800; color: #fff; line-height: 1; letter-spacing: -1px; }
 
-        .card-back { background: #fff; transform: rotateY(180deg); display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .qr-wrapper { background: #fff; padding: 10px; border-radius: 12px; }
-        .qr-subtext { margin-top: 10px; font-size: 0.6rem; font-weight: 800; color: var(--primary); letter-spacing: 1px; opacity: 0.6; }
+        .vip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+
+        .vip-card-container.is-flipped .vip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            color: white; /* Forzar texto blanco dentro de la tarjeta */
+        }
+
+        /* LADO FRONTAL: BLACK METALLIC */
+        .card-front {
+            background: #0a0a0a;
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(255,255,255,0.05) 0%, transparent 40%),
+                linear-gradient(45deg, #0a0a0a 0%, #1a1a1a 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 1.8rem;
+        }
 
         /* Efecto de Brillo Silver */
         .card-shine {
@@ -172,94 +187,134 @@
         
         .qr-help { margin-top: 1.5rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.6; }
 
-        .vip-card-container { width: 340px; height: 200px; perspective: 1000px; cursor: pointer; margin: 0 auto; position: relative; z-index: 10; transform: scale(0.9); }
-        .vip-card-inner { position: relative; width: 100%; height: 100%; text-align: left; transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform-style: preserve-3d; }
-        .is-flipped .vip-card-inner { transform: rotateY(180deg); }
-        .card-front, .card-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 20px; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.05); }
-        .card-front { background: linear-gradient(135deg, #1e57a3 0%, #003f83 100%); color: #fff; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; }
-        .membership-badge { font-size: 0.6rem; font-weight: 800; letter-spacing: 2px; color: #fff; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 6px; }
-        .label-small { font-size: 0.55rem; text-transform: uppercase; letter-spacing: 2px; color: rgba(255,255,255,0.5); font-weight: 700; margin-bottom: 4px; }
-        .holder-name { font-size: 1.1rem; font-weight: 800; color: #fff; text-transform: uppercase; }
-        .card-back { background: #fff; transform: rotateY(180deg); display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .qr-container { background: #fff; padding: 12px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
-        .qr-help { margin-top: 1rem; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--primary); font-weight: 800; }
+        /* Botón Tienda */
+        .btn-store {
+            background: #111;
+            color: #fff; 
+            text-decoration: none; 
+            padding: 1.2rem 2.5rem; 
+            border-radius: 100px;
+            display: flex; align-items: center; justify-content: center; gap: 0.8rem;
+            font-weight: 800; font-size: 1rem; 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            width: 85%;
+            max-width: 380px;
+            margin: 0 auto 3.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border: none;
+        }
+        .btn-store:hover { background: #000; transform: translateY(-3px); box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
+
+        /* Historial */
+        .container { padding: 0 1.5rem 4rem; max-width: 500px; margin: 0 auto; }
+        .section-title { font-size: 1rem; font-weight: 700; margin-bottom: 1.2rem; opacity: 0.8; letter-spacing: 1px; }
+        .history-card { background: white; border-radius: 2rem; border: 1px solid #eef2f7; box-shadow: 0 10px 30px rgba(0,0,0,0.03); overflow: hidden; }
+        .history-item { padding: 1.25rem 1.5rem; border-bottom: 1px solid #f0f4f8; transition: 0.3s; }
+        .history-item:active { background: #f8fafd; }
+        .history-main-row { display: flex; justify-content: space-between; align-items: center; }
+        .item-name { font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 10px; color: #444; }
+        .item-name i { color: var(--primary); font-size: 1.1rem; }
+        .item-pts { color: var(--text-main); font-weight: 800; font-size: 1.1rem; }
+        .history-date { font-size: 0.75rem; opacity: 0.4; margin-top: 4px; padding-left: 28px; }
+
+        .footer { text-align: center; padding: 3rem 0; color: rgba(0,0,0,0.3); font-size: 0.75rem; }
+        
+        .logout-btn-client {
+            position: absolute; top: -0.5rem; right: 0; color: rgba(255,255,255,0.6);
+            background: rgba(255,255,255,0.1); width: 40px; height: 40px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .flip-hint { margin-top: -1.5rem; text-align: center; font-size: 0.7rem; opacity: 0.4; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2rem; }
         
         [v-cloak] { display: none; }
     </style>
 </head>
 <body>
-    <a href="<?= BASE_URL ?>logout" class="header-bg-text">Cerrar Sesión</a>
-    <header class="page-header">
-        <div style="font-size: 1.8rem; font-weight: 800;">PERFIL</div>
-    </header>
 
-    <main class="main-container">
-        <!-- 3D VIP CARD (CENTRAL PIECE) -->
-        <div class="vip-card-container" id="profileCard">
-            <div class="vip-card-inner">
-                <div class="card-front">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                        <span style="font-size: 0.8rem; font-weight: 800; letter-spacing: 2.5px; opacity: 0.8;">PRESTIGE</span>
-                        <i class='bx bxs-chip' style="font-size: 2rem; opacity: 0.3;"></i>
-                    </div>
-                    
-                    <div class="card-pts-box">
-                        <span class="card-pts-label">Puntos Disponibles</span>
-                        <b class="card-pts-val" id="points-counter">0</b>
-                    </div>
+    <div class="header-wrapper">
+        <div class="header-content">
+            <a href="<?= BASE_URL ?>logout" class="logout-btn-client" title="Cerrar Sesión">
+                <i class='bx bx-log-out'></i>
+            </a>
+            <div class="user-greeting">
+                <div class="profile-avatar"><?= strtoupper(substr($cliente['nombre'], 0, 1)) ?></div>
+                <div class="greeting-text">
+                    <p>Digital Membership</p>
+                    <h1>¡Hola, <?= explode(' ', $cliente['nombre'])[0] ?>!</h1>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                    <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                        <div>
-                            <div style="font-size: 0.5rem; text-transform: uppercase; opacity: 0.4; letter-spacing: 1px;">Surgas Member</div>
-                            <div style="font-size: 0.95rem; font-weight: 700; text-transform: uppercase;"><?= htmlspecialchars($cliente['nombre']) ?></div>
+    <!-- VIP CARD BLACK EDITION (3D FLIP) -->
+    <div class="vip-card-container" id="profileCard">
+        <div class="vip-card-inner">
+            <!-- FRONT SIDE -->
+            <div class="card-front">
+                <div class="card-shine"></div>
+                <div class="card-header">
+                    <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" class="card-logo">
+                    <span class="membership-badge">ELITE MEMBER</span>
+                </div>
+                <div class="card-middle">
+                    <div class="label-small">Titular de Cuenta</div>
+                    <div class="holder-name"><?= htmlspecialchars($cliente['nombre']) ?></div>
+                </div>
+                <div class="card-footer">
+                    <div class="client-code"><?= htmlspecialchars($cliente['codigo']) ?></div>
+                    <div class="points-box">
+                        <span class="label-small">Saldo Actual</span>
+                        <b class="points-val" id="points-counter">0</b>
+                        <span class="points-unit">pts surgas</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BACK SIDE -->
+            <div class="card-back">
+                <div class="qr-container">
+                    <div id="qrcode"></div>
+                </div>
+                <div class="qr-help">Muestra para acumular</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="flip-hint"><i class='bx bx-refresh'></i> Toca la tarjeta para ver tu QR</div>
+
+    <a href="<?= BASE_URL ?>tienda" class="btn-store">
+        <i class='bx bxs-shopping-bag'></i> Ir a la tienda
+    </a>
+
+    <div class="container">
+        <div class="section-title">Actividad Reciente</div>
+        <div class="history-card">
+            <?php if (empty($ventas)): ?>
+                <div style="padding: 3rem 2rem; text-align: center; opacity: 0.3; font-size: 0.9rem;">No hay movimientos recientes.</div>
+            <?php else: ?>
+                <?php foreach (array_slice($ventas, 0, 4) as $v): ?>
+                <div class="history-item">
+                    <div class="history-main-row">
+                        <div class="item-name">
+                            <i class='bx bx-check-circle'></i>
+                            <?= htmlspecialchars($v['detalle'] ?: 'Operación') ?>
                         </div>
-                        <i class='bx bx-fingerprint' style="font-size: 1.5rem; opacity: 0.2;"></i>
+                        <span class="item-pts">+<?= $v['puntos'] ?></span>
                     </div>
+                    <span class="history-date"><?= date('d/m/Y', strtotime($v['fecha'])) ?></span>
                 </div>
-                <div class="card-back">
-                    <div class="qr-wrapper">
-                        <div id="qrcode"></div>
-                    </div>
-                    <div class="qr-subtext">CÓDIGO: <?= htmlspecialchars($cliente['codigo']) ?></div>
-                </div>
-            </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </div>
-
-        <!-- PROFILE DATA FIELDS (AS PER IMAGE) -->
-        <div class="profile-field">
-            <div class="field-icon"><i class='bx bx-id-card'></i></div>
-            <div class="field-content">
-                <span class="field-label">DNI / Código</span>
-                <div class="field-value"><?= htmlspecialchars($cliente['codigo']) ?></div>
-            </div>
+        
+        <div class="footer">
+            &copy; <?= date('Y') ?> Surgas — Premium Digital Member Card
         </div>
-
-        <div class="profile-field">
-            <div class="field-icon"><i class='bx bx-user'></i></div>
-            <div class="field-content">
-                <span class="field-label">Nombre Completo</span>
-                <div class="field-value"><?= htmlspecialchars($cliente['nombre']) ?></div>
-            </div>
-        </div>
-
-        <div class="profile-field">
-            <div class="field-icon"><i class='bx bx-calendar'></i></div>
-            <div class="field-content">
-                <span class="field-label">Miembro Desde</span>
-                <div class="field-value">Marzo 2026</div>
-            </div>
-        </div>
-
-        <a href="<?= BASE_URL ?>tienda" class="reward-btn">
-            <i class='bx bxs-store'></i>
-            VER CATÁLOGO DE PREMIOS
-        </a>
-
-        <div class="footer-tag">
-            Surgas &bull; Prestige Membership &bull; <?= date('Y') ?>
-        </div>
-    </main>
-
+    </div>
 
     <script>
         const cardContainer = document.getElementById('profileCard');
