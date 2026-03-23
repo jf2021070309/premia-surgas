@@ -106,6 +106,10 @@ $routes = [
     ['GET',  'canjes-admin',            'CanjeAdminController', 'index'],
     ['POST', 'canjes-admin/actualizar', 'CanjeAdminController', 'actualizarEstado'],
 
+    // —— Gestión de Recargas de Puntos (Admin) ——
+    ['GET',  'recargas-admin',            'RecargaAdminController', 'index'],
+    ['POST', 'recargas-admin/actualizar', 'RecargaAdminController', 'actualizarEstado'],
+
     // —— Configuración ——
     ['GET',  'configuraciones',        'ConfiguracionController', 'index'],
     ['POST', 'configuraciones/update', 'ConfiguracionController', 'update'],
