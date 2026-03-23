@@ -8,124 +8,122 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <style>
         :root { 
             --primary: #821515; 
-            --bg-color: #f7f9fc;
-            --text-main: #1a1c1e;
-            --silver-text: linear-gradient(135deg, #1a1a1a 0%, #444444 50%, #1a1a1a 100%);
-            --silver-metal: linear-gradient(135deg, #70706F, #E9E9E7, #70706F, #E9E9E7, #70706F);
-            --card-silver: linear-gradient(135deg, #a8a8a8 0%, #ffffff 50%, #a8a8a8 100%);
+            --primary-dark: #5f0005;
+            --bg-page: #f8f9fa;
+            --surface: #ffffff;
+            --text-main: #191c1d;
+            --text-muted: #58413f;
+            --sidebar-w: 260px;
+            --shadow-sm: 0 4px 15px rgba(130, 21, 21, 0.05);
+            --shadow-lg: 0 20px 50px rgba(0,0,0,0.1);
         }
         body { 
             font-family: 'Outfit', sans-serif; 
-            background: var(--bg-color);
-            background: radial-gradient(circle at top right, #ffffff 0%, #eef2f7 100%);
-            background-attachment: fixed;
+            background: var(--bg-page);
             margin: 0; 
             color: var(--text-main); 
             min-height: 100vh;
+            display: flex;
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
-        ::selection {
-            background: rgba(130, 21, 21, 0.2);
-            color: var(--primary);
-        }
-
-        
-        /* Layout */
-        .header-wrapper {
-            background: linear-gradient(135deg, var(--primary) 0%, #4a0b0b 100%);
-            padding: 3.5rem 1.5rem 7rem;
+        /* --- DASHBOARD ARCHITECTURE --- */
+        .sidebar {
+            width: var(--sidebar-w);
+            background: linear-gradient(180deg, var(--primary) 0%, var(--primary-dark) 100%);
+            height: 100vh;
+            position: fixed;
+            left: 0; top: 0;
+            display: flex; flex-direction: column;
             color: white;
-            position: relative;
-            border-bottom-left-radius: 40px;
-            border-bottom-right-radius: 40px;
-            box-shadow: 0 15px 40px rgba(130, 21, 21, 0.2);
-            margin-bottom: 0;
+            z-index: 100;
+            box-shadow: 10px 0 30px rgba(0,0,0,0.05);
+        }
+        .sidebar-header { padding: 3rem 1.5rem; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .sidebar-logo { width: 60px; height: 60px; background: rgba(255,255,255,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 1.8rem; font-weight: 800; border: 2px solid rgba(255,255,255,0.2); }
+        
+        .nav-menu { padding: 2rem 0; flex-grow: 1; }
+        .nav-item { 
+            display: flex; align-items: center; gap: 15px; 
+            padding: 1rem 2rem; color: rgba(255,255,255,0.7); 
+            text-decoration: none; font-weight: 600; font-size: 0.95rem;
+            transition: 0.3s;
+        }
+        .nav-item:hover, .nav-item.active { color: white; background: rgba(255,255,255,0.05); border-left: 4px solid white; }
+        .nav-item i { font-size: 1.4rem; }
+
+        .sidebar-foot { padding: 2rem; border-top: 1px solid rgba(255,255,255,0.05); }
+        .btn-exit { display: flex; align-items: center; gap: 10px; color: #ffb4ac; text-decoration: none; font-weight: 700; font-size: 0.9rem; }
+
+        .main-workspace {
+            flex-grow: 1;
+            margin-left: var(--sidebar-w);
+            padding: 3rem;
+            max-width: 1300px;
         }
 
-        .header-content {
-            max-width: 500px;
-            margin: 0 auto;
-            position: relative;
-        }
+        /* TOP BAR */
+        .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem; }
+        .page-heading { margin: 0; font-size: 2rem; font-weight: 800; letter-spacing: -1px; color: var(--primary-dark); }
+        .user-chip { display: flex; align-items: center; gap: 12px; background: white; padding: 8px 20px; border-radius: 100px; box-shadow: var(--shadow-sm); font-weight: 700; font-size: 0.9rem; }
 
-        .user-greeting {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 0;
+        /* DASHBOARD CARDS */
+        .hero-board {
+            background: white; border-radius: 30px; padding: 3rem;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: var(--shadow-lg); margin-bottom: 3rem;
+            position: relative; overflow: hidden;
         }
+        .hero-board::before { content: ''; position: absolute; top: 0; left: 0; width: 6px; height: 100%; background: var(--primary); }
 
-        .profile-avatar {
-            width: 55px; height: 55px; 
-            background: rgba(255,255,255,0.1);
-            border: 2px solid rgba(255,255,255,0.3);
-            color: #fff;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 1.6rem; font-weight: 700;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            backdrop-filter: blur(10px);
+        .hero-info h2 { margin: 0; font-size: 2.5rem; font-weight: 800; color: var(--primary-dark); line-height: 1; }
+        .hero-info p { margin: 10px 0 0; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; }
+        .data-grid { display: flex; gap: 3rem; margin-top: 2rem; }
+        .data-point .lbl { font-size: 0.7rem; font-weight: 800; color: #aaa; text-transform: uppercase; letter-spacing: 1.5px; display: block; margin-bottom: 5px; }
+        .data-point .val { font-size: 1.1rem; font-weight: 700; color: var(--text-main); }
+
+        /* VIP CARD POSITIONED RIGHT */
+        .hero-right { position: relative; z-index: 10; transform: scale(1.05); }
+
+        /* RECENT ACTIVITY SECTION */
+        .activity-sec { margin-top: 3rem; }
+        .sec-header { font-size: 1.1rem; font-weight: 800; margin-bottom: 1.5rem; color: var(--primary-dark); }
+        .activity-list { background: white; border-radius: 25px; overflow: hidden; box-shadow: var(--shadow-sm); border: 1px solid #f0f0f0; }
+        .activity-row { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 1.5rem 2rem; border-bottom: 1px solid #f8f9fa;
+            transition: 0.3s;
         }
+        .activity-row:hover { background: #fffcfc; }
+        .act-icon { width: 45px; height: 45px; background: #fff0f0; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: var(--primary); }
+        .act-info { flex-grow: 1; padding: 0 1.5rem; }
+        .act-title { font-weight: 700; font-size: 0.95rem; display: block; }
+        .act-date { font-size: 0.75rem; color: #aaa; font-weight: 600; }
+        .act-pts { font-weight: 800; font-size: 1.1rem; color: var(--primary); }
 
-        .greeting-text h1 { 
-            margin: 0; 
-            font-size: 1.6rem; 
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            color: #fff;
-        }
-        .greeting-text p { margin: 0; font-size: 0.85rem; opacity: 0.7; text-transform: uppercase; letter-spacing: 1px; color: #fff; }
-
-        /* --- 3D FLIP CARD BLACK EDITION --- */
-        .vip-card-container {
-            perspective: 1500px;
-            margin: -4.5rem auto 3rem;
-            max-width: 420px;
-            width: 92%;
-            height: 250px; /* Base height for mobile aspect ratio */
-            cursor: pointer;
-            z-index: 10;
-        }
-
-        .vip-card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            transform-style: preserve-3d;
-        }
-
-        .vip-card-container.is-flipped .vip-card-inner {
-            transform: rotateY(180deg);
-        }
-
-        .card-front, .card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            border-radius: 24px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            overflow: hidden;
-            color: white; /* Forzar texto blanco dentro de la tarjeta */
-        }
-
-        /* LADO FRONTAL: BLACK METALLIC */
-        .card-front {
-            background: #0a0a0a;
-            background-image: 
-                radial-gradient(circle at 20% 20%, rgba(255,255,255,0.05) 0%, transparent 40%),
-                linear-gradient(45deg, #0a0a0a 0%, #1a1a1a 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 1.8rem;
+        /* 3D CARD OVERRIDE FOR BURGUNDY */
+        .vip-card-container { width: 340px; height: 200px; perspective: 1000px; cursor: pointer; }
+        .vip-card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform-style: preserve-3d; }
+        .is-flipped .vip-card-inner { transform: rotateY(180deg); }
+        .card-front, .card-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 20px; overflow: hidden; box-shadow: 0 15px 40px rgba(0,0,0,0.2); }
+        .card-front { background: linear-gradient(135deg, #222 0%, #050505 100%); color: #fff; padding: 1.8rem; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid rgba(255,255,255,0.1); }
+        .pts-card-box { margin-top: 10px; }
+        .pts-card-lbl { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: rgba(255,255,255,0.4); font-weight: 800; }
+        .pts-card-val { font-size: 2.2rem; font-weight: 800; color: #fff; display: block; line-height: 1; margin-top: 4px; }
+        
+        @media (max-width: 1000px) {
+            .sidebar { display: none; }
+            .main-workspace { margin-left: 0; padding: 1.5rem; }
+            .hero-board { flex-direction: column; text-align: center; gap: 3rem; padding: 2.5rem 1.5rem; }
+            .data-grid { justify-content: center; gap: 1.5rem; }
+            .hero-info h2 { font-size: 1.8rem; }
         }
 
         /* Efecto de Brillo Silver */
@@ -235,86 +233,119 @@
 </head>
 <body>
 
-    <div class="header-wrapper">
-        <div class="header-content">
-            <a href="<?= BASE_URL ?>logout" class="logout-btn-client" title="Cerrar Sesión">
-                <i class='bx bx-log-out'></i>
+    <!-- DASHBOARD SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo"><?= strtoupper(substr($cliente['nombre'], 0, 1)) ?></div>
+            <div style="font-size: 0.75rem; font-weight: 800; letter-spacing: 2px;">SURGAS PRESTIGE</div>
+        </div>
+        <nav class="nav-menu">
+            <a href="#" class="nav-item active"><i class='bx bxs-dashboard'></i> Dashboard</a>
+            <a href="<?= BASE_URL ?>tienda" class="nav-item"><i class='bx bxs-shopping-bags'></i> Catálogo</a>
+            <a href="#" class="nav-item"><i class='bx bx-history'></i> Mi Actividad</a>
+        </nav>
+        <div class="sidebar-foot">
+            <a href="<?= BASE_URL ?>logout" class="btn-exit">
+                <i class='bx bx-log-out'></i> Salir
             </a>
-            <div class="user-greeting">
-                <div class="profile-avatar"><?= strtoupper(substr($cliente['nombre'], 0, 1)) ?></div>
-                <div class="greeting-text">
-                    <p>Digital Membership</p>
-                    <h1>¡Hola, <?= explode(' ', $cliente['nombre'])[0] ?>!</h1>
-                </div>
-            </div>
         </div>
-    </div>
+    </aside>
 
-    <!-- VIP CARD BLACK EDITION (3D FLIP) -->
-    <div class="vip-card-container" id="profileCard">
-        <div class="vip-card-inner">
-            <!-- FRONT SIDE -->
-            <div class="card-front">
-                <div class="card-shine"></div>
-                <div class="card-header">
-                    <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" class="card-logo">
-                    <span class="membership-badge">ELITE MEMBER</span>
-                </div>
-                <div class="card-middle">
-                    <div class="label-small">Titular de Cuenta</div>
-                    <div class="holder-name"><?= htmlspecialchars($cliente['nombre']) ?></div>
-                </div>
-                <div class="card-footer">
-                    <div class="client-code"><?= htmlspecialchars($cliente['codigo']) ?></div>
-                    <div class="points-box">
-                        <span class="label-small">Saldo Actual</span>
-                        <b class="points-val" id="points-counter">0</b>
-                        <span class="points-unit">pts surgas</span>
+    <!-- CONTENT WORKSPACE -->
+    <main class="main-workspace">
+        <header class="top-nav">
+            <h1 class="page-heading">Executive Overview</h1>
+            <div class="user-chip">
+                <i class='bx bxs-user-circle' style="font-size: 1.2rem; color: var(--primary);"></i>
+                <span><?= explode(' ', $cliente['nombre'])[0] ?></span>
+            </div>
+        </header>
+
+        <!-- DASHBOARD HERO PANEL -->
+        <section class="hero-board">
+            <div class="hero-info">
+                <p>Welcome back,</p>
+                <h2><?= strtoupper($cliente['nombre']) ?></h2>
+                
+                <div class="data-grid">
+                    <div class="data-point">
+                        <span class="lbl">DNI / Código</span>
+                        <span class="val"><?= htmlspecialchars($cliente['codigo']) ?></span>
+                    </div>
+                    <div class="data-point">
+                        <span class="lbl">Member Since</span>
+                        <span class="val">Marzo 2026</span>
                     </div>
                 </div>
+                
+                <a href="<?= BASE_URL ?>tienda" style="display: inline-flex; align-items: center; gap: 10px; margin-top: 2rem; background: var(--primary); color: white; padding: 12px 25px; border-radius: 12px; text-decoration: none; font-weight: 700; font-size: 0.85rem; box-shadow: 0 10px 25px rgba(130, 21, 21, 0.15);">
+                    <i class='bx bxs-store'></i> IR AL CATÁLOGO
+                </a>
             </div>
 
-            <!-- BACK SIDE -->
-            <div class="card-back">
-                <div class="qr-container">
-                    <div id="qrcode"></div>
-                </div>
-                <div class="qr-help">Muestra para acumular</div>
-            </div>
-        </div>
-    </div>
+            <!-- 3D CARD ON THE RIGHT -->
+            <div class="hero-right">
+                <div class="vip-card-container" id="profileCard">
+                    <div class="vip-card-inner">
+                        <div class="card-front">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div style="width: 35px; height: 35px; background: rgba(255,255,255,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.8rem; border: 1px solid rgba(255,255,255,0.2);">S</div>
+                                    <span style="font-weight: 800; font-size: 0.75rem; letter-spacing: 2px;">PRESTIGE</span>
+                                </div>
+                                <i class='bx bxs-chip' style="font-size: 1.8rem; opacity: 0.3;"></i>
+                            </div>
 
-    <div class="flip-hint"><i class='bx bx-refresh'></i> Toca la tarjeta para ver tu QR</div>
+                            <div class="pts-card-box">
+                                <span class="pts-card-lbl">Puntos Disponibles</span>
+                                <b class="pts-card-val" id="points-counter">0</b>
+                            </div>
 
-    <a href="<?= BASE_URL ?>tienda" class="btn-store">
-        <i class='bx bxs-shopping-bag'></i> Ir a la tienda
-    </a>
-
-    <div class="container">
-        <div class="section-title">Actividad Reciente</div>
-        <div class="history-card">
-            <?php if (empty($ventas)): ?>
-                <div style="padding: 3rem 2rem; text-align: center; opacity: 0.3; font-size: 0.9rem;">No hay movimientos recientes.</div>
-            <?php else: ?>
-                <?php foreach (array_slice($ventas, 0, 4) as $v): ?>
-                <div class="history-item">
-                    <div class="history-main-row">
-                        <div class="item-name">
-                            <i class='bx bx-check-circle'></i>
-                            <?= htmlspecialchars($v['detalle'] ?: 'Operación') ?>
+                            <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                                <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.6);">
+                                    <?= htmlspecialchars($cliente['codigo']) ?>
+                                </div>
+                                <i class='bx bx-fingerprint' style="font-size: 1.5rem; opacity: 0.2;"></i>
+                            </div>
                         </div>
-                        <span class="item-pts">+<?= $v['puntos'] ?></span>
+                        <div class="card-back" style="background: white; transform: rotateY(180deg); display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 20px;">
+                            <div style="background: #fff; padding: 10px; border-radius: 12px; border: 1px solid #eee;">
+                                <div id="qrcode"></div>
+                            </div>
+                            <div style="margin-top: 10px; font-size: 0.65rem; font-weight: 800; color: var(--primary); letter-spacing: 1px;">ID DIGITAL</div>
+                        </div>
                     </div>
-                    <span class="history-date"><?= date('d/m/Y', strtotime($v['fecha'])) ?></span>
                 </div>
-                <?php endforeach; ?>
-            <?php endif; ?>
-        </div>
-        
-        <div class="footer">
-            &copy; <?= date('Y') ?> Surgas — Premium Digital Member Card
-        </div>
-    </div>
+            </div>
+        </section>
+
+        <!-- RECENT ACTIVITY GRID -->
+        <section class="activity-sec">
+            <h3 class="sec-header">Actividad Reciente</h3>
+            <div class="activity-list">
+                <?php if (empty($ventas)): ?>
+                    <div style="padding: 4rem; text-align: center; color: #ccc; font-weight: 700;">No hay movimientos recientes</div>
+                <?php else: ?>
+                    <?php foreach (array_slice($ventas, 0, 5) as $v): ?>
+                    <div class="activity-row">
+                        <div class="act-icon">
+                            <i class='bx bxs-gas-pump'></i>
+                        </div>
+                        <div class="act-info">
+                            <span class="act-title"><?= htmlspecialchars($v['detalle'] ?: 'Consumo de Combustible') ?></span>
+                            <span class="act-date"><?= date('d M, Y', strtotime($v['fecha'])) ?></span>
+                        </div>
+                        <div class="act-pts">+<?= number_format($v['puntos']) ?></div>
+                    </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </div>
+        </section>
+
+        <footer style="margin-top: 5rem; text-align: center; font-size: 0.75rem; color: #aaa; font-weight: 600; text-transform: uppercase; letter-spacing: 2px;">
+            Surgas &bull; Executive Dashboard &bull; Premium Member Card
+        </footer>
+    </main>
 
     <script>
         const cardContainer = document.getElementById('profileCard');
