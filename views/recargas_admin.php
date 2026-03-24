@@ -369,10 +369,10 @@
 
     <script>
         // Real-time polling
-        let knownIds = [<?= implode(',', array_column($recargas, 'id')) ?>].map(String);
+        let knownIds = [<?= empty($recargas) ? '' : implode(',', array_column($recargas, 'id')) ?>].map(String);
 
         function checkLiveAdmin() {
-            fetch('<?= BASE_URL ?>panel/live-notifications')
+            fetch('<?= BASE_URL ?>panel/live-notifications', { credentials: 'same-origin' })
                 .then(res => res.json())
                 .then(data => {
                     if (data.success && data.recargas) {
