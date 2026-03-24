@@ -55,6 +55,7 @@ class PanelController {
         $stmt_canjes->execute();
         $canjes = $stmt_canjes->fetchAll(PDO::FETCH_ASSOC);
 
+        if (ob_get_length()) ob_clean();
         echo json_encode([
             'success'  => true,
             'recargas' => $recargas,
