@@ -18,7 +18,10 @@ createApp({
     methods: {
         async checkLiveNotifications(isFirstLoad) {
             try {
-                const res = await fetch(BASE_URL + 'panel/live-notifications');
+                const res = await fetch(BASE_URL + 'panel/live-notifications?_t=' + new Date().getTime(), {
+                    cache: 'no-store',
+                    credentials: 'same-origin'
+                });
                 const data = await res.json();
                 
                 if (data.success) {

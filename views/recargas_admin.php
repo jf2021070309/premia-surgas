@@ -258,6 +258,9 @@
                                 <div class="client-info">
                                     <h4><?= htmlspecialchars($r['cliente_nombre']) ?></h4>
                                     <span><?= htmlspecialchars($r['cliente_celular']) ?> | DNI: <?= htmlspecialchars($r['cliente_dni']) ?></span>
+                                    <span style="display:block; margin-top:0.2rem; color: #888; font-size: 0.75rem;">
+                                        <i class='bx bx-time'></i> <?= date('d M, g:i a', strtotime($r['fecha'])) ?>
+                                    </span>
                                 </div>
                             </div>
 
@@ -372,7 +375,11 @@
         let knownIds = [<?= empty($recargas) ? '' : implode(',', array_column($recargas, 'id')) ?>].map(String);
 
         function checkLiveAdmin() {
-            fetch('<?= BASE_URL ?>panel/live-notifications', { credentials: 'same-origin' })
+            fetch('<?= BASE_URL ?>panel/live-notifications?_t=' + new Date().getTime(), { 
+                method: 'GET',
+                cache: 'no-store',
+                credentials: 'same-origin' 
+            })
                 .then(res => res.json())
                 .then(data => {
                     if (data.success && data.recargas) {
