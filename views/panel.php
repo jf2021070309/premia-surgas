@@ -62,6 +62,12 @@
 
             <div class="header-user-side">
                 <div class="user-card-integrated">
+                    <?php if ($_SESSION['rol'] === 'admin'): ?>
+                    <a href="<?= BASE_URL ?>recargas-admin" title="Notificaciones Pendientes" style="position:relative; display:flex; align-items:center; color:#fff; text-decoration:none; margin-right: 12px; font-size: 1.4rem; cursor:pointer;">
+                        <i class='bx bxs-bell' style="transform-origin: top center; transition: all 0.3s; padding:5px;"></i>
+                        <span v-cloak v-if="pendingTotal > 0" style="position:absolute; top:0px; right:-2px; background:#f59e0b; color:#fff; font-size:0.7rem; font-weight:800; padding:2px 6px; border-radius:12px; border:2px solid #5c0f0f; box-shadow: 0 2px 5px rgba(0,0,0,0.3);">{{ pendingTotal }}</span>
+                    </a>
+                    <?php endif; ?>
                     <div class="u-avatar"><?= substr($_SESSION['nombre_usuario'], 0, 1) ?></div>
                     <div class="u-details">
                         <span class="u-role-tag"><?= htmlspecialchars(strtoupper($_SESSION['rol'])) ?></span>

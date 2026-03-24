@@ -304,27 +304,48 @@
                     <thead>
                         <tr>
                             <th>Cliente</th>
-                            <th>Abono</th>
-                            <th>Monto</th>
-                            <th>Fecha</th>
+                            <th>Puntos Acreditados</th>
+                            <th>Monto Abonado</th>
+                            <th>Evidencia</th>
                             <th>Estado</th>
-                            <th>Revisado Por</th>
+                            <th>Responsable</th>
+                            <th>Fecha y Hora</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($historial as $h): ?>
                         <tr>
-                            <td style="font-weight: 500;"><?= htmlspecialchars($h['cliente_nombre']) ?></td>
-                            <td class="pts-col"><?= number_format($h['puntos']) ?> pts</td>
-                            <td>S/ <?= number_format($h['monto'], 2) ?></td>
-                            <td class="date-col">
-                                <?= date('d M Y, H:i', strtotime($h['fecha'])) ?>
+                            <td>
+                                <div class="tb-client">
+                                    <div class="tb-avatar"><?= substr($h['cliente_nombre'], 0, 1) ?></div>
+                                    <?= htmlspecialchars($h['cliente_nombre']) ?>
+                                </div>
+                            </td>
+                            <td class="tb-pts">+<?= number_format($h['puntos']) ?> pts</td>
+                            <td style="font-weight: 500;">S/ <?= number_format($h['monto'], 2) ?></td>
+                            <td>
+                                <?php if (!empty($h['comprobante'])): ?>
+                                <button class="btn btn-outline" style="padding: 0.3rem 0.6rem; font-size: 0.8rem;" onclick="openModal('<?= BASE_URL ?>assets/uploads/comprobantes/<?= $h['comprobante'] ?>')" title="Ver Foto">
+                                    <i class='bx bx-image' style="font-size: 1.1rem; vertical-align: middle;"></i> Ver
+                                </button>
+                                <?php else: ?>
+                                <span style="color:var(--text-gray); font-size: 0.8rem;">Ninguna</span>
+                                <?php endif; ?>
                             </td>
                             <td>
-                                <span class="status status-<?= $h['estado'] ?>"><?= ucfirst($h['estado']) ?></span>
+                                <?php
+                                    $bgClass = '';
+                                    if ($h['estado'] === 'pendiente') $bgClass = 'status-pendiente';
+                                    if ($h['estado'] === 'aprobado') $bgClass = 'status-aprobado';
+                                    if ($h['estado'] === 'rechazado') $bgClass = 'status-rechazado';
+                                ?>
+                                <span class="status <?= $bgClass ?>"><?= ucfirst($h['estado']) ?></span>
                             </td>
                             <td style="color: var(--text-gray); font-size: 0.85rem;">
                                 <?= htmlspecialchars($h['validador_nombre'] ?? '-') ?>
+                            </td>
+                            <td class="date-col">
+                                <?= date('d M Y, H:i', strtotime($h['fecha'])) ?>
                             </td>
                         </tr>
                         <?php endforeach; ?>

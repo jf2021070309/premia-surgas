@@ -36,6 +36,35 @@ class PanelController {
 
     // ── helpers ──────────────────────────────────────────────────
 
+    public function liveNotifications(): void {
+        header('Content-Type: application/json');
+        if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] !== 'admin') {
+            echo json_encode(['success' => false]);
+            exit;
+        }
+
+        $db = Database::getConnection();
+        
+        // Pendientes de recargas
+        $stmt_recargas = $db->prepare("SELECT r.id, r.puntos, r.monto, c.nombre as cliente_nombre, r.fecha FROM recargas r JOIN clientes c ON r.cliente_id = c.id WHERE r.estado = 'pendiente' ORDER BY r.id DESC");
+        $stmt_recargas->execute();
+        $recargas = $stmt_recargas->fetchAll(PDO::FETCH_ASSOC);
+
+        // Pendientes de canjes (no entregados)
+        $stmt_canjes = $db->prepare("SELECT cj.id, p.nombre as premio_nombre, cl.nombre as cliente_nombre, cj.fecha FROM canjes cj JOIN premios p ON cj.premio_id = p.id JOIN clientes cl ON cj.cliente_id = cl.id WHERE cj.entregado = 0 ORDER BY cj.id DESC");
+        $stmt_canjes->execute();
+        $canjes = $stmt_canjes->fetchAll(PDO::FETCH_ASSOC);
+
+        echo json_encode([
+            'success'  => true,
+            'recargas' => $recargas,
+            'canjes'   => $canjes,
+            'total'    => count($recargas) + count($canjes)
+        ]);
+        exit;
+    }
+
+
     private function render(string $view, array $data = []): void {
         extract($data);
         require __DIR__ . "/../views/{$view}.php";

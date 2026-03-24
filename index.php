@@ -51,7 +51,8 @@ $routes = [
     ['GET',  'logout',      'AuthController',    'logout'],
 
     // —— Panel ——
-    ['GET',  'panel',       'PanelController',   'index'],
+    ['GET',  'panel',                     'PanelController',   'index'],
+    ['GET',  'panel/live-notifications',  'PanelController',   'liveNotifications'],
 
     // —— Clientes ——
     ['GET',  'registro',          'ClienteController', 'registro'],
