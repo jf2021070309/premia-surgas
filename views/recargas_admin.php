@@ -355,7 +355,6 @@
         </div>
     </div>
 
-    <!-- Modal Comprobante -->
     <div class="modal" id="receiptModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -369,6 +368,43 @@
     </div>
 
     <script>
+        // Real-time polling
+        let knownIds = [<?= implode(',', array_column($recargas, 'id')) ?>];
+
+        function checkLiveAdmin() {
+            fetch('<?= BASE_URL ?>panel/live-notifications')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success && data.recargas) {
+                        data.recargas.forEach(r => {
+                            if (!knownIds.includes(r.id)) {
+                                knownIds.push(r.id);
+                                const Toast = Swal.mixin({
+                                    toast: true,
+                                    position: 'top-end',
+                                    showConfirmButton: false,
+                                    timer: 6000,
+                                    timerProgressBar: true,
+                                    didOpen: (toast) => {
+                                        toast.onmouseenter = Swal.stopTimer;
+                                        toast.onmouseleave = Swal.resumeTimer;
+                                        toast.onclick = () => window.location.reload();
+                                    }
+                                });
+                                Toast.fire({
+                                    icon: 'info',
+                                    title: '¡Nueva Recarga Recibida!',
+                                    text: `${r.cliente_nombre} solicita +${r.puntos} pts. (Clic para actualizar)`
+                                });
+                            }
+                        });
+                    }
+                })
+                .catch(err => console.error('Error polling:', err));
+        }
+
+        setInterval(checkLiveAdmin, 10000); // Check every 10 seconds
+
         // Modal Handlers
         const modal = document.getElementById('receiptModal');
         const img = document.getElementById('receiptImage');
