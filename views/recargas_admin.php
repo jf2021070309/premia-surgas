@@ -383,34 +383,41 @@
                 .then(res => res.json())
                 .then(data => {
                     if (data.success && data.recargas) {
+                        let hayNueva = false;
                         data.recargas.forEach(r => {
                             if (!knownIds.includes(String(r.id))) {
                                 knownIds.push(String(r.id));
-                                const Toast = Swal.mixin({
-                                    toast: true,
-                                    position: 'top-end',
-                                    showConfirmButton: false,
-                                    timer: 6000,
-                                    timerProgressBar: true,
-                                    didOpen: (toast) => {
-                                        toast.onmouseenter = Swal.stopTimer;
-                                        toast.onmouseleave = Swal.resumeTimer;
-                                        toast.onclick = () => window.location.reload();
-                                    }
-                                });
-                                Toast.fire({
-                                    icon: 'info',
-                                    title: '¡Nueva Recarga Recibida!',
-                                    text: `${r.cliente_nombre} solicita +${r.puntos} pts. (Clic para actualizar)`
-                                });
+                                hayNueva = true;
                             }
                         });
+
+                        if (hayNueva) {
+                            // Mostrar toast y recargar la página automáticamente en 3s
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.onclick = () => window.location.reload();
+                                },
+                                didClose: () => {
+                                    window.location.reload();
+                                }
+                            });
+                            Toast.fire({
+                                icon: 'info',
+                                title: '¡Nueva Recarga!',
+                                text: 'Actualizando lista en 3 segundos...'
+                            });
+                        }
                     }
                 })
                 .catch(err => console.error('Error polling:', err));
         }
 
-        setInterval(checkLiveAdmin, 3000); // Check every 3 seconds
+        setInterval(checkLiveAdmin, 4000); // Check every 4 seconds
 
 
         // Modal Handlers
