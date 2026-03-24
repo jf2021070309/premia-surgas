@@ -108,8 +108,9 @@ $routes = [
     ['POST', 'canjes-admin/actualizar', 'CanjeAdminController', 'actualizarEstado'],
 
     // —— Gestión de Recargas de Puntos (Admin) ——
-    ['GET',  'recargas-admin',            'RecargaAdminController', 'index'],
-    ['POST', 'recargas-admin/actualizar', 'RecargaAdminController', 'actualizarEstado'],
+    ['GET',  'recargas-admin',              'RecargaAdminController', 'index'],
+    ['POST', 'recargas-admin/actualizar',   'RecargaAdminController', 'actualizarEstado'],
+    ['POST', 'recargas-admin/subir-qr',     'RecargaAdminController', 'subirQr'],
 
     // —— Configuración ——
     ['GET',  'configuraciones',        'ConfiguracionController', 'index'],

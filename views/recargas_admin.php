@@ -237,6 +237,112 @@
             <?php unset($_SESSION['flash']); ?>
         <?php endif; ?>
 
+        <!-- QR Yape Manager -->
+        <div class="section-card" style="margin-bottom: 1.5rem;">
+            <div class="section-header" style="cursor:pointer; user-select:none;" onclick="document.getElementById('qrPanel').classList.toggle('qr-collapsed')">
+                <h2 style="display:flex;align-items:center;gap:10px;">
+                    <i class='bx bx-qr' style="color:#6b21a8;"></i> Configuración QR de Pago Yape
+                </h2>
+                <span style="font-size:0.8rem;color:#888;font-weight:400;">Haz clic para expandir/colapsar</span>
+            </div>
+
+            <div id="qrPanel" class="qr-collapsed" style="overflow:hidden; transition: max-height 0.4s ease;">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:2rem; padding: 1.5rem 0 0.5rem; align-items:start;">
+                
+                <!-- Current QR Preview -->
+                <div style="text-align:center;">
+                    <p style="font-size:0.75rem;font-weight:700;letter-spacing:2px;color:#888;text-transform:uppercase;margin-bottom:1rem;">QR Actual</p>
+                    <div style="background: linear-gradient(135deg, #6b21a8 0%, #a855f7 100%); border-radius: 1.5rem; padding: 1.5rem; display:inline-block; box-shadow: 0 10px 30px rgba(107,33,168,0.3);">
+                        <?php if ($qrActual): ?>
+                            <img src="<?= BASE_URL ?>assets/uploads/qr/<?= htmlspecialchars($qrActual) ?>"
+                                 alt="QR Yape Actual"
+                                 style="width:200px;height:200px;object-fit:contain;border-radius:0.8rem;background:#fff;padding:8px;display:block;">
+                        <?php else: ?>
+                            <div style="width:200px;height:200px;background:rgba(255,255,255,0.15);border-radius:0.8rem;display:flex;flex-direction:column;align-items:center;justify-content:center;color:rgba(255,255,255,0.7);">
+                                <i class='bx bx-image' style="font-size:3rem;"></i>
+                                <span style="font-size:0.85rem;margin-top:0.5rem;">Sin imagen</span>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                    <?php if ($qrActual): ?>
+                        <p style="font-size:0.75rem;color:#4caf50;margin-top:0.8rem;font-weight:600;">
+                            <i class='bx bx-check-circle'></i> QR activo y visible para clientes
+                        </p>
+                    <?php else: ?>
+                        <p style="font-size:0.75rem;color:#f59e0b;margin-top:0.8rem;font-weight:600;">
+                            <i class='bx bx-error-circle'></i> Sube un QR para que los clientes puedan pagar
+                        </p>
+                    <?php endif; ?>
+                </div>
+
+                <!-- Upload Form -->
+                <div>
+                    <p style="font-size:0.75rem;font-weight:700;letter-spacing:2px;color:#888;text-transform:uppercase;margin-bottom:1rem;">Cambiar Imagen QR</p>
+                    <form action="<?= BASE_URL ?>recargas-admin/subir-qr" method="POST" enctype="multipart/form-data" id="qrUploadForm">
+                        <label for="qr_file_input" id="qrDropZone" style="display:flex;flex-direction:column;align-items:center;justify-content:center;border:2px dashed #d1d5db;border-radius:1.2rem;padding:2rem 1rem;cursor:pointer;background:#fafafa;transition:all 0.3s;text-align:center;">
+                            <img id="qrPreviewImg" src="" alt="" style="display:none;width:120px;height:120px;object-fit:contain;border-radius:0.8rem;margin-bottom:1rem;border:1px solid #eee;">
+                            <i id="qrUploadIcon" class='bx bxs-cloud-upload' style="font-size:2.8rem;color:#a855f7;"></i>
+                            <span id="qrUploadLabel" style="font-weight:700;color:#4b5563;margin-top:0.5rem;">Arrastra la imagen aquí</span>
+                            <span style="font-size:0.78rem;color:#9ca3af;margin-top:0.25rem;">o haz clic para buscarla</span>
+                            <span style="font-size:0.7rem;color:#c4b5fd;margin-top:0.8rem;background:#f3e8ff;padding:3px 10px;border-radius:50px;">JPG · PNG · GIF · WebP</span>
+                        </label>
+                        <input type="file" id="qr_file_input" name="qr_imagen" accept="image/*" class="d-none">
+                        <button type="submit" id="qrSubmitBtn" class="btn btn-primary" disabled
+                                style="width:100%;margin-top:1rem;padding:0.75rem;border-radius:0.8rem;font-weight:700;background:linear-gradient(135deg,#6b21a8,#a855f7);border:none;opacity:0.5;transition:all 0.3s;">
+                            <i class='bx bx-upload'></i> Subir QR de Yape
+                        </button>
+                    </form>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <style>
+            .qr-collapsed { max-height: 0 !important; }
+            #qrPanel { max-height: 600px; }
+            #qrDropZone:hover { border-color: #a855f7; background: #faf5ff; }
+            #qrDropZone.dragover { border-color: #6b21a8; background: #f3e8ff; }
+        </style>
+        <script>
+            (function() {
+                const input = document.getElementById('qr_file_input');
+                const zone  = document.getElementById('qrDropZone');
+                const btn   = document.getElementById('qrSubmitBtn');
+                const preview = document.getElementById('qrPreviewImg');
+                const icon  = document.getElementById('qrUploadIcon');
+                const lbl   = document.getElementById('qrUploadLabel');
+
+                function showPreview(file) {
+                    const reader = new FileReader();
+                    reader.onload = e => {
+                        preview.src = e.target.result;
+                        preview.style.display = 'block';
+                        icon.style.display = 'none';
+                        lbl.textContent = file.name;
+                        btn.disabled = false;
+                        btn.style.opacity = '1';
+                    };
+                    reader.readAsDataURL(file);
+                }
+
+                input.addEventListener('change', () => { if (input.files[0]) showPreview(input.files[0]); });
+
+                zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
+                zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+                zone.addEventListener('drop', e => {
+                    e.preventDefault();
+                    zone.classList.remove('dragover');
+                    const file = e.dataTransfer.files[0];
+                    if (file && file.type.startsWith('image/')) {
+                        const dt = new DataTransfer();
+                        dt.items.add(file);
+                        input.files = dt.files;
+                        showPreview(file);
+                    }
+                });
+            })();
+        </script>
+
         <!-- Pendientes -->
         <div class="section-card">
             <div class="section-header">

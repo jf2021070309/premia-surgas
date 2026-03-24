@@ -29,4 +29,9 @@ class ConfiguracionModel {
         $stmt = $this->db->prepare("UPDATE configuraciones SET valor = ? WHERE id = ?");
         return $stmt->execute([$valor, $id]);
     }
+
+    public function upsert(string $clave, string $valor, string $descripcion = ''): bool {
+        $stmt = $this->db->prepare("INSERT INTO configuraciones (clave, valor, descripcion) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE valor = ?");
+        return $stmt->execute([$clave, $valor, $descripcion, $valor]);
+    }
 }

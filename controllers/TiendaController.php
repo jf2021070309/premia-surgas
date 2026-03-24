@@ -57,11 +57,13 @@ class TiendaController {
 
         $configModel = new ConfiguracionModel();
         $montoPorPunto = (float) ($configModel->getValor('monto_por_punto') ?? 0.05);
+        $yapeQrImagen  = $configModel->getValor('yape_qr_imagen');
 
         $this->render('tienda', [
-            'premios' => $premios,
-            'cliente' => $cliente,
-            'montoPorPunto' => $montoPorPunto
+            'premios'      => $premios,
+            'cliente'      => $cliente,
+            'montoPorPunto'=> $montoPorPunto,
+            'yapeQrImagen' => $yapeQrImagen
         ]);
     }
 

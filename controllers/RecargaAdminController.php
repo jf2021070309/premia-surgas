@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../models/RecargaModel.php';
+require_once __DIR__ . '/../models/ConfiguracionModel.php';
 
 class RecargaAdminController {
 
@@ -20,10 +21,55 @@ class RecargaAdminController {
         $recargas = $model->getAllPending();
         $historial = $model->getAll(); 
 
+        $configModel = new ConfiguracionModel();
+        $qrActual = $configModel->getValor('yape_qr_imagen');
+
         $this->render('recargas_admin', [
             'recargas' => $recargas,
-            'historial' => $historial
+            'historial' => $historial,
+            'qrActual'  => $qrActual
         ]);
+    }
+
+    public function subirQr(): void {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') redirigir(BASE_URL . 'recargas-admin');
+
+        if (!isset($_FILES['qr_imagen']) || $_FILES['qr_imagen']['error'] !== UPLOAD_ERR_OK) {
+            $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se recibió ningún archivo.'];
+            redirigir(BASE_URL . 'recargas-admin');
+        }
+
+        $file = $_FILES['qr_imagen'];
+        $allowed = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+
+        if (!in_array($file['type'], $allowed)) {
+            $_SESSION['flash'] = ['type' => 'error', 'title' => 'Formato inválido', 'message' => 'Solo se aceptan JPG, PNG, GIF o WebP.'];
+            redirigir(BASE_URL . 'recargas-admin');
+        }
+
+        $dir = __DIR__ . '/../assets/uploads/qr/';
+        if (!is_dir($dir)) mkdir($dir, 0755, true);
+
+        // Delete old QR if exists
+        $configModel = new ConfiguracionModel();
+        $oldFile = $configModel->getValor('yape_qr_imagen');
+        if ($oldFile && file_exists($dir . $oldFile)) {
+            @unlink($dir . $oldFile);
+        }
+
+        $ext      = pathinfo($file['name'], PATHINFO_EXTENSION);
+        $filename = 'yape_qr_' . time() . '.' . $ext;
+        $dest     = $dir . $filename;
+
+        if (!move_uploaded_file($file['tmp_name'], $dest)) {
+            $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo guardar el archivo.'];
+            redirigir(BASE_URL . 'recargas-admin');
+        }
+
+        $configModel->upsert('yape_qr_imagen', $filename, 'Imagen QR de Yape para pagos');
+
+        $_SESSION['flash'] = ['type' => 'success', 'title' => '¡QR Actualizado!', 'message' => 'La imagen del QR de Yape ha sido actualizada correctamente.'];
+        redirigir(BASE_URL . 'recargas-admin');
     }
 
     public function actualizarEstado(): void {

@@ -643,7 +643,17 @@
                             <h6 class="fw-bold mb-1">Monto a pagar:</h6>
                             <span class="h3 fw-bold text-primary">S/ {{ selectedPkg.price }}</span>
                         </div>
-                        <img :src="'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=YAPE_FICTICIO_SURGAS_' + selectedPkg.price" alt="QR Yape" class="img-fluid rounded shadow-sm">
+                        <?php if (!empty($yapeQrImagen)): ?>
+                            <img src="<?= BASE_URL ?>assets/uploads/qr/<?= htmlspecialchars($yapeQrImagen) ?>"
+                                 alt="QR Yape"
+                                 class="img-fluid rounded shadow-sm"
+                                 style="max-width:200px;">
+                        <?php else: ?>
+                            <div style="width:200px;height:200px;background:#f3e8ff;border-radius:1rem;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#a855f7;margin:0 auto;">
+                                <i class='bx bx-qr' style="font-size:3rem;"></i>
+                                <span style="font-size:0.8rem;margin-top:0.5rem;">QR no configurado</span>
+                            </div>
+                        <?php endif; ?>
                         <p class="small text-muted mt-3">Escanea el QR o yapea al número: <br><b>931 187 102</b></p>
                     </div>
 
