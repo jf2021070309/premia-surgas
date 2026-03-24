@@ -383,16 +383,16 @@
                 .then(res => res.json())
                 .then(data => {
                     if (data.success && data.recargas) {
-                        let hayNueva = false;
+                        let nuevas = [];
                         data.recargas.forEach(r => {
                             if (!knownIds.includes(String(r.id))) {
                                 knownIds.push(String(r.id));
-                                hayNueva = true;
+                                nuevas.push(r);
                             }
                         });
 
-                        if (hayNueva) {
-                            // Mostrar toast y recargar la página automáticamente en 3s
+                        if (nuevas.length > 0) {
+                            const r = nuevas[0]; // Show info of first new recharge
                             const Toast = Swal.mixin({
                                 toast: true,
                                 position: 'top-end',
@@ -408,8 +408,8 @@
                             });
                             Toast.fire({
                                 icon: 'info',
-                                title: '¡Nueva Recarga!',
-                                text: 'Actualizando lista en 3 segundos...'
+                                title: '¡Nueva Recarga Recibida!',
+                                text: `${r.cliente_nombre} solicita +${r.puntos} pts. (Clic para actualizar)`
                             });
                         }
                     }
