@@ -19,6 +19,8 @@ class Database {
                         PDO::ATTR_EMULATE_PREPARES   => false,
                     ]
                 );
+                // Forzar zona horaria de Perú en la sesión MySQL
+                self::$instance->exec("SET time_zone = '-05:00'");
             } catch (PDOException $e) {
                 http_response_code(500);
                 die(json_encode(['error' => 'DB Connection failed: ' . $e->getMessage()]));
