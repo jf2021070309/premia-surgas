@@ -369,7 +369,7 @@
 
     <script>
         // Real-time polling
-        let knownIds = [<?= implode(',', array_column($recargas, 'id')) ?>];
+        let knownIds = [<?= implode(',', array_column($recargas, 'id')) ?>].map(String);
 
         function checkLiveAdmin() {
             fetch('<?= BASE_URL ?>panel/live-notifications')
@@ -377,8 +377,8 @@
                 .then(data => {
                     if (data.success && data.recargas) {
                         data.recargas.forEach(r => {
-                            if (!knownIds.includes(r.id)) {
-                                knownIds.push(r.id);
+                            if (!knownIds.includes(String(r.id))) {
+                                knownIds.push(String(r.id));
                                 const Toast = Swal.mixin({
                                     toast: true,
                                     position: 'top-end',
@@ -403,7 +403,8 @@
                 .catch(err => console.error('Error polling:', err));
         }
 
-        setInterval(checkLiveAdmin, 10000); // Check every 10 seconds
+        setInterval(checkLiveAdmin, 3000); // Check every 3 seconds
+
 
         // Modal Handlers
         const modal = document.getElementById('receiptModal');
