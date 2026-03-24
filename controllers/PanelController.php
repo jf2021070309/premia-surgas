@@ -50,8 +50,8 @@ class PanelController {
         $stmt_recargas->execute();
         $recargas = $stmt_recargas->fetchAll(PDO::FETCH_ASSOC);
 
-        // Pendientes de canjes (no entregados)
-        $stmt_canjes = $db->prepare("SELECT cj.id, p.nombre as premio_nombre, cl.nombre as cliente_nombre, cj.fecha FROM canjes cj JOIN premios p ON cj.premio_id = p.id JOIN clientes cl ON cj.cliente_id = cl.id WHERE cj.entregado = 0 ORDER BY cj.id DESC");
+        // Pendientes de canjes
+        $stmt_canjes = $db->prepare("SELECT cj.id, p.nombre as premio_nombre, cl.nombre as cliente_nombre, cj.fecha FROM canjes cj JOIN premios p ON cj.premio_id = p.id JOIN clientes cl ON cj.cliente_id = cl.id WHERE cj.estado = 'pendiente' ORDER BY cj.id DESC");
         $stmt_canjes->execute();
         $canjes = $stmt_canjes->fetchAll(PDO::FETCH_ASSOC);
 
