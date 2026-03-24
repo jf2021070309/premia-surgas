@@ -20,9 +20,15 @@ class ScanController {
             $cliente = $clienteModel->findByCodigo($codigo);
 
             if ($cliente && $cliente['token'] === $token) {
-                // Escenario 1: El cliente ve su propia información
-                // Seteamos sesión de cliente para que pueda entrar a la tienda
-                $_SESSION['id_cliente'] = $cliente['id'];
+                // Seteamos sesión completa de cliente como si fuera login
+                $sessId = session_id();
+                $clienteModel->updateSessionId($cliente['id'], $sessId);
+                
+                $_SESSION['id_usuario']     = $cliente['id'];
+                $_SESSION['rol']            = 'cliente';
+                $_SESSION['session_id']     = $sessId;
+                
+                $_SESSION['id_cliente']     = $cliente['id'];
                 $_SESSION['nombre_cliente'] = $cliente['nombre'];
                 $_SESSION['codigo_cliente'] = $codigo;
                 $_SESSION['token_cliente']  = $token;
