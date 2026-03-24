@@ -137,6 +137,11 @@
                 <div class="menu-card-label">Entregas Canjes</div>
                 <p>Controlar productos entregados.</p>
             </a>
+            <a href="<?= BASE_URL ?>recargas-admin" class="menu-card">
+                <div class="menu-card-icon"><i class='bx bx-wallet'></i></div>
+                <div class="menu-card-label">Gestión Recargas</div>
+                <p>Aprobar puntos comprados.</p>
+            </a>
             <?php endif; ?>
         </div>
 
