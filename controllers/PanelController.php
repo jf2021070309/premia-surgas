@@ -60,7 +60,7 @@ class PanelController {
             'success'  => true,
             'recargas' => $recargas,
             'canjes'   => $canjes,
-            'total'    => count($recargas) + count($canjes)
+            'total'    => count($recargas) // Solo recargas para no confundir
         ]);
         exit;
     }
