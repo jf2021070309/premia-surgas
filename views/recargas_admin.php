@@ -238,12 +238,12 @@
         /* Preview Side - Deep Yape Theme */
         .qr-preview-box {
             background: #742183;
-            padding: 3rem 2rem;
+            padding: 3.5rem 2rem;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 1.5rem;
+            gap: 1.75rem;
             position: relative;
         }
 
@@ -257,30 +257,30 @@
         }
 
         .yape-logo-img {
-            height: 48px;
+            height: 64px;
             object-fit: contain;
             position: relative; z-index: 1;
         }
 
         .qr-frame {
             background: #fff;
-            padding: 1rem;
-            border-radius: 20px;
+            padding: 1.25rem;
+            border-radius: 24px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.15);
             position: relative;
             z-index: 1;
         }
 
         .qr-frame img {
-            width: 170px;
-            height: 170px;
+            width: 200px;
+            height: 200px;
             object-fit: contain;
             display: block;
             border-radius: 12px;
         }
 
         .qr-empty-frame {
-            width: 170px; height: 170px;
+            width: 200px; height: 200px;
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
             color: #ccc; gap: 0.5rem;
@@ -292,21 +292,22 @@
         .yape-cta-pill {
             background: #00D1A4;
             color: #fff;
-            padding: 10px 24px;
+            padding: 12px 32px;
             border-radius: 100px;
-            font-weight: 700;
-            font-size: 0.82rem;
+            font-weight: 800;
+            font-size: 0.95rem;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.6rem;
             box-shadow: 0 4px 15px rgba(0,209,164,0.3);
             position: relative; z-index: 1;
+            text-transform: none;
         }
 
         .status-badge {
-            font-size: 0.68rem;
-            font-weight: 700;
-            padding: 5px 12px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            padding: 6px 16px;
             border-radius: 100px;
             text-transform: uppercase;
             letter-spacing: 0.05em;
@@ -349,6 +350,7 @@
             cursor: pointer;
             transition: all 0.3s;
             text-align: center;
+            margin-bottom: 1.25rem;
         }
 
         #qrDropZone:hover, #qrDropZone.dragover {
