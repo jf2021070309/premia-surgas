@@ -792,7 +792,7 @@
                                 </div>
                             <?php endif; ?>
                         </div>
-                        <div class="yape-cta-pill"><i class='bx bx-check-double'></i> Paga aquí con Yape</div>
+                        <div class="yape-cta-pill" id="yapePreviewName"><i class='bx bx-check-double'></i> <?= htmlspecialchars($nombreTitular) ?></div>
                         <?php if ($qrActual): ?>
                             <div class="status-badge active">Visible para clientes</div>
                         <?php else: ?>
@@ -806,6 +806,14 @@
                         <p class="upload-subtitle">Sube una imagen clara de tu código QR de Yape para que los clientes puedan realizar sus pagos fácilmente.</p>
                         
                         <form action="<?= BASE_URL ?>recargas-admin/subir-qr" method="POST" enctype="multipart/form-data">
+                            <div style="margin-bottom: 1.5rem;">
+                                <label class="section-label dark" style="display:block; margin-bottom:0.5rem; font-size: 0.75rem; color: #64748b;">Texto en el botón (Nombre):</label>
+                                <input type="text" name="yape_nombre" id="yapeNameInput" value="<?= htmlspecialchars($nombreTitular) ?>" 
+                                       placeholder="Ej: Juan Perez"
+                                       style="width: 100%; padding: 0.8rem; border-radius: 12px; border: 1px solid #e2e8f0; font-size: 0.88rem; outline:none; transition: border 0.3s;"
+                                       onfocus="this.style.borderColor='#742183'" onblur="this.style.borderColor='#e2e8f0'"
+                                       onkeyup="updateYapePreview(this.value)">
+                            </div>
                             <label for="qr_file_input" id="qrDropZone">
                                 <img id="qrPreviewImg" src="" alt="" style="display:none; width:80px; height:80px; object-fit:contain; border-radius:12px; margin-bottom:0.5rem; border:2px solid #e2e8f0; padding:4px; background:#fff;">
                                 <i id="qrUploadIcon" class='bx bx-cloud-upload'></i>
@@ -1032,6 +1040,16 @@
                 }
             });
         })();
+
+        // ── Yape Real-time Preview ──
+        function updateYapePreview(val) {
+            const preview = document.getElementById('yapePreviewName');
+            const btn = document.getElementById('qrSubmitBtn');
+            if (preview) {
+                preview.innerHTML = `<i class='bx bx-check-double'></i> ${val || 'Paga aquí con Yape'}`;
+            }
+            if (val.trim().length > 0) btn.disabled = false;
+        }
 
         // ── Receipt Modal ──
         const modal = document.getElementById('receiptModal');
