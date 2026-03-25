@@ -64,7 +64,7 @@
         height: 106,
         colorDark: '#000000',
         colorLight: '#ffffff',
-        correctLevel: QRCode.CorrectLevel.M
+        correctLevel: QRCode.CorrectLevel.H
     });
 
     document.getElementById('btn-print').addEventListener('click', function () {

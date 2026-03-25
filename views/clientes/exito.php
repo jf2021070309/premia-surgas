@@ -66,7 +66,7 @@
         text: clienteCodigo,
         width: 220,
         height: 220,
-        colorDark: '#1a1a1a',
+        colorDark: '#000000',
         colorLight: '#ffffff',
         correctLevel: QRCode.CorrectLevel.H
     });
