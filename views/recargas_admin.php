@@ -257,7 +257,7 @@
         }
 
         .yape-logo-img {
-            height: 64px;
+            height: 100px;
             object-fit: contain;
             position: relative; z-index: 1;
         }
