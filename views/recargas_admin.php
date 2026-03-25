@@ -205,169 +205,175 @@
         }
 
         /* ══════════════════════════════════════
-           QR Section — Yape Style
+           QR Section — Yape Inspired Redesign
         ══════════════════════════════════════ */
-        .qr-card { border: none; overflow: hidden; }
-        .qr-header {
-            background: linear-gradient(135deg, #7B2D8E, #6B2480) !important;
-            border-bottom: none !important;
-        }
-        .qr-header .card-title { color: #fff !important; font-size: 0.9rem; }
-
-        .yape-logo-img {
-            height: 50px;
-            object-fit: contain;
-            filter: brightness(0) invert(1);
-            position: relative; z-index: 1;
-        }
-        .qr-section-body {
-            max-height: 0;
+        .qr-card {
+            border: 1px solid var(--outline);
+            box-shadow: var(--shadow-md);
+            border-radius: var(--radius-xl);
             overflow: hidden;
-            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            background: #fff;
         }
-        .qr-section-body.open { max-height: 600px; }
+
+        .qr-header {
+            background: #fff !important;
+            border-bottom: 1px solid var(--outline) !important;
+            padding: 1.25rem 1.5rem !important;
+            cursor: pointer;
+        }
+
+        .qr-header .card-title {
+            color: var(--on-surface) !important;
+            font-size: 0.95rem;
+            font-weight: 800;
+        }
 
         .qr-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 380px 1fr;
             gap: 0;
-            align-items: stretch;
+            background: #fff;
         }
 
-        /* Left side — Yape Purple */
+        /* Preview Side - Deep Yape Theme */
         .qr-preview-box {
-            background: linear-gradient(170deg, #7B2D8E 0%, #5B1F6E 100%);
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            gap: 1.25rem;
-            padding: 2.5rem 2rem;
+            background: #742183;
+            padding: 3rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
             position: relative;
-            overflow: hidden;
         }
+
+        /* Subtle texture for preview side */
         .qr-preview-box::before {
             content: '';
             position: absolute;
-            top: -40px; right: -40px;
-            width: 120px; height: 120px;
-            background: rgba(255,255,255,0.06);
-            border-radius: 50%;
-            filter: blur(20px);
-        }
-        .qr-preview-box::after {
-            content: '';
-            position: absolute;
-            bottom: -30px; left: -30px;
-            width: 90px; height: 90px;
-            background: rgba(255,255,255,0.04);
-            border-radius: 50%;
-            filter: blur(15px);
+            inset: 0;
+            background-image: radial-gradient(circle at 10% 20%, rgba(255,255,255,0.03) 0%, transparent 20%),
+                            radial-gradient(circle at 90% 80%, rgba(255,255,255,0.03) 0%, transparent 20%);
         }
 
-        .yape-logo {
-            display: flex; align-items: center; gap: 0.4rem;
-            color: #00D1A4;
-            font-size: 1.5rem; font-weight: 800;
-            letter-spacing: -0.03em;
+        .yape-logo-img {
+            height: 48px;
+            object-fit: contain;
             position: relative; z-index: 1;
         }
-        .yape-logo .yape-s {
-            background: #00D1A4;
-            color: #fff;
-            width: 26px; height: 26px;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 0.72rem; font-weight: 800;
-        }
-
-        .section-label {
-            font-size: 0.6rem; font-weight: 700;
-            letter-spacing: 0.14em; text-transform: uppercase;
-        }
-        .section-label.white { color: rgba(255,255,255,0.6); }
-        .section-label.dark  { color: var(--on-light); }
 
         .qr-frame {
             background: #fff;
-            border-radius: var(--radius-lg);
             padding: 1rem;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
             position: relative;
             z-index: 1;
         }
 
         .qr-frame img {
-            width: 175px; height: 175px;
+            width: 170px;
+            height: 170px;
             object-fit: contain;
-            border-radius: var(--radius-sm);
-            background: #fff;
             display: block;
-            transition: transform 0.3s ease;
+            border-radius: 12px;
         }
-        .qr-frame:hover img { transform: scale(1.05); }
 
         .qr-empty-frame {
-            width: 175px; height: 175px;
-            background: rgba(255,255,255,0.1);
-            border: 2px dashed rgba(255,255,255,0.25);
-            border-radius: var(--radius-sm);
+            width: 170px; height: 170px;
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
-            color: rgba(255,255,255,0.5);
-            gap: 0.4rem;
+            color: #ccc; gap: 0.5rem;
+            background: #f8f9fa;
+            border: 2px dashed #ddd;
+            border-radius: 12px;
         }
 
-        .yape-cta {
+        .yape-cta-pill {
             background: #00D1A4;
             color: #fff;
-            font-size: 0.78rem; font-weight: 700;
-            padding: 7px 22px;
+            padding: 10px 24px;
             border-radius: 100px;
-            display: inline-flex; align-items: center; gap: 0.3rem;
-            position: relative; z-index: 1;
-            box-shadow: 0 3px 12px rgba(0,209,164,0.35);
-        }
-
-        .qr-status-tag {
-            display: inline-flex; align-items: center; gap: 0.35rem;
-            font-size: 0.72rem; font-weight: 600; padding: 5px 14px;
-            border-radius: 100px;
+            font-weight: 700;
+            font-size: 0.82rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 15px rgba(0,209,164,0.3);
             position: relative; z-index: 1;
         }
-        .tag-active { background: rgba(0,209,164,0.15); color: #00D1A4; border: 1px solid rgba(0,209,164,0.3); }
-        .tag-inactive { background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.2); }
 
-        /* Right side — Upload */
+        .status-badge {
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 100px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            position: relative; z-index: 1;
+        }
+        .status-badge.active { background: rgba(0,209,164,0.15); color: #00D1A4; }
+        .status-badge.inactive { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); }
+
+        /* Upload Side - Clean and Structured */
         .upload-section {
-            display: flex; flex-direction: column; gap: 0.75rem;
-            padding: 2rem 1.75rem;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
             justify-content: center;
+            gap: 1.5rem;
+        }
+
+        .upload-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--on-surface);
+            margin-bottom: -0.5rem;
+        }
+
+        .upload-subtitle {
+            font-size: 0.85rem;
+            color: var(--on-muted);
+            line-height: 1.5;
         }
 
         #qrDropZone {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            border: 2px dashed var(--surface-br);
-            border-radius: var(--radius-md);
-            padding: 2rem 1rem;
+            border: 2px dashed #e2e8f0;
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 2.5rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
             cursor: pointer;
-            background: var(--surface-low);
             transition: all 0.3s;
             text-align: center;
         }
+
         #qrDropZone:hover, #qrDropZone.dragover {
-            border-color: #7B2D8E;
-            background: #faf5ff;
-        }
-        #qrDropZone i { font-size: 2rem; color: #7B2D8E; }
-        #qrDropZone .dz-label { font-weight: 600; font-size: 0.85rem; color: var(--on-secondary); margin-top: 0.5rem; }
-        #qrDropZone .dz-sub { font-size: 0.75rem; color: var(--on-muted); margin-top: 0.2rem; }
-        #qrDropZone .dz-hint {
-            font-size: 0.62rem; margin-top: 0.7rem;
-            background: #f3e8ff; color: #7B2D8E;
-            padding: 3px 10px; border-radius: 100px;
-            font-weight: 600; border: 1px solid #e9d5ff;
+            border-color: #742183;
+            background: #fdf4ff;
         }
 
+        #qrDropZone i { font-size: 2.5rem; color: #742183; }
+        #qrDropZone .dz-label { font-weight: 700; font-size: 0.95rem; color: #1e293b; }
+        #qrDropZone .dz-hint { font-size: 0.75rem; color: #64748b; }
+
         #qrSubmitBtn {
+            background: #742183;
+            color: #fff;
+            padding: 0.9rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
             width: 100%;
             padding: 0.7rem;
             border-radius: var(--radius-sm);
@@ -754,18 +760,18 @@
              SECTION 1 — QR Yape Manager
         ════════════════════════════════════════════ -->
         <div class="card qr-card">
-            <div class="card-header qr-header" style="cursor:pointer;" onclick="toggleQR()">
-                <div class="card-title" style="color:#fff;">
-                    <img src="<?= BASE_URL ?>assets/premios/yape.png" alt="Yape" style="height:28px; object-fit:contain; filter: brightness(0) invert(1);">
+            <div class="card-header qr-header" onclick="toggleQR()">
+                <div class="card-title">
+                    <img src="<?= BASE_URL ?>assets/premios/yape.png" alt="Yape" style="height:24px; vertical-align:middle; margin-right:8px;">
                     Configuración QR de Pago
                 </div>
                 <div style="display:flex; align-items:center; gap:0.65rem;">
                     <?php if ($qrActual): ?>
-                        <span class="chip" style="background:rgba(0,209,164,0.2); color:#00D1A4; border:1px solid rgba(0,209,164,0.35);">Activo</span>
+                        <span class="chip" style="background:#ecfdf5; color:#059669; border:1px solid #a7f3d0; font-size:0.65rem; font-weight:700;">Activo</span>
                     <?php else: ?>
-                        <span class="chip" style="background:rgba(255,255,255,0.15); color:rgba(255,255,255,0.8); border:1px solid rgba(255,255,255,0.2);">Sin configurar</span>
+                        <span class="chip" style="background:#f9fafb; color:#6b7280; border:1px solid #e5e7eb; font-size:0.65rem; font-weight:700;">Inactivo</span>
                     <?php endif; ?>
-                    <i id="toggleIcon" class='bx bx-chevron-right toggle-chevron' style="color:rgba(255,255,255,0.6);"></i>
+                    <i id="toggleIcon" class='bx bx-chevron-down toggle-chevron' style="font-size:1.25rem;"></i>
                 </div>
             </div>
 
@@ -779,33 +785,34 @@
                                 <img src="<?= BASE_URL ?>assets/uploads/qr/<?= htmlspecialchars($qrActual) ?>" alt="QR Yape">
                             <?php else: ?>
                                 <div class="qr-empty-frame">
-                                    <i class='bx bx-image' style="font-size:2.2rem;"></i>
-                                    <span style="font-size:0.75rem; font-weight:500;">Sin imagen</span>
+                                    <i class='bx bx-image-add' style="font-size:2rem;"></i>
+                                    <span style="font-size:0.7rem;">Sin QR</span>
                                 </div>
                             <?php endif; ?>
                         </div>
-                        <span class="yape-cta"><i class='bx bx-check-circle'></i> Paga aquí con Yape</span>
+                        <div class="yape-cta-pill"><i class='bx bx-check-double'></i> Paga aquí con Yape</div>
                         <?php if ($qrActual): ?>
-                            <span class="qr-status-tag tag-active"><i class='bx bx-check-circle'></i> Visible para clientes</span>
+                            <div class="status-badge active">Visible para clientes</div>
                         <?php else: ?>
-                            <span class="qr-status-tag tag-inactive"><i class='bx bx-error-circle'></i> Sube un QR primero</span>
+                            <div class="status-badge inactive">No configurado</div>
                         <?php endif; ?>
                     </div>
 
                     <!-- Upload -->
                     <div class="upload-section">
-                        <span class="section-label dark">Cambiar imagen QR</span>
+                        <div class="upload-title">Actualizar Código QR</div>
+                        <p class="upload-subtitle">Sube una imagen clara de tu código QR de Yape para que los clientes puedan realizar sus pagos fácilmente.</p>
+                        
                         <form action="<?= BASE_URL ?>recargas-admin/subir-qr" method="POST" enctype="multipart/form-data">
                             <label for="qr_file_input" id="qrDropZone">
-                                <img id="qrPreviewImg" src="" alt="" style="display:none; width:90px; height:90px; object-fit:contain; border-radius:8px; margin-bottom:0.5rem; border:1px solid var(--surface-br);">
-                                <i id="qrUploadIcon" class='bx bxs-cloud-upload'></i>
-                                <span id="qrUploadLabel" class="dz-label">Arrastra o selecciona tu imagen</span>
-                                <span class="dz-sub">Formatos aceptados:</span>
-                                <span class="dz-hint">JPG · PNG · GIF · WebP</span>
+                                <img id="qrPreviewImg" src="" alt="" style="display:none; width:80px; height:80px; object-fit:contain; border-radius:12px; margin-bottom:0.5rem; border:2px solid #e2e8f0; padding:4px; background:#fff;">
+                                <i id="qrUploadIcon" class='bx bx-cloud-upload'></i>
+                                <div id="qrUploadLabel" class="dz-label">Selecciona una imagen</div>
+                                <div class="dz-hint">Formatos: JPG, PNG o WebP (Máx 2MB)</div>
                             </label>
                             <input type="file" id="qr_file_input" name="qr_imagen" accept="image/*" style="display:none;">
                             <button type="submit" id="qrSubmitBtn" disabled>
-                                <i class='bx bx-upload'></i> Subir QR de Yape
+                                <i class='bx bx-check-circle'></i> Guardar Nuevo QR
                             </button>
                         </form>
                     </div>
