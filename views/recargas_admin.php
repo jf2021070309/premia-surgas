@@ -205,83 +205,126 @@
         }
 
         /* ══════════════════════════════════════
-           QR Section
+           QR Section — Yape Style
         ══════════════════════════════════════ */
         .qr-section-body {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .qr-section-body.open { max-height: 550px; }
+        .qr-section-body.open { max-height: 600px; }
 
         .qr-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 2.5rem;
-            padding: 2rem 1.75rem;
-            align-items: start;
+            gap: 0;
+            align-items: stretch;
         }
 
+        /* Left side — Yape Purple */
         .qr-preview-box {
-            display: flex; flex-direction: column; align-items: center; gap: 1rem;
+            background: linear-gradient(170deg, #7B2D8E 0%, #5B1F6E 100%);
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            gap: 1.25rem;
+            padding: 2.5rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .qr-preview-box::before {
+            content: '';
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 120px; height: 120px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 50%;
+        }
+        .qr-preview-box::after {
+            content: '';
+            position: absolute;
+            bottom: -30px; left: -30px;
+            width: 90px; height: 90px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 50%;
+        }
+
+        .yape-logo {
+            display: flex; align-items: center; gap: 0.4rem;
+            color: #00D1A4;
+            font-size: 1.5rem; font-weight: 800;
+            letter-spacing: -0.03em;
+            position: relative; z-index: 1;
+        }
+        .yape-logo .yape-s {
+            background: #00D1A4;
+            color: #fff;
+            width: 26px; height: 26px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.72rem; font-weight: 800;
         }
 
         .section-label {
-            font-size: 0.62rem; font-weight: 700;
+            font-size: 0.6rem; font-weight: 700;
             letter-spacing: 0.14em; text-transform: uppercase;
-            color: var(--on-light);
         }
+        .section-label.white { color: rgba(255,255,255,0.6); }
+        .section-label.dark  { color: var(--on-light); }
 
         .qr-frame {
-            background: linear-gradient(160deg, #6B2D8E, #9333EA);
+            background: #fff;
             border-radius: var(--radius-lg);
-            padding: 1.25rem;
-            box-shadow: 0 8px 28px rgba(107,45,142,0.25), 0 4px 12px rgba(0,0,0,0.08);
+            padding: 1rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
             position: relative;
-        }
-        .qr-frame::after {
-            content: 'S/ Yape';
-            position: absolute;
-            bottom: -10px; left: 50%; transform: translateX(-50%);
-            background: #00D1A4;
-            color: #fff;
-            font-size: 0.68rem; font-weight: 800;
-            padding: 3px 14px;
-            border-radius: 100px;
-            letter-spacing: 0.03em;
-            box-shadow: 0 2px 8px rgba(0,209,164,0.3);
+            z-index: 1;
         }
 
         .qr-frame img {
-            width: 165px; height: 165px;
+            width: 175px; height: 175px;
             object-fit: contain;
             border-radius: var(--radius-sm);
             background: #fff;
             display: block;
-            padding: 5px;
         }
 
         .qr-empty-frame {
-            width: 165px; height: 165px;
-            background: rgba(255,255,255,0.15);
-            border: 2px dashed rgba(255,255,255,0.3);
+            width: 175px; height: 175px;
+            background: rgba(255,255,255,0.1);
+            border: 2px dashed rgba(255,255,255,0.25);
             border-radius: var(--radius-sm);
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
-            color: rgba(255,255,255,0.6);
+            color: rgba(255,255,255,0.5);
             gap: 0.4rem;
+        }
+
+        .yape-cta {
+            background: #00D1A4;
+            color: #fff;
+            font-size: 0.78rem; font-weight: 700;
+            padding: 7px 22px;
+            border-radius: 100px;
+            display: inline-flex; align-items: center; gap: 0.3rem;
+            position: relative; z-index: 1;
+            box-shadow: 0 3px 12px rgba(0,209,164,0.35);
         }
 
         .qr-status-tag {
             display: inline-flex; align-items: center; gap: 0.35rem;
-            font-size: 0.75rem; font-weight: 600; padding: 5px 14px;
+            font-size: 0.72rem; font-weight: 600; padding: 5px 14px;
             border-radius: 100px;
+            position: relative; z-index: 1;
         }
-        .tag-active { background: var(--green-soft); color: var(--green); border: 1px solid var(--green-border); }
-        .tag-inactive { background: var(--amber-soft); color: var(--amber); border: 1px solid var(--amber-border); }
+        .tag-active { background: rgba(0,209,164,0.15); color: #00D1A4; border: 1px solid rgba(0,209,164,0.3); }
+        .tag-inactive { background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.2); }
 
-        /* Upload Zone */
-        .upload-section { display: flex; flex-direction: column; gap: 0.75rem; }
+        /* Right side — Upload */
+        .upload-section {
+            display: flex; flex-direction: column; gap: 0.75rem;
+            padding: 2rem 1.75rem;
+            justify-content: center;
+        }
 
         #qrDropZone {
             display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -294,17 +337,17 @@
             text-align: center;
         }
         #qrDropZone:hover, #qrDropZone.dragover {
-            border-color: var(--primary);
-            background: var(--primary-soft);
+            border-color: #7B2D8E;
+            background: #faf5ff;
         }
-        #qrDropZone i { font-size: 2rem; color: var(--primary); }
+        #qrDropZone i { font-size: 2rem; color: #7B2D8E; }
         #qrDropZone .dz-label { font-weight: 600; font-size: 0.85rem; color: var(--on-secondary); margin-top: 0.5rem; }
         #qrDropZone .dz-sub { font-size: 0.75rem; color: var(--on-muted); margin-top: 0.2rem; }
         #qrDropZone .dz-hint {
             font-size: 0.62rem; margin-top: 0.7rem;
-            background: var(--surface-hi); color: var(--on-muted);
+            background: #f3e8ff; color: #7B2D8E;
             padding: 3px 10px; border-radius: 100px;
-            font-weight: 600; border: 1px solid var(--outline);
+            font-weight: 600; border: 1px solid #e9d5ff;
         }
 
         #qrSubmitBtn {
@@ -312,14 +355,14 @@
             padding: 0.7rem;
             border-radius: var(--radius-sm);
             font-weight: 700; font-size: 0.82rem;
-            background: var(--primary);
+            background: #7B2D8E;
             border: none; color: #fff;
             cursor: pointer; opacity: 0.4;
             transition: all 0.3s;
             display: flex; align-items: center; justify-content: center; gap: 0.4rem;
         }
-        #qrSubmitBtn:not(:disabled) { opacity: 1; box-shadow: 0 4px 14px var(--primary-glow); }
-        #qrSubmitBtn:not(:disabled):hover { background: var(--primary-dim); transform: translateY(-1px); }
+        #qrSubmitBtn:not(:disabled) { opacity: 1; box-shadow: 0 4px 14px rgba(123,45,142,0.25); }
+        #qrSubmitBtn:not(:disabled):hover { background: #5B1F6E; transform: translateY(-1px); }
 
         .toggle-chevron { transition: transform 0.35s; color: var(--on-light); font-size: 1.15rem; }
         .toggle-chevron.open { transform: rotate(90deg); }
@@ -675,9 +718,12 @@
 
             <div id="qrSectionBody" class="qr-section-body">
                 <div class="qr-grid">
-                    <!-- Preview -->
+                    <!-- Left — Yape Purple Panel -->
                     <div class="qr-preview-box">
-                        <span class="section-label">QR Actual</span>
+                        <div class="yape-logo">
+                            <span class="yape-s">S/</span>
+                            Yape
+                        </div>
                         <div class="qr-frame">
                             <?php if ($qrActual): ?>
                                 <img src="<?= BASE_URL ?>assets/uploads/qr/<?= htmlspecialchars($qrActual) ?>" alt="QR Yape">
@@ -688,6 +734,7 @@
                                 </div>
                             <?php endif; ?>
                         </div>
+                        <span class="yape-cta"><i class='bx bx-check-circle'></i> Paga aquí con Yape</span>
                         <?php if ($qrActual): ?>
                             <span class="qr-status-tag tag-active"><i class='bx bx-check-circle'></i> Visible para clientes</span>
                         <?php else: ?>
@@ -697,7 +744,7 @@
 
                     <!-- Upload -->
                     <div class="upload-section">
-                        <span class="section-label">Cambiar imagen QR</span>
+                        <span class="section-label dark">Cambiar imagen QR</span>
                         <form action="<?= BASE_URL ?>recargas-admin/subir-qr" method="POST" enctype="multipart/form-data">
                             <label for="qr_file_input" id="qrDropZone">
                                 <img id="qrPreviewImg" src="" alt="" style="display:none; width:90px; height:90px; object-fit:contain; border-radius:8px; margin-bottom:0.5rem; border:1px solid var(--surface-br);">
