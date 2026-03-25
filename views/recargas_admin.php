@@ -9,53 +9,67 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* ── Design Tokens · Light Mode ── */
+        /* ══════════════════════════════════════
+           Design Tokens · Elegant Light Mode
+        ══════════════════════════════════════ */
         :root {
-            --bg:           #f4f5f7;
-            --surface:      #ffffff;
-            --surface-low:  #f9fafb;
-            --surface-hi:   #f0f1f3;
-            --surface-br:   #e5e7eb;
-            --on-surface:   #1a1d26;
-            --on-muted:     #6b7280;
-            --on-light:     #9ca3af;
-            --outline:      rgba(0,0,0,0.07);
-            --outline-med:  rgba(0,0,0,0.10);
-            --primary:      #e86a10;
-            --primary-soft: #fff3e8;
-            --primary-dim:  #d45e0e;
-            --primary-glow: rgba(232,106,16,0.18);
-            --green:        #16a34a;
-            --green-soft:   #ecfdf5;
-            --green-border: #bbf7d0;
-            --amber:        #d97706;
-            --amber-soft:   #fffbeb;
-            --red:          #dc2626;
-            --red-soft:     #fef2f2;
-            --red-border:   #fecaca;
-            --radius-sm:    8px;
-            --radius-md:    12px;
-            --radius-lg:    16px;
-            --shadow-sm:    0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-            --shadow-md:    0 4px 12px rgba(0,0,0,0.06), 0 2px 4px rgba(0,0,0,0.04);
-            --shadow-lg:    0 10px 30px rgba(0,0,0,0.08), 0 4px 10px rgba(0,0,0,0.04);
+            --bg:            #f0f2f5;
+            --surface:       #ffffff;
+            --surface-low:   #f8f9fb;
+            --surface-hi:    #f3f4f6;
+            --surface-br:    #e5e7eb;
+            --on-surface:    #111827;
+            --on-secondary:  #374151;
+            --on-muted:      #6b7280;
+            --on-light:      #9ca3af;
+            --outline:       rgba(0,0,0,0.06);
+            --outline-med:   rgba(0,0,0,0.10);
+            --primary:       #e86a10;
+            --primary-soft:  #fff7ed;
+            --primary-dim:   #c2590d;
+            --primary-glow:  rgba(232,106,16,0.15);
+            --green:         #059669;
+            --green-soft:    #ecfdf5;
+            --green-border:  #a7f3d0;
+            --amber:         #d97706;
+            --amber-soft:    #fffbeb;
+            --amber-border:  #fde68a;
+            --red:           #dc2626;
+            --red-soft:      #fef2f2;
+            --red-border:    #fecaca;
+            --blue:          #2563eb;
+            --blue-soft:     #eff6ff;
+            --blue-border:   #bfdbfe;
+            --radius-xs:     6px;
+            --radius-sm:     8px;
+            --radius-md:     12px;
+            --radius-lg:     16px;
+            --radius-xl:     20px;
+            --shadow-xs:     0 1px 2px rgba(0,0,0,0.04);
+            --shadow-sm:     0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-md:     0 4px 14px rgba(0,0,0,0.06), 0 2px 6px rgba(0,0,0,0.03);
+            --shadow-lg:     0 10px 30px rgba(0,0,0,0.08);
+            --transition:    0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            background-color: var(--bg);
-            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             color: var(--on-surface);
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
-        /* ── Sticky Top Nav ── */
+        /* ══════════════════════════════════════
+           Sticky Top Nav
+        ══════════════════════════════════════ */
         .top-nav {
-            background: rgba(255,255,255,0.92);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(255,255,255,0.88);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
             border-bottom: 1px solid var(--outline);
             padding: 0 2rem;
             height: 64px;
@@ -68,60 +82,131 @@
         }
 
         .back-btn {
-            display: inline-flex; align-items: center; gap: 0.5rem;
+            display: inline-flex; align-items: center; gap: 0.45rem;
             color: var(--on-muted); text-decoration: none;
-            font-weight: 500; font-size: 0.875rem;
-            padding: 8px 14px;
+            font-weight: 500; font-size: 0.85rem;
+            padding: 7px 14px;
             border-radius: var(--radius-sm);
-            transition: all 0.2s;
+            transition: all var(--transition);
         }
+        .back-btn i { font-size: 1.15rem; }
         .back-btn:hover { color: var(--on-surface); background: var(--surface-hi); }
 
+        .page-title-group { text-align: center; }
         .page-title {
-            font-size: 1.05rem; font-weight: 700;
-            letter-spacing: -0.02em; color: var(--on-surface);
+            font-size: 1rem; font-weight: 700;
+            letter-spacing: -0.025em; color: var(--on-surface);
+        }
+        .page-subtitle {
+            font-size: 0.7rem; color: var(--on-light);
+            font-weight: 500; letter-spacing: 0.02em;
         }
 
-        .nav-right { display: flex; align-items: center; gap: 0.75rem; }
-
-        /* ── Main Layout ── */
+        /* ══════════════════════════════════════
+           Main Layout
+        ══════════════════════════════════════ */
         .container {
-            max-width: 1100px;
-            margin: 2rem auto;
+            max-width: 1140px;
+            margin: 1.75rem auto;
             padding: 0 1.5rem;
-            display: grid;
-            grid-template-columns: 1fr;
+            display: flex;
+            flex-direction: column;
             gap: 1.5rem;
         }
 
-        /* ── Premium Card ── */
-        .card {
+        /* ══════════════════════════════════════
+           Stats Row — Icon Boxes
+        ══════════════════════════════════════ */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+
+        .stat-card {
             background: var(--surface);
             border-radius: var(--radius-lg);
             border: 1px solid var(--outline);
+            padding: 1.25rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            box-shadow: var(--shadow-xs);
+            transition: all var(--transition);
+        }
+        .stat-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+
+        .stat-icon {
+            width: 46px; height: 46px;
+            border-radius: var(--radius-md);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.35rem;
+            flex-shrink: 0;
+        }
+        .stat-icon.orange { background: var(--primary-soft); color: var(--primary); }
+        .stat-icon.green  { background: var(--green-soft);   color: var(--green); }
+        .stat-icon.red    { background: var(--red-soft);     color: var(--red); }
+        .stat-icon.blue   { background: var(--blue-soft);    color: var(--blue); }
+
+        .stat-content { flex: 1; min-width: 0; }
+        .stat-value {
+            font-size: 1.5rem; font-weight: 800;
+            letter-spacing: -0.03em; color: var(--on-surface);
+            line-height: 1.1;
+        }
+        .stat-label {
+            font-size: 0.72rem; font-weight: 600;
+            color: var(--on-muted); margin-top: 4px;
+            letter-spacing: 0.01em;
+        }
+
+        /* ══════════════════════════════════════
+           Card Component
+        ══════════════════════════════════════ */
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--outline);
             box-shadow: var(--shadow-sm);
             overflow: hidden;
-            transition: box-shadow 0.2s;
         }
-        .card:hover { box-shadow: var(--shadow-md); }
 
         .card-header {
-            padding: 1.15rem 1.5rem;
+            padding: 1.1rem 1.5rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
             border-bottom: 1px solid var(--outline);
+            background: var(--surface-low);
         }
 
         .card-title {
             display: flex; align-items: center; gap: 0.6rem;
-            font-size: 0.925rem; font-weight: 700;
+            font-size: 0.88rem; font-weight: 700;
             letter-spacing: -0.01em; color: var(--on-surface);
         }
 
-        .card-title i { font-size: 1.2rem; color: var(--primary); }
+        .card-title .title-icon {
+            width: 32px; height: 32px;
+            border-radius: var(--radius-sm);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.05rem;
+        }
+        .card-title .title-icon.orange { background: var(--primary-soft); color: var(--primary); }
+        .card-title .title-icon.green  { background: var(--green-soft);   color: var(--green); }
+        .card-title .title-icon.blue   { background: var(--blue-soft);    color: var(--blue); }
+        .card-title .title-icon.red    { background: var(--red-soft);     color: var(--red); }
+        .card-title .title-icon.purple { background: #f3e8ff; color: #7c3aed; }
 
-        /* ── QR Section ── */
+        .card-badge {
+            display: inline-flex; align-items: center; gap: 0.3rem;
+            font-size: 0.7rem; font-weight: 600;
+            padding: 4px 10px; border-radius: 100px;
+        }
+
+        /* ══════════════════════════════════════
+           QR Section
+        ══════════════════════════════════════ */
         .qr-section-body {
             max-height: 0;
             overflow: hidden;
@@ -132,8 +217,8 @@
         .qr-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            padding: 1.75rem 1.5rem;
+            gap: 2.5rem;
+            padding: 2rem 1.75rem;
             align-items: start;
         }
 
@@ -141,225 +226,251 @@
             display: flex; flex-direction: column; align-items: center; gap: 1rem;
         }
 
-        .qr-preview-label {
-            font-size: 0.65rem; font-weight: 700;
-            letter-spacing: 0.12em; text-transform: uppercase;
-            color: var(--on-muted);
+        .section-label {
+            font-size: 0.62rem; font-weight: 700;
+            letter-spacing: 0.14em; text-transform: uppercase;
+            color: var(--on-light);
         }
 
         .qr-frame {
-            background: linear-gradient(145deg, #e86a10, #f59e0b);
+            background: linear-gradient(160deg, #6B2D8E, #9333EA);
             border-radius: var(--radius-lg);
             padding: 1.25rem;
-            box-shadow: 0 8px 24px var(--primary-glow), 0 4px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 8px 28px rgba(107,45,142,0.25), 0 4px 12px rgba(0,0,0,0.08);
+            position: relative;
+        }
+        .qr-frame::after {
+            content: 'S/ Yape';
+            position: absolute;
+            bottom: -10px; left: 50%; transform: translateX(-50%);
+            background: #00D1A4;
+            color: #fff;
+            font-size: 0.68rem; font-weight: 800;
+            padding: 3px 14px;
+            border-radius: 100px;
+            letter-spacing: 0.03em;
+            box-shadow: 0 2px 8px rgba(0,209,164,0.3);
         }
 
         .qr-frame img {
-            width: 170px; height: 170px;
+            width: 165px; height: 165px;
             object-fit: contain;
             border-radius: var(--radius-sm);
             background: #fff;
             display: block;
-            padding: 6px;
+            padding: 5px;
         }
 
         .qr-empty-frame {
-            width: 170px; height: 170px;
-            background: var(--surface-hi);
+            width: 165px; height: 165px;
+            background: rgba(255,255,255,0.15);
+            border: 2px dashed rgba(255,255,255,0.3);
             border-radius: var(--radius-sm);
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
-            color: var(--on-light);
-            gap: 0.5rem;
+            color: rgba(255,255,255,0.6);
+            gap: 0.4rem;
         }
 
         .qr-status-tag {
-            display: inline-flex; align-items: center; gap: 0.4rem;
-            font-size: 0.78rem; font-weight: 600; padding: 5px 14px;
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            font-size: 0.75rem; font-weight: 600; padding: 5px 14px;
             border-radius: 100px;
         }
         .tag-active { background: var(--green-soft); color: var(--green); border: 1px solid var(--green-border); }
-        .tag-inactive { background: var(--amber-soft); color: var(--amber); border: 1px solid rgba(217,119,6,0.2); }
+        .tag-inactive { background: var(--amber-soft); color: var(--amber); border: 1px solid var(--amber-border); }
 
         /* Upload Zone */
-        .upload-label-text {
-            font-size: 0.65rem; font-weight: 700;
-            letter-spacing: 0.12em; text-transform: uppercase;
-            color: var(--on-muted); margin-bottom: 0.75rem;
-        }
+        .upload-section { display: flex; flex-direction: column; gap: 0.75rem; }
 
         #qrDropZone {
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            border: 2px dashed rgba(232,106,16,0.35);
+            border: 2px dashed var(--surface-br);
             border-radius: var(--radius-md);
             padding: 2rem 1rem;
             cursor: pointer;
-            background: var(--primary-soft);
+            background: var(--surface-low);
             transition: all 0.3s;
             text-align: center;
         }
         #qrDropZone:hover, #qrDropZone.dragover {
             border-color: var(--primary);
-            background: rgba(232,106,16,0.08);
+            background: var(--primary-soft);
         }
-        #qrDropZone i { font-size: 2.2rem; color: var(--primary); }
-        #qrDropZone .dz-label { font-weight: 600; font-size: 0.9rem; color: var(--on-surface); margin-top: 0.5rem; }
-        #qrDropZone .dz-sub { font-size: 0.78rem; color: var(--on-muted); margin-top: 0.25rem; }
+        #qrDropZone i { font-size: 2rem; color: var(--primary); }
+        #qrDropZone .dz-label { font-weight: 600; font-size: 0.85rem; color: var(--on-secondary); margin-top: 0.5rem; }
+        #qrDropZone .dz-sub { font-size: 0.75rem; color: var(--on-muted); margin-top: 0.2rem; }
         #qrDropZone .dz-hint {
-            font-size: 0.65rem; margin-top: 0.75rem;
-            background: rgba(232,106,16,0.12); color: var(--primary-dim);
+            font-size: 0.62rem; margin-top: 0.7rem;
+            background: var(--surface-hi); color: var(--on-muted);
             padding: 3px 10px; border-radius: 100px;
-            font-weight: 600;
+            font-weight: 600; border: 1px solid var(--outline);
         }
 
         #qrSubmitBtn {
-            width: 100%; margin-top: 1rem;
-            padding: 0.75rem;
+            width: 100%;
+            padding: 0.7rem;
             border-radius: var(--radius-sm);
-            font-weight: 700; font-size: 0.875rem;
-            background: linear-gradient(135deg, var(--primary-dim), var(--primary));
+            font-weight: 700; font-size: 0.82rem;
+            background: var(--primary);
             border: none; color: #fff;
-            cursor: pointer; opacity: 0.45;
+            cursor: pointer; opacity: 0.4;
             transition: all 0.3s;
-            display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+            display: flex; align-items: center; justify-content: center; gap: 0.4rem;
         }
-        #qrSubmitBtn:not(:disabled) { opacity: 1; box-shadow: 0 4px 16px var(--primary-glow); }
-        #qrSubmitBtn:not(:disabled):hover { filter: brightness(1.08); transform: translateY(-1px); }
+        #qrSubmitBtn:not(:disabled) { opacity: 1; box-shadow: 0 4px 14px var(--primary-glow); }
+        #qrSubmitBtn:not(:disabled):hover { background: var(--primary-dim); transform: translateY(-1px); }
 
-        .toggle-icon { transition: transform 0.35s; color: var(--on-muted) !important; }
-        .toggle-icon.open { transform: rotate(90deg); }
+        .toggle-chevron { transition: transform 0.35s; color: var(--on-light); font-size: 1.15rem; }
+        .toggle-chevron.open { transform: rotate(90deg); }
 
-        /* ── Pending Section ── */
-        .pending-header {
-            padding: 1.15rem 1.5rem;
-            display: flex; align-items: center; justify-content: space-between;
-            border-bottom: 1px solid var(--outline);
-        }
-
-        .pending-title {
-            display: flex; align-items: center; gap: 0.7rem;
-            font-size: 0.925rem; font-weight: 700;
+        /* ══════════════════════════════════════
+           Pending Tickets
+        ══════════════════════════════════════ */
+        .pending-badge {
+            background: var(--red-soft); color: var(--red); border: 1px solid var(--red-border);
+            font-size: 0.68rem; font-weight: 700;
+            padding: 3px 10px; border-radius: 100px;
         }
 
         .pulse-dot {
-            width: 8px; height: 8px; border-radius: 50%;
+            width: 7px; height: 7px; border-radius: 50%;
             background: var(--red);
             box-shadow: 0 0 0 0 rgba(220,38,38,0.5);
-            animation: pulse 1.8s infinite;
+            animation: pulse 2s infinite;
+            flex-shrink: 0;
         }
         @keyframes pulse {
-            0%   { box-shadow: 0 0 0 0 rgba(220,38,38,0.5); }
+            0%   { box-shadow: 0 0 0 0 rgba(220,38,38,0.4); }
             70%  { box-shadow: 0 0 0 8px rgba(220,38,38,0); }
             100% { box-shadow: 0 0 0 0 rgba(220,38,38,0); }
         }
 
-        .count-badge {
-            background: var(--red-soft);
-            color: var(--red);
-            border: 1px solid var(--red-border);
-            font-size: 0.72rem; font-weight: 700;
-            padding: 3px 10px; border-radius: 100px;
-            letter-spacing: 0.02em;
-        }
-
-        /* Ticket Cards */
-        .ticket-list { padding: 0.75rem; display: flex; flex-direction: column; gap: 0.6rem; list-style: none; }
+        .ticket-list { padding: 0.5rem 0.75rem; display: flex; flex-direction: column; gap: 0.5rem; list-style: none; }
 
         .ticket-card {
-            background: var(--surface-low);
+            background: var(--surface);
             border-radius: var(--radius-md);
-            padding: 1.1rem 1.25rem;
-            display: flex;
+            padding: 1rem 1.15rem;
+            display: grid;
+            grid-template-columns: auto 1fr auto auto;
             align-items: center;
-            gap: 1.25rem;
-            transition: all 0.2s;
+            gap: 1rem;
+            transition: all var(--transition);
             border: 1px solid var(--outline);
         }
-        .ticket-card:hover { background: var(--surface-hi); border-color: var(--outline-med); box-shadow: var(--shadow-sm); }
+        .ticket-card:hover { border-color: var(--outline-med); box-shadow: var(--shadow-sm); }
 
         .ticket-avatar {
-            width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0;
-            background: linear-gradient(135deg, var(--primary), #f59e0b);
+            width: 40px; height: 40px; border-radius: var(--radius-sm); flex-shrink: 0;
+            background: linear-gradient(135deg, var(--primary), #fb923c);
             display: flex; align-items: center; justify-content: center;
-            font-weight: 700; font-size: 1.1rem; color: #fff;
+            font-weight: 700; font-size: 1rem; color: #fff;
             box-shadow: 0 2px 8px var(--primary-glow);
         }
 
-        .ticket-info { flex: 1; min-width: 0; }
-        .ticket-name { font-weight: 700; font-size: 0.925rem; color: var(--on-surface); }
-        .ticket-meta { font-size: 0.78rem; color: var(--on-muted); margin-top: 2px; }
-        .ticket-time { font-size: 0.72rem; color: var(--on-light); margin-top: 4px; display: flex; align-items: center; gap: 4px; }
+        .ticket-info { min-width: 0; }
+        .ticket-name {
+            font-weight: 700; font-size: 0.88rem; color: var(--on-surface);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .ticket-detail {
+            display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;
+            margin-top: 3px;
+        }
+        .ticket-detail-item {
+            display: inline-flex; align-items: center; gap: 3px;
+            font-size: 0.72rem; color: var(--on-muted); font-weight: 500;
+        }
+        .ticket-detail-item i { font-size: 0.82rem; color: var(--on-light); }
+        .detail-sep { color: var(--surface-br); font-size: 0.6rem; }
 
-        .ticket-amounts { text-align: right; margin-right: 1rem; flex-shrink: 0; }
-        .pts-val { font-size: 1rem; font-weight: 700; color: var(--green); display: flex; align-items: center; gap: 4px; justify-content: flex-end; }
-        .monto-val { font-size: 0.78rem; color: var(--on-muted); margin-top: 2px; }
+        .ticket-amounts { text-align: right; flex-shrink: 0; }
+        .pts-val {
+            font-size: 0.95rem; font-weight: 800; color: var(--green);
+            display: flex; align-items: center; gap: 4px; justify-content: flex-end;
+            letter-spacing: -0.02em;
+        }
+        .pts-val i { font-size: 1rem; }
+        .monto-val { font-size: 0.72rem; color: var(--on-muted); margin-top: 2px; font-weight: 500; }
 
-        .ticket-actions { display: flex; gap: 0.5rem; flex-shrink: 0; }
+        .ticket-actions { display: flex; gap: 0.4rem; flex-shrink: 0; }
 
-        /* Buttons */
+        /* ══════════════════════════════════════
+           Buttons
+        ══════════════════════════════════════ */
         .btn {
-            display: inline-flex; align-items: center; gap: 0.35rem;
-            border-radius: var(--radius-sm); font-size: 0.8rem; font-weight: 600;
-            padding: 7px 14px; cursor: pointer; border: 1px solid transparent;
-            transition: all 0.2s; text-decoration: none;
+            display: inline-flex; align-items: center; gap: 0.3rem;
+            border-radius: var(--radius-sm); font-size: 0.78rem; font-weight: 600;
+            padding: 7px 13px; cursor: pointer; border: 1px solid transparent;
+            transition: all var(--transition); text-decoration: none;
+            white-space: nowrap;
         }
 
-        .btn-ghost {
+        .btn-outline {
             background: var(--surface);
-            border-color: var(--outline-med);
+            border-color: var(--surface-br);
             color: var(--on-muted);
         }
-        .btn-ghost:hover { color: var(--on-surface); background: var(--surface-hi); border-color: var(--surface-br); }
+        .btn-outline:hover { color: var(--on-surface); background: var(--surface-hi); border-color: var(--outline-med); }
 
-        .btn-approve {
-            background: var(--green-soft);
-            border-color: var(--green-border);
-            color: var(--green);
+        .btn-success {
+            background: var(--green);
+            color: #fff;
+            border-color: var(--green);
         }
-        .btn-approve:hover { background: var(--green); color: white; border-color: var(--green); box-shadow: 0 2px 8px rgba(22,163,74,0.25); }
+        .btn-success:hover { background: #047857; box-shadow: 0 3px 10px rgba(5,150,105,0.25); transform: translateY(-1px); }
 
-        .btn-reject {
+        .btn-danger-ghost {
             background: transparent;
             border-color: transparent;
-            color: rgba(220,38,38,0.5);
+            color: var(--on-light);
             padding: 7px 8px;
         }
-        .btn-reject:hover { background: var(--red-soft); color: var(--red); border-radius: var(--radius-sm); }
+        .btn-danger-ghost:hover { background: var(--red-soft); color: var(--red); }
 
-        /* Empty State */
+        /* ══════════════════════════════════════
+           Empty State
+        ══════════════════════════════════════ */
         .empty-state {
             padding: 3.5rem 1.5rem;
             text-align: center;
-            display: flex; flex-direction: column; align-items: center; gap: 0.75rem;
+            display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
         }
-        .empty-state i { font-size: 2.5rem; color: var(--surface-br); }
-        .empty-state h3 { font-size: 0.95rem; color: var(--on-muted); font-weight: 600; }
-        .empty-state p { font-size: 0.82rem; color: var(--on-light); }
+        .empty-icon {
+            width: 56px; height: 56px; border-radius: 50%;
+            background: var(--green-soft);
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 0.25rem;
+        }
+        .empty-icon i { font-size: 1.6rem; color: var(--green); }
+        .empty-state h3 { font-size: 0.92rem; color: var(--on-secondary); font-weight: 700; }
+        .empty-state p { font-size: 0.8rem; color: var(--on-muted); }
 
-        /* ── History Table ── */
+        /* ══════════════════════════════════════
+           History Table
+        ══════════════════════════════════════ */
         .table-wrapper { overflow-x: auto; }
 
         .data-table {
             width: 100%; border-collapse: collapse; text-align: left;
         }
 
-        .data-table thead tr {
-            border-bottom: 1px solid var(--outline-med);
-        }
+        .data-table thead tr { border-bottom: 1px solid var(--outline-med); }
 
         .data-table th {
-            padding: 0.9rem 1.25rem;
-            font-size: 0.65rem; font-weight: 700;
+            padding: 0.8rem 1.25rem;
+            font-size: 0.62rem; font-weight: 700;
             letter-spacing: 0.1em; text-transform: uppercase;
-            color: var(--on-muted);
+            color: var(--on-light);
             background: var(--surface-low);
             white-space: nowrap;
         }
 
         .data-table td {
-            padding: 0.9rem 1.25rem;
-            font-size: 0.85rem;
-            color: var(--on-surface);
+            padding: 0.85rem 1.25rem;
+            font-size: 0.82rem;
+            color: var(--on-secondary);
             border-bottom: 1px solid var(--outline);
             vertical-align: middle;
         }
@@ -368,103 +479,121 @@
         .data-table tbody tr:hover { background: var(--surface-low); }
         .data-table tbody tr:last-child td { border-bottom: none; }
 
-        /* Row client info */
-        .row-client { display: flex; align-items: center; gap: 0.6rem; }
+        .row-client { display: flex; align-items: center; gap: 0.55rem; }
         .row-avatar {
-            width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
-            background: linear-gradient(135deg, var(--primary), #f59e0b);
+            width: 28px; height: 28px; border-radius: var(--radius-xs); flex-shrink: 0;
+            background: linear-gradient(135deg, var(--primary), #fb923c);
             display: flex; align-items: center; justify-content: center;
-            font-size: 0.72rem; font-weight: 700; color: #fff;
+            font-size: 0.68rem; font-weight: 700; color: #fff;
         }
-        .client-name { font-weight: 600; font-size: 0.85rem; }
+        .client-name { font-weight: 600; font-size: 0.82rem; color: var(--on-surface); }
 
-        .pts-positive { color: var(--green); font-weight: 700; font-size: 0.85rem; }
+        .pts-positive { color: var(--green); font-weight: 700; font-size: 0.82rem; }
 
         /* Status Chips */
         .chip {
             display: inline-flex; align-items: center; gap: 4px;
-            font-size: 0.7rem; font-weight: 700;
+            font-size: 0.68rem; font-weight: 700;
             padding: 3px 10px; border-radius: 100px; white-space: nowrap;
         }
         .chip::before {
             content: ''; width: 5px; height: 5px; border-radius: 50%;
             background: currentColor; flex-shrink: 0;
         }
-        .chip-pending { background: var(--amber-soft); color: var(--amber); border: 1px solid rgba(217,119,6,0.15); }
+        .chip-pending  { background: var(--amber-soft); color: var(--amber); border: 1px solid var(--amber-border); }
         .chip-approved { background: var(--green-soft); color: var(--green); border: 1px solid var(--green-border); }
-        .chip-rejected { background: var(--red-soft); color: var(--red); border: 1px solid var(--red-border); }
+        .chip-rejected { background: var(--red-soft);   color: var(--red);   border: 1px solid var(--red-border); }
 
         .btn-view-sm {
-            display: inline-flex; align-items: center; gap: 0.3rem;
-            background: var(--surface); border: 1px solid var(--outline-med);
-            color: var(--on-muted); border-radius: 6px;
-            font-size: 0.72rem; font-weight: 600; padding: 4px 10px;
-            cursor: pointer; transition: all 0.2s;
+            display: inline-flex; align-items: center; gap: 0.25rem;
+            background: var(--surface-low); border: 1px solid var(--outline-med);
+            color: var(--on-muted); border-radius: var(--radius-xs);
+            font-size: 0.7rem; font-weight: 600; padding: 4px 9px;
+            cursor: pointer; transition: all var(--transition);
         }
         .btn-view-sm:hover { color: var(--on-surface); background: var(--surface-hi); }
 
-        .date-text { font-size: 0.8rem; color: var(--on-muted); white-space: nowrap; }
+        .date-text { font-size: 0.78rem; color: var(--on-muted); white-space: nowrap; }
 
-        /* ── Image Modal ── */
+        /* ══════════════════════════════════════
+           Image Modal
+        ══════════════════════════════════════ */
         .img-modal {
             display: none; position: fixed; z-index: 1000;
-            inset: 0; background: rgba(0,0,0,0.45);
+            inset: 0; background: rgba(17,24,39,0.35);
             align-items: center; justify-content: center; padding: 2rem;
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(10px);
         }
         .img-modal.is-active { display: flex; }
         .img-modal-inner {
             background: var(--surface);
             border: 1px solid var(--outline);
-            border-radius: var(--radius-lg);
-            max-width: 600px; width: 100%;
-            animation: fadeUp 0.25s ease;
+            border-radius: var(--radius-xl);
+            max-width: 560px; width: 100%;
+            animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             overflow: hidden;
             box-shadow: var(--shadow-lg);
         }
-        @keyframes fadeUp {
-            from { transform: translateY(20px) scale(0.97); opacity: 0; }
+        @keyframes slideUp {
+            from { transform: translateY(24px) scale(0.96); opacity: 0; }
             to   { transform: translateY(0) scale(1); opacity: 1; }
         }
         .img-modal-header {
             padding: 1rem 1.5rem;
             border-bottom: 1px solid var(--outline);
             display: flex; justify-content: space-between; align-items: center;
+            background: var(--surface-low);
         }
-        .img-modal-header h3 { font-size: 0.95rem; font-weight: 700; color: var(--on-surface); }
+        .img-modal-header h3 {
+            font-size: 0.9rem; font-weight: 700; color: var(--on-surface);
+            display: flex; align-items: center; gap: 0.4rem;
+        }
+        .img-modal-header h3 i { color: var(--primary); }
         .modal-close-btn {
-            background: var(--surface-hi); border: 1px solid var(--outline);
-            color: var(--on-muted); border-radius: 6px;
-            font-size: 1.1rem; width: 32px; height: 32px;
+            background: var(--surface); border: 1px solid var(--outline-med);
+            color: var(--on-muted); border-radius: var(--radius-xs);
+            font-size: 1.1rem; width: 30px; height: 30px;
             cursor: pointer; display: flex; align-items: center; justify-content: center;
-            transition: all 0.2s;
+            transition: all var(--transition);
         }
-        .modal-close-btn:hover { background: var(--surface-br); color: var(--on-surface); }
-        .img-modal-body { padding: 1.25rem; text-align: center; }
-        .img-modal-body img { max-width: 100%; border-radius: var(--radius-sm); max-height: 60vh; object-fit: contain; }
+        .modal-close-btn:hover { background: var(--red-soft); color: var(--red); border-color: var(--red-border); }
+        .img-modal-body { padding: 1.25rem; text-align: center; background: var(--surface-low); }
+        .img-modal-body img { max-width: 100%; border-radius: var(--radius-md); max-height: 60vh; object-fit: contain; box-shadow: var(--shadow-sm); }
 
-        /* ── Responsive ── */
+        /* ══════════════════════════════════════
+           Responsive
+        ══════════════════════════════════════ */
+        @media (max-width: 900px) {
+            .stats-row { grid-template-columns: repeat(2, 1fr); }
+        }
         @media (max-width: 768px) {
+            .stats-row { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+            .stat-card { padding: 1rem; }
+            .stat-value { font-size: 1.25rem; }
             .qr-grid { grid-template-columns: 1fr; }
-            .ticket-card { flex-wrap: wrap; }
-            .ticket-actions { width: 100%; justify-content: space-between; }
-            .ticket-amounts { margin-right: 0; }
+            .ticket-card { grid-template-columns: 1fr; gap: 0.75rem; }
+            .ticket-actions { justify-content: flex-start; }
+            .ticket-amounts { text-align: left; }
             .container { padding: 0 1rem; margin: 1rem auto; }
             .top-nav { padding: 0 1rem; }
+        }
+        @media (max-width: 480px) {
+            .stats-row { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Top Nav -->
+    <!-- ════ Top Nav ════ -->
     <nav class="top-nav">
         <a href="<?= BASE_URL ?>panel" class="back-btn">
-            <i class='bx bx-arrow-back'></i> Volver
+            <i class='bx bx-chevron-left'></i> Volver al Panel
         </a>
-        <span class="page-title">Verificación de Recargas</span>
-        <div class="nav-right" style="width:80px; justify-content: flex-end;">
-            <!-- placeholder for symmetry -->
+        <div class="page-title-group">
+            <div class="page-title">Verificación de Recargas</div>
+            <div class="page-subtitle">Gestión de comprobantes y pagos</div>
         </div>
+        <div style="width:120px;"></div>
     </nav>
 
     <div class="container">
@@ -480,21 +609,67 @@
         <?php endif; ?>
 
         <!-- ════════════════════════════════════════════
+             SECTION 0 — Stats Icon Boxes
+        ════════════════════════════════════════════ -->
+        <?php
+            $totalPendientes = count($recargas);
+            $totalAprobados  = 0;
+            $totalRechazados = 0;
+            $montoTotal      = 0;
+            if (!empty($historial)) {
+                foreach ($historial as $h) {
+                    if (($h['estado'] ?? '') === 'aprobado') { $totalAprobados++; $montoTotal += $h['monto']; }
+                    if (($h['estado'] ?? '') === 'rechazado') $totalRechazados++;
+                }
+            }
+        ?>
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-icon orange"><i class='bx bx-time-five'></i></div>
+                <div class="stat-content">
+                    <div class="stat-value"><?= $totalPendientes ?></div>
+                    <div class="stat-label">Pendientes</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green"><i class='bx bx-check-circle'></i></div>
+                <div class="stat-content">
+                    <div class="stat-value"><?= $totalAprobados ?></div>
+                    <div class="stat-label">Aprobados</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon red"><i class='bx bx-x-circle'></i></div>
+                <div class="stat-content">
+                    <div class="stat-value"><?= $totalRechazados ?></div>
+                    <div class="stat-label">Rechazados</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon blue"><i class='bx bx-wallet'></i></div>
+                <div class="stat-content">
+                    <div class="stat-value">S/ <?= number_format($montoTotal, 0) ?></div>
+                    <div class="stat-label">Monto Acreditado</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ════════════════════════════════════════════
              SECTION 1 — QR Yape Manager
         ════════════════════════════════════════════ -->
         <div class="card">
             <div class="card-header" style="cursor:pointer;" onclick="toggleQR()">
                 <div class="card-title">
-                    <i class='bx bx-qr'></i>
+                    <div class="title-icon purple"><i class='bx bx-qr'></i></div>
                     Configuración QR de Pago Yape
                 </div>
-                <div style="display:flex; align-items:center; gap:0.75rem;">
+                <div style="display:flex; align-items:center; gap:0.65rem;">
                     <?php if ($qrActual): ?>
                         <span class="chip chip-approved">Activo</span>
                     <?php else: ?>
                         <span class="chip chip-pending">Sin configurar</span>
                     <?php endif; ?>
-                    <i id="toggleIcon" class='bx bx-chevron-right toggle-icon' style="font-size:1.2rem;"></i>
+                    <i id="toggleIcon" class='bx bx-chevron-right toggle-chevron'></i>
                 </div>
             </div>
 
@@ -502,14 +677,14 @@
                 <div class="qr-grid">
                     <!-- Preview -->
                     <div class="qr-preview-box">
-                        <span class="qr-preview-label">QR Actual</span>
+                        <span class="section-label">QR Actual</span>
                         <div class="qr-frame">
                             <?php if ($qrActual): ?>
                                 <img src="<?= BASE_URL ?>assets/uploads/qr/<?= htmlspecialchars($qrActual) ?>" alt="QR Yape">
                             <?php else: ?>
                                 <div class="qr-empty-frame">
-                                    <i class='bx bx-image' style="font-size:2.5rem;"></i>
-                                    <span style="font-size:0.78rem;">Sin imagen</span>
+                                    <i class='bx bx-image' style="font-size:2.2rem;"></i>
+                                    <span style="font-size:0.75rem; font-weight:500;">Sin imagen</span>
                                 </div>
                             <?php endif; ?>
                         </div>
@@ -521,14 +696,14 @@
                     </div>
 
                     <!-- Upload -->
-                    <div>
-                        <p class="upload-label-text">Cambiar imagen QR</p>
+                    <div class="upload-section">
+                        <span class="section-label">Cambiar imagen QR</span>
                         <form action="<?= BASE_URL ?>recargas-admin/subir-qr" method="POST" enctype="multipart/form-data">
                             <label for="qr_file_input" id="qrDropZone">
-                                <img id="qrPreviewImg" src="" alt="" style="display:none; width:100px; height:100px; object-fit:contain; border-radius:8px; margin-bottom:0.75rem; border:1px solid var(--outline);">
+                                <img id="qrPreviewImg" src="" alt="" style="display:none; width:90px; height:90px; object-fit:contain; border-radius:8px; margin-bottom:0.5rem; border:1px solid var(--surface-br);">
                                 <i id="qrUploadIcon" class='bx bxs-cloud-upload'></i>
-                                <span id="qrUploadLabel" class="dz-label">Arrastra tu imagen aquí</span>
-                                <span class="dz-sub">o haz clic para buscarla</span>
+                                <span id="qrUploadLabel" class="dz-label">Arrastra o selecciona tu imagen</span>
+                                <span class="dz-sub">Formatos aceptados:</span>
                                 <span class="dz-hint">JPG · PNG · GIF · WebP</span>
                             </label>
                             <input type="file" id="qr_file_input" name="qr_imagen" accept="image/*" style="display:none;">
@@ -545,17 +720,19 @@
              SECTION 2 — Revisión Pendiente
         ════════════════════════════════════════════ -->
         <div class="card">
-            <div class="pending-header">
-                <div class="pending-title">
-                    <div class="pulse-dot"></div>
+            <div class="card-header">
+                <div class="card-title">
+                    <div class="title-icon red">
+                        <div class="pulse-dot"></div>
+                    </div>
                     Revisión Pendiente
-                    <span class="count-badge"><?= count($recargas) ?> pendiente<?= count($recargas) !== 1 ? 's' : '' ?></span>
                 </div>
+                <span class="pending-badge"><?= count($recargas) ?> pendiente<?= count($recargas) !== 1 ? 's' : '' ?></span>
             </div>
 
             <?php if (empty($recargas)): ?>
                 <div class="empty-state">
-                    <i class='bx bx-check-shield'></i>
+                    <div class="empty-icon"><i class='bx bx-check-shield'></i></div>
                     <h3>Todo al día</h3>
                     <p>No hay comprobantes pendientes de verificar.</p>
                 </div>
@@ -567,10 +744,21 @@
 
                         <div class="ticket-info">
                             <div class="ticket-name"><?= htmlspecialchars($r['cliente_nombre']) ?></div>
-                            <div class="ticket-meta"><?= htmlspecialchars($r['cliente_celular']) ?> · DNI <?= htmlspecialchars($r['cliente_dni']) ?></div>
-                            <div class="ticket-time">
-                                <i class='bx bx-time'></i>
-                                <?= date('d M, g:i a', strtotime($r['fecha'])) ?>
+                            <div class="ticket-detail">
+                                <span class="ticket-detail-item">
+                                    <i class='bx bx-phone'></i>
+                                    <?= htmlspecialchars($r['cliente_celular']) ?>
+                                </span>
+                                <span class="detail-sep">•</span>
+                                <span class="ticket-detail-item">
+                                    <i class='bx bx-id-card'></i>
+                                    DNI <?= htmlspecialchars($r['cliente_dni']) ?>
+                                </span>
+                                <span class="detail-sep">•</span>
+                                <span class="ticket-detail-item">
+                                    <i class='bx bx-time'></i>
+                                    <?= date('d M, g:i a', strtotime($r['fecha'])) ?>
+                                </span>
                             </div>
                         </div>
 
@@ -580,14 +768,14 @@
                         </div>
 
                         <div class="ticket-actions">
-                            <button class="btn btn-ghost" onclick="openModal('<?= BASE_URL ?>assets/uploads/comprobantes/<?= $r['comprobante'] ?>')">
-                                <i class='bx bx-receipt'></i> Ver Pago
+                            <button class="btn btn-outline" onclick="openModal('<?= BASE_URL ?>assets/uploads/comprobantes/<?= $r['comprobante'] ?>')">
+                                <i class='bx bx-image'></i> Evidencia
                             </button>
 
                             <form action="<?= BASE_URL ?>recargas-admin/actualizar" method="POST" style="margin:0;" class="approve-form">
                                 <input type="hidden" name="id" value="<?= $r['id'] ?>">
                                 <input type="hidden" name="estado" value="aprobado">
-                                <button type="button" class="btn btn-approve btn-approve-trigger">
+                                <button type="button" class="btn btn-success btn-approve-trigger">
                                     <i class='bx bx-check'></i> Aprobar
                                 </button>
                             </form>
@@ -595,8 +783,8 @@
                             <form action="<?= BASE_URL ?>recargas-admin/actualizar" method="POST" style="margin:0;" class="reject-form">
                                 <input type="hidden" name="id" value="<?= $r['id'] ?>">
                                 <input type="hidden" name="estado" value="rechazado">
-                                <button type="button" class="btn btn-reject btn-reject-trigger" title="Rechazar">
-                                    <i class='bx bx-x'></i>
+                                <button type="button" class="btn btn-danger-ghost btn-reject-trigger" title="Rechazar">
+                                    <i class='bx bx-x' style="font-size:1.1rem;"></i>
                                 </button>
                             </form>
                         </div>
@@ -612,14 +800,14 @@
         <div class="card">
             <div class="card-header">
                 <div class="card-title">
-                    <i class='bx bx-history'></i>
+                    <div class="title-icon blue"><i class='bx bx-history'></i></div>
                     Historial de Movimientos
                 </div>
             </div>
 
             <?php if (empty($historial)): ?>
                 <div class="empty-state">
-                    <i class='bx bx-spreadsheet'></i>
+                    <div class="empty-icon"><i class='bx bx-spreadsheet'></i></div>
                     <h3>Sin historial</h3>
                     <p>Aquí aparecerán todas las recargas procesadas.</p>
                 </div>
@@ -660,11 +848,11 @@
                                             <i class='bx bx-image'></i> Ver
                                         </button>
                                     <?php else: ?>
-                                        <span style="color:var(--on-light); font-size:0.8rem;">—</span>
+                                        <span style="color:var(--on-light); font-size:0.78rem;">—</span>
                                     <?php endif; ?>
                                 </td>
                                 <td><span class="chip <?= $chipClass ?>"><?= ucfirst($h['estado'] ?? 'pendiente') ?></span></td>
-                                <td style="color: var(--on-muted); font-size:0.82rem;"><?= htmlspecialchars($h['validador_nombre'] ?? '—') ?></td>
+                                <td style="color: var(--on-muted); font-size:0.8rem;"><?= htmlspecialchars($h['validador_nombre'] ?? '—') ?></td>
                                 <td class="date-text"><?= date('d M Y, H:i', strtotime($h['fecha'])) ?></td>
                             </tr>
                             <?php endforeach; ?>
@@ -676,11 +864,11 @@
 
     </div><!-- .container -->
 
-    <!-- Image Modal -->
+    <!-- ════ Image Modal ════ -->
     <div class="img-modal" id="receiptModal">
         <div class="img-modal-inner">
             <div class="img-modal-header">
-                <h3>Evidencia de Pago</h3>
+                <h3><i class='bx bx-receipt'></i> Evidencia de Pago</h3>
                 <button class="modal-close-btn" onclick="closeModal()"><i class='bx bx-x'></i></button>
             </div>
             <div class="img-modal-body">
@@ -745,7 +933,7 @@
         function closeModal() {
             modal.classList.remove('is-active');
             document.body.style.overflow = '';
-            setTimeout(() => img.src = '', 200);
+            setTimeout(() => img.src = '', 250);
         }
 
         modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
@@ -760,12 +948,13 @@
                     text: '¿Confirmaste que el dinero ingresó a tu cuenta bancaria?',
                     icon: 'question',
                     background: '#ffffff',
-                    color: '#1a1d26',
+                    color: '#111827',
                     showCancelButton: true,
-                    confirmButtonColor: '#16a34a',
-                    cancelButtonColor: '#9ca3af',
-                    confirmButtonText: 'Sí, Acreditar Puntos',
-                    cancelButtonText: 'Cancelar'
+                    confirmButtonColor: '#059669',
+                    cancelButtonColor: '#d1d5db',
+                    confirmButtonText: '<i class="bx bx-check"></i> Sí, Acreditar Puntos',
+                    cancelButtonText: 'Cancelar',
+                    customClass: { popup: 'swal-light' }
                 }).then(result => { if (result.isConfirmed) form.submit(); });
             });
         });
@@ -778,12 +967,13 @@
                     text: 'Esta acción anulará la solicitud de puntos del cliente.',
                     icon: 'warning',
                     background: '#ffffff',
-                    color: '#1a1d26',
+                    color: '#111827',
                     showCancelButton: true,
                     confirmButtonColor: '#dc2626',
-                    cancelButtonColor: '#9ca3af',
-                    confirmButtonText: 'Sí, Rechazar',
-                    cancelButtonText: 'Cancelar'
+                    cancelButtonColor: '#d1d5db',
+                    confirmButtonText: '<i class="bx bx-x"></i> Sí, Rechazar',
+                    cancelButtonText: 'Cancelar',
+                    customClass: { popup: 'swal-light' }
                 }).then(result => { if (result.isConfirmed) form.submit(); });
             });
         });
@@ -805,7 +995,7 @@
                 const Toast = Swal.mixin({
                     toast: true, position: 'top-end',
                     showConfirmButton: false, timer: 3500, timerProgressBar: true,
-                    background: '#ffffff', color: '#1a1d26',
+                    background: '#ffffff', color: '#111827',
                     didOpen: t => { t.onclick = () => window.location.reload(); },
                     didClose: () => window.location.reload()
                 });
