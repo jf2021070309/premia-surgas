@@ -58,13 +58,16 @@
 
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script>
+    <?php
+        $scanUrl = BASE_URL . 'scan?c=' . urlencode($cliente['codigo']) . '&t=' . urlencode($cliente['token']);
+    ?>
     new QRCode(document.getElementById('qrcode-print'), {
-        text: '<?= $cliente['codigo'] ?>',
+        text: '<?= addslashes($scanUrl) ?>',
         width: 106,
         height: 106,
         colorDark: '#000000',
         colorLight: '#ffffff',
-        correctLevel: QRCode.CorrectLevel.H
+        correctLevel: QRCode.CorrectLevel.M
     });
 
     document.getElementById('btn-print').addEventListener('click', function () {

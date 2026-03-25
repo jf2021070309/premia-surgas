@@ -61,12 +61,15 @@
     const clienteCelular = "<?= addslashes($cliente['celular']) ?>";
     const clienteCodigo = "<?= addslashes($cliente['codigo']) ?>";
 
-    // Generar QR (Usa el código directo para evitar enlaces genéricos)
+    <?php
+        $scanUrl = BASE_URL . 'scan?c=' . urlencode($cliente['codigo']) . '&t=' . urlencode($cliente['token']);
+    ?>
+    // Generar QR
     const qr = new QRCode(document.getElementById('qrcode'), {
-        text: clienteCodigo,
+        text: '<?= addslashes($scanUrl) ?>',
         width: 220,
         height: 220,
-        colorDark: '#000000',
+        colorDark: '#1a1a1a',
         colorLight: '#ffffff',
         correctLevel: QRCode.CorrectLevel.H
     });
