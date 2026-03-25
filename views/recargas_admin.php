@@ -346,16 +346,18 @@
             border: 2px dashed #742183;
             background: #fdf4ff;
             border-radius: 20px;
-            padding: 3rem 1.5rem;
+            height: 220px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 1rem;
+            justify-content: center;
+            gap: 0.75rem;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
             text-align: center;
             margin-bottom: 1.5rem;
             position: relative;
+            padding: 1.5rem;
         }
 
         #qrDropZone:hover, #qrDropZone.dragover {
@@ -769,7 +771,6 @@
         <div class="card qr-card">
             <div class="card-header qr-header" onclick="toggleQR()">
                 <div class="card-title">
-                    <img src="<?= BASE_URL ?>assets/premios/yape.png" alt="Yape" style="height:24px; vertical-align:middle; margin-right:8px;">
                     Configuración QR de Pago
                 </div>
                 <div style="display:flex; align-items:center; gap:0.65rem;">
@@ -818,7 +819,7 @@
                                 <img id="qrPreviewImg" src="" alt="" style="display:none; width:80px; height:80px; object-fit:contain; border-radius:12px; margin-bottom:0.5rem; border:2px solid #e2e8f0; padding:4px; background:#fff;">
                                 <i id="qrUploadIcon" class='bx bx-cloud-upload'></i>
                                 <div id="qrUploadLabel" class="dz-label">Selecciona una imagen</div>
-                                <div class="dz-hint">Formatos: JPG, PNG o WebP (Máx 2MB)</div>
+                                <div id="qrUploadHint" class="dz-hint">Formatos: JPG, PNG o WebP (Máx 2MB)</div>
                             </label>
                             <input type="file" id="qr_file_input" name="qr_imagen" accept="image/*" style="display:none;">
                             <button type="submit" id="qrSubmitBtn" disabled>
@@ -1022,6 +1023,7 @@
                     preview.src = e.target.result;
                     preview.style.display = 'block';
                     icon.style.display = 'none';
+                    document.getElementById('qrUploadHint').style.display = 'none';
                     lbl.textContent = file.name;
                     btn.disabled = false;
                 };
