@@ -292,29 +292,33 @@
         .yape-cta-pill {
             background: #00D1A4;
             color: #fff;
-            padding: 12px 32px;
+            padding: 12px 28px;
             border-radius: 100px;
             font-weight: 800;
-            font-size: 0.95rem;
+            font-size: 0.88rem;
             display: flex;
             align-items: center;
+            justify-content: center;
+            text-align: center;
             gap: 0.6rem;
             box-shadow: 0 4px 15px rgba(0,209,164,0.3);
             position: relative; z-index: 1;
-            text-transform: none;
+            text-transform: uppercase;
+            max-width: 90%;
+            line-height: 1.2;
         }
 
         .status-badge {
-            font-size: 0.72rem;
+            font-size: 0.68rem;
             font-weight: 800;
             padding: 6px 16px;
             border-radius: 100px;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.08em;
             position: relative; z-index: 1;
         }
-        .status-badge.active { background: rgba(0,209,164,0.15); color: #00D1A4; }
-        .status-badge.inactive { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); }
+        .status-badge.active { background: rgba(0,209,164,0.15); color: #00D1A4; border: 1px solid rgba(0,209,164,0.3); }
+        .status-badge.inactive { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.2); }
 
         /* Upload Side - Clean and Structured */
         .upload-section {
@@ -339,18 +343,19 @@
         }
 
         #qrDropZone {
-            border: 2px dashed #e2e8f0;
-            background: #f8fafc;
-            border-radius: 16px;
-            padding: 2.5rem 1.5rem;
+            border: 2px dashed #742183;
+            background: #fdf4ff;
+            border-radius: 20px;
+            padding: 3rem 1.5rem;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 0.75rem;
+            gap: 1rem;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
             text-align: center;
-            margin-bottom: 1.25rem;
+            margin-bottom: 1.5rem;
+            position: relative;
         }
 
         #qrDropZone:hover, #qrDropZone.dragover {
