@@ -24,9 +24,6 @@
         </div>
         <div class="badge-code"><?= htmlspecialchars($cliente['codigo']) ?></div>
 
-        <?php
-            $scanUrl = BASE_URL . 'scan?c=' . urlencode($cliente['codigo']) . '&t=' . urlencode($cliente['token']);
-        ?>
         <div class="qr-code-box">
             <div id="qrcode"></div>
         </div>
@@ -64,9 +61,9 @@
     const clienteCelular = "<?= addslashes($cliente['celular']) ?>";
     const clienteCodigo = "<?= addslashes($cliente['codigo']) ?>";
 
-    // Generar QR
+    // Generar QR (Usa el código directo para evitar enlaces genéricos)
     const qr = new QRCode(document.getElementById('qrcode'), {
-        text: '<?= addslashes($scanUrl) ?>',
+        text: clienteCodigo,
         width: 220,
         height: 220,
         colorDark: '#1a1a1a',
@@ -76,9 +73,8 @@
 
     async function captureCard() {
         const card = document.querySelector('.qr-card');
-        // Pequeño delay para asegurar que el QR esté renderizado si se acaba de cargar
         return await html2canvas(card, {
-            scale: 2, // Mejor calidad
+            scale: 2,
             backgroundColor: '#f0f2f5',
             logging: false,
             useCORS: true
@@ -113,28 +109,23 @@
         const message = `¡Hola! 🔥 Aquí tienes tu tarjeta de cliente de *Gas Express Surgas*.\n\n👤 *Cliente:* ${clienteNombre}\n🆔 *Código:* ${clienteCodigo}\n\nPresenta este QR en tus compras para acumular puntos y canjear premios. ¡Gracias por tu preferencia! 🏠✨`;
 
         try {
-            // 1. Intentar copiar imagen al portapapeles (Para que el usuario solo tenga que PEGAR)
             const canvas = await captureCard();
             canvas.toBlob(async (blob) => {
                 try {
                     const data = [new ClipboardItem({ [blob.type]: blob })];
                     await navigator.clipboard.write(data);
-                    // Mostrar un pequeño aviso visual o notificación si fuera necesario
                 } catch (err) {
                     console.warn("No se pudo copiar al portapapeles automáticamente.");
                 }
             });
 
-            // 2. Abrir el chat directamente
             const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
             const waUrl = isMobile 
                 ? `https://wa.me/51${clienteCelular}?text=${encodeURIComponent(message)}`
                 : `https://web.whatsapp.com/send?phone=51${clienteCelular}&text=${encodeURIComponent(message)}`;
             
             window.open(waUrl, '_blank');
-            
             alert("✅ ¡Imagen de tarjeta copiada!\n\nSe ha abierto el chat. Solo tienes que 'Pegar' (Ctrl+V) para enviar la tarjeta junto con el mensaje.");
-
         } catch (e) {
             console.error(e);
             alert("Error al procesar la tarjeta.");
@@ -143,7 +134,7 @@
         }
     }
 </script>
-    <script> const BASE_URL = '<?= BASE_URL ?>'; </script>
-    <script src="<?= BASE_URL ?>assets/js/session_check.js"></script>
+<script> const BASE_URL = '<?= BASE_URL ?>'; </script>
+<script src="<?= BASE_URL ?>assets/js/session_check.js"></script>
 </body>
 </html>

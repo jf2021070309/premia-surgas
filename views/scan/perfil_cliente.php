@@ -322,12 +322,12 @@
             cardContainer.classList.toggle('is-flipped');
         });
 
-        // Generar QR en el reverso
-        const qrContent = '<?= BASE_URL ?>scan?c=<?= urlencode($cliente['codigo']) ?>&t=<?= urlencode($cliente['token']) ?>';
+        // Generar QR en el reverso (Solo el código del cliente para búsqueda directa)
+        const qrContent = '<?= $cliente['codigo'] ?>';
         new QRCode(document.getElementById("qrcode"), {
             text: qrContent,
-            width: 150,
-            height: 150,
+            width: 180,
+            height: 180,
             colorDark : "#000000",
             colorLight : "#ffffff",
             correctLevel : QRCode.CorrectLevel.H

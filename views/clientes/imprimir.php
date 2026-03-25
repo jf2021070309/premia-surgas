@@ -59,7 +59,7 @@
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script>
     new QRCode(document.getElementById('qrcode-print'), {
-        text: '<?= addslashes($scanUrl) ?>',
+        text: '<?= $cliente['codigo'] ?>',
         width: 106,
         height: 106,
         colorDark: '#000000',
