@@ -213,6 +213,17 @@
             border-radius: var(--radius-xl);
             overflow: hidden;
             background: #fff;
+            margin-bottom: 2rem;
+        }
+
+        .qr-section-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0, 1, 0, 1);
+        }
+        .qr-section-body.open {
+            max-height: 2000px;
+            transition: max-height 0.4s cubic-bezier(1, 0, 1, 0);
         }
 
         .qr-header {
@@ -370,8 +381,7 @@
         #qrDropZone .dz-hint { font-size: 0.75rem; color: #64748b; }
 
         #qrSubmitBtn {
-            background: #742183;
-            color: #fff;
+            width: 100%;
             padding: 0.9rem;
             border: none;
             border-radius: 12px;
@@ -383,21 +393,21 @@
             align-items: center;
             justify-content: center;
             gap: 0.6rem;
-            width: 100%;
-            padding: 0.7rem;
-            border-radius: var(--radius-sm);
-            font-weight: 700; font-size: 0.82rem;
             background: #7B2D8E;
-            border: none; color: #fff;
-            cursor: pointer; opacity: 0.4;
-            transition: all 0.3s;
-            display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+            color: #fff;
+            opacity: 0.4;
         }
-        #qrSubmitBtn:not(:disabled) { opacity: 1; box-shadow: 0 4px 14px rgba(123,45,142,0.25); }
-        #qrSubmitBtn:not(:disabled):hover { background: #5B1F6E; transform: translateY(-1px); }
+        #qrSubmitBtn:not(:disabled) { 
+            opacity: 1; 
+            box-shadow: 0 4px 14px rgba(123,45,142,0.25); 
+        }
+        #qrSubmitBtn:not(:disabled):hover { 
+            background: #5B1F6E; 
+            transform: translateY(-1px); 
+        }
 
         .toggle-chevron { transition: transform 0.35s; color: var(--on-light); font-size: 1.15rem; }
-        .toggle-chevron.open { transform: rotate(90deg); }
+        .toggle-chevron.open { transform: rotate(180deg); }
 
         /* ══════════════════════════════════════
            Pending Tickets
@@ -779,11 +789,11 @@
                     <?php else: ?>
                         <span class="chip" style="background:#f9fafb; color:#6b7280; border:1px solid #e5e7eb; font-size:0.65rem; font-weight:700;">Inactivo</span>
                     <?php endif; ?>
-                    <i id="toggleIcon" class='bx bx-chevron-down toggle-chevron' style="font-size:1.25rem;"></i>
+                    <i id="toggleIcon" class='bx bx-chevron-down toggle-chevron open' style="font-size:1.25rem;"></i>
                 </div>
             </div>
 
-            <div id="qrSectionBody" class="qr-section-body">
+            <div id="qrSectionBody" class="qr-section-body open">
                 <div class="qr-grid">
                     <!-- Left — Yape Purple Panel -->
                     <div class="qr-preview-box">
@@ -822,8 +832,8 @@
                                 <div id="qrUploadHint" class="dz-hint">Formatos: JPG, PNG o WebP (Máx 2MB)</div>
                             </label>
                             <input type="file" id="qr_file_input" name="qr_imagen" accept="image/*" style="display:none;">
-                            <button type="submit" id="qrSubmitBtn" disabled>
-                                <i class='bx bx-check-circle'></i> Guardar Nuevo QR
+                            <button type="submit" id="qrSubmitBtn" <?= $nombreTitular ? '' : 'disabled' ?>>
+                                <i class='bx bx-check-circle'></i> Guardar Cambios
                             </button>
                         </form>
                     </div>
