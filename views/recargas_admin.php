@@ -207,6 +207,19 @@
         /* ══════════════════════════════════════
            QR Section — Yape Style
         ══════════════════════════════════════ */
+        .qr-card { border: none; overflow: hidden; }
+        .qr-header {
+            background: linear-gradient(135deg, #7B2D8E, #6B2480) !important;
+            border-bottom: none !important;
+        }
+        .qr-header .card-title { color: #fff !important; font-size: 0.9rem; }
+
+        .yape-logo-img {
+            height: 50px;
+            object-fit: contain;
+            filter: brightness(0) invert(1);
+            position: relative; z-index: 1;
+        }
         .qr-section-body {
             max-height: 0;
             overflow: hidden;
@@ -238,6 +251,7 @@
             width: 120px; height: 120px;
             background: rgba(255,255,255,0.06);
             border-radius: 50%;
+            filter: blur(20px);
         }
         .qr-preview-box::after {
             content: '';
@@ -246,6 +260,7 @@
             width: 90px; height: 90px;
             background: rgba(255,255,255,0.04);
             border-radius: 50%;
+            filter: blur(15px);
         }
 
         .yape-logo {
@@ -286,7 +301,9 @@
             border-radius: var(--radius-sm);
             background: #fff;
             display: block;
+            transition: transform 0.3s ease;
         }
+        .qr-frame:hover img { transform: scale(1.05); }
 
         .qr-empty-frame {
             width: 175px; height: 175px;
@@ -623,6 +640,42 @@
         @media (max-width: 480px) {
             .stats-row { grid-template-columns: 1fr; }
         }
+        /* Search box in header */
+        .header-search {
+            position: relative;
+            max-width: 220px;
+            width: 100%;
+        }
+        .header-search i {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--on-light);
+            font-size: 0.9rem;
+        }
+        .header-search input {
+            width: 100%;
+            padding: 6px 10px 6px 32px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--outline-med);
+            background: var(--surface);
+            font-size: 0.78rem;
+            color: var(--on-surface);
+            outline: none;
+            transition: all 0.2s;
+        }
+        .header-search input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-glow);
+        }
+
+        .copy-btn {
+            background: none; border: none; padding: 2px 4px;
+            border-radius: 4px; cursor: pointer; color: var(--on-light);
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: var(--surface-hi); color: var(--primary); }
     </style>
 </head>
 <body>
@@ -700,19 +753,19 @@
         <!-- ════════════════════════════════════════════
              SECTION 1 — QR Yape Manager
         ════════════════════════════════════════════ -->
-        <div class="card">
-            <div class="card-header" style="cursor:pointer;" onclick="toggleQR()">
-                <div class="card-title">
-                    <div class="title-icon purple"><i class='bx bx-qr'></i></div>
-                    Configuración QR de Pago Yape
+        <div class="card qr-card">
+            <div class="card-header qr-header" style="cursor:pointer;" onclick="toggleQR()">
+                <div class="card-title" style="color:#fff;">
+                    <img src="<?= BASE_URL ?>assets/premios/yape.png" alt="Yape" style="height:28px; object-fit:contain; filter: brightness(0) invert(1);">
+                    Configuración QR de Pago
                 </div>
                 <div style="display:flex; align-items:center; gap:0.65rem;">
                     <?php if ($qrActual): ?>
-                        <span class="chip chip-approved">Activo</span>
+                        <span class="chip" style="background:rgba(0,209,164,0.2); color:#00D1A4; border:1px solid rgba(0,209,164,0.35);">Activo</span>
                     <?php else: ?>
-                        <span class="chip chip-pending">Sin configurar</span>
+                        <span class="chip" style="background:rgba(255,255,255,0.15); color:rgba(255,255,255,0.8); border:1px solid rgba(255,255,255,0.2);">Sin configurar</span>
                     <?php endif; ?>
-                    <i id="toggleIcon" class='bx bx-chevron-right toggle-chevron'></i>
+                    <i id="toggleIcon" class='bx bx-chevron-right toggle-chevron' style="color:rgba(255,255,255,0.6);"></i>
                 </div>
             </div>
 
@@ -720,10 +773,7 @@
                 <div class="qr-grid">
                     <!-- Left — Yape Purple Panel -->
                     <div class="qr-preview-box">
-                        <div class="yape-logo">
-                            <span class="yape-s">S/</span>
-                            Yape
-                        </div>
+                        <img src="<?= BASE_URL ?>assets/premios/yape.png" alt="Yape" class="yape-logo-img">
                         <div class="qr-frame">
                             <?php if ($qrActual): ?>
                                 <img src="<?= BASE_URL ?>assets/uploads/qr/<?= htmlspecialchars($qrActual) ?>" alt="QR Yape">
@@ -800,6 +850,9 @@
                                 <span class="ticket-detail-item">
                                     <i class='bx bx-id-card'></i>
                                     DNI <?= htmlspecialchars($r['cliente_dni']) ?>
+                                    <button class="copy-btn" onclick="copyToClipboard('<?= $r['cliente_dni'] ?>', event)" title="Copiar DNI">
+                                        <i class='bx bx-copy'></i>
+                                    </button>
                                 </span>
                                 <span class="detail-sep">•</span>
                                 <span class="ticket-detail-item">
@@ -849,6 +902,10 @@
                 <div class="card-title">
                     <div class="title-icon blue"><i class='bx bx-history'></i></div>
                     Historial de Movimientos
+                </div>
+                <div class="header-search">
+                    <i class='bx bx-search'></i>
+                    <input type="text" id="historySearch" placeholder="Buscar cliente..." onkeyup="filterHistory()">
                 </div>
             </div>
 
@@ -985,6 +1042,30 @@
 
         modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
         document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+        // ── Quick Copy ──
+        function copyToClipboard(text, e) {
+            e.stopPropagation();
+            navigator.clipboard.writeText(text);
+            const btn = e.currentTarget;
+            const icon = btn.querySelector('i');
+            icon.classList.replace('bx-copy', 'bx-check');
+            btn.style.color = 'var(--green)';
+            setTimeout(() => {
+                icon.classList.replace('bx-check', 'bx-copy');
+                btn.style.color = '';
+            }, 1500);
+        }
+
+        // ── History Filter ──
+        function filterHistory() {
+            const query = document.getElementById('historySearch').value.toLowerCase();
+            const rows = document.querySelectorAll('.data-table tbody tr');
+            rows.forEach(row => {
+                const text = row.querySelector('.client-name').textContent.toLowerCase();
+                row.style.display = text.includes(query) ? '' : 'none';
+            });
+        }
 
         // ── SweetAlert2 Confirms (Light Theme) ──
         document.querySelectorAll('.btn-approve-trigger').forEach(btn => {
