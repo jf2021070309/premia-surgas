@@ -798,21 +798,16 @@
                             <?php endif; ?>
                         </div>
                         <div class="yape-cta-pill" id="yapePreviewName"><i class='bx bx-check-double'></i> <?= htmlspecialchars($nombreTitular) ?></div>
-                        <?php if ($qrActual): ?>
-                            <div class="status-badge active">Visible para clientes</div>
-                        <?php else: ?>
-                            <div class="status-badge inactive">No configurado</div>
-                        <?php endif; ?>
                     </div>
 
                     <!-- Upload -->
                     <div class="upload-section">
-                        <div class="upload-title">Actualizar Código QR</div>
-                        <p class="upload-subtitle">Sube una imagen clara de tu código QR de Yape para que los clientes puedan realizar sus pagos fácilmente.</p>
+                        <div class="upload-title">Configuración de Yape</div>
+                        <p class="upload-subtitle">Define el nombre que verán los clientes y sube tu código QR para recibir pagos.</p>
                         
                         <form action="<?= BASE_URL ?>recargas-admin/subir-qr" method="POST" enctype="multipart/form-data">
                             <div style="margin-bottom: 1.5rem;">
-                                <label class="section-label dark" style="display:block; margin-bottom:0.5rem; font-size: 0.75rem; color: #64748b;">Texto en el botón (Nombre):</label>
+                                <label class="section-label dark" style="display:block; margin-bottom:0.5rem; font-size: 0.75rem; color: #64748b; font-weight:700;">Nombre del Titular:</label>
                                 <input type="text" name="yape_nombre" id="yapeNameInput" value="<?= htmlspecialchars($nombreTitular) ?>" 
                                        placeholder="Ej: Juan Perez"
                                        style="width: 100%; padding: 0.8rem; border-radius: 12px; border: 1px solid #e2e8f0; font-size: 0.88rem; outline:none; transition: border 0.3s;"
