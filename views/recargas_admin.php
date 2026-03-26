@@ -260,27 +260,29 @@
         }
 
         .stat-icon {
-            width: 50px; height: 50px;
-            border-radius: 14px;
+            width: 44px; height: 44px;
+            border-radius: 12px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.4rem;
+            font-size: 1.35rem;
             flex-shrink: 0;
-            background: rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.12);
             color: #fff;
             backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
         }
-        .stat-card:hover .stat-icon { transform: scale(1.1) rotate(3deg); background: rgba(255,255,255,0.25); }
+        .stat-card:hover .stat-icon { transform: scale(1.1) rotate(5deg); background: rgba(255,255,255,0.22); }
 
         .stat-content { flex: 1; min-width: 0; z-index: 1; }
         .stat-value {
-            font-size: 1.85rem; font-weight: 900;
+            font-size: 1.65rem; font-weight: 900;
             letter-spacing: -0.04em; color: #ffffff;
             line-height: 1;
         }
         .stat-label {
-            font-size: 0.72rem; font-weight: 700;
-            color: rgba(255,255,255,0.7); margin-top: 6px;
-            letter-spacing: 0.05em; text-transform: uppercase;
+            font-size: 0.65rem; font-weight: 800;
+            color: rgba(255,255,255,0.6); margin-top: 4px;
+            letter-spacing: 0.08rem; text-transform: uppercase;
         }
 
         /* ══════════════════════════════════════
@@ -310,16 +312,17 @@
         }
 
         .card-title .title-icon {
-            width: 32px; height: 32px;
-            border-radius: 8px;
+            width: auto; height: auto;
+            background: transparent !important;
+            padding: 0;
             display: flex; align-items: center; justify-content: center;
-            font-size: 1rem;
+            font-size: 1.35rem;
         }
-        .card-title .title-icon.orange { background: #fff7ed; color: #f97316; }
-        .card-title .title-icon.green  { background: #ecfdf5; color: #10b981; }
-        .card-title .title-icon.blue   { background: #eff6ff; color: #3b82f6; }
-        .card-title .title-icon.red    { background: #fff1f2; color: #e11d48; }
-        .card-title .title-icon.purple { background: #fdf4ff; color: #742183; }
+        .card-title .title-icon.orange { color: #f97316; }
+        .card-title .title-icon.green  { color: #10b981; }
+        .card-title .title-icon.blue   { color: #3b82f6; }
+        .card-title .title-icon.red    { color: #e11d48; }
+        .card-title .title-icon.purple { color: #742183; }
 
         .card-title {
             display: flex; align-items: center; gap: 0.85rem;
@@ -987,30 +990,30 @@
         ?>
         <div class="stats-row">
             <div class="stat-card orange-theme">
-                <div class="stat-icon"><i class='bx bx-time-five'></i></div>
+                <div class="stat-icon"><i class='bx bx-time'></i></div>
                 <div class="stat-content">
-                    <div class="stat-value"><?= $totalPendientes ?></div>
+                    <div class="stat-value count-up" data-target="<?= $totalPendientes ?>">0</div>
                     <div class="stat-label">Pendientes</div>
                 </div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon"><i class='bx bx-check-circle'></i></div>
                 <div class="stat-content">
-                    <div class="stat-value"><?= $totalAprobados ?></div>
+                    <div class="stat-value count-up" data-target="<?= $totalAprobados ?>">0</div>
                     <div class="stat-label">Aprobados</div>
                 </div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon"><i class='bx bx-x-circle'></i></div>
                 <div class="stat-content">
-                    <div class="stat-value"><?= $totalRechazados ?></div>
+                    <div class="stat-value count-up" data-target="<?= $totalRechazados ?>">0</div>
                     <div class="stat-label">Rechazados</div>
                 </div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon"><i class='bx bx-wallet'></i></div>
                 <div class="stat-content">
-                    <div class="stat-value">S/ <?= number_format($montoTotal, 0) ?></div>
+                    <div class="stat-value">S/ <span class="count-up" data-target="<?= $montoTotal ?>">0</span></div>
                     <div class="stat-label">Monto Acreditado</div>
                 </div>
             </div>
@@ -1087,7 +1090,7 @@
             </div> <!-- End COLUMN 1 -->
 
             <!-- COLUMN 2 — Revisión Pendiente -->
-            <div class="card" style="margin-bottom:0;">
+            <!-- COLUMN 2 — Revisión Pendiente -->
 
         <!-- ════════════════════════════════════════════
              SECTION 2 — Revisión Pendiente
@@ -1175,7 +1178,7 @@
                 <?php endif; ?>
             </div>
         </div>
-        </div> <!-- End Dashboard Grid -->
+        </div>
 
         <!-- ════════════════════════════════════════════
              SECTION 3 — Historial de Movimientos
@@ -1477,8 +1480,32 @@
             filterHistory();
         }
 
-        // Initialize pagination on load
-        document.addEventListener('DOMContentLoaded', filterHistory);
+        // ── Count-Up Animation ──
+        function animateCountUp() {
+            document.querySelectorAll('.count-up').forEach(el => {
+                const target = +el.getAttribute('data-target');
+                const duration = 1500;
+                const increment = target / (duration / 16);
+                let current = 0;
+
+                const update = () => {
+                    current += increment;
+                    if (current < target) {
+                        el.textContent = Math.floor(current).toLocaleString();
+                        requestAnimationFrame(update);
+                    } else {
+                        el.textContent = target.toLocaleString();
+                    }
+                };
+                update();
+            });
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            filterHistory();
+            animateCountUp();
+        });
 
         // ── SweetAlert2 Confirms (Light Theme) ──
         document.querySelectorAll('.btn-approve-trigger').forEach(btn => {
