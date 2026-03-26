@@ -305,18 +305,14 @@
             border-bottom: 1px solid var(--outline);
         }
 
-        .card-title {
-            display: flex; align-items: center; gap: 0.85rem;
-            font-size: 0.95rem; font-weight: 700;
-            letter-spacing: -0.01em; color: var(--on-surface);
-        }
 
         .card-title .title-icon {
-            width: auto; height: auto;
+            width: 24px; height: 24px;
             background: transparent !important;
             padding: 0;
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.35rem;
+            font-size: 1.15rem;
+            flex-shrink: 0;
         }
         .card-title .title-icon.orange { color: #f97316; }
         .card-title .title-icon.green  { color: #10b981; }
@@ -325,9 +321,10 @@
         .card-title .title-icon.purple { color: #742183; }
 
         .card-title {
-            display: flex; align-items: center; gap: 0.85rem;
-            color: var(--on-surface); font-weight: 800; font-size: 1.05rem;
+            display: flex; align-items: center; gap: 0.75rem;
+            color: var(--on-surface); font-weight: 700; font-size: 0.95rem;
             letter-spacing: -0.01em;
+            line-height: 1;
         }
 
         .card-badge {
