@@ -2,26 +2,30 @@
 require_once __DIR__ . '/../models/ClienteModel.php';
 require_once __DIR__ . '/../config/config.php';
 
-class ClienteController {
+class ClienteController
+{
 
-    public function nuevo(): void {
+    public function nuevo(): void
+    {
         $this->requireAuth();
         $this->render('clientes/nuevo');
     }
 
-    public function registro(): void {
+    public function registro(): void
+    {
         $this->render('clientes/registro');
     }
 
-    public function registerPublic(): void {
+    public function registerPublic(): void
+    {
         header('Content-Type: application/json');
 
-        $data     = json_decode(file_get_contents('php://input'), true);
-        $dni      = trim($data['dni']      ?? '');
-        $nombre   = trim($data['nombre']   ?? '');
-        $celular  = trim($data['celular']  ?? '');
+        $data = json_decode(file_get_contents('php://input'), true);
+        $dni = trim($data['dni'] ?? '');
+        $nombre = trim($data['nombre'] ?? '');
+        $celular = trim($data['celular'] ?? '');
         $password = trim($data['password'] ?? '');
-        $dep      = trim($data['departamento'] ?? 'Tacna');
+        $dep = trim($data['departamento'] ?? 'Tacna');
 
         if (!$dni || !$nombre || !$celular || !$password) {
             echo json_encode(['success' => false, 'message' => 'Todos los campos son obligatorios.']);
@@ -42,40 +46,41 @@ class ClienteController {
         }
 
         $codigo = $model->generarCodigo();
-        $token  = hash_hmac('sha256', $codigo, SECRET_KEY);
+        $token = hash_hmac('sha256', $codigo, SECRET_KEY);
 
         $id = $model->create([
-            'codigo'       => $codigo,
-            'dni'          => $dni,
-            'nombre'       => $nombre,
+            'codigo' => $codigo,
+            'dni' => $dni,
+            'nombre' => $nombre,
             'razon_social' => null,
             'tipo_cliente' => 'Normal',
-            'ruc'          => null,
-            'celular'      => $celular,
-            'direccion'    => '',
+            'ruc' => null,
+            'celular' => $celular,
+            'direccion' => '',
             'departamento' => $dep,
-            'token'        => $token,
-            'password'     => hash('sha256', $password),
-            'creado_por'   => null,
+            'token' => $token,
+            'password' => hash('sha256', $password),
+            'creado_por' => null,
         ]);
 
         echo json_encode(['success' => true, 'message' => 'Registro exitoso. Ya puedes iniciar sesión.']);
         exit;
-    }PREMIASURGASLOGO
+    }
 
-    public function create(): void {
+    public function create(): void
+    {
         $this->requireAuth();
         header('Content-Type: application/json');
 
-        $data         = json_decode(file_get_contents('php://input'), true);
+        $data = json_decode(file_get_contents('php://input'), true);
         $tipo_cliente = trim($data['tipo_cliente'] ?? 'Normal');
-        $dni          = trim($data['dni']      ?? '');
-        $ruc          = trim($data['ruc']      ?? '');
+        $dni = trim($data['dni'] ?? '');
+        $ruc = trim($data['ruc'] ?? '');
         $razon_social = trim($data['razon_social'] ?? '');
-        $nombre       = trim($data['nombre']   ?? '');
-        $celular      = trim($data['celular']  ?? '');
-        $dir          = trim($data['direccion'] ?? '');
-        $dep          = $_SESSION['departamento'] ?? null;
+        $nombre = trim($data['nombre'] ?? '');
+        $celular = trim($data['celular'] ?? '');
+        $dir = trim($data['direccion'] ?? '');
+        $dep = $_SESSION['departamento'] ?? null;
 
         if (!$nombre || !$celular) {
             echo json_encode(['success' => false, 'message' => 'El Nombre del Contacto y el celular son obligatorios.']);
@@ -89,7 +94,8 @@ class ClienteController {
             }
             $ruc = null; // Clean ruc for Normal
             $razon_social = null;
-        } else {
+        }
+        else {
             if (!$ruc || !preg_match('/^\d{11}$/', $ruc)) {
                 echo json_encode(['success' => false, 'message' => 'El RUC debe tener exactamente 11 dígitos.']);
                 exit;
@@ -122,20 +128,21 @@ class ClienteController {
                     'success' => true,
                     'existing' => true,
                     'message' => 'El cliente ya estaba registrado por DNI.',
-                    'id'      => $existenteDni['id'],
-                    'codigo'  => $existenteDni['codigo'],
+                    'id' => $existenteDni['id'],
+                    'codigo' => $existenteDni['codigo'],
                 ]);
                 exit;
             }
-        } else {
+        }
+        else {
             $existenteRuc = $model->findByRuc($ruc);
             if ($existenteRuc) {
                 echo json_encode([
                     'success' => true,
                     'existing' => true,
                     'message' => 'El cliente ya estaba registrado por RUC.',
-                    'id'      => $existenteRuc['id'],
-                    'codigo'  => $existenteRuc['codigo'],
+                    'id' => $existenteRuc['id'],
+                    'codigo' => $existenteRuc['codigo'],
                 ]);
                 exit;
             }
@@ -148,59 +155,67 @@ class ClienteController {
                 'success' => true,
                 'existing' => true,
                 'message' => 'El cliente ya estaba registrado por celular.',
-                'id'      => $existente['id'],
-                'codigo'  => $existente['codigo'],
+                'id' => $existente['id'],
+                'codigo' => $existente['codigo'],
             ]);
             exit;
         }
 
         $codigo = $model->generarCodigo();
-        $token  = hash_hmac('sha256', $codigo, SECRET_KEY);
+        $token = hash_hmac('sha256', $codigo, SECRET_KEY);
 
         $id = $model->create([
-            'codigo'       => $codigo,
-            'dni'          => $dni,
-            'nombre'       => $nombre,
+            'codigo' => $codigo,
+            'dni' => $dni,
+            'nombre' => $nombre,
             'razon_social' => $razon_social,
             'tipo_cliente' => $tipo_cliente,
-            'ruc'          => $ruc,
-            'celular'      => $celular,
-            'direccion'    => $dir,
+            'ruc' => $ruc,
+            'celular' => $celular,
+            'direccion' => $dir,
             'departamento' => $dep,
-            'token'        => $token,
-            'creado_por'   => $_SESSION['id_usuario'],
+            'token' => $token,
+            'creado_por' => $_SESSION['id_usuario'],
         ]);
 
         echo json_encode(['success' => true, 'id' => $id, 'codigo' => $codigo]);
         exit;
     }
 
-    public function exito(): void {
+    public function exito(): void
+    {
         $this->requireAuth();
-        $id     = (int)($_GET['id'] ?? 0);
-        $model  = new ClienteModel();
+        $id = (int)($_GET['id'] ?? 0);
+        $model = new ClienteModel();
         $cliente = $model->findById($id);
-        if (!$cliente) { $this->redirect('panel'); }
+        if (!$cliente) {
+            $this->redirect('panel');
+        }
         $this->render('clientes/exito', ['cliente' => $cliente]);
     }
 
-    public function imprimir(): void {
+    public function imprimir(): void
+    {
         $this->requireAuth();
-        $id     = (int)($_GET['id'] ?? 0);
-        $model  = new ClienteModel();
+        $id = (int)($_GET['id'] ?? 0);
+        $model = new ClienteModel();
         $cliente = $model->findById($id);
-        if (!$cliente) { $this->redirect('panel'); }
+        if (!$cliente) {
+            $this->redirect('panel');
+        }
         $this->render('clientes/imprimir', ['cliente' => $cliente]);
     }
 
-    public function lista(): void {
+    public function lista(): void
+    {
         $this->requireAuth();
-        $model   = new ClienteModel();
+        $model = new ClienteModel();
         $clientes = $model->getAll();
         $this->render('clientes/lista', ['clientes' => $clientes]);
     }
 
-    public function editar(): void {
+    public function editar(): void
+    {
         $this->requireAdmin();
         $id = (int)($_GET['id'] ?? 0);
         $model = new ClienteModel();
@@ -213,11 +228,12 @@ class ClienteController {
         $this->render('clientes/editar', ['cliente' => $cliente]);
     }
 
-    public function update(): void {
+    public function update(): void
+    {
         $this->requireAdmin();
         $id = (int)($_POST['id'] ?? 0);
         $model = new ClienteModel();
-        
+
         $clienteOriginal = $model->findById($id);
         if (!$clienteOriginal) {
             $this->redirect('clientes/lista');
@@ -225,14 +241,14 @@ class ClienteController {
 
         $data = [
             'tipo_cliente' => trim($_POST['tipo_cliente'] ?? 'Normal'),
-            'dni'          => trim($_POST['dni'] ?? ''),
-            'ruc'          => trim($_POST['ruc'] ?? ''),
+            'dni' => trim($_POST['dni'] ?? ''),
+            'ruc' => trim($_POST['ruc'] ?? ''),
             'razon_social' => trim($_POST['razon_social'] ?? ''),
-            'nombre'       => trim($_POST['nombre'] ?? ''),
-            'celular'      => trim($_POST['celular'] ?? ''),
-            'direccion'    => trim($_POST['direccion'] ?? ''),
+            'nombre' => trim($_POST['nombre'] ?? ''),
+            'celular' => trim($_POST['celular'] ?? ''),
+            'direccion' => trim($_POST['direccion'] ?? ''),
             'departamento' => $clienteOriginal['departamento'], // Keep orginal department
-            'estado'       => (int)($_POST['estado'] ?? 1),
+            'estado' => (int)($_POST['estado'] ?? 1),
         ];
 
         if (!$data['nombre'] || !$data['celular']) {
@@ -247,7 +263,8 @@ class ClienteController {
             }
             $data['ruc'] = null;
             $data['razon_social'] = null;
-        } else {
+        }
+        else {
             if (!$data['ruc'] || !preg_match('/^\d{11}$/', $data['ruc'])) {
                 $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'El RUC debe tener exactamente 11 dígitos.'];
                 $this->redirect('clientes/editar?id=' . $id);
@@ -272,30 +289,34 @@ class ClienteController {
         if ($model->update($id, $data)) {
             $_SESSION['flash'] = ['type' => 'success', 'title' => '¡Éxito!', 'message' => 'Cliente actualizado correctamente.'];
             $this->redirect('clientes/lista');
-        } else {
+        }
+        else {
             $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo actualizar el cliente.'];
             $this->redirect('clientes/lista');
         }
     }
 
-    public function cambiarEstado(): void {
+    public function cambiarEstado(): void
+    {
         $this->requireAdmin();
         $id = (int)($_GET['id'] ?? 0);
         $estado = (int)($_GET['v'] ?? 1);
         $model = new ClienteModel();
         if ($model->setEstado($id, $estado)) {
             $_SESSION['flash'] = ['type' => 'success', 'title' => '¡Hecho!', 'message' => ($estado ? 'Cliente activado.' : 'Cliente inactivado.')];
-        } else {
+        }
+        else {
             $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo cambiar el estado.'];
         }
         $this->redirect('clientes/lista');
     }
 
-    public function consultarDni(): void {
+    public function consultarDni(): void
+    {
         header('Content-Type: application/json; charset=utf-8');
-        
+
         $dni = $_GET['dni'] ?? null;
-        
+
         if (!$dni || strlen($dni) !== 8 || !is_numeric($dni)) {
             echo json_encode(['success' => false, 'message' => 'DNI inválido.']);
             exit;
@@ -306,7 +327,7 @@ class ClienteController {
         $ch = curl_init($url);
         curl_setopt_array($ch, [
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT        => 10,
+            CURLOPT_TIMEOUT => 10,
             CURLOPT_SSL_VERIFYPEER => false,
         ]);
         $response = curl_exec($ch);
@@ -320,7 +341,8 @@ class ClienteController {
                 $nombreC = mb_convert_case(mb_strtolower(trim($nombreC), 'UTF-8'), MB_CASE_TITLE, 'UTF-8');
                 echo json_encode(['success' => true, 'data' => ['nombre_completo' => $nombreC]]);
                 exit;
-            } else if (isset($data['nombre'])) {
+            }
+            else if (isset($data['nombre'])) {
                 $nombreC = mb_convert_case(mb_strtolower(trim($data['nombre']), 'UTF-8'), MB_CASE_TITLE, 'UTF-8');
                 echo json_encode(['success' => true, 'data' => ['nombre_completo' => $nombreC]]);
                 exit;
@@ -331,9 +353,10 @@ class ClienteController {
         exit;
     }
 
-    public function consultarRuc(): void {
+    public function consultarRuc(): void
+    {
         header('Content-Type: application/json; charset=utf-8');
-        
+
         $ruc = $_GET['ruc'] ?? null;
         if (!$ruc || strlen($ruc) !== 11 || !is_numeric($ruc)) {
             echo json_encode(['success' => false, 'message' => 'RUC inválido.']);
@@ -359,7 +382,7 @@ class ClienteController {
                     'success' => true,
                     'data' => [
                         'razon_social' => trim($data['nombre']),
-                        'direccion'    => trim($data['direccion'] ?? '')
+                        'direccion' => trim($data['direccion'] ?? '')
                     ]
                 ]);
                 exit;
@@ -372,24 +395,28 @@ class ClienteController {
 
     // ── helpers ──────────────────────────────────────────────────
 
-    private function render(string $view, array $data = []): void {
+    private function render(string $view, array $data = []): void
+    {
         extract($data);
         require __DIR__ . "/../views/{$view}.php";
     }
 
-    private function redirect(string $path): void {
+    private function redirect(string $path): void
+    {
         header('Location: ' . BASE_URL . $path);
         exit;
     }
 
-    private function requireAuth(): void {
+    private function requireAuth(): void
+    {
         if (!isset($_SESSION['id_usuario'])) {
             header('Location: ' . BASE_URL . 'login');
             exit;
         }
     }
 
-    private function requireAdmin(): void {
+    private function requireAdmin(): void
+    {
         $this->requireAuth();
         if ($_SESSION['rol'] !== 'admin') {
             header('Location: ' . BASE_URL . 'panel');
