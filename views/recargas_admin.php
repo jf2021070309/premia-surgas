@@ -147,28 +147,33 @@
         }
 
         .admin-pill {
-            display: flex; align-items: center; gap: 16px;
-            padding: 8px 10px 8px 24px;
-            background: #2a0000; /* Deepest Guinda */
+            display: flex; align-items: center; gap: 14px;
+            padding: 7px 8px 7px 20px;
+            background: #ffffff;
             border-radius: 100px;
-            border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.02);
+            transition: all 0.3s ease;
+        }
+        .admin-pill:hover {
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            border-color: #cbd5e1;
         }
 
         .nav-bell {
-            color: #fff; font-size: 1.35rem; cursor: pointer;
-            opacity: 0.8; transition: all 0.2s;
+            color: #64748b; font-size: 1.25rem; cursor: pointer;
+            transition: all 0.2s;
         }
-        .nav-bell:hover { opacity: 1; transform: scale(1.1); }
+        .nav-bell:hover { color: var(--accent); transform: rotate(15deg); }
 
         .admin-avatar {
-            width: 38px; height: 38px; border-radius: 50%;
+            width: 34px; height: 34px; border-radius: 50%;
             background: #fb923c; color: #fff;
             display: flex; align-items: center; justify-content: center;
-            font-weight: 800; font-size: 1.1rem;
-            box-shadow: 0 0 15px rgba(251, 146, 60, 0.4);
+            font-weight: 800; font-size: 0.9rem;
+            box-shadow: 0 4px 10px rgba(251, 146, 60, 0.3);
             flex-shrink: 0;
-            border: 2px solid rgba(255,255,255,0.1);
+            border: 2px solid #fff;
         }
 
         .admin-pill-text {
@@ -176,32 +181,34 @@
             line-height: 1.2;
         }
         .admin-pill-role {
-            font-size: 0.65rem; font-weight: 800;
-            color: rgba(255,255,255,0.5);
+            font-size: 0.58rem; font-weight: 800;
+            color: #94a3b8;
             text-transform: uppercase; letter-spacing: 0.08em;
         }
         .admin-pill-name {
-            font-size: 1rem; font-weight: 800;
-            color: #fff; text-transform: lowercase;
+            font-size: 0.82rem; font-weight: 800;
+            color: #0f172a; text-transform: lowercase;
         }
 
         .nav-divider {
             width: 1px; height: 20px;
-            background: rgba(255,255,255,0.2);
+            background: #e2e8f0;
             margin: 0 4px;
         }
 
         .header-logout-btn {
-            width: 36px; height: 36px;
+            width: 32px; height: 32px;
             display: flex; align-items: center; justify-content: center;
-            background: rgba(255,255,255,0.1); border: none;
-            color: #fff; border-radius: 50%;
-            font-size: 1.2rem; transition: all var(--transition);
+            background: #f1f5f9; border: 1px solid #e2e8f0;
+            color: #64748b; border-radius: 50%;
+            font-size: 1rem; transition: all var(--transition);
             text-decoration: none;
         }
         .header-logout-btn:hover {
-            background: rgba(255,255,255,0.2);
-            transform: scale(1.05);
+            background: #ffe4e6;
+            color: #e11d48;
+            border-color: #fecaca;
+            transform: scale(1.1) rotate(-10deg);
         }
 
         /* ══════════════════════════════════════
@@ -356,7 +363,7 @@
         }
 
         .qr-preview-box {
-            background: linear-gradient(135deg, #400000, #5a0000);
+            background: #742183; /* Reverting to Yape Purple */
             padding: 3.5rem 2rem;
             display: flex;
             flex-direction: column;
@@ -512,15 +519,14 @@
             align-items: center;
             justify-content: center;
             gap: 0.7rem;
-            background: rgba(64, 0, 0, 0.9); /* Glass Guinda */
+            background: #7B2D8E; /* Reverting to Purple */
             color: #fff;
-            backdrop-filter: blur(5px);
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
         #qrSubmitBtn:not(:disabled):hover { 
-            background: #500000;
+            background: #5B1F6E;
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            box-shadow: 0 6px 20px rgba(123,45,142,0.2);
         }
         #qrSubmitBtn:disabled {
             opacity: 0.5;
