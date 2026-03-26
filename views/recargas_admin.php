@@ -9,45 +9,22 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* ══════════════════════════════════════
-           Design Tokens · Elegant Light Mode
-        ══════════════════════════════════════ */
         :root {
-            --bg:            #f0f2f5;
+            --bg:            #f4f7fa;
             --surface:       #ffffff;
-            --surface-low:   #f8f9fb;
-            --surface-hi:    #ffffff;
+            --sidebar-bg:    #ffffff;
+            
             /* Surgas Palette */
             --primary:       #800000; /* Guinda Surgas */
-            --primary-soft:  #fdf2f2;
-            --primary-glow:  rgba(128, 0, 0, 0.12);
             --accent:        #ff6600; /* Naranja Surgas */
-            --accent-soft:   #fff7ed;
             
-            --on-surface:    #0f172a;
-            --on-secondary:  #374151;
+            --on-surface:    #1e293b;
             --on-muted:      #64748b;
             --on-light:      #94a3b8;
-            --outline:       rgba(0,0,0,0.06);
-            --outline-med:   rgba(0,0,0,0.10);
+            --outline:       #e2e8f0;
             
-            --green:         #059669;
-            --green-soft:    #ecfdf5;
-            --red:           #dc2626;
-            --red-soft:      #fef2f2;
-            --blue:          #2563eb;
-            --blue-soft:     #eff6ff;
-            
-            --radius-xs:     8px;
-            --radius-sm:     12px;
-            --radius-md:     16px;
-            --radius-lg:     20px;
-            --radius-xl:     24px;
-            
-            --shadow-xs:     0 2px 4px rgba(0,0,0,0.02);
-            --shadow-sm:     0 4px 6px -1px rgba(0,0,0,0.05);
-            --shadow-md:     0 10px 15px -3px rgba(0,0,0,0.08);
-            --shadow-lg:     0 20px 25px -5px rgba(0,0,0,0.1);
+            --sidebar-width: 260px;
+            --radius-md:     12px;
             --transition:    0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -55,63 +32,133 @@
 
         body {
             background: var(--bg);
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Inter', system-ui, sans-serif;
             color: var(--on-surface);
             min-height: 100vh;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+            display: flex; /* Sidebar + Main */
+        }
+
+        /* ══════════════════════════════════════
+           Sidebar Elegant
+        ══════════════════════════════════════ */
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: var(--sidebar-bg);
+            position: fixed;
+            left: 0; top: 0;
+            border-right: 1px solid var(--outline);
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+        }
+
+        .sidebar-brand {
+            padding: 2.25rem 1.75rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar-brand img { width: 38px; height: auto; }
+        .sidebar-brand .brand-name {
+            font-weight: 800; font-size: 1.2rem;
+            color: var(--primary); letter-spacing: -0.02em;
+        }
+
+        .sidebar-menu {
+            flex: 1; padding: 0 0.85rem; overflow-y: auto;
+        }
+
+        .menu-label {
+            font-size: 0.65rem; font-weight: 800; color: var(--on-light);
+            text-transform: uppercase; letter-spacing: 0.1em;
+            padding: 1.5rem 1rem 0.6rem;
+        }
+
+        .sidebar-item {
+            display: flex; align-items: center; gap: 14px;
+            padding: 0.95rem 1.75rem; margin: 2px 0;
+            color: var(--on-muted); text-decoration: none;
+            font-weight: 700; font-size: 0.78rem;
+            transition: all var(--transition);
+            position: relative;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .sidebar-item i { font-size: 1.35rem; opacity: 0.7; transition: all 0.3s; }
+
+        .sidebar-item:hover { background: #f8fafc; color: var(--on-surface); }
+        .sidebar-item:hover i { opacity: 1; transform: translateX(2px); }
+
+        .sidebar-item.active {
+            background: #fff9f5;
+            color: var(--accent);
+        }
+
+        .sidebar-item.active i { color: var(--accent); opacity: 1; }
+
+        .sidebar-item.active::after {
+            content: ''; position: absolute;
+            right: 0; top: 0; height: 100%; width: 4px;
+            background: var(--accent);
+            box-shadow: -2px 0 10px rgba(255, 102, 0, 0.3);
+        }
+
+        /* Main Content Container */
+        .admin-layout {
+            flex: 1; margin-left: var(--sidebar-width);
+            display: flex; flex-direction: column;
+            min-width: 0; min-height: 100vh;
         }
 
         /* ══════════════════════════════════════
            Brand-Identity Top Bar
         ══════════════════════════════════════ */
         .top-nav {
-            background: #400000; /* Guinda Surgas */
-            background: linear-gradient(90deg, #400000 0%, #2a0000 100%);
-            border-bottom: 2px solid var(--accent);
-            padding: 0 1.5rem;
-            height: 60px;
+            background: #fff;
+            border-bottom: 1px solid var(--outline);
+            padding: 0 2rem;
+            height: 70px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             position: sticky;
             top: 0;
             z-index: 200;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
-        .nav-left { display: flex; align-items: center; gap: 1.5rem; }
-        .nav-right { display: flex; align-items: center; gap: 1rem; }
+        .nav-left { display: flex; flex-direction: column; }
+        .nav-right { display: flex; align-items: center; gap: 1.5rem; }
 
-        .brand-logo-img {
-            height: 32px;
-            width: auto;
-            object-fit: contain;
-        }
-
-        .back-btn {
-            display: inline-flex; align-items: center; gap: 0.4rem;
-            color: rgba(255,255,255,0.7); text-decoration: none;
-            font-weight: 500; font-size: 0.8rem;
-            padding: 6px 12px;
-            border-radius: var(--radius-sm);
-            border: 1px solid rgba(255,255,255,0.15);
-            background: rgba(255,255,255,0.05);
-            transition: all var(--transition);
-        }
-        .back-btn i { font-size: 1rem; }
-        .back-btn:hover { color: #fff; border-color: #fff; background: rgba(255,255,255,0.1); }
-
-        .page-title-group { text-align: right; }
         .page-title {
-            font-size: 0.95rem; font-weight: 800;
-            letter-spacing: -0.01em; color: #ffffff;
-            line-height: 1;
+            font-size: 1.25rem; font-weight: 800;
+            color: var(--on-surface);
+            letter-spacing: -0.02em;
+            line-height: 1.2;
         }
         .page-subtitle {
-            font-size: 0.65rem; color: rgba(255,255,255,0.5);
-            margin-top: 2px;
+            font-size: 0.8rem; color: var(--on-muted);
             font-weight: 500;
+        }
+
+        .admin-pill {
+            display: flex; align-items: center; gap: 12px;
+            padding: 6px 6px 6px 16px;
+            background: #f1f5f9;
+            border-radius: 100px;
+            border: 1px solid #e2e8f0;
+        }
+        .admin-pill-text { text-align: right; }
+        .admin-pill-name { font-size: 0.8rem; font-weight: 700; color: var(--on-surface); block; }
+        .admin-pill-role { font-size: 0.7rem; color: var(--on-muted); block; }
+        .admin-avatar {
+            width: 32px; height: 32px;
+            background: var(--primary);
+            color: #fff; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 0.85rem;
         }
 
         /* ══════════════════════════════════════
@@ -761,23 +808,85 @@
 </head>
 <body>
 
-    <!-- ════ Brand Header Nav ════ -->
-    <nav class="top-nav">
-        <div class="nav-left">
-            <img src="<?= BASE_URL ?>assets/premios/logo.png" alt="Surgas" class="brand-logo-img">
-            <a href="<?= BASE_URL ?>panel" class="back-btn">
-                <i class='bx bx-chevron-left'></i> Salir
+    <!-- ════════════════════════════════════════════
+         SIDEBAR — Elegant Navigation
+    ════════════════════════════════════════════ -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <img src="<?= BASE_URL ?>assets/premios/icono.png" alt="Surgas">
+            <span class="brand-name">SURGAS</span>
+        </div>
+
+        <nav class="sidebar-menu">
+            <div class="menu-label">Principal</div>
+            <a href="<?= BASE_URL ?>panel" class="sidebar-item">
+                <i class='bx bx-grid-alt'></i>
+                <span>Dashboard</span>
+            </a>
+
+            <div class="menu-label">Gestión Administrativa</div>
+            <a href="<?= BASE_URL ?>recargas-admin" class="sidebar-item active">
+                <i class='bx bx-wallet'></i>
+                <span>Solicitudes</span>
+            </a>
+            <a href="<?= BASE_URL ?>canjes-admin" class="sidebar-item">
+                <i class='bx bx-gift'></i>
+                <span>Canjes</span>
+            </a>
+            <a href="<?= BASE_URL ?>clientes/lista" class="sidebar-item">
+                <i class='bx bx-group'></i>
+                <span>Clientes</span>
+            </a>
+
+            <div class="menu-label">Catálogo</div>
+            <a href="<?= BASE_URL ?>productos" class="sidebar-item">
+                <i class='bx bx-package'></i>
+                <span>Productos</span>
+            </a>
+            <a href="<?= BASE_URL ?>conductores" class="sidebar-item">
+                <i class='bx bx-id-card'></i>
+                <span>Conductores</span>
+            </a>
+
+            <div class="menu-label">Operaciones</div>
+            <a href="<?= BASE_URL ?>scan" class="sidebar-item">
+                <i class='bx bx-qr-scan'></i>
+                <span>Escaneo QR</span>
+            </a>
+            <a href="<?= BASE_URL ?>configuraciones" class="sidebar-item">
+                <i class='bx bx-cog'></i>
+                <span>Configuración</span>
+            </a>
+        </nav>
+
+        <div style="padding: 1.25rem; border-top: 1px solid var(--outline);">
+            <a href="<?= BASE_URL ?>logout" class="sidebar-item" style="margin:0; color:var(--red); text-transform: none;">
+                <i class='bx bx-log-out' style="color:var(--red);"></i>
+                <span>Cerrar Sesión</span>
             </a>
         </div>
-        <div class="nav-right">
-            <div class="page-title-group">
-                <div class="page-title">Administración</div>
-                <div class="page-subtitle">Verificación de Recargas</div>
-            </div>
-        </div>
-    </nav>
+    </aside>
 
-    <div class="container">
+    <div class="admin-layout">
+        <!-- ════ Top Header ════ -->
+        <header class="top-nav">
+            <div class="nav-left">
+                <h1 class="page-title">Solicitudes de Recarga</h1>
+                <p class="page-subtitle">Panel de verificación administrativa</p>
+            </div>
+            
+            <div class="nav-right">
+                <div class="admin-pill">
+                    <div class="admin-pill-text">
+                        <span class="admin-pill-name">Admin Surgas</span>
+                        <span class="admin-pill-role">Administrador</span>
+                    </div>
+                    <div class="admin-avatar">A</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="container" style="max-width: 1400px; margin: 2rem auto; padding: 0 2.5rem; width: 100%;">
 
         <?php if (isset($_SESSION['flash'])): ?>
         <script>
@@ -1093,7 +1202,8 @@
             <?php endif; ?>
         </div>
 
-    </div><!-- .container -->
+        </main>
+    </div> <!-- .admin-main -->
 
     <!-- ════ Image Modal ════ -->
     <div class="img-modal" id="receiptModal">
@@ -1366,5 +1476,7 @@
 
         setInterval(checkLiveAdmin, 4000);
     </script>
+        </div> <!-- .container -->
+    </div> <!-- .admin-layout -->
 </body>
 </html>
