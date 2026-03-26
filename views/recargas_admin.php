@@ -305,11 +305,17 @@
             display: flex; align-items: center; justify-content: center;
             font-size: 1rem;
         }
-        .card-title .title-icon.orange { background: var(--accent-soft); color: var(--accent); }
-        .card-title .title-icon.green  { background: var(--primary-soft); color: var(--primary); }
-        .card-title .title-icon.blue   { background: var(--accent-soft); color: var(--accent); }
-        .card-title .title-icon.red    { background: #fee2e2; color: #dc2626; }
-        .card-title .title-icon.purple { background: #f3e8ff; color: #7c3aed; }
+        .card-title .title-icon.orange { background: #fff7ed; color: #f97316; }
+        .card-title .title-icon.green  { background: #ecfdf5; color: #10b981; }
+        .card-title .title-icon.blue   { background: #eff6ff; color: #3b82f6; }
+        .card-title .title-icon.red    { background: #fff1f2; color: #e11d48; }
+        .card-title .title-icon.purple { background: #fdf4ff; color: #742183; }
+
+        .card-title {
+            display: flex; align-items: center; gap: 0.85rem;
+            color: var(--on-surface); font-weight: 800; font-size: 1.05rem;
+            letter-spacing: -0.01em;
+        }
 
         .card-badge {
             display: inline-flex; align-items: center; gap: 0.3rem;
@@ -331,8 +337,6 @@
 
         .qr-header .card-title, .pending-header .card-title {
             color: var(--on-surface) !important;
-            font-size: 0.95rem;
-            font-weight: 800;
         }
 
         .qr-header, .pending-header {
@@ -348,9 +352,8 @@
             background: #fff;
         }
 
-        /* Preview Side - Deep Yape Theme */
         .qr-preview-box {
-            background: #742183;
+            background: linear-gradient(135deg, #400000, #5a0000);
             padding: 3.5rem 2rem;
             display: flex;
             flex-direction: column;
@@ -358,6 +361,17 @@
             justify-content: center;
             gap: 1.75rem;
             position: relative;
+            overflow: hidden;
+        }
+
+        /* Glassmorphism overlays */
+        .qr-preview-box::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(2px);
+            pointer-events: none;
         }
 
         /* Subtle texture for preview side */
@@ -484,28 +498,31 @@
 
         #qrSubmitBtn {
             width: 100%;
-            padding: 0.9rem;
-            border: none;
-            border-radius: 12px;
+            padding: 1rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 14px;
             font-weight: 700;
-            font-size: 0.88rem;
+            font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.6rem;
-            background: #7B2D8E;
+            gap: 0.7rem;
+            background: rgba(64, 0, 0, 0.9); /* Glass Guinda */
             color: #fff;
-            opacity: 0.4;
-        }
-        #qrSubmitBtn:not(:disabled) { 
-            opacity: 1; 
-            box-shadow: 0 4px 14px rgba(123,45,142,0.25); 
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
         #qrSubmitBtn:not(:disabled):hover { 
-            background: #5B1F6E; 
-            transform: translateY(-1px); 
+            background: #500000;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        #qrSubmitBtn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: #94a3b8;
         }
 
         .toggle-chevron { transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); color: var(--on-light); font-size: 1.25rem; }
@@ -997,6 +1014,9 @@
             <div class="card qr-card" style="margin-bottom:0;">
             <div class="card-header qr-header" onclick="toggleQR()">
                 <div class="card-title">
+                    <div class="title-icon purple">
+                        <i class='bx bx-qr-scan'></i>
+                    </div>
                     Configuración QR de Pago
                 </div>
                 <div style="display:flex; align-items:center; gap:0.65rem;">
