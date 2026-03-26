@@ -603,6 +603,18 @@
 
         .date-text { font-size: 0.78rem; color: var(--on-muted); white-space: nowrap; }
 
+        .pag-btn {
+            width: 32px; height: 32px;
+            display: inline-flex; align-items: center; justify-content: center;
+            border: 1px solid var(--outline-med); border-radius: 8px;
+            background: #fff; color: #64748b;
+            font-size: 0.75rem; font-weight: 700; cursor: pointer;
+            transition: all 0.2s;
+        }
+        .pag-btn:hover { border-color: var(--primary); color: var(--primary); background: #fdf4ff; }
+        .pag-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 4px 10px var(--primary-glow); }
+        .pag-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
         /* ══════════════════════════════════════
            Image Modal
         ══════════════════════════════════════ */
@@ -970,7 +982,6 @@
                                 <th>Monto</th>
                                 <th>Evidencia</th>
                                 <th>Estado</th>
-                                <th>Responsable</th>
                                 <th>Fecha y Hora</th>
                             </tr>
                         </thead>
@@ -1001,8 +1012,14 @@
                                     <?php endif; ?>
                                 </td>
                                 <td><span class="chip <?= $chipClass ?>"><?= ucfirst($h['estado'] ?? 'pendiente') ?></span></td>
-                                <td style="color: var(--on-muted); font-size:0.8rem;"><?= htmlspecialchars($h['validador_nombre'] ?? '—') ?></td>
-                                <td class="date-text"><?= date('d M Y, H:i', strtotime($h['fecha'])) ?></td>
+                                <td class="date-text">
+                                    <div style="font-weight: 700; color: var(--on-surface);">
+                                        <?= date('d M Y', strtotime($h['fecha'])) ?>
+                                    </div>
+                                    <div style="font-size: 0.7rem; opacity: 0.7;">
+                                        <?= date('h:i A', strtotime($h['fecha'])) ?>
+                                    </div>
+                                </td>
                             </tr>
                             <?php endforeach; ?>
                         </tbody>
@@ -1011,11 +1028,10 @@
                 <!-- Pagination Controls -->
                 <div id="paginationControls" style="padding: 1rem 1.25rem; border-top: 1px solid var(--outline); display: flex; align-items: center; justify-content: space-between; background: var(--surface-low);">
                     <div style="font-size: 0.78rem; color: var(--on-muted); font-weight: 500;">
-                        Mostrando <span id="pagStart">0</span> - <span id="pagEnd">0</span> de <span id="pagTotal">0</span> movimientos
+                        Mostrando <span id="pagStart">0</span> - <span id="pagEnd">0</span> de <span id="pagTotal">0</span>
                     </div>
-                    <div style="display: flex; gap: 0.5rem;">
-                        <button onclick="changePage(-1)" id="prevBtn" class="btn-view-sm" style="padding: 6px 12px;"><i class='bx bx-chevron-left'></i> Anterior</button>
-                        <button onclick="changePage(1)" id="nextBtn" class="btn-view-sm" style="padding: 6px 12px;">Siguiente <i class='bx bx-chevron-right'></i></button>
+                    <div id="pageNumbers" style="display: flex; gap: 4px; align-items: center;">
+                        <!-- JS injects here -->
                     </div>
                 </div>
             <?php endif; ?>
@@ -1171,10 +1187,41 @@
             document.getElementById('pagStart').textContent = total === 0 ? 0 : start + 1;
             document.getElementById('pagEnd').textContent = Math.min(end, total);
             
-            document.getElementById('prevBtn').disabled = currentPage === 1;
-            document.getElementById('prevBtn').style.opacity = currentPage === 1 ? '0.5' : '1';
-            document.getElementById('nextBtn').disabled = currentPage === maxPage;
-            document.getElementById('nextBtn').style.opacity = currentPage === maxPage ? '0.5' : '1';
+            updatePaginationUI(maxPage);
+        }
+
+        function updatePaginationUI(maxPage) {
+            const container = document.getElementById('pageNumbers');
+            container.innerHTML = '';
+
+            // Prev button
+            const prev = document.createElement('button');
+            prev.className = 'pag-btn';
+            prev.innerHTML = "<i class='bx bx-chevron-left'></i>";
+            prev.disabled = currentPage === 1;
+            prev.onclick = () => { currentPage--; filterHistory(); };
+            container.appendChild(prev);
+
+            // Page numbers logic (sliding window if many pages)
+            let startPage = Math.max(1, currentPage - 2);
+            let endPage = Math.min(maxPage, startPage + 4);
+            if (endPage - startPage < 4) startPage = Math.max(1, endPage - 4);
+
+            for (let i = startPage; i <= endPage; i++) {
+                const btn = document.createElement('button');
+                btn.className = `pag-btn ${i === currentPage ? 'active' : ''}`;
+                btn.textContent = i;
+                btn.onclick = () => { currentPage = i; filterHistory(); };
+                container.appendChild(btn);
+            }
+
+            // Next button
+            const next = document.createElement('button');
+            next.className = 'pag-btn';
+            next.innerHTML = "<i class='bx bx-chevron-right'></i>";
+            next.disabled = currentPage === maxPage;
+            next.onclick = () => { currentPage++; filterHistory(); };
+            container.appendChild(next);
         }
 
         function changePage(dir) {
