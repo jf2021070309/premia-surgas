@@ -23,19 +23,22 @@
             --on-light:      #94a3b8;
             --outline:       #e2e8f0;
             
-            --sidebar-width: 260px;
-            --radius-md:     12px;
+            --sidebar-width: 240px;
+            --radius-md:     10px;
             --transition:    0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { font-size: 14px; } /* 90% Scale effect from 16px */
 
         body {
             background: var(--bg);
             font-family: 'Inter', system-ui, sans-serif;
             color: var(--on-surface);
             min-height: 100vh;
-            display: flex; /* Sidebar + Main */
+            display: flex;
+            -webkit-font-smoothing: antialiased;
         }
 
         /* ══════════════════════════════════════
@@ -54,7 +57,7 @@
         }
 
         .sidebar-brand {
-            padding: 2.5rem 1.75rem;
+            padding: 2rem 1.5rem;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -77,10 +80,10 @@
         }
 
         .sidebar-item {
-            display: flex; align-items: center; gap: 14px;
-            padding: 0.95rem 1.75rem; margin: 2px 0;
+            display: flex; align-items: center; gap: 12px;
+            padding: 0.85rem 1.5rem; margin: 1px 0;
             color: rgba(255,255,255,0.7); text-decoration: none;
-            font-weight: 700; font-size: 0.78rem;
+            font-weight: 700; font-size: 0.72rem;
             transition: all var(--transition);
             position: relative;
             text-transform: uppercase;
@@ -205,12 +208,12 @@
            Main Layout
         ══════════════════════════════════════ */
         .container {
-            max-width: 1200px;
-            margin: 1.75rem auto;
-            padding: 0 1.5rem;
+            max-width: 1250px;
+            margin: 1.25rem auto;
+            padding: 0 1.25rem;
             display: flex;
             flex-direction: column;
-            gap: 1.5rem;
+            gap: 1.25rem;
         }
 
         .dashboard-top-grid {
@@ -225,17 +228,17 @@
         .stats-row {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 1.25rem;
+            gap: 1rem;
         }
 
         .stat-card {
             background: #400000; /* Guinda */
-            border-radius: 20px;
-            padding: 1.5rem;
+            border-radius: 16px;
+            padding: 1.25rem;
             display: flex;
             align-items: center;
-            gap: 1.25rem;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+            gap: 1rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative; overflow: hidden;
             border: 1px solid rgba(255,255,255,0.02);
