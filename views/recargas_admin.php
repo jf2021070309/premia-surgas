@@ -120,44 +120,56 @@
         .stats-row {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 1rem;
+            gap: 1.25rem;
         }
 
         .stat-card {
-            background: var(--surface);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--outline);
-            padding: 1.25rem;
+            background: #fff;
+            border-radius: 20px;
+            border: 1px solid #f1f5f9;
+            padding: 1.5rem;
             display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-            box-shadow: var(--shadow-xs);
-            transition: all var(--transition);
+            align-items: center;
+            gap: 1.25rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative; overflow: hidden;
         }
-        .stat-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+        .stat-card:hover { 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.06); 
+            transform: translateY(-4px); 
+            border-color: #e2e8f0;
+        }
+        .stat-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
+            background: currentColor; opacity: 0.1;
+        }
 
         .stat-icon {
-            width: 46px; height: 46px;
-            border-radius: var(--radius-md);
+            width: 52px; height: 52px;
+            border-radius: 16px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.35rem;
+            font-size: 1.5rem;
             flex-shrink: 0;
+            transition: transform 0.3s ease;
         }
-        .stat-icon.orange { background: var(--primary-soft); color: var(--primary); }
-        .stat-icon.green  { background: var(--green-soft);   color: var(--green); }
-        .stat-icon.red    { background: var(--red-soft);     color: var(--red); }
-        .stat-icon.blue   { background: var(--blue-soft);    color: var(--blue); }
+        .stat-card:hover .stat-icon { transform: scale(1.1) rotate(-5deg); }
+
+        .stat-icon.orange { background: #fff7ed; color: #f97316; }
+        .stat-icon.green  { background: #f0fdf4; color: #22c55e; }
+        .stat-icon.red    { background: #fef2f2; color: #ef4444; }
+        .stat-icon.blue   { background: #eff6ff; color: #3b82f6; }
 
         .stat-content { flex: 1; min-width: 0; }
         .stat-value {
-            font-size: 1.5rem; font-weight: 800;
-            letter-spacing: -0.03em; color: var(--on-surface);
-            line-height: 1.1;
+            font-size: 1.75rem; font-weight: 900;
+            letter-spacing: -0.04em; color: #1e293b;
+            line-height: 1;
         }
         .stat-label {
-            font-size: 0.72rem; font-weight: 600;
-            color: var(--on-muted); margin-top: 4px;
-            letter-spacing: 0.01em;
+            font-size: 0.8rem; font-weight: 700;
+            color: #64748b; margin-top: 6px;
+            letter-spacing: 0.01em; text-transform: uppercase;
         }
 
         /* ══════════════════════════════════════
@@ -515,22 +527,38 @@
         .btn-danger-ghost:hover { background: var(--red-soft); color: var(--red); }
 
         /* ══════════════════════════════════════
-           Empty State
+           Empty State Premium
         ══════════════════════════════════════ */
         .empty-state {
-            padding: 3.5rem 1.5rem;
+            padding: 5rem 2rem;
             text-align: center;
-            display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: radial-gradient(circle at center, #ffffff 0%, #f9fafb 100%);
+            border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+            position: relative; overflow: hidden;
         }
         .empty-icon {
-            width: 56px; height: 56px; border-radius: 50%;
-            background: var(--green-soft);
+            font-size: 3.5rem; color: #10b981; background: #fff;
+            width: 80px; height: 80px; border-radius: 1.5rem;
             display: flex; align-items: center; justify-content: center;
-            margin-bottom: 0.25rem;
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.12);
+            margin-bottom: 1.5rem;
+            animation: float 3.5s ease-in-out infinite;
+            z-index: 1;
         }
-        .empty-icon i { font-size: 1.6rem; color: var(--green); }
-        .empty-state h3 { font-size: 0.92rem; color: var(--on-secondary); font-weight: 700; }
-        .empty-state p { font-size: 0.8rem; color: var(--on-muted); }
+        .empty-icon i { font-size: 2.2rem; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(2deg); }
+        }
+        .empty-state h3 { font-size: 1.25rem; color: var(--on-surface); margin-bottom: 0.5rem; font-weight: 800; z-index: 1; }
+        .empty-state p { color: #64748b; font-size: 0.9rem; max-width: 320px; margin: 0 auto; line-height: 1.6; z-index: 1; }
+        
+        .empty-state::before {
+            content: ''; position: absolute; width: 300px; height: 300px;
+            background: var(--primary-glow); border-radius: 50%;
+            top: -150px; right: -150px; filter: blur(80px); opacity: 0.08;
+        }
 
         /* ══════════════════════════════════════
            History Table
@@ -873,8 +901,8 @@
             <?php if (empty($recargas)): ?>
                 <div class="empty-state">
                     <div class="empty-icon"><i class='bx bx-check-shield'></i></div>
-                    <h3>Todo al día</h3>
-                    <p>No hay comprobantes pendientes de verificar.</p>
+                    <h3>¡Todo al día!</h3>
+                    <p>No hay comprobantes pendientes de verificar en este momento.</p>
                 </div>
             <?php else: ?>
                 <ul class="ticket-list">
@@ -968,9 +996,9 @@
 
             <?php if (empty($historial)): ?>
                 <div class="empty-state">
-                    <div class="empty-icon"><i class='bx bx-spreadsheet'></i></div>
-                    <h3>Sin historial</h3>
-                    <p>Aquí aparecerán todas las recargas procesadas.</p>
+                    <div class="empty-icon" style="color: var(--primary);"><i class='bx bx-spreadsheet'></i></div>
+                    <h3>Sin movimientos todavía</h3>
+                    <p>Cuando los clientes realicen recargas, aparecerán aquí con todo su detalle.</p>
                 </div>
             <?php else: ?>
                 <div class="table-wrapper">
