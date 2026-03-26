@@ -16,40 +16,39 @@
             --bg:            #f0f2f5;
             --surface:       #ffffff;
             --surface-low:   #f8f9fb;
-            --surface-hi:    #f3f4f6;
-            --surface-br:    #e5e7eb;
-            --on-surface:    #111827;
+            --surface-hi:    #ffffff;
+            /* Surgas Palette */
+            --primary:       #800000; /* Guinda Surgas */
+            --primary-soft:  #fdf2f2;
+            --primary-glow:  rgba(128, 0, 0, 0.12);
+            --accent:        #ff6600; /* Naranja Surgas */
+            --accent-soft:   #fff7ed;
+            
+            --on-surface:    #0f172a;
             --on-secondary:  #374151;
-            --on-muted:      #6b7280;
-            --on-light:      #9ca3af;
+            --on-muted:      #64748b;
+            --on-light:      #94a3b8;
             --outline:       rgba(0,0,0,0.06);
             --outline-med:   rgba(0,0,0,0.10);
-            --primary:       #e86a10;
-            --primary-soft:  #fff7ed;
-            --primary-dim:   #c2590d;
-            --primary-glow:  rgba(232,106,16,0.15);
+            
             --green:         #059669;
             --green-soft:    #ecfdf5;
-            --green-border:  #a7f3d0;
-            --amber:         #d97706;
-            --amber-soft:    #fffbeb;
-            --amber-border:  #fde68a;
             --red:           #dc2626;
             --red-soft:      #fef2f2;
-            --red-border:    #fecaca;
             --blue:          #2563eb;
             --blue-soft:     #eff6ff;
-            --blue-border:   #bfdbfe;
-            --radius-xs:     6px;
-            --radius-sm:     8px;
-            --radius-md:     12px;
-            --radius-lg:     16px;
-            --radius-xl:     20px;
-            --shadow-xs:     0 1px 2px rgba(0,0,0,0.04);
-            --shadow-sm:     0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-            --shadow-md:     0 4px 14px rgba(0,0,0,0.06), 0 2px 6px rgba(0,0,0,0.03);
-            --shadow-lg:     0 10px 30px rgba(0,0,0,0.08);
-            --transition:    0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            --radius-xs:     8px;
+            --radius-sm:     12px;
+            --radius-md:     16px;
+            --radius-lg:     20px;
+            --radius-xl:     24px;
+            
+            --shadow-xs:     0 2px 4px rgba(0,0,0,0.02);
+            --shadow-sm:     0 4px 6px -1px rgba(0,0,0,0.05);
+            --shadow-md:     0 10px 15px -3px rgba(0,0,0,0.08);
+            --shadow-lg:     0 20px 25px -5px rgba(0,0,0,0.1);
+            --transition:    0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -106,12 +105,22 @@
            Main Layout
         ══════════════════════════════════════ */
         .container {
-            max-width: 1140px;
+            max-width: 1200px;
             margin: 1.75rem auto;
             padding: 0 1.5rem;
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
+        }
+
+        .dashboard-top-grid {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 1.5rem;
+            align-items: start;
+        }
+        @media (max-width: 1024px) {
+            .dashboard-top-grid { grid-template-columns: 1fr; }
         }
 
         /* ══════════════════════════════════════
@@ -136,40 +145,41 @@
             position: relative; overflow: hidden;
         }
         .stat-card:hover { 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.06); 
-            transform: translateY(-4px); 
-            border-color: #e2e8f0;
+            box-shadow: 0 15px 30px rgba(128,0,0,0.08); 
+            transform: translateY(-5px); 
+            border-color: var(--primary);
         }
         .stat-card::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
-            background: currentColor; opacity: 0.1;
+            content: ''; position: absolute; top: 0; left: 0; width: 5px; height: 100%;
+            background: var(--primary); opacity: 0.15;
         }
 
         .stat-icon {
-            width: 52px; height: 52px;
-            border-radius: 16px;
+            width: 56px; height: 56px;
+            border-radius: 18px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             flex-shrink: 0;
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 -4px 0 rgba(0,0,0,0.1);
         }
-        .stat-card:hover .stat-icon { transform: scale(1.1) rotate(-5deg); }
+        .stat-card:hover .stat-icon { transform: scale(1.1); box-shadow: inset 0 -2px 0 rgba(0,0,0,0.1); }
 
-        .stat-icon.orange { background: #fff7ed; color: #f97316; }
-        .stat-icon.green  { background: #f0fdf4; color: #22c55e; }
-        .stat-icon.red    { background: #fef2f2; color: #ef4444; }
-        .stat-icon.blue   { background: #eff6ff; color: #3b82f6; }
+        .stat-icon.orange { background: var(--accent); color: #fff; }
+        .stat-icon.green  { background: #22c55e; color: #fff; } /* Mantenemos verde para aprobados por UX */
+        .stat-icon.red    { background: var(--primary); color: #fff; } /* Guinda para rechazados */
+        .stat-icon.blue   { background: #1e293b; color: #fff; } /* Negro para totales */
 
         .stat-content { flex: 1; min-width: 0; }
         .stat-value {
-            font-size: 1.75rem; font-weight: 900;
-            letter-spacing: -0.04em; color: #1e293b;
+            font-size: 1.85rem; font-weight: 900;
+            letter-spacing: -0.04em; color: var(--primary);
             line-height: 1;
         }
         .stat-label {
-            font-size: 0.8rem; font-weight: 700;
+            font-size: 0.78rem; font-weight: 800;
             color: #64748b; margin-top: 6px;
-            letter-spacing: 0.01em; text-transform: uppercase;
+            letter-spacing: 0.04em; text-transform: uppercase;
         }
 
         /* ══════════════════════════════════════
@@ -204,10 +214,10 @@
             display: flex; align-items: center; justify-content: center;
             font-size: 1.05rem;
         }
-        .card-title .title-icon.orange { background: var(--primary-soft); color: var(--primary); }
-        .card-title .title-icon.green  { background: var(--green-soft);   color: var(--green); }
-        .card-title .title-icon.blue   { background: var(--blue-soft);    color: var(--blue); }
-        .card-title .title-icon.red    { background: var(--red-soft);     color: var(--red); }
+        .card-title .title-icon.orange { background: var(--accent-soft); color: var(--accent); }
+        .card-title .title-icon.green  { background: var(--primary-soft); color: var(--primary); }
+        .card-title .title-icon.blue   { background: var(--accent-soft); color: var(--accent); }
+        .card-title .title-icon.red    { background: #fee2e2; color: #dc2626; }
         .card-title .title-icon.purple { background: #f3e8ff; color: #7c3aed; }
 
         .card-badge {
@@ -253,57 +263,48 @@
 
         .qr-grid {
             display: grid;
-            grid-template-columns: 380px 1fr;
+            grid-template-columns: 1fr;
             gap: 0;
             background: #fff;
         }
 
         /* Preview Side - Deep Yape Theme */
         .qr-preview-box {
-            background: #742183;
-            padding: 3.5rem 2rem;
+            background: var(--primary);
+            padding: 2rem;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 1.75rem;
+            gap: 1.25rem;
             position: relative;
         }
 
-        /* Subtle texture for preview side */
-        .qr-preview-box::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-image: radial-gradient(circle at 10% 20%, rgba(255,255,255,0.03) 0%, transparent 20%),
-                            radial-gradient(circle at 90% 80%, rgba(255,255,255,0.03) 0%, transparent 20%);
-        }
-
         .yape-logo-img {
-            height: 100px;
+            height: 64px;
             object-fit: contain;
             position: relative; z-index: 1;
         }
 
         .qr-frame {
             background: #fff;
-            padding: 1.25rem;
-            border-radius: 24px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            padding: 1rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             position: relative;
             z-index: 1;
         }
 
         .qr-frame img {
-            width: 200px;
-            height: 200px;
+            width: 160px;
+            height: 160px;
             object-fit: contain;
             display: block;
-            border-radius: 12px;
+            border-radius: 8px;
         }
 
         .qr-empty-frame {
-            width: 200px; height: 200px;
+            width: 160px; height: 160px;
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
             color: #ccc; gap: 0.5rem;
@@ -527,26 +528,32 @@
         .btn-danger-ghost:hover { background: var(--red-soft); color: var(--red); }
 
         /* ══════════════════════════════════════
-           Empty State Premium
+           Empty State Premium (Adaptive)
         ══════════════════════════════════════ */
         .empty-state {
-            padding: 5rem 2rem;
+            padding: 3.5rem 2rem;
             text-align: center;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             background: radial-gradient(circle at center, #ffffff 0%, #f9fafb 100%);
             border-radius: 0 0 var(--radius-xl) var(--radius-xl);
             position: relative; overflow: hidden;
+            transition: all 0.4s ease;
         }
+        .empty-state.is-compact { padding: 2rem 1.5rem; }
+        
         .empty-icon {
-            font-size: 3.5rem; color: #10b981; background: #fff;
-            width: 80px; height: 80px; border-radius: 1.5rem;
+            font-size: 2.8rem; color: #10b981; background: #fff;
+            width: 70px; height: 70px; border-radius: 1.25rem;
             display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.12);
-            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.1);
+            margin-bottom: 1.25rem;
             animation: float 3.5s ease-in-out infinite;
             z-index: 1;
         }
-        .empty-icon i { font-size: 2.2rem; }
+        .empty-state.is-compact .empty-icon { width: 56px; height: 56px; font-size: 2rem; margin-bottom: 0.75rem; }
+        
+        .empty-icon i { font-size: 2rem; }
+        .empty-state.is-compact .empty-icon i { font-size: 1.5rem; }
         @keyframes float {
             0%, 100% { transform: translateY(0) rotate(0deg); }
             50% { transform: translateY(-12px) rotate(2deg); }
@@ -818,10 +825,11 @@
             </div>
         </div>
 
-        <!-- ════════════════════════════════════════════
-             SECTION 1 — QR Yape Manager
-        ════════════════════════════════════════════ -->
-        <div class="card qr-card">
+        <!-- Dashboard Modular Grid -->
+        <div class="dashboard-top-grid">
+            
+            <!-- COLUMN 1 — Configuración QR -->
+            <div class="card qr-card" style="margin-bottom:0;">
             <div class="card-header qr-header" onclick="toggleQR()">
                 <div class="card-title">
                     Configuración QR de Pago
@@ -881,8 +889,11 @@
                         </form>
                     </div>
                 </div>
-            </div>
-        </div>
+                </div>
+            </div> <!-- End COLUMN 1 -->
+
+            <!-- COLUMN 2 — Revisión Pendiente -->
+            <div class="card" style="margin-bottom:0;">
 
         <!-- ════════════════════════════════════════════
              SECTION 2 — Revisión Pendiente
@@ -899,10 +910,10 @@
             </div>
 
             <?php if (empty($recargas)): ?>
-                <div class="empty-state">
+                <div class="empty-state is-compact">
                     <div class="empty-icon"><i class='bx bx-check-shield'></i></div>
-                    <h3>¡Todo al día!</h3>
-                    <p>No hay comprobantes pendientes de verificar en este momento.</p>
+                    <h3 style="font-size: 1.1rem;">¡Todo al día!</h3>
+                    <p style="font-size: 0.85rem;">No hay comprobantes pendientes de verificar.</p>
                 </div>
             <?php else: ?>
                 <ul class="ticket-list">
@@ -963,7 +974,8 @@
                     <?php endforeach; ?>
                 </ul>
             <?php endif; ?>
-        </div>
+            </div> <!-- End COLUMN 2 -->
+        </div> <!-- End Dashboard Grid -->
 
         <!-- ════════════════════════════════════════════
              SECTION 3 — Historial de Movimientos
