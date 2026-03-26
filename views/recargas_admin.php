@@ -215,12 +215,13 @@
            Main Layout
         ══════════════════════════════════════ */
         .container {
-            max-width: 1250px;
-            margin: 1.25rem auto;
-            padding: 0 1.25rem;
+            max-width: 1400px;
+            margin: 1.5rem auto;
+            padding: 0 2.5rem;
             display: flex;
             flex-direction: column;
             gap: 1.25rem;
+            width: 100%;
         }
 
         .dashboard-top-grid {
@@ -979,7 +980,7 @@
             </div>
         </header>
 
-        <div class="container" style="max-width: 1400px; margin: 2rem auto; padding: 0 2.5rem; width: 100%;">
+        <div class="container">
 
         <?php if (isset($_SESSION['flash'])): ?>
         <script>
@@ -1114,7 +1115,7 @@
              SECTION 2 — Revisión Pendiente
         ════════════════════════════════════════════ -->
         <?php $numPendientes = count($recargas); ?>
-        <div class="card" style="margin-bottom:2rem;">
+        <div class="card" style="margin-bottom:0;">
             <div class="card-header pending-header" onclick="togglePending()">
                 <div class="card-title">
                     <div class="title-icon red">
