@@ -114,13 +114,9 @@
         }
 
         .dashboard-top-grid {
-            display: grid;
-            grid-template-columns: 1fr 400px;
+            display: flex;
+            flex-direction: column;
             gap: 1.5rem;
-            align-items: start;
-        }
-        @media (max-width: 1024px) {
-            .dashboard-top-grid { grid-template-columns: 1fr; }
         }
 
         /* ══════════════════════════════════════
@@ -263,48 +259,57 @@
 
         .qr-grid {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: 380px 1fr;
             gap: 0;
             background: #fff;
         }
 
         /* Preview Side - Deep Yape Theme */
         .qr-preview-box {
-            background: var(--primary);
-            padding: 2rem;
+            background: #742183;
+            padding: 3.5rem 2rem;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 1.25rem;
+            gap: 1.75rem;
             position: relative;
         }
 
+        /* Subtle texture for preview side */
+        .qr-preview-box::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(circle at 10% 20%, rgba(255,255,255,0.03) 0%, transparent 20%),
+                            radial-gradient(circle at 90% 80%, rgba(255,255,255,0.03) 0%, transparent 20%);
+        }
+
         .yape-logo-img {
-            height: 64px;
+            height: 100px;
             object-fit: contain;
             position: relative; z-index: 1;
         }
 
         .qr-frame {
             background: #fff;
-            padding: 1rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 1.25rem;
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
             position: relative;
             z-index: 1;
         }
 
         .qr-frame img {
-            width: 160px;
-            height: 160px;
+            width: 200px;
+            height: 200px;
             object-fit: contain;
             display: block;
-            border-radius: 8px;
+            border-radius: 12px;
         }
 
         .qr-empty-frame {
-            width: 160px; height: 160px;
+            width: 200px; height: 200px;
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
             color: #ccc; gap: 0.5rem;
@@ -528,32 +533,28 @@
         .btn-danger-ghost:hover { background: var(--red-soft); color: var(--red); }
 
         /* ══════════════════════════════════════
-           Empty State Premium (Adaptive)
+           Empty State Premium
         ══════════════════════════════════════ */
         .empty-state {
-            padding: 3.5rem 2rem;
+            padding: 5rem 2rem;
             text-align: center;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             background: radial-gradient(circle at center, #ffffff 0%, #f9fafb 100%);
             border-radius: 0 0 var(--radius-xl) var(--radius-xl);
             position: relative; overflow: hidden;
-            transition: all 0.4s ease;
         }
-        .empty-state.is-compact { padding: 2rem 1.5rem; }
         
         .empty-icon {
-            font-size: 2.8rem; color: #10b981; background: #fff;
-            width: 70px; height: 70px; border-radius: 1.25rem;
+            font-size: 3.5rem; color: #10b981; background: #fff;
+            width: 80px; height: 80px; border-radius: 1.5rem;
             display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.1);
-            margin-bottom: 1.25rem;
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.12);
+            margin-bottom: 1.5rem;
             animation: float 3.5s ease-in-out infinite;
             z-index: 1;
         }
-        .empty-state.is-compact .empty-icon { width: 56px; height: 56px; font-size: 2rem; margin-bottom: 0.75rem; }
         
-        .empty-icon i { font-size: 2rem; }
-        .empty-state.is-compact .empty-icon i { font-size: 1.5rem; }
+        .empty-icon i { font-size: 2.2rem; }
         @keyframes float {
             0%, 100% { transform: translateY(0) rotate(0deg); }
             50% { transform: translateY(-12px) rotate(2deg); }
@@ -910,10 +911,10 @@
             </div>
 
             <?php if (empty($recargas)): ?>
-                <div class="empty-state is-compact">
+                <div class="empty-state">
                     <div class="empty-icon"><i class='bx bx-check-shield'></i></div>
-                    <h3 style="font-size: 1.1rem;">¡Todo al día!</h3>
-                    <p style="font-size: 0.85rem;">No hay comprobantes pendientes de verificar.</p>
+                    <h3>¡Todo al día!</h3>
+                    <p>No hay comprobantes pendientes de verificar en este momento.</p>
                 </div>
             <?php else: ?>
                 <ul class="ticket-list">
