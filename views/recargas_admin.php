@@ -242,27 +242,24 @@
             margin-bottom: 2rem;
         }
 
-        .qr-section-body {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s cubic-bezier(0, 1, 0, 1);
-        }
-        .qr-section-body.open {
-            max-height: 2000px;
-            transition: max-height 0.4s cubic-bezier(1, 0, 1, 0);
-        }
-
-        .qr-header {
-            background: #fff !important;
-            border-bottom: 1px solid var(--outline) !important;
-            padding: 1.25rem 1.5rem !important;
-            cursor: pointer;
-        }
-
-        .qr-header .card-title {
+        .qr-header .card-title, .pending-header .card-title {
             color: var(--on-surface) !important;
             font-size: 0.95rem;
             font-weight: 800;
+        }
+
+        .pending-section-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0, 1, 0, 1);
+            background: #fff;
+        }
+        .pending-section-body.open {
+            max-height: 2000px;
+            transition: max-height 0.4s cubic-bezier(1, 0, 1, 0);
+        }
+        .pending-header {
+            cursor: pointer;
         }
 
         .qr-grid {
@@ -911,83 +908,89 @@
         <!-- ════════════════════════════════════════════
              SECTION 2 — Revisión Pendiente
         ════════════════════════════════════════════ -->
-        <div class="card">
-            <div class="card-header">
+        <?php $numPendientes = count($recargas); ?>
+        <div class="card" style="margin-bottom:2rem;">
+            <div class="card-header pending-header" onclick="togglePending()">
                 <div class="card-title">
                     <div class="title-icon red">
                         <div class="pulse-dot"></div>
                     </div>
                     Revisión Pendiente
                 </div>
-                <span class="pending-badge"><?= count($recargas) ?> pendiente<?= count($recargas) !== 1 ? 's' : '' ?></span>
+                <div style="display:flex; align-items:center; gap:0.65rem;">
+                    <span class="pending-badge"><?= $numPendientes ?> pendiente<?= $numPendientes !== 1 ? 's' : '' ?></span>
+                    <i id="pendingChevron" class='bx bx-chevron-down toggle-chevron <?= $numPendientes > 0 ? 'open' : '' ?>' style="font-size:1.25rem;"></i>
+                </div>
             </div>
 
-            <?php if (empty($recargas)): ?>
-                <div class="empty-state">
-                    <div class="empty-icon"><i class='bx bx-check-shield'></i></div>
-                    <h3>¡Todo al día!</h3>
-                    <p>No hay comprobantes pendientes de verificar en este momento.</p>
-                </div>
-            <?php else: ?>
-                <ul class="ticket-list">
-                    <?php foreach ($recargas as $r): ?>
-                    <li class="ticket-card">
-                        <div class="ticket-avatar"><?= strtoupper(substr($r['cliente_nombre'], 0, 1)) ?></div>
+            <div id="pendingSectionBody" class="pending-section-body <?= $numPendientes > 0 ? 'open' : '' ?>">
+                <?php if (empty($recargas)): ?>
+                    <div class="empty-state">
+                        <div class="empty-icon"><i class='bx bx-check-shield'></i></div>
+                        <h3>¡Todo al día!</h3>
+                        <p>No hay comprobantes pendientes de verificar en este momento.</p>
+                    </div>
+                <?php else: ?>
+                    <ul class="ticket-list">
+                        <?php foreach ($recargas as $r): ?>
+                        <li class="ticket-card">
+                            <div class="ticket-avatar"><?= strtoupper(substr($r['cliente_nombre'], 0, 1)) ?></div>
 
-                        <div class="ticket-info">
-                            <div class="ticket-name"><?= htmlspecialchars($r['cliente_nombre']) ?></div>
-                            <div class="ticket-detail">
-                                <span class="ticket-detail-item">
-                                    <i class='bx bx-phone'></i>
-                                    <?= htmlspecialchars($r['cliente_celular']) ?>
-                                </span>
-                                <span class="detail-sep">•</span>
-                                <span class="ticket-detail-item">
-                                    <i class='bx bx-id-card'></i>
-                                    DNI <?= htmlspecialchars($r['cliente_dni']) ?>
-                                    <button class="copy-btn" onclick="copyToClipboard('<?= $r['cliente_dni'] ?>', event)" title="Copiar DNI">
-                                        <i class='bx bx-copy'></i>
-                                    </button>
-                                </span>
-                                <span class="detail-sep">•</span>
-                                <span class="ticket-detail-item">
-                                    <i class='bx bx-time'></i>
-                                    <?= date('d M, g:i a', strtotime($r['fecha'])) ?>
-                                </span>
+                            <div class="ticket-info">
+                                <div class="ticket-name"><?= htmlspecialchars($r['cliente_nombre']) ?></div>
+                                <div class="ticket-detail">
+                                    <span class="ticket-detail-item">
+                                        <i class='bx bx-phone'></i>
+                                        <?= htmlspecialchars($r['cliente_celular']) ?>
+                                    </span>
+                                    <span class="detail-sep">•</span>
+                                    <span class="ticket-detail-item">
+                                        <i class='bx bx-id-card'></i>
+                                        DNI <?= htmlspecialchars($r['cliente_dni']) ?>
+                                        <button class="copy-btn" onclick="copyToClipboard('<?= $r['cliente_dni'] ?>', event)" title="Copiar DNI">
+                                            <i class='bx bx-copy'></i>
+                                        </button>
+                                    </span>
+                                    <span class="detail-sep">•</span>
+                                    <span class="ticket-detail-item">
+                                        <i class='bx bx-time'></i>
+                                        <?= date('d M, g:i a', strtotime($r['fecha'])) ?>
+                                    </span>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="ticket-amounts">
-                            <div class="pts-val"><i class='bx bxs-up-arrow-circle'></i> <?= number_format($r['puntos']) ?> pts</div>
-                            <div class="monto-val">S/ <?= number_format($r['monto'], 2) ?></div>
-                        </div>
+                            <div class="ticket-amounts">
+                                <div class="pts-val"><i class='bx bxs-up-arrow-circle'></i> <?= number_format($r['puntos']) ?> pts</div>
+                                <div class="monto-val">S/ <?= number_format($r['monto'], 2) ?></div>
+                            </div>
 
-                        <div class="ticket-actions">
-                            <button class="btn btn-outline" onclick="openModal('<?= BASE_URL ?>assets/uploads/comprobantes/<?= $r['comprobante'] ?>')">
-                                <i class='bx bx-image'></i> Evidencia
-                            </button>
-
-                            <form action="<?= BASE_URL ?>recargas-admin/actualizar" method="POST" style="margin:0;" class="approve-form">
-                                <input type="hidden" name="id" value="<?= $r['id'] ?>">
-                                <input type="hidden" name="estado" value="aprobado">
-                                <button type="button" class="btn btn-success btn-approve-trigger">
-                                    <i class='bx bx-check'></i> Aprobar
+                            <div class="ticket-actions">
+                                <button class="btn btn-outline" onclick="openModal('<?= BASE_URL ?>assets/uploads/comprobantes/<?= $r['comprobante'] ?>')">
+                                    <i class='bx bx-image'></i> Evidencia
                                 </button>
-                            </form>
 
-                            <form action="<?= BASE_URL ?>recargas-admin/actualizar" method="POST" style="margin:0;" class="reject-form">
-                                <input type="hidden" name="id" value="<?= $r['id'] ?>">
-                                <input type="hidden" name="estado" value="rechazado">
-                                <button type="button" class="btn btn-danger-ghost btn-reject-trigger" title="Rechazar">
-                                    <i class='bx bx-x' style="font-size:1.1rem;"></i>
-                                </button>
-                            </form>
-                        </div>
-                    </li>
-                    <?php endforeach; ?>
-                </ul>
-            <?php endif; ?>
-            </div> <!-- End COLUMN 2 -->
+                                <form action="<?= BASE_URL ?>recargas-admin/actualizar" method="POST" style="margin:0;" class="approve-form">
+                                    <input type="hidden" name="id" value="<?= $r['id'] ?>">
+                                    <input type="hidden" name="estado" value="aprobado">
+                                    <button type="button" class="btn btn-success btn-approve-trigger">
+                                        <i class='bx bx-check'></i> Aprobar
+                                    </button>
+                                </form>
+
+                                <form action="<?= BASE_URL ?>recargas-admin/actualizar" method="POST" style="margin:0;" class="reject-form">
+                                    <input type="hidden" name="id" value="<?= $r['id'] ?>">
+                                    <input type="hidden" name="estado" value="rechazado">
+                                    <button type="button" class="btn btn-danger-ghost btn-reject-trigger" title="Rechazar">
+                                        <i class='bx bx-x' style="font-size:1.1rem;"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php endif; ?>
+            </div>
+        </div>
         </div> <!-- End Dashboard Grid -->
 
         <!-- ════════════════════════════════════════════
@@ -1110,6 +1113,13 @@
         function toggleQR() {
             const body = document.getElementById('qrSectionBody');
             const icon = document.getElementById('toggleIcon');
+            body.classList.toggle('open');
+            icon.classList.toggle('open');
+        }
+
+        function togglePending() {
+            const body = document.getElementById('pendingSectionBody');
+            const icon = document.getElementById('pendingChevron');
             body.classList.toggle('open');
             icon.classList.toggle('open');
         }
