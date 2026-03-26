@@ -143,12 +143,26 @@
             font-weight: 500;
         }
 
-        .admin-pill {
-            display: flex; align-items: center; gap: 12px;
-            padding: 6px 6px 6px 16px;
-            background: #f1f5f9;
-            border-radius: 100px;
-            border: 1px solid #e2e8f0;
+        .admin-avatar {
+            width: 32px; height: 32px; border-radius: 8px;
+            background: var(--primary); color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 0.9rem;
+        }
+
+        .header-logout-btn {
+            width: 44px; height: 44px;
+            display: flex; align-items: center; justify-content: center;
+            background: #fff; border: 1px solid var(--outline);
+            color: var(--on-muted); border-radius: 14px;
+            font-size: 1.3rem; transition: all var(--transition);
+            text-decoration: none;
+        }
+        .header-logout-btn:hover {
+            background: var(--red-soft); color: var(--red);
+            border-color: var(--red-border);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.1);
         }
         .admin-pill-text { text-align: right; }
         .admin-pill-name { font-size: 0.8rem; font-weight: 700; color: var(--on-surface); block; }
@@ -857,13 +871,6 @@
                 <span>Configuración</span>
             </a>
         </nav>
-
-        <div class="sidebar-footer" style="padding: 1.25rem; border-top: 1px solid rgba(255,255,255,0.05); background: rgba(0,0,0,0.08);">
-            <a href="<?= BASE_URL ?>logout" class="sidebar-item" style="margin:0; color:var(--red); text-transform: none; opacity:0.9;">
-                <i class='bx bx-log-out' style="color:var(--red); opacity:1;"></i>
-                <span style="letter-spacing: normal;">Cerrar Sesión</span>
-            </a>
-        </div>
     </aside>
 
     <div class="admin-layout">
@@ -882,6 +889,9 @@
                     </div>
                     <div class="admin-avatar">A</div>
                 </div>
+                <a href="<?= BASE_URL ?>logout" class="header-logout-btn" title="Cerrar Sesión">
+                    <i class='bx bx-power-off'></i>
+                </a>
             </div>
         </header>
 
