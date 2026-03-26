@@ -271,7 +271,7 @@
             border: 1px solid rgba(255,255,255,0.1);
             transition: all 0.3s ease;
         }
-        .stat-card:hover .stat-icon { transform: scale(1.1) rotate(5deg); background: rgba(255,255,255,0.22); }
+        .stat-card:hover .stat-icon { transform: scale(1.08); background: rgba(255,255,255,0.22); }
 
         .stat-content { flex: 1; min-width: 0; z-index: 1; }
         .stat-value {
@@ -990,28 +990,28 @@
         ?>
         <div class="stats-row">
             <div class="stat-card orange-theme">
-                <div class="stat-icon"><i class='bx bx-time'></i></div>
+                <div class="stat-icon"><i class='bx bxs-time-five'></i></div>
                 <div class="stat-content">
                     <div class="stat-value count-up" data-target="<?= $totalPendientes ?>">0</div>
                     <div class="stat-label">Pendientes</div>
                 </div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon"><i class='bx bx-check-circle'></i></div>
+                <div class="stat-icon"><i class='bx bxs-badge-check'></i></div>
                 <div class="stat-content">
                     <div class="stat-value count-up" data-target="<?= $totalAprobados ?>">0</div>
                     <div class="stat-label">Aprobados</div>
                 </div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon"><i class='bx bx-x-circle'></i></div>
+                <div class="stat-icon"><i class='bx bxs-error-circle'></i></div>
                 <div class="stat-content">
                     <div class="stat-value count-up" data-target="<?= $totalRechazados ?>">0</div>
                     <div class="stat-label">Rechazados</div>
                 </div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon"><i class='bx bx-wallet'></i></div>
+                <div class="stat-icon"><i class='bx bxs-bank'></i></div>
                 <div class="stat-content">
                     <div class="stat-value">S/ <span class="count-up" data-target="<?= $montoTotal ?>">0</span></div>
                     <div class="stat-label">Monto Acreditado</div>
