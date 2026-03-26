@@ -61,7 +61,7 @@ class ClienteController {
 
         echo json_encode(['success' => true, 'message' => 'Registro exitoso. Ya puedes iniciar sesión.']);
         exit;
-    }
+    }PREMIASURGASLOGO
 
     public function create(): void {
         $this->requireAuth();

@@ -10,9 +10,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg:            #f4f7fa;
+            --bg:            #f8fafc;
             --surface:       #ffffff;
-            --sidebar-bg:    #ffffff;
+            --sidebar-bg:    #400000; /* Guinda Surgas */
             
             /* Surgas Palette */
             --primary:       #800000; /* Guinda Surgas */
@@ -60,26 +60,23 @@
             gap: 12px;
         }
 
-        .sidebar-brand img { width: 38px; height: auto; }
-        .sidebar-brand .brand-name {
-            font-weight: 800; font-size: 1.2rem;
-            color: var(--primary); letter-spacing: -0.02em;
-        }
+        .sidebar-brand img { width: 140px; height: auto; object-fit: contain; }
+        .sidebar-brand .brand-name { display: none; }
 
         .sidebar-menu {
-            flex: 1; padding: 0 0.85rem; overflow-y: auto;
+            flex: 1; padding: 0.5rem 0.85rem; overflow-y: auto;
         }
 
         .menu-label {
-            font-size: 0.65rem; font-weight: 800; color: var(--on-light);
-            text-transform: uppercase; letter-spacing: 0.1em;
+            font-size: 0.65rem; font-weight: 800; color: rgba(255,255,255,0.4);
+            text-transform: uppercase; letter-spacing: 0.12em;
             padding: 1.5rem 1rem 0.6rem;
         }
 
         .sidebar-item {
             display: flex; align-items: center; gap: 14px;
             padding: 0.95rem 1.75rem; margin: 2px 0;
-            color: var(--on-muted); text-decoration: none;
+            color: rgba(255,255,255,0.7); text-decoration: none;
             font-weight: 700; font-size: 0.78rem;
             transition: all var(--transition);
             position: relative;
@@ -87,13 +84,13 @@
             letter-spacing: 0.05em;
         }
 
-        .sidebar-item i { font-size: 1.35rem; opacity: 0.7; transition: all 0.3s; }
+        .sidebar-item i { font-size: 1.35rem; opacity: 0.6; transition: all 0.3s; }
 
-        .sidebar-item:hover { background: #f8fafc; color: var(--on-surface); }
+        .sidebar-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
         .sidebar-item:hover i { opacity: 1; transform: translateX(2px); }
 
         .sidebar-item.active {
-            background: #fff9f5;
+            background: rgba(0,0,0,0.15);
             color: var(--accent);
         }
 
@@ -103,7 +100,7 @@
             content: ''; position: absolute;
             right: 0; top: 0; height: 100%; width: 4px;
             background: var(--accent);
-            box-shadow: -2px 0 10px rgba(255, 102, 0, 0.3);
+            box-shadow: -2px 0 10px rgba(255, 102, 0, 0.4);
         }
 
         /* Main Content Container */
@@ -813,8 +810,7 @@
     ════════════════════════════════════════════ -->
     <aside class="sidebar">
         <div class="sidebar-brand">
-            <img src="<?= BASE_URL ?>assets/premios/icono.png" alt="Surgas">
-            <span class="brand-name">SURGAS</span>
+            <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" alt="PremiaSurgas">
         </div>
 
         <nav class="sidebar-menu">
