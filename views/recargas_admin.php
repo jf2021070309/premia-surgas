@@ -563,16 +563,37 @@
         }
 
         .pulse-dot {
-            width: 7px; height: 7px; border-radius: 50%;
-            background: var(--red);
-            box-shadow: 0 0 0 0 rgba(220,38,38,0.5);
-            animation: pulse 2s infinite;
+            width: 9px; height: 9px; border-radius: 50%;
+            background: #e11d48; /* Red */
+            position: relative;
             flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
         }
-        @keyframes pulse {
-            0%   { box-shadow: 0 0 0 0 rgba(220,38,38,0.4); }
-            70%  { box-shadow: 0 0 0 8px rgba(220,38,38,0); }
-            100% { box-shadow: 0 0 0 0 rgba(220,38,38,0); }
+        .pulse-dot::before {
+            content: '';
+            position: absolute;
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            background: inherit;
+            animation: pulse-ring 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+        }
+        .pulse-dot::after {
+            content: '';
+            position: absolute;
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            background: inherit;
+            animation: pulse-dot 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(.6); opacity: 0.8; }
+            80%, 100% { transform: scale(2.8); opacity: 0; }
+        }
+        @keyframes pulse-dot {
+            0% { transform: scale(.9); opacity: 0.9; }
+            50% { transform: scale(1.15); opacity: 1; }
+            100% { transform: scale(.9); opacity: 0.9; }
         }
 
         .ticket-list { padding: 0.5rem 0.75rem; display: flex; flex-direction: column; gap: 0.5rem; list-style: none; }
