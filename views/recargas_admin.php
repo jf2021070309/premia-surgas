@@ -63,42 +63,55 @@
         }
 
         /* ══════════════════════════════════════
-           Sticky Top Nav
+           Brand-Identity Top Bar
         ══════════════════════════════════════ */
         .top-nav {
-            background: rgba(255,255,255,0.88);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border-bottom: 1px solid var(--outline);
-            padding: 0 2rem;
-            height: 64px;
+            background: #400000; /* Guinda Surgas */
+            background: linear-gradient(90deg, #400000 0%, #2a0000 100%);
+            border-bottom: 2px solid var(--accent);
+            padding: 0 1.5rem;
+            height: 60px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             position: sticky;
             top: 0;
             z-index: 200;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .nav-left { display: flex; align-items: center; gap: 1.5rem; }
+        .nav-right { display: flex; align-items: center; gap: 1rem; }
+
+        .brand-logo-img {
+            height: 32px;
+            width: auto;
+            object-fit: contain;
         }
 
         .back-btn {
-            display: inline-flex; align-items: center; gap: 0.45rem;
-            color: var(--on-muted); text-decoration: none;
-            font-weight: 500; font-size: 0.85rem;
-            padding: 7px 14px;
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            color: rgba(255,255,255,0.7); text-decoration: none;
+            font-weight: 500; font-size: 0.8rem;
+            padding: 6px 12px;
             border-radius: var(--radius-sm);
+            border: 1px solid rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.05);
             transition: all var(--transition);
         }
-        .back-btn i { font-size: 1.15rem; }
-        .back-btn:hover { color: var(--on-surface); background: var(--surface-hi); }
+        .back-btn i { font-size: 1rem; }
+        .back-btn:hover { color: #fff; border-color: #fff; background: rgba(255,255,255,0.1); }
 
-        .page-title-group { text-align: center; }
+        .page-title-group { text-align: right; }
         .page-title {
-            font-size: 1rem; font-weight: 700;
-            letter-spacing: -0.025em; color: var(--on-surface);
+            font-size: 0.95rem; font-weight: 800;
+            letter-spacing: -0.01em; color: #ffffff;
+            line-height: 1;
         }
         .page-subtitle {
-            font-size: 0.7rem; color: var(--on-light);
-            font-weight: 500; letter-spacing: 0.02em;
+            font-size: 0.65rem; color: rgba(255,255,255,0.5);
+            margin-top: 2px;
+            font-weight: 500;
         }
 
         /* ══════════════════════════════════════
@@ -129,55 +142,47 @@
         }
 
         .stat-card {
-            background: #400000; /* Guinda Oscuro */
+            background: #400000; /* Guinda */
             border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.05);
             padding: 1.5rem;
             display: flex;
             align-items: center;
             gap: 1.25rem;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.12);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative; overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.02);
         }
+        .stat-card.orange-theme {
+            background: var(--accent); /* Naranja */
+        }
+        
         .stat-card:hover { 
             box-shadow: 0 15px 35px rgba(0,0,0,0.2); 
             transform: translateY(-5px); 
-            border-color: var(--accent);
-        }
-        .stat-card::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 100%);
-            pointer-events: none;
         }
 
         .stat-icon {
-            width: 52px; height: 52px;
-            border-radius: 16px;
+            width: 50px; height: 50px;
+            border-radius: 14px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             flex-shrink: 0;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
-            background: var(--accent); color: #fff;
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+            backdrop-filter: blur(4px);
         }
-        .stat-card:hover .stat-icon { transform: scale(1.1) rotate(5deg); }
-
-        /* Variaciones de color para iconos */
-        .stat-icon.orange { background: var(--accent); }
-        .stat-icon.green  { background: #22c55e; }
-        .stat-icon.red    { background: #ef4444; }
-        .stat-icon.blue   { background: #3b82f6; }
+        .stat-card:hover .stat-icon { transform: scale(1.1) rotate(3deg); background: rgba(255,255,255,0.25); }
 
         .stat-content { flex: 1; min-width: 0; z-index: 1; }
         .stat-value {
-            font-size: 1.75rem; font-weight: 900;
+            font-size: 1.85rem; font-weight: 900;
             letter-spacing: -0.04em; color: #ffffff;
             line-height: 1;
         }
         .stat-label {
             font-size: 0.72rem; font-weight: 700;
-            color: rgba(255,255,255,0.6); margin-top: 6px;
+            color: rgba(255,255,255,0.7); margin-top: 6px;
             letter-spacing: 0.05em; text-transform: uppercase;
         }
 
@@ -193,31 +198,31 @@
         }
 
         .card-header {
-            padding: 1.25rem 1.75rem;
+            padding: 1.1rem 1.75rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: #400000; /* Guinda Surgas */
-            border-bottom: 2px solid rgba(255,255,255,0.05);
+            background: #fff;
+            border-bottom: 1px solid var(--outline);
         }
 
         .card-title {
             display: flex; align-items: center; gap: 0.85rem;
-            font-size: 1rem; font-weight: 800;
-            letter-spacing: -0.01em; color: #ffffff;
+            font-size: 0.95rem; font-weight: 700;
+            letter-spacing: -0.01em; color: var(--on-surface);
         }
 
         .card-title .title-icon {
-            width: 34px; height: 34px;
-            border-radius: 10px;
+            width: 32px; height: 32px;
+            border-radius: 8px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
-        .card-title .title-icon.orange { background: var(--accent); color: #fff; }
-        .card-title .title-icon.green  { background: #22c55e; color: #fff; }
-        .card-title .title-icon.blue   { background: #3b82f6; color: #fff; }
-        .card-title .title-icon.red    { background: #ef4444; color: #fff; }
-        .card-title .title-icon.purple { background: #742183; color: #fff; }
+        .card-title .title-icon.orange { background: var(--accent-soft); color: var(--accent); }
+        .card-title .title-icon.green  { background: var(--primary-soft); color: var(--primary); }
+        .card-title .title-icon.blue   { background: var(--accent-soft); color: var(--accent); }
+        .card-title .title-icon.red    { background: #fee2e2; color: #dc2626; }
+        .card-title .title-icon.purple { background: #f3e8ff; color: #7c3aed; }
 
         .card-badge {
             display: inline-flex; align-items: center; gap: 0.3rem;
@@ -759,16 +764,20 @@
 </head>
 <body>
 
-    <!-- ════ Top Nav ════ -->
+    <!-- ════ Brand Header Nav ════ -->
     <nav class="top-nav">
-        <a href="<?= BASE_URL ?>panel" class="back-btn">
-            <i class='bx bx-chevron-left'></i> Volver al Panel
-        </a>
-        <div class="page-title-group">
-            <div class="page-title">Verificación de Recargas</div>
-            <div class="page-subtitle">Gestión de comprobantes y pagos</div>
+        <div class="nav-left">
+            <img src="<?= BASE_URL ?>assets/premios/logo.png" alt="Surgas" class="brand-logo-img">
+            <a href="<?= BASE_URL ?>panel" class="back-btn">
+                <i class='bx bx-chevron-left'></i> Salir
+            </a>
         </div>
-        <div style="width:120px;"></div>
+        <div class="nav-right">
+            <div class="page-title-group">
+                <div class="page-title">Administración</div>
+                <div class="page-subtitle">Verificación de Recargas</div>
+            </div>
+        </div>
     </nav>
 
     <div class="container">
@@ -799,29 +808,29 @@
             }
         ?>
         <div class="stats-row">
-            <div class="stat-card">
-                <div class="stat-icon orange"><i class='bx bx-time-five'></i></div>
+            <div class="stat-card orange-theme">
+                <div class="stat-icon"><i class='bx bx-time-five'></i></div>
                 <div class="stat-content">
                     <div class="stat-value"><?= $totalPendientes ?></div>
                     <div class="stat-label">Pendientes</div>
                 </div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon green"><i class='bx bx-check-circle'></i></div>
+                <div class="stat-icon"><i class='bx bx-check-circle'></i></div>
                 <div class="stat-content">
                     <div class="stat-value"><?= $totalAprobados ?></div>
                     <div class="stat-label">Aprobados</div>
                 </div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon red"><i class='bx bx-x-circle'></i></div>
+                <div class="stat-icon"><i class='bx bx-x-circle'></i></div>
                 <div class="stat-content">
                     <div class="stat-value"><?= $totalRechazados ?></div>
                     <div class="stat-label">Rechazados</div>
                 </div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon blue"><i class='bx bx-wallet'></i></div>
+                <div class="stat-icon"><i class='bx bx-wallet'></i></div>
                 <div class="stat-content">
                     <div class="stat-value">S/ <?= number_format($montoTotal, 0) ?></div>
                     <div class="stat-label">Monto Acreditado</div>
