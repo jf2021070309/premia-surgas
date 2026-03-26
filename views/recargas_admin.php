@@ -54,18 +54,21 @@
         }
 
         .sidebar-brand {
-            padding: 2.25rem 1.75rem;
+            padding: 2.5rem 1.75rem;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 12px;
         }
 
-        .sidebar-brand img { width: 140px; height: auto; object-fit: contain; }
+        .sidebar-brand img { width: 150px; height: auto; object-fit: contain; }
         .sidebar-brand .brand-name { display: none; }
 
         .sidebar-menu {
             flex: 1; padding: 0.5rem 0.85rem; overflow-y: auto;
+            scrollbar-width: none; /* Firefox */
         }
+        .sidebar-menu::-webkit-scrollbar { display: none; /* Chrome/Safari */ }
 
         .menu-label {
             font-size: 0.65rem; font-weight: 800; color: rgba(255,255,255,0.4);
@@ -855,10 +858,10 @@
             </a>
         </nav>
 
-        <div style="padding: 1.25rem; border-top: 1px solid var(--outline);">
-            <a href="<?= BASE_URL ?>logout" class="sidebar-item" style="margin:0; color:var(--red); text-transform: none;">
-                <i class='bx bx-log-out' style="color:var(--red);"></i>
-                <span>Cerrar Sesión</span>
+        <div class="sidebar-footer" style="padding: 1.25rem; border-top: 1px solid rgba(255,255,255,0.05); background: rgba(0,0,0,0.08);">
+            <a href="<?= BASE_URL ?>logout" class="sidebar-item" style="margin:0; color:var(--red); text-transform: none; opacity:0.9;">
+                <i class='bx bx-log-out' style="color:var(--red); opacity:1;"></i>
+                <span style="letter-spacing: normal;">Cerrar Sesión</span>
             </a>
         </div>
     </aside>
