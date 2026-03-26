@@ -544,12 +544,13 @@
         .data-table thead tr { border-bottom: 1px solid var(--outline-med); }
 
         .data-table th {
-            padding: 0.8rem 1.25rem;
-            font-size: 0.62rem; font-weight: 700;
-            letter-spacing: 0.1em; text-transform: uppercase;
-            color: var(--on-light);
-            background: var(--surface-low);
+            padding: 1rem 1.25rem;
+            font-size: 0.65rem; font-weight: 800;
+            letter-spacing: 0.08em; text-transform: uppercase;
+            color: #64748b;
+            background: #f8fafc;
             white-space: nowrap;
+            border-bottom: 2px solid var(--outline);
         }
 
         .data-table td {
@@ -561,7 +562,8 @@
         }
 
         .data-table tbody tr { transition: background 0.15s; }
-        .data-table tbody tr:hover { background: var(--surface-low); }
+        .data-table tbody tr:nth-child(even) { background: #fafbfc; }
+        .data-table tbody tr:hover { background: #f4f6f8 !important; }
         .data-table tbody tr:last-child td { border-bottom: none; }
 
         .row-client { display: flex; align-items: center; gap: 0.55rem; }
@@ -575,19 +577,20 @@
 
         .pts-positive { color: var(--green); font-weight: 700; font-size: 0.82rem; }
 
-        /* Status Chips */
+        /* Status Chips Modernized */
         .chip {
-            display: inline-flex; align-items: center; gap: 4px;
-            font-size: 0.68rem; font-weight: 700;
-            padding: 3px 10px; border-radius: 100px; white-space: nowrap;
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 0.7rem; font-weight: 700;
+            padding: 4px 12px; border-radius: 100px; white-space: nowrap;
+            letter-spacing: 0.02em;
         }
         .chip::before {
-            content: ''; width: 5px; height: 5px; border-radius: 50%;
+            content: ''; width: 6px; height: 6px; border-radius: 50%;
             background: currentColor; flex-shrink: 0;
         }
-        .chip-pending  { background: var(--amber-soft); color: var(--amber); border: 1px solid var(--amber-border); }
-        .chip-approved { background: var(--green-soft); color: var(--green); border: 1px solid var(--green-border); }
-        .chip-rejected { background: var(--red-soft);   color: var(--red);   border: 1px solid var(--red-border); }
+        .chip-pending  { background: #fffbeb; color: #d97706; border: 1px solid #fef3c7; }
+        .chip-approved { background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; }
+        .chip-rejected { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
 
         .btn-view-sm {
             display: inline-flex; align-items: center; gap: 0.25rem;
@@ -789,11 +792,11 @@
                     <?php else: ?>
                         <span class="chip" style="background:#f9fafb; color:#6b7280; border:1px solid #e5e7eb; font-size:0.65rem; font-weight:700;">Inactivo</span>
                     <?php endif; ?>
-                    <i id="toggleIcon" class='bx bx-chevron-down toggle-chevron open' style="font-size:1.25rem;"></i>
+                    <i id="toggleIcon" class='bx bx-chevron-down toggle-chevron' style="font-size:1.25rem;"></i>
                 </div>
             </div>
 
-            <div id="qrSectionBody" class="qr-section-body open">
+            <div id="qrSectionBody" class="qr-section-body">
                 <div class="qr-grid">
                     <!-- Left — Yape Purple Panel -->
                     <div class="qr-preview-box">
@@ -931,9 +934,23 @@
                     <div class="title-icon blue"><i class='bx bx-history'></i></div>
                     Historial de Movimientos
                 </div>
-                <div class="header-search">
-                    <i class='bx bx-search'></i>
-                    <input type="text" id="historySearch" placeholder="Buscar cliente..." onkeyup="filterHistory()">
+                <div style="display: flex; gap: 0.75rem; align-items: center;">
+                    <div class="header-search" style="max-width: 150px;">
+                        <i class='bx bx-calendar'></i>
+                        <input type="date" id="historyDate" onchange="filterHistory()">
+                    </div>
+                    <div class="header-search" style="max-width: 130px;">
+                        <i class='bx bx-filter-alt'></i>
+                        <select id="historyStatus" onchange="filterHistory()" style="width: 100%; padding: 6px 10px 6px 32px; border-radius: var(--radius-sm); border: 1px solid var(--outline-med); background: var(--surface); font-size: 0.78rem; color: var(--on-surface); outline: none; appearance: none;">
+                            <option value="">Todos</option>
+                            <option value="aprobado">Aprobados</option>
+                            <option value="rechazado">Rechazados</option>
+                        </select>
+                    </div>
+                    <div class="header-search">
+                        <i class='bx bx-search'></i>
+                        <input type="text" id="historySearch" placeholder="Buscar cliente..." onkeyup="filterHistory()">
+                    </div>
                 </div>
             </div>
 
@@ -968,7 +985,7 @@
                             <tr>
                                 <td>
                                     <div class="row-client">
-                                        <div class="row-avatar"><?= strtoupper(substr($h['cliente_nombre'] ?? 'C', 0, 1)) ?></div>
+                                        <i class='bx bx-user' style="color: var(--on-light); font-size: 1.1rem;"></i>
                                         <span class="client-name"><?= htmlspecialchars($h['cliente_nombre'] ?? '-') ?></span>
                                     </div>
                                 </td>
@@ -990,6 +1007,16 @@
                             <?php endforeach; ?>
                         </tbody>
                     </table>
+                </div>
+                <!-- Pagination Controls -->
+                <div id="paginationControls" style="padding: 1rem 1.25rem; border-top: 1px solid var(--outline); display: flex; align-items: center; justify-content: space-between; background: var(--surface-low);">
+                    <div style="font-size: 0.78rem; color: var(--on-muted); font-weight: 500;">
+                        Mostrando <span id="pagStart">0</span> - <span id="pagEnd">0</span> de <span id="pagTotal">0</span> movimientos
+                    </div>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button onclick="changePage(-1)" id="prevBtn" class="btn-view-sm" style="padding: 6px 12px;"><i class='bx bx-chevron-left'></i> Anterior</button>
+                        <button onclick="changePage(1)" id="nextBtn" class="btn-view-sm" style="padding: 6px 12px;">Siguiente <i class='bx bx-chevron-right'></i></button>
+                    </div>
                 </div>
             <?php endif; ?>
         </div>
@@ -1096,15 +1123,67 @@
             }, 1500);
         }
 
-        // ── History Filter ──
+        // ── History Filter & Pagination ──
+        let currentPage = 1;
+        const rowsPerPage = 10;
+
         function filterHistory() {
             const query = document.getElementById('historySearch').value.toLowerCase();
-            const rows = document.querySelectorAll('.data-table tbody tr');
-            rows.forEach(row => {
-                const text = row.querySelector('.client-name').textContent.toLowerCase();
-                row.style.display = text.includes(query) ? '' : 'none';
+            const status = document.getElementById('historyStatus').value.toLowerCase();
+            const dateVal = document.getElementById('historyDate').value;
+            const rows = Array.from(document.querySelectorAll('.data-table tbody tr'));
+            
+            let visibleRows = rows.filter(row => {
+                const name = row.querySelector('.client-name').textContent.toLowerCase();
+                const rowStatus = row.querySelector('.chip').textContent.toLowerCase();
+                const rowDate = row.querySelector('.date-text').textContent; // Format: "dd M Y, H:i"
+                
+                // Match search
+                const matchesSearch = name.includes(query);
+                // Match status
+                const matchesStatus = status === "" || rowStatus.includes(status);
+                // Match date (simplistic date check, rowDate contains "25 Mar 2026")
+                let matchesDate = true;
+                if (dateVal) {
+                    const [y, m, d] = dateVal.split('-');
+                    const dateObj = new Date(y, m - 1, d);
+                    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]; // match your data format
+                    const formattedDate = `${d.padStart(2, '0')} ${months[dateObj.getMonth()]} ${y}`;
+                    matchesDate = rowDate.includes(formattedDate);
+                }
+
+                return matchesSearch && matchesStatus && matchesDate;
             });
+
+            // Pagination Logic
+            const total = visibleRows.length;
+            const maxPage = Math.max(1, Math.ceil(total / rowsPerPage));
+            if (currentPage > maxPage) currentPage = maxPage;
+
+            const start = (currentPage - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+
+            rows.forEach(r => r.style.display = 'none');
+            visibleRows.slice(start, end).forEach(r => r.style.display = '');
+
+            // Update UI
+            document.getElementById('pagTotal').textContent = total;
+            document.getElementById('pagStart').textContent = total === 0 ? 0 : start + 1;
+            document.getElementById('pagEnd').textContent = Math.min(end, total);
+            
+            document.getElementById('prevBtn').disabled = currentPage === 1;
+            document.getElementById('prevBtn').style.opacity = currentPage === 1 ? '0.5' : '1';
+            document.getElementById('nextBtn').disabled = currentPage === maxPage;
+            document.getElementById('nextBtn').style.opacity = currentPage === maxPage ? '0.5' : '1';
         }
+
+        function changePage(dir) {
+            currentPage += dir;
+            filterHistory();
+        }
+
+        // Initialize pagination on load
+        document.addEventListener('DOMContentLoaded', filterHistory);
 
         // ── SweetAlert2 Confirms (Light Theme) ──
         document.querySelectorAll('.btn-approve-trigger').forEach(btn => {
