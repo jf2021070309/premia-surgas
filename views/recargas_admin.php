@@ -143,36 +143,62 @@
             font-weight: 500;
         }
 
+        .admin-pill {
+            display: flex; align-items: center; gap: 16px;
+            padding: 8px 10px 8px 24px;
+            background: #2a0000; /* Deepest Guinda */
+            border-radius: 100px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+
+        .nav-bell {
+            color: #fff; font-size: 1.35rem; cursor: pointer;
+            opacity: 0.8; transition: all 0.2s;
+        }
+        .nav-bell:hover { opacity: 1; transform: scale(1.1); }
+
         .admin-avatar {
-            width: 32px; height: 32px; border-radius: 8px;
-            background: var(--primary); color: #fff;
+            width: 38px; height: 38px; border-radius: 50%;
+            background: #fb923c; color: #fff;
             display: flex; align-items: center; justify-content: center;
-            font-weight: 800; font-size: 0.9rem;
+            font-weight: 800; font-size: 1.1rem;
+            box-shadow: 0 0 15px rgba(251, 146, 60, 0.4);
+            flex-shrink: 0;
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+
+        .admin-pill-text {
+            display: flex; flex-direction: column;
+            line-height: 1.2;
+        }
+        .admin-pill-role {
+            font-size: 0.65rem; font-weight: 800;
+            color: rgba(255,255,255,0.5);
+            text-transform: uppercase; letter-spacing: 0.08em;
+        }
+        .admin-pill-name {
+            font-size: 1rem; font-weight: 800;
+            color: #fff; text-transform: lowercase;
+        }
+
+        .nav-divider {
+            width: 1px; height: 20px;
+            background: rgba(255,255,255,0.2);
+            margin: 0 4px;
         }
 
         .header-logout-btn {
-            width: 44px; height: 44px;
+            width: 36px; height: 36px;
             display: flex; align-items: center; justify-content: center;
-            background: #fff; border: 1px solid var(--outline);
-            color: var(--on-muted); border-radius: 14px;
-            font-size: 1.3rem; transition: all var(--transition);
+            background: rgba(255,255,255,0.1); border: none;
+            color: #fff; border-radius: 50%;
+            font-size: 1.2rem; transition: all var(--transition);
             text-decoration: none;
         }
         .header-logout-btn:hover {
-            background: var(--red-soft); color: var(--red);
-            border-color: var(--red-border);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.1);
-        }
-        .admin-pill-text { text-align: right; }
-        .admin-pill-name { font-size: 0.8rem; font-weight: 700; color: var(--on-surface); block; }
-        .admin-pill-role { font-size: 0.7rem; color: var(--on-muted); block; }
-        .admin-avatar {
-            width: 32px; height: 32px;
-            background: var(--primary);
-            color: #fff; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 800; font-size: 0.85rem;
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.05);
         }
 
         /* ══════════════════════════════════════
@@ -309,19 +335,11 @@
             font-weight: 800;
         }
 
-        .pending-section-body {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s cubic-bezier(0, 1, 0, 1);
-            background: #fff;
-        }
-        .pending-section-body.open {
-            max-height: 2000px;
-            transition: max-height 0.4s cubic-bezier(1, 0, 1, 0);
-        }
-        .pending-header {
+        .qr-header, .pending-header {
             cursor: pointer;
+            transition: background 0.2s;
         }
+        .qr-header:hover, .pending-header:hover { background: #fafbfc; }
 
         .qr-grid {
             display: grid;
@@ -490,8 +508,21 @@
             transform: translateY(-1px); 
         }
 
-        .toggle-chevron { transition: transform 0.35s; color: var(--on-light); font-size: 1.15rem; }
-        .toggle-chevron.open { transform: rotate(180deg); }
+        .toggle-chevron { transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); color: var(--on-light); font-size: 1.25rem; }
+        .toggle-chevron.open { transform: rotate(180deg); color: var(--primary); }
+
+        /* Accordion System — Ultra Smooth */
+        .qr-section-body, .pending-section-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+        }
+        .qr-section-body.open, .pending-section-body.open {
+            max-height: 5000px;
+            opacity: 1;
+            padding-bottom: 2rem;
+        }
 
         /* ══════════════════════════════════════
            Pending Tickets
@@ -883,15 +914,21 @@
             
             <div class="nav-right">
                 <div class="admin-pill">
-                    <div class="admin-pill-text">
-                        <span class="admin-pill-name">Admin Surgas</span>
-                        <span class="admin-pill-role">Administrador</span>
-                    </div>
+                    <i class='bx bxs-bell nav-bell'></i>
+                    
                     <div class="admin-avatar">A</div>
+                    
+                    <div class="admin-pill-text">
+                        <span class="admin-pill-role">ADMIN</span>
+                        <span class="admin-pill-name">admin</span>
+                    </div>
+
+                    <div class="nav-divider"></div>
+
+                    <a href="<?= BASE_URL ?>logout" class="header-logout-btn" title="Cerrar Sesión">
+                        <i class='bx bx-log-out-circle'></i>
+                    </a>
                 </div>
-                <a href="<?= BASE_URL ?>logout" class="header-logout-btn" title="Cerrar Sesión">
-                    <i class='bx bx-power-off'></i>
-                </a>
             </div>
         </header>
 
