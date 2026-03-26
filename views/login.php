@@ -19,7 +19,7 @@
         .login-wrap.mode-register { max-width: 680px; }
         
         .login-header { text-align: center; margin-bottom: 2rem; }
-        .login-logo { width: 100%; max-width: 250px; height: auto; margin-bottom: 0.8rem; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.4)); animation: fadeInScale 1s ease; }
+        .login-logo { width: 100%; max-width: 280px; height: auto; margin-bottom: 0.8rem; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.4)); animation: fadeInScale 1s ease; }
         .login-header p { color: rgba(255,255,255,0.45); font-size: 0.85rem; margin: 0; font-weight: 300; letter-spacing: 1px; text-transform: uppercase; }
 
         @keyframes fadeInScale {
