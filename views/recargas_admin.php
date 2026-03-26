@@ -596,6 +596,28 @@
 
         .ticket-list { padding: 0.5rem 0.75rem; display: flex; flex-direction: column; gap: 0.5rem; list-style: none; }
 
+        /* Compact Empty State */
+        .empty-state-compact {
+            display: flex; align-items: center; gap: 1rem;
+            padding: 1rem 1.75rem;
+            color: #10b981;
+        }
+        .empty-state-compact i {
+            font-size: 1.8rem;
+            color: #10b981;
+            background: rgba(16,185,129,0.08);
+            width: 44px; height: 44px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 12px;
+            flex-shrink: 0;
+            border: 1px solid rgba(16,185,129,0.15);
+        }
+        .empty-state-compact .empty-text {
+            display: flex; flex-direction: column; gap: 1px;
+        }
+        .empty-state-compact strong { font-size: 0.9rem; color: #1e293b; font-weight: 700; }
+        .empty-state-compact span { font-size: 0.78rem; color: #64748b; font-weight: 500; }
+
         .ticket-card {
             background: var(--surface);
             border-radius: var(--radius-md);
@@ -1131,10 +1153,12 @@
 
             <div id="pendingSectionBody" class="pending-section-body <?= $numPendientes > 0 ? 'open' : '' ?>">
                 <?php if (empty($recargas)): ?>
-                    <div class="empty-state">
-                        <div class="empty-icon"><i class='bx bx-check-shield'></i></div>
-                        <h3>¡Todo al día!</h3>
-                        <p>No hay comprobantes pendientes de verificar en este momento.</p>
+                    <div class="empty-state-compact">
+                        <i class='bx bxs-check-shield'></i>
+                        <div class="empty-text">
+                            <strong>¡Todo al día!</strong>
+                            <span>No hay comprobantes pendientes de verificar en este momento.</span>
+                        </div>
                     </div>
                 <?php else: ?>
                     <ul class="ticket-list">
