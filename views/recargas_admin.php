@@ -129,53 +129,56 @@
         }
 
         .stat-card {
-            background: #fff;
+            background: #400000; /* Guinda Oscuro */
             border-radius: 20px;
-            border: 1px solid #f1f5f9;
+            border: 1px solid rgba(255,255,255,0.05);
             padding: 1.5rem;
             display: flex;
             align-items: center;
             gap: 1.25rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative; overflow: hidden;
         }
         .stat-card:hover { 
-            box-shadow: 0 15px 30px rgba(128,0,0,0.08); 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2); 
             transform: translateY(-5px); 
-            border-color: var(--primary);
+            border-color: var(--accent);
         }
         .stat-card::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 5px; height: 100%;
-            background: var(--primary); opacity: 0.15;
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 100%);
+            pointer-events: none;
         }
 
         .stat-icon {
-            width: 56px; height: 56px;
-            border-radius: 18px;
+            width: 52px; height: 52px;
+            border-radius: 16px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             flex-shrink: 0;
             transition: all 0.3s ease;
-            box-shadow: inset 0 -4px 0 rgba(0,0,0,0.1);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+            background: var(--accent); color: #fff;
         }
-        .stat-card:hover .stat-icon { transform: scale(1.1); box-shadow: inset 0 -2px 0 rgba(0,0,0,0.1); }
+        .stat-card:hover .stat-icon { transform: scale(1.1) rotate(5deg); }
 
-        .stat-icon.orange { background: var(--accent); color: #fff; }
-        .stat-icon.green  { background: #22c55e; color: #fff; } /* Mantenemos verde para aprobados por UX */
-        .stat-icon.red    { background: var(--primary); color: #fff; } /* Guinda para rechazados */
-        .stat-icon.blue   { background: #1e293b; color: #fff; } /* Negro para totales */
+        /* Variaciones de color para iconos */
+        .stat-icon.orange { background: var(--accent); }
+        .stat-icon.green  { background: #22c55e; }
+        .stat-icon.red    { background: #ef4444; }
+        .stat-icon.blue   { background: #3b82f6; }
 
-        .stat-content { flex: 1; min-width: 0; }
+        .stat-content { flex: 1; min-width: 0; z-index: 1; }
         .stat-value {
-            font-size: 1.85rem; font-weight: 900;
-            letter-spacing: -0.04em; color: var(--primary);
+            font-size: 1.75rem; font-weight: 900;
+            letter-spacing: -0.04em; color: #ffffff;
             line-height: 1;
         }
         .stat-label {
-            font-size: 0.78rem; font-weight: 800;
-            color: #64748b; margin-top: 6px;
-            letter-spacing: 0.04em; text-transform: uppercase;
+            font-size: 0.72rem; font-weight: 700;
+            color: rgba(255,255,255,0.6); margin-top: 6px;
+            letter-spacing: 0.05em; text-transform: uppercase;
         }
 
         /* ══════════════════════════════════════
@@ -190,31 +193,31 @@
         }
 
         .card-header {
-            padding: 1.1rem 1.5rem;
+            padding: 1.25rem 1.75rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid var(--outline);
-            background: var(--surface-low);
+            background: #400000; /* Guinda Surgas */
+            border-bottom: 2px solid rgba(255,255,255,0.05);
         }
 
         .card-title {
-            display: flex; align-items: center; gap: 0.6rem;
-            font-size: 0.88rem; font-weight: 700;
-            letter-spacing: -0.01em; color: var(--on-surface);
+            display: flex; align-items: center; gap: 0.85rem;
+            font-size: 1rem; font-weight: 800;
+            letter-spacing: -0.01em; color: #ffffff;
         }
 
         .card-title .title-icon {
-            width: 32px; height: 32px;
-            border-radius: var(--radius-sm);
+            width: 34px; height: 34px;
+            border-radius: 10px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.05rem;
+            font-size: 1.1rem;
         }
-        .card-title .title-icon.orange { background: var(--accent-soft); color: var(--accent); }
-        .card-title .title-icon.green  { background: var(--primary-soft); color: var(--primary); }
-        .card-title .title-icon.blue   { background: var(--accent-soft); color: var(--accent); }
-        .card-title .title-icon.red    { background: #fee2e2; color: #dc2626; }
-        .card-title .title-icon.purple { background: #f3e8ff; color: #7c3aed; }
+        .card-title .title-icon.orange { background: var(--accent); color: #fff; }
+        .card-title .title-icon.green  { background: #22c55e; color: #fff; }
+        .card-title .title-icon.blue   { background: #3b82f6; color: #fff; }
+        .card-title .title-icon.red    { background: #ef4444; color: #fff; }
+        .card-title .title-icon.purple { background: #742183; color: #fff; }
 
         .card-badge {
             display: inline-flex; align-items: center; gap: 0.3rem;
