@@ -3,117 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clientes — PremiaSurgas</title>
-    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/main.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <style>[v-cloak]{display:none}</style>
+    <title>Directorio de Clientes — PremiaSurgas</title>
+    <link rel="icon" type="image/png" href="<?= BASE_URL ?>assets/premios/icono.png">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-layout.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-tables.css">
     <style>[v-cloak]{display:none}</style>
 </head>
 <body>
 <div id="app" v-cloak>
-    <div class="panel-header">
-        <div class="header-top-row">
-            <div class="header-logo-side">
-                <a href="<?= BASE_URL ?>panel" style="text-decoration:none; display:flex; align-items:center; gap:10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); padding: 8px 20px; border-radius:100px; color: white; transition:0.3s;" title="Volver al Panel">
-                    <i class='bx bx-left-arrow-alt' style="font-size: 1.5rem;"></i>
-                    <span style="font-weight: 700; font-size: 0.9rem; letter-spacing: 0.5px;">VOLVER</span>
-                </a>
-            </div>
+    
+    <?php include __DIR__ . '/../partials/sidebar_admin.php'; ?>
 
-            <div class="header-user-side">
-                <div class="user-card-integrated">
-                    <div class="u-avatar"><?= substr($_SESSION['nombre_usuario'], 0, 1) ?></div>
-                    <div class="u-details">
-                        <span class="u-role-tag"><?= htmlspecialchars(strtoupper($_SESSION['rol'])) ?></span>
-                        <span class="u-name-val"><?= htmlspecialchars($_SESSION['usuario'] ?? $_SESSION['nombre_usuario']) ?></span>
+    <div class="admin-layout">
+        <?php
+            $pageTitle    = 'Directorio';
+            $pageSubtitle = 'Panel de gestión de beneficiarios registrados';
+            include __DIR__ . '/../partials/header_admin.php';
+        ?>
+
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class='bx bx-group title-icon orange'></i>
+                        <span>Lista de Beneficiarios</span>
                     </div>
-                    <div class="u-divider"></div>
-                    <button @click="logout" class="u-logout-btn" title="Cerrar Sesión">
-                        <i class='bx bx-log-out'></i>
-                    </button>
+                    
+                    <div class="header-actions">
+                        <div class="header-search">
+                            <i class='bx bx-search'></i>
+                            <input type="text" v-model="busqueda" placeholder="Buscar cliente...">
+                        </div>
+                        <a href="<?= BASE_URL ?>clientes/nuevo" class="btn btn-primary-premium">
+                            <i class='bx bx-plus-circle'></i> Nuevo Cliente
+                        </a>
+                    </div>
+                </div>
+
+                <div class="table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Nombre del Cliente</th>
+                                <th>Categoría</th>
+                                <th>Celular</th>
+                                <th>Documento</th>
+                                <th>Departamento</th>
+                                <th>Puntos</th>
+                                <th style="text-align: right;">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="c in filtrados" :key="c.id">
+                                <td>
+                                    <div class="row-client">
+                                        <div class="row-avatar">{{ c.tipo_cliente === 'Normal' ? (c.nombre ? c.nombre.charAt(0) : '?') : (c.razon_social ? c.razon_social.charAt(0) : '?') }}</div>
+                                        <div class="client-info">
+                                            <div class="client-name">{{ c.tipo_cliente === 'Normal' ? c.nombre : (c.razon_social || c.nombre) }}</div>
+                                            <div v-if="c.tipo_cliente !== 'Normal'" class="client-subtext">{{ c.nombre }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="chip" :class="c.tipo_cliente === 'Normal' ? 'chip-normal' : 'chip-business'">
+                                        <i :class="c.tipo_cliente === 'Normal' ? 'bx bx-user' : 'bx bx-buildings'"></i>
+                                        {{ c.tipo_cliente || 'Normal' }}
+                                    </span>
+                                </td>
+                                <td><span class="text-medium">{{ c.celular }}</span></td>
+                                <td><span class="text-mono"><?= htmlspecialchars($c->ruc ?? $c->dni ?? '—') ?></span></td>
+                                <td>{{ c.departamento || '—' }}</td>
+                                <td><strong class="pts-positive">{{ c.puntos }} pts</strong></td>
+                                <td>
+                                    <div class="actions-flex">
+                                        <a :href="'<?= BASE_URL ?>clientes/exito?id=' + c.id" class="btn-action blue" title="Ver Carnet">
+                                            <i class='bx bx-id-card'></i>
+                                        </a>
+                                        <a :href="'<?= BASE_URL ?>clientes/imprimir?id=' + c.id" target="_blank" class="btn-action gray" title="Imprimir">
+                                            <i class='bx bx-printer'></i>
+                                        </a>
+                                        <?php if ($_SESSION['rol'] === 'admin'): ?>
+                                        <a :href="'<?= BASE_URL ?>clientes/editar?id=' + c.id" class="btn-action orange" title="Editar">
+                                            <i class='bx bx-edit'></i>
+                                        </a>
+                                        <button v-if="c.estado == 1" @click="toggleEstado(c.id, 0)" class="btn-action red" title="Desactivar">
+                                            <i class='bx bx-block'></i>
+                                        </button>
+                                        <button v-else @click="toggleEstado(c.id, 1)" class="btn-action green" title="Activar">
+                                            <i class='bx bx-check-circle'></i>
+                                        </button>
+                                        <?php endif; ?>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr v-if="filtrados.length === 0">
+                                <td colspan="7">
+                                    <div class="empty-table">
+                                        <i class='bx bx-search-alt'></i>
+                                        <p>No se encontraron clientes que coincidan con "{{ busqueda }}"</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-
-        <!-- Título principal estilo Hero (debajo de la botonera) -->
-        <div class="header-hero-content">
-            <h1 class="hero-main-title">Directorio</h1>
-            <p class="hero-welcome-msg">Toda tu base de datos a un clic.</p>
-        </div>
-    </div>
-
-    <div class="container" style="margin-top: -1.5rem;">        <div class="card" style="padding:1rem">
-            <div style="display: flex; gap: 1rem; margin-bottom: 1.2rem; align-items: center; flex-wrap: wrap;">
-                <div style="position: relative; flex: 1; min-width: 250px;">
-                    <i class='bx bx-search' style="position: absolute; left: 1.1rem; top: 50%; transform: translateY(-50%); color: #a1a5b7; font-size: 1.3rem;"></i>
-                    <input type="text" v-model="busqueda" placeholder="Buscar por DNI/RUC, nombre o celular..."
-                           style="width:100%; padding:.85rem 1rem .85rem 3rem; border:1px solid #e4e6ef; border-radius:8px; font-family:inherit; font-size:.95rem; color:#3f4254; box-sizing:border-box; outline:none; transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.02);"
-                           onfocus="this.style.borderColor='var(--primary)'; this.style.boxShadow='0 4px 12px rgba(130,21,21,0.1)'" onblur="this.style.borderColor='#e4e6ef'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.02)'">
-                </div>
-                <a href="<?= BASE_URL ?>clientes/nuevo" style="background: var(--primary); color: white; display: flex; align-items: center; gap: 8px; padding: .85rem 1.6rem; border-radius: 8px; font-weight: 700; font-size: .95rem; text-decoration: none; flex-shrink: 0; box-shadow: 0 4px 10px rgba(130,21,21,0.25); border: 1px solid var(--primary); transition: all 0.3s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 15px rgba(130,21,21,0.35)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 10px rgba(130,21,21,0.25)'">
-                    <i class='bx bx-plus-circle' style="font-size: 1.2rem;"></i> Nuevo
-                </a>
-            </div>
-
-            <div class="table-wrap">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Tipo</th>
-                            <th>Celular</th>
-                            <th>Documento</th>
-                            <th>Dep.</th>
-                            <th>Puntos</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="c in filtrados" :key="c.id">
-                            <td>
-                                <div>{{ c.tipo_cliente === 'Normal' ? c.nombre : (c.razon_social || c.nombre) }}</div>
-                                <div v-if="c.tipo_cliente !== 'Normal'" style="font-size:0.75rem; color:var(--muted);">
-                                    <i class="bx bx-user" style="font-size:0.75rem;"></i> {{ c.nombre }}
-                                </div>
-                            </td>
-                            <td>
-                                <span class="badge" :class="c.tipo_cliente === 'Normal' ? 'badge-primary' : 'badge-warning'" style="font-size:0.75rem; padding: 3px 6px; border-radius: 4px; background: var(--bg-soft); border: 1px solid var(--border-color); color: var(--dark);">
-                                    <i :class="c.tipo_cliente === 'Normal' ? 'bx bx-user' : 'bx bx-buildings'"></i> {{ c.tipo_cliente || 'Normal' }}
-                                </span>
-                            </td>
-                            <td>{{ c.celular }}</td>
-                            <td>{{ c.ruc || c.dni || '—' }}</td>
-                            <td>{{ c.departamento || '—' }}</td>
-                            <td><strong style="color:var(--primary)">{{ c.puntos }}</strong></td>
-                            <td style="display: flex; gap: 8px; align-items: center;">
-                                <a :href="'<?= BASE_URL ?>clientes/exito?id=' + c.id" title="Ver Nuevo Carnet" style="color: #0ea5e9; font-size: 1.15rem; background: #e0f2fe; padding: 5px; border-radius: 6px; display: inline-flex; transition: 0.3s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
-                                    <i class='bx bx-id-card'></i>
-                                </a>
-                                <a :href="'<?= BASE_URL ?>clientes/imprimir?id=' + c.id" target="_blank" title="Imprimir" style="color: #64748b; font-size: 1.15rem; background: #f1f5f9; padding: 5px; border-radius: 6px; display: inline-flex; transition: 0.3s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
-                                    <i class='bx bx-printer'></i>
-                                </a>
-                                <?php if ($_SESSION['rol'] === 'admin'): ?>
-                                <a :href="'<?= BASE_URL ?>clientes/editar?id=' + c.id" title="Editar" style="color: #f59e0b; font-size: 1.15rem; background: #fef3c7; padding: 5px; border-radius: 6px; display: inline-flex; transition: 0.3s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
-                                    <i class='bx bx-edit'></i>
-                                </a>
-                                <a v-if="c.estado == 1" href="#" @click.prevent="toggleEstado(c.id, 0)" title="Inactivar" style="color: #ef4444; font-size: 1.15rem; background: #fee2e2; padding: 5px; border-radius: 6px; display: inline-flex; transition: 0.3s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
-                                    <i class='bx bx-block'></i>
-                                </a>
-                                <a v-else href="#" @click.prevent="toggleEstado(c.id, 1)" title="Activar" style="color: #10b981; font-size: 1.15rem; background: #d1fae5; padding: 5px; border-radius: 6px; display: inline-flex; transition: 0.3s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
-                                    <i class='bx bx-check-circle'></i>
-                                </a>
-                                <?php endif; ?>
-                            </td>
-                        </tr>
-                        <tr v-if="filtrados.length === 0">
-                            <td colspan="5" style="text-align:center; color:var(--muted); padding:2rem">Sin resultados</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+    </div> <!-- .admin-layout -->
+</div> <!-- #app -->
 </div>
 
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
