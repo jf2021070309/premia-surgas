@@ -6,54 +6,89 @@
     <title>Imprimir Tarjeta — <?= htmlspecialchars($cliente['nombre']) ?></title>
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/main.css">
     <style>
-        @page { size: 85mm 55mm; margin: 0; }   /* Tamaño tarjeta de crédito */
-        body  { background: #fff; }
+        @page { size: 85mm 55mm; margin: 0; }
+        body { background: #fff; margin: 0; padding: 0; -webkit-print-color-adjust: exact; }
+        
         .card-print {
             width: 85mm;
             height: 55mm;
-            border: 1.5px solid #ccc;
-            border-radius: 6px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 4mm;
             font-family: 'Inter', sans-serif;
-            box-sizing: border-box;
-            margin: auto;
             text-align: center;
+            position: relative;
+            box-sizing: border-box;
+            border: 1px solid #f1f5f9;
         }
-        .card-print h1  { font-size: 11pt; color: #e67e22; margin: 0 0 2mm; }
-        .card-print h2  { font-size: 9pt;  color: #333;    margin: 0 0 2mm; font-weight:600; }
-        .card-print .cd { font-size: 8pt;  color: #555;    letter-spacing: 1px; margin-bottom: 2mm; font-weight:700; }
-        .card-print #qrcode-print canvas,
-        .card-print #qrcode-print img { width: 28mm !important; height: 28mm !important; }
-        .card-print p   { font-size: 6.5pt; color: #777;   margin-top: 2mm; }
+
+        .header-title {
+            font-size: 11pt;
+            font-weight: 800;
+            color: #800000;
+            letter-spacing: 0.05em;
+            margin-bottom: 3mm;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .client-name {
+            font-size: 10pt;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 1mm;
+        }
+
+        .client-doc {
+            font-size: 8pt;
+            font-weight: 600;
+            color: #64748b;
+            margin-bottom: 3mm;
+        }
+
+        #qrcode-print {
+            background: #fff;
+            padding: 1.5mm;
+        }
+
+        .footer-msg {
+            font-size: 6.5pt;
+            font-weight: 500;
+            color: #94a3b8;
+            margin-top: 3mm;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
         @media screen {
-            body { background: #eee; display: flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; }
-            .no-print { margin-top: 1rem; display:flex; gap:.8rem; }
+            body { background: #f0f2f5; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; }
+            .card-print { background: #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-radius: 12px; border: none; }
+            .no-print { margin-top: 2rem; display: flex; gap: 1rem; }
+            .btn-print { background: #800000; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; font-weight: 700; }
+            .btn-back { background: #fff; border: 1px solid #e2e8f0; color: #64748b; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; font-weight: 600; text-decoration: none; }
         }
         @media print { .no-print { display: none !important; } }
     </style>
 </head>
 <body>
-    <?php
-        $scanUrl = BASE_URL . 'scan?c=' . urlencode($cliente['codigo']) . '&t=' . urlencode($cliente['token']);
-    ?>
     <div class="card-print">
-        <h1>&#x1F525; GAS EXPRESS SURGAS</h1>
-        <h2><?= htmlspecialchars($cliente['nombre']) ?></h2>
-        <div class="cd">
-            <?= $cliente['tipo_cliente'] === 'Normal' ? 'DNI: ' : 'RUC: ' ?> <?= htmlspecialchars($cliente['tipo_cliente'] === 'Normal' ? ($cliente['dni'] ?? '—') : ($cliente['ruc'] ?? '—')) ?><br>
-            CÓDIGO: <?= htmlspecialchars($cliente['codigo']) ?>
+        <div class="header-title">🔥 GAS EXPRESS SURGAS</div>
+        <div class="client-name"><?= htmlspecialchars(mb_strtoupper($cliente['nombre'])) ?></div>
+        <div class="client-doc">
+            <?= $cliente['tipo_cliente'] === 'Normal' ? 'DNI' : 'RUC' ?>: <?= htmlspecialchars($cliente['tipo_cliente'] === 'Normal' ? ($cliente['dni'] ?? '—') : ($cliente['ruc'] ?? '—')) ?>
         </div>
+        
         <div id="qrcode-print"></div>
-        <p>Acumula puntos en cada compra &#x1F381;</p>
+        
+        <div class="footer-msg">Acumula puntos en cada compra 🎁</div>
     </div>
 
     <div class="no-print">
-        <button id="btn-print" class="btn btn-primary">&#x1F5A8; Imprimir ahora</button>
-        <a href="<?= BASE_URL ?>clientes/exito?id=<?= $cliente['id'] ?>" class="btn btn-dark">&larr; Volver</a>
+        <button id="btn-print" class="btn-print">🖨️ Imprimir ahora</button>
+        <a href="<?= BASE_URL ?>clientes/lista" class="btn-back">← Volver a la Lista</a>
     </div>
 
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
