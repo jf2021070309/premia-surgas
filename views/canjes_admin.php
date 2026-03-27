@@ -12,19 +12,19 @@
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-tables.css">
     <style>
         .chip-pendiente { 
-            background: #fff1f2; 
-            color: #e11d48; 
-            border: 1px solid #ffe4e6; 
-            animation: pulse-red 2s infinite; 
-            box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.4);
+            background: #fff7ed; 
+            color: #ea580c; 
+            border: 1px solid #ffedd5; 
+            animation: pulse-orange 2s infinite; 
+            box-shadow: 0 0 0 0 rgba(234, 88, 12, 0.4);
             font-weight: 800;
         }
         .chip-entregado { background: #f0fdf4; color: #166534; border: 1px solid #dcfce7; }
         
-        @keyframes pulse-red {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(225, 29, 72, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(225, 29, 72, 0); }
+        @keyframes pulse-orange {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(234, 88, 12, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(234, 88, 12, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(234, 88, 12, 0); }
         }
         .row-prize { display: flex; align-items: center; gap: 0.75rem; }
         .prize-img { width: 40px; height: 40px; object-fit: contain; background: #f8fafc; border-radius: 8px; padding: 4px; border: 1px solid #e2e8f0; }
@@ -68,7 +68,7 @@
                                 <th>Beneficiario</th>
                                 <th>Premio Canjeado</th>
                                 <th>Estado</th>
-                                <th class="text-end">Acciones</th>
+                                <th class="text-center">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -109,8 +109,8 @@
                                         <?= strtoupper($c['estado']) ?>
                                     </span>
                                 </td>
-                                <td class="text-end">
-                                    <div class="actions-flex">
+                                <td class="text-center">
+                                    <div class="actions-flex" style="justify-content: center;">
                                         <?php if ($c['estado'] === 'pendiente'): ?>
                                             <form action="<?= BASE_URL ?>canjes-admin/actualizar" method="POST" style="display:inline;">
                                                 <input type="hidden" name="id" value="<?= $c['id'] ?>">
@@ -122,10 +122,6 @@
                                             <button class="btn-action red" title="No entregar/Cancelar">
                                                 <i class='bx bx-block'></i>
                                             </button>
-                                        <?php else: ?>
-                                            <div class="btn-action green" style="cursor: default;" title="Producto entregado">
-                                                <i class='bx bxs-check-shield'></i>
-                                            </div>
                                         <?php endif; ?>
                                     </div>
                                 </td>
