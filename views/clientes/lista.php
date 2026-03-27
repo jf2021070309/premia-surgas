@@ -92,7 +92,7 @@
                                     </span>
                                 </td>
                                 <td><span class="text-medium">{{ c.celular }}</span></td>
-                                <td><span class="text-mono">{{ c.tipo_cliente !== 'Normal' ? (c.ruc || '—') : (c.dni || '—') }}</span></td>
+                                <td><span class="text-medium">{{ c.tipo_cliente !== 'Normal' ? (c.ruc || '—') : (c.dni || '—') }}</span></td>
                                 <td><span class="text-medium">{{ c.departamento || '—' }}</span></td>
                                 <td><span class="text-medium">{{ c.puntos }} pts</span></td>
                                 <td>
