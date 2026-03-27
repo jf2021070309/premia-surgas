@@ -8,43 +8,12 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg:            #f8fafc;
-            --surface:       #ffffff;
-            --sidebar-bg:    #400000; /* Guinda Surgas */
-            
-            /* Surgas Palette */
-            --primary:       #800000; /* Guinda Surgas */
-            --accent:        #ff6600; /* Naranja Surgas */
-            
-            --on-surface:    #1e293b;
-            --on-muted:      #64748b;
-            --on-light:      #94a3b8;
-            --outline:       #e2e8f0;
-            
-            --sidebar-width: 240px;
-            --radius-md:     10px;
-            --transition:    0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-layout.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/recargas_admin.css">
+</head>
+<body>
 
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-        html { font-size: 14px; } /* 90% Scale effect from 16px */
-
-        body {
-            background: var(--bg);
-            font-family: 'Inter', system-ui, sans-serif;
-            color: var(--on-surface);
-            min-height: 100vh;
-            display: flex;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        /* ══════════════════════════════════════
-           Sidebar Elegant
-        ══════════════════════════════════════ */
-        .sidebar {
+    <?php include __DIR__ . '/partials/sidebar_admin.php'; ?>
             width: var(--sidebar-width);
             height: 100vh;
             background: var(--sidebar-bg);
@@ -926,32 +895,11 @@
     <?php include __DIR__ . '/partials/sidebar_admin.php'; ?>
 
     <div class="admin-layout">
-        <!-- ════ Top Header ════ -->
-        <header class="top-nav">
-            <div class="nav-left">
-                <h1 class="page-title">Solicitudes de Recarga</h1>
-                <p class="page-subtitle">Panel de verificación administrativa</p>
-            </div>
-            
-            <div class="nav-right">
-                <div class="admin-pill">
-                    <i class='bx bxs-bell nav-bell'></i>
-                    
-                    <div class="admin-avatar">A</div>
-                    
-                    <div class="admin-pill-text">
-                        <span class="admin-pill-role">ADMIN</span>
-                        <span class="admin-pill-name">admin</span>
-                    </div>
-
-                    <div class="nav-divider"></div>
-
-                    <a href="<?= BASE_URL ?>logout" class="header-logout-btn" title="Cerrar Sesión">
-                        <i class='bx bx-log-out-circle'></i>
-                    </a>
-                </div>
-            </div>
-        </header>
+        <?php
+            $pageTitle    = 'Gestión Recargas';
+            $pageSubtitle = 'Panel de verificación administrativa';
+            include __DIR__ . '/partials/header_admin.php';
+        ?>
 
         <div class="container">
 
