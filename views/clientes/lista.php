@@ -170,20 +170,23 @@
 
     <!-- MODAL: EDITAR CLIENTE -->
     <div class="modal-overlay" v-if="showEditModal" @click.self="showEditModal = false">
-        <div class="modal-content-wrapper" style="max-width: 650px;">
+        <div class="modal-content-wrapper" style="max-width: 700px; padding: 0; overflow: hidden; border-radius: 20px;">
             <div class="modal-close" @click="showEditModal = false"><i class='bx bx-x'></i></div>
             
-            <div class="card elite-form-card" style="margin: 0; box-shadow: none; border: none;">
-                <div class="card-header-premium">
-                    <i class='bx bx-edit-alt'></i>
-                    <span>Editar Beneficiario</span>
+            <div class="elite-form-card" style="margin: 0; box-shadow: none;">
+                <div class="card-header-premium" style="padding: 1.5rem 2rem; background: #f8fafc; border-bottom: 1px solid #f1f5f9;">
+                    <div style="background: #fee2e2; width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                        <i class='bx bx-edit-alt' style="color: #ef4444; font-size: 1.2rem;"></i>
+                    </div>
+                    <span style="font-size: 1.2rem; font-weight: 700; color: #0f172a;">Editar Beneficiario</span>
                 </div>
 
-                <form @submit.prevent="guardarCambios" class="premium-form" style="padding: 2rem;">
-                    <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <form @submit.prevent="guardarCambios" class="premium-form" style="padding: 2.5rem;">
+                    <div class="form-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;">
                         
+                        <!-- Primera Fila -->
                         <div class="form-group-modern">
-                            <label>Tipo de Cliente</label>
+                            <label>TIPO DE CLIENTE</label>
                             <div class="input-wrapper">
                                 <i class='bx bx-category'></i>
                                 <select v-model="form.tipo_cliente" class="form-control-modern">
@@ -210,24 +213,27 @@
                             </div>
                         </div>
 
+                        <!-- Segunda Fila (Opcional) -->
                         <div class="form-group-modern" v-if="form.tipo_cliente !== 'Normal'" style="grid-column: span 2;">
-                            <label>Razón Social *</label>
+                            <label>RAZÓN SOCIAL *</label>
                             <div class="input-wrapper">
                                 <i class='bx bx-buildings'></i>
                                 <input type="text" v-model="form.razon_social" required>
                             </div>
                         </div>
 
+                        <!-- Tercera Fila -->
                         <div class="form-group-modern" style="grid-column: span 2;">
-                            <label>Nombre Completo / Contacto *</label>
+                            <label>NOMBRE COMPLETO / CONTACTO *</label>
                             <div class="input-wrapper">
                                 <i class='bx bx-user'></i>
                                 <input type="text" v-model="form.nombre" required>
                             </div>
                         </div>
 
+                        <!-- Cuarta Fila -->
                         <div class="form-group-modern">
-                            <label>Celular *</label>
+                            <label>CELULAR *</label>
                             <div class="input-wrapper">
                                 <i class='bx bx-phone'></i>
                                 <input type="text" v-model="form.celular" maxlength="9" required>
@@ -235,7 +241,7 @@
                         </div>
 
                         <div class="form-group-modern">
-                            <label>Departamento</label>
+                            <label>DEPARTAMENTO</label>
                             <div class="input-wrapper">
                                 <i class='bx bx-map'></i>
                                 <select v-model="form.departamento" class="form-control-modern">
@@ -248,8 +254,9 @@
                             </div>
                         </div>
 
+                        <!-- Quinta Fila -->
                         <div class="form-group-modern" style="grid-column: span 2;">
-                            <label>Dirección</label>
+                            <label>DIRECCIÓN</label>
                             <div class="input-wrapper">
                                 <i class='bx bx-map-pin'></i>
                                 <input type="text" v-model="form.direccion" placeholder="Calle, número, urbanización...">
@@ -257,9 +264,10 @@
                         </div>
                     </div>
 
-                    <div style="margin-top: 2rem; display: flex; justify-content: flex-end; gap: 1rem;">
-                        <button type="button" @click="showEditModal = false" class="btn-primary-premium gray" style="width: auto; padding: 0.8rem 2rem; height: 3.5rem; background: #64748b; box-shadow: none;">Cancelar</button>
-                        <button type="submit" class="btn-primary-premium" :disabled="fetching" style="padding: 0.8rem 2rem; height: 3.5rem;">
+                    <!-- Footer de Botones -->
+                    <div style="margin-top: 3rem; display: flex; justify-content: flex-end; gap: 1rem; border-top: 1px solid #f1f5f9; padding-top: 2rem;">
+                        <button type="button" @click="showEditModal = false" class="btn-primary-premium" style="width: auto; padding: 0 2.5rem; height: 3.5rem; background: #64748b; box-shadow: none;">Cancelar</button>
+                        <button type="submit" class="btn-primary-premium" :disabled="fetching" style="padding: 0 2.5rem; height: 3.5rem; width: auto;">
                             <i class='bx bx-save'></i> {{ fetching ? 'Guardando...' : 'Guardar Cambios' }}
                         </button>
                     </div>
