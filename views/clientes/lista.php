@@ -264,9 +264,9 @@
                         </div>
                     </div>
 
-                    <!-- Footer de Botones -->
-                    <div style="margin-top: 3rem; display: flex; justify-content: flex-end; border-top: 1px solid #f1f5f9; padding: 2rem 2.5rem;">
-                        <button type="submit" class="btn-primary-premium" :disabled="fetching" style="padding: 0 3rem; height: 3.8rem; width: auto; font-size: 1rem;">
+                    <!-- Footer de Botones Centrado -->
+                    <div style="margin-top: 2.5rem; display: flex; justify-content: center; border-top: 1px solid #f1f5f9; padding: 2rem 0 0 0;">
+                        <button type="submit" class="btn-primary-premium" :disabled="fetching" style="padding: 0 4rem; height: 3.8rem; width: auto; font-size: 1rem; border-radius: 15px;">
                             <i class='bx bx-save'></i> {{ fetching ? 'Guardando...' : 'Guardar Cambios' }}
                         </button>
                     </div>
