@@ -174,11 +174,11 @@
             <div class="modal-close" @click="showEditModal = false"><i class='bx bx-x'></i></div>
             
             <div class="elite-form-card" style="margin: 0; box-shadow: none;">
-                <div class="card-header-premium" style="padding: 1.5rem 2rem; background: #f8fafc; border-bottom: 1px solid #f1f5f9;">
-                    <div style="background: #fee2e2; width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
-                        <i class='bx bx-edit-alt' style="color: #ef4444; font-size: 1.2rem;"></i>
+                <div class="card-header-premium" style="padding: 1.5rem 2rem; background: #ffffff; border-bottom: 1px solid #f1f5f9;">
+                    <div style="background: #fff1f1; width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 15px; border: 1px solid #fee2e2;">
+                        <i class='bx bx-edit-alt' style="color: #800000; font-size: 1.3rem;"></i>
                     </div>
-                    <span style="font-size: 1.2rem; font-weight: 700; color: #0f172a;">Editar Beneficiario</span>
+                    <span style="font-size: 1.25rem; font-weight: 700; color: #0f172a; letter-spacing: -0.02em;">Editar Beneficiario</span>
                 </div>
 
                 <form @submit.prevent="guardarCambios" class="premium-form" style="padding: 2.5rem;">
@@ -257,13 +257,12 @@
                         </div>
                     </div>
 
-                    <!-- Footer de Botones Centrado -->
-                    <div class="form-footer-actions" style="margin-top: 2rem; border-top: 1px solid #f1f5f9; padding-top: 2rem;">
-                        <button type="submit" class="btn-primary-premium" :disabled="fetching" style="padding: 0 4rem; height: 3.8rem; width: auto; font-size: 1rem; border-radius: 15px; margin: 0 auto; display: flex;">
+                    <!-- Footer de Botones Centrado (Ajustado) -->
+                    <div class="form-footer-actions" style="margin-top: 1rem; border-top: 1px solid #f1f5f9; padding-top: 1.5rem;">
+                        <button type="submit" class="btn-primary-premium" :disabled="fetching" style="padding: 0 4rem; height: 3.5rem; width: auto; font-size: 0.95rem; border-radius: 12px; margin: 0 auto; display: flex;">
                             <i class='bx bx-save'></i> {{ fetching ? 'Guardando...' : 'Guardar Cambios' }}
                         </button>
                     </div>
-                </form>
                 </form>
             </div>
         </div>
