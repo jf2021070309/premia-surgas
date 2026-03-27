@@ -70,6 +70,41 @@ class CanjeModel {
     }
 
     public function actualizarEstado(int $id, string $estado): bool {
+        // Si el estado es cancelado, necesitamos devolver puntos y stock
+        if ($estado === 'cancelado') {
+            try {
+                $this->db->beginTransaction();
+
+                // 1. Obtener datos del canje (Solo si aún está pendiente para evitar dobles devoluciones)
+                $stmt = $this->db->prepare("SELECT cliente_id, premio_id, puntos_usados, estado FROM canjes WHERE id = ? FOR UPDATE");
+                $stmt->execute([$id]);
+                $canje = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                if (!$canje || $canje['estado'] !== 'pendiente') {
+                     throw new Exception("Canje no válido para cancelación.");
+                }
+
+                // 2. Devolver puntos al cliente
+                $stmt = $this->db->prepare("UPDATE clientes SET puntos = puntos + ? WHERE id = ?");
+                $stmt->execute([$canje['puntos_usados'], $canje['cliente_id']]);
+
+                // 3. Devolver stock al premio
+                $stmt = $this->db->prepare("UPDATE premios SET stock = stock + 1 WHERE id = ?");
+                $stmt->execute([$canje['premio_id']]);
+
+                // 4. Actualizar estado del canje
+                $stmt = $this->db->prepare("UPDATE canjes SET estado = 'cancelado' WHERE id = ?");
+                $stmt->execute([$id]);
+
+                $this->db->commit();
+                return true;
+            } catch (Exception $e) {
+                if ($this->db->inTransaction()) $this->db->rollBack();
+                return false;
+            }
+        }
+
+        // Caso normal (ej: pendiente -> entregado)
         $stmt = $this->db->prepare("UPDATE canjes SET estado = ? WHERE id = ?");
         return $stmt->execute([$estado, $id]);
     }

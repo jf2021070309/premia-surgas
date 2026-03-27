@@ -105,13 +105,18 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <span class="chip <?= $c['estado'] === 'entregado' ? 'chip-entregado' : 'chip-pendiente' ?>">
-                                        <?= strtoupper($c['estado']) ?>
-                                    </span>
+                                    <?php if ($c['estado'] === 'pendiente'): ?>
+                                        <span class="chip chip-pendiente">PENDIENTE</span>
+                                    <?php elseif ($c['estado'] === 'entregado'): ?>
+                                        <span style="font-weight: 700; color: #111827; font-size: 0.75rem; letter-spacing: 0.02em;">ENTREGADO</span>
+                                    <?php else: ?>
+                                        <span style="font-weight: 700; color: #6b7280; font-size: 0.75rem; letter-spacing: 0.02em; text-decoration: line-through;"><?= strtoupper($c['estado']) ?></span>
+                                    <?php endif; ?>
                                 </td>
                                 <td>
                                     <div style="display: flex; justify-content: center; align-items: center; gap: 8px;">
                                         <?php if ($c['estado'] === 'pendiente'): ?>
+                                            <!-- Entregar -->
                                             <form action="<?= BASE_URL ?>canjes-admin/actualizar" method="POST" style="display:inline; margin: 0;">
                                                 <input type="hidden" name="id" value="<?= $c['id'] ?>">
                                                 <input type="hidden" name="estado" value="entregado">
@@ -119,9 +124,15 @@
                                                     <i class='bx bx-check'></i>
                                                 </button>
                                             </form>
-                                            <button class="btn-action red" title="No entregar/Cancelar">
-                                                <i class='bx bx-block'></i>
-                                            </button>
+
+                                            <!-- Cancelar / No Entregar -->
+                                            <form action="<?= BASE_URL ?>canjes-admin/actualizar" method="POST" style="display:inline; margin: 0;" onsubmit="return confirmarCancelacion(event, this);">
+                                                <input type="hidden" name="id" value="<?= $c['id'] ?>">
+                                                <input type="hidden" name="estado" value="cancelado">
+                                                <button type="submit" class="btn-action red" title="No entregar/Cancelar">
+                                                    <i class='bx bx-block'></i>
+                                                </button>
+                                            </form>
                                         <?php endif; ?>
                                     </div>
                                 </td>
@@ -134,6 +145,27 @@
 
         </div> <!-- .container -->
     </div> <!-- .admin-layout -->
+
+    <script>
+        function confirmarCancelacion(event, form) {
+            event.preventDefault();
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "Se cancelará el canje. Si deseas que los puntos se devuelvan al cliente, asegúrate de procesar la devolución.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ff6600',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Sí, cancelar',
+                cancelButtonText: 'No, esperar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+            return false;
+        }
+    </script>
 
     <?php if (isset($_SESSION['flash'])): ?>
     <script>
