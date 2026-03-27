@@ -96,36 +96,30 @@
 
                 <!-- [PANTALLA 1] — ELECCIÓN INICIAL -->
                 <div id="screen-start" class="v-screen active">
-                    <h5 style="font-weight: 800; text-transform: uppercase; color: #94a3b8; font-size: 0.85rem; letter-spacing: 1.5px; margin-bottom: 2rem; text-align: center;">Seleccione m&eacute;todo de ingreso</h5>
+                    <h5 style="font-weight: 800; text-transform: uppercase; color: #94a3b8; font-size: 0.85rem; letter-spacing: 1.5px; margin-bottom: 2rem; text-align: center;">M&eacute;todo de Lectura QR</h5>
                     
                     <div class="option-grid">
                         <div class="choice-card" onclick="initScanner()">
-                            <i class='bx bx-qr-scan'></i>
-                            <span>ESCANEAR QR</span>
+                            <i class='bx bx-camera'></i>
+                            <span>USAR C&Aacute;MARA</span>
                         </div>
-                        <div class="choice-card" onclick="document.getElementById('manual-dni').focus()">
-                            <i class='bx bx-id-card'></i>
-                            <span>POR DNI</span>
+                        <div class="choice-card" onclick="document.getElementById('qr-input-file').click()">
+                            <i class='bx bx-image-add'></i>
+                            <span>GALERIA / QR</span>
                         </div>
                     </div>
 
-                    <div class="premium-box" style="margin-top: 2rem;">
-                        <h4 style="font-weight: 800; font-size: 1.1rem; color: var(--dark-blue); text-align: center; margin-bottom: 1.5rem;">B&uacute;squeda Manual</h4>
+                    <div class="premium-box" style="margin-top: 1rem; padding: 1.8rem;">
+                        <span style="display: block; text-align: center; color: #94a3b8; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 1rem; letter-spacing: 1px;">B&uacute;squeda por Documento</span>
                         
-                        <div class="search-group-elite">
-                            <i class='bx bx-search-alt-2 icon-prefix'></i>
-                            <input type="tel" id="manual-dni" placeholder="00000000" maxlength="8">
+                        <div class="search-group-elite" style="margin: 0.5rem 0;">
+                            <i class='bx bx-id-card icon-prefix'></i>
+                            <input type="tel" id="manual-dni" placeholder="Ingresa DNI" maxlength="8">
                             <button class="btn-search" onclick="buscarPorDni()">
-                                <i class='bx bx-right-arrow-alt'></i>
+                                <i class='bx bx-search-alt'></i>
                             </button>
                         </div>
-
-                        <p style="text-align: center; color: #94a3b8; font-size: 0.8rem; margin-bottom: 2rem;">Ingrese los 8 d&iacute;gitos del documento</p>
-
                         <input type="file" id="qr-input-file" accept="image/*" style="display: none;" onchange="onFileChange(event)">
-                        <button class="btn-gallery-elite" onclick="document.getElementById('qr-input-file').click()">
-                            <i class='bx bx-cloud-upload'></i> Importar imagen de QR
-                        </button>
                     </div>
                 </div>
 
