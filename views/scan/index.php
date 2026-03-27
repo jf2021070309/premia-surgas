@@ -73,8 +73,8 @@
 
         /* Final Button (Black) */
         .btn-elite-black { 
-            display: block; margin: 1.5rem auto 0;
-            background: #000; color: white; border: none; height: 50px; width: 240px;
+            display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+            background: #000; color: white; border: none; height: 50px; width: 100%;
             border-radius: 12px; font-weight: 800; font-size: 0.85rem; text-transform: uppercase;
             letter-spacing: 1px; cursor: pointer; transition: 0.3s;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
@@ -83,12 +83,14 @@
 
         /* Result formatting */
         .elite-customer-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 1.25rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem; }
-        .customer-avatar { width: 42px; height: 42px; background: white; border: 1.5px solid #e2e8f0; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: var(--p-orange); }
+        .customer-avatar { width: 42px; height: 42px; background: white; border: 1.5px solid #e2e8f0; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: var(--p-wine); }
 
         .form-select-elite { height: 50px; width: 100%; border-radius: 12px; border: 1.5px solid #f1f5f9; padding: 0 1rem; font-weight: 700; font-size: 0.85rem; color: #1e293b; outline: none; appearance: none; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E") no-repeat right 1rem center / 1.25rem; }
 
         .op-row { padding: 1rem; background: #fff; border-radius: 12px; border: 1px solid #f1f5f9; margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; }
         .total-display { margin-top: 2rem; padding: 1.5rem; background: #fdfcfa; border-radius: 16px; border: 2px dashed #ffedd5; display: flex; justify-content: space-between; align-items: center; }
+
+        .elite-subtotal-box { height: 50px; background: var(--p-wine); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 800; color: #fff; font-size: 0.85rem; border: none; }
 
         #reader { width: 100%; border-radius: 16px; overflow: hidden; }
     </style>
@@ -189,7 +191,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="elite-label">Subtotal Puntos</label>
-                                    <div id="main-op-unit" style="height: 50px; background: #fffcf0; border: 1.5px solid #fff3e0; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 800; color: var(--p-orange); font-size: 1.1rem;">-</div>
+                                    <div id="main-op-unit" class="elite-subtotal-box">-</div>
                                 </div>
                             </div>
 
@@ -202,7 +204,7 @@
                                 </select>
                             </div>
 
-                            <button class="btn-primary-premium" onclick="addOperation()" style="width: 100%; height: 50px; border-radius: 12px; font-size: 0.85rem; justify-content: center;">
+                            <button class="btn-elite-black" onclick="addOperation()">
                                 <i class='bx bx-plus-circle'></i> A&Ntilde;ADIR A LISTA
                             </button>
 
