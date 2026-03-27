@@ -5,18 +5,18 @@
 /* ── Main Container ── */
 .container {
     max-width: 1400px;
-    margin: 1.5rem auto;
-    padding: 0 2.5rem;
+    margin: 1rem auto;
+    padding: 0 2rem;
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: 1rem;
     width: 100%;
 }
 
 .dashboard-top-grid {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1rem;
 }
 
 /* ══════════════════════════════════════
@@ -246,13 +246,19 @@
 .toggle-chevron { transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); color: var(--on-light); font-size: 1.25rem; }
 .toggle-chevron.open { transform: rotate(180deg); color: var(--primary); }
 
+.dashboard-top-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
 .qr-section-body, .pending-section-body {
     max-height: 0; overflow: hidden;
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     opacity: 0;
 }
 .qr-section-body.open, .pending-section-body.open {
-    max-height: 5000px; opacity: 1; padding-bottom: 2rem;
+    max-height: 5000px; opacity: 1; padding-bottom: 1.25rem;
 }
 
 /* ══════════════════════════════════════
