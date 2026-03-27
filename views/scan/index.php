@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-layout.css">
     <style>
-        :root { --p-orange: #ff6600; --dark-blue: #000; }
+        :root { --p-wine: #800000; --dark-blue: #000; }
         
         /* Layout */
         .scan-container { max-width: 650px; margin: 4rem auto 0; padding-bottom: 5rem; }
@@ -29,7 +29,7 @@
             display: flex; align-items: center; gap: 0.75rem;
         }
         .elite-header-icon { 
-            width: 36px; height: 36px; background: #fdf2f2; color: #800000; 
+            width: 36px; height: 36px; background: #fdf2f2; color: var(--p-wine); 
             border-radius: 8px; display: flex; align-items: center; justify-content: center;
             font-size: 1.25rem; border: 1px solid #fee2e2;
         }
@@ -38,7 +38,7 @@
         .elite-card-body { padding: 2.5rem 2.5rem 1.5rem; }
 
         /* Small labels */
-        .elite-label { display: block; font-size: 0.75rem; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.6rem; }
+        .elite-label { display: block; font-size: 0.75rem; font-weight: 800; color: var(--p-wine); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.6rem; }
 
         /* Interactive Choice Blocks */
         .choice-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 2rem; }
@@ -47,9 +47,9 @@
             padding: 1.5rem; cursor: pointer; transition: 0.3s;
             display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.8rem;
         }
-        .choice-btn:hover { border-color: var(--p-orange); transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.03); }
+        .choice-btn:hover { border-color: var(--p-wine); transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.03); }
         .choice-btn i { font-size: 2.2rem; color: #1e293b; transition: 0.3s; }
-        .choice-btn:hover i { color: var(--p-orange); }
+        .choice-btn:hover i { color: var(--p-wine); }
         .choice-btn span { font-size: 0.8rem; font-weight: 800; color: #475569; letter-spacing: 0.2px; }
 
         /* Premium Input Area */
@@ -61,10 +61,10 @@
             background: #fff;
         }
         .elite-input::placeholder { color: #cbd5e1; font-weight: 500; }
-        .elite-input:focus { border-color: var(--p-orange); background: white; box-shadow: 0 0 0 4px rgba(255,102,0,0.05); }
+        .elite-input:focus { border-color: var(--p-wine); background: white; box-shadow: 0 0 0 4px rgba(128,0,0,0.05); }
 
-        .btn-search-icon { position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%); width: 42px; height: 42px; border-radius: 10px; background: var(--p-orange); color: white; border: none; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; cursor: pointer; transition: 0.3s; }
-        .btn-search-icon:hover { transform: scale(1.05); background: #e05a00; }
+        .btn-search-icon { position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%); width: 42px; height: 42px; border-radius: 10px; background: var(--p-wine); color: white; border: none; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; cursor: pointer; transition: 0.3s; }
+        .btn-search-icon:hover { transform: scale(1.05); background: #600000; }
 
         /* Final Button (Black) */
         .btn-elite-black { 
@@ -128,13 +128,9 @@
                                 <i class='bx bx-id-card'></i>
                                 <input type="tel" id="manual-dni" class="elite-input" placeholder="Ej. 12345678" maxlength="8">
                                 <button class="btn-search-icon" onclick="buscarPorDni()" title="Buscar cliente">
-                                    <i class='bx bx-chevron-right'></i>
+                                    <i class='bx bx-search'></i>
                                 </button>
                             </div>
-                        </div>
-
-                        <div style="padding-bottom: 3rem;">
-                            <!-- Botón inferior opcional si fuera necesario, pero mantenemos el diseño centrado -->
                         </div>
                     </div>
                 </div>
