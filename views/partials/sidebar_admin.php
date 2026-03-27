@@ -18,7 +18,7 @@ if (!function_exists('isActiveLink')) {
 
 <aside class="sidebar">
     <div class="sidebar-brand">
-        <img src="<?= BASE_URL ?>assets/img/logo-dark.png" alt="Surgas" style="width: 140px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));">
+        <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" alt="Surgas" style="width: 140px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));">
     </div>
 
     <nav class="sidebar-menu">
