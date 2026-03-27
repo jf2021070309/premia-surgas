@@ -11,8 +11,21 @@
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-layout.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-tables.css">
     <style>
-        .chip-pendiente { background: #fffbeb; color: #d97706; border: 1px solid #fef3c7; }
+        .chip-pendiente { 
+            background: #fff1f2; 
+            color: #e11d48; 
+            border: 1px solid #ffe4e6; 
+            animation: pulse-red 2s infinite; 
+            box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.4);
+            font-weight: 800;
+        }
         .chip-entregado { background: #f0fdf4; color: #166534; border: 1px solid #dcfce7; }
+        
+        @keyframes pulse-red {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(225, 29, 72, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(225, 29, 72, 0); }
+        }
         .row-prize { display: flex; align-items: center; gap: 0.75rem; }
         .prize-img { width: 40px; height: 40px; object-fit: contain; background: #f8fafc; border-radius: 8px; padding: 4px; border: 1px solid #e2e8f0; }
         .btn-deliver { background: #000; color: #fff; border: none; padding: 6px 14px; border-radius: 8px; font-weight: 700; font-size: 0.78rem; cursor: pointer; transition: 0.2s; }
@@ -79,7 +92,6 @@
                                 </td>
                                 <td>
                                     <div class="row-client">
-                                        <div class="row-avatar"><?= strtoupper(substr($c['cliente_nombre'], 0, 1)) ?></div>
                                         <div class="client-info">
                                             <span class="client-name"><?= htmlspecialchars($c['cliente_nombre']) ?></span>
                                             <span class="client-subtext"><?= $c['cliente_celular'] ?></span>
@@ -98,19 +110,24 @@
                                     </span>
                                 </td>
                                 <td class="text-end">
-                                    <?php if ($c['estado'] === 'pendiente'): ?>
-                                        <form action="<?= BASE_URL ?>canjes-admin/actualizar" method="POST" style="display:inline;">
-                                            <input type="hidden" name="id" value="<?= $c['id'] ?>">
-                                            <input type="hidden" name="estado" value="entregado">
-                                            <button type="submit" class="btn-deliver">
-                                                <i class='bx bx-check-circle'></i> Entregar
+                                    <div class="actions-flex">
+                                        <?php if ($c['estado'] === 'pendiente'): ?>
+                                            <form action="<?= BASE_URL ?>canjes-admin/actualizar" method="POST" style="display:inline;">
+                                                <input type="hidden" name="id" value="<?= $c['id'] ?>">
+                                                <input type="hidden" name="estado" value="entregado">
+                                                <button type="submit" class="btn-action blue" title="Marcar como entregado">
+                                                    <i class='bx bx-check'></i>
+                                                </button>
+                                            </form>
+                                            <button class="btn-action red" title="No entregar/Cancelar">
+                                                <i class='bx bx-block'></i>
                                             </button>
-                                        </form>
-                                    <?php else: ?>
-                                        <span style="color: #059669; font-weight: 800; font-size: 0.82rem; display: flex; align-items: center; gap: 4px; justify-content: flex-end;">
-                                            <i class='bx bxs-check-shield' style="font-size: 1.1rem;"></i> Entregado
-                                        </span>
-                                    <?php endif; ?>
+                                        <?php else: ?>
+                                            <div class="btn-action green" style="cursor: default;" title="Producto entregado">
+                                                <i class='bx bxs-check-shield'></i>
+                                            </div>
+                                        <?php endif; ?>
+                                    </div>
                                 </td>
                             </tr>
                             <?php endforeach; ?>
