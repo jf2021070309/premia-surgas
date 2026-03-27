@@ -8,7 +8,22 @@ createApp({
             filterDep: '',
             clientes: typeof CLIENTES !== 'undefined' ? CLIENTES : [],
             loading: false,
-            fetching: false
+            fetching: false,
+            // Modales
+            showEditModal: false,
+            showCarnetModal: false,
+            currentCliente: null,
+            form: {
+                id: '',
+                nombre: '',
+                tipo_cliente: 'Normal',
+                dni: '',
+                ruc: '',
+                razon_social: '',
+                celular: '',
+                departamento: '',
+                direccion: ''
+            }
         };
     },
     computed: {
@@ -47,41 +62,117 @@ createApp({
         // Limpieza si es necesaria
     },
     methods: {
-        logout() {
-            if (typeof Swal !== 'undefined') {
-                Swal.fire({
-                    title: '¿Cerrar sesión?',
-                    text: "Esperamos verte pronto de nuevo.",
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonColor: 'var(--primary)',
-                    cancelButtonColor: '#6c757d',
-                    confirmButtonText: 'Sí, salir',
-                    cancelButtonText: 'Cancelar'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = typeof BASE_URL !== 'undefined' ? BASE_URL + 'logout' : '/logout';
-                    }
+        abrirCarnet(c) {
+            this.currentCliente = c;
+            this.showCarnetModal = true;
+            this.$nextTick(() => {
+                const qrContainer = document.getElementById('qrcode-modal');
+                if (qrContainer) {
+                    qrContainer.innerHTML = '';
+                    const url = `${BASE_URL}scan?c=${encodeURIComponent(c.codigo)}&t=${encodeURIComponent(c.token)}`;
+                    new QRCode(qrContainer, {
+                        text: url,
+                        width: 180,
+                        height: 180,
+                        colorDark: '#1a1a1a',
+                        colorLight: '#ffffff',
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
+                }
+            });
+        },
+        abrirEditar(c) {
+            this.currentCliente = c;
+            // Clonar datos al form
+            this.form.id = c.id;
+            this.form.nombre = c.nombre;
+            this.form.tipo_cliente = c.tipo_cliente || 'Normal';
+            this.form.dni = c.dni || '';
+            this.form.ruc = c.ruc || '';
+            this.form.razon_social = c.razon_social || '';
+            this.form.celular = c.celular || '';
+            this.form.departamento = c.departamento || '';
+            this.form.direccion = c.direccion || '';
+            
+            this.showEditModal = true;
+        },
+        async guardarCambios() {
+            if (this.fetching) return;
+            this.fetching = true;
+            
+            try {
+                const formData = new FormData();
+                for (const key in this.form) {
+                    formData.append(key, this.form[key]);
+                }
+                
+                const response = await fetch(`${BASE_URL}clientes/update`, {
+                    method: 'POST',
+                    body: formData
                 });
+                
+                if (response.ok) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Actualizado!',
+                        text: 'Los datos se guardaron correctamente.',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                    this.showEditModal = false;
+                    // Recargar página para ver cambios (o actualizar el array local)
+                    setTimeout(() => window.location.reload(), 1500);
+                } else {
+                    throw new Error('Error al actualizar');
+                }
+            } catch (err) {
+                Swal.fire('Error', 'No se pudo guardar la información.', 'error');
+            } finally {
+                this.fetching = false;
             }
         },
         toggleEstado(id, v) {
             const text = v ? '¿Activar este cliente?' : '¿Inactivar este cliente?';
-            if (typeof Swal !== 'undefined') {
-                Swal.fire({
-                    title: 'Confirmar',
-                    text: text,
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonColor: 'var(--primary)',
-                    confirmButtonText: 'Sí, proceder',
-                    cancelButtonText: 'Cancelar'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = (typeof BASE_URL !== 'undefined' ? BASE_URL : '/') + 'clientes/estado?id=' + id + '&v=' + v;
-                    }
-                });
-            }
+            Swal.fire({
+                title: 'Confirmar',
+                text: text,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: 'var(--primary)',
+                confirmButtonText: 'Sí, proceder',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = `${BASE_URL}clientes/estado?id=${id}&v=${v}`;
+                }
+            });
+        },
+        async consultarDni() {
+            const dni = this.form.dni;
+            if (dni.length !== 8) return;
+            this.fetching = true;
+            try {
+                const res = await fetch(`${BASE_URL}clientes/consultarDni?dni=${dni}`);
+                const r = await res.json();
+                if (r.success) {
+                    this.form.nombre = r.data.nombre_completo;
+                }
+            } catch (e) { console.error(e); }
+            finally { this.fetching = false; }
+        },
+        async consultarRuc() {
+            const ruc = this.form.ruc;
+            if (ruc.length !== 11) return;
+            this.fetching = true;
+            try {
+                const res = await fetch(`${BASE_URL}clientes/consultarRuc?ruc=${ruc}`);
+                const r = await res.json();
+                if (r.success) {
+                    this.form.razon_social = r.data.razon_social;
+                    if (r.data.direccion) this.form.direccion = r.data.direccion;
+                }
+            } catch (e) { console.error(e); }
+            finally { this.fetching = false; }
         }
     }
 }).mount('#app');

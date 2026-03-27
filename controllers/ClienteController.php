@@ -252,48 +252,47 @@ class ClienteController
         ];
 
         if (!$data['nombre'] || !$data['celular']) {
-            $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'El nombre del contacto y celular son obligatorios.'];
-            $this->redirect('clientes/editar?id=' . $id);
+            echo json_encode(['success' => false, 'message' => 'El nombre del contacto y celular son obligatorios.']);
+            exit;
         }
 
         if ($data['tipo_cliente'] === 'Normal') {
             if (!$data['dni'] || !preg_match('/^\d{8}$/', $data['dni'])) {
-                $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'El DNI debe tener exactamente 8 dígitos.'];
-                $this->redirect('clientes/editar?id=' . $id);
+                echo json_encode(['success' => false, 'message' => 'El DNI debe tener exactamente 8 dígitos.']);
+                exit;
             }
             $data['ruc'] = null;
             $data['razon_social'] = null;
         }
         else {
             if (!$data['ruc'] || !preg_match('/^\d{11}$/', $data['ruc'])) {
-                $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'El RUC debe tener exactamente 11 dígitos.'];
-                $this->redirect('clientes/editar?id=' . $id);
+                echo json_encode(['success' => false, 'message' => 'El RUC debe tener exactamente 11 dígitos.']);
+                exit;
             }
             if (!$data['razon_social']) {
-                $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'La Razón Social es obligatoria.'];
-                $this->redirect('clientes/editar?id=' . $id);
+                echo json_encode(['success' => false, 'message' => 'La Razón Social es obligatoria.']);
+                exit;
             }
             $data['dni'] = null;
         }
 
         if ($data['tipo_cliente'] === 'Normal' && !preg_match('/^[A-Za-zñÑáéíóúÁÉÍÓÚ\s]+$/u', $data['nombre'])) {
-            $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'El nombre solo debe contener letras.'];
-            $this->redirect('clientes/editar?id=' . $id);
+            echo json_encode(['success' => false, 'message' => 'El nombre solo debe contener letras.']);
+            exit;
         }
 
         if (!preg_match('/^\d{9}$/', $data['celular'])) {
-            $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'El celular debe tener exactamente 9 dígitos.'];
-            $this->redirect('clientes/editar?id=' . $id);
+            echo json_encode(['success' => false, 'message' => 'El celular debe tener exactamente 9 dígitos.']);
+            exit;
         }
 
         if ($model->update($id, $data)) {
-            $_SESSION['flash'] = ['type' => 'success', 'title' => '¡Éxito!', 'message' => 'Cliente actualizado correctamente.'];
-            $this->redirect('clientes/lista');
+            echo json_encode(['success' => true, 'message' => 'Cliente actualizado correctamente.']);
         }
         else {
-            $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo actualizar el cliente.'];
-            $this->redirect('clientes/lista');
+            echo json_encode(['success' => false, 'message' => 'No se pudo actualizar el cliente.']);
         }
+        exit;
     }
 
     public function cambiarEstado(): void
