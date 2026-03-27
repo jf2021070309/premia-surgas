@@ -67,7 +67,7 @@
                                 <th>Fecha y Hora</th>
                                 <th>Beneficiario</th>
                                 <th>Premio Canjeado</th>
-                                <th>Estado</th>
+                                <th class="text-center">Estado</th>
                                 <th style="text-align: center !important;">Acciones</th>
                             </tr>
                         </thead>
@@ -104,9 +104,11 @@
                                         <span class="text-medium"><?= htmlspecialchars($c['premio_nombre']) ?></span>
                                     </div>
                                 </td>
-                                <td>
+                                <td class="text-center">
                                     <?php if ($c['estado'] === 'pendiente'): ?>
-                                        <span class="chip chip-pendiente">PENDIENTE</span>
+                                        <div style="display: flex; justify-content: center;">
+                                            <span class="chip chip-pendiente">PENDIENTE</span>
+                                        </div>
                                     <?php elseif ($c['estado'] === 'entregado'): ?>
                                         <span style="font-weight: 700; color: #111827; font-size: 0.75rem; letter-spacing: 0.02em;">ENTREGADO</span>
                                     <?php else: ?>
