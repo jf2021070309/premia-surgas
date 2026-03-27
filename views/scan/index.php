@@ -73,13 +73,13 @@
 
         /* Final Button (Black) */
         .btn-elite-black { 
-            display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+            display: flex; align-items: center; justify-content: center;
             background: #000; color: white; border: none; height: 50px; width: 100%;
-            border-radius: 12px; font-weight: 800; font-size: 0.85rem; text-transform: uppercase;
-            letter-spacing: 1px; cursor: pointer; transition: 0.3s;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-radius: 50px; font-weight: 800; font-size: 0.85rem; text-transform: uppercase;
+            letter-spacing: 1.5px; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
         }
-        .btn-elite-black:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(0,0,0,0.2); background: #111; }
+        .btn-elite-black:hover { transform: translateY(-2px); box-shadow: 0 15px 30px rgba(0,0,0,0.25); background: #000; }
 
         /* Result formatting */
         .elite-customer-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 1.25rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem; }
@@ -90,7 +90,7 @@
         .op-row { padding: 1rem; background: #fff; border-radius: 12px; border: 1px solid #f1f5f9; margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; }
         .total-display { margin-top: 2rem; padding: 1.5rem; background: #fdfcfa; border-radius: 16px; border: 2px dashed #ffedd5; display: flex; justify-content: space-between; align-items: center; }
 
-        .elite-subtotal-box { height: 50px; background: var(--p-wine); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 800; color: #fff; font-size: 0.85rem; border: none; }
+        .elite-subtotal-box { height: 50px; background: #fff; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 800; color: #1e293b; font-size: 0.85rem; border: 1.5px solid #f1f5f9; }
 
         #reader { width: 100%; border-radius: 16px; overflow: hidden; }
     </style>
@@ -205,7 +205,7 @@
                             </div>
 
                             <button class="btn-elite-black" onclick="addOperation()">
-                                <i class='bx bx-plus-circle'></i> A&Ntilde;ADIR A LISTA
+                                A&Ntilde;ADIR A LISTA
                             </button>
 
                             <div style="margin-top: 3rem;">
@@ -219,13 +219,13 @@
                                         <span class="elite-label" style="margin: 0; opacity: 0.6;">Cr&eacute;dito Total</span>
                                         <div id="main-total-pts" style="font-size: 2.2rem; font-weight: 950; color: #1e293b; line-height: 1; margin-top: 0.2rem;">0</div>
                                     </div>
-                                    <div style="text-align: right; font-weight: 800; color: var(--p-orange); font-size: 0.8rem; letter-spacing: 1px;">PUNTOS</div>
+                                    <div style="text-align: right; font-weight: 800; color: var(--p-wine); font-size: 0.8rem; letter-spacing: 1px;">PUNTOS</div>
                                 </div>
                             </div>
                         </div>
 
                         <div style="padding: 1.5rem 2.5rem 3rem; text-align: center;">
-                            <button id="save-all-btn" class="btn-elite-black" onclick="saveAll()" style="width: 100%;">Registrar</button>
+                            <button id="save-all-btn" class="btn-elite-black" onclick="saveAll()" style="width: 100%;">REGISTRAR</button>
                             <button onclick="location.reload()" style="background: none; border: none; font-size: 0.75rem; font-weight: 800; color: #94a3b8; margin-top: 1.25rem; cursor: pointer; text-transform: uppercase;">Cancelar todo</button>
                         </div>
                     </div>
