@@ -28,7 +28,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-title">
-                        <i class='bx bx-group title-icon orange'></i>
+                        <i class='bx bx-id-card title-icon red-premium'></i>
                         <span>Lista de Beneficiarios</span>
                     </div>
                     
