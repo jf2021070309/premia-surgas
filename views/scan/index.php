@@ -12,7 +12,7 @@
     <style>
         :root { --p-orange: #ff6600; --dark-blue: #0f172a; }
         
-        .scan-container { max-width: 580px; margin: 0 auto; padding-bottom: 5rem; }
+        .scan-container { max-width: 620px; margin: 4rem auto 0; padding-bottom: 5rem; }
         .v-screen { display: none; }
         .v-screen.active { display: block; animation: smoothReveal 0.5s ease-out; }
         @keyframes smoothReveal { from { opacity: 0; filter: blur(10px); transform: scale(0.98); } to { opacity: 1; filter: blur(0); transform: scale(1); } }
