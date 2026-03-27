@@ -116,13 +116,11 @@
                     </div>
                 </div>
 
-                <div class="row-modern" style="grid-template-columns: 1fr;">
-                    <div class="form-group-modern">
-                        <label>Dirección</label>
-                        <div class="input-wrapper">
-                            <i class='bx bx-map-pin'></i>
-                            <input type="text" v-model="form.direccion" placeholder="Av. Principal 123">
-                        </div>
+                <div class="form-group-modern full-width">
+                    <label>Dirección</label>
+                    <div class="input-wrapper">
+                        <i class='bx bx-map-pin'></i>
+                        <input type="text" v-model="form.direccion" placeholder="Av. Principal 123">
                     </div>
                 </div>
 
