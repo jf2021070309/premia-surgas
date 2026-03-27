@@ -101,8 +101,8 @@
 
     <div class="admin-layout">
         <?php
-            $pageTitle    = 'Gesti&oacute;n de Puntos';
-            $pageSubtitle = '&iexcl;Puntaje asignado, cliente feliz!';
+            $pageTitle    = 'Gestión de Puntos';
+            $pageSubtitle = '¡Puntaje asignado, cliente feliz!';
             include __DIR__ . '/../partials/header_admin.php';
         ?>
 
