@@ -67,19 +67,63 @@ createApp({
             this.showCarnetModal = true;
             this.$nextTick(() => {
                 const qrContainer = document.getElementById('qrcode-modal');
-                if (qrContainer) {
-                    qrContainer.innerHTML = '';
-                    const url = `${BASE_URL}scan?c=${encodeURIComponent(c.codigo)}&t=${encodeURIComponent(c.token)}`;
-                    new QRCode(qrContainer, {
-                        text: url,
-                        width: 180,
-                        height: 180,
-                        colorDark: '#1a1a1a',
-                        colorLight: '#ffffff',
-                        correctLevel: QRCode.CorrectLevel.H
-                    });
-                }
+                qrContainer.innerHTML = '';
+                new QRCode(qrContainer, {
+                    text: `${BASE_URL}scan?c=${encodeURIComponent(c.codigo)}&t=${encodeURIComponent(c.token)}`,
+                    width: 200,
+                    height: 200,
+                    colorDark: "#0f172a",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
             });
+        },
+        async descargarTarjeta(c) {
+            // Preparar plantilla oculta
+            document.getElementById('capture-name').innerText = c.nombre;
+            document.getElementById('capture-doc').innerText = (c.tipo_cliente === 'Normal' ? 'DNI' : 'RUC') + ': ' + (c.tipo_cliente === 'Normal' ? c.dni : c.ruc);
+            
+            const qrCapture = document.getElementById('qrcode-capture');
+            qrCapture.innerHTML = '';
+            new QRCode(qrCapture, {
+                text: `${BASE_URL}scan?c=${encodeURIComponent(c.codigo)}&t=${encodeURIComponent(c.token)}`,
+                width: 280,
+                height: 280,
+                colorDark: "#0f172a",
+                colorLight: "#f8fafc",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+
+            // Pequeña pausa para que el QR se renderice
+            await new Promise(r => setTimeout(r, 100));
+
+            const template = document.getElementById('card-capture-template');
+            
+            try {
+                Swal.fire({
+                    title: 'Generando Imagen',
+                    text: 'Espera un momento...',
+                    allowOutsideClick: false,
+                    didOpen: () => { Swal.showLoading(); }
+                });
+
+                const canvas = await html2canvas(template, {
+                    scale: 3,
+                    backgroundColor: '#ffffff',
+                    logging: false,
+                    useCORS: true
+                });
+
+                const link = document.createElement('a');
+                link.download = `Tarjeta_Surgas_${c.nombre.replace(/ /g, '_')}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                
+                Swal.close();
+            } catch (e) {
+                console.error(e);
+                Swal.fire('Error', 'No se pudo generar la imagen', 'error');
+            }
         },
         abrirEditar(c) {
             this.currentCliente = c;

@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-layout.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-tables.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/clientes_nuevo.css">
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <style>[v-cloak]{display:none}</style>
 </head>
 <body>
@@ -20,12 +21,25 @@
 
     <div class="admin-layout">
         <?php
-            $pageTitle    = 'Directorio';
-            $pageSubtitle = 'Panel de gestión de beneficiarios registrados';
+            $pageTitle    = 'Directorio de Clientes';
+            $pageSubtitle = 'Gestión y administración de beneficiarios';
             include __DIR__ . '/../partials/header_admin.php';
         ?>
 
-        <div class="container">
+        <div class="container animate-fade-in">
+            <!-- Plantilla Oculta para Captura de Imagen -->
+            <div id="capture-container" style="position: fixed; left: -9999px; top: -9999px;">
+                <div id="card-capture-template" style="width: 450px; height: 550px; background: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 40px 20px; font-family: 'Inter', sans-serif; text-align: center; box-sizing: border-box;">
+                    <div style="font-size: 14px; font-weight: 500; color: #94a3b8; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 20px;">GAS EXPRESS SURGAS</div>
+                    <div id="capture-name" style="font-size: 26px; font-weight: 800; color: #0f172a; margin-bottom: 8px; letter-spacing: -0.01em;">---</div>
+                    <div id="capture-doc" style="font-size: 18px; font-weight: 600; color: #64748b; margin-bottom: 40px;">DNI: 00000000</div>
+                    
+                    <div style="background: #f8fafc; border: 1px dashed #e2e8f0; padding: 25px; border-radius: 30px; display: flex; align-items: center; justify-content: center; width: 320px; height: 320px; box-sizing: border-box;">
+                        <div id="qrcode-capture"></div>
+                    </div>
+                </div>
+            </div>
+
             <div class="card">
                 <div class="card-header">
                     <div class="card-title">
@@ -101,9 +115,9 @@
                                         <button @click="abrirCarnet(c)" class="btn-action blue" title="Ver Carnet">
                                             <i class='bx bx-id-card'></i>
                                         </button>
-                                        <a :href="'<?= BASE_URL ?>clientes/imprimir?id=' + c.id" target="_blank" class="btn-action gray" title="Imprimir">
+                                        <button @click="descargarTarjeta(c)" class="btn-action gray" title="Descargar Tarjeta">
                                             <i class='bx bx-printer'></i>
-                                        </a>
+                                        </button>
                                         <?php if ($_SESSION['rol'] === 'admin'): ?>
                                         <button @click="abrirEditar(c)" class="btn-action orange" title="Editar">
                                             <i class='bx bx-edit'></i>
@@ -135,33 +149,22 @@
 
     <!-- MODAL: VER CARNET -->
     <div class="modal-overlay" v-if="showCarnetModal" @click.self="showCarnetModal = false">
-        <div class="modal-content-wrapper" style="max-width: 400px; padding: 2.5rem 2rem; text-align: center;">
+        <div class="modal-content-wrapper" style="max-width: 420px; padding: 3rem 2rem; border-radius: 25px;">
             <div class="modal-close" @click="showCarnetModal = false"><i class='bx bx-x'></i></div>
             
-            <div style="font-size:0.7rem; color:var(--on-muted); text-transform:uppercase; letter-spacing:2px; margin-bottom:1rem">GAS EXPRESS SURGAS</div>
-            <h2 style="font-size:1.4rem; color:var(--on-surface); margin-bottom:0.5rem">{{ currentCliente.nombre }}</h2>
-            <div class="text-medium" style="color:var(--on-muted); margin-bottom:1.5rem">
+            <div style="font-size:0.75rem; color:#94a3b8; text-transform:uppercase; letter-spacing:0.15em; margin-bottom:1.5rem; text-align: center;">GAS EXPRESS SURGAS</div>
+            <h2 style="font-size:1.6rem; color:#0f172a; margin-bottom:0.5rem; text-align: center;">{{ currentCliente.nombre }}</h2>
+            <div class="text-medium" style="color:#64748b; margin-bottom:2.5rem; text-align: center; font-size: 1.1rem; font-weight: 600;">
                 {{ currentCliente.tipo_cliente === 'Normal' ? 'DNI' : 'RUC' }}: {{ currentCliente.tipo_cliente === 'Normal' ? currentCliente.dni : currentCliente.ruc }}
             </div>
 
-            <div id="qrcode-modal" style="display:flex; justify-content:center; margin: 2rem 0; padding: 1rem; background: #f8fafc; border-radius: 15px; border: 1px dashed #e2e8f0;"></div>
-
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem; border-top: 1px solid #f1f5f9; padding-top: 1.5rem;">
-                <div style="text-align: left;">
-                    <span style="font-size:0.65rem; color:#94a3b8; text-transform: uppercase;">Puntos</span>
-                    <div style="font-size:1.1rem; font-weight:800; color:var(--primary)">{{ currentCliente.puntos }} pts</div>
-                </div>
-                <div style="text-align: right;">
-                    <span style="font-size:0.65rem; color:#94a3b8; text-transform: uppercase;">Código</span>
-                    <div style="font-size:1.1rem; font-weight:800; color:var(--on-surface)">{{ currentCliente.codigo }}</div>
-                </div>
+            <div style="background: #f8fafc; border: 1px dashed #e2e8f0; padding: 1.5rem; border-radius: 25px; display: flex; align-items: center; justify-content: center; margin-bottom: 2rem;">
+                <div id="qrcode-modal"></div>
             </div>
 
-            <div style="margin-top: 2rem;">
-                <a :href="'<?= BASE_URL ?>clientes/imprimir?id=' + currentCliente.id" target="_blank" class="btn-primary-premium" style="width:100%; justify-content:center; height: 3.5rem;">
-                    <i class='bx bx-printer'></i> Imprimir Tarjeta
-                </a>
-            </div>
+            <button @click="descargarTarjeta(currentCliente)" class="btn-primary-premium" style="width:100%; justify-content:center; height: 3.5rem;">
+                <i class='bx bx-download'></i> Descargar Tarjeta
+            </button>
         </div>
     </div>
 
