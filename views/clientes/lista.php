@@ -33,12 +33,31 @@
                     </div>
                     
                     <div class="header-actions">
+                        <div class="header-filter">
+                            <i class='bx bx-filter-alt'></i>
+                            <select v-model="filterTipo">
+                                <option value="">Todos los Tipos</option>
+                                <option value="Normal">Personal</option>
+                                <option value="Empresa">Empresa</option>
+                            </select>
+                        </div>
+                        <div class="header-filter">
+                            <i class='bx bx-map-alt'></i>
+                            <select v-model="filterDep">
+                                <option value="">Todos los Departamentos</option>
+                                <option value="Tacna">Tacna</option>
+                                <option value="Ilo">Ilo</option>
+                                <option value="Moquegua">Moquegua</option>
+                                <option value="Camaná">Camaná</option>
+                                <option value="Mollendo">Mollendo</option>
+                            </select>
+                        </div>
                         <div class="header-search">
                             <i class='bx bx-search'></i>
                             <input type="text" v-model="busqueda" placeholder="Buscar cliente...">
                         </div>
-                        <a href="<?= BASE_URL ?>clientes/nuevo" class="btn btn-primary-premium">
-                            <i class='bx bx-plus-circle'></i> Nuevo Cliente
+                        <a href="<?= BASE_URL ?>clientes/nuevo" class="btn-primary-premium">
+                            <i class='bx bx-plus-circle'></i> Nuevo
                         </a>
                     </div>
                 </div>

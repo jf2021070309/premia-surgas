@@ -4,6 +4,8 @@ createApp({
     data() {
         return {
             busqueda: '',
+            filterTipo: '',
+            filterDep: '',
             clientes: typeof CLIENTES !== 'undefined' ? CLIENTES : [],
             loading: false,
             fetching: false
@@ -11,15 +13,31 @@ createApp({
     },
     computed: {
         filtrados() {
+            let filtered = this.clientes;
+            
+            // Filtro por tipo
+            if (this.filterTipo) {
+                filtered = filtered.filter(c => c.tipo_cliente === this.filterTipo);
+            }
+            
+            // Filtro por departamento
+            if (this.filterDep) {
+                filtered = filtered.filter(c => c.departamento === this.filterDep);
+            }
+            
+            // Búsqueda de texto
             const q = this.busqueda.toLowerCase();
-            if (!q) return this.clientes;
-            return this.clientes.filter(c =>
-                (c.nombre && c.nombre.toLowerCase().includes(q)) ||
-                (c.razon_social && c.razon_social.toLowerCase().includes(q)) ||
-                (c.celular && c.celular.toLowerCase().includes(q)) ||
-                (c.dni && c.dni.includes(q)) ||
-                (c.ruc && c.ruc.includes(q))
-            );
+            if (q) {
+                filtered = filtered.filter(c =>
+                    (c.nombre && c.nombre.toLowerCase().includes(q)) ||
+                    (c.razon_social && c.razon_social.toLowerCase().includes(q)) ||
+                    (c.celular && c.celular.toLowerCase().includes(q)) ||
+                    (c.dni && c.dni.includes(q)) ||
+                    (c.ruc && c.ruc.includes(q))
+                );
+            }
+            
+            return filtered;
         }
     },
     mounted() {
