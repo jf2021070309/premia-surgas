@@ -265,9 +265,8 @@
                     </div>
 
                     <!-- Footer de Botones -->
-                    <div style="margin-top: 3rem; display: flex; justify-content: flex-end; gap: 1rem; border-top: 1px solid #f1f5f9; padding-top: 2rem;">
-                        <button type="button" @click="showEditModal = false" class="btn-primary-premium" style="width: auto; padding: 0 2.5rem; height: 3.5rem; background: #64748b; box-shadow: none;">Cancelar</button>
-                        <button type="submit" class="btn-primary-premium" :disabled="fetching" style="padding: 0 2.5rem; height: 3.5rem; width: auto;">
+                    <div style="margin-top: 3rem; display: flex; justify-content: flex-end; border-top: 1px solid #f1f5f9; padding: 2rem 2.5rem;">
+                        <button type="submit" class="btn-primary-premium" :disabled="fetching" style="padding: 0 3rem; height: 3.8rem; width: auto; font-size: 1rem;">
                             <i class='bx bx-save'></i> {{ fetching ? 'Guardando...' : 'Guardar Cambios' }}
                         </button>
                     </div>
