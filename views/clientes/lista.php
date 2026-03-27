@@ -38,7 +38,8 @@
                             <select v-model="filterTipo">
                                 <option value="">Todos los Tipos</option>
                                 <option value="Normal">Personal</option>
-                                <option value="Empresa">Empresa</option>
+                                <option value="Restaurante">Restaurante</option>
+                                <option value="Punto de Venta">Punto de Venta</option>
                             </select>
                         </div>
                         <div class="header-filter">
@@ -79,7 +80,6 @@
                             <tr v-for="c in filtrados" :key="c.id">
                                 <td>
                                     <div class="row-client">
-                                        <div class="row-avatar">{{ c.tipo_cliente === 'Normal' ? (c.nombre ? c.nombre.charAt(0) : '?') : (c.razon_social ? c.razon_social.charAt(0) : '?') }}</div>
                                         <div class="client-info">
                                             <div class="client-name">{{ c.tipo_cliente === 'Normal' ? c.nombre : (c.razon_social || c.nombre) }}</div>
                                             <div v-if="c.tipo_cliente !== 'Normal'" class="client-subtext">{{ c.nombre }}</div>
@@ -87,15 +87,14 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <span class="chip" :class="c.tipo_cliente === 'Normal' ? 'chip-normal' : 'chip-business'">
-                                        <i :class="c.tipo_cliente === 'Normal' ? 'bx bx-user' : 'bx bx-buildings'"></i>
+                                    <span class="text-medium">
                                         {{ c.tipo_cliente || 'Normal' }}
                                     </span>
                                 </td>
                                 <td><span class="text-medium">{{ c.celular }}</span></td>
-                                <td><span class="text-mono"><?= htmlspecialchars($c->ruc ?? $c->dni ?? '—') ?></span></td>
+                                <td><span class="text-mono">{{ c.tipo_cliente !== 'Normal' ? (c.ruc || '—') : (c.dni || '—') }}</span></td>
                                 <td>{{ c.departamento || '—' }}</td>
-                                <td><strong class="pts-positive">{{ c.puntos }} pts</strong></td>
+                                <td><strong class="text-medium">{{ c.puntos }} pts</strong></td>
                                 <td>
                                     <div class="actions-flex">
                                         <a :href="'<?= BASE_URL ?>clientes/exito?id=' + c.id" class="btn-action blue" title="Ver Carnet">
