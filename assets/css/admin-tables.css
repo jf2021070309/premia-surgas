@@ -218,7 +218,7 @@
     flex-direction: column;
 }
 .client-name {
-    font-weight: 700;
+    font-weight: 600;
     color: var(--on-surface);
     font-size: 0.85rem;
 }
@@ -227,8 +227,8 @@
     color: var(--on-light);
 }
 
-.text-medium { font-weight: 500; color: var(--on-surface); }
-.text-mono { font-family: monospace; font-size: 0.85rem; color: var(--on-muted); }
+.text-medium { font-weight: 600; color: var(--on-surface); }
+.text-mono { font-family: 'DM Mono', monospace; font-size: 0.82rem; font-weight: 600; color: var(--on-surface); }
 .pts-positive { color: var(--green); font-weight: 700; }
 
 /* Action Buttons Grid */

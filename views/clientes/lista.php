@@ -93,8 +93,8 @@
                                 </td>
                                 <td><span class="text-medium">{{ c.celular }}</span></td>
                                 <td><span class="text-mono">{{ c.tipo_cliente !== 'Normal' ? (c.ruc || '—') : (c.dni || '—') }}</span></td>
-                                <td>{{ c.departamento || '—' }}</td>
-                                <td><strong class="text-medium">{{ c.puntos }} pts</strong></td>
+                                <td><span class="text-medium">{{ c.departamento || '—' }}</span></td>
+                                <td><span class="text-medium">{{ c.puntos }} pts</span></td>
                                 <td>
                                     <div class="actions-flex">
                                         <a :href="'<?= BASE_URL ?>clientes/exito?id=' + c.id" class="btn-action blue" title="Ver Carnet">
