@@ -182,94 +182,88 @@
                 </div>
 
                 <form @submit.prevent="guardarCambios" class="premium-form" style="padding: 2.5rem;">
-                    <div class="form-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;">
-                        
-                        <!-- Primera Fila -->
-                        <div class="form-group-modern">
-                            <label>TIPO DE CLIENTE</label>
-                            <div class="input-wrapper">
-                                <i class='bx bx-category'></i>
-                                <select v-model="form.tipo_cliente" class="form-control-modern">
-                                    <option value="Normal">Personal</option>
-                                    <option value="Restaurante">Restaurante</option>
-                                    <option value="Punto de Venta">Punto de Venta</option>
-                                </select>
-                            </div>
+                    <!-- Campos directos en el grid del formulario -->
+                    <div class="form-group-modern">
+                        <label>TIPO DE CLIENTE</label>
+                        <div class="input-wrapper">
+                            <i class='bx bx-category'></i>
+                            <select v-model="form.tipo_cliente" class="form-control-modern">
+                                <option value="Normal">Personal</option>
+                                <option value="Restaurante">Restaurante</option>
+                                <option value="Punto de Venta">Punto de Venta</option>
+                            </select>
                         </div>
+                    </div>
 
-                        <div class="form-group-modern" v-if="form.tipo_cliente === 'Normal'">
-                            <label>DNI *</label>
-                            <div class="input-wrapper">
-                                <i class='bx bx-id-card'></i>
-                                <input type="text" v-model="form.dni" maxlength="8" @blur="consultarDni" placeholder="8 dígitos">
-                            </div>
+                    <div class="form-group-modern" v-if="form.tipo_cliente === 'Normal'">
+                        <label>DNI *</label>
+                        <div class="input-wrapper">
+                            <i class='bx bx-id-card'></i>
+                            <input type="text" v-model="form.dni" maxlength="8" @blur="consultarDni" placeholder="8 dígitos">
                         </div>
+                    </div>
 
-                        <div class="form-group-modern" v-else>
-                            <label>RUC *</label>
-                            <div class="input-wrapper">
-                                <i class='bx bx-building-house'></i>
-                                <input type="text" v-model="form.ruc" maxlength="11" @blur="consultarRuc" placeholder="11 dígitos">
-                            </div>
+                    <div class="form-group-modern" v-else>
+                        <label>RUC *</label>
+                        <div class="input-wrapper">
+                            <i class='bx bx-building-house'></i>
+                            <input type="text" v-model="form.ruc" maxlength="11" @blur="consultarRuc" placeholder="11 dígitos">
                         </div>
+                    </div>
 
-                        <!-- Segunda Fila (Opcional) -->
-                        <div class="form-group-modern" v-if="form.tipo_cliente !== 'Normal'" style="grid-column: span 2;">
-                            <label>RAZÓN SOCIAL *</label>
-                            <div class="input-wrapper">
-                                <i class='bx bx-buildings'></i>
-                                <input type="text" v-model="form.razon_social" required>
-                            </div>
+                    <div class="form-group-modern full-width" v-if="form.tipo_cliente !== 'Normal'">
+                        <label>RAZÓN SOCIAL *</label>
+                        <div class="input-wrapper">
+                            <i class='bx bx-buildings'></i>
+                            <input type="text" v-model="form.razon_social" required>
                         </div>
+                    </div>
 
-                        <!-- Tercera Fila -->
-                        <div class="form-group-modern" style="grid-column: span 2;">
-                            <label>NOMBRE COMPLETO / CONTACTO *</label>
-                            <div class="input-wrapper">
-                                <i class='bx bx-user'></i>
-                                <input type="text" v-model="form.nombre" required>
-                            </div>
+                    <div class="form-group-modern full-width">
+                        <label>NOMBRE COMPLETO / CONTACTO *</label>
+                        <div class="input-wrapper">
+                            <i class='bx bx-user'></i>
+                            <input type="text" v-model="form.nombre" required>
                         </div>
+                    </div>
 
-                        <!-- Cuarta Fila -->
-                        <div class="form-group-modern">
-                            <label>CELULAR *</label>
-                            <div class="input-wrapper">
-                                <i class='bx bx-phone'></i>
-                                <input type="text" v-model="form.celular" maxlength="9" required>
-                            </div>
+                    <div class="form-group-modern">
+                        <label>CELULAR *</label>
+                        <div class="input-wrapper">
+                            <i class='bx bx-phone'></i>
+                            <input type="text" v-model="form.celular" maxlength="9" required>
                         </div>
+                    </div>
 
-                        <div class="form-group-modern">
-                            <label>DEPARTAMENTO</label>
-                            <div class="input-wrapper">
-                                <i class='bx bx-map'></i>
-                                <select v-model="form.departamento" class="form-control-modern">
-                                    <option value="Tacna">Tacna</option>
-                                    <option value="Ilo">Ilo</option>
-                                    <option value="Moquegua">Moquegua</option>
-                                    <option value="Camaná">Camaná</option>
-                                    <option value="Mollendo">Mollendo</option>
-                                </select>
-                            </div>
+                    <div class="form-group-modern">
+                        <label>DEPARTAMENTO</label>
+                        <div class="input-wrapper">
+                            <i class='bx bx-map'></i>
+                            <select v-model="form.departamento" class="form-control-modern">
+                                <option value="Tacna">Tacna</option>
+                                <option value="Ilo">Ilo</option>
+                                <option value="Moquegua">Moquegua</option>
+                                <option value="Camaná">Camaná</option>
+                                <option value="Mollendo">Mollendo</option>
+                            </select>
                         </div>
+                    </div>
 
-                        <!-- Quinta Fila -->
-                        <div class="form-group-modern" style="grid-column: span 2;">
-                            <label>DIRECCIÓN</label>
-                            <div class="input-wrapper">
-                                <i class='bx bx-map-pin'></i>
-                                <input type="text" v-model="form.direccion" placeholder="Calle, número, urbanización...">
-                            </div>
+                    <div class="form-group-modern full-width">
+                        <label>DIRECCIÓN</label>
+                        <div class="input-wrapper">
+                            <i class='bx bx-map-pin'></i>
+                            <input type="text" v-model="form.direccion" placeholder="Calle, número, urbanización...">
                         </div>
                     </div>
 
                     <!-- Footer de Botones Centrado -->
-                    <div style="margin-top: 2.5rem; display: flex; justify-content: center; border-top: 1px solid #f1f5f9; padding: 2rem 0 0 0;">
-                        <button type="submit" class="btn-primary-premium" :disabled="fetching" style="padding: 0 4rem; height: 3.8rem; width: auto; font-size: 1rem; border-radius: 15px;">
+                    <div class="form-footer-actions" style="margin-top: 2rem; border-top: 1px solid #f1f5f9; padding-top: 2rem;">
+                        <button type="submit" class="btn-primary-premium" :disabled="fetching" style="padding: 0 4rem; height: 3.8rem; width: auto; font-size: 1rem; border-radius: 15px; margin: 0 auto; display: flex;">
                             <i class='bx bx-save'></i> {{ fetching ? 'Guardando...' : 'Guardar Cambios' }}
                         </button>
                     </div>
+                </form>
                 </form>
             </div>
         </div>
