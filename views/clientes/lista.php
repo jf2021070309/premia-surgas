@@ -57,7 +57,7 @@
                             <input type="text" v-model="busqueda" placeholder="Buscar cliente...">
                         </div>
                         <a href="<?= BASE_URL ?>clientes/nuevo" class="btn-primary-premium">
-                            <i class='bx bx-plus-circle'></i> Nuevo
+                            <i class='bx bx-user-plus'></i> Nuevo
                         </a>
                     </div>
                 </div>
