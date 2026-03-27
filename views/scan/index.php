@@ -54,7 +54,7 @@
 
         /* Premium Input Area */
         .elite-input-wrapper { position: relative; margin-bottom: 2.5rem; display: flex; align-items: center; gap: 0.5rem; }
-        .elite-input-wrapper i.icon-dni { position: absolute; left: 1rem; color: #94a3b8; font-size: 1.25rem; pointer-events: none; }
+        .elite-input-wrapper i.icon-dni { position: absolute; left: 1.25rem; color: #94a3b8; font-size: 1.5rem; pointer-events: none; }
         .elite-input { 
             flex: 1; height: 55px; padding: 0 4rem 0 3rem; border: 1.5px solid #f1f5f9; border-radius: 12px;
             font-family: inherit; font-size: 0.9rem; font-weight: 600; color: #1e293b; outline: none; transition: 0.3s;
@@ -130,7 +130,7 @@
 
                             <label class="elite-label">B&uacute;squeda Manual (DNI)</label>
                             <div class="elite-input-wrapper">
-                                <i class='bx bx-id-card'></i>
+                                <i class='bx bx-id-card icon-dni'></i>
                                 <input type="tel" id="manual-dni" class="elite-input" placeholder="Ej. 12345678" maxlength="8">
                                 <button class="btn-search-icon" onclick="buscarPorDni()" title="Buscar cliente">
                                     <i class='bx bx-search'></i>
