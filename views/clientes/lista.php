@@ -12,7 +12,10 @@
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-tables.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/clientes_nuevo.css">
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-    <style>[v-cloak]{display:none}</style>
+    <style>
+        [v-cloak] { display: none !important; }
+        [v-cloak] > * { display: none !important; }
+    </style>
 </head>
 <body>
 <div id="app" v-cloak>
