@@ -13,18 +13,18 @@
     <style>
         .chip-pendiente { 
             background: #fff7ed; 
-            color: #ea580c; 
+            color: #ff6600; 
             border: 1px solid #ffedd5; 
             animation: pulse-orange 2s infinite; 
-            box-shadow: 0 0 0 0 rgba(234, 88, 12, 0.4);
+            box-shadow: 0 0 0 0 rgba(255, 102, 0, 0.4);
             font-weight: 800;
         }
         .chip-entregado { background: #f0fdf4; color: #166534; border: 1px solid #dcfce7; }
         
         @keyframes pulse-orange {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(234, 88, 12, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(234, 88, 12, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(234, 88, 12, 0); }
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 102, 0, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(255, 102, 0, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 102, 0, 0); }
         }
         .row-prize { display: flex; align-items: center; gap: 0.75rem; }
         .prize-img { width: 40px; height: 40px; object-fit: contain; background: #f8fafc; border-radius: 8px; padding: 4px; border: 1px solid #e2e8f0; }
@@ -68,7 +68,7 @@
                                 <th>Beneficiario</th>
                                 <th>Premio Canjeado</th>
                                 <th>Estado</th>
-                                <th class="text-center">Acciones</th>
+                                <th style="text-align: center !important;">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -109,10 +109,10 @@
                                         <?= strtoupper($c['estado']) ?>
                                     </span>
                                 </td>
-                                <td class="text-center">
-                                    <div class="actions-flex" style="justify-content: center;">
+                                <td>
+                                    <div style="display: flex; justify-content: center; align-items: center; gap: 8px;">
                                         <?php if ($c['estado'] === 'pendiente'): ?>
-                                            <form action="<?= BASE_URL ?>canjes-admin/actualizar" method="POST" style="display:inline;">
+                                            <form action="<?= BASE_URL ?>canjes-admin/actualizar" method="POST" style="display:inline; margin: 0;">
                                                 <input type="hidden" name="id" value="<?= $c['id'] ?>">
                                                 <input type="hidden" name="estado" value="entregado">
                                                 <button type="submit" class="btn-action blue" title="Marcar como entregado">
