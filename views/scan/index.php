@@ -35,16 +35,16 @@
         }
         .elite-card-header h3 { margin: 0; font-size: 0.95rem; font-weight: 800; color: #1e293b; letter-spacing: -0.01em; }
 
-        .elite-card-body { padding: 2.5rem 2.5rem 1.5rem; }
+        .elite-card-body { padding: 3rem 3rem 2rem; }
 
         /* Small labels */
-        .elite-label { display: block; font-size: 0.75rem; font-weight: 800; color: var(--p-wine); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.6rem; }
+        .elite-label { display: block; font-size: 0.75rem; font-weight: 800; color: var(--p-wine); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.9rem; }
 
         /* Interactive Choice Blocks */
-        .choice-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 2rem; }
+        .choice-row { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2.5rem; }
         .choice-btn { 
             background: white; border: 1.5px solid #f1f5f9; border-radius: 16px; 
-            padding: 1.5rem; cursor: pointer; transition: 0.3s;
+            padding: 2rem 1.5rem; cursor: pointer; transition: 0.3s;
             display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.8rem;
         }
         .choice-btn:hover { border-color: var(--p-wine); transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.03); }
@@ -53,17 +53,22 @@
         .choice-btn span { font-size: 0.8rem; font-weight: 800; color: #475569; letter-spacing: 0.2px; }
 
         /* Premium Input Area */
-        .elite-input-wrapper { position: relative; margin-bottom: 2rem; }
-        .elite-input-wrapper i { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 1.25rem; }
+        .elite-input-wrapper { position: relative; margin-bottom: 2.5rem; display: flex; align-items: center; gap: 0.5rem; }
+        .elite-input-wrapper i.icon-dni { position: absolute; left: 1rem; color: #94a3b8; font-size: 1.25rem; pointer-events: none; }
         .elite-input { 
-            width: 100%; padding: 0.9rem 1rem 0.9rem 3rem; border: 1.5px solid #f1f5f9; border-radius: 12px;
+            flex: 1; height: 55px; padding: 0 4rem 0 3rem; border: 1.5px solid #f1f5f9; border-radius: 12px;
             font-family: inherit; font-size: 0.9rem; font-weight: 600; color: #1e293b; outline: none; transition: 0.3s;
             background: #fff;
         }
         .elite-input::placeholder { color: #cbd5e1; font-weight: 500; }
         .elite-input:focus { border-color: var(--p-wine); background: white; box-shadow: 0 0 0 4px rgba(128,0,0,0.05); }
 
-        .btn-search-icon { position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%); width: 42px; height: 42px; border-radius: 10px; background: var(--p-wine); color: white; border: none; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; cursor: pointer; transition: 0.3s; }
+        .btn-search-icon { 
+            position: absolute; right: 4px; width: 42px; height: 42px; border-radius: 10px; 
+            background: var(--p-wine); color: white; border: none; display: flex; 
+            align-items: center; justify-content: center; font-size: 1.3rem; 
+            cursor: pointer; transition: 0.3s;
+        }
         .btn-search-icon:hover { transform: scale(1.05); background: #600000; }
 
         /* Final Button (Black) */
