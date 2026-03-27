@@ -74,7 +74,8 @@
         /* Final Button (Black) */
         .btn-elite-black { 
             display: flex; align-items: center; justify-content: center;
-            background: #000; color: white; border: none; height: 50px; width: 100%;
+            background: #000; color: white; border: none; height: 50px; width: 260px;
+            margin: 0 auto;
             border-radius: 50px; font-weight: 800; font-size: 0.85rem; text-transform: uppercase;
             letter-spacing: 1.5px; cursor: pointer; transition: 0.3s;
             box-shadow: 0 10px 20px rgba(0,0,0,0.15);
