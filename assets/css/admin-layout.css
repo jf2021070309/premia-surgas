@@ -1,0 +1,74 @@
+:root {
+    --primary: #800000;
+    --accent: #ff6600;
+    --sidebar-bg: #400000;
+    --bg: #f8fafc;
+    --surface: #ffffff;
+    --outline: #e2e8f0;
+    --on-surface: #1e293b;
+    --on-muted: #64748b;
+    --on-light: #94a3b8;
+    --sidebar-width: 260px;
+    --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', system-ui, -apple-system, sans-serif; background: var(--bg); display: flex; min-height: 100vh; }
+
+/* Sidebar Layout */
+.sidebar {
+    width: var(--sidebar-width);
+    height: 100vh;
+    background: var(--sidebar-bg);
+    position: fixed;
+    left: 0; top: 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+    border-right: 1px solid rgba(255,255,255,0.05);
+}
+
+.sidebar-brand { padding: 2.5rem 1.5rem; text-align: center; }
+.sidebar-brand img { width: 160px; height: auto; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2)); }
+
+.sidebar-menu { flex: 1; padding: 0.5rem 1rem; overflow-y: auto; }
+.menu-label {
+    font-size: 0.65rem; font-weight: 800; color: rgba(255,255,255,0.35);
+    text-transform: uppercase; letter-spacing: 0.12em;
+    padding: 1.5rem 1rem 0.6rem;
+}
+
+.sidebar-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 0.9rem 1.25rem; margin-bottom: 4px;
+    color: rgba(255,255,255,0.6); text-decoration: none;
+    font-weight: 600; font-size: 0.78rem;
+    border-radius: 12px;
+    transition: all var(--transition);
+}
+
+.sidebar-item i { font-size: 1.35rem; transition: transform 0.3s; }
+
+.sidebar-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
+.sidebar-item:hover i { transform: translateX(3px); }
+
+.sidebar-item.active {
+    background: rgba(255,102,0,0.15);
+    color: var(--accent);
+    position: relative;
+}
+.sidebar-item.active::after {
+    content: ''; position: absolute; right: 0; top: 20%; bottom: 20%;
+    width: 4px; background: var(--accent); border-radius: 4px 0 0 4px;
+}
+.sidebar-item.active i { color: var(--accent); }
+
+/* Main Content Wrapper */
+.admin-layout {
+    flex: 1;
+    margin-left: var(--sidebar-width);
+    padding: 2.5rem;
+    width: calc(100% - var(--sidebar-width));
+}
