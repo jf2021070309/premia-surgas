@@ -4,45 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nuevo Cliente — PremiaSurgas</title>
-    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/main.css">
+    <link rel="icon" type="image/png" href="<?= BASE_URL ?>assets/premios/icono.png">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-layout.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/clientes_nuevo.css">
     <style>[v-cloak]{display:none}</style>
 </head>
 <body>
 <div id="app" v-cloak>
-    <div class="panel-header">
-        <div class="header-top-row">
-            <div class="header-logo-side">
-                <a href="<?= BASE_URL ?>panel" style="text-decoration:none; display:flex; align-items:center; gap:10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); padding: 8px 20px; border-radius:100px; color: white; transition:0.3s;" title="Volver al Panel">
-                    <i class='bx bx-left-arrow-alt' style="font-size: 1.5rem;"></i>
-                    <span style="font-weight: 700; font-size: 0.9rem; letter-spacing: 0.5px;">VOLVER</span>
-                </a>
-            </div>
+    
+    <?php include __DIR__ . '/../partials/sidebar_admin.php'; ?>
 
-            <div class="header-user-side">
-                <div class="user-card-integrated">
-                    <div class="u-avatar"><?= substr($_SESSION['nombre_usuario'], 0, 1) ?></div>
-                    <div class="u-details">
-                        <span class="u-role-tag"><?= htmlspecialchars(strtoupper($_SESSION['rol'])) ?></span>
-                        <span class="u-name-val"><?= htmlspecialchars($_SESSION['usuario'] ?? $_SESSION['nombre_usuario']) ?></span>
-                    </div>
-                    <div class="u-divider"></div>
-                    <button @click="logout" class="u-logout-btn" title="Cerrar Sesión">
-                        <i class='bx bx-log-out'></i>
-                    </button>
-                </div>
-            </div>
-        </div>
+    <div class="admin-layout">
+        <?php
+            $pageTitle    = 'Nuevo Cliente';
+            $pageSubtitle = 'Registrar un nuevo beneficiario en el sistema';
+            include __DIR__ . '/../partials/header_admin.php';
+        ?>
 
-        <!-- Título principal estilo Hero (debajo de la botonera) -->
-        <div class="header-hero-content">
-            <h1 class="hero-main-title">Nuevo Cliente</h1>
-            <p class="hero-welcome-msg">Completa los datos para registrar un nuevo cliente en el sistema</p>
-        </div>
-    </div>
-
-    <div class="container" style="max-width:700px; margin-top: -1.5rem;">
+    <div class="container">
 
         <!-- Formulario -->
         <div class="card elite-form-card animate-fade-in">
@@ -156,8 +138,9 @@
             </form>
         </div>
 
-    </div>
-</div>
+    </div> <!-- .container -->
+    </div> <!-- .admin-layout -->
+</div> <!-- #app -->
 
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
