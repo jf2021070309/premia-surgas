@@ -131,7 +131,6 @@
                             <i class='bx bx-loader-alt bx-spin'></i> ESPERE...
                         </span>
                     </button>
-                    <p class="form-hint">Campos marcados con (*) son obligatorios</p>
                 </div>
             </form>
         </div>
