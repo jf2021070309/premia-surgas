@@ -109,6 +109,8 @@
 
         <div class="container">
             <div class="scan-container">
+                <!-- Input de archivo oculto para escaneo desde galería -->
+                <input type="file" id="qr-input-file" accept="image/*" style="display: none;" onchange="onFileChange(event)">
 
                 <!-- [PANTALLA 1] — INICIO -->
                 <div id="screen-start" class="v-screen active">
