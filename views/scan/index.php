@@ -16,7 +16,7 @@
         .scan-wrapper { 
             display: flex; gap: 2rem; align-items: stretch;
             max-width: 1400px; margin: 1.5rem auto; padding: 0 1.5rem;
-            min-height: 520px;
+            min-height: 500px;
         }
         
         .scan-left-panel { flex: 0 0 350px; display: flex; flex-direction: column; }
@@ -46,26 +46,26 @@
         }
         .elite-card-header h3 { margin: 0; font-size: 0.95rem; font-weight: 800; color: #1e293b; letter-spacing: -0.5px; text-transform: uppercase; }
 
-        .elite-card-body { padding: 2.5rem 2rem; flex: 1; display: flex; flex-direction: column; }
+        .elite-card-body { padding: 2.5rem 2rem; flex: 1; display: flex; flex-direction: column; gap: 2rem; }
 
         /* Two Column Layout (Inside Card) */
         .elite-card-content { display: flex; flex-direction: row; flex: 1; }
-        .elite-card-main { flex: 1.2; padding: 2.5rem; border-right: 1px solid #f1f5f9; display: flex; flex-direction: column; justify-content: space-between; }
+        .elite-card-main { flex: 1.2; padding: 2.5rem; border-right: 1px solid #f1f5f9; display: flex; flex-direction: column; gap: 1.5rem; }
         .elite-card-side { flex: 1; padding: 2.5rem; background: #fafbfc; display: flex; flex-direction: column; }
 
-        .elite-label { display: block; font-size: 0.72rem; font-weight: 950; color: var(--p-wine); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1.25rem; }
+        .elite-label { display: block; font-size: 0.72rem; font-weight: 950; color: var(--p-wine); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; }
 
-        .choice-row { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-bottom: 2rem; }
+        .choice-row { display: grid; grid-template-columns: 1fr; gap: 0.8rem; }
         .choice-btn { 
             background: white; border: 1.5px solid #f1f5f9; border-radius: 18px; 
-            padding: 1.5rem; cursor: pointer; transition: 0.3s;
+            padding: 1.25rem 1.5rem; cursor: pointer; transition: 0.3s;
             display: flex; flex-direction: row; align-items: center; gap: 1.5rem;
         }
         .choice-btn:hover { border-color: var(--p-wine); transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0,0,0,0.04); }
-        .choice-btn i { font-size: 2rem; color: #b91c1c; transition: 0.3s; }
-        .choice-btn span { font-size: 0.85rem; font-weight: 800; color: #1e293b; letter-spacing: 0.3px; }
+        .choice-btn i { font-size: 1.8rem; color: #b91c1c; transition: 0.3s; }
+        .choice-btn span { font-size: 0.85rem; font-weight: 800; color: #1e293b; letter-spacing: 0.2px; }
 
-        .elite-input-wrapper { position: relative; margin-top: auto; display: flex; align-items: center; }
+        .elite-input-wrapper { position: relative; display: flex; align-items: center; }
         .elite-input { 
             flex: 1; height: 55px; padding: 0 4rem 0 1.5rem; border: 1.5px solid #f1f5f9; border-radius: 14px;
             font-family: inherit; font-size: 0.95rem; font-weight: 600; color: #1e293b; outline: none; transition: 0.3s; background: #fff;
@@ -74,7 +74,7 @@
         .elite-input:focus { border-color: var(--p-wine); box-shadow: 0 0 0 4px rgba(128,0,0,0.05); }
 
         .btn-search-icon { 
-            position: absolute; right: 6px; width: 43px; height: 43px; border-radius: 10px; 
+            position: absolute; right: 5px; width: 44px; height: 45px; border-radius: 10px; 
             background: var(--p-wine); color: white; border: none; display: flex; 
             align-items: center; justify-content: center; font-size: 1.4rem; cursor: pointer; transition: 0.3s;
         }
@@ -89,8 +89,7 @@
         .btn-elite-black:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0,0,0,0.25); background: #000; }
         .btn-elite-black:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-        .elite-customer-box { background: #fff; border: 1.5px solid #f1f5f9; border-radius: 18px; padding: 1.5rem; margin-bottom: 0; display: flex; align-items: center; gap: 1.5rem; transition: 0.3s; }
-        .elite-customer-box:hover { border-color: #e2e8f0; }
+        .elite-customer-box { background: #fff; border: 1.5px solid #f1f5f9; border-radius: 18px; padding: 1.5rem; display: flex; align-items: center; gap: 1.5rem; }
         .customer-avatar { width: 52px; height: 52px; background: #fdf2f2; border: 1px solid #fee2e2; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; color: var(--p-wine); }
 
         .form-select-elite { height: 55px; width: 100%; border-radius: 14px; border: 1.5px solid #f1f5f9; padding: 0 1.5rem; font-weight: 700; font-size: 0.95rem; color: #1e293b; outline: none; appearance: none; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E") no-repeat right 1.25rem center / 1.25rem; }
@@ -106,7 +105,7 @@
 
         /* Custom Scrollbar for Operations List */
         #ops-container { 
-            height: 230px; 
+            height: 250px; 
             overflow-y: auto; 
             padding-right: 8px;
             margin-bottom: 1.5rem;
@@ -118,7 +117,7 @@
         #ops-container::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
         #ops-container::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
 
-        #main-op-add-btn-row { margin-top: auto; padding-top: 2rem; }
+        .spacer { flex: 1; min-height: 20px; }
 
         @media (max-width: 1100px) {
             .scan-wrapper { flex-direction: column; align-items: stretch; }
@@ -167,15 +166,15 @@
                                 </div>
                             </div>
 
-                            <div class="elite-input-wrapper">
-                                <div style="width: 100%;">
-                                    <label class="elite-label">B&uacute;squeda Manual (DNI)</label>
-                                    <div style="position: relative;">
-                                        <input type="tel" id="manual-dni" class="elite-input" placeholder="Ej. 12345678" maxlength="8">
-                                        <button class="btn-search-icon" onclick="buscarPorDni()" title="Buscar cliente">
-                                            <i class='bx bx-search'></i>
-                                        </button>
-                                    </div>
+                            <div class="spacer"></div>
+
+                            <div>
+                                <label class="elite-label">B&uacute;squeda Manual (DNI)</label>
+                                <div class="elite-input-wrapper">
+                                    <input type="tel" id="manual-dni" class="elite-input" placeholder="Ej. 12345678" maxlength="8">
+                                    <button class="btn-search-icon" onclick="buscarPorDni()" title="Buscar cliente">
+                                        <i class='bx bx-search'></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -226,7 +225,9 @@
                                     </div>
                                 </div>
 
-                                <div style="margin: 2rem 0;">
+                                <div class="spacer"></div>
+
+                                <div>
                                     <div style="display: grid; grid-template-columns: 2.2fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
                                         <div class="form-group">
                                             <label class="elite-label">Tipo de Recarga</label>
@@ -245,9 +246,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div id="main-op-add-btn-row">
                                     <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem; align-items: end;">
                                         <div class="form-group">
                                             <label class="elite-label">Subtotal</label>
