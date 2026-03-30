@@ -16,10 +16,10 @@
         .scan-wrapper { 
             display: flex; gap: 2rem; align-items: stretch;
             max-width: 1400px; margin: 1.5rem auto; padding: 0 1.5rem;
-            min-height: 550px;
+            min-height: 520px;
         }
         
-        .scan-left-panel { flex: 0 0 350px; display: flex; flex-direction: column; gap: 1.5rem; }
+        .scan-left-panel { flex: 0 0 350px; display: flex; flex-direction: column; }
         .scan-right-panel { flex: 1; display: flex; flex-direction: column; }
         
         /* Placeholder state for right panel */
@@ -40,20 +40,20 @@
             display: flex; align-items: center; gap: 1rem; flex-shrink: 0;
         }
         .elite-header-icon { 
-            width: 38px; height: 38px; background: #fffcfc; color: var(--p-wine); 
-            border-radius: 10px; display: flex; align-items: center; justify-content: center;
-            font-size: 1.3rem; border: 1px solid #fee2e2; box-shadow: 0 2px 5px rgba(128,0,0,0.05);
+            width: 42px; height: 42px; background: #fffcfc; color: var(--p-wine); 
+            border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; border: 1px solid #fee2e2; box-shadow: 0 2px 5px rgba(128,0,0,0.05);
         }
-        .elite-card-header h3 { margin: 0; font-size: 0.9rem; font-weight: 900; color: #1e293b; letter-spacing: -0.5px; text-transform: uppercase; }
+        .elite-card-header h3 { margin: 0; font-size: 0.95rem; font-weight: 800; color: #1e293b; letter-spacing: -0.5px; text-transform: uppercase; }
 
-        .elite-card-body { padding: 2rem; flex: 1; display: flex; flex-direction: column; }
+        .elite-card-body { padding: 2.5rem 2rem; flex: 1; display: flex; flex-direction: column; }
 
         /* Two Column Layout (Inside Card) */
         .elite-card-content { display: flex; flex-direction: row; flex: 1; }
-        .elite-card-main { flex: 1.2; padding: 2.5rem; border-right: 1px solid #f1f5f9; }
+        .elite-card-main { flex: 1.2; padding: 2.5rem; border-right: 1px solid #f1f5f9; display: flex; flex-direction: column; justify-content: space-between; }
         .elite-card-side { flex: 1; padding: 2.5rem; background: #fafbfc; display: flex; flex-direction: column; }
 
-        .elite-label { display: block; font-size: 0.7rem; font-weight: 900; color: var(--p-wine); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 1rem; }
+        .elite-label { display: block; font-size: 0.72rem; font-weight: 950; color: var(--p-wine); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1.25rem; }
 
         .choice-row { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-bottom: 2rem; }
         .choice-btn { 
@@ -62,52 +62,53 @@
             display: flex; flex-direction: row; align-items: center; gap: 1.5rem;
         }
         .choice-btn:hover { border-color: var(--p-wine); transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0,0,0,0.04); }
-        .choice-btn i { font-size: 1.8rem; color: #b91c1c; transition: 0.3s; }
-        .choice-btn span { font-size: 0.8rem; font-weight: 800; color: #1e293b; letter-spacing: 0.3px; }
+        .choice-btn i { font-size: 2rem; color: #b91c1c; transition: 0.3s; }
+        .choice-btn span { font-size: 0.85rem; font-weight: 800; color: #1e293b; letter-spacing: 0.3px; }
 
-        .elite-input-wrapper { position: relative; margin-bottom: 1.5rem; display: flex; align-items: center; }
+        .elite-input-wrapper { position: relative; margin-top: auto; display: flex; align-items: center; }
         .elite-input { 
-            flex: 1; height: 50px; padding: 0 3.5rem 0 1.25rem; border: 1.5px solid #f1f5f9; border-radius: 12px;
-            font-family: inherit; font-size: 0.9rem; font-weight: 600; color: #1e293b; outline: none; transition: 0.3s; background: #fff;
+            flex: 1; height: 55px; padding: 0 4rem 0 1.5rem; border: 1.5px solid #f1f5f9; border-radius: 14px;
+            font-family: inherit; font-size: 0.95rem; font-weight: 600; color: #1e293b; outline: none; transition: 0.3s; background: #fff;
         }
-        .elite-input::placeholder { color: #cbd5e1; font-weight: 500; font-size: 0.8rem; }
+        .elite-input::placeholder { color: #cbd5e1; font-weight: 500; font-size: 0.85rem; }
         .elite-input:focus { border-color: var(--p-wine); box-shadow: 0 0 0 4px rgba(128,0,0,0.05); }
 
         .btn-search-icon { 
-            position: absolute; right: 5px; width: 40px; height: 40px; border-radius: 8px; 
+            position: absolute; right: 6px; width: 43px; height: 43px; border-radius: 10px; 
             background: var(--p-wine); color: white; border: none; display: flex; 
-            align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; transition: 0.3s;
+            align-items: center; justify-content: center; font-size: 1.4rem; cursor: pointer; transition: 0.3s;
         }
 
         .btn-elite-black { 
             display: flex; align-items: center; justify-content: center;
-            background: #000; color: white; border: none; height: 55px; width: 100%;
-            border-radius: 50px; font-weight: 800; font-size: 0.85rem; text-transform: uppercase;
+            background: #000; color: white; border: none; height: 58px; width: 100%;
+            border-radius: 50px; font-weight: 900; font-size: 0.9rem; text-transform: uppercase;
             letter-spacing: 1.5px; cursor: pointer; transition: 0.3s;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.15); margin-top: 1rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
         }
-        .btn-elite-black:hover { transform: translateY(-2px); box-shadow: 0 15px 30px rgba(0,0,0,0.25); background: #000; }
+        .btn-elite-black:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0,0,0,0.25); background: #000; }
         .btn-elite-black:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-        .elite-customer-box { background: #fff; border: 1.5px solid #f1f5f9; border-radius: 16px; padding: 1.25rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 1.25rem; }
-        .customer-avatar { width: 44px; height: 44px; background: #fdf2f2; border: 1px solid #fee2e2; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--p-wine); }
+        .elite-customer-box { background: #fff; border: 1.5px solid #f1f5f9; border-radius: 18px; padding: 1.5rem; margin-bottom: 0; display: flex; align-items: center; gap: 1.5rem; transition: 0.3s; }
+        .elite-customer-box:hover { border-color: #e2e8f0; }
+        .customer-avatar { width: 52px; height: 52px; background: #fdf2f2; border: 1px solid #fee2e2; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; color: var(--p-wine); }
 
-        .form-select-elite { height: 52px; width: 100%; border-radius: 12px; border: 1.5px solid #f1f5f9; padding: 0 1.25rem; font-weight: 700; font-size: 0.85rem; color: #1e293b; outline: none; appearance: none; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E") no-repeat right 1.25rem center / 1.25rem; }
+        .form-select-elite { height: 55px; width: 100%; border-radius: 14px; border: 1.5px solid #f1f5f9; padding: 0 1.5rem; font-weight: 700; font-size: 0.95rem; color: #1e293b; outline: none; appearance: none; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E") no-repeat right 1.25rem center / 1.25rem; }
 
-        .op-row { padding: 1.2rem; background: #fff; border-radius: 12px; border: 1px solid #f1f5f9; margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; transition: 0.2s; }
+        .op-row { padding: 1.25rem; background: #fff; border-radius: 14px; border: 1px solid #f1f5f9; margin-bottom: 0.8rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; transition: 0.2s; }
         .op-row:hover { border-color: #e2e8f0; background: #fafafa; }
         
-        .total-display { margin-top: auto; padding: 1.5rem 2rem; background: #fff; border-radius: 20px; border: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+        .total-display { margin-top: auto; padding: 2rem; background: #fff; border-radius: 20px; border: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
 
-        .elite-subtotal-box { height: 52px; background: #fff; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 800; color: #1e293b; font-size: 0.9rem; border: 1.5px solid #f1f5f9; }
+        .elite-subtotal-box { height: 55px; background: #fff; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-weight: 900; color: #1e293b; font-size: 1rem; border: 1.5px solid #f1f5f9; }
 
         #reader { width: 100%; border-radius: 16px; overflow: hidden; background: #000; }
 
         /* Custom Scrollbar for Operations List */
         #ops-container { 
-            height: 260px; /* Fixed height as requested */
+            height: 230px; 
             overflow-y: auto; 
-            padding-right: 5px;
+            padding-right: 8px;
             margin-bottom: 1.5rem;
             display: flex;
             flex-direction: column;
@@ -116,6 +117,8 @@
         #ops-container::-webkit-scrollbar { width: 4px; }
         #ops-container::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
         #ops-container::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+        #main-op-add-btn-row { margin-top: auto; padding-top: 2rem; }
 
         @media (max-width: 1100px) {
             .scan-wrapper { flex-direction: column; align-items: stretch; }
@@ -142,7 +145,7 @@
                 <input type="file" id="qr-input-file" accept="image/*" style="display: none;" onchange="onFileChange(event)">
 
                 <!-- PANEL IZQUIERDO: BÚSQUEDA Y SCAN -->
-                <div class="scan-left-panel" id="left-panel-stack">
+                <div class="scan-left-panel">
                     <div class="elite-form-card">
                         <div class="elite-card-header">
                             <div class="elite-header-icon"><i class='bx bx-qr-scan'></i></div>
@@ -150,24 +153,30 @@
                         </div>
                         
                         <div class="elite-card-body">
-                            <label class="elite-label">M&eacute;todo de Lectura QR</label>
-                            <div class="choice-row">
-                                <div class="choice-btn" onclick="initScanner()">
-                                    <div class="elite-header-icon" style="flex-shrink:0;"><i class='bx bx-camera'></i></div>
-                                    <span>USAR C&Aacute;MARA</span>
-                                </div>
-                                <div class="choice-btn" onclick="document.getElementById('qr-input-file').click()">
-                                    <div class="elite-header-icon" style="flex-shrink:0;"><i class='bx bx-image-add'></i></div>
-                                    <span>GALERIA / QR</span>
+                            <div>
+                                <label class="elite-label">M&eacute;todo de Lectura QR</label>
+                                <div class="choice-row">
+                                    <div class="choice-btn" onclick="initScanner()">
+                                        <div class="elite-header-icon" style="flex-shrink:0;"><i class='bx bx-camera'></i></div>
+                                        <span>USAR C&Aacute;MARA</span>
+                                    </div>
+                                    <div class="choice-btn" onclick="document.getElementById('qr-input-file').click()">
+                                        <div class="elite-header-icon" style="flex-shrink:0;"><i class='bx bx-image-add'></i></div>
+                                        <span>GALERIA / QR</span>
+                                    </div>
                                 </div>
                             </div>
 
-                            <label class="elite-label">B&uacute;squeda Manual (DNI)</label>
                             <div class="elite-input-wrapper">
-                                <input type="tel" id="manual-dni" class="elite-input" placeholder="Ej. 12345678" maxlength="8">
-                                <button class="btn-search-icon" onclick="buscarPorDni()" title="Buscar cliente">
-                                    <i class='bx bx-search'></i>
-                                </button>
+                                <div style="width: 100%;">
+                                    <label class="elite-label">B&uacute;squeda Manual (DNI)</label>
+                                    <div style="position: relative;">
+                                        <input type="tel" id="manual-dni" class="elite-input" placeholder="Ej. 12345678" maxlength="8">
+                                        <button class="btn-search-icon" onclick="buscarPorDni()" title="Buscar cliente">
+                                            <i class='bx bx-search'></i>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -205,43 +214,49 @@
                         <div class="elite-card-content">
                             <!-- SECCIÓN DATOS -->
                             <div class="elite-card-main">
-                                <label class="elite-label">Cliente Seleccionado</label>
-                                <div class="elite-customer-box">
-                                    <div class="customer-avatar"><i class='bx bx-user'></i></div>
-                                    <div>
-                                        <b id="res-name" style="display: block; font-size: 0.95rem; color: #1e293b;">- - -</b>
-                                        <span id="res-phone" style="font-size: 0.8rem; color: #64748b;">Esperando cliente...</span>
-                                    </div>
-                                    <input type="hidden" id="client-id">
-                                </div>
-
-                                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.25rem; margin-bottom: 1.5rem;">
-                                    <div class="form-group">
-                                        <label class="elite-label">Tipo de Recarga</label>
-                                        <select id="main-op-type" class="form-select-elite" onchange="updateSubtotal()">
-                                            <?php foreach ($operaciones as $op): ?>
-                                                <option value="<?= $op['puntos'] ?>"><?= htmlspecialchars($op['nombre']) ?> (+<?= $op['puntos'] ?> pts)</option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="elite-label">Cantidad</label>
-                                        <select id="main-op-qty" class="form-select-elite" onchange="updateSubtotal()">
-                                            <?php for($i=1;$i<=10;$i++): ?>
-                                                <option value="<?= $i ?>"><?= $i ?></option>
-                                            <?php endfor; ?>
-                                        </select>
+                                <div>
+                                    <label class="elite-label">Cliente Seleccionado</label>
+                                    <div class="elite-customer-box">
+                                        <div class="customer-avatar"><i class='bx bx-user'></i></div>
+                                        <div>
+                                            <b id="res-name" style="display: block; font-size: 1.1rem; color: #1e293b; letter-spacing: -0.5px;">- - -</b>
+                                            <span id="res-phone" style="font-size: 0.85rem; color: #64748b; font-weight: 500;">Esperando cliente...</span>
+                                        </div>
+                                        <input type="hidden" id="client-id">
                                     </div>
                                 </div>
 
-                                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.25rem; align-items: end; margin-bottom: 2rem;">
-                                    <div class="form-group">
-                                        <label class="elite-label">Subtotal</label>
-                                        <div id="main-op-unit" class="elite-subtotal-box">0 PTS</div>
+                                <div style="margin: 2rem 0;">
+                                    <div style="display: grid; grid-template-columns: 2.2fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+                                        <div class="form-group">
+                                            <label class="elite-label">Tipo de Recarga</label>
+                                            <select id="main-op-type" class="form-select-elite" onchange="updateSubtotal()">
+                                                <?php foreach ($operaciones as $op): ?>
+                                                    <option value="<?= $op['puntos'] ?>"><?= htmlspecialchars($op['nombre']) ?> (+<?= $op['puntos'] ?> pts)</option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="elite-label">Cantidad</label>
+                                            <select id="main-op-qty" class="form-select-elite" onchange="updateSubtotal()">
+                                                <?php for($i=1;$i<=10;$i++): ?>
+                                                    <option value="<?= $i ?>"><?= $i ?></option>
+                                                <?php endfor; ?>
+                                            </select>
+                                        </div>
                                     </div>
-                                    <button class="btn-elite-black" onclick="addOperation()" style="margin: 0; height: 52px; border-radius: 12px;">
-                                        A&Ntilde;ADIR A LISTA
-                                    </button>
+                                </div>
+
+                                <div id="main-op-add-btn-row">
+                                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem; align-items: end;">
+                                        <div class="form-group">
+                                            <label class="elite-label">Subtotal</label>
+                                            <div id="main-op-unit" class="elite-subtotal-box">0 PTS</div>
+                                        </div>
+                                        <button class="btn-elite-black" onclick="addOperation()" style="margin: 0;">
+                                            A&Ntilde;ADIR A LISTA
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
 
@@ -249,23 +264,23 @@
                             <div class="elite-card-side">
                                 <label class="elite-label">Resumen de Operaci&oacute;n</label>
                                 <div id="ops-container">
-                                    <div style="text-align: center; color: #cbd5e1; padding: 2rem 1rem; font-weight: 500; font-size: 0.8rem;">
-                                        <i class='bx bx-list-check' style="font-size: 2rem; opacity: 0.3; display: block; margin-bottom: 0.5rem;"></i>
+                                    <div style="text-align: center; color: #cbd5e1; padding: 4rem 1rem; font-weight: 500; font-size: 0.8rem;">
+                                        <i class='bx bx-list-check' style="font-size: 2.5rem; opacity: 0.25; display: block; margin-bottom: 1rem;"></i>
                                         Lista vac&iacute;a
                                     </div>
                                 </div>
 
                                 <div class="total-display">
                                     <div>
-                                        <span class="elite-label" style="margin: 0; opacity: 0.6; font-size: 0.6rem;">Total Acumulado</span>
-                                        <div id="main-total-pts" style="font-size: 2.2rem; font-weight: 950; color: #1e293b; line-height: 1; margin-top: 0.2rem;">0</div>
+                                        <span class="elite-label" style="margin: 0; opacity: 0.65; font-size: 0.65rem;">Total Acumulado</span>
+                                        <div id="main-total-pts" style="font-size: 2.5rem; font-weight: 950; color: #1e293b; line-height: 1; margin-top: 0.4rem;">0</div>
                                     </div>
-                                    <div style="text-align: right; font-weight: 900; color: #b91c1c; font-size: 0.75rem; letter-spacing: 1px;">PUNTOS</div>
+                                    <div style="text-align: right; font-weight: 900; color: #b91c1c; font-size: 0.75rem; letter-spacing: 1.5px;">PUNTOS</div>
                                 </div>
 
-                                <button id="save-all-btn" class="btn-elite-black" onclick="saveAll()" disabled>REGISTRAR</button>
-                                <div style="text-align: center; margin-top: 1rem;">
-                                    <button onclick="location.reload()" style="background: none; border: none; font-size: 0.65rem; font-weight: 800; color: #94a3b8; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px;">Cancelar todo</button>
+                                <button id="save-all-btn" class="btn-elite-black" onclick="saveAll()" disabled style="margin-top: 1.5rem;">REGISTRAR</button>
+                                <div style="text-align: center; margin-top: 1.5rem;">
+                                    <button onclick="location.reload()" style="background: none; border: none; font-size: 0.7rem; font-weight: 900; color: #94a3b8; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s;" onmouseover="this.style.color='#b91c1c'" onmouseout="this.style.color='#94a3b8'">Cancelar todo</button>
                                 </div>
                             </div>
                         </div>
@@ -279,12 +294,12 @@
                             <div class="elite-header-icon" style="background:#fef2f2; color:#ef4444; border-color:#fee2e2;"><i class='bx bx-user-x' ></i></div>
                             <h3 style="color: #991b1b;">CLIENTE NO ENCONTRADO</h3>
                         </div>
-                        <div class="elite-card-body" style="text-align: center; padding: 5rem 3rem;">
-                            <h2 style="font-weight: 900; color: #1e293b; font-size: 1.25rem; margin-bottom: 0.75rem;">No se encontr&oacute; al cliente</h2>
-                            <p style="font-size: 0.85rem; color: #64748b; line-height: 1.6; margin-bottom: 2.5rem;">El c&oacute;digo o DNI no coincide con ningún registro. &iquest;Deseas crearlo ahora?</p>
+                        <div class="elite-card-body" style="text-align: center; justify-content: center;">
+                            <h2 style="font-weight: 900; color: #1e293b; font-size: 1.5rem; margin-bottom: 1rem; letter-spacing: -0.5px;">No se encontr&oacute; al cliente</h2>
+                            <p style="font-size: 0.95rem; color: #64748b; line-height: 1.6; margin-bottom: 3rem; max-width: 400px; margin-left: auto; margin-right: auto;">El c&oacute;digo o DNI no coincide con ningún registro en nuestra base de datos. &iquest;Deseas crearlo ahora?</p>
                             
-                            <a href="<?= BASE_URL ?>clientes/nuevo" class="btn-elite-black" style="text-decoration: none; display: flex; align-items: center; justify-content: center; width: 240px; margin: 0 auto;">Nuevo Cliente</a>
-                            <button onclick="initLayout()" style="background: none; border: none; font-size: 0.75rem; font-weight: 800; color: #94a3b8; margin-top: 2rem; cursor: pointer; text-transform: uppercase;">Volver</button>
+                            <a href="<?= BASE_URL ?>clientes/nuevo" class="btn-elite-black" style="text-decoration: none; display: flex; align-items: center; justify-content: center; width: 280px; margin: 0 auto;">Nuevo Cliente</a>
+                            <button onclick="initLayout()" style="background: none; border: none; font-size: 0.8rem; font-weight: 800; color: #94a3b8; margin-top: 2rem; cursor: pointer; text-transform: uppercase; letter-spacing: 1px;">Volver a buscar</button>
                         </div>
                     </div>
                 </template>
@@ -442,8 +457,8 @@
             const container = document.getElementById('ops-container');
             if (operations.length === 0) {
                 container.innerHTML = `
-                    <div style="text-align: center; color: #cbd5e1; padding: 2rem 1rem; font-weight: 500; font-size: 0.8rem;">
-                        <i class='bx bx-list-check' style="font-size: 2rem; opacity: 0.3; display: block; margin-bottom: 0.5rem;"></i>
+                    <div style="text-align: center; color: #cbd5e1; padding: 4rem 1rem; font-weight: 500; font-size: 0.8rem;">
+                        <i class='bx bx-list-check' style="font-size: 2.5rem; opacity: 0.25; display: block; margin-bottom: 1rem;"></i>
                         Lista vac&iacute;a
                     </div>
                 `;
