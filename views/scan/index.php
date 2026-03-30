@@ -13,88 +13,91 @@
         :root { --p-wine: #800000; --dark-blue: #000; }
         
         /* Layout */
-        .scan-container { max-width: 650px; margin: 4rem auto 0; padding-bottom: 5rem; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        .scan-container.wide { max-width: 1050px; }
+        .scan-container { max-width: 650px; margin: 4rem auto 0; padding-bottom: 5rem; transition: max-width 0.3s ease; }
+        .scan-container.wide { max-width: 950px; }
         
+        .v-screen { display: none; }
+        .v-screen.active { display: block; animation: smoothReveal 0.4s ease-out; }
+        @keyframes smoothReveal { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Card Elite Style */
         .elite-form-card { 
-            background: white; border-radius: 24px; 
-            border: 1px solid #f1f5f9; box-shadow: 0 15px 45px rgba(0,0,0,0.03);
-            overflow: hidden; display: flex; flex-direction: column;
+            background: white; border-radius: 20px; 
+            border: 1px solid #e2e8f0; box-shadow: 0 10px 40px rgba(0,0,0,0.02);
+            overflow: hidden;
         }
         .elite-card-header { 
-            background: #fff; padding: 1.5rem 2.5rem; border-bottom: 1px solid #f8fafc;
+            background: #fff; padding: 1.5rem 2.5rem; border-bottom: 1px solid #f1f5f9;
             display: flex; align-items: center; gap: 1rem;
         }
         .elite-header-icon { 
-            width: 38px; height: 38px; background: #fff1f2; color: var(--p-wine); 
-            border-radius: 12px; display: flex; align-items: center; justify-content: center;
-            font-size: 1.3rem; border: 1px solid #ffe4e6;
+            width: 38px; height: 38px; background: #fffcfc; color: var(--p-wine); 
+            border-radius: 10px; display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem; border: 1px solid #fee2e2; box-shadow: 0 2px 5px rgba(128,0,0,0.05);
         }
-        .elite-card-header h3 { margin: 0; font-size: 0.9rem; font-weight: 850; color: #1e293b; text-transform: uppercase; letter-spacing: 0.5px; }
+        .elite-card-header h3 { margin: 0; font-size: 1rem; font-weight: 900; color: #1e293b; letter-spacing: -0.5px; text-transform: uppercase; }
 
-        .elite-card-content { display: flex; flex-direction: row; }
-        .elite-card-main { flex: 1.25; padding: 3rem 2.5rem; }
-        .elite-card-side { 
-            flex: 1; padding: 3rem 2.5rem; background: #fafbfc; 
-            border-left: 1px solid #f1f5f9; display: none; flex-direction: column; 
-            animation: slideInRight 0.4s ease;
-        }
-        @keyframes slideInRight { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+        .elite-card-body { padding: 3rem 3rem 2rem; }
 
-        .elite-label { display: block; font-size: 0.72rem; font-weight: 850; color: var(--p-wine); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 1rem; }
+        /* Two Column Layout (Only for Main Screen) */
+        .elite-card-content { display: flex; flex-direction: row; border-top: 1px solid #f1f5f9; }
+        .elite-card-main { flex: 1.3; padding: 3rem 2.5rem 2.5rem; }
+        .elite-card-side { flex: 1; padding: 3rem 2.5rem 2.5rem; background: #fafbfc; border-left: 1px solid #f1f5f9; display: flex; flex-direction: column; }
 
-        /* Choice Buttons (Vertical) */
-        .choice-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2.5rem; }
+        /* Small labels */
+        .elite-label { display: block; font-size: 0.7rem; font-weight: 900; color: var(--p-wine); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 1rem; }
+
+        /* Choice Blocks (Screen Start) */
+        .choice-row { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2.5rem; }
         .choice-btn { 
-            background: white; border: 1.5px solid #f1f5f9; border-radius: 20px; 
-            padding: 2.5rem 1rem; cursor: pointer; transition: all 0.3s;
+            background: white; border: 1.5px solid #f1f5f9; border-radius: 18px; 
+            padding: 2.5rem 1.5rem; cursor: pointer; transition: 0.3s;
             display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem;
         }
-        .choice-btn:hover { border-color: var(--p-wine); background: #fffcfc; transform: translateY(-4px); box-shadow: 0 10px 25px rgba(128,0,0,0.06); }
-        .choice-btn i { font-size: 2.5rem; color: #1e293b; }
+        .choice-btn:hover { border-color: var(--p-wine); transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0,0,0,0.04); }
+        .choice-btn i { font-size: 2.4rem; color: #1e293b; transition: 0.3s; }
         .choice-btn:hover i { color: var(--p-wine); }
-        .choice-btn span { font-size: 0.75rem; font-weight: 800; color: #475569; text-transform: uppercase; }
+        .choice-btn span { font-size: 0.85rem; font-weight: 800; color: #475569; letter-spacing: 0.3px; }
 
-        /* Manual Input */
-        .elite-input-wrapper { position: relative; margin-bottom: 1.5rem; display: flex; align-items: center; }
+        /* Input Area (Screen Start) */
+        .elite-input-wrapper { position: relative; margin-bottom: 2.5rem; display: flex; align-items: center; }
         .elite-input { 
-            flex: 1; height: 55px; padding: 0 1.5rem; border: 1.5px solid #f1f5f9; border-radius: 14px;
-            font-family: inherit; font-size: 0.95rem; font-weight: 600; color: #1e293b; outline: none; transition: 0.3s;
+            flex: 1; height: 55px; padding: 0 4rem 0 1.5rem; border: 1.5px solid #f1f5f9; border-radius: 12px;
+            font-family: inherit; font-size: 0.9rem; font-weight: 600; color: #1e293b; outline: none; transition: 0.3s;
             background: #fff;
         }
         .elite-input::placeholder { color: #cbd5e1; font-weight: 500; font-size: 0.8rem; }
-        .elite-input:focus { border-color: var(--p-wine); }
+        .elite-input:focus { border-color: var(--p-wine); box-shadow: 0 0 0 4px rgba(128,0,0,0.05); }
+
         .btn-search-icon { 
-            position: absolute; right: 8px; width: 40px; height: 40px; border-radius: 10px; 
+            position: absolute; right: 5px; width: 42px; height: 43px; border-radius: 10px; 
             background: var(--p-wine); color: white; border: none; display: flex; 
-            align-items: center; justify-content: center; font-size: 1.1rem; cursor: pointer; transition: 0.3s;
+            align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; transition: 0.3s;
         }
 
-        /* Buttons Styling */
+        /* Final Button (Black) */
         .btn-elite-black { 
             display: flex; align-items: center; justify-content: center;
-            background: #000; color: white; border: none; height: 55px; 
-            border-radius: 50px; font-weight: 850; font-size: 0.85rem; text-transform: uppercase;
-            letter-spacing: 1.8px; cursor: pointer; transition: 0.3s;
-            box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+            background: #000; color: white; border: none; height: 50px; width: 240px;
+            margin: 0 auto;
+            border-radius: 50px; font-weight: 800; font-size: 0.85rem; text-transform: uppercase;
+            letter-spacing: 1.5px; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
         }
-        .btn-elite-black:hover { transform: translateY(-2px); box-shadow: 0 18px 35px rgba(0,0,0,0.25); }
+        .btn-elite-black:hover { transform: translateY(-2px); box-shadow: 0 15px 30px rgba(0,0,0,0.25); background: #000; }
 
-        /* Components */
-        .elite-customer-box { background: #fff; border: 1.5px solid #f1f5f9; border-radius: 16px; padding: 1.5rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 1.25rem; }
-        .customer-avatar { width: 48px; height: 48px; background: #fafbfc; border: 1px solid #f1f5f9; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #94a3b8; }
+        /* Elements */
+        .elite-customer-box { background: #fff; border: 1.5px solid #f1f5f9; border-radius: 16px; padding: 1.25rem; margin-bottom: 2.5rem; display: flex; align-items: center; gap: 1.25rem; }
+        .customer-avatar { width: 44px; height: 44px; background: #fdf2f2; border: 1px solid #fee2e2; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--p-wine); }
 
-        .form-select-elite { height: 55px; width: 100%; border-radius: 14px; border: 1.5px solid #f1f5f9; padding: 0 1.25rem; font-weight: 700; font-size: 0.9rem; color: #1e293b; outline: none; appearance: none; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E") no-repeat right 1.25rem center / 1.25rem; }
+        .form-select-elite { height: 52px; width: 100%; border-radius: 12px; border: 1.5px solid #f1f5f9; padding: 0 1.25rem; font-weight: 700; font-size: 0.85rem; color: #1e293b; outline: none; appearance: none; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E") no-repeat right 1.25rem center / 1.25rem; }
 
-        .op-row { background: #fff; border: 1.5px solid #f1f5f9; border-radius: 14px; padding: 0.9rem 1.25rem; margin-bottom: 0.8rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; box-shadow: 0 2px 5px rgba(0,0,0,0.01); }
-        .op-row i { cursor: pointer; color: #cbd5e1; font-size: 1.1rem; transition: 0.2s; }
-        .op-row i:hover { color: #ef4444; }
+        .op-row { padding: 1rem 1.25rem; background: #fff; border-radius: 14px; border: 1px solid #e2e8f0; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
+        .total-display { margin-top: auto; padding: 1.5rem 1.75rem; background: #fff; border-radius: 18px; border: 1.5px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
 
-        .total-display { background: #fff; border: 1.5px solid #f1f5f9; border-radius: 20px; padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; box-shadow: 0 5px 15px rgba(0,0,0,0.01); }
-        .elite-subtotal-box { height: 55px; background: #fff; border-radius: 14px; border: 1.5px solid #f1f5f9; display: flex; align-items: center; justify-content: center; font-weight: 900; color: #1e293b; font-size: 0.95rem; }
+        .elite-subtotal-box { height: 52px; background: #fff; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 800; color: #1e293b; font-size: 0.9rem; border: 1.5px solid #f1f5f9; }
 
-        #reader { width: 100%; border-radius: 20px; overflow: hidden; border: 3px solid #f1f5f9; }
-        @keyframes smoothReveal { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        #reader { width: 100%; border-radius: 16px; overflow: hidden; }
     </style>
 </head>
 <body>
@@ -109,63 +112,84 @@
         ?>
 
         <div class="container">
-            <div id="main-container" class="scan-container">
-                <!-- Input de archivo -->
+            <div class="scan-container">
+                <!-- Input de archivo oculto para escaneo desde galería -->
                 <input type="file" id="qr-input-file" accept="image/*" style="display: none;" onchange="onFileChange(event)">
 
-                <div class="elite-form-card">
-                    <div class="elite-card-header">
-                        <div id="header-icon" class="elite-header-icon"><i class='bx bx-qr-scan'></i></div>
-                        <h3 id="panel-title">REGISTRAR OPERACIÓN</h3>
-                    </div>
-
-                    <div class="elite-card-content">
-                        <!-- PANEL IZQUIERDO -->
-                        <div class="elite-card-main">
-                            
-                            <!-- PASO 1: BÚSQUEDA -->
-                            <div id="search-section">
-                                <label class="elite-label">M&eacute;todo de Lectura QR</label>
-                                <div class="choice-row">
-                                    <div class="choice-btn" onclick="initScanner()">
-                                        <i class='bx bx-camera'></i>
-                                        <span>USAR C&Aacute;MARA</span>
-                                    </div>
-                                    <div class="choice-btn" onclick="document.getElementById('qr-input-file').click()">
-                                        <i class='bx bx-image-add'></i>
-                                        <span>GALERIA / QR</span>
-                                    </div>
+                <!-- [PANTALLA 1] — INICIO -->
+                <div id="screen-start" class="v-screen active">
+                    <div class="elite-form-card">
+                        <div class="elite-card-header">
+                            <div class="elite-header-icon"><i class='bx bx-qr-scan'></i></div>
+                            <h3>REGISTRAR OPERACI&Oacute;N</h3>
+                        </div>
+                        
+                        <div class="elite-card-body">
+                            <label class="elite-label">M&eacute;todo de Lectura QR</label>
+                            <div class="choice-row">
+                                <div class="choice-btn" onclick="initScanner()">
+                                    <i class='bx bx-camera'></i>
+                                    <span>USAR C&Aacute;MARA</span>
                                 </div>
-
-                                <label class="elite-label">B&uacute;squeda Manual (DNI)</label>
-                                <div class="elite-input-wrapper">
-                                    <input type="tel" id="manual-dni" class="elite-input" placeholder="Ej. 12345678" maxlength="8">
-                                    <button class="btn-search-icon" onclick="buscarPorDni()" title="Buscar">
-                                        <i class='bx bx-search'></i>
-                                    </button>
-                                </div>
-
-                                <div id="reader-container" style="display: none; margin-top: 2rem; animation: smoothReveal 0.3s ease;">
-                                    <div id="reader"></div>
-                                    <div style="text-align: center; margin-top: 1rem;">
-                                        <button class="btn-elite-black" onclick="stopScanner()" style="width: auto; padding: 0 1.5rem; background: #f8fafc; color: #64748b; height: 35px; font-size: 0.62rem; border: 1px solid #e2e8f0; box-shadow: none;">CANCELAR ESCANEO</button>
-                                    </div>
+                                <div class="choice-btn" onclick="document.getElementById('qr-input-file').click()">
+                                    <i class='bx bx-image-add'></i>
+                                    <span>GALERIA / QR</span>
                                 </div>
                             </div>
 
-                            <!-- PASO 2: FORMULARIO -->
-                            <div id="form-section" style="display: none; animation: smoothReveal 0.4s ease-out;">
+                            <label class="elite-label">B&uacute;squeda Manual (DNI)</label>
+                            <div class="elite-input-wrapper">
+                                <i class='bx bx-id-card icon-dni'></i>
+                                <input type="tel" id="manual-dni" class="elite-input" placeholder="Ej. 12345678" maxlength="8">
+                                <button class="btn-search-icon" onclick="buscarPorDni()" title="Buscar cliente">
+                                    <i class='bx bx-search'></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- [PANTALLA 2] — SCANNER -->
+                <div id="screen-scan" class="v-screen">
+                    <div class="elite-form-card">
+                        <div class="elite-card-header">
+                            <div class="elite-header-icon"><i class='bx bx-camera'></i></div>
+                            <h3>LECTOR QR EN l&Iacute;NEA</h3>
+                        </div>
+                        <div class="elite-card-body" style="padding: 1.5rem;">
+                            <div id="reader"></div>
+                            <div style="text-align: center; margin-top: 1rem;">
+                                <p style="font-size: 0.8rem; color: #64748b; font-weight: 500;">Apunte su c&aacute;mara hacia el QR del cliente</p>
+                            </div>
+                        </div>
+                        <div style="padding-bottom: 2rem; text-align: center;">
+                            <button class="btn-elite-black" onclick="stopScanner()" style="background: #f1f5f9; color: #475569;">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- [PANTALLA 3] — REGISTRO ACTIVADO -->
+                <div id="screen-main" class="v-screen">
+                    <div class="elite-form-card">
+                        <div class="elite-card-header">
+                            <div class="elite-header-icon"><i class='bx bx-user-circle'></i></div>
+                            <h3>ORDEN DE SUMA DE PUNTOS</h3>
+                        </div>
+
+                        <div class="elite-card-content">
+                            <!-- PANEL IZQUIERDO -->
+                            <div class="elite-card-main">
                                 <label class="elite-label">Cliente Seleccionado</label>
                                 <div class="elite-customer-box">
                                     <div class="customer-avatar"><i class='bx bx-user'></i></div>
-                                    <div style="flex: 1;">
-                                        <b id="res-name" style="display: block; font-size: 1rem; color: #1e293b;">-</b>
-                                        <span id="res-phone" style="font-size: 0.8rem; color: #94a3b8;">-</span>
+                                    <div>
+                                        <b id="res-name" style="display: block; font-size: 0.95rem; color: #1e293b;">-</b>
+                                        <span id="res-phone" style="font-size: 0.8rem; color: #64748b;">-</span>
                                     </div>
                                     <input type="hidden" id="client-id">
                                 </div>
 
-                                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+                                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.25rem; margin-bottom: 1.5rem;">
                                     <div class="form-group">
                                         <label class="elite-label">Tipo de Recarga</label>
                                         <select id="main-op-type" class="form-select-elite" onchange="updateSubtotal()">
@@ -184,44 +208,57 @@
                                     </div>
                                 </div>
 
-                                <label class="elite-label">Subtotal</label>
-                                <div style="display: grid; grid-template-columns: 140px 1fr; gap: 1.5rem; align-items: center;">
-                                    <div id="main-op-unit" class="elite-subtotal-box">0 PTS</div>
+                                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.25rem; align-items: end; margin-bottom: 2rem;">
+                                    <div class="form-group">
+                                        <label class="elite-label">Subtotal</label>
+                                        <div id="main-op-unit" class="elite-subtotal-box">-</div>
+                                    </div>
                                     <button class="btn-elite-black" onclick="addOperation()" style="width: 100%; margin: 0;">
                                         A&Ntilde;ADIR A LISTA
                                     </button>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- PANEL DERECHO -->
-                        <div id="side-panel" class="elite-card-side">
-                            <label class="elite-label">Resumen de Operaci&oacute;n</label>
-                            <div id="ops-container" style="flex: 1; min-height: 150px; overflow-y: auto; max-height: 380px; margin-bottom: 2rem;">
-                                <div id="summary-empty" style="text-align: center; color: #e2e8f0; padding-top: 6rem;">
-                                    <i class='bx bx-list-check' style="font-size: 4rem; opacity: 0.5;"></i>
+                            <!-- PANEL DERECHO -->
+                            <div class="elite-card-side">
+                                <label class="elite-label">Resumen de Operaci&oacute;n</label>
+                                <div id="ops-container" style="min-height: 120px; overflow-y: auto; max-height: 220px; margin-bottom: 1.5rem;">
+                                    <!-- Dinámico -->
                                 </div>
-                            </div>
 
-                            <div id="summary-footer" style="display: none; border-top: 1px solid #f1f5f9; padding-top: 1.5rem;">
-                                <div class="total-display">
+                                <div class="total-display" style="margin-bottom: 2rem;">
                                     <div>
-                                        <span class="elite-label" style="margin: 0; opacity: 0.5; font-size: 0.65rem;">TOTAL ACUMULADO</span>
-                                        <div id="main-total-pts" style="font-size: 2.5rem; font-weight: 900; color: #1e293b; line-height: 1;">0</div>
+                                        <span class="elite-label" style="margin: 0; opacity: 0.6;">Total Acumulado</span>
+                                        <div id="main-total-pts" style="font-size: 2.2rem; font-weight: 950; color: #1e293b; line-height: 1; margin-top: 0.2rem;">0</div>
                                     </div>
-                                    <div style="text-align: right; font-weight: 900; color: var(--p-wine); font-size: 1rem;">PUNTOS</div>
+                                    <div style="text-align: right; font-weight: 800; color: var(--p-wine); font-size: 0.8rem; letter-spacing: 1px;">PUNTOS</div>
                                 </div>
 
                                 <button id="save-all-btn" class="btn-elite-black" onclick="saveAll()" style="width: 100%;">REGISTRAR</button>
-                                <div style="text-align: center; margin-top: 1.5rem;">
-                                    <button onclick="resetFlow()" style="background: none; border: none; font-size: 0.7rem; font-weight: 850; color: #cbd5e1; cursor: pointer; text-transform: uppercase;">CANCELAR TODO</button>
+                                <div style="text-align: center; margin-top: 1rem;">
+                                    <button onclick="location.reload()" style="background: none; border: none; font-size: 0.65rem; font-weight: 800; color: #94a3b8; cursor: pointer; text-transform: uppercase;">Cancelar todo</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+
+                <!-- [PANTALLA 4] — NO ENCONTRADO -->
+                <div id="screen-error" class="v-screen">
+                    <div class="elite-form-card">
+                        <div class="elite-card-header">
+                            <div class="elite-header-icon" style="background:#fef2f2; color:#ef4444; border-color:#fee2e2;"><i class='bx bx-user-x' ></i></div>
+                            <h3>CLIENTE NO REGISTRADO</h3>
+                        </div>
+                        <div class="elite-card-body" style="text-align: center; padding: 4rem 3rem;">
+                            <h2 style="font-weight: 900; color: #1e293b; font-size: 1.25rem; margin-bottom: 0.75rem;">No se encontr&oacute; al cliente</h2>
+                            <p style="font-size: 0.85rem; color: #64748b; line-height: 1.6; margin-bottom: 2.5rem;">El c&oacute;digo o DNI no coincide con ningún registro. &iquest;Deseas crearlo ahora?</p>
+                            
+                            <a href="<?= BASE_URL ?>clientes/nuevo" class="btn-elite-black" style="text-decoration: none; display: flex; align-items: center; justify-content: center;">Nuevo Cliente</a>
+                            <button onclick="location.reload()" style="background: none; border: none; font-size: 0.75rem; font-weight: 800; color: #94a3b8; margin-top: 1.5rem; cursor: pointer; text-transform: uppercase;">Volver al inicio</button>
+                        </div>
+                    </div>
+                </div>
 
             </div> <!-- .scan-container -->
         </div> <!-- .container -->
@@ -235,67 +272,57 @@
         let operations = [];
         let running = false;
 
-        // --- LÓGICA DE INTERFAZ ---
-        function setFormState(active) {
-            const container     = document.getElementById('main-container');
-            const searchSection = document.getElementById('search-section');
-            const formSection   = document.getElementById('form-section');
-            const sidePanel     = document.getElementById('side-panel');
-            const title         = document.getElementById('panel-title');
-            const iconHeader    = document.getElementById('header-icon');
-
-            if (active) {
+        function showScreen(id) {
+            document.querySelectorAll('.v-screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            
+            // Adjust container width based on screen
+            const container = document.querySelector('.scan-container');
+            if (id === 'screen-main') {
                 container.classList.add('wide');
-                searchSection.style.display = 'none';
-                formSection.style.display   = 'block';
-                sidePanel.style.display     = 'flex';
-                title.innerText = 'ORDEN DE SUMA DE PUNTOS';
-                iconHeader.innerHTML = '<i class="bx bx-user"></i>';
-                iconHeader.style.background = '#f8fafc';
-                iconHeader.style.color = '#94a3b8';
-                iconHeader.style.borderColor = '#f1f5f9';
             } else {
                 container.classList.remove('wide');
-                searchSection.style.display = 'block';
-                formSection.style.display   = 'none';
-                sidePanel.style.display     = 'none';
-                title.innerText = 'REGISTRAR OPERACIÓN';
-                iconHeader.innerHTML = '<i class="bx bx-qr-scan"></i>';
-                iconHeader.style.background = '#fff1f2';
-                iconHeader.style.color = 'var(--p-wine)';
-                iconHeader.style.borderColor = '#ffe4e6';
             }
+
+            const subtitles = {
+                'screen-start': '&iexcl;Puntaje asignado, cliente feliz!',
+                'screen-scan': 'Lectura de C&oacute;digo QR',
+                'screen-main': 'Calculando puntos ganados',
+                'screen-error': 'Lo sentimos, no encontramos el registro'
+            };
+            document.querySelector('.page-subtitle').innerHTML = subtitles[id] || 'Panel de Gesti&oacute;n';
         }
 
-        function resetFlow() {
-            setFormState(false);
-            stopScanner();
-            operations = [];
-            renderOperations();
-            document.getElementById('manual-dni').value = '';
-        }
-
-        // --- SCANNER ---
         async function initScanner() {
-            document.getElementById('reader-container').style.display = 'block';
+            showScreen('screen-scan');
             if (!html5QrCode) html5QrCode = new Html5Qrcode("reader");
-            
-            const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+            const config = { fps: 20, qrbox: { width: 280, height: 280 }, aspectRatio: 1.0 };
             try {
                 await html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess);
             } catch (err) {
-                Swal.fire('Error', 'No se pudo acceder a la c&aacute;mara', 'error');
+                Swal.fire({ icon: 'error', title: 'C&aacute;mara no disponible' });
+                showScreen('screen-start');
             }
         }
 
-        function stopScanner() {
-            if (html5QrCode && html5QrCode.isScanning) {
-                html5QrCode.stop().then(() => {
-                    document.getElementById('reader-container').style.display = 'none';
-                });
-            } else {
-                document.getElementById('reader-container').style.display = 'none';
+        async function onFileChange(event) {
+            if (event.target.files.length === 0) return;
+            const imageFile = event.target.files[0];
+            if (!html5QrCode) html5QrCode = new Html5Qrcode("reader");
+            Swal.fire({ title: 'Escaneando...', didOpen: () => { Swal.showLoading(); } });
+            try {
+                const decodedText = await html5QrCode.scanFile(imageFile, false);
+                Swal.close();
+                onScanSuccess(decodedText);
+            } catch (err) {
+                Swal.fire({ icon: 'error', title: 'Error', text: 'No se detect&oacute; QR.' });
             }
+            event.target.value = '';
+        }
+
+        function stopScanner() {
+            if (html5QrCode) html5QrCode.stop().then(() => showScreen('screen-start'));
+            else showScreen('screen-start');
         }
 
         function onScanSuccess(decodedText) {
@@ -306,33 +333,18 @@
             } else if (decodedText.includes('/')) {
                 codigo = decodedText.split('/').pop();
             }
-            stopScanner();
-            buscarCliente(codigo);
-        }
 
-        async function onFileChange(event) {
-            if (event.target.files.length === 0) return;
-            const imageFile = event.target.files[0];
-            if (!html5QrCode) html5QrCode = new Html5Qrcode("reader");
-            
-            Swal.fire({ title: 'Escaneando...', didOpen: () => Swal.showLoading() });
-            
-            try {
-                const decodedText = await html5QrCode.scanFile(imageFile, false);
-                Swal.close();
-                onScanSuccess(decodedText);
-            } catch (err) {
-                Swal.fire({ icon: 'error', title: 'Error', text: 'No se detect&oacute; QR en la imagen.' });
+            if (html5QrCode && html5QrCode.getState() === 2) {
+                html5QrCode.stop().then(() => buscarCliente(codigo));
+            } else {
+                buscarCliente(codigo);
             }
-            event.target.value = '';
         }
 
-        // --- CORE: BÚSQUEDA ---
         function buscarPorDni() {
-            const dniInput = document.getElementById('manual-dni');
-            const dni = dniInput.value.trim();
+            const dni = document.getElementById('manual-dni').value.trim();
             if (!/^\d{8}$/.test(dni)) {
-                Swal.fire({ icon: 'warning', title: 'Atenci&oacute;n', text: 'Ingrese un DNI v&aacute;lido de 8 dígitos.' });
+                Swal.fire({ icon: 'warning', title: 'DNI Inv&aacute;lido' });
                 return;
             }
             buscarCliente(dni);
@@ -346,35 +358,24 @@
                     body: JSON.stringify({ codigo })
                 });
                 const data = await res.json();
-
                 if (data.success) {
-                    document.getElementById('res-name').innerText  = data.cliente.nombre;
-                    document.getElementById('res-phone').innerText = data.cliente.celular || 'S/D';
-                    document.getElementById('client-id').value     = data.cliente.id;
-                    setFormState(true);
+                    document.getElementById('res-name').innerText = data.cliente.nombre;
+                    document.getElementById('res-phone').innerText = data.cliente.celular;
+                    document.getElementById('client-id').value = data.cliente.id;
+                    showScreen('screen-main');
                     updateSubtotal();
                 } else {
-                    Swal.fire({
-                        title: 'Cliente no registrado',
-                        text: '¿Deseas crear un nuevo cliente?',
-                        icon: 'question',
-                        showCancelButton: true,
-                        confirmButtonText: 'Sí, crear',
-                        confirmButtonColor: '#000'
-                    }).then(r => { 
-                        if(r.isConfirmed) window.location.href = baseUrl + 'clientes/nuevo'; 
-                    });
+                    showScreen('screen-error');
                 }
             } catch (e) {
-                Swal.fire({ icon: 'error', title: 'Error de servidor', text: 'No se pudo completar la b&uacute;squeda.' });
+                Swal.fire({ icon: 'error', title: 'Error' });
+                showScreen('screen-start');
             }
         }
 
-        // --- CORE: OPERACIONES ---
         function updateSubtotal() {
-            const select = document.getElementById('main-op-type');
-            const unit   = parseInt(select.value);
-            const qty    = parseInt(document.getElementById('main-op-qty').value) || 1;
+            const unit = parseInt(document.getElementById('main-op-type').value);
+            const qty = parseInt(document.getElementById('main-op-qty').value) || 1;
             document.getElementById('main-op-unit').innerText = (unit * qty) + ' PTS';
         }
 
@@ -384,12 +385,8 @@
             const unit = parseInt(select.value);
             const qty = parseInt(document.getElementById('main-op-qty').value) || 1;
             const subtotal = unit * qty;
-            
             operations.push({ name: typeName, unit, qty, subtotal });
             renderOperations();
-
-            document.getElementById('main-op-qty').selectedIndex = 0;
-            updateSubtotal();
         }
 
         function removeOperation(index) {
@@ -399,41 +396,29 @@
 
         function renderOperations() {
             const container = document.getElementById('ops-container');
-            const footer    = document.getElementById('summary-footer');
-            const empty     = document.getElementById('summary-empty');
-            
-            container.innerHTML = '';
-            let total = 0;
-
             if (operations.length === 0) {
-                empty.style.display = 'block';
-                footer.style.display = 'none';
-                container.appendChild(empty);
+                container.innerHTML = '<div style="text-align: center; color: #cbd5e1; padding: 1rem; font-weight: 500; font-size: 0.8rem;">Lista vac&iacute;a</div>';
                 document.getElementById('main-total-pts').innerText = '0';
+                document.getElementById('save-all-btn').disabled = true;
                 return;
             }
-
-            empty.style.display = 'none';
-            footer.style.display = 'block';
-
+            let html = '';
+            let total = 0;
             operations.forEach((op, i) => {
                 total += op.subtotal;
-                const div = document.createElement('div');
-                div.className = 'op-row';
-                div.innerHTML = `
-                    <div style="flex: 1;">
-                        <span style="font-weight: 800; color: #1e293b;">${op.name}</span>
-                        <span style="color: #94a3b8; font-size: 0.75rem; margin-left: 0.5rem;">x${op.qty}</span>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 1rem;">
-                        <b style="color: var(--p-wine);">+${op.subtotal}</b>
-                        <button onclick="removeOperation(${i})" style="background: none; border: none; color: #cbd5e1; cursor: pointer; font-size: 1.1rem; padding: 0.2rem;"><i class='bx bx-x'></i></button>
+                html += `
+                    <div class="op-row">
+                        <div style="font-weight: 700;">${op.name} <span style="color:#94a3b8; font-weight:500;">x${op.qty}</span></div>
+                        <div style="display: flex; align-items: center; gap: 0.8rem;">
+                            <div style="font-weight: 800; color: var(--p-orange);">+${op.subtotal}</div>
+                            <i class='bx bx-x' onclick="removeOperation(${i})" style="cursor:pointer; color:#94a3b8; font-size:1.1rem;"></i>
+                        </div>
                     </div>
                 `;
-                container.appendChild(div);
             });
-
+            container.innerHTML = html;
             document.getElementById('main-total-pts').innerText = total;
+            document.getElementById('save-all-btn').disabled = false;
         }
 
         async function saveAll() {
@@ -444,8 +429,7 @@
 
             running = true;
             const btn = document.getElementById('save-all-btn');
-            const originalText = btn.innerText;
-            btn.innerText = "REGISTRANDO...";
+            btn.innerHTML = "REGISTRANDO...";
             btn.disabled = true;
 
             try {
@@ -458,23 +442,22 @@
                 const data = await res.json();
                 if (data.success) {
                     Swal.fire({
-                        icon: 'success', title: '&iexcl;Puntos Sumados!', text: data.message || 'El saldo ha sido actualizado.',
-                        confirmButtonColor: '#000'
-                    }).then(() => resetFlow());
+                        icon: 'success', title: '&iexcl;Suma Exitosa!', text: 'El saldo del cliente ha sido actualizado.',
+                        timer: 2000, showConfirmButton: false
+                    }).then(() => window.location.href = baseUrl + 'panel');
                 } else {
                     Swal.fire({ icon: 'error', title: 'Error', text: data.message });
                     running = false;
-                    btn.innerText = originalText;
+                    btn.innerHTML = "REGISTRAR";
                     btn.disabled = false;
                 }
             } catch (e) {
-                Swal.fire({ icon: 'error', title: 'Error de servidor' });
+                Swal.fire({ icon: 'error', title: 'Error' });
                 running = false;
-                btn.innerText = originalText;
+                btn.innerHTML = "REGISTRAR";
                 btn.disabled = false;
             }
         }
-    </script>
     </script>
     <script src="<?= BASE_URL ?>assets/js/session_check.js"></script>
 </body>
