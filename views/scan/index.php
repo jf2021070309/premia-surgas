@@ -164,6 +164,11 @@
                                     </div>
                                 </div>
                             </div>
+                            
+                            <div style="text-align: center; margin: 0.5rem 0; flex: 1; display: flex; align-items: center; justify-content: center;">
+                                <img src="<?= BASE_URL ?>assets/premios/escanea.png" alt="Escanear QR" style="max-width: 85%; height: auto; opacity: 0.9;">
+                            </div>
+
                             <div>
                                 <label class="elite-label">B&uacute;squeda Manual</label>
                                 <div class="elite-input-wrapper">
