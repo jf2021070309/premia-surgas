@@ -14,105 +14,103 @@
         
         /* Layout Grid */
         .scan-wrapper { 
-            display: flex; gap: 2rem; align-items: stretch;
-            max-width: 1300px; margin: 1.5rem auto; padding: 0 1.5rem;
-            min-height: 520px;
+            display: flex; gap: 1.5rem; align-items: stretch;
+            max-width: 1250px; margin: 1rem auto; padding: 0 1rem;
         }
         
-        .scan-left-panel { flex: 0 0 320px; display: flex; flex-direction: column; }
+        .scan-left-panel { flex: 0 0 310px; display: flex; flex-direction: column; }
         .scan-right-panel { flex: 1; display: flex; flex-direction: column; }
         
         /* Placeholder state for right panel */
-        .scan-right-panel:not(.active) { opacity: 0.5; pointer-events: none; filter: grayscale(0.2); transition: 0.3s; }
-        .scan-right-panel.active { opacity: 1; pointer-events: auto; filter: none; animation: slideIn 0.5s ease-out; }
+        .scan-right-panel:not(.active) { opacity: 0.5; pointer-events: none; transition: 0.3s; }
+        .scan-right-panel.active { opacity: 1; pointer-events: auto; animation: slideIn 0.5s ease-out; }
 
         @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
         
         /* Elite Card Style */
         .elite-form-card { 
-            background: white; border-radius: 20px; 
-            border: 1px solid #e2e8f0; box-shadow: 0 8px 30px rgba(0,0,0,0.02);
+            background: white; border-radius: 18px; 
+            border: 1px solid #e2e8f0; box-shadow: 0 5px 20px rgba(0,0,0,0.01);
             overflow: hidden; height: 100%; display: flex; flex-direction: column;
         }
         .elite-card-header { 
-            background: #fff; padding: 1.25rem 1.75rem; border-bottom: 1px solid #f1f5f9;
-            display: flex; align-items: center; gap: 0.8rem; flex-shrink: 0;
+            background: #fff; padding: 1rem 1.5rem; border-bottom: 1px solid #f1f5f9;
+            display: flex; align-items: center; gap: 0.7rem; flex-shrink: 0;
         }
         .elite-header-icon { 
-            width: 32px; height: 32px; background: #fffcfc; color: var(--p-wine); 
-            border-radius: 10px; display: flex; align-items: center; justify-content: center;
-            font-size: 1.1rem; border: 1px solid #fee2e2;
+            width: 30px; height: 30px; background: #fffcfc; color: var(--p-wine); 
+            border-radius: 8px; display: flex; align-items: center; justify-content: center;
+            font-size: 1rem; border: 1px solid #fee2e2;
         }
-        .elite-card-header h3 { margin: 0; font-size: 0.8rem; font-weight: 850; color: #1e293b; letter-spacing: -0.2px; text-transform: uppercase; }
+        .elite-card-header h3 { margin: 0; font-size: 0.75rem; font-weight: 850; color: #1e293b; letter-spacing: -0.2px; text-transform: uppercase; }
 
-        .elite-card-body { padding: 2rem; flex: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 1.5rem; }
+        .elite-card-body { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 1rem; }
 
         /* Two Column Layout (Inside Card) */
         .elite-card-content { display: flex; flex-direction: row; flex: 1; }
-        .elite-card-main { flex: 1.2; padding: 2rem; border-right: 1px solid #f1f5f9; display: flex; flex-direction: column; justify-content: space-between; gap: 1.5rem; }
-        .elite-card-side { flex: 1; padding: 2rem; background: #fafbfc; display: flex; flex-direction: column; }
+        .elite-card-main { flex: 1.25; padding: 1.5rem; border-right: 1px solid #f1f5f9; display: flex; flex-direction: column; justify-content: space-between; gap: 1.25rem; }
+        .elite-card-side { flex: 1; padding: 1.5rem; background: #fafbfc; display: flex; flex-direction: column; gap: 1rem; }
 
-        .elite-label { display: block; font-size: 0.65rem; font-weight: 950; color: var(--p-wine); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 0.8rem; }
+        .elite-label { display: block; font-size: 0.65rem; font-weight: 950; color: var(--p-wine); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 0.6rem; }
 
-        .choice-row { display: grid; grid-template-columns: 1fr; gap: 0.8rem; }
+        .choice-row { display: grid; grid-template-columns: 1fr; gap: 0.7rem; }
         .choice-btn { 
-            background: white; border: 1.5px solid #f1f5f9; border-radius: 16px; 
-            padding: 1.2rem; cursor: pointer; transition: 0.3s;
-            display: flex; flex-direction: row; align-items: center; gap: 1.2rem;
+            background: white; border: 1.5px solid #f1f5f9; border-radius: 14px; 
+            padding: 1rem; cursor: pointer; transition: 0.3s;
+            display: flex; flex-direction: row; align-items: center; gap: 1rem;
         }
-        .choice-btn:hover { border-color: var(--p-wine); transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0,0,0,0.03); }
-        .choice-btn i { font-size: 1.5rem; color: #b91c1c; }
-        .choice-btn span { font-size: 0.78rem; font-weight: 850; color: #1e293b; letter-spacing: 0.1px; }
+        .choice-btn:hover { border-color: var(--p-wine); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.02); }
+        .choice-btn i { font-size: 1.4rem; color: #b91c1c; }
+        .choice-btn span { font-size: 0.75rem; font-weight: 850; color: #1e293b; }
 
         .elite-input-wrapper { position: relative; display: flex; align-items: center; }
         .elite-input { 
-            flex: 1; height: 50px; padding: 0 4rem 0 1.2rem; border: 1.5px solid #f1f5f9; border-radius: 14px;
-            font-family: inherit; font-size: 0.8rem; font-weight: 600; color: #1e293b; outline: none; transition: 0.3s; background: #fff;
+            flex: 1; height: 46px; padding: 0 3.5rem 0 1rem; border: 1.5px solid #f1f5f9; border-radius: 12px;
+            font-family: inherit; font-size: 0.78rem; font-weight: 600; color: #1e293b; outline: none; transition: 0.3s; background: #fff;
         }
-        .elite-input::placeholder { color: #cbd5e1; font-weight: 500; font-size: 0.78rem; }
-        .elite-input:focus { border-color: var(--p-wine); box-shadow: 0 0 0 3px rgba(128,0,0,0.05); }
+        .elite-input::placeholder { color: #cbd5e1; font-weight: 500; font-size: 0.75rem; }
+        .elite-input:focus { border-color: var(--p-wine); }
 
         .btn-search-icon { 
-            position: absolute; right: 5px; width: 40px; height: 40px; border-radius: 10px; 
+            position: absolute; right: 4px; width: 38px; height: 38px; border-radius: 8px; 
             background: var(--p-wine); color: white; border: none; display: flex; 
-            align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; transition: 0.3s;
+            align-items: center; justify-content: center; font-size: 1.1rem; cursor: pointer; transition: 0.3s;
         }
 
         .btn-elite-black { 
             display: flex; align-items: center; justify-content: center;
-            background: #000; color: white; border: none; height: 52px; width: 100%;
-            border-radius: 50px; font-weight: 900; font-size: 0.8rem; text-transform: uppercase;
+            background: #000; color: white; border: none; height: 48px; width: 100%;
+            border-radius: 50px; font-weight: 900; font-size: 0.75rem; text-transform: uppercase;
             letter-spacing: 1.2px; cursor: pointer; transition: 0.3s;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
         }
-        .btn-elite-black:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(0,0,0,0.2); background: #000; }
+        .btn-elite-black:hover { transform: translateY(-2px); background: #000; }
         .btn-elite-black:disabled { opacity: 0.5; filter: grayscale(1); transform: none; }
 
-        .elite-customer-box { background: #fff; border: 1.5px solid #f1f5f9; border-radius: 16px; padding: 1.25rem; display: flex; align-items: center; gap: 1.25rem; }
-        .customer-avatar { width: 44px; height: 44px; background: #fdf2f2; border: 1px solid #fee2e2; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--p-wine); }
+        .elite-customer-box { background: #fff; border: 1.5px solid #f1f5f9; border-radius: 14px; padding: 1rem; display: flex; align-items: center; gap: 1rem; }
+        .customer-avatar { width: 40px; height: 40px; background: #fdf2f2; border: 1px solid #fee2e2; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: var(--p-wine); }
 
-        .form-select-elite { height: 50px; width: 100%; border-radius: 14px; border: 1.5px solid #f1f5f9; padding: 0 1.25rem; font-weight: 700; font-size: 0.8rem; color: #1e293b; outline: none; appearance: none; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E") no-repeat right 1.25rem center / 1.1rem; }
+        .form-select-elite { height: 46px; width: 100%; border-radius: 12px; border: 1.5px solid #f1f5f9; padding: 0 1rem; font-weight: 700; font-size: 0.78rem; color: #1e293b; outline: none; appearance: none; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E") no-repeat right 1rem center / 1rem; }
 
-        .op-row { padding: 1rem; background: #fff; border-radius: 12px; border: 1px solid #f1f5f9; margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; transition: 0.2s; }
+        .op-row { padding: 0.8rem 1rem; background: #fff; border-radius: 10px; border: 1px solid #f1f5f9; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; transition: 0.2s; }
         
-        .total-display { margin-top: auto; padding: 1.5rem; background: #fff; border-radius: 18px; border: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+        .total-display { margin-top: auto; padding: 1.2rem; background: #fff; border-radius: 16px; border: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
 
-        .elite-subtotal-box { height: 50px; background: #fff; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-weight: 950; color: #1e293b; font-size: 0.85rem; border: 1.5px solid #f1f5f9; }
+        .elite-subtotal-box { height: 46px; background: #fff; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 950; color: #1e293b; font-size: 0.8rem; border: 1.5px solid #f1f5f9; }
 
         #ops-container { 
-            height: 240px; 
+            height: 200px; /* Reduced further to make cards shorter */
             overflow-y: auto; 
             padding-right: 5px;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
             display: flex;
             flex-direction: column;
             gap: 1px;
         }
-        #ops-container::-webkit-scrollbar { width: 4px; }
-        #ops-container::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
-        #ops-container::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        #ops-container::-webkit-scrollbar { width: 3px; }
+        #ops-container::-webkit-scrollbar-track { background: #f1f5f9; }
+        #ops-container::-webkit-scrollbar-thumb { background: #cbd5e1; }
 
-        #main-total-pts { font-size: 2rem; font-weight: 950; color: #1e293b; line-height: 1; }
+        #main-total-pts { font-size: 1.8rem; font-weight: 950; color: #1e293b; line-height: 1; }
 
         @media (max-width: 1100px) {
             .scan-wrapper { flex-direction: column; align-items: stretch; }
@@ -137,14 +135,12 @@
             <div class="scan-wrapper">
                 <input type="file" id="qr-input-file" accept="image/*" style="display: none;" onchange="onFileChange(event)">
 
-                <!-- PANEL IZQUIERDO -->
                 <div class="scan-left-panel">
                     <div class="elite-form-card">
                         <div class="elite-card-header">
                             <div class="elite-header-icon"><i class='bx bx-qr-scan'></i></div>
-                            <h3>SOLICITAR B&Uacute;SQUEDA</h3>
+                            <h3>B&Uacute;SQUEDA QR</h3>
                         </div>
-                        
                         <div class="elite-card-body">
                             <div>
                                 <label class="elite-label">M&eacute;todo de Lectura</label>
@@ -155,15 +151,14 @@
                                     </div>
                                     <div class="choice-btn" onclick="document.getElementById('qr-input-file').click()">
                                         <i class='bx bx-image-add'></i>
-                                        <span>GALERIA / QR</span>
+                                        <span>QR DESDE GALERIA</span>
                                     </div>
                                 </div>
                             </div>
-
                             <div>
                                 <label class="elite-label">B&uacute;squeda Manual</label>
                                 <div class="elite-input-wrapper">
-                                    <input type="tel" id="manual-dni" class="elite-input" placeholder="Ingresa DNI..." maxlength="8">
+                                    <input type="tel" id="manual-dni" class="elite-input" placeholder="DNI..." maxlength="8">
                                     <button class="btn-search-icon" onclick="buscarPorDni()" title="Buscar">
                                         <i class='bx bx-search'></i>
                                     </button>
@@ -180,46 +175,42 @@
                             </div>
                             <div class="elite-card-body" style="padding: 1rem;">
                                 <div id="reader"></div>
-                                <button class="btn-elite-black" onclick="stopScanner()" style="background: #f1f5f9; color: #475569; margin-top: 1rem; height: 40px; font-size: 0.75rem;">Cerrar Lector</button>
+                                <button class="btn-elite-black" onclick="stopScanner()" style="background: #f1f5f9; color: #475569; margin-top: 0.8rem; height: 35px; font-size: 0.7rem;">Cerrar</button>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- PANEL DERECHO -->
                 <div id="scan-right-panel" class="scan-right-panel">
-                    <div id="right-panel-content" style="height: 100%;">
-                        <!-- JS Loaded -->
-                    </div>
+                    <div id="right-panel-content" style="height: 100%;"></div>
                 </div>
 
                 <template id="tpl-main-form">
                     <div class="elite-form-card">
                         <div class="elite-card-header">
                             <div class="elite-header-icon"><i class='bx bx-user-circle'></i></div>
-                            <h3>ORDEN DE SUMA DE PUNTOS</h3>
+                            <h3>ORDEN DE SUMA</h3>
                         </div>
                         <div class="elite-card-content">
                             <div class="elite-card-main">
                                 <div>
-                                    <label class="elite-label">Cliente Detectado</label>
+                                    <label class="elite-label">Cliente</label>
                                     <div class="elite-customer-box">
                                         <div class="customer-avatar"><i class='bx bx-user'></i></div>
                                         <div>
-                                            <b id="res-name" style="display: block; font-size: 0.85rem; color: #1e293b;">- - -</b>
-                                            <span id="res-phone" style="font-size: 0.75rem; color: #64748b;">No detectado</span>
+                                            <b id="res-name" style="display: block; font-size: 0.8rem; color: #1e293b;">- - -</b>
+                                            <span id="res-phone" style="font-size: 0.7rem; color: #64748b;">No detectado</span>
                                         </div>
                                         <input type="hidden" id="client-id">
                                     </div>
                                 </div>
-
                                 <div>
-                                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
+                                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 0.8rem; margin-bottom: 1rem;">
                                         <div class="form-group">
                                             <label class="elite-label">Servicio</label>
                                             <select id="main-op-type" class="form-select-elite" onchange="updateSubtotal()">
                                                 <?php foreach ($operaciones as $op): ?>
-                                                    <option value="<?= $op['puntos'] ?>"><?= htmlspecialchars($op['nombre']) ?> (+<?= $op['puntos'] ?> pts)</option>
+                                                    <option value="<?= $op['puntos'] ?>"><?= htmlspecialchars($op['nombre']) ?> (+<?= $op['puntos'] ?>)</option>
                                                 <?php endforeach; ?>
                                             </select>
                                         </div>
@@ -232,10 +223,9 @@
                                             </select>
                                         </div>
                                     </div>
-
-                                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; align-items: end;">
+                                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 0.8rem; align-items: end;">
                                         <div class="form-group">
-                                            <label class="elite-label">Suma Parcial</label>
+                                            <label class="elite-label">Suma</label>
                                             <div id="main-op-unit" class="elite-subtotal-box">0 PTS</div>
                                         </div>
                                         <button class="btn-elite-black" onclick="addOperation()">A&Ntilde;ADIR</button>
@@ -244,25 +234,19 @@
                             </div>
 
                             <div class="elite-card-side">
-                                <label class="elite-label">Resumen de Puntos</label>
+                                <label class="elite-label">Resumen</label>
                                 <div id="ops-container">
-                                    <div style="text-align: center; color: #cbd5e1; padding: 3rem 1rem; font-size: 0.75rem;">
-                                        Lista vac&iacute;a
-                                    </div>
+                                    <div style="text-align: center; color: #cbd5e1; padding: 2rem 1rem; font-size: 0.7rem;">Vac&iacute;o</div>
                                 </div>
-
                                 <div class="total-display">
                                     <div>
-                                        <span class="elite-label" style="margin: 0; opacity: 0.6; font-size: 0.6rem;">Total Acumulado</span>
+                                        <span class="elite-label" style="margin: 0; opacity: 0.6; font-size: 0.55rem;">Ptos</span>
                                         <div id="main-total-pts">0</div>
                                     </div>
-                                    <b style="color: #b91c1c; font-size: 0.7rem; letter-spacing: 1px;">PUNTOS</b>
+                                    <b style="color: #b91c1c; font-size: 0.65rem;">PUNTOS</b>
                                 </div>
-
-                                <button id="save-all-btn" class="btn-elite-black" onclick="saveAll()" disabled style="margin-top: 1rem;">REGISTRAR</button>
-                                <div style="text-align: center; margin-top: 1rem;">
-                                    <button onclick="location.reload()" style="background: none; border: none; font-size: 0.65rem; font-weight: 900; color: #94a3b8; cursor: pointer; text-transform: uppercase;">Limpiar</button>
-                                </div>
+                                <button id="save-all-btn" class="btn-elite-black" onclick="saveAll()" disabled style="margin-top: 0.8rem;">REGISTRAR</button>
+                                <button onclick="location.reload()" style="background: none; border: none; font-size: 0.6rem; color: #94a3b8; cursor: pointer; text-transform: uppercase; margin-top: 0.5rem;">Limpiar</button>
                             </div>
                         </div>
                     </div>
@@ -272,13 +256,13 @@
                     <div class="elite-form-card">
                         <div class="elite-card-header" style="border-bottom-color: #fee2e2;">
                             <div class="elite-header-icon" style="background:#fef2f2; color:#ef4444;"><i class='bx bx-user-x' ></i></div>
-                            <h3>SIN RESULTADOS</h3>
+                            <h3>ERROR</h3>
                         </div>
-                        <div class="elite-card-body" style="text-align: center; justify-content: center; padding: 4rem 2rem;">
-                            <h2 style="font-weight: 950; color: #1e293b; font-size: 1.2rem; margin-bottom: 0.5rem;">No se encontr&oacute; al cliente</h2>
-                            <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 2.5rem;">Prueba con otro DNI o escanea el QR nuevamente.</p>
-                            <a href="<?= BASE_URL ?>clientes/nuevo" class="btn-elite-black" style="text-decoration: none; width: 220px; margin: 0 auto; display: flex; align-items: center; justify-content: center;">Crear Nuevo</a>
-                            <button onclick="initLayout()" style="background: none; border: none; font-size: 0.75rem; font-weight: 800; color: #94a3b8; margin-top: 2rem; cursor: pointer;">REINTENTAR</button>
+                        <div class="elite-card-body" style="text-align: center; justify-content: center; padding: 3rem 1.5rem;">
+                            <h2 style="font-weight: 950; color: #1e293b; font-size: 1.1rem; margin-bottom: 0.5rem;">No encontrado</h2>
+                            <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 2rem;">Verifica los datos e intenta de nuevo.</p>
+                            <a href="<?= BASE_URL ?>clientes/nuevo" class="btn-elite-black" style="text-decoration: none; width: 180px; margin: 0 auto; display: flex; align-items: center; justify-content: center;">Nuevo Cliente</a>
+                            <button onclick="initLayout()" style="background: none; border: none; font-size: 0.7rem; color: #94a3b8; margin-top: 1.5rem; cursor: pointer;">REINTENTAR</button>
                         </div>
                     </div>
                 </template>
@@ -309,7 +293,7 @@
             try {
                 await html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess);
             } catch (err) {
-                Swal.fire({ icon: 'error', title: 'C&aacute;mara no disponible' });
+                Swal.fire({ icon: 'error', title: 'Error' });
                 document.getElementById('qr-reader-container').style.display = 'none';
             }
         }
@@ -324,7 +308,7 @@
                 Swal.close();
                 onScanSuccess(decodedText);
             } catch (err) {
-                Swal.fire({ icon: 'error', title: 'Error', text: 'No se detect&oacute; QR.' });
+                Swal.fire({ icon: 'error', title: 'Error' });
             }
             event.target.value = '';
         }
@@ -353,7 +337,7 @@
         function buscarPorDni() {
             const dni = document.getElementById('manual-dni').value.trim();
             if (!/^\d{8}$/.test(dni)) {
-                Swal.fire({ icon: 'warning', title: 'DNI Inv&aacute;lido' });
+                Swal.fire({ icon: 'warning', title: 'Revisa DNI' });
                 return;
             }
             buscarCliente(dni);
@@ -416,7 +400,7 @@
         function renderOperations() {
             const container = document.getElementById('ops-container');
             if (operations.length === 0) {
-                container.innerHTML = `<div style="text-align: center; color: #cbd5e1; padding: 3rem 1rem; font-size: 0.75rem;">Lista vac&iacute;a</div>`;
+                container.innerHTML = `<div style="text-align: center; color: #cbd5e1; padding: 2rem 1rem; font-size: 0.7rem;">Vac&iacute;o</div>`;
                 document.getElementById('main-total-pts').innerText = '0';
                 document.getElementById('save-all-btn').disabled = true;
                 return;
