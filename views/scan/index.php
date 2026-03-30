@@ -19,8 +19,11 @@
         }
         
         .scan-left-panel { flex: 0 0 350px; }
-        .scan-right-panel { flex: 1; display: none; }
-        .scan-right-panel.active { display: block; animation: slideIn 0.5s ease-out; }
+        .scan-right-panel { flex: 1; }
+        
+        /* Placeholder state for right panel */
+        .scan-right-panel:not(.active) { opacity: 0.5; pointer-events: none; filter: grayscale(0.5); transition: 0.3s; }
+        .scan-right-panel.active { opacity: 1; pointer-events: auto; filter: none; animation: slideIn 0.5s ease-out; }
 
         @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
         
@@ -104,7 +107,7 @@
         }
     </style>
 </head>
-<body>
+<body onload="initLayout()">
 
     <?php include __DIR__ . '/../partials/sidebar_admin.php'; ?>
 
@@ -168,9 +171,8 @@
 
                 <!-- PANEL DERECHO: DETALLES DE OPERACIÓN -->
                 <div id="scan-right-panel" class="scan-right-panel">
-                    <!-- Contenido dinámico (Error o Formulario) -->
                     <div id="right-panel-content">
-                        <!-- Se llena vía JS -->
+                        <!-- Se precarga el template vía JS (initLayout) -->
                     </div>
                 </div>
 
@@ -189,8 +191,8 @@
                                 <div class="elite-customer-box">
                                     <div class="customer-avatar"><i class='bx bx-user'></i></div>
                                     <div>
-                                        <b id="res-name" style="display: block; font-size: 0.95rem; color: #1e293b;">-</b>
-                                        <span id="res-phone" style="font-size: 0.8rem; color: #64748b;">-</span>
+                                        <b id="res-name" style="display: block; font-size: 0.95rem; color: #1e293b;">- - -</b>
+                                        <span id="res-phone" style="font-size: 0.8rem; color: #64748b;">Esperando cliente...</span>
                                     </div>
                                     <input type="hidden" id="client-id">
                                 </div>
@@ -217,7 +219,7 @@
                                 <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.25rem; align-items: end; margin-bottom: 2rem;">
                                     <div class="form-group">
                                         <label class="elite-label">Subtotal</label>
-                                        <div id="main-op-unit" class="elite-subtotal-box">-</div>
+                                        <div id="main-op-unit" class="elite-subtotal-box">0 PTS</div>
                                     </div>
                                     <button class="btn-elite-black" onclick="addOperation()" style="margin: 0; height: 52px; border-radius: 12px;">
                                         A&Ntilde;ADIR A LISTA
@@ -252,16 +254,16 @@
                 <!-- TEMPLATE: ERROR NO ENCONTRADO -->
                 <template id="tpl-error">
                     <div class="elite-form-card">
-                        <div class="elite-card-header">
+                        <div class="elite-card-header" style="border-bottom-color: #fee2e2;">
                             <div class="elite-header-icon" style="background:#fef2f2; color:#ef4444; border-color:#fee2e2;"><i class='bx bx-user-x' ></i></div>
-                            <h3>CLIENTE NO REGISTRADO</h3>
+                            <h3 style="color: #991b1b;">CLIENTE NO ENCONTRADO</h3>
                         </div>
                         <div class="elite-card-body" style="text-align: center; padding: 4rem 3rem;">
                             <h2 style="font-weight: 900; color: #1e293b; font-size: 1.25rem; margin-bottom: 0.75rem;">No se encontr&oacute; al cliente</h2>
                             <p style="font-size: 0.85rem; color: #64748b; line-height: 1.6; margin-bottom: 2.5rem;">El c&oacute;digo o DNI no coincide con ningún registro. &iquest;Deseas crearlo ahora?</p>
                             
                             <a href="<?= BASE_URL ?>clientes/nuevo" class="btn-elite-black" style="text-decoration: none; display: flex; align-items: center; justify-content: center;">Nuevo Cliente</a>
-                            <button onclick="document.getElementById('scan-right-panel').classList.remove('active')" style="background: none; border: none; font-size: 0.75rem; font-weight: 800; color: #94a3b8; margin-top: 1.5rem; cursor: pointer; text-transform: uppercase;">Cerrar</button>
+                            <button onclick="initLayout()" style="background: none; border: none; font-size: 0.75rem; font-weight: 800; color: #94a3b8; margin-top: 1.5rem; cursor: pointer; text-transform: uppercase;">Volver</button>
                         </div>
                     </div>
                 </template>
@@ -277,6 +279,22 @@
         let html5QrCode;
         let operations = [];
         let running = false;
+
+        function initLayout() {
+            const rightPanel = document.getElementById('scan-right-panel');
+            const content = document.getElementById('right-panel-content');
+            
+            // Limpiar y cargar template inicial
+            content.innerHTML = '';
+            const tpl = document.getElementById('tpl-main-form').content.cloneNode(true);
+            content.appendChild(tpl);
+            
+            // Asegurar que el subtotal inicial diga 0
+            const unitBox = document.getElementById('main-op-unit');
+            if(unitBox) updateSubtotal();
+
+            rightPanel.classList.remove('active'); // Estado placeholder (opaco)
+        }
 
         async function initScanner() {
             document.getElementById('qr-reader-container').style.display = 'block';
@@ -352,23 +370,26 @@
                 });
                 const data = await res.json();
                 
-                content.innerHTML = '';
                 operations = [];
 
                 if (data.success) {
+                    // Si ya estaba cargado el form, solo actualizamos datos para no perder estados si fuera el caso
+                    // Pero para asegurar consistencia, recargamos el tpl y llenamos
+                    content.innerHTML = '';
                     const tpl = document.getElementById('tpl-main-form').content.cloneNode(true);
                     content.appendChild(tpl);
-                    
+
                     document.getElementById('res-name').innerText = data.cliente.nombre;
                     document.getElementById('res-phone').innerText = data.cliente.celular;
                     document.getElementById('client-id').value = data.cliente.id;
                     
-                    rightPanel.classList.add('active');
+                    rightPanel.classList.add('active'); // Activa el panel (se vuelve opaco y clickable)
                     updateSubtotal();
                 } else {
+                    content.innerHTML = '';
                     const tpl = document.getElementById('tpl-error').content.cloneNode(true);
                     content.appendChild(tpl);
-                    rightPanel.classList.add('active');
+                    rightPanel.classList.add('active'); // Mostrar el error también con brillo normal
                 }
             } catch (e) {
                 Swal.fire({ icon: 'error', title: 'Error' });
@@ -376,9 +397,12 @@
         }
 
         function updateSubtotal() {
-            const unit = parseInt(document.getElementById('main-op-type').value);
+            const select = document.getElementById('main-op-type');
+            if(!select) return;
+            const unit = parseInt(select.value);
             const qty = parseInt(document.getElementById('main-op-qty').value) || 1;
-            document.getElementById('main-op-unit').innerText = (unit * qty) + ' PTS';
+            const subtotalBox = document.getElementById('main-op-unit');
+            if(subtotalBox) subtotalBox.innerText = (unit * qty) + ' PTS';
         }
 
         function addOperation() {
