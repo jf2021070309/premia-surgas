@@ -14,12 +14,13 @@
         
         /* Layout Grid */
         .scan-wrapper { 
-            display: flex; gap: 2rem; align-items: flex-start; /* Removed stretch to avoid forced empty space */
+            display: flex; gap: 2rem; align-items: stretch;
             max-width: 1400px; margin: 1.5rem auto; padding: 0 1.5rem;
+            min-height: 550px;
         }
         
-        .scan-left-panel { flex: 0 0 350px; display: flex; flex-direction: column; gap: 1.5rem; }
-        .scan-right-panel { flex: 1; display: flex; flex-direction: column; gap: 1.5rem; }
+        .scan-left-panel { flex: 0 0 350px; display: flex; flex-direction: column; }
+        .scan-right-panel { flex: 1; display: flex; flex-direction: column; }
         
         /* Placeholder state for right panel */
         .scan-right-panel:not(.active) { opacity: 0.5; pointer-events: none; filter: grayscale(0.5); transition: 0.3s; }
@@ -31,78 +32,78 @@
         .elite-form-card { 
             background: white; border-radius: 20px; 
             border: 1px solid #e2e8f0; box-shadow: 0 10px 40px rgba(0,0,0,0.02);
-            overflow: hidden; width: 100%;
+            overflow: hidden; height: 100%; display: flex; flex-direction: column;
         }
         .elite-card-header { 
-            background: #fff; padding: 1.25rem 2rem; border-bottom: 1px solid #f1f5f9;
-            display: flex; align-items: center; gap: 1rem;
+            background: #fff; padding: 1.5rem 2rem; border-bottom: 1px solid #f1f5f9;
+            display: flex; align-items: center; gap: 1rem; flex-shrink: 0;
         }
         .elite-header-icon { 
-            width: 38px; height: 38px; background: #fffcfc; color: var(--p-wine); 
-            border-radius: 10px; display: flex; align-items: center; justify-content: center;
-            font-size: 1.3rem; border: 1px solid #fee2e2;
+            width: 42px; height: 42px; background: #fffcfc; color: var(--p-wine); 
+            border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; border: 1px solid #fee2e2;
         }
-        .elite-card-header h3 { margin: 0; font-size: 0.9rem; font-weight: 850; color: #1e293b; letter-spacing: -0.3px; text-transform: uppercase; }
+        .elite-card-header h3 { margin: 0; font-size: 0.95rem; font-weight: 850; color: #1e293b; letter-spacing: -0.3px; text-transform: uppercase; }
 
-        .elite-card-body { padding: 2rem; display: flex; flex-direction: column; gap: 1.5rem; }
+        .elite-card-body { padding: 2.5rem 2.5rem; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
 
         /* Two Column Layout (Inside Card) */
-        .elite-card-content { display: flex; flex-direction: row; align-items: stretch; }
-        .elite-card-main { flex: 1.2; padding: 2rem; border-right: 1px solid #f1f5f9; display: flex; flex-direction: column; gap: 1.5rem; }
-        .elite-card-side { flex: 1; padding: 2rem; background: #fafbfc; display: flex; flex-direction: column; gap: 1.5rem; }
+        .elite-card-content { display: flex; flex-direction: row; flex: 1; }
+        .elite-card-main { flex: 1.2; padding: 2.5rem; border-right: 1px solid #f1f5f9; display: flex; flex-direction: column; justify-content: space-between; }
+        .elite-card-side { flex: 1; padding: 2.5rem; background: #fafbfc; display: flex; flex-direction: column; }
 
-        .elite-label { display: block; font-size: 0.72rem; font-weight: 950; color: var(--p-wine); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.8rem; }
+        .elite-label { display: block; font-size: 0.72rem; font-weight: 950; color: var(--p-wine); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1.25rem; }
 
-        .choice-row { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+        .choice-row { display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
         .choice-btn { 
-            background: white; border: 1.5px solid #f1f5f9; border-radius: 16px; 
-            padding: 1.2rem; cursor: pointer; transition: 0.3s;
-            display: flex; flex-direction: row; align-items: center; gap: 1.25rem;
+            background: white; border: 1.5px solid #f1f5f9; border-radius: 20px; 
+            padding: 1.5rem; cursor: pointer; transition: 0.3s;
+            display: flex; flex-direction: row; align-items: center; gap: 1.5rem;
         }
-        .choice-btn:hover { border-color: var(--p-wine); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.03); }
-        .choice-btn i { font-size: 1.6rem; color: #b91c1c; }
-        .choice-btn span { font-size: 0.85rem; font-weight: 800; color: #1e293b; letter-spacing: 0.2px; }
+        .choice-btn:hover { border-color: var(--p-wine); transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.04); }
+        .choice-btn i { font-size: 2rem; color: #b91c1c; }
+        .choice-btn span { font-size: 0.9rem; font-weight: 850; color: #1e293b; letter-spacing: 0.2px; }
 
         .elite-input-wrapper { position: relative; display: flex; align-items: center; }
         .elite-input { 
-            flex: 1; height: 52px; padding: 0 3.5rem 0 1.25rem; border: 1.5px solid #f1f5f9; border-radius: 12px;
-            font-family: inherit; font-size: 0.9rem; font-weight: 600; color: #1e293b; outline: none; transition: 0.3s; background: #fdfdfd;
+            flex: 1; height: 58px; padding: 0 4.5rem 0 1.5rem; border: 1.5px solid #f1f5f9; border-radius: 15px;
+            font-family: inherit; font-size: 1rem; font-weight: 600; color: #1e293b; outline: none; transition: 0.3s; background: #fff;
         }
-        .elite-input::placeholder { color: #cbd5e1; font-weight: 500; font-size: 0.8rem; }
-        .elite-input:focus { border-color: var(--p-wine); background: #fff; }
+        .elite-input::placeholder { color: #cbd5e1; font-weight: 500; font-size: 0.9rem; }
+        .elite-input:focus { border-color: var(--p-wine); box-shadow: 0 0 0 4px rgba(128,0,0,0.06); }
 
         .btn-search-icon { 
-            position: absolute; right: 5px; width: 42px; height: 42px; border-radius: 10px; 
+            position: absolute; right: 6px; width: 46px; height: 46px; border-radius: 12px; 
             background: var(--p-wine); color: white; border: none; display: flex; 
-            align-items: center; justify-content: center; font-size: 1.3rem; cursor: pointer; transition: 0.3s;
+            align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; transition: 0.3s;
         }
 
         .btn-elite-black { 
             display: flex; align-items: center; justify-content: center;
-            background: #000; color: white; border: none; height: 55px; width: 100%;
-            border-radius: 50px; font-weight: 900; font-size: 0.85rem; text-transform: uppercase;
-            letter-spacing: 1.2px; cursor: pointer; transition: 0.3s;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+            background: #000; color: white; border: none; height: 60px; width: 100%;
+            border-radius: 60px; font-weight: 900; font-size: 0.9rem; text-transform: uppercase;
+            letter-spacing: 1.5px; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
         }
-        .btn-elite-black:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(0,0,0,0.2); background: #000; }
+        .btn-elite-black:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(0,0,0,0.25); background: #000; }
         .btn-elite-black:disabled { opacity: 0.5; filter: grayscale(1); transform: none; }
 
-        .elite-customer-box { background: #fff; border: 1.5px solid #f1f5f9; border-radius: 16px; padding: 1.25rem; display: flex; align-items: center; gap: 1.25rem; }
-        .customer-avatar { width: 48px; height: 48px; background: #fdf2f2; border: 1px solid #fee2e2; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; color: var(--p-wine); }
+        .elite-customer-box { background: #fff; border: 1.5px solid #f1f5f9; border-radius: 20px; padding: 1.5rem; display: flex; align-items: center; gap: 1.5rem; }
+        .customer-avatar { width: 55px; height: 55px; background: #fdf2f2; border: 1px solid #fee2e2; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: var(--p-wine); }
 
-        .form-select-elite { height: 52px; width: 100%; border-radius: 12px; border: 1.5px solid #f1f5f9; padding: 0 1.25rem; font-weight: 700; font-size: 0.9rem; color: #1e293b; outline: none; appearance: none; background: #fdfdfd url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E") no-repeat right 1.25rem center / 1.25rem; }
+        .form-select-elite { height: 58px; width: 100%; border-radius: 15px; border: 1.5px solid #f1f5f9; padding: 0 1.5rem; font-weight: 700; font-size: 1rem; color: #1e293b; outline: none; appearance: none; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E") no-repeat right 1.5rem center / 1.5rem; }
 
-        .op-row { padding: 1.2rem; background: #fff; border-radius: 12px; border: 1px solid #f1f5f9; margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; transition: 0.2s; }
+        .op-row { padding: 1.25rem; background: #fff; border-radius: 14px; border: 1px solid #f1f5f9; margin-bottom: 0.8rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; transition: 0.2s; }
         
-        .total-display { padding: 1.5rem; background: #fff; border-radius: 18px; border: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.01); }
+        .total-display { margin-top: auto; padding: 2rem; background: #fff; border-radius: 20px; border: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
 
-        .elite-subtotal-box { height: 52px; background: #fff; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 900; color: #1e293b; font-size: 0.9rem; border: 1.5px solid #f1f5f9; }
+        .elite-subtotal-box { height: 58px; background: #fff; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-weight: 900; color: #1e293b; font-size: 1.1rem; border: 1.5px solid #f1f5f9; }
 
         #ops-container { 
-            min-height: 100px;
-            max-height: 250px; 
+            height: 280px; 
             overflow-y: auto; 
-            padding-right: 5px;
+            padding-right: 8px;
+            margin-bottom: 1.5rem;
             display: flex;
             flex-direction: column;
             gap: 2px;
@@ -112,7 +113,7 @@
         #ops-container::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
 
         @media (max-width: 1100px) {
-            .scan-wrapper { flex-direction: column; }
+            .scan-wrapper { flex-direction: column; align-items: stretch; }
             .scan-left-panel { flex: 1; width: 100%; }
             .elite-card-content { flex-direction: column; }
             .elite-card-main { border-right: none; border-bottom: 1px solid #f1f5f9; }
@@ -139,28 +140,28 @@
                     <div class="elite-form-card">
                         <div class="elite-card-header">
                             <div class="elite-header-icon"><i class='bx bx-qr-scan'></i></div>
-                            <h3>B&uacute;squeda</h3>
+                            <h3>REGISTRAR OPERACI&Oacute;N</h3>
                         </div>
                         
                         <div class="elite-card-body">
                             <div>
-                                <label class="elite-label">M&eacute;todo QR</label>
+                                <label class="elite-label">M&eacute;todo de Lectura QR</label>
                                 <div class="choice-row">
                                     <div class="choice-btn" onclick="initScanner()">
-                                        <i class='bx bx-camera'></i>
-                                        <span>C&aacute;mara</span>
+                                        <div class="elite-header-icon" style="flex-shrink:0;"><i class='bx bx-camera'></i></div>
+                                        <span>USAR C&Aacute;MARA</span>
                                     </div>
                                     <div class="choice-btn" onclick="document.getElementById('qr-input-file').click()">
-                                        <i class='bx bx-image-add'></i>
-                                        <span>Galer&iacute;a</span>
+                                        <div class="elite-header-icon" style="flex-shrink:0;"><i class='bx bx-image-add'></i></div>
+                                        <span>GALERIA / QR</span>
                                     </div>
                                 </div>
                             </div>
 
                             <div>
-                                <label class="elite-label">Manual (DNI)</label>
+                                <label class="elite-label">B&uacute;squeda Manual (DNI)</label>
                                 <div class="elite-input-wrapper">
-                                    <input type="tel" id="manual-dni" class="elite-input" placeholder="8 dígitos..." maxlength="8">
+                                    <input type="tel" id="manual-dni" class="elite-input" placeholder="Ej. 12345678" maxlength="8">
                                     <button class="btn-search-icon" onclick="buscarPorDni()" title="Buscar cliente">
                                         <i class='bx bx-search'></i>
                                     </button>
@@ -169,15 +170,15 @@
                         </div>
                     </div>
 
-                    <div id="qr-reader-container" style="display: none; width: 100%;">
+                    <div id="qr-reader-container" style="display: none; height: 100%;">
                         <div class="elite-form-card">
                             <div class="elite-card-header">
                                 <div class="elite-header-icon"><i class='bx bx-camera'></i></div>
-                                <h3>Escaneando QR</h3>
+                                <h3>ESCANEANDO QR</h3>
                             </div>
                             <div class="elite-card-body" style="padding: 1rem;">
                                 <div id="reader"></div>
-                                <button class="btn-elite-black" onclick="stopScanner()" style="background: #f1f5f9; color: #475569; margin-top: 1rem; height: 40px; font-size: 0.75rem;">CERRAR</button>
+                                <button class="btn-elite-black" onclick="stopScanner()" style="background: #f1f5f9; color: #475569; margin-top: 1rem; height: 40px;">Cancelar</button>
                             </div>
                         </div>
                     </div>
@@ -185,8 +186,8 @@
 
                 <!-- PANEL DERECHO -->
                 <div id="scan-right-panel" class="scan-right-panel">
-                    <div id="right-panel-content">
-                        <!-- Templates inited via JS -->
+                    <div id="right-panel-content" style="height: 100%;">
+                        <!-- Content via JS -->
                     </div>
                 </div>
 
@@ -199,65 +200,66 @@
                         <div class="elite-card-content">
                             <div class="elite-card-main">
                                 <div>
-                                    <label class="elite-label">Cliente</label>
+                                    <label class="elite-label">Cliente Seleccionado</label>
                                     <div class="elite-customer-box">
                                         <div class="customer-avatar"><i class='bx bx-user'></i></div>
                                         <div>
-                                            <b id="res-name" style="display: block; font-size: 1rem; color: #1e293b; letter-spacing: -0.3px;">- - -</b>
-                                            <span id="res-phone" style="font-size: 0.8rem; color: #64748b; font-weight: 500;">Esperando...</span>
+                                            <b id="res-name" style="display: block; font-size: 1.15rem; color: #1e293b; letter-spacing: -0.4px;">- - -</b>
+                                            <span id="res-phone" style="font-size: 0.9rem; color: #64748b; font-weight: 500;">Esperando cliente...</span>
                                         </div>
                                         <input type="hidden" id="client-id">
                                     </div>
                                 </div>
 
-                                <div>
-                                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem;">
-                                        <div class="form-group">
-                                            <label class="elite-label">Servicio</label>
-                                            <select id="main-op-type" class="form-select-elite" onchange="updateSubtotal()">
-                                                <?php foreach ($operaciones as $op): ?>
-                                                    <option value="<?= $op['puntos'] ?>"><?= htmlspecialchars($op['nombre']) ?> (+<?= $op['puntos'] ?> pts)</option>
-                                                <?php endforeach; ?>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="elite-label">Cant.</label>
-                                            <select id="main-op-qty" class="form-select-elite" onchange="updateSubtotal()">
-                                                <?php for($i=1;$i<=10;$i++): ?>
-                                                    <option value="<?= $i ?>"><?= $i ?></option>
-                                                <?php endfor; ?>
-                                            </select>
-                                        </div>
+                                <div style="display: grid; grid-template-columns: 2.2fr 1fr; gap: 1.5rem;">
+                                    <div class="form-group">
+                                        <label class="elite-label">Tipo de Recarga</label>
+                                        <select id="main-op-type" class="form-select-elite" onchange="updateSubtotal()">
+                                            <?php foreach ($operaciones as $op): ?>
+                                                <option value="<?= $op['puntos'] ?>"><?= htmlspecialchars($op['nombre']) ?> (+<?= $op['puntos'] ?> pts)</option>
+                                            <?php endforeach; ?>
+                                        </select>
                                     </div>
-                                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.25rem; align-items: end;">
-                                        <div>
-                                            <label class="elite-label">Suma</label>
-                                            <div id="main-op-unit" class="elite-subtotal-box">0 PTS</div>
-                                        </div>
-                                        <button class="btn-elite-black" onclick="addOperation()">A&Ntilde;ADIR</button>
+                                    <div class="form-group">
+                                        <label class="elite-label">Cantidad</label>
+                                        <select id="main-op-qty" class="form-select-elite" onchange="updateSubtotal()">
+                                            <?php for($i=1;$i<=10;$i++): ?>
+                                                <option value="<?= $i ?>"><?= $i ?></option>
+                                            <?php endfor; ?>
+                                        </select>
                                     </div>
+                                </div>
+
+                                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem; align-items: end;">
+                                    <div class="form-group">
+                                        <label class="elite-label">Subtotal</label>
+                                        <div id="main-op-unit" class="elite-subtotal-box">0 PTS</div>
+                                    </div>
+                                    <button class="btn-elite-black" onclick="addOperation()">A&Ntilde;ADIR A LISTA</button>
                                 </div>
                             </div>
 
                             <div class="elite-card-side">
-                                <label class="elite-label">Resumen</label>
+                                <label class="elite-label">Resumen de Operaci&oacute;n</label>
                                 <div id="ops-container">
-                                    <div style="text-align: center; color: #cbd5e1; padding: 3rem 1rem; font-size: 0.8rem;">
-                                        <i class='bx bx-list-check' style="font-size: 2.2rem; opacity: 0.2; display: block; margin-bottom: 0.5rem;"></i>
-                                        Vac&iacute;o
+                                    <div style="text-align: center; color: #cbd5e1; padding: 4rem 1rem; font-weight: 500; font-size: 0.9rem;">
+                                        <i class='bx bx-list-check' style="font-size: 2.5rem; opacity: 0.25; display: block; margin-bottom: 1rem;"></i>
+                                        Lista vac&iacute;a
                                     </div>
                                 </div>
 
                                 <div class="total-display">
                                     <div>
-                                        <span class="elite-label" style="margin: 0; opacity: 0.6; font-size: 0.6rem;">Ptos Totales</span>
-                                        <div id="main-total-pts" style="font-size: 2.2rem; font-weight: 950; color: #1e293b; line-height: 1;">0</div>
+                                        <span class="elite-label" style="margin: 0; opacity: 0.65; font-size: 0.65rem;">Total Acumulado</span>
+                                        <div id="main-total-pts" style="font-size: 2.5rem; font-weight: 950; color: #1e293b; line-height: 1; margin-top: 0.4rem;">0</div>
                                     </div>
-                                    <b style="color: #b91c1c; font-size: 0.7rem; letter-spacing: 1px;">PUNTOS</b>
+                                    <div style="text-align: right; font-weight: 900; color: #b91c1c; font-size: 0.75rem; letter-spacing: 1.5px;">PUNTOS</div>
                                 </div>
 
-                                <button id="save-all-btn" class="btn-elite-black" onclick="saveAll()" disabled>REGISTRAR</button>
-                                <button onclick="location.reload()" style="background: none; border: none; font-size: 0.65rem; font-weight: 900; color: #94a3b8; cursor: pointer; text-transform: uppercase;">Cancelar</button>
+                                <button id="save-all-btn" class="btn-elite-black" onclick="saveAll()" disabled style="margin-top: 1.5rem;">REGISTRAR</button>
+                                <div style="text-align: center; margin-top: 1.5rem;">
+                                    <button onclick="location.reload()" style="background: none; border: none; font-size: 0.75rem; font-weight: 900; color: #94a3b8; cursor: pointer; text-transform: uppercase; letter-spacing: 1px;">Cancelar todo</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -269,15 +271,14 @@
                             <div class="elite-header-icon" style="background:#fef2f2; color:#ef4444; border-color:#fee2e2;"><i class='bx bx-user-x' ></i></div>
                             <h3 style="color: #991b1b;">SIN RESULTADOS</h3>
                         </div>
-                        <div class="elite-card-body" style="text-align: center; padding: 4rem 2rem;">
-                            <h2 style="font-weight: 900; color: #1e293b; font-size: 1.3rem; margin-bottom: 0.5rem;">No encontrado</h2>
-                            <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 2.5rem;">Verifica los datos e intenta de nuevo.</p>
-                            <a href="<?= BASE_URL ?>clientes/nuevo" class="btn-elite-black" style="text-decoration: none; display: flex; width: 220px; margin: 0 auto;">Nuevo Cliente</a>
-                            <button onclick="initLayout()" style="background: none; border: none; font-size: 0.75rem; font-weight: 800; color: #94a3b8; margin-top: 1.5rem; cursor: pointer;">VOLVER</button>
+                        <div class="elite-card-body" style="text-align: center; justify-content: center;">
+                            <h2 style="font-weight: 950; color: #1e293b; font-size: 1.6rem; margin-bottom: 1rem;">No encontrado</h2>
+                            <p style="font-size: 1rem; color: #64748b; margin-bottom: 3rem;">El c&oacute;digo ingresado no coincide con ningún cliente.</p>
+                            <a href="<?= BASE_URL ?>clientes/nuevo" class="btn-elite-black" style="text-decoration: none; width: 280px; margin: 0 auto; display: flex; align-items: center; justify-content: center;">Nuevo Cliente</a>
+                            <button onclick="initLayout()" style="background: none; border: none; font-size: 0.8rem; font-weight: 800; color: #94a3b8; margin-top: 2rem; cursor: pointer;">VOLVER</button>
                         </div>
                     </div>
                 </template>
-
             </div>
         </div>
     </div>
@@ -301,7 +302,7 @@
         async function initScanner() {
             document.getElementById('qr-reader-container').style.display = 'block';
             if (!html5QrCode) html5QrCode = new Html5Qrcode("reader");
-            const config = { fps: 20, qrbox: { width: 250, height: 250 }, aspectRatio: 1.0 };
+            const config = { fps: 20, qrbox: { width: 280, height: 280 }, aspectRatio: 1.0 };
             try {
                 await html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess);
             } catch (err) {
@@ -412,7 +413,7 @@
         function renderOperations() {
             const container = document.getElementById('ops-container');
             if (operations.length === 0) {
-                container.innerHTML = `<div style="text-align: center; color: #cbd5e1; padding: 3rem 1rem; font-size: 0.8rem;"><i class='bx bx-list-check' style="font-size: 2.2rem; opacity: 0.2; display: block; margin-bottom: 0.5rem;"></i>Vac&iacute;o</div>`;
+                container.innerHTML = `<div style="text-align: center; color: #cbd5e1; padding: 4rem 1rem; font-weight: 500; font-size: 0.9rem;"><i class='bx bx-list-check' style="font-size: 2.5rem; opacity: 0.25; display: block; margin-bottom: 1rem;"></i>Lista vac&iacute;a</div>`;
                 document.getElementById('main-total-pts').innerText = '0';
                 document.getElementById('save-all-btn').disabled = true;
                 return;
@@ -436,7 +437,7 @@
             if (total <= 0) return;
             running = true;
             const btn = document.getElementById('save-all-btn');
-            btn.innerHTML = "...";
+            btn.innerHTML = "REGISTRANDO...";
             btn.disabled = true;
             try {
                 const detalleString = operations.map(op => `${op.name} x${op.qty} (+${op.subtotal} pts)`).join(', ');
@@ -447,7 +448,7 @@
                 });
                 const data = await res.json();
                 if (data.success) {
-                    Swal.fire({ icon: 'success', title: '&iexcl;Exito!', timer: 1500, showConfirmButton: false }).then(() => window.location.href = baseUrl + 'panel');
+                    Swal.fire({ icon: 'success', title: '&iexcl;Puntos Sumados!', timer: 1500, showConfirmButton: false }).then(() => window.location.href = baseUrl + 'panel');
                 } else {
                     Swal.fire({ icon: 'error', title: 'Error', text: data.message });
                     running = false; btn.innerHTML = "REGISTRAR"; btn.disabled = false;
