@@ -116,80 +116,62 @@
                 <!-- Input de archivo oculto para escaneo desde galería -->
                 <input type="file" id="qr-input-file" accept="image/*" style="display: none;" onchange="onFileChange(event)">
 
-                <!-- [PANTALLA 1] — INICIO -->
-                <div id="screen-start" class="v-screen active">
-                    <div class="elite-form-card">
-                        <div class="elite-card-header">
-                            <div class="elite-header-icon"><i class='bx bx-qr-scan'></i></div>
-                            <h3>REGISTRAR OPERACI&Oacute;N</h3>
-                        </div>
-                        
-                        <div class="elite-card-body">
-                            <label class="elite-label">M&eacute;todo de Lectura QR</label>
-                            <div class="choice-row">
-                                <div class="choice-btn" onclick="initScanner()">
-                                    <i class='bx bx-camera'></i>
-                                    <span>USAR C&Aacute;MARA</span>
-                                </div>
-                                <div class="choice-btn" onclick="document.getElementById('qr-input-file').click()">
-                                    <i class='bx bx-image-add'></i>
-                                    <span>GALERIA / QR</span>
-                                </div>
-                            </div>
-
-                            <label class="elite-label">B&uacute;squeda Manual (DNI)</label>
-                            <div class="elite-input-wrapper">
-                                <i class='bx bx-id-card icon-dni'></i>
-                                <input type="tel" id="manual-dni" class="elite-input" placeholder="Ej. 12345678" maxlength="8">
-                                <button class="btn-search-icon" onclick="buscarPorDni()" title="Buscar cliente">
-                                    <i class='bx bx-search'></i>
-                                </button>
-                            </div>
-                        </div>
+                <div class="elite-form-card">
+                    <div class="elite-card-header">
+                        <div class="elite-header-icon"><i class='bx bx-qr-scan'></i></div>
+                        <h3 id="panel-title">REGISTRAR OPERACIÓN</h3>
                     </div>
-                </div>
 
-                <!-- [PANTALLA 2] — SCANNER -->
-                <div id="screen-scan" class="v-screen">
-                    <div class="elite-form-card">
-                        <div class="elite-card-header">
-                            <div class="elite-header-icon"><i class='bx bx-camera'></i></div>
-                            <h3>LECTOR QR EN l&Iacute;NEA</h3>
-                        </div>
-                        <div class="elite-card-body" style="padding: 1.5rem;">
-                            <div id="reader"></div>
-                            <div style="text-align: center; margin-top: 1rem;">
-                                <p style="font-size: 0.8rem; color: #64748b; font-weight: 500;">Apunte su c&aacute;mara hacia el QR del cliente</p>
+                    <div class="elite-card-content">
+                        <!-- PANEL IZQUIERDO: BÚSQUEDA Y FORMULARIO -->
+                        <div class="elite-card-main">
+                            
+                            <!-- SECCIÓN: BÚSQUEDA -->
+                            <div id="search-section">
+                                <label class="elite-label">M&eacute;todo de Lectura QR</label>
+                                <div class="choice-row" style="gap: 1.25rem; margin-bottom: 2rem;">
+                                    <div class="choice-btn" onclick="initScanner()" style="padding: 1.5rem;">
+                                        <i class='bx bx-camera' style="font-size: 1.8rem;"></i>
+                                        <span style="font-size: 0.75rem;">C&Aacute;MARA</span>
+                                    </div>
+                                    <div class="choice-btn" onclick="document.getElementById('qr-input-file').click()" style="padding: 1.5rem;">
+                                        <i class='bx bx-image-add' style="font-size: 1.8rem;"></i>
+                                        <span style="font-size: 0.75rem;">GALER&Iacute;A</span>
+                                    </div>
+                                </div>
+
+                                <label class="elite-label">B&uacute;squeda Manual (DNI)</label>
+                                <div class="elite-input-wrapper" style="margin-bottom: 2.5rem;">
+                                    <i class='bx bx-id-card icon-dni'></i>
+                                    <input type="tel" id="manual-dni" class="elite-input" placeholder="Ej. 12345678" maxlength="8">
+                                    <button class="btn-search-icon" onclick="buscarPorDni()" title="Buscar cliente">
+                                        <i class='bx bx-search'></i>
+                                    </button>
+                                </div>
+
+                                <!-- Contenedor de cámara embebido -->
+                                <div id="reader-container" style="display: none; margin-bottom: 2rem; animation: smoothReveal 0.3s ease;">
+                                    <div id="reader" style="border-radius: 16px; overflow: hidden; border: 2px solid #f1f5f9;"></div>
+                                    <div style="text-align: center; margin-top: 1rem;">
+                                        <button class="btn-elite-black" onclick="stopScanner()" style="width: auto; padding: 0 2rem; background: #f1f5f9; color: #475569; height: 35px; font-size: 0.65rem; box-shadow: none; border: 1px solid #e2e8f0;">CANCELAR ESCANEO</button>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div style="padding-bottom: 2rem; text-align: center;">
-                            <button class="btn-elite-black" onclick="stopScanner()" style="background: #f1f5f9; color: #475569;">Cancelar</button>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- [PANTALLA 3] — REGISTRO ACTIVADO -->
-                <div id="screen-main" class="v-screen">
-                    <div class="elite-form-card">
-                        <div class="elite-card-header">
-                            <div class="elite-header-icon"><i class='bx bx-user-circle'></i></div>
-                            <h3>ORDEN DE SUMA DE PUNTOS</h3>
-                        </div>
-
-                        <div class="elite-card-content">
-                            <!-- PANEL IZQUIERDO -->
-                            <div class="elite-card-main">
+                            <!-- SECCIÓN: FORMULARIO (DINÁMICO) -->
+                            <div id="form-section" style="display: none; border-top: 1px dashed #f1f5f9; padding-top: 2rem; animation: smoothReveal 0.4s ease-out;">
                                 <label class="elite-label">Cliente Seleccionado</label>
-                                <div class="elite-customer-box">
+                                <div class="elite-customer-box" style="margin-bottom: 1.5rem;">
                                     <div class="customer-avatar"><i class='bx bx-user'></i></div>
-                                    <div>
+                                    <div style="flex: 1;">
                                         <b id="res-name" style="display: block; font-size: 0.95rem; color: #1e293b;">-</b>
                                         <span id="res-phone" style="font-size: 0.8rem; color: #64748b;">-</span>
                                     </div>
+                                    <button onclick="resetFlow()" style="background: none; color: #94a3b8; border: none; font-size: 1.2rem; cursor: pointer;"><i class='bx bx-x-circle'></i></button>
                                     <input type="hidden" id="client-id">
                                 </div>
 
-                                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.25rem; margin-bottom: 1.5rem;">
+                                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem;">
                                     <div class="form-group">
                                         <label class="elite-label">Tipo de Recarga</label>
                                         <select id="main-op-type" class="form-select-elite" onchange="updateSubtotal()">
@@ -208,7 +190,7 @@
                                     </div>
                                 </div>
 
-                                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.25rem; align-items: end; margin-bottom: 2rem;">
+                                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.25rem; align-items: end; margin-bottom: 1rem;">
                                     <div class="form-group">
                                         <label class="elite-label">Subtotal</label>
                                         <div id="main-op-unit" class="elite-subtotal-box">-</div>
@@ -218,33 +200,37 @@
                                     </button>
                                 </div>
                             </div>
+                        </div>
 
-                            <!-- PANEL DERECHO -->
-                            <div class="elite-card-side">
-                                <label class="elite-label">Resumen de Operaci&oacute;n</label>
-                                <div id="ops-container" style="min-height: 120px; overflow-y: auto; max-height: 220px; margin-bottom: 1.5rem;">
-                                    <!-- Dinámico -->
+                        <!-- PANEL DERECHO: RESUMEN -->
+                        <div class="elite-card-side">
+                            <label class="elite-label">Resumen de Operaci&oacute;n</label>
+                            <div id="ops-container" style="flex: 1; min-height: 150px; overflow-y: auto; max-height: 350px; margin-bottom: 1.5rem;">
+                                <!-- PLACEHOLDER -->
+                                <div id="summary-empty" style="text-align: center; color: #94a3b8; padding-top: 5rem; animation: smoothReveal 0.5s ease;">
+                                    <i class='bx bx-list-check' style="font-size: 3.5rem; opacity: 0.15; display: block; margin-bottom: 1rem;"></i>
+                                    <p style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">SIN OPERACIONES</p>
                                 </div>
+                            </div>
 
-                                <div class="total-display" style="margin-bottom: 2rem;">
+                            <!-- FOOTER DERECHO (DINÁMICO) -->
+                            <div id="summary-footer" style="display: none; border-top: 1px solid #e2e8f0; padding-top: 1.5rem; animation: smoothReveal 0.4s ease;">
+                                <div class="total-display" style="margin-bottom: 2rem; border-color: #f1f5f9;">
                                     <div>
-                                        <span class="elite-label" style="margin: 0; opacity: 0.6;">Total Acumulado</span>
+                                        <span class="elite-label" style="margin: 0; opacity: 0.5; font-size: 0.65rem;">Total Acumulado</span>
                                         <div id="main-total-pts" style="font-size: 2.2rem; font-weight: 950; color: #1e293b; line-height: 1; margin-top: 0.2rem;">0</div>
                                     </div>
                                     <div style="text-align: right; font-weight: 800; color: var(--p-wine); font-size: 0.8rem; letter-spacing: 1px;">PUNTOS</div>
                                 </div>
 
                                 <button id="save-all-btn" class="btn-elite-black" onclick="saveAll()" style="width: 100%;">REGISTRAR</button>
-                                <div style="text-align: center; margin-top: 1rem;">
-                                    <button onclick="location.reload()" style="background: none; border: none; font-size: 0.65rem; font-weight: 800; color: #94a3b8; cursor: pointer; text-transform: uppercase;">Cancelar todo</button>
+                                <div style="text-align: center; margin-top: 1.25rem;">
+                                    <button onclick="resetFlow()" style="background: none; border: none; font-size: 0.65rem; font-weight: 800; color: #94a3b8; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px;">Cancelar todo</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- [PANTALLA 4] — NO ENCONTRADO -->
-                <div id="screen-error" class="v-screen">
                     <div class="elite-form-card">
                         <div class="elite-card-header">
                             <div class="elite-header-icon" style="background:#fef2f2; color:#ef4444; border-color:#fee2e2;"><i class='bx bx-user-x' ></i></div>
@@ -284,25 +270,68 @@
                 container.classList.remove('wide');
             }
 
-            const subtitles = {
-                'screen-start': '&iexcl;Puntaje asignado, cliente feliz!',
-                'screen-scan': 'Lectura de C&oacute;digo QR',
-                'screen-main': 'Calculando puntos ganados',
-                'screen-error': 'Lo sentimos, no encontramos el registro'
-            };
-            document.querySelector('.page-subtitle').innerHTML = subtitles[id] || 'Panel de Gesti&oacute;n';
+        // --- LÓGICA DE NAVEGACIÓN INTERNA ---
+        function setFormState(active) {
+            const search = document.getElementById('search-section');
+            const form = document.getElementById('form-section');
+            const footer = document.getElementById('summary-footer');
+            const empty = document.getElementById('summary-empty');
+            const title = document.getElementById('panel-title');
+
+            if (active) {
+                search.style.display = 'none';
+                form.style.display = 'block';
+                title.innerText = 'ORDEN DE SUMA DE PUNTOS';
+            } else {
+                search.style.display = 'block';
+                form.style.display = 'none';
+                title.innerText = 'REGISTRAR OPERACIÓN';
+            }
         }
 
+        function resetFlow() {
+            setFormState(false);
+            stopScanner();
+            operations = [];
+            renderOperations();
+            document.getElementById('manual-dni').value = '';
+        }
+
+        // --- SCANNER ---
         async function initScanner() {
-            showScreen('screen-scan');
-            if (!html5QrCode) html5QrCode = new Html5Qrcode("reader");
-            const config = { fps: 20, qrbox: { width: 280, height: 280 }, aspectRatio: 1.0 };
+            document.getElementById('reader-container').style.display = 'block';
+            if (!html5QrCode) {
+                html5QrCode = new Html5Qrcode("reader");
+            }
+            
+            const config = { fps: 10, qrbox: { width: 250, height: 250 } };
             try {
                 await html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess);
             } catch (err) {
-                Swal.fire({ icon: 'error', title: 'C&aacute;mara no disponible' });
-                showScreen('screen-start');
+                Swal.fire('Error', 'No se pudo acceder a la c&aacute;mara', 'error');
             }
+        }
+
+        function stopScanner() {
+            if (html5QrCode && html5QrCode.isScanning) {
+                html5QrCode.stop().then(() => {
+                    document.getElementById('reader-container').style.display = 'none';
+                });
+            } else {
+                document.getElementById('reader-container').style.display = 'none';
+            }
+        }
+
+        function onScanSuccess(decodedText) {
+            let codigo = decodedText;
+            if (decodedText.includes('c=')) {
+                const urlParams = new URLSearchParams(decodedText.split('?')[1]);
+                codigo = urlParams.get('c');
+            } else if (decodedText.includes('/')) {
+                codigo = decodedText.split('/').pop();
+            }
+            stopScanner();
+            buscarCliente(codigo);
         }
 
         async function onFileChange(event) {
@@ -320,32 +349,11 @@
             event.target.value = '';
         }
 
-        function stopScanner() {
-            if (html5QrCode) html5QrCode.stop().then(() => showScreen('screen-start'));
-            else showScreen('screen-start');
-        }
-
-        function onScanSuccess(decodedText) {
-            let codigo = decodedText;
-            if (decodedText.includes('c=')) {
-                const urlParams = new URLSearchParams(decodedText.split('?')[1]);
-                codigo = urlParams.get('c');
-            } else if (decodedText.includes('/')) {
-                codigo = decodedText.split('/').pop();
-            }
-
-            if (html5QrCode && html5QrCode.getState() === 2) {
-                html5QrCode.stop().then(() => buscarCliente(codigo));
-            } else {
-                buscarCliente(codigo);
-            }
-        }
-
+        // --- BÚSQUEDA ---
         function buscarPorDni() {
             const dni = document.getElementById('manual-dni').value.trim();
             if (!/^\d{8}$/.test(dni)) {
-                Swal.fire({ icon: 'warning', title: 'DNI Inv&aacute;lido' });
-                return;
+                return Swal.fire({ icon: 'warning', title: 'DNI Inv&aacute;lido', text: 'Ingrese un DNI de 8 dígitos.' });
             }
             buscarCliente(dni);
         }
@@ -360,21 +368,29 @@
                 const data = await res.json();
                 if (data.success) {
                     document.getElementById('res-name').innerText = data.cliente.nombre;
-                    document.getElementById('res-phone').innerText = data.cliente.celular;
+                    document.getElementById('res-phone').innerText = data.cliente.celular || (data.cliente.dni ? 'DNI: ' + data.cliente.dni : '-');
                     document.getElementById('client-id').value = data.cliente.id;
-                    showScreen('screen-main');
+                    setFormState(true);
                     updateSubtotal();
                 } else {
-                    showScreen('screen-error');
+                    Swal.fire({
+                        title: 'Cliente no registrado',
+                        text: '¿Deseas crear un nuevo cliente?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Sí, crear',
+                        confirmButtonColor: '#000'
+                    }).then(r => { if(r.isConfirmed) window.location.href = baseUrl + 'clientes/nuevo'; });
                 }
             } catch (e) {
-                Swal.fire({ icon: 'error', title: 'Error' });
-                showScreen('screen-start');
+                Swal.fire({ icon: 'error', title: 'Error de servidor' });
             }
         }
 
+        // --- OPERACIONES ---
         function updateSubtotal() {
-            const unit = parseInt(document.getElementById('main-op-type').value);
+            const select = document.getElementById('main-op-type');
+            const unit = parseInt(select.value);
             const qty = parseInt(document.getElementById('main-op-qty').value) || 1;
             document.getElementById('main-op-unit').innerText = (unit * qty) + ' PTS';
         }
@@ -385,8 +401,13 @@
             const unit = parseInt(select.value);
             const qty = parseInt(document.getElementById('main-op-qty').value) || 1;
             const subtotal = unit * qty;
+            
             operations.push({ name: typeName, unit, qty, subtotal });
             renderOperations();
+
+            // Reset qty for next
+            document.getElementById('main-op-qty').selectedIndex = 0;
+            updateSubtotal();
         }
 
         function removeOperation(index) {
@@ -396,29 +417,41 @@
 
         function renderOperations() {
             const container = document.getElementById('ops-container');
+            const footer = document.getElementById('summary-footer');
+            const empty = document.getElementById('summary-empty');
+            
+            container.innerHTML = '';
+            let total = 0;
+
             if (operations.length === 0) {
-                container.innerHTML = '<div style="text-align: center; color: #cbd5e1; padding: 1rem; font-weight: 500; font-size: 0.8rem;">Lista vac&iacute;a</div>';
+                empty.style.display = 'block';
+                footer.style.display = 'none';
+                container.appendChild(empty);
                 document.getElementById('main-total-pts').innerText = '0';
-                document.getElementById('save-all-btn').disabled = true;
                 return;
             }
-            let html = '';
-            let total = 0;
+
+            empty.style.display = 'none';
+            footer.style.display = 'block';
+
             operations.forEach((op, i) => {
                 total += op.subtotal;
-                html += `
-                    <div class="op-row">
-                        <div style="font-weight: 700;">${op.name} <span style="color:#94a3b8; font-weight:500;">x${op.qty}</span></div>
-                        <div style="display: flex; align-items: center; gap: 0.8rem;">
-                            <div style="font-weight: 800; color: var(--p-orange);">+${op.subtotal}</div>
-                            <i class='bx bx-x' onclick="removeOperation(${i})" style="cursor:pointer; color:#94a3b8; font-size:1.1rem;"></i>
-                        </div>
+                const div = document.createElement('div');
+                div.className = 'op-row';
+                div.innerHTML = `
+                    <div style="flex: 1;">
+                        <span style="font-weight: 800; color: #1e293b;">${op.name}</span>
+                        <span style="color: #94a3b8; font-size: 0.75rem; margin-left: 0.5rem;">x${op.qty}</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <b style="color: var(--p-wine);">+${op.subtotal}</b>
+                        <button onclick="removeOperation(${i})" style="background: none; border: none; color: #cbd5e1; cursor: pointer; font-size: 1.1rem; padding: 0.2rem;"><i class='bx bx-x'></i></button>
                     </div>
                 `;
+                container.appendChild(div);
             });
-            container.innerHTML = html;
+
             document.getElementById('main-total-pts').innerText = total;
-            document.getElementById('save-all-btn').disabled = false;
         }
 
         async function saveAll() {
@@ -429,7 +462,8 @@
 
             running = true;
             const btn = document.getElementById('save-all-btn');
-            btn.innerHTML = "REGISTRANDO...";
+            const originalText = btn.innerText;
+            btn.innerText = "REGISTRANDO...";
             btn.disabled = true;
 
             try {
@@ -442,19 +476,19 @@
                 const data = await res.json();
                 if (data.success) {
                     Swal.fire({
-                        icon: 'success', title: '&iexcl;Suma Exitosa!', text: 'El saldo del cliente ha sido actualizado.',
-                        timer: 2000, showConfirmButton: false
-                    }).then(() => window.location.href = baseUrl + 'panel');
+                        icon: 'success', title: '&iexcl;Puntos Sumados!', text: data.message || 'El saldo ha sido actualizado.',
+                        confirmButtonColor: '#000'
+                    }).then(() => resetFlow());
                 } else {
                     Swal.fire({ icon: 'error', title: 'Error', text: data.message });
                     running = false;
-                    btn.innerHTML = "REGISTRAR";
+                    btn.innerText = originalText;
                     btn.disabled = false;
                 }
             } catch (e) {
-                Swal.fire({ icon: 'error', title: 'Error' });
+                Swal.fire({ icon: 'error', title: 'Error de servidor' });
                 running = false;
-                btn.innerHTML = "REGISTRAR";
+                btn.innerText = originalText;
                 btn.disabled = false;
             }
         }
