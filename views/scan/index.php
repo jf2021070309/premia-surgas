@@ -14,12 +14,13 @@
         
         /* Layout Grid */
         .scan-wrapper { 
-            display: flex; gap: 2rem; align-items: flex-start;
+            display: flex; gap: 2rem; align-items: stretch;
             max-width: 1400px; margin: 1.5rem auto; padding: 0 1.5rem;
+            min-height: 550px;
         }
         
-        .scan-left-panel { flex: 0 0 350px; }
-        .scan-right-panel { flex: 1; }
+        .scan-left-panel { flex: 0 0 350px; display: flex; flex-direction: column; gap: 1.5rem; }
+        .scan-right-panel { flex: 1; display: flex; flex-direction: column; }
         
         /* Placeholder state for right panel */
         .scan-right-panel:not(.active) { opacity: 0.5; pointer-events: none; filter: grayscale(0.5); transition: 0.3s; }
@@ -31,11 +32,12 @@
         .elite-form-card { 
             background: white; border-radius: 20px; 
             border: 1px solid #e2e8f0; box-shadow: 0 10px 40px rgba(0,0,0,0.02);
-            overflow: hidden; margin-bottom: 2rem;
+            overflow: hidden; height: 100%;
+            display: flex; flex-direction: column;
         }
         .elite-card-header { 
             background: #fff; padding: 1.5rem 2rem; border-bottom: 1px solid #f1f5f9;
-            display: flex; align-items: center; gap: 1rem;
+            display: flex; align-items: center; gap: 1rem; flex-shrink: 0;
         }
         .elite-header-icon { 
             width: 38px; height: 38px; background: #fffcfc; color: var(--p-wine); 
@@ -44,10 +46,10 @@
         }
         .elite-card-header h3 { margin: 0; font-size: 0.9rem; font-weight: 900; color: #1e293b; letter-spacing: -0.5px; text-transform: uppercase; }
 
-        .elite-card-body { padding: 2rem; }
+        .elite-card-body { padding: 2rem; flex: 1; display: flex; flex-direction: column; }
 
         /* Two Column Layout (Inside Card) */
-        .elite-card-content { display: flex; flex-direction: row; }
+        .elite-card-content { display: flex; flex-direction: row; flex: 1; }
         .elite-card-main { flex: 1.2; padding: 2.5rem; border-right: 1px solid #f1f5f9; }
         .elite-card-side { flex: 1; padding: 2.5rem; background: #fafbfc; display: flex; flex-direction: column; }
 
@@ -92,15 +94,31 @@
 
         .form-select-elite { height: 52px; width: 100%; border-radius: 12px; border: 1.5px solid #f1f5f9; padding: 0 1.25rem; font-weight: 700; font-size: 0.85rem; color: #1e293b; outline: none; appearance: none; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E") no-repeat right 1.25rem center / 1.25rem; }
 
-        .op-row { padding: 1.2rem; background: #fff; border-radius: 14px; border: 1px solid #f1f5f9; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; }
-        .total-display { margin-top: auto; padding: 2rem; background: #fff; border-radius: 20px; border: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; }
+        .op-row { padding: 1.2rem; background: #fff; border-radius: 12px; border: 1px solid #f1f5f9; margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; transition: 0.2s; }
+        .op-row:hover { border-color: #e2e8f0; background: #fafafa; }
+        
+        .total-display { margin-top: auto; padding: 1.5rem 2rem; background: #fff; border-radius: 20px; border: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
 
         .elite-subtotal-box { height: 52px; background: #fff; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 800; color: #1e293b; font-size: 0.9rem; border: 1.5px solid #f1f5f9; }
 
         #reader { width: 100%; border-radius: 16px; overflow: hidden; background: #000; }
 
+        /* Custom Scrollbar for Operations List */
+        #ops-container { 
+            height: 260px; /* Fixed height as requested */
+            overflow-y: auto; 
+            padding-right: 5px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        #ops-container::-webkit-scrollbar { width: 4px; }
+        #ops-container::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
+        #ops-container::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
         @media (max-width: 1100px) {
-            .scan-wrapper { flex-direction: column; }
+            .scan-wrapper { flex-direction: column; align-items: stretch; }
             .scan-left-panel { flex: 1; width: 100%; }
             .elite-card-content { flex-direction: column; }
             .elite-card-main { border-right: none; border-bottom: 1px solid #f1f5f9; }
@@ -124,7 +142,7 @@
                 <input type="file" id="qr-input-file" accept="image/*" style="display: none;" onchange="onFileChange(event)">
 
                 <!-- PANEL IZQUIERDO: BÚSQUEDA Y SCAN -->
-                <div class="scan-left-panel">
+                <div class="scan-left-panel" id="left-panel-stack">
                     <div class="elite-form-card">
                         <div class="elite-card-header">
                             <div class="elite-header-icon"><i class='bx bx-qr-scan'></i></div>
@@ -155,7 +173,7 @@
                     </div>
 
                     <!-- Lector QR (Sustituye contenido si se activa cámara) -->
-                    <div id="qr-reader-container" style="display: none;">
+                    <div id="qr-reader-container" style="display: none; height: 100%;">
                         <div class="elite-form-card">
                             <div class="elite-card-header">
                                 <div class="elite-header-icon"><i class='bx bx-camera'></i></div>
@@ -171,7 +189,7 @@
 
                 <!-- PANEL DERECHO: DETALLES DE OPERACIÓN -->
                 <div id="scan-right-panel" class="scan-right-panel">
-                    <div id="right-panel-content">
+                    <div id="right-panel-content" style="height: 100%;">
                         <!-- Se precarga el template vía JS (initLayout) -->
                     </div>
                 </div>
@@ -230,21 +248,24 @@
                             <!-- SECCIÓN RESUMEN -->
                             <div class="elite-card-side">
                                 <label class="elite-label">Resumen de Operaci&oacute;n</label>
-                                <div id="ops-container" style="min-height: 120px; overflow-y: auto; max-height: 220px; margin-bottom: 1.5rem;">
-                                    <div style="text-align: center; color: #cbd5e1; padding: 1rem; font-weight: 500; font-size: 0.8rem;">Lista vac&iacute;a</div>
+                                <div id="ops-container">
+                                    <div style="text-align: center; color: #cbd5e1; padding: 2rem 1rem; font-weight: 500; font-size: 0.8rem;">
+                                        <i class='bx bx-list-check' style="font-size: 2rem; opacity: 0.3; display: block; margin-bottom: 0.5rem;"></i>
+                                        Lista vac&iacute;a
+                                    </div>
                                 </div>
 
-                                <div class="total-display" style="margin-bottom: 1.5rem;">
+                                <div class="total-display">
                                     <div>
-                                        <span class="elite-label" style="margin: 0; opacity: 0.6;">Total Acumulado</span>
+                                        <span class="elite-label" style="margin: 0; opacity: 0.6; font-size: 0.6rem;">Total Acumulado</span>
                                         <div id="main-total-pts" style="font-size: 2.2rem; font-weight: 950; color: #1e293b; line-height: 1; margin-top: 0.2rem;">0</div>
                                     </div>
-                                    <div style="text-align: right; font-weight: 800; color: #b91c1c; font-size: 0.8rem; letter-spacing: 1px;">PUNTOS</div>
+                                    <div style="text-align: right; font-weight: 900; color: #b91c1c; font-size: 0.75rem; letter-spacing: 1px;">PUNTOS</div>
                                 </div>
 
                                 <button id="save-all-btn" class="btn-elite-black" onclick="saveAll()" disabled>REGISTRAR</button>
                                 <div style="text-align: center; margin-top: 1rem;">
-                                    <button onclick="location.reload()" style="background: none; border: none; font-size: 0.65rem; font-weight: 800; color: #94a3b8; cursor: pointer; text-transform: uppercase;">Cancelar todo</button>
+                                    <button onclick="location.reload()" style="background: none; border: none; font-size: 0.65rem; font-weight: 800; color: #94a3b8; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px;">Cancelar todo</button>
                                 </div>
                             </div>
                         </div>
@@ -258,12 +279,12 @@
                             <div class="elite-header-icon" style="background:#fef2f2; color:#ef4444; border-color:#fee2e2;"><i class='bx bx-user-x' ></i></div>
                             <h3 style="color: #991b1b;">CLIENTE NO ENCONTRADO</h3>
                         </div>
-                        <div class="elite-card-body" style="text-align: center; padding: 4rem 3rem;">
+                        <div class="elite-card-body" style="text-align: center; padding: 5rem 3rem;">
                             <h2 style="font-weight: 900; color: #1e293b; font-size: 1.25rem; margin-bottom: 0.75rem;">No se encontr&oacute; al cliente</h2>
                             <p style="font-size: 0.85rem; color: #64748b; line-height: 1.6; margin-bottom: 2.5rem;">El c&oacute;digo o DNI no coincide con ningún registro. &iquest;Deseas crearlo ahora?</p>
                             
-                            <a href="<?= BASE_URL ?>clientes/nuevo" class="btn-elite-black" style="text-decoration: none; display: flex; align-items: center; justify-content: center;">Nuevo Cliente</a>
-                            <button onclick="initLayout()" style="background: none; border: none; font-size: 0.75rem; font-weight: 800; color: #94a3b8; margin-top: 1.5rem; cursor: pointer; text-transform: uppercase;">Volver</button>
+                            <a href="<?= BASE_URL ?>clientes/nuevo" class="btn-elite-black" style="text-decoration: none; display: flex; align-items: center; justify-content: center; width: 240px; margin: 0 auto;">Nuevo Cliente</a>
+                            <button onclick="initLayout()" style="background: none; border: none; font-size: 0.75rem; font-weight: 800; color: #94a3b8; margin-top: 2rem; cursor: pointer; text-transform: uppercase;">Volver</button>
                         </div>
                     </div>
                 </template>
@@ -284,16 +305,14 @@
             const rightPanel = document.getElementById('scan-right-panel');
             const content = document.getElementById('right-panel-content');
             
-            // Limpiar y cargar template inicial
             content.innerHTML = '';
             const tpl = document.getElementById('tpl-main-form').content.cloneNode(true);
             content.appendChild(tpl);
             
-            // Asegurar que el subtotal inicial diga 0
             const unitBox = document.getElementById('main-op-unit');
             if(unitBox) updateSubtotal();
 
-            rightPanel.classList.remove('active'); // Estado placeholder (opaco)
+            rightPanel.classList.remove('active');
         }
 
         async function initScanner() {
@@ -373,8 +392,6 @@
                 operations = [];
 
                 if (data.success) {
-                    // Si ya estaba cargado el form, solo actualizamos datos para no perder estados si fuera el caso
-                    // Pero para asegurar consistencia, recargamos el tpl y llenamos
                     content.innerHTML = '';
                     const tpl = document.getElementById('tpl-main-form').content.cloneNode(true);
                     content.appendChild(tpl);
@@ -383,13 +400,13 @@
                     document.getElementById('res-phone').innerText = data.cliente.celular;
                     document.getElementById('client-id').value = data.cliente.id;
                     
-                    rightPanel.classList.add('active'); // Activa el panel (se vuelve opaco y clickable)
+                    rightPanel.classList.add('active');
                     updateSubtotal();
                 } else {
                     content.innerHTML = '';
                     const tpl = document.getElementById('tpl-error').content.cloneNode(true);
                     content.appendChild(tpl);
-                    rightPanel.classList.add('active'); // Mostrar el error también con brillo normal
+                    rightPanel.classList.add('active');
                 }
             } catch (e) {
                 Swal.fire({ icon: 'error', title: 'Error' });
@@ -424,7 +441,12 @@
         function renderOperations() {
             const container = document.getElementById('ops-container');
             if (operations.length === 0) {
-                container.innerHTML = '<div style="text-align: center; color: #cbd5e1; padding: 1rem; font-weight: 500; font-size: 0.8rem;">Lista vac&iacute;a</div>';
+                container.innerHTML = `
+                    <div style="text-align: center; color: #cbd5e1; padding: 2rem 1rem; font-weight: 500; font-size: 0.8rem;">
+                        <i class='bx bx-list-check' style="font-size: 2rem; opacity: 0.3; display: block; margin-bottom: 0.5rem;"></i>
+                        Lista vac&iacute;a
+                    </div>
+                `;
                 document.getElementById('main-total-pts').innerText = '0';
                 document.getElementById('save-all-btn').disabled = true;
                 return;
@@ -438,7 +460,7 @@
                         <div style="font-weight: 700;">${op.name} <span style="color:#94a3b8; font-weight:500;">x${op.qty}</span></div>
                         <div style="display: flex; align-items: center; gap: 0.8rem;">
                             <div style="font-weight: 800; color: #ff6600;">+${op.subtotal}</div>
-                            <i class='bx bx-x' onclick="removeOperation(${i})" style="cursor:pointer; color:#94a3b8; font-size:1.1rem;"></i>
+                            <i class='bx bx-x' onclick="removeOperation(${i})" style="cursor:pointer; color:#94a3b8; font-size:1.1rem; padding: 4px; border-radius: 50%; transition: 0.2s;" onmouseover="this.style.background='#fee2e2'; this.style.color='#ef4444'" onmouseout="this.style.background='transparent'; this.style.color='#94a3b8'"></i>
                         </div>
                     </div>
                 `;
@@ -446,6 +468,9 @@
             container.innerHTML = html;
             document.getElementById('main-total-pts').innerText = total;
             document.getElementById('save-all-btn').disabled = false;
+
+            // Scroll to bottom on add
+            container.scrollTop = container.scrollHeight;
         }
 
         async function saveAll() {
