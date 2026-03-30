@@ -13,12 +13,12 @@
         :root { --p-wine: #800000; --dark-blue: #000; }
         
         /* Layout */
-        .scan-container { max-width: 650px; margin: 4rem auto 0; padding-bottom: 5rem; }
+        .scan-container { max-width: 950px; margin: 4rem auto 0; padding-bottom: 5rem; }
         .v-screen { display: none; }
         .v-screen.active { display: block; animation: smoothReveal 0.4s ease-out; }
         @keyframes smoothReveal { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Card Elite Style from Image */
+        /* Card Elite Style — Two Column Layout */
         .elite-form-card { 
             background: white; border-radius: 20px; 
             border: 1px solid #e2e8f0; box-shadow: 0 10px 40px rgba(0,0,0,0.02);
@@ -35,46 +35,17 @@
         }
         .elite-card-header h3 { margin: 0; font-size: 0.95rem; font-weight: 800; color: #1e293b; letter-spacing: -0.01em; }
 
-        .elite-card-body { padding: 3rem 3rem 2rem; }
+        .elite-card-content { display: flex; flex-direction: row; align-items: stretch; min-height: 480px; }
+        .elite-card-main { flex: 1.4; padding: 2.5rem; border-right: 1px solid #f1f5f9; }
+        .elite-card-side { flex: 1; padding: 2.5rem; background: #fafbfc; position: relative; }
 
         /* Small labels */
         .elite-label { display: block; font-size: 0.75rem; font-weight: 800; color: var(--p-wine); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.9rem; }
 
-        /* Interactive Choice Blocks */
-        .choice-row { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2.5rem; }
-        .choice-btn { 
-            background: white; border: 1.5px solid #f1f5f9; border-radius: 16px; 
-            padding: 2rem 1.5rem; cursor: pointer; transition: 0.3s;
-            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.8rem;
-        }
-        .choice-btn:hover { border-color: var(--p-wine); transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.03); }
-        .choice-btn i { font-size: 2.2rem; color: #1e293b; transition: 0.3s; }
-        .choice-btn:hover i { color: var(--p-wine); }
-        .choice-btn span { font-size: 0.8rem; font-weight: 800; color: #475569; letter-spacing: 0.2px; }
-
-        /* Premium Input Area */
-        .elite-input-wrapper { position: relative; margin-bottom: 2.5rem; display: flex; align-items: center; gap: 0.5rem; }
-        .elite-input-wrapper i.icon-dni { position: absolute; left: 1.25rem; color: #94a3b8; font-size: 1.5rem; pointer-events: none; }
-        .elite-input { 
-            flex: 1; height: 55px; padding: 0 4rem 0 3rem; border: 1.5px solid #f1f5f9; border-radius: 12px;
-            font-family: inherit; font-size: 0.9rem; font-weight: 600; color: #1e293b; outline: none; transition: 0.3s;
-            background: #fff;
-        }
-        .elite-input::placeholder { color: #cbd5e1; font-weight: 500; }
-        .elite-input:focus { border-color: var(--p-wine); background: white; box-shadow: 0 0 0 4px rgba(128,0,0,0.05); }
-
-        .btn-search-icon { 
-            position: absolute; right: 4px; width: 42px; height: 42px; border-radius: 10px; 
-            background: var(--p-wine); color: white; border: none; display: flex; 
-            align-items: center; justify-content: center; font-size: 1.3rem; 
-            cursor: pointer; transition: 0.3s;
-        }
-        .btn-search-icon:hover { transform: scale(1.05); background: #600000; }
-
         /* Final Button (Black) */
         .btn-elite-black { 
             display: flex; align-items: center; justify-content: center;
-            background: #000; color: white; border: none; height: 50px; width: 260px;
+            background: #000; color: white; border: none; height: 50px; width: 240px;
             margin: 0 auto;
             border-radius: 50px; font-weight: 800; font-size: 0.85rem; text-transform: uppercase;
             letter-spacing: 1.5px; cursor: pointer; transition: 0.3s;
@@ -83,13 +54,13 @@
         .btn-elite-black:hover { transform: translateY(-2px); box-shadow: 0 15px 30px rgba(0,0,0,0.25); background: #000; }
 
         /* Result formatting */
-        .elite-customer-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 1.25rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem; }
-        .customer-avatar { width: 42px; height: 42px; background: white; border: 1.5px solid #e2e8f0; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: var(--p-wine); }
+        .elite-customer-box { background: #fff; border: 1.5px solid #f1f5f9; border-radius: 16px; padding: 1.25rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem; }
+        .customer-avatar { width: 42px; height: 42px; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: var(--p-wine); }
 
         .form-select-elite { height: 50px; width: 100%; border-radius: 12px; border: 1.5px solid #f1f5f9; padding: 0 1rem; font-weight: 700; font-size: 0.85rem; color: #1e293b; outline: none; appearance: none; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E") no-repeat right 1rem center / 1.25rem; }
 
-        .op-row { padding: 1rem; background: #fff; border-radius: 12px; border: 1px solid #f1f5f9; margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; }
-        .total-display { margin-top: 2rem; padding: 1.5rem; background: #fdfcfa; border-radius: 16px; border: 2px dashed #ffedd5; display: flex; justify-content: space-between; align-items: center; }
+        .op-row { padding: 1rem; background: #fff; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+        .total-display { margin-top: auto; padding: 1.5rem; background: white; border-radius: 16px; border: 1.5px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
 
         .elite-subtotal-box { height: 50px; background: #fff; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 800; color: #1e293b; font-size: 0.85rem; border: 1.5px solid #f1f5f9; }
 
@@ -172,63 +143,69 @@
                             <h3>ORDEN DE SUMA DE PUNTOS</h3>
                         </div>
 
-                        <div class="elite-card-body">
-                            <label class="elite-label">Cliente Seleccionado</label>
-                            <div class="elite-customer-box">
-                                <div class="customer-avatar"><i class='bx bx-user'></i></div>
-                                <div>
-                                    <b id="res-name" style="display: block; font-size: 0.95rem; color: #1e293b;">-</b>
-                                    <span id="res-phone" style="font-size: 0.8rem; color: #64748b;">-</span>
+                        <div class="elite-card-content">
+                            <!-- PANEL IZQUIERDO -->
+                            <div class="elite-card-main">
+                                <label class="elite-label">Cliente Seleccionado</label>
+                                <div class="elite-customer-box">
+                                    <div class="customer-avatar"><i class='bx bx-user'></i></div>
+                                    <div>
+                                        <b id="res-name" style="display: block; font-size: 0.95rem; color: #1e293b;">-</b>
+                                        <span id="res-phone" style="font-size: 0.8rem; color: #64748b;">-</span>
+                                    </div>
+                                    <input type="hidden" id="client-id">
                                 </div>
-                                <input type="hidden" id="client-id">
-                                                     <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.25rem; margin-bottom: 1.5rem;">
-                                <div class="form-group">
-                                    <label class="elite-label">Tipo de Recarga</label>
-                                    <select id="main-op-type" class="form-select-elite" onchange="updateSubtotal()">
-                                        <?php foreach ($operaciones as $op): ?>
-                                            <option value="<?= $op['puntos'] ?>"><?= htmlspecialchars($op['nombre']) ?> (+<?= $op['puntos'] ?> pts)</option>
-                                        <?php endforeach; ?>
-                                    </select>
+
+                                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.25rem; margin-bottom: 1.5rem;">
+                                    <div class="form-group">
+                                        <label class="elite-label">Tipo de Recarga</label>
+                                        <select id="main-op-type" class="form-select-elite" onchange="updateSubtotal()">
+                                            <?php foreach ($operaciones as $op): ?>
+                                                <option value="<?= $op['puntos'] ?>"><?= htmlspecialchars($op['nombre']) ?> (+<?= $op['puntos'] ?> pts)</option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="elite-label">Cantidad</label>
+                                        <select id="main-op-qty" class="form-select-elite" onchange="updateSubtotal()">
+                                            <?php for($i=1;$i<=10;$i++): ?>
+                                                <option value="<?= $i ?>"><?= $i ?></option>
+                                            <?php endfor; ?>
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="elite-label">Cantidad</label>
-                                    <select id="main-op-qty" class="form-select-elite" onchange="updateSubtotal()">
-                                        <?php for($i=1;$i<=10;$i++): ?>
-                                            <option value="<?= $i ?>"><?= $i ?></option>
-                                        <?php endfor; ?>
-                                    </select>
+
+                                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.25rem; align-items: end; margin-bottom: 2rem;">
+                                    <div class="form-group">
+                                        <label class="elite-label">Subtotal</label>
+                                        <div id="main-op-unit" class="elite-subtotal-box">-</div>
+                                    </div>
+                                    <button class="btn-elite-black" onclick="addOperation()" style="width: 100%; margin: 0;">
+                                        A&Ntilde;ADIR A LISTA
+                                    </button>
                                 </div>
                             </div>
 
-                            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.25rem; align-items: end; margin-bottom: 2rem;">
-                                <div class="form-group">
-                                    <label class="elite-label">Subtotal</label>
-                                    <div id="main-op-unit" class="elite-subtotal-box">-</div>
-                                </div>
-                                <button class="btn-elite-black" onclick="addOperation()" style="width: 100%; margin: 0;">
-                                    A&Ntilde;ADIR A LISTA
-                                </button>
-                            </div>
-
-                            <div style="margin-top: 3rem;">
+                            <!-- PANEL DERECHO -->
+                            <div class="elite-card-side">
                                 <label class="elite-label">Resumen de Operaci&oacute;n</label>
-                                <div id="ops-container" style="min-height: 50px;">
+                                <div id="ops-container" style="min-height: 120px; overflow-y: auto; max-height: 220px; margin-bottom: 1.5rem;">
                                     <!-- Dinámico -->
                                 </div>
 
-                                <div class="total-display">
+                                <div class="total-display" style="margin-bottom: 2rem;">
                                     <div>
-                                        <span class="elite-label" style="margin: 0; opacity: 0.6;">Cr&eacute;dito Total</span>
+                                        <span class="elite-label" style="margin: 0; opacity: 0.6;">Total Acumulado</span>
                                         <div id="main-total-pts" style="font-size: 2.2rem; font-weight: 950; color: #1e293b; line-height: 1; margin-top: 0.2rem;">0</div>
                                     </div>
                                     <div style="text-align: right; font-weight: 800; color: var(--p-wine); font-size: 0.8rem; letter-spacing: 1px;">PUNTOS</div>
                                 </div>
-                            </div>
-                        </div>
 
-                        <div style="padding: 1.5rem 2.5rem 3rem; text-align: center;">
-                            <button id="save-all-btn" class="btn-elite-black" onclick="saveAll()" style="width: 100%;">REGISTRAR</button>
-                            <button onclick="location.reload()" style="background: none; border: none; font-size: 0.75rem; font-weight: 800; color: #94a3b8; margin-top: 1.25rem; cursor: pointer; text-transform: uppercase;">Cancelar todo</button>
+                                <button id="save-all-btn" class="btn-elite-black" onclick="saveAll()" style="width: 100%;">REGISTRAR</button>
+                                <div style="text-align: center; margin-top: 1rem;">
+                                    <button onclick="location.reload()" style="background: none; border: none; font-size: 0.65rem; font-weight: 800; color: #94a3b8; cursor: pointer; text-transform: uppercase;">Cancelar todo</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
