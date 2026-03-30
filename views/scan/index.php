@@ -112,10 +112,11 @@
         ?>
 
         <div class="container">
-            <div class="scan-container">
+            <div class="scan-container wide">
                 <!-- Input de archivo oculto para escaneo desde galería -->
                 <input type="file" id="qr-input-file" accept="image/*" style="display: none;" onchange="onFileChange(event)">
 
+                <!-- [ VISTA ÚNICA MAESTRA ] -->
                 <div class="elite-form-card">
                     <div class="elite-card-header">
                         <div class="elite-header-icon"><i class='bx bx-qr-scan'></i></div>
@@ -123,10 +124,10 @@
                     </div>
 
                     <div class="elite-card-content">
-                        <!-- PANEL IZQUIERDO: BÚSQUEDA Y FORMULARIO -->
+                        <!-- PANEL IZQUIERDO -->
                         <div class="elite-card-main">
                             
-                            <!-- SECCIÓN: BÚSQUEDA -->
+                            <!-- PASO 1: BÚSQUEDA -->
                             <div id="search-section">
                                 <label class="elite-label">M&eacute;todo de Lectura QR</label>
                                 <div class="choice-row" style="gap: 1.25rem; margin-bottom: 2rem;">
@@ -141,24 +142,22 @@
                                 </div>
 
                                 <label class="elite-label">B&uacute;squeda Manual (DNI)</label>
-                                <div class="elite-input-wrapper" style="margin-bottom: 2.5rem;">
-                                    <i class='bx bx-id-card icon-dni'></i>
+                                <div class="elite-input-wrapper" style="margin-bottom: 2rem;">
                                     <input type="tel" id="manual-dni" class="elite-input" placeholder="Ej. 12345678" maxlength="8">
                                     <button class="btn-search-icon" onclick="buscarPorDni()" title="Buscar cliente">
                                         <i class='bx bx-search'></i>
                                     </button>
                                 </div>
 
-                                <!-- Contenedor de cámara embebido -->
                                 <div id="reader-container" style="display: none; margin-bottom: 2rem; animation: smoothReveal 0.3s ease;">
                                     <div id="reader" style="border-radius: 16px; overflow: hidden; border: 2px solid #f1f5f9;"></div>
                                     <div style="text-align: center; margin-top: 1rem;">
-                                        <button class="btn-elite-black" onclick="stopScanner()" style="width: auto; padding: 0 2rem; background: #f1f5f9; color: #475569; height: 35px; font-size: 0.65rem; box-shadow: none; border: 1px solid #e2e8f0;">CANCELAR ESCANEO</button>
+                                        <button class="btn-elite-black" onclick="stopScanner()" style="width: auto; padding: 0 1.5rem; background: #f1f5f9; color: #475569; height: 35px; font-size: 0.65rem; border: 1px solid #e2e8f0; box-shadow: none;">CANCELAR ESCANEO</button>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- SECCIÓN: FORMULARIO (DINÁMICO) -->
+                            <!-- PASO 2: FORMULARIO (Se activa al encontrar al cliente) -->
                             <div id="form-section" style="display: none; border-top: 1px dashed #f1f5f9; padding-top: 2rem; animation: smoothReveal 0.4s ease-out;">
                                 <label class="elite-label">Cliente Seleccionado</label>
                                 <div class="elite-customer-box" style="margin-bottom: 1.5rem;">
@@ -167,7 +166,7 @@
                                         <b id="res-name" style="display: block; font-size: 0.95rem; color: #1e293b;">-</b>
                                         <span id="res-phone" style="font-size: 0.8rem; color: #64748b;">-</span>
                                     </div>
-                                    <button onclick="resetFlow()" style="background: none; color: #94a3b8; border: none; font-size: 1.2rem; cursor: pointer;"><i class='bx bx-x-circle'></i></button>
+                                    <button onclick="resetFlow()" style="background: none; color: #94a3b8; border: none; font-size: 1.25rem; cursor: pointer;"><i class='bx bx-x-circle'></i></button>
                                     <input type="hidden" id="client-id">
                                 </div>
 
@@ -190,7 +189,7 @@
                                     </div>
                                 </div>
 
-                                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.25rem; align-items: end; margin-bottom: 1rem;">
+                                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.25rem; align-items: end;">
                                     <div class="form-group">
                                         <label class="elite-label">Subtotal</label>
                                         <div id="main-op-unit" class="elite-subtotal-box">-</div>
@@ -206,14 +205,12 @@
                         <div class="elite-card-side">
                             <label class="elite-label">Resumen de Operaci&oacute;n</label>
                             <div id="ops-container" style="flex: 1; min-height: 150px; overflow-y: auto; max-height: 350px; margin-bottom: 1.5rem;">
-                                <!-- PLACEHOLDER -->
                                 <div id="summary-empty" style="text-align: center; color: #94a3b8; padding-top: 5rem; animation: smoothReveal 0.5s ease;">
                                     <i class='bx bx-list-check' style="font-size: 3.5rem; opacity: 0.15; display: block; margin-bottom: 1rem;"></i>
-                                    <p style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">SIN OPERACIONES</p>
+                                    <p style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase;">SIN OPERACIONES</p>
                                 </div>
                             </div>
 
-                            <!-- FOOTER DERECHO (DINÁMICO) -->
                             <div id="summary-footer" style="display: none; border-top: 1px solid #e2e8f0; padding-top: 1.5rem; animation: smoothReveal 0.4s ease;">
                                 <div class="total-display" style="margin-bottom: 2rem; border-color: #f1f5f9;">
                                     <div>
@@ -231,20 +228,9 @@
                         </div>
                     </div>
                 </div>
-                    <div class="elite-form-card">
-                        <div class="elite-card-header">
-                            <div class="elite-header-icon" style="background:#fef2f2; color:#ef4444; border-color:#fee2e2;"><i class='bx bx-user-x' ></i></div>
-                            <h3>CLIENTE NO REGISTRADO</h3>
-                        </div>
-                        <div class="elite-card-body" style="text-align: center; padding: 4rem 3rem;">
-                            <h2 style="font-weight: 900; color: #1e293b; font-size: 1.25rem; margin-bottom: 0.75rem;">No se encontr&oacute; al cliente</h2>
-                            <p style="font-size: 0.85rem; color: #64748b; line-height: 1.6; margin-bottom: 2.5rem;">El c&oacute;digo o DNI no coincide con ningún registro. &iquest;Deseas crearlo ahora?</p>
-                            
-                            <a href="<?= BASE_URL ?>clientes/nuevo" class="btn-elite-black" style="text-decoration: none; display: flex; align-items: center; justify-content: center;">Nuevo Cliente</a>
-                            <button onclick="location.reload()" style="background: none; border: none; font-size: 0.75rem; font-weight: 800; color: #94a3b8; margin-top: 1.5rem; cursor: pointer; text-transform: uppercase;">Volver al inicio</button>
-                        </div>
-                    </div>
-                </div>
+
+            </div> <!-- .scan-container -->
+        </div> <!-- .container -->
 
             </div> <!-- .scan-container -->
         </div> <!-- .container -->
@@ -258,33 +244,19 @@
         let operations = [];
         let running = false;
 
-        function showScreen(id) {
-            document.querySelectorAll('.v-screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            
-            // Adjust container width based on screen
-            const container = document.querySelector('.scan-container');
-            if (id === 'screen-main') {
-                container.classList.add('wide');
-            } else {
-                container.classList.remove('wide');
-            }
-
-        // --- LÓGICA DE NAVEGACIÓN INTERNA ---
+        // --- LÓGICA DE INTERFAZ ---
         function setFormState(active) {
-            const search = document.getElementById('search-section');
-            const form = document.getElementById('form-section');
-            const footer = document.getElementById('summary-footer');
-            const empty = document.getElementById('summary-empty');
-            const title = document.getElementById('panel-title');
+            const searchSection = document.getElementById('search-section');
+            const formSection   = document.getElementById('form-section');
+            const title         = document.getElementById('panel-title');
 
             if (active) {
-                search.style.display = 'none';
-                form.style.display = 'block';
+                searchSection.style.display = 'none';
+                formSection.style.display   = 'block';
                 title.innerText = 'ORDEN DE SUMA DE PUNTOS';
             } else {
-                search.style.display = 'block';
-                form.style.display = 'none';
+                searchSection.style.display = 'block';
+                formSection.style.display   = 'none';
                 title.innerText = 'REGISTRAR OPERACIÓN';
             }
         }
@@ -300,9 +272,7 @@
         // --- SCANNER ---
         async function initScanner() {
             document.getElementById('reader-container').style.display = 'block';
-            if (!html5QrCode) {
-                html5QrCode = new Html5Qrcode("reader");
-            }
+            if (!html5QrCode) html5QrCode = new Html5Qrcode("reader");
             
             const config = { fps: 10, qrbox: { width: 250, height: 250 } };
             try {
@@ -338,22 +308,26 @@
             if (event.target.files.length === 0) return;
             const imageFile = event.target.files[0];
             if (!html5QrCode) html5QrCode = new Html5Qrcode("reader");
-            Swal.fire({ title: 'Escaneando...', didOpen: () => { Swal.showLoading(); } });
+            
+            Swal.fire({ title: 'Escaneando...', didOpen: () => Swal.showLoading() });
+            
             try {
                 const decodedText = await html5QrCode.scanFile(imageFile, false);
                 Swal.close();
                 onScanSuccess(decodedText);
             } catch (err) {
-                Swal.fire({ icon: 'error', title: 'Error', text: 'No se detect&oacute; QR.' });
+                Swal.fire({ icon: 'error', title: 'Error', text: 'No se detect&oacute; QR en la imagen.' });
             }
             event.target.value = '';
         }
 
-        // --- BÚSQUEDA ---
+        // --- CORE: BÚSQUEDA ---
         function buscarPorDni() {
-            const dni = document.getElementById('manual-dni').value.trim();
+            const dniInput = document.getElementById('manual-dni');
+            const dni = dniInput.value.trim();
             if (!/^\d{8}$/.test(dni)) {
-                return Swal.fire({ icon: 'warning', title: 'DNI Inv&aacute;lido', text: 'Ingrese un DNI de 8 dígitos.' });
+                Swal.fire({ icon: 'warning', title: 'Atenci&oacute;n', text: 'Ingrese un DNI v&aacute;lido de 8 dígitos.' });
+                return;
             }
             buscarCliente(dni);
         }
@@ -366,10 +340,11 @@
                     body: JSON.stringify({ codigo })
                 });
                 const data = await res.json();
+
                 if (data.success) {
-                    document.getElementById('res-name').innerText = data.cliente.nombre;
-                    document.getElementById('res-phone').innerText = data.cliente.celular || (data.cliente.dni ? 'DNI: ' + data.cliente.dni : '-');
-                    document.getElementById('client-id').value = data.cliente.id;
+                    document.getElementById('res-name').innerText  = data.cliente.nombre;
+                    document.getElementById('res-phone').innerText = data.cliente.celular || 'S/D';
+                    document.getElementById('client-id').value     = data.cliente.id;
                     setFormState(true);
                     updateSubtotal();
                 } else {
@@ -380,18 +355,20 @@
                         showCancelButton: true,
                         confirmButtonText: 'Sí, crear',
                         confirmButtonColor: '#000'
-                    }).then(r => { if(r.isConfirmed) window.location.href = baseUrl + 'clientes/nuevo'; });
+                    }).then(r => { 
+                        if(r.isConfirmed) window.location.href = baseUrl + 'clientes/nuevo'; 
+                    });
                 }
             } catch (e) {
-                Swal.fire({ icon: 'error', title: 'Error de servidor' });
+                Swal.fire({ icon: 'error', title: 'Error de servidor', text: 'No se pudo completar la b&uacute;squeda.' });
             }
         }
 
-        // --- OPERACIONES ---
+        // --- CORE: OPERACIONES ---
         function updateSubtotal() {
             const select = document.getElementById('main-op-type');
-            const unit = parseInt(select.value);
-            const qty = parseInt(document.getElementById('main-op-qty').value) || 1;
+            const unit   = parseInt(select.value);
+            const qty    = parseInt(document.getElementById('main-op-qty').value) || 1;
             document.getElementById('main-op-unit').innerText = (unit * qty) + ' PTS';
         }
 
@@ -405,7 +382,6 @@
             operations.push({ name: typeName, unit, qty, subtotal });
             renderOperations();
 
-            // Reset qty for next
             document.getElementById('main-op-qty').selectedIndex = 0;
             updateSubtotal();
         }
@@ -417,8 +393,8 @@
 
         function renderOperations() {
             const container = document.getElementById('ops-container');
-            const footer = document.getElementById('summary-footer');
-            const empty = document.getElementById('summary-empty');
+            const footer    = document.getElementById('summary-footer');
+            const empty     = document.getElementById('summary-empty');
             
             container.innerHTML = '';
             let total = 0;
@@ -492,6 +468,7 @@
                 btn.disabled = false;
             }
         }
+    </script>
     </script>
     <script src="<?= BASE_URL ?>assets/js/session_check.js"></script>
 </body>
