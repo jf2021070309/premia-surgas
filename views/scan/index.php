@@ -181,9 +181,7 @@
                                     <span id="res-phone" style="font-size: 0.8rem; color: #64748b;">-</span>
                                 </div>
                                 <input type="hidden" id="client-id">
-                            </div>
-
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+                                                     <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.25rem; margin-bottom: 1.5rem;">
                                 <div class="form-group">
                                     <label class="elite-label">Tipo de Recarga</label>
                                     <select id="main-op-type" class="form-select-elite" onchange="updateSubtotal()">
@@ -193,23 +191,24 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label class="elite-label">Subtotal Puntos</label>
-                                    <div id="main-op-unit" class="elite-subtotal-box">-</div>
+                                    <label class="elite-label">Cantidad</label>
+                                    <select id="main-op-qty" class="form-select-elite" onchange="updateSubtotal()">
+                                        <?php for($i=1;$i<=10;$i++): ?>
+                                            <option value="<?= $i ?>"><?= $i ?></option>
+                                        <?php endfor; ?>
+                                    </select>
                                 </div>
                             </div>
 
-                            <div class="form-group" style="margin-top: 1.25rem; margin-bottom: 2rem;">
-                                <label class="elite-label">Cantidad</label>
-                                <select id="main-op-qty" class="form-select-elite" onchange="updateSubtotal()">
-                                    <?php for($i=1;$i<=10;$i++): ?>
-                                        <option value="<?= $i ?>"><?= $i ?></option>
-                                    <?php endfor; ?>
-                                </select>
+                            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.25rem; align-items: end; margin-bottom: 2rem;">
+                                <div class="form-group">
+                                    <label class="elite-label">Subtotal</label>
+                                    <div id="main-op-unit" class="elite-subtotal-box">-</div>
+                                </div>
+                                <button class="btn-elite-black" onclick="addOperation()" style="width: 100%; margin: 0;">
+                                    A&Ntilde;ADIR A LISTA
+                                </button>
                             </div>
-
-                            <button class="btn-elite-black" onclick="addOperation()">
-                                A&Ntilde;ADIR A LISTA
-                            </button>
 
                             <div style="margin-top: 3rem;">
                                 <label class="elite-label">Resumen de Operaci&oacute;n</label>
