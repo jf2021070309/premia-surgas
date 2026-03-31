@@ -69,9 +69,6 @@ if (!function_exists('isActiveLink')) {
             <i class='bx bxs-truck'></i>
             <span>Conductores</span>
         </a>
-        <a href="<?= BASE_URL ?>configuraciones" class="sidebar-item <?= isActiveLink('configuraciones', $uri) ?>">
-            <i class='bx bx-cog'></i>
-            <span>Parámetros</span>
-        </a>
+
     </nav>
 </aside>

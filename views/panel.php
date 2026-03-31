@@ -128,11 +128,7 @@
                 <div class="menu-card-label">Conductores</div>
                 <p>Gestionar equipo de reparto.</p>
             </a>
-            <a href="<?= BASE_URL ?>configuraciones" class="menu-card">
-                <div class="menu-card-icon"><i class='bx bx-cog'></i></div>
-                <div class="menu-card-label">Parámetros</div>
-                <p>Configurar puntos y equivalencias.</p>
-            </a>
+
             <a href="<?= BASE_URL ?>operaciones" class="menu-card">
                 <div class="menu-card-icon"><i class='bx bx-wrench'></i></div>
                 <div class="menu-card-label">Gestión Operaciones</div>
