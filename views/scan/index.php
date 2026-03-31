@@ -14,7 +14,7 @@
         
         /* Layout Grid */
         .scan-wrapper { 
-            display: flex; gap: 1.5rem; align-items: stretch;
+            display: flex; gap: 1.5rem; align-items: flex-start;
             max-width: 1250px; margin: 1rem auto; padding: 0 1rem;
         }
         
@@ -31,7 +31,7 @@
         .elite-form-card { 
             background: white; border-radius: 18px; 
             border: 1px solid #e2e8f0; box-shadow: 0 8px 30px rgba(0,0,0,0.04);
-            overflow: hidden; height: 100%; display: flex; flex-direction: column;
+            overflow: hidden; display: flex; flex-direction: column;
         }
         .elite-card-header { 
             background: #fff; padding: 1rem 1.5rem; border-bottom: 1px solid #f1f5f9;
@@ -44,12 +44,12 @@
         }
         .elite-card-header h3 { margin: 0; font-size: 0.75rem; font-weight: 850; color: #1e293b; letter-spacing: -0.2px; text-transform: uppercase; }
 
-        .elite-card-body { padding: 2rem; flex: 1; display: flex; flex-direction: column; justify-content: flex-start; gap: 2rem; }
+        .elite-card-body { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; justify-content: flex-start; gap: 1.5rem; }
 
         /* Two Column Layout (Inside Card) */
         .elite-card-content { display: flex; flex-direction: row; flex: 1; }
-        .elite-card-main { flex: 1.25; padding: 2rem; border-right: 1px solid #f1f5f9; display: flex; flex-direction: column; justify-content: flex-start; gap: 1.5rem; }
-        .elite-card-side { flex: 1; padding: 2rem; background: #fafbfc; display: flex; flex-direction: column; justify-content: flex-start; gap: 1rem; }
+        .elite-card-main { flex: 1.25; padding: 1.5rem; border-right: 1px solid #f1f5f9; display: flex; flex-direction: column; justify-content: flex-start; gap: 1.25rem; }
+        .elite-card-side { flex: 1; padding: 1.5rem; background: #fafbfc; display: flex; flex-direction: column; justify-content: flex-start; gap: 1rem; }
 
         .elite-label { display: block; font-size: 0.65rem; font-weight: 950; color: var(--p-wine); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 0.6rem; }
 
@@ -108,7 +108,7 @@
 
         #ops-container { 
             flex: 1;
-            min-height: 160px;
+            min-height: 120px;
             overflow-y: auto; 
             padding-right: 5px;
             margin-bottom: 1rem;
