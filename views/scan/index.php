@@ -14,11 +14,11 @@
         
         /* Layout Grid */
         .scan-wrapper { 
-            display: flex; gap: 1.5rem; align-items: flex-start;
+            display: flex; flex-direction: column; gap: 1.5rem; align-items: stretch;
             max-width: 1250px; margin: 1rem auto; padding: 0 1rem;
         }
         
-        .scan-left-panel { flex: 0 0 310px; display: flex; flex-direction: column; }
+        .scan-left-panel { width: 100%; display: flex; flex-direction: column; }
         .scan-right-panel { flex: 1; display: flex; flex-direction: column; }
         
         /* Placeholder state for right panel */
@@ -45,6 +45,8 @@
         .elite-card-header h3 { margin: 0; font-size: 0.75rem; font-weight: 850; color: #1e293b; letter-spacing: -0.2px; text-transform: uppercase; }
 
         .elite-card-body { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; justify-content: flex-start; gap: 1.5rem; }
+        
+        .scan-top-search { padding: 1.5rem; display: grid; grid-template-columns: 60% 1fr; gap: 2.5rem; align-items: end; background: #fff; }
 
         /* Two Column Layout (Inside Card) */
         .elite-card-content { display: flex; flex-direction: row; flex: 1; }
@@ -53,11 +55,11 @@
 
         .elite-label { display: block; font-size: 0.65rem; font-weight: 950; color: var(--p-wine); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 0.6rem; }
 
-        .choice-row { display: grid; grid-template-columns: 1fr; gap: 0.7rem; }
+        .choice-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
         .choice-btn { 
             background: white; border: 1.5px solid #f1f5f9; border-radius: 14px; 
             padding: 1.25rem 1rem; cursor: pointer; transition: 0.3s;
-            display: flex; flex-direction: row; align-items: center; gap: 1rem;
+            display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 1rem;
         }
         .choice-btn:hover { border-color: var(--p-wine); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.02); }
         .choice-btn i { font-size: 1.4rem; color: #b91c1c; }
@@ -128,6 +130,11 @@
             .elite-card-content { flex-direction: column; }
             .elite-card-main { border-right: none; border-bottom: 1px solid #f1f5f9; }
         }
+        @media (max-width: 768px) {
+            .scan-top-search { grid-template-columns: 1fr; gap: 1.5rem; }
+            .choice-row { grid-template-columns: 1fr; }
+            .choice-btn { justify-content: flex-start; }
+        }
     </style>
 </head>
 <body onload="initLayout()">
@@ -151,7 +158,7 @@
                             <div class="elite-header-icon"><i class='bx bx-qr-scan'></i></div>
                             <h3>B&Uacute;SQUEDA QR</h3>
                         </div>
-                        <div class="elite-card-body">
+                        <div class="scan-top-search">
                             <div>
                                 <label class="elite-label">M&eacute;todo de Lectura</label>
                                 <div class="choice-row">
@@ -161,7 +168,7 @@
                                     </div>
                                     <div class="choice-btn" onclick="document.getElementById('qr-input-file').click()">
                                         <i class='bx bx-image-add'></i>
-                                        <span>QR DESDE GALERIA</span>
+                                        <span>QR GALERIA</span>
                                     </div>
                                 </div>
                             </div>
@@ -215,7 +222,7 @@
                                         <input type="hidden" id="client-id">
                                     </div>
                                 </div>
-                                <div>
+                                <div style="margin-top: auto;">
                                     <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 0.8rem; margin-bottom: 1rem;">
                                         <div class="form-group">
                                             <label class="elite-label">Servicio</label>
