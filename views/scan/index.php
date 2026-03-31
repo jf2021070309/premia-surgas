@@ -30,8 +30,8 @@
         /* Elite Card Style */
         .elite-form-card { 
             background: white; border-radius: 18px; 
-            border: 1px solid #e2e8f0; box-shadow: 0 5px 20px rgba(0,0,0,0.01);
-            overflow: hidden; height: 100%; display: flex; flex-direction: column;
+            border: 1px solid #e2e8f0; box-shadow: 0 8px 30px rgba(0,0,0,0.04);
+            overflow: hidden; height: 100%; min-height: 580px; display: flex; flex-direction: column;
         }
         .elite-card-header { 
             background: #fff; padding: 1rem 1.5rem; border-bottom: 1px solid #f1f5f9;
@@ -44,19 +44,19 @@
         }
         .elite-card-header h3 { margin: 0; font-size: 0.75rem; font-weight: 850; color: #1e293b; letter-spacing: -0.2px; text-transform: uppercase; }
 
-        .elite-card-body { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 1rem; }
+        .elite-card-body { padding: 2rem; flex: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 1.5rem; }
 
         /* Two Column Layout (Inside Card) */
         .elite-card-content { display: flex; flex-direction: row; flex: 1; }
-        .elite-card-main { flex: 1.25; padding: 1.5rem; border-right: 1px solid #f1f5f9; display: flex; flex-direction: column; justify-content: space-between; gap: 1.25rem; }
-        .elite-card-side { flex: 1; padding: 1.5rem; background: #fafbfc; display: flex; flex-direction: column; gap: 1rem; }
+        .elite-card-main { flex: 1.25; padding: 2rem; border-right: 1px solid #f1f5f9; display: flex; flex-direction: column; justify-content: flex-start; gap: 2rem; }
+        .elite-card-side { flex: 1; padding: 2rem; background: #fafbfc; display: flex; flex-direction: column; gap: 1rem; }
 
         .elite-label { display: block; font-size: 0.65rem; font-weight: 950; color: var(--p-wine); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 0.6rem; }
 
         .choice-row { display: grid; grid-template-columns: 1fr; gap: 0.7rem; }
         .choice-btn { 
             background: white; border: 1.5px solid #f1f5f9; border-radius: 14px; 
-            padding: 1rem; cursor: pointer; transition: 0.3s;
+            padding: 1.25rem 1rem; cursor: pointer; transition: 0.3s;
             display: flex; flex-direction: row; align-items: center; gap: 1rem;
         }
         .choice-btn:hover { border-color: var(--p-wine); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.02); }
@@ -65,21 +65,21 @@
 
         .elite-input-wrapper { position: relative; display: flex; align-items: center; }
         .elite-input { 
-            flex: 1; height: 46px; padding: 0 3.5rem 0 1rem; border: 1.5px solid #f1f5f9; border-radius: 12px;
+            flex: 1; height: 50px; padding: 0 4rem 0 1.2rem; border: 1.5px solid #f1f5f9; border-radius: 12px;
             font-family: inherit; font-size: 0.78rem; font-weight: 600; color: #1e293b; outline: none; transition: 0.3s; background: #fff;
         }
         .elite-input::placeholder { color: #cbd5e1; font-weight: 500; font-size: 0.75rem; }
         .elite-input:focus { border-color: var(--p-wine); }
 
         .btn-search-icon { 
-            position: absolute; right: 4px; width: 38px; height: 38px; border-radius: 8px; 
+            position: absolute; right: 4px; width: 42px; height: 42px; border-radius: 10px; 
             background: var(--p-wine); color: white; border: none; display: flex; 
-            align-items: center; justify-content: center; font-size: 1.1rem; cursor: pointer; transition: 0.3s;
+            align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; transition: 0.3s;
         }
 
         .btn-elite-black { 
             display: flex; align-items: center; justify-content: center;
-            background: #000; color: white; border: none; height: 48px; width: 100%;
+            background: #000; color: white; border: none; height: 50px; width: 100%;
             border-radius: 50px; font-weight: 900; font-size: 0.75rem; text-transform: uppercase;
             letter-spacing: 1.2px; cursor: pointer; transition: 0.3s;
         }
@@ -88,32 +88,33 @@
 
         .btn-elite-wine { 
             display: flex; align-items: center; justify-content: center;
-            background: var(--p-wine); color: white; border: none; height: 48px; width: 100%;
+            background: var(--p-wine); color: white; border: none; height: 50px; width: 100%;
             border-radius: 50px; font-weight: 900; font-size: 0.75rem; text-transform: uppercase;
             letter-spacing: 1.2px; cursor: pointer; transition: 0.3s; box-shadow: 0 8px 20px rgba(128,0,0,0.2);
         }
         .btn-elite-wine:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(128,0,0,0.35); background: #660000; }
         .btn-elite-wine:disabled { opacity: 0.4; filter: grayscale(1); transform: none; box-shadow: none; cursor: not-allowed; }
 
-        .elite-customer-box { background: #fff; border: 1.5px solid #f1f5f9; border-radius: 14px; padding: 1rem; display: flex; align-items: center; gap: 1rem; }
+        .elite-customer-box { background: #fff; border: 1.5px solid #f1f5f9; border-radius: 14px; padding: 1.25rem; display: flex; align-items: center; gap: 1.25rem; }
         .customer-avatar { width: 40px; height: 40px; background: #fdf2f2; border: 1px solid #fee2e2; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: var(--p-wine); }
 
-        .form-select-elite { height: 46px; width: 100%; border-radius: 12px; border: 1.5px solid #f1f5f9; padding: 0 1rem; font-weight: 700; font-size: 0.78rem; color: #1e293b; outline: none; appearance: none; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E") no-repeat right 1rem center / 1rem; }
+        .form-select-elite { height: 50px; width: 100%; border-radius: 12px; border: 1.5px solid #f1f5f9; padding: 0 1.2rem; font-weight: 700; font-size: 0.78rem; color: #1e293b; outline: none; appearance: none; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E") no-repeat right 1.2rem center / 1rem; }
 
-        .op-row { padding: 0.8rem 1rem; background: #fff; border-radius: 10px; border: 1px solid #f1f5f9; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; transition: 0.2s; }
+        .op-row { padding: 1rem 1.2rem; background: #fff; border-radius: 12px; border: 1px solid #f1f5f9; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; transition: 0.2s; }
         
-        .total-display { margin-top: auto; padding: 1.2rem; background: #fff; border-radius: 16px; border: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+        .total-display { margin-top: auto; padding: 1.5rem; background: #fff; border-radius: 16px; border: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
 
-        .elite-subtotal-box { height: 46px; background: #fff; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 950; color: #1e293b; font-size: 0.8rem; border: 1.5px solid #f1f5f9; }
+        .elite-subtotal-box { height: 50px; background: #fff; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 950; color: #1e293b; font-size: 0.8rem; border: 1.5px solid #f1f5f9; }
 
         #ops-container { 
-            height: 200px;
+            flex: 1;
+            min-height: 250px;
             overflow-y: auto; 
             padding-right: 5px;
-            margin-bottom: 0.75rem;
+            margin-bottom: 1rem;
             display: flex;
             flex-direction: column;
-            gap: 1px;
+            gap: 0.5rem;
         }
         #ops-container::-webkit-scrollbar { width: 3px; }
         #ops-container::-webkit-scrollbar-track { background: #f1f5f9; }
@@ -163,10 +164,6 @@
                                         <span>QR DESDE GALERIA</span>
                                     </div>
                                 </div>
-                            </div>
-                            
-                            <div style="text-align: center; margin: 0.5rem 0; flex: 1; display: flex; align-items: center; justify-content: center;">
-                                <img src="<?= BASE_URL ?>assets/premios/escanea.png" alt="Escanear QR" style="max-width: 85%; height: auto; opacity: 0.9;">
                             </div>
 
                             <div>
