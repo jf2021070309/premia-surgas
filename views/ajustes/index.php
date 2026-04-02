@@ -56,7 +56,7 @@
                                 <th>Nombre Operación</th>
                                 <th class="text-center">Puntaje</th>
                                 <th class="text-center">Estado</th>
-                                <th class="text-center">Acciones</th>
+                                <th class="text-center" style="width: 150px;">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -98,14 +98,6 @@
                     </div>
                     <div class="header-controls">
                         <div class="filter-input-group">
-                            <i class='bx bx-filter-alt'></i>
-                            <select onchange="handleStatusFilter('tablePremios', this.value, 3)">
-                                <option value="">Todos los items</option>
-                                <option value="Activo">Solo Activos</option>
-                                <option value="Inactivo">Solo Ocultos</option>
-                            </select>
-                        </div>
-                        <div class="filter-input-group">
                             <i class='bx bx-search'></i>
                             <input type="text" placeholder="Buscar premio..." onkeyup="handleSearch('tablePremios', this.value)">
                         </div>
@@ -122,7 +114,7 @@
                                 <th class="text-center">Puntos</th>
                                 <th class="text-center">Stock</th>
                                 <th class="text-center">Estado</th>
-                                <th class="text-center">Acciones</th>
+                                <th class="text-center" style="width: 180px;">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -181,7 +173,7 @@
                                 <th>Nombre Conductor</th>
                                 <th class="text-center">Usuario</th>
                                 <th class="text-center">Estado</th>
-                                <th class="text-center">Acciones</th>
+                                <th class="text-center" style="width: 150px;">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -365,8 +357,8 @@
             // Filter
             const visibleRows = allRows.filter(row => {
                 const matchesSearch = row.innerText.toLowerCase().includes(config.search.toLowerCase());
-                const matchesStatus = config.status === "" || row.cells[row.cells.length-2].innerText.trim() === config.status;
-                return matchesSearch && matchesStatus;
+                // Status filtering removed as requested
+                return matchesSearch;
             });
 
             const total = visibleRows.length;
@@ -416,12 +408,6 @@
 
         function handleSearch(tableId, val) {
             PagData[tableId].search = val;
-            PagData[tableId].page = 1;
-            renderPagination(tableId);
-        }
-
-        function handleStatusFilter(tableId, val, colIndex) {
-            PagData[tableId].status = val;
             PagData[tableId].page = 1;
             renderPagination(tableId);
         }
