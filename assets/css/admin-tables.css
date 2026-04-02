@@ -2,7 +2,7 @@
    Elite Table System (Refined)
 ══════════════════════════════════════ */
 .card-header-premium {
-    padding: 1.5rem 2rem;
+    padding: 1rem 1.5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -86,9 +86,9 @@
 .filter-input-group input::placeholder { color: #cbd5e1; }
 
 .data-table thead th {
-    background: #f8fafc;
-    padding: 0.85rem 1.5rem;
-    font-size: 0.72rem;
+    background: #fbfcfd;
+    padding: 0.72rem 1.5rem;
+    font-size: 0.7rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.06em;
@@ -96,10 +96,10 @@
     border-bottom: 1px solid #f1f5f9;
 }
 .table-row td {
-    padding: 1.1rem 1.5rem;
+    padding: 0.75rem 1.5rem;
     border-bottom: 1px solid #f1f5f9;
     vertical-align: middle;
-    transition: background 0.2s;
+    transition: background 0.15s;
 }
 .data-table tbody tr:hover {
     background: #fbfcfe;
@@ -189,13 +189,13 @@
 }
 
 .text-medium {
-    font-size: 0.88rem;
+    font-size: 0.82rem;
     font-weight: 600;
     color: #1e293b;
 }
 
 .text-pts-plus {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 700;
     color: #059669;
 }
