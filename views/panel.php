@@ -7,6 +7,7 @@
     <link rel="icon" type="image/png" href="<?= BASE_URL ?>assets/premios/icono.png?v=<?= time() ?>">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-layout.css">
     <style>
@@ -59,55 +60,124 @@
             include __DIR__ . '/partials/header_admin.php';
         ?>
 
-        <div class="container" style="max-width: 1000px; margin: 0 auto; padding-top: 1rem;">
+        <div class="container" style="max-width: 1250px; margin: 0 auto; padding-top: 1rem;">
 
         <?php if ($_SESSION['rol'] === 'admin'): ?>
-        <!-- KPIs y Resúmenes Principales -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
+        
+        <style>
+            .middle-row-grid { display: grid; grid-template-columns: 2.2fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+            @media (max-width: 1000px) { .middle-row-grid { grid-template-columns: 1fr; } }
             
-            <!-- Usuarios Activos -->
-            <div style="background: white; border-radius: 1.5rem; padding: 1.5rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.02); display: flex; align-items: center; gap: 1.25rem;">
-                <div style="width: 55px; height: 55px; border-radius: 14px; background: #eef2ff; color: #4f46e5; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; flex-shrink: 0;">
-                    <i class='bx bx-user-check'></i>
+            .dash-card { border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); position: relative; overflow: hidden; color: white; display: flex; flex-direction: column; }
+            .dash-card.card-white { background: #fff; color: #333; }
+            .dash-card.card-green { background: #28a745; }
+            .dash-card.card-yellow { background: #ffc107; color: #333; }
+            .dash-card.card-red { background: #dc3545; }
+
+            .dash-card-body { padding: 15px 20px; flex: 1; position: relative; z-index: 2; min-height: 100px; }
+            .dash-card-number { font-size: 2.5rem; font-weight: 700; margin-bottom: 2px; line-height: 1; font-family: 'Inter', sans-serif; }
+            .dash-card-text { font-size: 0.95rem; margin-bottom: 0; font-weight: 400; letter-spacing: 0.3px; }
+
+            .dash-card-icon { position: absolute; top: 50%; right: 15px; transform: translateY(-50%); font-size: 80px; color: rgba(0,0,0,0.15); z-index: 1; }
+            .dash-card.card-white .dash-card-icon { color: rgba(0,0,0,0.05); }
+
+            .dash-card-footer { display: block; padding: 6px 15px; text-align: center; background: rgba(0,0,0,0.1); color: white; text-decoration: none; font-size: 0.85rem; position: relative; z-index: 2; transition: background 0.3s; margin-top: auto; }
+            .dash-card.card-white .dash-card-footer { background: #e2e2e2; color: #fff; }
+            .dash-card.card-yellow .dash-card-footer { color: #333; }
+
+            .dash-card-footer:hover { background: rgba(0,0,0,0.15); color: inherit; }
+            .dash-card.card-white .dash-card-footer:hover { background: #d0d0d0; color: #fff; }
+
+            .dash-card-footer i { margin-left: 5px; font-size: 1rem; vertical-align: middle; }
+        </style>
+
+        <!-- TOP ROW: KPI Metrics -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+            
+            <!-- White Card -->
+            <div class="dash-card card-white">
+                <div class="dash-card-body">
+                    <div class="dash-card-number"><?= $totales['clientes'] ?></div>
+                    <div class="dash-card-text">Usuarios Registrados</div>
                 </div>
-                <div>
-                    <div style="color: #64748b; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">Usuarios Activos</div>
-                    <div style="font-size: 1.8rem; font-weight: 900; color: #1e293b; margin-top: 0.1rem; line-height: 1;"><?= $totales['clientes'] ?></div>
+                <i class='bx bx-check-double dash-card-icon'></i>
+                <a href="<?= BASE_URL ?>clientes" class="dash-card-footer">Mas información <i class='bx bx-right-arrow-circle'></i></a>
+            </div>
+
+            <!-- Green Card -->
+            <div class="dash-card card-green">
+                <div class="dash-card-body">
+                    <div class="dash-card-number"><?= $metricas_adicionales['canjes_hoy'] ?></div>
+                    <div class="dash-card-text">Canjes Hoy</div>
+                </div>
+                <i class='bx bx-cart dash-card-icon'></i>
+                <a href="<?= BASE_URL ?>canjes" class="dash-card-footer">Mas información <i class='bx bx-right-arrow-circle'></i></a>
+            </div>
+
+            <!-- Yellow Card -->
+            <div class="dash-card card-yellow">
+                <div class="dash-card-body">
+                    <div class="dash-card-number" style="display: flex; align-items: baseline; gap: 4px;"> 
+                        <span style="font-size: 0.5em; font-weight: 800; position: relative; top: -5px;">Pts/</span> <?= $metricas_adicionales['puntos_hoy'] ?>
+                    </div>
+                    <div class="dash-card-text">Puntos Dados Hoy</div>
+                </div>
+                <i class='bx bxs-file-blank dash-card-icon'></i>
+                <a href="<?= BASE_URL ?>historial" class="dash-card-footer">Mas información <i class='bx bx-right-arrow-circle'></i></a>
+            </div>
+
+            <!-- Red Card -->
+            <div class="dash-card card-red">
+                <div class="dash-card-body">
+                    <div class="dash-card-number"><?= count($notificaciones_recargas) ?></div>
+                    <div class="dash-card-text">Recargas Pendientes</div>
+                </div>
+                <i class='bx bx-calendar-check dash-card-icon'></i>
+                <a href="<?= BASE_URL ?>recargas-admin" class="dash-card-footer">Mas información <i class='bx bx-right-arrow-circle'></i></a>
+            </div>
+
+        </div>
+
+        <!-- MIDDLE ROW: Chart & Ranking -->
+        <div class="middle-row-grid">
+            
+            <!-- CHART -->
+            <div style="background: white; border-radius: 1.25rem; padding: 1.5rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3 style="margin: 0; font-size: 1rem; color: #1e293b; display: flex; align-items: center; gap: 0.5rem;"><i class='bx bx-line-chart' style="color: var(--p-wine, #800000);"></i> Actividad (7 Días)</h3>
+                </div>
+                <div style="position: relative; height: 300px; width: 100%;">
+                    <canvas id="actividadChart"></canvas>
                 </div>
             </div>
 
-            <!-- Canjes de Hoy -->
-            <div style="background: white; border-radius: 1.5rem; padding: 1.5rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.02); display: flex; align-items: center; gap: 1.25rem;">
-                <div style="width: 55px; height: 55px; border-radius: 14px; background: #f0fdf4; color: #22c55e; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; flex-shrink: 0;">
-                    <i class='bx bx-refresh'></i>
-                </div>
-                <div>
-                    <div style="color: #64748b; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">Canjes Realizados Hoy</div>
-                    <div style="font-size: 1.8rem; font-weight: 900; color: #1e293b; margin-top: 0.1rem; line-height: 1;"><?= $metricas_adicionales['canjes_hoy'] ?></div>
-                </div>
-            </div>
-
-            <!-- Ranking de Usuarios (Top 3) -->
-            <div style="background: white; border-radius: 1.5rem; padding: 1.5rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: center;">
-                <div style="color: #64748b; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
-                    <i class='bx bx-trophy' style="color: #f59e0b; font-size: 1.1rem;"></i> Top Clientes Canjeadores
+            <!-- RANKING -->
+            <div style="background: white; border-radius: 1.25rem; padding: 1.5rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.03); display: flex; flex-direction: column;">
+                <div style="color: #1e293b; font-size: 1rem; font-weight: 800; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class='bx bx-trophy' style="color: #f59e0b; font-size: 1.2rem;"></i> Ranking Canjeadores
                 </div>
                 
-                <div style="display: flex; flex-direction: column; gap: 0.6rem;">
+                <div style="display: flex; flex-direction: column; gap: 0.8rem; overflow-y: auto;">
                     <?php if (!empty($metricas_adicionales['ranking'])): ?>
-                        <?php foreach (array_slice($metricas_adicionales['ranking'], 0, 3) as $index => $rank): ?>
-                            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem;">
-                                <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: <?php echo $index === 0 ? '800' : '600'; ?>; color: <?php echo $index === 0 ? '#1e293b' : '#475569'; ?>; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px;">
-                                    <span style="background: <?php echo $index === 0 ? '#fef3c7' : '#f1f5f9'; ?>; color: <?php echo $index === 0 ? '#d97706' : '#64748b'; ?>; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 800; flex-shrink: 0;"><?= $index + 1 ?></span>
-                                    <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<?= htmlspecialchars($rank['nombre']) ?>"><?= htmlspecialchars($rank['nombre']) ?></span>
+                        <?php foreach ($metricas_adicionales['ranking'] as $index => $rank): ?>
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.8rem; border-bottom: <?php echo $index < count($metricas_adicionales['ranking']) - 1 ? '1px solid #f1f5f9' : 'none'; ?>;">
+                                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                    <div style="background: <?php echo $index === 0 ? '#fef3c7' : ($index === 1 ? '#e2e8f0' : ($index === 2 ? '#ffedd5' : '#f8fafc')); ?>; 
+                                                color: <?php echo $index === 0 ? '#d97706' : ($index === 1 ? '#475569' : ($index === 2 ? '#ea580c' : '#94a3b8')); ?>; 
+                                                width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 900; flex-shrink: 0;">
+                                        <?= $index + 1 ?>
+                                    </div>
+                                    <div style="font-weight: <?php echo $index === 0 ? '800' : '600'; ?>; color: #1e293b; font-size: 0.85rem;">
+                                        <?= htmlspecialchars($rank['nombre']) ?>
+                                    </div>
                                 </div>
-                                <div style="font-weight: 800; color: var(--p-wine, #800000); flex-shrink: 0;">
-                                    <?= $rank['total_canjes'] ?> canjes
+                                <div style="font-weight: 800; color: var(--p-wine, #800000); font-size: 0.85rem; background: #fffcfc; padding: 0.3rem 0.6rem; border-radius: 8px; border: 1px solid #fee2e2;">
+                                    <?= $rank['total_canjes'] ?>
                                 </div>
                             </div>
                         <?php endforeach; ?>
                     <?php else: ?>
-                        <div style="font-size: 0.75rem; color: #94a3b8; font-weight: 500;">Aún no hay canjes registrados.</div>
+                        <div style="font-size: 0.8rem; color: #94a3b8; font-weight: 500; text-align: center; margin-top: 2rem;">Aún no hay canjes registrados.</div>
                     <?php endif; ?>
                 </div>
             </div>
@@ -225,5 +295,81 @@
 <script> var BASE_URL = '<?= BASE_URL ?>'; </script>
 <script src="<?= BASE_URL ?>assets/js/session_check.js"></script>
 <script src="<?= BASE_URL ?>views/panel.js"></script>
+
+<?php if ($_SESSION['rol'] === 'admin'): ?>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const chartDataPuntos = <?php echo json_encode($metricas_adicionales['chart_puntos'] ?? []); ?>;
+    const chartDataCanjes = <?php echo json_encode($metricas_adicionales['chart_canjes'] ?? []); ?>;
+
+    const allDates = [...new Set([...chartDataPuntos.map(d => d.fecha), ...chartDataCanjes.map(d => d.fecha)])].sort();
+
+    const puntosMap = Object.fromEntries(chartDataPuntos.map(d => [d.fecha, d.total]));
+    const canjesMap = Object.fromEntries(chartDataCanjes.map(d => [d.fecha, d.total]));
+
+    const dataPuntos = allDates.map(fecha => puntosMap[fecha] || 0);
+    const dataCanjes = allDates.map(fecha => canjesMap[fecha] || 0);
+
+    const formatFecha = (d) => {
+        const date = new Date(d + 'T00:00:00'); 
+        return date.toLocaleDateString('es-ES', {month: 'short', day: 'numeric'});
+    };
+
+    const ctx = document.getElementById('actividadChart');
+    if(ctx && allDates.length > 0) {
+        new Chart(ctx.getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: allDates.map(formatFecha),
+                datasets: [
+                    {
+                        type: 'line',
+                        label: 'Canjes',
+                        data: dataCanjes,
+                        borderColor: '#4f46e5',
+                        backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        yAxisID: 'y1'
+                    },
+                    {
+                        type: 'bar',
+                        label: 'Puntos Entregados',
+                        data: dataPuntos,
+                        backgroundColor: 'rgba(128, 0, 0, 0.8)',
+                        borderRadius: 6,
+                        yAxisID: 'y'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                plugins: {
+                    legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 8, font: {family: 'Inter'} } },
+                    tooltip: { backgroundColor: 'rgba(0,0,0,0.8)', padding: 12, cornerRadius: 8 }
+                },
+                scales: {
+                    y: {
+                        type: 'linear', display: true, position: 'left',
+                        grid: { borderDash: [4, 4], color: '#f1f5f9' }
+                    },
+                    y1: {
+                        type: 'linear', display: true, position: 'right',
+                        grid: { drawOnChartArea: false }
+                    },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+    } else if(ctx) {
+        ctx.style.display = 'none';
+        ctx.parentNode.innerHTML = '<div style="display:flex; height:100%; align-items:center; justify-content:center; color:#94a3b8; font-size:0.9rem;">Sin datos en los últimos 7 días</div>';
+    }
+});
+</script>
+<?php endif; ?>
+
 </body>
 </html>

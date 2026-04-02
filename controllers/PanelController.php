@@ -32,10 +32,34 @@ class PanelController {
             // Canjes realizados hoy
             $canjes_hoy = $db->query("SELECT COUNT(*) as total FROM canjes WHERE DATE(fecha) = CURDATE()")->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
             
+            // Puntos entregados hoy (desde ventas)
+            $puntos_hoy = $db->query("SELECT SUM(puntos) as total FROM ventas WHERE DATE(fecha) = CURDATE()")->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
+
+            // Gráfico: Puntos entregados en los últimos 7 días
+            $chart_puntos = $db->query("
+                SELECT DATE(fecha) as fecha, SUM(puntos) as total 
+                FROM ventas 
+                WHERE fecha >= DATE_SUB(CURDATE(), INTERVAL 6 DAY) 
+                GROUP BY DATE(fecha) 
+                ORDER BY DATE(fecha) ASC
+            ")->fetchAll(PDO::FETCH_ASSOC);
+
+            // Gráfico: Canjes en los últimos 7 días
+            $chart_canjes = $db->query("
+                SELECT DATE(fecha) as fecha, COUNT(id) as total 
+                FROM canjes 
+                WHERE fecha >= DATE_SUB(CURDATE(), INTERVAL 6 DAY) 
+                GROUP BY DATE(fecha) 
+                ORDER BY DATE(fecha) ASC
+            ")->fetchAll(PDO::FETCH_ASSOC);
+
             // Ranking de usuarios con más canjes
             $ranking = $db->query("SELECT c.nombre, COUNT(cj.id) as total_canjes FROM canjes cj JOIN clientes c ON cj.cliente_id = c.id GROUP BY c.id ORDER BY total_canjes DESC LIMIT 5")->fetchAll(PDO::FETCH_ASSOC);
             
             $metricas_adicionales['canjes_hoy'] = $canjes_hoy;
+            $metricas_adicionales['puntos_hoy'] = $puntos_hoy;
+            $metricas_adicionales['chart_puntos'] = $chart_puntos;
+            $metricas_adicionales['chart_canjes'] = $chart_canjes;
             $metricas_adicionales['ranking'] = $ranking;
         }
 
