@@ -47,6 +47,31 @@
             .panel-subtitle { font-size: .82rem !important; margin-bottom: .7rem !important; }
             input, select, textarea { font-size: 16px !important; }
         }
+
+        .middle-row-grid { display: grid; grid-template-columns: 2.2fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+        @media (max-width: 1000px) { .middle-row-grid { grid-template-columns: 1fr; } }
+        
+        .dash-card { border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); position: relative; overflow: hidden; color: white; display: flex; flex-direction: column; }
+        .dash-card.card-white { background: #fff; color: #333; }
+        .dash-card.card-green { background: #28a745; }
+        .dash-card.card-yellow { background: #ffc107; color: #333; }
+        .dash-card.card-red { background: #dc3545; }
+
+        .dash-card-body { padding: 15px 20px; flex: 1; position: relative; z-index: 2; min-height: 100px; }
+        .dash-card-number { font-size: 2.5rem; font-weight: 700; margin-bottom: 2px; line-height: 1; font-family: 'Inter', sans-serif; }
+        .dash-card-text { font-size: 0.95rem; margin-bottom: 0; font-weight: 400; letter-spacing: 0.3px; }
+
+        .dash-card-icon { position: absolute; top: 50%; right: 15px; transform: translateY(-50%); font-size: 80px; color: rgba(0,0,0,0.15); z-index: 1; pointer-events: none; }
+        .dash-card.card-white .dash-card-icon { color: rgba(0,0,0,0.05); }
+
+        .dash-card-footer { display: block; padding: 6px 15px; text-align: center; background: rgba(0,0,0,0.1); color: white; text-decoration: none; font-size: 0.85rem; position: relative; z-index: 2; transition: background 0.3s; margin-top: auto; }
+        .dash-card.card-white .dash-card-footer { background: #e2e2e2; color: #fff; }
+        .dash-card.card-yellow .dash-card-footer { color: #333; }
+
+        .dash-card-footer:hover { background: rgba(0,0,0,0.15); color: inherit; }
+        .dash-card.card-white .dash-card-footer:hover { background: #d0d0d0; color: #fff; }
+
+        .dash-card-footer i { margin-left: 5px; font-size: 1rem; vertical-align: middle; }
     </style>
 </head>
 <body>
@@ -60,36 +85,9 @@
             include __DIR__ . '/partials/header_admin.php';
         ?>
 
-        <div class="container" style="max-width: 1250px; margin: 0 auto; padding-top: 1rem;">
+        <div class="container" style="width: 100%; max-width: 100%; padding: 1.5rem 2rem;">
 
         <?php if ($_SESSION['rol'] === 'admin'): ?>
-        
-        <style>
-            .middle-row-grid { display: grid; grid-template-columns: 2.2fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
-            @media (max-width: 1000px) { .middle-row-grid { grid-template-columns: 1fr; } }
-            
-            .dash-card { border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); position: relative; overflow: hidden; color: white; display: flex; flex-direction: column; }
-            .dash-card.card-white { background: #fff; color: #333; }
-            .dash-card.card-green { background: #28a745; }
-            .dash-card.card-yellow { background: #ffc107; color: #333; }
-            .dash-card.card-red { background: #dc3545; }
-
-            .dash-card-body { padding: 15px 20px; flex: 1; position: relative; z-index: 2; min-height: 100px; }
-            .dash-card-number { font-size: 2.5rem; font-weight: 700; margin-bottom: 2px; line-height: 1; font-family: 'Inter', sans-serif; }
-            .dash-card-text { font-size: 0.95rem; margin-bottom: 0; font-weight: 400; letter-spacing: 0.3px; }
-
-            .dash-card-icon { position: absolute; top: 50%; right: 15px; transform: translateY(-50%); font-size: 80px; color: rgba(0,0,0,0.15); z-index: 1; }
-            .dash-card.card-white .dash-card-icon { color: rgba(0,0,0,0.05); }
-
-            .dash-card-footer { display: block; padding: 6px 15px; text-align: center; background: rgba(0,0,0,0.1); color: white; text-decoration: none; font-size: 0.85rem; position: relative; z-index: 2; transition: background 0.3s; margin-top: auto; }
-            .dash-card.card-white .dash-card-footer { background: #e2e2e2; color: #fff; }
-            .dash-card.card-yellow .dash-card-footer { color: #333; }
-
-            .dash-card-footer:hover { background: rgba(0,0,0,0.15); color: inherit; }
-            .dash-card.card-white .dash-card-footer:hover { background: #d0d0d0; color: #fff; }
-
-            .dash-card-footer i { margin-left: 5px; font-size: 1rem; vertical-align: middle; }
-        </style>
 
         <!-- TOP ROW: KPI Metrics -->
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
