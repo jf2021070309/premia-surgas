@@ -12,17 +12,38 @@
 }
 .header-title-flex {
     display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    min-width: 320px;
+}
+.header-title-flex i, 
+.header-title-flex .title-icon-square {
+    font-size: 1.4rem;
+    margin-top: 4px;
+    color: #800000; /* Default wine color */
+    display: flex;
     align-items: center;
-    gap: 0.85rem;
-    font-size: 1.05rem;
+    justify-content: center;
+}
+
+.title-text-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.title-text-group h3 {
+    margin: 0;
+    font-size: 1.15rem;
     font-weight: 800;
     color: #0f172a;
-    letter-spacing: -0.015em;
-    min-width: 250px;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
 }
-.header-title-flex i {
-    color: #6366f1;
-    font-size: 1.25rem;
+.title-text-group span {
+    font-size: 0.8rem;
+    color: #64748b;
+    font-weight: 500;
+    letter-spacing: -0.01em;
 }
 
 .header-controls {

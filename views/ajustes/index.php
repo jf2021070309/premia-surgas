@@ -29,12 +29,15 @@
 
         <div class="container" style="max-width: 1200px; padding-top: 1rem;">
             
-            <!-- SECTION 1: OPERACIONES (5 per page) -->
+            <!-- SECTION 1: OPERACIONES -->
             <div class="card shadow-sm" id="cardOp">
                 <div class="card-header-premium">
                     <div class="header-title-flex">
-                        <i class='bx bx-calculator' style="color: #800000;"></i>
-                        Reglas de Puntaje
+                        <i class='bx bx-calculator'></i>
+                        <div class="title-text-group">
+                            <h3>Reglas de Puntaje</h3>
+                            <span>Configura los puntos acumulados por cada operación</span>
+                        </div>
                     </div>
                     <div class="header-controls">
                         <div class="filter-input-group">
@@ -78,17 +81,19 @@
                     </table>
                 </div>
                 <div class="card-footer-premium" id="footerOp">
-                    <div class="footer-info">Mostrando <span class="range"></span> de <span class="total"></span></div>
                     <div class="pagination-elite" data-pagination="tableOp"></div>
                 </div>
             </div>
 
-            <!-- SECTION 2: PREMIOS (10 per page) -->
+            <!-- SECTION 2: PREMIOS -->
             <div class="card shadow-sm" id="cardPremios">
                 <div class="card-header-premium">
                     <div class="header-title-flex">
                         <i class='bx bx-gift' style="color: #ea580c;"></i>
-                        Catálogo de Premios
+                        <div class="title-text-group">
+                            <h3>Catálogo de Premios</h3>
+                            <span>Gestiona los productos disponibles y sus costos en puntos</span>
+                        </div>
                     </div>
                     <div class="header-controls">
                         <div class="filter-input-group">
@@ -144,17 +149,19 @@
                     </table>
                 </div>
                 <div class="card-footer-premium" id="footerPremios">
-                    <div class="footer-info">Mostrando <span class="range"></span> de <span class="total"></span></div>
                     <div class="pagination-elite" data-pagination="tablePremios"></div>
                 </div>
             </div>
 
-            <!-- SECTION 3: CONDUCTORES (5 per page) -->
+            <!-- SECTION 3: CONDUCTORES -->
             <div class="card shadow-sm" id="cardCond">
                 <div class="card-header-premium">
                     <div class="header-title-flex">
                         <i class='bx bxs-truck' style="color: #166534;"></i>
-                        Directorio de Conductores
+                        <div class="title-text-group">
+                            <h3>Directorio de Conductores</h3>
+                            <span>Control de acceso y perfiles del personal de campo</span>
+                        </div>
                     </div>
                     <div class="header-controls">
                         <div class="filter-input-group">
@@ -198,7 +205,6 @@
                     </table>
                 </div>
                 <div class="card-footer-premium" id="footerCond">
-                    <div class="footer-info">Mostrando <span class="range"></span> de <span class="total"></span></div>
                     <div class="pagination-elite" data-pagination="tableCond"></div>
                 </div>
             </div>
@@ -360,13 +366,6 @@
             const pageRows = visibleRows.slice(start, end);
             pageRows.forEach(r => r.style.display = '');
 
-            // Update Info
-            const footer = document.getElementById(config.footer);
-            const rangeSpan = footer.querySelector('.range');
-            const totalSpan = footer.querySelector('.total');
-            rangeSpan.innerText = total > 0 ? `${start + 1} - ${Math.min(end, total)}` : '0';
-            totalSpan.innerText = total;
-
             // Render Buttons
             const pagContainer = document.querySelector(`[data-pagination="${tableId}"]`);
             if (totalPages <= 1) {
@@ -385,7 +384,6 @@
 
         function changePage(tableId, targetPage) {
             const config = PagData[tableId];
-            const maxPage = Math.ceil(document.querySelectorAll(`#${tableId} tbody tr`).length / config.size); // simplified total for now
             if (targetPage < 1) return;
             config.page = targetPage;
             renderPagination(tableId);
