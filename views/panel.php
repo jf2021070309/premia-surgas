@@ -138,13 +138,8 @@
             
             <!-- CHART -->
             <div style="background: white; border-radius: 1.25rem; padding: 1.5rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
-                <div style="color: #1e293b; font-size: 1.1rem; font-weight: 800; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.8rem; padding-bottom: 1rem; border-bottom: 1px dashed #e2e8f0; justify-content: space-between;">
-                    <div style="display: flex; align-items: center; gap: 0.8rem;">
-                        <div style="background: linear-gradient(135deg, var(--p-wine, #800000), #dc2626); width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem; box-shadow: 0 4px 10px rgba(220, 38, 38, 0.2);">
-                            <i class='bx bx-line-chart'></i>
-                        </div> 
-                        Actividad (7 Días)
-                    </div>
+                <div style="margin-bottom: 1.25rem; padding-bottom: 1rem; border-bottom: 1px dashed #e2e8f0;">
+                    <h3 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 0.5rem;"><i class='bx bx-line-chart' style="color: #dc2626; font-size: 1.25rem;"></i> Actividad (7 Días)</h3>
                 </div>
                 <div style="position: relative; height: 300px; width: 100%;">
                     <canvas id="actividadChart"></canvas>
@@ -202,16 +197,9 @@
         <?php endif; ?>
 
         <?php if ($_SESSION['rol'] === 'admin' && !empty($notificaciones_recargas)): ?>
-        <div style="color: #1e293b; font-size: 1.1rem; font-weight: 800; margin-top: 1.5rem; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.8rem; padding-bottom: 1rem; border-bottom: 1px dashed #e2e8f0; justify-content: space-between;">
-            <div style="display: flex; align-items: center; gap: 0.8rem;">
-                <div style="background: linear-gradient(135deg, #4f46e5, #3730a3); width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem; box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2);">
-                    <i class='bx bx-wallet'></i>
-                </div> 
-                <div style="display: flex; flex-direction: column; gap: 0.1rem;">
-                    <span>Nuevas Recargas de Puntos</span>
-                    <span style="font-size: 0.75rem; color: #64748b; font-weight: 500;">Clientes que han enviado comprobante de pago</span>
-                </div>
-            </div>
+        <div style="margin-top: 1.5rem; border-bottom: 1px dashed #e2e8f0; padding-bottom: 1rem; margin-bottom: 1.25rem;">
+            <h3 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 0.5rem;"><i class='bx bx-wallet' style="color: #4f46e5; font-size: 1.25rem;"></i> Nuevas Recargas de Puntos</h3>
+            <p style="font-size: 0.75rem; color: #64748b; margin: 0; margin-top: 0.2rem; font-weight: 500;">Clientes que han enviado comprobante de pago</p>
         </div>
         <div class="notif-list">
             <?php foreach ($notificaciones_recargas as $r): ?>
@@ -235,16 +223,9 @@
         <?php endif; ?>
 
         <?php if ($_SESSION['rol'] === 'admin' && !empty($notificaciones)): ?>
-        <div style="color: #1e293b; font-size: 1.1rem; font-weight: 800; margin-top: <?= !empty($notificaciones_recargas) ? '2rem' : '1.5rem' ?>; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.8rem; padding-bottom: 1rem; border-bottom: 1px dashed #e2e8f0; justify-content: space-between;">
-            <div style="display: flex; align-items: center; gap: 0.8rem;">
-                <div style="background: linear-gradient(135deg, var(--p-wine, #800000), #b91c1c); width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem; box-shadow: 0 4px 10px rgba(185, 28, 28, 0.2);">
-                    <i class='bx bx-gift'></i>
-                </div> 
-                <div style="display: flex; flex-direction: column; gap: 0.1rem;">
-                    <span>Notificaciones de Canjes</span>
-                    <span style="font-size: 0.75rem; color: #64748b; font-weight: 500;">Últimos canjes solicitados por clientes</span>
-                </div>
-            </div>
+        <div style="margin-top: <?= !empty($notificaciones_recargas) ? '2rem' : '1.5rem' ?>; border-bottom: 1px dashed #e2e8f0; padding-bottom: 1rem; margin-bottom: 1.25rem;">
+            <h3 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 0.5rem;"><i class='bx bx-gift' style="color: var(--p-wine, #800000); font-size: 1.25rem;"></i> Notificaciones de Canjes</h3>
+            <p style="font-size: 0.75rem; color: #64748b; margin: 0; margin-top: 0.2rem; font-weight: 500;">Últimos canjes solicitados por clientes</p>
         </div>
 
         <div class="notif-list">
