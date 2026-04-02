@@ -249,13 +249,13 @@ body {
 
 .modal-content-wrapper {
     background: #fff;
-    border-radius: 20px;
+    border-radius: 24px;
     width: 100%;
     max-width: 500px;
     max-height: 90vh;
     overflow-y: auto;
     position: relative;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.25), 0 10px 20px -5px rgba(0, 0, 0, 0.1);
     animation: modalSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -286,33 +286,31 @@ body {
    Form & UI Elements (Elite)
 ══════════════════════════════════════ */
 .btn-premium-pill-black {
-    background: #000000;
-    color: #ffffff;
-    padding: 0.85rem 2.5rem;
+    background: #000;
+    color: #fff;
+    padding: 0.95rem 2.8rem;
     border-radius: 100px;
-    border: none;
+    border: 1px solid rgba(255,255,255,0.1);
     font-family: 'Inter', sans-serif;
     font-weight: 700;
-    font-size: 0.88rem;
+    font-size: 0.92rem;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.18);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    text-transform: none;
+    gap: 12px;
     letter-spacing: -0.01em;
 }
 .btn-premium-pill-black:hover {
-    background: #1a1a1a;
+    background: #111;
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.22);
 }
 .btn-premium-pill-black:active { transform: translateY(0); }
 
 .form-label-premium {
     display: block;
-    font-size: 0.68rem;
     font-weight: 800;
     color: #94a3b8;
     margin-bottom: 0.75rem;
