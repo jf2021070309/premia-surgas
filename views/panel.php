@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel — PremiaSurgas</title>
     <link rel="icon" type="image/png" href="<?= BASE_URL ?>assets/premios/icono.png?v=<?= time() ?>">
-    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/main.css">
-    <!-- Boxicons for elegant icons -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-layout.css">
     <style>
         [v-cloak]{display:none}
         .notif-card {
@@ -50,146 +50,21 @@
 </head>
 <body>
 <div id="app" v-cloak>
-    <div class="panel-header">
-        <!-- Header Top Row: Logo, Search, Profile -->
-        <div class="header-top-row">
-            <div class="header-logo-side">
-                <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" alt="PremiaSurgas" class="header-main-logo">
-            </div>
+    <?php include __DIR__ . '/partials/sidebar_admin.php'; ?>
 
-            <!-- Search Bar Removed -->
-            <div class="header-search-side" style="display:none;"></div> 
+    <div class="admin-layout">
+        <?php
+            $pageTitle    = 'Panel de Control';
+            $pageSubtitle = 'Notificaciones recientes';
+            include __DIR__ . '/partials/header_admin.php';
+        ?>
 
-            <div class="header-user-side">
-                <div class="user-card-integrated">
-                    <?php if ($_SESSION['rol'] === 'admin'): ?>
-                    <a href="<?= BASE_URL ?>recargas-admin" title="Notificaciones Pendientes" style="position:relative; display:flex; align-items:center; color:#fff; text-decoration:none; margin-right: 12px; font-size: 1.4rem; cursor:pointer;">
-                        <i class='bx bxs-bell' style="transform-origin: top center; transition: all 0.3s; padding:5px;"></i>
-                        <span v-cloak v-if="pendingTotal > 0" style="position:absolute; top:0px; right:-2px; background:#f59e0b; color:#fff; font-size:0.7rem; font-weight:800; padding:2px 6px; border-radius:12px; border:2px solid #5c0f0f; box-shadow: 0 2px 5px rgba(0,0,0,0.3);">{{ pendingTotal }}</span>
-                    </a>
-                    <?php endif; ?>
-                    <div class="u-avatar"><?= substr($_SESSION['nombre_usuario'], 0, 1) ?></div>
-                    <div class="u-details">
-                        <span class="u-role-tag"><?= htmlspecialchars(strtoupper($_SESSION['rol'])) ?></span>
-                        <span class="u-name-val"><?= htmlspecialchars($_SESSION['usuario'] ?? $_SESSION['nombre_usuario']) ?></span>
-                    </div>
-                    <div class="u-divider"></div>
-                    <button @click="logout" class="u-logout-btn" title="Cerrar Sesión">
-                        <i class='bx bx-log-out'></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Header Hero Content -->
-        <div class="header-hero-content">
-            <h1 class="hero-main-title">
-                <?= $_SESSION['rol'] === 'admin' ? 'Panel de Control' : 'Panel del Conductor' ?>
-            </h1>
-            <p class="hero-welcome-msg">Bienvenido de nuevo. ¿Qué haremos hoy?</p>
-        </div>
-    </div>
-
-    <div class="container">
-        
-        <div class="section-header">
-            <h3 class="section-title light">Acciones Principales</h3>
-        </div>
-
-        <div class="menu-grid">
-            <a href="<?= BASE_URL ?>clientes/nuevo" class="menu-card">
-                <div class="menu-card-icon"><i class='bx bx-user-plus'></i></div>
-                <div class="menu-card-label">Nuevo Cliente</div>
-                <p>Suma nuevos clientes al equipo.</p>
-            </a>
-            <a href="<?= BASE_URL ?>clientes/lista" class="menu-card">
-                <div class="menu-card-icon"><i class='bx bx-group'></i></div>
-                <div class="menu-card-label">Directorio</div>
-                <p>Toda tu base de datos a un clic.</p>
-            </a>
-            <a href="<?= BASE_URL ?>scan" class="menu-card">
-                <div class="menu-card-icon"><i class='bx bx-qr-scan'></i></div>
-                <div class="menu-card-label">Suma Puntos</div>
-                <p>¡Premiarlos es muy sencillo!</p>
-            </a>
-            <a href="<?= BASE_URL ?>tienda" class="menu-card">
-                <div class="menu-card-icon"><i class='bx bx-shopping-bag'></i></div>
-                <div class="menu-card-label">Tienda</div>
-                <p>Descubre recompensas exclusivas.</p>
-            </a>
-            <?php if ($_SESSION['rol'] === 'admin'): ?>
-            <a href="<?= BASE_URL ?>productos" class="menu-card">
-                <div class="menu-card-icon"><i class='bx bx-gift'></i></div>
-                <div class="menu-card-label">Gestionar Premios</div>
-                <p>CRUD de productos y stock.</p>
-            </a>
-            <a href="<?= BASE_URL ?>conductores" class="menu-card">
-                <div class="menu-card-icon"><i class='bx bxs-truck'></i></div>
-                <div class="menu-card-label">Conductores</div>
-                <p>Gestionar equipo de reparto.</p>
-            </a>
-
-            <a href="<?= BASE_URL ?>operaciones" class="menu-card">
-                <div class="menu-card-icon"><i class='bx bx-wrench'></i></div>
-                <div class="menu-card-label">Gestión Operaciones</div>
-                <p>Personalizar tipos de canje.</p>
-            </a>
-            <a href="<?= BASE_URL ?>canjes-admin" class="menu-card">
-                <div class="menu-card-icon"><i class='bx bx-check-double'></i></div>
-                <div class="menu-card-label">Entregas Canjes</div>
-                <p>Controlar productos entregados.</p>
-            </a>
-            <a href="<?= BASE_URL ?>recargas-admin" class="menu-card">
-                <div class="menu-card-icon"><i class='bx bx-wallet'></i></div>
-                <div class="menu-card-label">Gestión Recargas</div>
-                <p>Aprobar puntos comprados.</p>
-            </a>
-            <?php endif; ?>
-        </div>
-
-        <div class="section-header">
-            <h3 class="section-title">Resumen de Gesti&oacute;n</h3>
-        </div>
-
-        <!-- Estadísticas integradas de forma elegante -->
-        <div class="stats-container">
-            <div class="stats-flex">
-                <div class="stat-item">
-                    <div class="stat-icon"><i class='bx bx-pie-chart-alt-2'></i></div>
-                    <div class="stat-content">
-                        <span class="stat-lbl">Alcance Total</span>
-                        <b class="stat-val"><?= $totales['clientes'] ?></b>
-                        <span style="font-size: 0.75rem; color: #999;">Clientes Activos</span>
-                    </div>
-                </div>
-                
-                <div class="divider-v"></div>
-
-                <div class="stat-item">
-                    <div class="stat-icon"><i class='bx bx-time-five'></i></div>
-                    <div class="stat-content">
-                        <span class="stat-lbl">&Uacute;ltima Actividad</span>
-                        <b class="stat-val" style="font-size: 1.1rem; color: var(--muted);"><?= date('H:i') ?></b>
-                        <span style="font-size: 0.75rem; color: #999;">Hoy, <?= date('d M') ?></span>
-                    </div>
-                </div>
-
-                <?php if ($_SESSION['rol'] === 'admin'): ?>
-                <div class="divider-v"></div>
-
-                <div class="stat-item" style="flex: 0.5; justify-content: flex-end;">
-                    <a href="<?= BASE_URL ?>reportes" class="btn btn-primary" style="font-size: 0.8rem; padding: 0.7rem 1.2rem; border-radius: 50px; box-shadow: 0 4px 15px rgba(130, 21, 21, 0.2);">
-                        Ver Reportes
-                    </a>
-                </div>
-                <?php endif; ?>
-            </div>
-        </div>
+        <div class="container" style="max-width: 1000px; margin: 0 auto;">
 
         <?php if ($_SESSION['rol'] === 'admin' && !empty($notificaciones_recargas)): ?>
-        <div class="section-header" style="margin-top: 3rem;">
-            <h3 class="section-title">Nuevas Recargas de Puntos</h3>
-            <p style="font-size: 0.8rem; color: #888; margin: 0;">Clientes que han enviado comprobante de pago</p>
+        <div class="section-header" style="margin-top: 1.5rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 0.5rem; margin-bottom: 1rem;">
+            <h3 class="section-title" style="margin: 0; font-size: 1rem; color: #1e293b; display: flex; align-items: center; gap: 0.5rem;"><i class='bx bx-wallet' style="color: #4f46e5;"></i> Nuevas Recargas de Puntos</h3>
+            <p style="font-size: 0.75rem; color: #64748b; margin: 0; margin-top: 0.2rem;">Clientes que han enviado comprobante de pago</p>
         </div>
         <div class="notif-list">
             <?php foreach ($notificaciones_recargas as $r): ?>
@@ -213,9 +88,9 @@
         <?php endif; ?>
 
         <?php if ($_SESSION['rol'] === 'admin' && !empty($notificaciones)): ?>
-        <div class="section-header" style="margin-top: 3rem;">
-            <h3 class="section-title">Notificaciones de Canjes</h3>
-            <p style="font-size: 0.8rem; color: #888; margin: 0;">Últimos canjes solicitados por clientes</p>
+        <div class="section-header" style="margin-top: <?= !empty($notificaciones_recargas) ? '2rem' : '1.5rem' ?>; border-bottom: 2px solid #f1f5f9; padding-bottom: 0.5rem; margin-bottom: 1rem;">
+            <h3 class="section-title" style="margin: 0; font-size: 1rem; color: #1e293b; display: flex; align-items: center; gap: 0.5rem;"><i class='bx bx-gift' style="color: #800000;"></i> Notificaciones de Canjes</h3>
+            <p style="font-size: 0.75rem; color: #64748b; margin: 0; margin-top: 0.2rem;">Últimos canjes solicitados por clientes</p>
         </div>
 
         <div class="notif-list">
@@ -240,6 +115,7 @@
             <?php endforeach; ?>
         </div>
         <?php endif; ?>
+    </div>
     </div>
 
     <!-- Modal Detalle Canje -->
@@ -282,7 +158,7 @@
                         </div>
 
                         <div style="margin-top: 2rem;">
-                            <button class="btn btn-primary w-100" style="padding: 1rem; border-radius: 1rem;" @click="showModal = false">Cerrar Notificación</button>
+                            <button class="btn btn-primary w-100" style="padding: 1rem; border-radius: 1rem; background: var(--p-wine, #800000); color: white; border: none; font-weight: 700; width: 100%; cursor: pointer;" @click="showModal = false">Cerrar Notificación</button>
                         </div>
                     </div>
                 </div>

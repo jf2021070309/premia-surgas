@@ -49,17 +49,17 @@
         .scan-top-search { padding: 1.5rem; display: grid; grid-template-columns: 60% 1fr; gap: 2.5rem; align-items: end; background: #fff; }
 
         /* Two Column Layout (Inside Card) */
-        .elite-card-content { display: flex; flex-direction: row; flex: 1; }
-        .elite-card-main { flex: 1.25; padding: 1.5rem; border-right: 1px solid #f1f5f9; display: flex; flex-direction: column; justify-content: flex-start; gap: 1.25rem; }
-        .elite-card-side { flex: 1; padding: 1.5rem; background: #fafbfc; display: flex; flex-direction: column; justify-content: flex-start; gap: 1rem; }
+        .elite-card-content { display: flex; flex-direction: row; }
+        .elite-card-main { flex: 1.4; padding: 1.5rem; border-right: 1px solid #f1f5f9; display: flex; flex-direction: column; gap: 1.5rem; }
+        .elite-card-side { flex: 1; padding: 1.5rem; background: #fafbfc; display: flex; flex-direction: column; gap: 1.1rem; }
 
-        .elite-label { display: block; font-size: 0.65rem; font-weight: 950; color: var(--p-wine); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 0.6rem; }
+        .elite-label { display: block; font-size: 0.65rem; font-weight: 950; color: var(--p-wine); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 0.5rem; }
 
         .choice-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
         .choice-btn { 
-            background: white; border: 1.5px solid #f1f5f9; border-radius: 14px; 
-            padding: 1.25rem 1rem; cursor: pointer; transition: 0.3s;
-            display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 1rem;
+            background: white; border: 1.5px solid #f1f5f9; border-radius: 12px; 
+            padding: 1rem; cursor: pointer; transition: 0.3s;
+            display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 0.75rem;
         }
         .choice-btn:hover { border-color: var(--p-wine); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.02); }
         .choice-btn i { font-size: 1.4rem; color: #b91c1c; }
@@ -97,32 +97,33 @@
         .btn-elite-wine:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(128,0,0,0.35); background: #660000; }
         .btn-elite-wine:disabled { opacity: 0.4; filter: grayscale(1); transform: none; box-shadow: none; cursor: not-allowed; }
 
-        .elite-customer-box { background: #fff; border: 1.5px solid #f1f5f9; border-radius: 14px; padding: 1.25rem; display: flex; align-items: center; gap: 1.25rem; }
-        .customer-avatar { width: 40px; height: 40px; background: #fdf2f2; border: 1px solid #fee2e2; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: var(--p-wine); }
+        .elite-customer-box { background: #fff; border: 1.5px solid #f1f5f9; border-radius: 12px; padding: 1rem 1.25rem; display: flex; align-items: center; gap: 1rem; }
+        .customer-avatar { width: 42px; height: 42px; background: #fdf2f2; border: 1px solid #fee2e2; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: var(--p-wine); }
 
         .form-select-elite { height: 50px; width: 100%; border-radius: 12px; border: 1.5px solid #f1f5f9; padding: 0 1.2rem; font-weight: 700; font-size: 0.78rem; color: #1e293b; outline: none; appearance: none; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E") no-repeat right 1.2rem center / 1rem; }
 
-        .op-row { padding: 1rem 1.2rem; background: #fff; border-radius: 12px; border: 1px solid #f1f5f9; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; transition: 0.2s; }
+        .op-row { padding: 1rem 1.2rem; background: #fff; border-radius: 10px; border: 1.5px solid #f1f5f9; margin-bottom: 0.4rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; transition: 0.2s; }
         
-        .total-display { margin-top: auto; padding: 1.5rem; background: #fff; border-radius: 16px; border: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+        .total-display { padding: 1.25rem; background: #fff; border-radius: 12px; border: 1.5px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
 
         .elite-subtotal-box { height: 50px; background: #fff; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 950; color: #1e293b; font-size: 0.8rem; border: 1.5px solid #f1f5f9; }
 
         #ops-container { 
             flex: 1;
-            min-height: 120px;
+            min-height: 100px;
+            max-height: 180px;
             overflow-y: auto; 
             padding-right: 5px;
-            margin-bottom: 1rem;
+            margin-bottom: 0;
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 0.4rem;
         }
         #ops-container::-webkit-scrollbar { width: 3px; }
         #ops-container::-webkit-scrollbar-track { background: #f1f5f9; }
         #ops-container::-webkit-scrollbar-thumb { background: #cbd5e1; }
 
-        #main-total-pts { font-size: 1.8rem; font-weight: 950; color: #1e293b; line-height: 1; }
+        #main-total-pts { font-size: 1.6rem; font-weight: 950; color: #1e293b; line-height: 1; margin-top: 0.2rem; }
 
         @media (max-width: 1100px) {
             .scan-wrapper { flex-direction: column; align-items: stretch; }
@@ -216,14 +217,14 @@
                                     <div class="elite-customer-box">
                                         <div class="customer-avatar"><i class='bx bx-user'></i></div>
                                         <div>
-                                            <b id="res-name" style="display: block; font-size: 0.8rem; color: #1e293b;">- - -</b>
-                                            <span id="res-phone" style="font-size: 0.7rem; color: #64748b;">No detectado</span>
+                                            <b id="res-name" style="display: block; font-size: 0.85rem; color: #1e293b; margin-bottom: 0.2rem;">- - -</b>
+                                            <span id="res-phone" style="font-size: 0.75rem; color: #64748b; font-weight: 500;">No detectado</span>
                                         </div>
                                         <input type="hidden" id="client-id">
                                     </div>
                                 </div>
-                                <div style="margin-top: auto;">
-                                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 0.8rem; margin-bottom: 1rem;">
+                                <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+                                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem;">
                                         <div class="form-group">
                                             <label class="elite-label">Servicio</label>
                                             <select id="main-op-type" class="form-select-elite" onchange="updateSubtotal()">
@@ -241,30 +242,32 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 0.8rem; align-items: end;">
+                                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; align-items: end;">
                                         <div class="form-group">
                                             <label class="elite-label">Suma</label>
                                             <div id="main-op-unit" class="elite-subtotal-box">0 PTS</div>
                                         </div>
-                                        <button class="btn-elite-black" onclick="addOperation()">A&Ntilde;ADIR</button>
+                                        <button class="btn-elite-black" onclick="addOperation()">A&Ntilde;ADIR SERVICIO</button>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="elite-card-side">
-                                <label class="elite-label">Resumen</label>
-                                <div id="ops-container">
-                                    <div style="text-align: center; color: #cbd5e1; padding: 2rem 1rem; font-size: 0.7rem;">Vac&iacute;o</div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.2rem;">
+                                    <label class="elite-label" style="margin: 0;">Resumen</label>
+                                    <button onclick="location.reload()" style="background: none; border: none; font-size: 0.65rem; font-weight: 700; color: #94a3b8; cursor: pointer; text-transform: uppercase; display: flex; align-items: center; gap: 0.3rem;">Limpiar <i class='bx bx-refresh' style="font-size: 0.9rem;"></i></button>
                                 </div>
-                                <div class="total-display">
+                                <div id="ops-container">
+                                    <div style="text-align: center; color: #cbd5e1; padding: 2rem 1rem; font-size: 0.75rem;">Vac&iacute;o</div>
+                                </div>
+                                <div class="total-display" style="margin-top: auto;">
                                     <div>
-                                        <span class="elite-label" style="margin: 0; opacity: 0.6; font-size: 0.55rem;">Ptos</span>
+                                        <span class="elite-label" style="margin: 0; opacity: 0.8; font-size: 0.6rem;">Total</span>
                                         <div id="main-total-pts">0</div>
                                     </div>
-                                    <b style="color: #b91c1c; font-size: 0.65rem;">PUNTOS</b>
+                                    <b style="color: var(--p-wine); font-size: 0.75rem; font-weight: 950; letter-spacing: 0.5px; opacity: 0.9;">PUNTOS</b>
                                 </div>
-                                <button id="save-all-btn" class="btn-elite-wine" onclick="saveAll()" disabled style="margin-top: 0.8rem;">REGISTRAR</button>
-                                <button onclick="location.reload()" style="background: none; border: none; font-size: 0.6rem; color: #94a3b8; cursor: pointer; text-transform: uppercase; margin-top: 0.5rem;">Limpiar</button>
+                                <button id="save-all-btn" class="btn-elite-wine" onclick="saveAll()" disabled>REGISTRAR PUNTOS</button>
                             </div>
                         </div>
                     </div>
