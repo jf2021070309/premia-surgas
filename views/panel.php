@@ -182,7 +182,7 @@
                                 
                                 <!-- Score / Canjes -->
                                 <div style="font-weight: 900; color: var(--p-wine, #800000); font-size: 1.1rem;">
-                                    <?= $rank['total_canjes'] ?>
+                                    <?= $rank['total_canjes'] ?> <span style="font-size: 0.8rem; font-weight: 700; opacity: 0.7;">pts</span>
                                 </div>
                             </div>
                         <?php endforeach; ?>
