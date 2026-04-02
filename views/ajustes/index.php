@@ -81,6 +81,7 @@
                     </table>
                 </div>
                 <div class="card-footer-premium" id="footerOp">
+                    <div class="footer-info">Mostrando <span class="range"></span> de <span class="total"></span></div>
                     <div class="pagination-elite" data-pagination="tableOp"></div>
                 </div>
             </div>
@@ -98,7 +99,7 @@
                     <div class="header-controls">
                         <div class="filter-input-group">
                             <i class='bx bx-filter-alt'></i>
-                            <select onchange="handleStatusFilter('tablePremios', this.value, 4)">
+                            <select onchange="handleStatusFilter('tablePremios', this.value, 3)">
                                 <option value="">Todos los items</option>
                                 <option value="Activo">Solo Activos</option>
                                 <option value="Inactivo">Solo Ocultos</option>
@@ -117,8 +118,7 @@
                     <table class="data-table" id="tablePremios">
                         <thead>
                             <tr>
-                                <th class="ps-3">Imagen</th>
-                                <th>Premio</th>
+                                <th class="ps-3 text-start">Premio</th>
                                 <th class="text-center">Puntos</th>
                                 <th class="text-center">Stock</th>
                                 <th class="text-center">Estado</th>
@@ -128,8 +128,7 @@
                         <tbody>
                             <?php foreach ($premios as $p): ?>
                             <tr class="table-row">
-                                <td class="ps-4"><img src="<?= BASE_URL ?>assets/premios/<?= $p['imagen'] ?>" class="preview-img-circle" onerror="this.src='<?= BASE_URL ?>assets/premios/default.png'"></td>
-                                <td class="text-medium"><?= htmlspecialchars($p['nombre']) ?></td>
+                                <td class="text-medium ps-3"><?= htmlspecialchars($p['nombre']) ?></td>
                                 <td class="text-center"><span class="text-pts-plus"><?= $p['puntos'] ?> pts</span></td>
                                 <td class="text-center"><?= $p['stock'] ?></td>
                                 <td class="text-center">
@@ -139,6 +138,7 @@
                                 </td>
                                 <td class="text-center">
                                     <div class="actions-flex" style="justify-content: center;">
+                                        <button class="btn-action" style="color: #6366f1;" onclick="viewPremioImage('<?= $p['nombre'] ?>', '<?= BASE_URL ?>assets/premios/<?= $p['imagen'] ?>')"><i class='bx bx-show'></i></button>
                                         <button class="btn-action blue" onclick="editPremio(<?= htmlspecialchars(json_encode($p)) ?>)"><i class='bx bx-edit-alt'></i></button>
                                         <button class="btn-action red" onclick="confirmDeletePremio('<?= BASE_URL ?>productos/delete?id=<?= $p['id'] ?>')"><i class='bx bx-trash'></i></button>
                                     </div>
@@ -149,6 +149,7 @@
                     </table>
                 </div>
                 <div class="card-footer-premium" id="footerPremios">
+                    <div class="footer-info">Mostrando <span class="range"></span> de <span class="total"></span></div>
                     <div class="pagination-elite" data-pagination="tablePremios"></div>
                 </div>
             </div>
@@ -205,6 +206,7 @@
                     </table>
                 </div>
                 <div class="card-footer-premium" id="footerCond">
+                    <div class="footer-info">Mostrando <span class="range"></span> de <span class="total"></span></div>
                     <div class="pagination-elite" data-pagination="tableCond"></div>
                 </div>
             </div>
@@ -331,6 +333,22 @@
     </div>
 
     <script>
+        // --- PHOTO PREVIEW ---
+        function viewPremioImage(name, url) {
+            Swal.fire({
+                title: name,
+                imageUrl: url,
+                imageWidth: 320,
+                imageHeight: 280,
+                imageAlt: 'Premio Preview',
+                showConfirmButton: false,
+                showCloseButton: true,
+                customClass: {
+                    popup: 'premium-swal-popup'
+                }
+            });
+        }
+
         // --- PAGINATION MODULE ---
         const PagData = {
             tableOp:      { page: 1, size: 5, search: '', status: '', footer: 'footerOp' },
@@ -365,6 +383,13 @@
             const end = start + config.size;
             const pageRows = visibleRows.slice(start, end);
             pageRows.forEach(r => r.style.display = '');
+
+            // Update Info
+            const footer = document.getElementById(config.footer);
+            const rangeSpan = footer.querySelector('.range');
+            const totalSpan = footer.querySelector('.total');
+            rangeSpan.innerText = total > 0 ? `${start + 1} - ${Math.min(end, total)}` : '0';
+            totalSpan.innerText = total;
 
             // Render Buttons
             const pagContainer = document.querySelector(`[data-pagination="${tableId}"]`);
