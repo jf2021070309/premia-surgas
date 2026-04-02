@@ -51,7 +51,7 @@
         ?>
         <style>
             .dash-card { border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); position: relative; overflow: hidden; color: white; display: flex; flex-direction: column; }
-            .dash-card-body { padding: 15px 20px; flex: 1; position: relative; z-index: 2; min-height: 100px; }
+            .dash-card-body { padding: 15px 20px; flex: 1; position: relative; z-index: 2; min-height: 132px; }
             .dash-card-number { font-size: 2.5rem; font-weight: 700; margin-bottom: 2px; line-height: 1; font-family: 'Inter', sans-serif; }
             .dash-card-text { font-size: 0.95rem; margin-bottom: 0; font-weight: 400; letter-spacing: 0.3px; }
             

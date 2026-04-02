@@ -53,8 +53,8 @@
 
 .form-footer-actions {
     grid-column: 1 / -1;
-    margin-top: 1rem;
-    text-align: center;
+    margin-top: 2rem;
+    text-align: right;
 }
 
 .form-group-modern label {
@@ -125,20 +125,17 @@
 }
 
 .btn-premium-submit {
-    width: 100%;
-    max-width: 320px;
-    margin: 1.5rem auto 0;
-    padding: 1.1rem;
+    padding: 0.8rem 2.5rem;
     background: #000000;
     border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 14px;
+    border-radius: 12px;
     color: white;
-    font-weight: 600;
-    font-size: 1rem;
-    display: flex;
+    font-weight: 700;
+    font-size: 0.85rem;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 8px;
     cursor: pointer;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -180,10 +177,7 @@
     cursor: not-allowed;
 }
 
-.form-footer-actions {
-    margin-top: 1rem;
-    text-align: center;
-}
+
 
 .form-hint {
     margin-top: 1.2rem;
