@@ -25,7 +25,9 @@ class OperacionController {
         } else {
             $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo crear la operación.'];
         }
-        redirigir(BASE_URL . 'operaciones');
+        
+        $redir = $_POST['redir'] ?? 'ajustes';
+        redirigir(BASE_URL . $redir);
     }
 
     public function update(): void {
@@ -44,7 +46,9 @@ class OperacionController {
         } else {
             $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo actualizar la operación.'];
         }
-        redirigir(BASE_URL . 'operaciones');
+        
+        $redir = $_POST['redir'] ?? 'ajustes';
+        redirigir(BASE_URL . $redir);
     }
 
     public function delete(): void {
@@ -57,7 +61,9 @@ class OperacionController {
         } else {
             $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo inactivar la operación.'];
         }
-        redirigir(BASE_URL . 'operaciones');
+        
+        $redir = $_GET['redir'] ?? 'ajustes';
+        redirigir(BASE_URL . $redir);
     }
 
     private function render(string $view, array $data = []): void {
