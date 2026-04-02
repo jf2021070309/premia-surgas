@@ -89,44 +89,44 @@
     </div> <!-- .admin-layout -->
 
     <!-- Modal de Edición/Creación -->
-    <div id="modalOp" class="modal-overlay" onclick="if(event.target===this) closeModal()">
-        <div class="modal-card" style="max-width: 450px;">
-            <div class="modal-header">
-                <h2 id="modalTitle" style="font-weight: 800; font-size: 1.1rem; margin: 0;">Nueva Operación</h2>
-                <button class="modal-close-btn" onclick="closeModal()">
+    <div id="modalOp" class="modal-overlay" style="display: none;" onclick="if(event.target===this) closeModal()">
+        <div class="modal-content-wrapper" style="max-width: 450px; padding: 0;">
+            <div style="padding: 2.25rem; border-bottom: 1px solid var(--outline); position: relative; background: #fff; border-radius: 20px 20px 0 0;">
+                <h2 id="modalTitle" style="font-weight: 800; font-size: 1.15rem; color: #1e293b; margin: 0; letter-spacing: -0.01em;">Nueva Operación</h2>
+                <div class="modal-close" onclick="closeModal()" style="top: 2rem; right: 2rem;">
                     <i class='bx bx-x'></i>
-                </button>
+                </div>
             </div>
             
-            <form id="formOp" method="POST" action="<?= BASE_URL ?>operaciones/create" style="padding: 1.5rem;">
+            <form id="formOp" method="POST" action="<?= BASE_URL ?>operaciones/create" style="padding: 2.5rem; background: #fff; border-radius: 0 0 20px 20px;">
                 <input type="hidden" name="id" id="op_id">
                 
-                <div class="form-group" style="margin-bottom: 1.25rem;">
-                    <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #64748b; margin-bottom: 0.5rem; text-transform: uppercase;">Nombre de la Operación</label>
+                <div class="form-group" style="margin-bottom: 2rem;">
+                    <label style="display: block; font-size: 0.72rem; font-weight: 800; color: #94a3b8; margin-bottom: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">Nombre de la Operación</label>
                     <input type="text" name="nombre" id="op_nombre" class="form-input" 
-                           style="width: 100%; padding: 0.85rem; border: 1.5px solid #e2e8f0; border-radius: 12px; outline: none; transition: 0.3s;"
+                           style="width: 100%; padding: 0.85rem 1.15rem; border: 1.5px solid #e2e8f0; border-radius: 12px; font-size: 0.9rem; outline: none; transition: 0.3s; font-family: 'Inter', sans-serif;"
                            placeholder="Ej: Recarga Gas 10kg" required>
                 </div>
 
-                <div class="form-group" style="margin-bottom: 1.25rem;">
-                    <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #64748b; margin-bottom: 0.5rem; text-transform: uppercase;">Puntos Asignados</label>
+                <div class="form-group" style="margin-bottom: 2rem;">
+                    <label style="display: block; font-size: 0.72rem; font-weight: 800; color: #94a3b8; margin-bottom: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">Puntos Asignados</label>
                     <input type="number" name="puntos" id="op_puntos" class="form-input" 
-                           style="width: 100%; padding: 0.85rem; border: 1.5px solid #e2e8f0; border-radius: 12px; outline: none; transition: 0.3s;"
+                           style="width: 100%; padding: 0.85rem 1.15rem; border: 1.5px solid #e2e8f0; border-radius: 12px; font-size: 0.9rem; outline: none; transition: 0.3s; font-family: 'Inter', sans-serif;"
                            placeholder="0" required>
                 </div>
 
-                <div class="form-group" id="group_estado" style="display: none; margin-bottom: 1.25rem;">
-                    <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #64748b; margin-bottom: 0.5rem; text-transform: uppercase;">Estado</label>
+                <div class="form-group" id="group_estado" style="display: none; margin-bottom: 2rem;">
+                    <label style="display: block; font-size: 0.72rem; font-weight: 800; color: #94a3b8; margin-bottom: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">Estado</label>
                     <select name="estado" id="op_estado" class="form-input"
-                            style="width: 100%; padding: 0.85rem; border: 1.5px solid #e2e8f0; border-radius: 12px; outline: none; transition: 0.3s; background: #fff;">
+                            style="width: 100%; padding: 0.85rem 1.15rem; border: 1.5px solid #e2e8f0; border-radius: 12px; font-size: 0.9rem; outline: none; transition: 0.3s; background: #fff; cursor: pointer;">
                         <option value="1">Activo</option>
                         <option value="0">Inactivo</option>
                     </select>
                 </div>
 
-                <div style="display: flex; gap: 0.75rem; margin-top: 2rem;">
-                    <button type="submit" class="btn-primary-premium" style="flex: 1; justify-content: center; height: 48px;">
-                        <i class='bx bx-save'></i> Guardar Cambios
+                <div style="display: flex; justify-content: flex-end; margin-top: 3rem;">
+                    <button type="submit" class="btn-premium-pill-black" style="padding: 1rem 3.5rem; background: #000000; border: none; border-radius: 10px; color: white; font-weight: 500; font-size: 1rem; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.15); transition: 0.3s; display: flex; align-items: center; gap: 10px;">
+                        <i class='bx bx-save'></i> <span>Guardar cambios</span>
                     </button>
                 </div>
             </form>

@@ -457,7 +457,7 @@
     content: ''; width: 6px; height: 6px; border-radius: 50%;
     background: currentColor; flex-shrink: 0;
 }
-.chip-pending  { background: #fffbeb; color: #d97706; border: 1px solid #fef3c7; }
+.chip-pending  { background: #fdf2f2; color: #800000; border: 1px solid #800000; }
 .chip-approved { background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; }
 .chip-rejected { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
 

@@ -111,15 +111,17 @@ body {
 .sidebar-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
 .sidebar-item:hover i { opacity: 1; transform: translateX(2px); }
 .sidebar-item.active {
-    background: rgba(0,0,0,0.15);
-    color: var(--accent);
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    border-right: 4px solid var(--primary, #800000);
 }
-.sidebar-item.active i { color: var(--accent); opacity: 1; }
+.sidebar-item.active i { 
+    color: var(--primary, #800000); 
+    opacity: 1; 
+    transform: scale(1.1);
+}
 .sidebar-item.active::after {
-    content: ''; position: absolute;
-    right: 0; top: 0; height: 100%; width: 4px;
-    background: var(--accent);
-    box-shadow: -2px 0 10px rgba(255, 102, 0, 0.4);
+    display: none; /* Replaced by border-right for cleaner implementation matching image */
 }
 
 /* ══════════════════════════════════════
