@@ -125,23 +125,33 @@
 }
 
 .btn-premium-submit {
-    padding: 0.9rem 2.8rem;
-    background: linear-gradient(to bottom, #1a1a1a, #000000);
-    border: 1px solid #333333;
-    border-radius: 10px;
+    padding: 0.85rem 3rem;
+    background: var(--p-wine, #800000);
+    border: none;
+    border-radius: 12px;
     color: white;
-    font-weight: 800;
-    font-size: 0.82rem;
-    letter-spacing: 0.08em;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.02em;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 12px;
     cursor: pointer;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255,255,255,0.1);
+    box-shadow: 0 4px 15px rgba(128, 0, 0, 0.2);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
+}
+
+.btn-premium-submit:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(128, 0, 0, 0.35);
+    background: #a10000;
+}
+
+.btn-premium-submit:active:not(:disabled) {
+    transform: scale(0.98);
 }
 
 .btn-premium-submit::before {
