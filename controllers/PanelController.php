@@ -17,7 +17,10 @@ class PanelController {
             'clientes' => count($model->getAll()),
         ];
 
+        $metricas_adicionales = [];
         $notificaciones_recargas = [];
+        $notificaciones = [];
+        
         if ($_SESSION['rol'] === 'admin') {
             $canjeModel = new CanjeModel();
             $notificaciones = $canjeModel->getRecientes(5);
@@ -25,12 +28,22 @@ class PanelController {
             // Nuevas Recargas Pendientes
             $db = Database::getConnection();
             $notificaciones_recargas = $db->query("SELECT r.*, c.nombre as cliente_nombre FROM recargas r JOIN clientes c ON r.cliente_id = c.id WHERE r.estado = 'pendiente' ORDER BY r.fecha DESC LIMIT 5")->fetchAll();
+            
+            // Canjes realizados hoy
+            $canjes_hoy = $db->query("SELECT COUNT(*) as total FROM canjes WHERE DATE(fecha) = CURDATE()")->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
+            
+            // Ranking de usuarios con más canjes
+            $ranking = $db->query("SELECT c.nombre, COUNT(cj.id) as total_canjes FROM canjes cj JOIN clientes c ON cj.cliente_id = c.id GROUP BY c.id ORDER BY total_canjes DESC LIMIT 5")->fetchAll(PDO::FETCH_ASSOC);
+            
+            $metricas_adicionales['canjes_hoy'] = $canjes_hoy;
+            $metricas_adicionales['ranking'] = $ranking;
         }
 
         $this->render('panel', [
             'totales'        => $totales,
             'notificaciones' => $notificaciones,
-            'notificaciones_recargas' => $notificaciones_recargas
+            'notificaciones_recargas' => $notificaciones_recargas,
+            'metricas_adicionales' => $metricas_adicionales
         ]);
     }
 

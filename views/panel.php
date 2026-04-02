@@ -59,7 +59,61 @@
             include __DIR__ . '/partials/header_admin.php';
         ?>
 
-        <div class="container" style="max-width: 1000px; margin: 0 auto;">
+        <div class="container" style="max-width: 1000px; margin: 0 auto; padding-top: 1rem;">
+
+        <?php if ($_SESSION['rol'] === 'admin'): ?>
+        <!-- KPIs y Resúmenes Principales -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
+            
+            <!-- Usuarios Activos -->
+            <div style="background: white; border-radius: 1.5rem; padding: 1.5rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.02); display: flex; align-items: center; gap: 1.25rem;">
+                <div style="width: 55px; height: 55px; border-radius: 14px; background: #eef2ff; color: #4f46e5; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; flex-shrink: 0;">
+                    <i class='bx bx-user-check'></i>
+                </div>
+                <div>
+                    <div style="color: #64748b; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">Usuarios Activos</div>
+                    <div style="font-size: 1.8rem; font-weight: 900; color: #1e293b; margin-top: 0.1rem; line-height: 1;"><?= $totales['clientes'] ?></div>
+                </div>
+            </div>
+
+            <!-- Canjes de Hoy -->
+            <div style="background: white; border-radius: 1.5rem; padding: 1.5rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.02); display: flex; align-items: center; gap: 1.25rem;">
+                <div style="width: 55px; height: 55px; border-radius: 14px; background: #f0fdf4; color: #22c55e; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; flex-shrink: 0;">
+                    <i class='bx bx-refresh'></i>
+                </div>
+                <div>
+                    <div style="color: #64748b; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">Canjes Realizados Hoy</div>
+                    <div style="font-size: 1.8rem; font-weight: 900; color: #1e293b; margin-top: 0.1rem; line-height: 1;"><?= $metricas_adicionales['canjes_hoy'] ?></div>
+                </div>
+            </div>
+
+            <!-- Ranking de Usuarios (Top 3) -->
+            <div style="background: white; border-radius: 1.5rem; padding: 1.5rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: center;">
+                <div style="color: #64748b; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
+                    <i class='bx bx-trophy' style="color: #f59e0b; font-size: 1.1rem;"></i> Top Clientes Canjeadores
+                </div>
+                
+                <div style="display: flex; flex-direction: column; gap: 0.6rem;">
+                    <?php if (!empty($metricas_adicionales['ranking'])): ?>
+                        <?php foreach (array_slice($metricas_adicionales['ranking'], 0, 3) as $index => $rank): ?>
+                            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem;">
+                                <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: <?php echo $index === 0 ? '800' : '600'; ?>; color: <?php echo $index === 0 ? '#1e293b' : '#475569'; ?>; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px;">
+                                    <span style="background: <?php echo $index === 0 ? '#fef3c7' : '#f1f5f9'; ?>; color: <?php echo $index === 0 ? '#d97706' : '#64748b'; ?>; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 800; flex-shrink: 0;"><?= $index + 1 ?></span>
+                                    <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<?= htmlspecialchars($rank['nombre']) ?>"><?= htmlspecialchars($rank['nombre']) ?></span>
+                                </div>
+                                <div style="font-weight: 800; color: var(--p-wine, #800000); flex-shrink: 0;">
+                                    <?= $rank['total_canjes'] ?> canjes
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div style="font-size: 0.75rem; color: #94a3b8; font-weight: 500;">Aún no hay canjes registrados.</div>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+        </div>
+        <?php endif; ?>
 
         <?php if ($_SESSION['rol'] === 'admin' && !empty($notificaciones_recargas)): ?>
         <div class="section-header" style="margin-top: 1.5rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 0.5rem; margin-bottom: 1rem;">
