@@ -111,14 +111,16 @@ body {
 .sidebar-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
 .sidebar-item:hover i { opacity: 1; transform: translateX(2px); }
 .sidebar-item.active {
-    background: rgba(255, 255, 255, 0.08); /* Sophisticated lighter block */
-    color: var(--accent);
-    border-right: 5px solid var(--accent); /* Thick vibrant orange delimiter */
+    background: #5a0a0a; /* Defined lighter crimson block for contrast */
+    color: #ff6600 !important;
+    border-right: 5px solid #ff6600;
+}
+.sidebar-item.active span {
+    color: #ff6600 !important;
 }
 .sidebar-item.active i { 
-    color: var(--accent); 
+    color: #ff6600 !important; 
     opacity: 1; 
-    transform: scale(1.05);
 }
 
 /* ══════════════════════════════════════
