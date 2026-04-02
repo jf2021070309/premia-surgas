@@ -13,6 +13,7 @@
     <style>
         .settings-grid { display: grid; grid-template-columns: 1fr; gap: 2.5rem; margin-bottom: 3rem; }
         .preview-img-circle { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        [data-pagination] { display: none; } /* Hidden by default till JS runs */
     </style>
 </head>
 <body>
@@ -28,8 +29,8 @@
 
         <div class="container" style="max-width: 1200px; padding-top: 1rem;">
             
-            <!-- SECTION 1: OPERACIONES -->
-            <div class="card shadow-sm">
+            <!-- SECTION 1: OPERACIONES (5 per page) -->
+            <div class="card shadow-sm" id="cardOp">
                 <div class="card-header-premium">
                     <div class="header-title-flex">
                         <i class='bx bx-calculator' style="color: #800000;"></i>
@@ -38,7 +39,7 @@
                     <div class="header-controls">
                         <div class="filter-input-group">
                             <i class='bx bx-search'></i>
-                            <input type="text" placeholder="Buscar regla..." onkeyup="filterTable('tableOp', this.value)">
+                            <input type="text" placeholder="Buscar regla..." onkeyup="handleSearch('tableOp', this.value)">
                         </div>
                         <button class="btn-premium-pill-black" style="padding: 0.6rem 1.8rem; font-size: 0.85rem;" onclick="openModalOp()">
                             <i class='bx bx-plus'></i> Nueva Regla
@@ -57,7 +58,7 @@
                         </thead>
                         <tbody>
                             <?php foreach ($operaciones as $op): ?>
-                            <tr>
+                            <tr class="table-row">
                                 <td class="text-medium"><?= htmlspecialchars($op['nombre']) ?></td>
                                 <td class="text-center"><span class="text-pts-plus"><?= $op['puntos'] ?> pts</span></td>
                                 <td class="text-center">
@@ -76,18 +77,14 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="card-footer-premium">
-                    <div class="footer-info">Mostrando <?= count($operaciones) ?> reglas registradas</div>
-                    <div class="pagination-elite">
-                        <a href="#" class="page-btn nav-arrows"><i class='bx bx-chevron-left'></i></a>
-                        <a href="#" class="page-btn active">1</a>
-                        <a href="#" class="page-btn nav-arrows"><i class='bx bx-chevron-right'></i></a>
-                    </div>
+                <div class="card-footer-premium" id="footerOp">
+                    <div class="footer-info">Mostrando <span class="range"></span> de <span class="total"></span></div>
+                    <div class="pagination-elite" data-pagination="tableOp"></div>
                 </div>
             </div>
 
-            <!-- SECTION 2: PREMIOS -->
-            <div class="card shadow-sm">
+            <!-- SECTION 2: PREMIOS (10 per page) -->
+            <div class="card shadow-sm" id="cardPremios">
                 <div class="card-header-premium">
                     <div class="header-title-flex">
                         <i class='bx bx-gift' style="color: #ea580c;"></i>
@@ -96,7 +93,7 @@
                     <div class="header-controls">
                         <div class="filter-input-group">
                             <i class='bx bx-filter-alt'></i>
-                            <select onchange="filterTableByStatus('tablePremios', this.value, 3)">
+                            <select onchange="handleStatusFilter('tablePremios', this.value, 4)">
                                 <option value="">Todos los items</option>
                                 <option value="Activo">Solo Activos</option>
                                 <option value="Inactivo">Solo Ocultos</option>
@@ -104,7 +101,7 @@
                         </div>
                         <div class="filter-input-group">
                             <i class='bx bx-search'></i>
-                            <input type="text" placeholder="Buscar premio..." onkeyup="filterTable('tablePremios', this.value)">
+                            <input type="text" placeholder="Buscar premio..." onkeyup="handleSearch('tablePremios', this.value)">
                         </div>
                         <button class="btn-premium-pill-black" style="padding: 0.6rem 1.8rem; font-size: 0.85rem;" onclick="openModalPremio()">
                             <i class='bx bx-plus'></i> Nuevo Premio
@@ -125,7 +122,7 @@
                         </thead>
                         <tbody>
                             <?php foreach ($premios as $p): ?>
-                            <tr>
+                            <tr class="table-row">
                                 <td class="ps-4"><img src="<?= BASE_URL ?>assets/premios/<?= $p['imagen'] ?>" class="preview-img-circle" onerror="this.src='<?= BASE_URL ?>assets/premios/default.png'"></td>
                                 <td class="text-medium"><?= htmlspecialchars($p['nombre']) ?></td>
                                 <td class="text-center"><span class="text-pts-plus"><?= $p['puntos'] ?> pts</span></td>
@@ -146,16 +143,14 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="card-footer-premium">
-                    <div class="footer-info">Mostrando <?= count($premios) ?> premios en catálogo</div>
-                    <div class="pagination-elite">
-                        <a href="#" class="page-btn active">1</a>
-                    </div>
+                <div class="card-footer-premium" id="footerPremios">
+                    <div class="footer-info">Mostrando <span class="range"></span> de <span class="total"></span></div>
+                    <div class="pagination-elite" data-pagination="tablePremios"></div>
                 </div>
             </div>
 
-            <!-- SECTION 3: CONDUCTORES -->
-            <div class="card shadow-sm">
+            <!-- SECTION 3: CONDUCTORES (5 per page) -->
+            <div class="card shadow-sm" id="cardCond">
                 <div class="card-header-premium">
                     <div class="header-title-flex">
                         <i class='bx bxs-truck' style="color: #166534;"></i>
@@ -164,7 +159,7 @@
                     <div class="header-controls">
                         <div class="filter-input-group">
                             <i class='bx bx-search'></i>
-                            <input type="text" placeholder="Nombre o usuario..." onkeyup="filterTable('tableCond', this.value)">
+                            <input type="text" placeholder="Nombre o usuario..." onkeyup="handleSearch('tableCond', this.value)">
                         </div>
                         <button class="btn-premium-pill-black" style="padding: 0.6rem 1.8rem; font-size: 0.85rem;" onclick="openModalCond()">
                             <i class='bx bx-plus'></i> Nuevo Conductor
@@ -183,7 +178,7 @@
                         </thead>
                         <tbody>
                             <?php foreach ($conductores as $c): ?>
-                            <tr>
+                            <tr class="table-row">
                                 <td class="text-medium"><?= htmlspecialchars($c['nombre']) ?></td>
                                 <td class="text-center text-muted"><?= htmlspecialchars($c['usuario']) ?></td>
                                 <td class="text-center">
@@ -202,11 +197,9 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="card-footer-premium">
-                    <div class="footer-info">Mostrando <?= count($conductores) ?> conductores activos</div>
-                    <div class="pagination-elite">
-                        <a href="#" class="page-btn active">1</a>
-                    </div>
+                <div class="card-footer-premium" id="footerCond">
+                    <div class="footer-info">Mostrando <span class="range"></span> de <span class="total"></span></div>
+                    <div class="pagination-elite" data-pagination="tableCond"></div>
                 </div>
             </div>
 
@@ -224,7 +217,7 @@
                 <div class="modal-body-premium">
                     <input type="hidden" name="id" id="op_id">
                     <input type="hidden" name="redir" value="ajustes">
-                    <div class="form-group" style="margin-bottom: 2rem;">
+                    <div class="form-group">
                         <label class="form-label-premium">Nombre de la Operación</label>
                         <input type="text" name="nombre" id="op_nombre" class="form-input-premium" placeholder="Ej: Recarga Gas 10kg" required>
                     </div>
@@ -260,11 +253,11 @@
                 <div class="modal-body-premium">
                     <input type="hidden" name="id" id="premio_id">
                     <input type="hidden" name="redir" value="ajustes">
-                    <div class="form-group" style="margin-bottom: 2rem;">
+                    <div class="form-group">
                         <label class="form-label-premium">Nombre Comercial del Premio</label>
                         <input type="text" name="nombre" id="premio_nombre" class="form-input-premium" required>
                     </div>
-                    <div class="modal-grid-2" style="margin-bottom: 2rem;">
+                    <div class="modal-grid-2">
                         <div class="form-group">
                             <label class="form-label-premium">Inversión Puntos</label>
                             <input type="number" name="puntos" id="premio_puntos" class="form-input-premium" required>
@@ -274,7 +267,7 @@
                             <input type="number" name="stock" id="premio_stock" class="form-input-premium" required>
                         </div>
                     </div>
-                    <div class="form-group" style="margin-bottom: 2rem;">
+                    <div class="form-group">
                         <label class="form-label-premium">Cambiar Imagen</label>
                         <input type="file" name="imagen_file" class="form-input-premium">
                     </div>
@@ -304,15 +297,15 @@
                 <div class="modal-body-premium">
                     <input type="hidden" name="id" id="cond_id">
                     <input type="hidden" name="redir" value="ajustes">
-                    <div class="form-group" style="margin-bottom: 2rem;">
+                    <div class="form-group">
                         <label class="form-label-premium">Nombre y Apellidos</label>
                         <input type="text" name="nombre" id="cond_nombre" class="form-input-premium" required>
                     </div>
-                    <div class="form-group" style="margin-bottom: 2rem;">
+                    <div class="form-group">
                         <label class="form-label-premium">Nombre de Usuario</label>
                         <input type="text" name="usuario" id="cond_usuario" class="form-input-premium" required>
                     </div>
-                    <div class="form-group" style="margin-bottom: 2rem;">
+                    <div class="form-group">
                         <label class="form-label-premium">Nueva Contraseña</label>
                         <input type="password" name="password" id="cond_pass" class="form-input-premium" placeholder="••••••••">
                     </div>
@@ -332,29 +325,90 @@
     </div>
 
     <script>
-        // --- REAL TIME FILTER ---
-        function filterTable(tableId, query) {
+        // --- PAGINATION MODULE ---
+        const PagData = {
+            tableOp:      { page: 1, size: 5, search: '', status: '', footer: 'footerOp' },
+            tablePremios: { page: 1, size: 10, search: '', status: '', footer: 'footerPremios' },
+            tableCond:    { page: 1, size: 5, search: '', status: '', footer: 'footerCond' }
+        };
+
+        function renderPagination(tableId) {
+            const config = PagData[tableId];
             const table = document.getElementById(tableId);
-            const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
-            query = query.toLowerCase();
-            for (let i = 0; i < rows.length; i++) {
-                const text = rows[i].innerText.toLowerCase();
-                rows[i].style.display = text.includes(query) ? '' : 'none';
+            const tbody = table.querySelector('tbody');
+            const allRows = Array.from(tbody.querySelectorAll('tr'));
+            
+            // Filter
+            const visibleRows = allRows.filter(row => {
+                const matchesSearch = row.innerText.toLowerCase().includes(config.search.toLowerCase());
+                const matchesStatus = config.status === "" || row.cells[row.cells.length-2].innerText.trim() === config.status;
+                return matchesSearch && matchesStatus;
+            });
+
+            const total = visibleRows.length;
+            const totalPages = Math.ceil(total / config.size);
+            
+            // Correction if page is out of range
+            if (config.page > totalPages) config.page = Math.max(1, totalPages);
+
+            // Hide all rows
+            allRows.forEach(r => r.style.display = 'none');
+
+            // Show page rows
+            const start = (config.page - 1) * config.size;
+            const end = start + config.size;
+            const pageRows = visibleRows.slice(start, end);
+            pageRows.forEach(r => r.style.display = '');
+
+            // Update Info
+            const footer = document.getElementById(config.footer);
+            const rangeSpan = footer.querySelector('.range');
+            const totalSpan = footer.querySelector('.total');
+            rangeSpan.innerText = total > 0 ? `${start + 1} - ${Math.min(end, total)}` : '0';
+            totalSpan.innerText = total;
+
+            // Render Buttons
+            const pagContainer = document.querySelector(`[data-pagination="${tableId}"]`);
+            if (totalPages <= 1) {
+                pagContainer.style.display = 'none';
+                return;
             }
+
+            pagContainer.style.display = 'flex';
+            let html = `<a href="javascript:void(0)" class="page-btn nav-arrows ${config.page === 1 ? 'disabled' : ''}" onclick="changePage('${tableId}', ${config.page - 1})"><i class='bx bx-chevron-left'></i></a>`;
+            for (let i = 1; i <= totalPages; i++) {
+                html += `<a href="javascript:void(0)" class="page-btn ${i === config.page ? 'active' : ''}" onclick="changePage('${tableId}', ${i})">${i}</a>`;
+            }
+            html += `<a href="javascript:void(0)" class="page-btn nav-arrows ${config.page === totalPages ? 'disabled' : ''}" onclick="changePage('${tableId}', ${config.page + 1})"><i class='bx bx-chevron-right'></i></a>`;
+            pagContainer.innerHTML = html;
         }
 
-        function filterTableByStatus(tableId, status, colIndex) {
-            const table = document.getElementById(tableId);
-            const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
-            for (let i = 0; i < rows.length; i++) {
-                const badgeText = rows[i].cells[colIndex].innerText.trim();
-                if (status === "" || badgeText === status) {
-                    rows[i].style.display = '';
-                } else {
-                    rows[i].style.display = 'none';
-                }
-            }
+        function changePage(tableId, targetPage) {
+            const config = PagData[tableId];
+            const maxPage = Math.ceil(document.querySelectorAll(`#${tableId} tbody tr`).length / config.size); // simplified total for now
+            if (targetPage < 1) return;
+            config.page = targetPage;
+            renderPagination(tableId);
         }
+
+        function handleSearch(tableId, val) {
+            PagData[tableId].search = val;
+            PagData[tableId].page = 1;
+            renderPagination(tableId);
+        }
+
+        function handleStatusFilter(tableId, val, colIndex) {
+            PagData[tableId].status = val;
+            PagData[tableId].page = 1;
+            renderPagination(tableId);
+        }
+
+        // --- INIT ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderPagination('tableOp');
+            renderPagination('tablePremios');
+            renderPagination('tableCond');
+        });
 
         // --- MODAL HELPERS ---
         function openModalOp() {
