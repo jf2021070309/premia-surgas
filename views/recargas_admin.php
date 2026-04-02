@@ -49,35 +49,49 @@
                 }
             }
         ?>
-        <div class="stats-row">
-            <div class="stat-card orange-theme">
-                <div class="stat-icon"><i class='bx bxs-time-five'></i></div>
-                <div class="stat-content">
-                    <div class="stat-value count-up" data-target="<?= $totalPendientes ?>">0</div>
-                    <div class="stat-label">Pendientes</div>
+        <style>
+            .dash-card { border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); position: relative; overflow: hidden; color: white; display: flex; flex-direction: column; }
+            .dash-card-body { padding: 1.25rem 1.5rem; flex: 1; position: relative; z-index: 2; min-height: 110px; }
+            .dash-card-number { font-size: 2.2rem; font-weight: 800; margin-bottom: 4px; line-height: 1; font-family: 'Inter', sans-serif; }
+            .dash-card-text { font-size: 0.8rem; margin-bottom: 0; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: rgba(255,255,255,0.8); }
+            .dash-card-icon { position: absolute; top: 50%; right: -10px; transform: translateY(-50%); font-size: 90px; color: rgba(0,0,0,0.1); z-index: 1; pointer-events: none; }
+        </style>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+            
+            <div class="dash-card" style="background: #f97316;">
+                <div class="dash-card-body">
+                    <div class="dash-card-number count-up" data-target="<?= $totalPendientes ?>">0</div>
+                    <div class="dash-card-text">Pendientes</div>
                 </div>
+                <i class='bx bxs-time-five dash-card-icon'></i>
             </div>
-            <div class="stat-card">
-                <div class="stat-icon"><i class='bx bxs-badge-check'></i></div>
-                <div class="stat-content">
-                    <div class="stat-value count-up" data-target="<?= $totalAprobados ?>">0</div>
-                    <div class="stat-label">Aprobados</div>
+
+            <div class="dash-card" style="background: #450a0a;">
+                <div class="dash-card-body">
+                    <div class="dash-card-number count-up" data-target="<?= $totalAprobados ?>">0</div>
+                    <div class="dash-card-text">Aprobados</div>
                 </div>
+                <i class='bx bxs-check-shield dash-card-icon'></i>
             </div>
-            <div class="stat-card">
-                <div class="stat-icon"><i class='bx bxs-error-circle'></i></div>
-                <div class="stat-content">
-                    <div class="stat-value count-up" data-target="<?= $totalRechazados ?>">0</div>
-                    <div class="stat-label">Rechazados</div>
+
+            <div class="dash-card" style="background: #450a0a;">
+                <div class="dash-card-body">
+                    <div class="dash-card-number count-up" data-target="<?= $totalRechazados ?>">0</div>
+                    <div class="dash-card-text">Rechazados</div>
                 </div>
+                <i class='bx bxs-error-circle dash-card-icon'></i>
             </div>
-            <div class="stat-card">
-                <div class="stat-icon"><i class='bx bxs-bank'></i></div>
-                <div class="stat-content">
-                    <div class="stat-value">S/ <span class="count-up" data-target="<?= $montoTotal ?>">0</span></div>
-                    <div class="stat-label">Monto Acreditado</div>
+
+            <div class="dash-card" style="background: #450a0a;">
+                <div class="dash-card-body">
+                    <div class="dash-card-number" style="display: flex; align-items: baseline; gap: 4px;">
+                        <span style="font-size: 1.2rem;">S/</span> <span class="count-up" data-target="<?= $montoTotal ?>">0</span>
+                    </div>
+                    <div class="dash-card-text">Monto Acreditado</div>
                 </div>
+                <i class='bx bxs-bank dash-card-icon'></i>
             </div>
+
         </div>
 
         <!-- Dashboard Modular Grid -->

@@ -96,7 +96,7 @@
                     <div class="dash-card-text">Usuarios Registrados</div>
                 </div>
                 <i class='bx bx-user-plus dash-card-icon'></i>
-                <a href="<?= BASE_URL ?>clientes" class="dash-card-footer">Mas información <i class='bx bx-right-arrow-circle'></i></a>
+                <a href="<?= BASE_URL ?>clientes/lista" class="dash-card-footer">Mas información <i class='bx bx-right-arrow-circle'></i></a>
             </div>
 
             <!-- Green Card (Canjes) -->
@@ -106,7 +106,7 @@
                     <div class="dash-card-text">Canjes Hoy</div>
                 </div>
                 <i class='bx bx-gift dash-card-icon'></i>
-                <a href="<?= BASE_URL ?>canjes" class="dash-card-footer">Mas información <i class='bx bx-right-arrow-circle'></i></a>
+                <a href="<?= BASE_URL ?>canjes-admin" class="dash-card-footer">Mas información <i class='bx bx-right-arrow-circle'></i></a>
             </div>
 
             <!-- Yellow Card (Puntos) -->
@@ -118,7 +118,7 @@
                     <div class="dash-card-text">Puntos Dados Hoy</div>
                 </div>
                 <i class='bx bx-star dash-card-icon'></i>
-                <a href="<?= BASE_URL ?>historial" class="dash-card-footer">Mas información <i class='bx bx-right-arrow-circle'></i></a>
+                <a href="<?= BASE_URL ?>scan" class="dash-card-footer">Mas información <i class='bx bx-right-arrow-circle'></i></a>
             </div>
 
             <!-- Red Card (Recargas) -->
@@ -157,58 +157,33 @@
                 
                 <div style="display: flex; flex-direction: column; gap: 0.8rem; overflow-y: auto; padding-right: 0.5rem;">
                     <?php if (!empty($metricas_adicionales['ranking'])): ?>
-                        <?php foreach ($metricas_adicionales['ranking'] as $index => $rank): 
-                            // Extract initials
-                            $words = explode(" ", trim($rank['nombre']));
-                            $initials = strtoupper(substr($words[0], 0, 1) . (isset($words[1]) ? substr($words[1], 0, 1) : ''));
-                        ?>
-                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.85rem 1rem; border-radius: 1rem; background: #fff; border: 1px solid <?php echo $index === 0 ? '#fef3c7' : '#f8fafc'; ?>; box-shadow: <?php echo $index === 0 ? '0 4px 15px rgba(245,158,11,0.1)' : '0 2px 5px rgba(0,0,0,0.02)'; ?>; transition: all 0.3s ease; cursor: default;" onmouseover="this.style.transform='translateX(5px)'; this.style.borderColor='var(--primary)';" onmouseout="this.style.transform='translateX(0)'; this.style.borderColor='<?php echo $index === 0 ? '#fef3c7' : '#f8fafc'; ?>';">
-                                <div style="display: flex; align-items: center; gap: 1rem;">
+                        <?php foreach ($metricas_adicionales['ranking'] as $index => $rank): ?>
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.85rem 1rem; border-radius: 1rem; background: #fff; border: 1px solid <?php echo $index === 0 ? '#fef3c7' : '#f8fafc'; ?>; box-shadow: <?php echo $index === 0 ? '0 4px 15px rgba(245,158,11,0.1)' : '0 2px 5px rgba(0,0,0,0.02)'; ?>; transition: all 0.3s ease; cursor: default;">
+                                <div style="display: flex; align-items: center; gap: 0.8rem;">
                                     
                                     <!-- Medal / Rank Number -->
                                     <?php if ($index === 0): ?>
-                                        <div style="font-size: 1.6rem; color: #fbbf24; text-shadow: 0 2px 5px rgba(251,191,36,0.3);"><i class='bx bxs-medal'></i></div>
+                                        <div style="font-size: 1.6rem; color: #fbbf24;"><i class='bx bxs-medal'></i></div>
                                     <?php elseif ($index === 1): ?>
-                                        <div style="font-size: 1.6rem; color: #94a3b8; text-shadow: 0 2px 5px rgba(148,163,184,0.3);"><i class='bx bxs-medal'></i></div>
+                                        <div style="font-size: 1.6rem; color: #94a3b8;"><i class='bx bxs-medal'></i></div>
                                     <?php elseif ($index === 2): ?>
-                                        <div style="font-size: 1.6rem; color: #b45309; text-shadow: 0 2px 5px rgba(180,83,9,0.3);"><i class='bx bxs-medal'></i></div>
+                                        <div style="font-size: 1.6rem; color: #b45309;"><i class='bx bxs-medal'></i></div>
                                     <?php else: ?>
                                         <div style="font-size: 1rem; font-weight: 800; color: #cbd5e1; width: 1.6rem; text-align: center;"><?= $index + 1 ?></div>
                                     <?php endif; ?>
 
-                                    <!-- User Avatar (Initials) -->
-                                    <div style="width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, var(--p-wine, #800000), #dc2626); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.95rem; letter-spacing: 1px; flex-shrink: 0;">
-                                        <?= $initials ?>
-                                    </div>
-                                    
                                     <!-- User Name -->
-                                    <div style="display: flex; flex-direction: column;">
-                                        <div style="font-weight: 800; color: #1e293b; font-size: 0.9rem; margin-bottom: 0.15rem; line-height: 1.2;">
-                                            <?= htmlspecialchars($rank['nombre']) ?>
-                                        </div>
-                                        <?php if ($index === 0): ?>
-                                            <div style="font-size: 0.65rem; color: #d97706; font-weight: 800; text-transform: uppercase;">Top #1 Frecuente</div>
-                                        <?php else: ?>
-                                            <div style="font-size: 0.65rem; color: #64748b; font-weight: 600; text-transform: uppercase;">Cliente Activo</div>
-                                        <?php endif; ?>
+                                    <div style="font-weight: 800; color: #1e293b; font-size: 0.9rem;">
+                                        <?= htmlspecialchars($rank['nombre']) ?>
                                     </div>
                                 </div>
                                 
                                 <!-- Score / Canjes -->
-                                <div style="display: flex; flex-direction: column; align-items: flex-end;">
-                                    <div style="font-weight: 900; color: white; font-size: 0.9rem; background: var(--p-wine, #800000); padding: 0.3rem 0.8rem; border-radius: 12px; box-shadow: 0 3px 8px rgba(128,0,0,0.2);">
-                                        <?= $rank['total_canjes'] ?>
-                                    </div>
-                                    <div style="font-size: 0.6rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; margin-top: 0.3rem; letter-spacing: 0.5px;">Canjes</div>
+                                <div style="font-weight: 900; color: var(--p-wine, #800000); font-size: 1.1rem;">
+                                    <?= $rank['total_canjes'] ?>
                                 </div>
                             </div>
                         <?php endforeach; ?>
-                        
-                        <?php if (count($metricas_adicionales['ranking']) < 5): ?>
-                            <div style="text-align: center; font-size: 0.75rem; color: #cbd5e1; margin-top: 0.5rem; font-weight: 600;">
-                                Más usuarios en camino... 🚀
-                            </div>
-                        <?php endif; ?>
                     <?php else: ?>
                         <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2.5rem 0;">
                             <div style="font-size: 3rem; color: #e2e8f0; margin-bottom: 0.5rem;"><i class='bx bx-ghost'></i></div>
