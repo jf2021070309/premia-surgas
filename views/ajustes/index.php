@@ -42,6 +42,8 @@
             font-size: 0.7rem; font-weight: 800; color: #94a3b8;
             text-transform: uppercase; letter-spacing: 0.15em;
         }
+        .form-label-premium { display: block; font-size: 0.72rem; font-weight: 800; color: #94a3b8; margin-bottom: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        .modal-overlay { z-index: 1000 !important; }
     </style>
 </head>
 <body>
@@ -67,7 +69,7 @@
                         Reglas de Puntaje
                     </div>
                     <div class="header-actions">
-                        <button class="btn-premium-pill-black" onclick="openModalOp()" style="padding: 0.5rem 1.5rem; font-size: 0.85rem; border-radius: 100px;">
+                        <button class="btn-premium-pill-black" onclick="openModalOp()">
                             <i class='bx bx-plus'></i> <span>Nueva Regla</span>
                         </button>
                     </div>
@@ -119,9 +121,9 @@
                         Catálogo de Premios
                     </div>
                     <div class="header-actions">
-                        <a href="<?= BASE_URL ?>productos" class="btn-primary-premium">
-                            <i class='bx bx-package'></i> Gestionar Inventario
-                        </a>
+                        <button class="btn-premium-pill-black" onclick="openModalPremio()">
+                            <i class='bx bx-plus'></i> <span>Nuevo Premio</span>
+                        </button>
                     </div>
                 </div>
                 <div class="table-wrapper">
@@ -132,10 +134,11 @@
                                 <th>Premio</th>
                                 <th class="text-center">Puntos</th>
                                 <th class="text-center">Stock</th>
+                                <th class="text-center">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach (array_slice($premios, 0, 5) as $p): ?>
+                            <?php foreach ($premios as $p): ?>
                             <tr>
                                 <td class="ps-3">
                                     <img src="<?= BASE_URL ?>assets/premios/<?= $p['imagen'] ?>" class="preview-img-circle" onerror="this.src='<?= BASE_URL ?>assets/premios/default.png'">
@@ -143,6 +146,16 @@
                                 <td class="text-medium"><?= htmlspecialchars($p['nombre']) ?></td>
                                 <td class="text-center"><span class="badge bg-light text-dark" style="border: 1px solid #e2e8f0;"><?= $p['puntos'] ?> pts</span></td>
                                 <td class="text-center"><?= $p['stock'] ?></td>
+                                <td class="text-center">
+                                    <div class="actions-flex" style="justify-content: center;">
+                                        <button class="btn-action blue" onclick="editPremio(<?= htmlspecialchars(json_encode($p)) ?>)" title="Editar">
+                                            <i class='bx bx-edit-alt'></i>
+                                        </button>
+                                        <button class="btn-action red" onclick="confirmDeletePremio('<?= BASE_URL ?>productos/delete?id=<?= $p['id'] ?>')" title="Inactivar">
+                                            <i class='bx bx-trash'></i>
+                                        </button>
+                                    </div>
+                                </td>
                             </tr>
                             <?php endforeach; ?>
                         </tbody>
@@ -160,9 +173,9 @@
                         Directorio de Conductores
                     </div>
                     <div class="header-actions">
-                        <a href="<?= BASE_URL ?>conductores" class="btn-primary-premium">
-                            <i class='bx bx-group'></i> Gestionar Equipo
-                        </a>
+                        <button class="btn-premium-pill-black" onclick="openModalCond()">
+                            <i class='bx bx-plus'></i> <span>Nuevo Conductor</span>
+                        </button>
                     </div>
                 </div>
                 <div class="table-wrapper">
@@ -172,10 +185,11 @@
                                 <th>Nombre Conductor</th>
                                 <th class="text-center">Usuario</th>
                                 <th class="text-center">Estado</th>
+                                <th class="text-center">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach (array_slice($conductores, 0, 5) as $c): ?>
+                            <?php foreach ($conductores as $c): ?>
                             <tr>
                                 <td class="text-medium"><?= htmlspecialchars($c['nombre']) ?></td>
                                 <td class="text-center text-muted"><?= htmlspecialchars($c['usuario']) ?></td>
@@ -183,6 +197,16 @@
                                     <span class="chip <?= $c['estado'] ? 'chip-active' : 'chip-inactive' ?>">
                                         <?= $c['estado'] ? 'ACTIVO' : 'INACTIVO' ?>
                                     </span>
+                                </td>
+                                <td class="text-center">
+                                    <div class="actions-flex" style="justify-content: center;">
+                                        <button class="btn-action blue" onclick="editCond(<?= htmlspecialchars(json_encode($c)) ?>)" title="Editar">
+                                            <i class='bx bx-edit-alt'></i>
+                                        </button>
+                                        <button class="btn-action red" onclick="confirmDeleteCond('<?= BASE_URL ?>conductores/delete?id=<?= $c['id'] ?>')" title="Inactivar">
+                                            <i class='bx bx-trash'></i>
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                             <?php endforeach; ?>
@@ -194,7 +218,7 @@
         </div> <!-- .container -->
     </div> <!-- .admin-layout -->
 
-    <!-- Modal de Edición/Creación para Operaciones -->
+    <!-- MODAL OPERACIONES -->
     <div id="modalOp" class="modal-overlay" style="display: none;" onclick="if(event.target===this) closeModalOp()">
         <div class="modal-content-wrapper" style="max-width: 450px; padding: 0;">
             <div style="padding: 2.25rem; border-bottom: 1px solid var(--outline); position: relative; background: #fff; border-radius: 20px 20px 0 0;">
@@ -203,89 +227,179 @@
                     <i class='bx bx-x'></i>
                 </div>
             </div>
-            
             <form id="formOp" method="POST" action="<?= BASE_URL ?>operaciones/create" style="padding: 2.5rem; background: #fff; border-radius: 0 0 20px 20px;">
                 <input type="hidden" name="id" id="op_id">
                 <input type="hidden" name="redir" value="ajustes">
-                
                 <div class="form-group" style="margin-bottom: 2rem;">
-                    <label style="display: block; font-size: 0.72rem; font-weight: 800; color: #94a3b8; margin-bottom: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">Nombre de la Operación</label>
-                    <input type="text" name="nombre" id="op_nombre" class="form-input" 
-                           style="width: 100%; padding: 0.85rem 1.15rem; border: 1.5px solid #e2e8f0; border-radius: 12px; font-size: 0.9rem; outline: none; transition: 0.3s; font-family: 'Inter', sans-serif;"
-                           placeholder="Ej: Recarga Gas 10kg" required>
+                    <label class="form-label-premium">Nombre Operación</label>
+                    <input type="text" name="nombre" id="op_nombre" class="form-input" style="width: 100%;" required>
                 </div>
-
                 <div class="form-group" style="margin-bottom: 2rem;">
-                    <label style="display: block; font-size: 0.72rem; font-weight: 800; color: #94a3b8; margin-bottom: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">Puntos Asignados</label>
-                    <input type="number" name="puntos" id="op_puntos" class="form-input" 
-                           style="width: 100%; padding: 0.85rem 1.15rem; border: 1.5px solid #e2e8f0; border-radius: 12px; font-size: 0.9rem; outline: none; transition: 0.3s; font-family: 'Inter', sans-serif;"
-                           placeholder="0" required>
+                    <label class="form-label-premium">Puntos</label>
+                    <input type="number" name="puntos" id="op_puntos" class="form-input" style="width: 100%;" required>
                 </div>
-
                 <div class="form-group" id="group_estadoOp" style="display: none; margin-bottom: 2rem;">
-                    <label style="display: block; font-size: 0.72rem; font-weight: 800; color: #94a3b8; margin-bottom: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">Estado</label>
-                    <select name="estado" id="op_estado" class="form-input"
-                            style="width: 100%; padding: 0.85rem 1.15rem; border: 1.5px solid #e2e8f0; border-radius: 12px; font-size: 0.9rem; outline: none; transition: 0.3s; background: #fff; cursor: pointer;">
+                    <label class="form-label-premium">Estado</label>
+                    <select name="estado" id="op_estado" class="form-input" style="width: 100%;">
                         <option value="1">Activo</option>
                         <option value="0">Inactivo</option>
                     </select>
                 </div>
-
                 <div style="display: flex; justify-content: flex-end; margin-top: 3rem;">
-                    <button type="submit" class="btn-premium-pill-black" style="padding: 1rem 3.5rem; background: #000000; border: none; border-radius: 10px; color: white; font-weight: 500; font-size: 1rem; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.15); transition: 0.3s; display: flex; align-items: center; gap: 10px;">
-                        <i class='bx bx-save'></i> <span>Guardar cambios</span>
-                    </button>
+                    <button type="submit" class="btn-premium-pill-black"><i class='bx bx-save'></i> Guardar cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL PREMIOS -->
+    <div id="modalPremio" class="modal-overlay" style="display: none;" onclick="if(event.target===this) closeModalPremio()">
+        <div class="modal-content-wrapper" style="max-width: 500px; padding: 0;">
+            <div style="padding: 2.25rem; border-bottom: 1px solid var(--outline); position: relative; background: #fff; border-radius: 20px 20px 0 0;">
+                <h2 id="modalTitlePremio" style="font-weight: 800; font-size: 1.15rem;">Nuevo Premio</h2>
+                <div class="modal-close" onclick="closeModalPremio()"><i class='bx bx-x'></i></div>
+            </div>
+            <form id="formPremio" method="POST" action="<?= BASE_URL ?>productos/create" enctype="multipart/form-data" style="padding: 2.5rem; background: #fff;">
+                <input type="hidden" name="id" id="premio_id">
+                <input type="hidden" name="redir" value="ajustes">
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label class="form-label-premium">Nombre</label>
+                    <input type="text" name="nombre" id="premio_nombre" class="form-input" style="width: 100%;" required>
+                </div>
+                <div class="row" style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+                    <div style="flex: 1;">
+                        <label class="form-label-premium">Puntos</label>
+                        <input type="number" name="puntos" id="premio_puntos" class="form-input" style="width: 100%;" required>
+                    </div>
+                    <div style="flex: 1;">
+                        <label class="form-label-premium">Stock</label>
+                        <input type="number" name="stock" id="premio_stock" class="form-input" style="width: 100%;" required>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label class="form-label-premium">Imagen (Archivo)</label>
+                    <input type="file" name="imagen_file" class="form-input" style="width: 100%;">
+                </div>
+                <div class="form-group" style="margin-bottom: 2rem;">
+                    <label class="form-label-premium">Estado</label>
+                    <select name="estado" id="premio_estado" class="form-input" style="width: 100%;">
+                        <option value="1">Activo</option>
+                        <option value="0">Inactivo</option>
+                    </select>
+                </div>
+                <div style="display: flex; justify-content: flex-end;">
+                    <button type="submit" class="btn-premium-pill-black">Guardar Premio</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL CONDUCTORES -->
+    <div id="modalCond" class="modal-overlay" style="display: none;" onclick="if(event.target===this) closeModalCond()">
+        <div class="modal-content-wrapper" style="max-width: 450px; padding: 0;">
+            <div style="padding: 2.25rem; border-bottom: 1px solid var(--outline); position: relative; background: #fff; border-radius: 20px 20px 0 0;">
+                <h2 id="modalTitleCond" style="font-weight: 800; font-size: 1.15rem;">Nuevo Conductor</h2>
+                <div class="modal-close" onclick="closeModalCond()"><i class='bx bx-x'></i></div>
+            </div>
+            <form id="formCond" method="POST" action="<?= BASE_URL ?>conductores/create" style="padding: 2.5rem; background: #fff;">
+                <input type="hidden" name="id" id="cond_id">
+                <input type="hidden" name="redir" value="ajustes">
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label class="form-label-premium">Nombre Completo</label>
+                    <input type="text" name="nombre" id="cond_nombre" class="form-input" style="width: 100%;" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label class="form-label-premium">Usuario (Login)</label>
+                    <input type="text" name="usuario" id="cond_usuario" class="form-input" style="width: 100%;" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label class="form-label-premium">Contraseña</label>
+                    <input type="password" name="password" id="cond_pass" class="form-input" style="width: 100%;" placeholder="Dejar en blanco para no cambiar">
+                </div>
+                <div class="form-group" style="margin-bottom: 2rem;">
+                    <label class="form-label-premium">Estado</label>
+                    <select name="estado" id="cond_estado" class="form-input" style="width: 100%;">
+                        <option value="1">Activo</option>
+                        <option value="0">Inactivo</option>
+                    </select>
+                </div>
+                <div style="display: flex; justify-content: flex-end;">
+                    <button type="submit" class="btn-premium-pill-black">Guardar Conductor</button>
                 </div>
             </form>
         </div>
     </div>
 
     <script>
-        // Lógica Modal Operaciones
-        const modalOp = document.getElementById('modalOp');
-        const formOp = document.getElementById('formOp');
-        const titleOp = document.getElementById('modalTitleOp');
-
+        // --- OPERACIONES ---
         function openModalOp() {
-            modalOp.style.display = 'flex';
-            formOp.action = '<?= BASE_URL ?>operaciones/create';
-            titleOp.innerText = 'Nueva Regla';
-            formOp.reset();
-            document.getElementById('op_id').value = '';
+            document.getElementById('modalOp').style.display = 'flex';
+            document.getElementById('formOp').action = '<?= BASE_URL ?>operaciones/create';
+            document.getElementById('modalTitleOp').innerText = 'Nueva Regla';
+            document.getElementById('formOp').reset();
             document.getElementById('group_estadoOp').style.display = 'none';
         }
-
-        function closeModalOp() {
-            modalOp.style.display = 'none';
-        }
-
+        function closeModalOp() { document.getElementById('modalOp').style.display = 'none'; }
         function editOp(op) {
-            modalOp.style.display = 'flex';
-            formOp.action = '<?= BASE_URL ?>operaciones/update';
-            titleOp.innerText = 'Editar Regla';
-            
+            document.getElementById('modalOp').style.display = 'flex';
+            document.getElementById('formOp').action = '<?= BASE_URL ?>operaciones/update';
+            document.getElementById('modalTitleOp').innerText = 'Editar Regla';
             document.getElementById('op_id').value = op.id;
             document.getElementById('op_nombre').value = op.nombre;
             document.getElementById('op_puntos').value = op.puntos;
             document.getElementById('op_estado').value = op.estado;
             document.getElementById('group_estadoOp').style.display = 'block';
         }
-
         function confirmDeleteOp(url) {
-            Swal.fire({
-                title: '¿Inactivar regla?',
-                text: "Ya no se podrá usar para nuevas recargas.",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#000000',
-                cancelButtonColor: '#64748b',
-                confirmButtonText: 'Sí, inactivar',
-                cancelButtonText: 'Cancelar'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = url + '&redir=ajustes';
-                }
-            });
+            Swal.fire({ title: '¿Inactivar regla?', text: "Se ocultará de las opciones de carga.", icon: 'warning', showCancelButton: true, confirmButtonColor: '#000', confirmButtonText: 'Sí, inactivar' })
+                .then((r) => { if(r.isConfirmed) window.location.href = url + '&redir=ajustes'; });
+        }
+
+        // --- PREMIOS ---
+        function openModalPremio() {
+            document.getElementById('modalPremio').style.display = 'flex';
+            document.getElementById('formPremio').action = '<?= BASE_URL ?>productos/create';
+            document.getElementById('modalTitlePremio').innerText = 'Nuevo Premio';
+            document.getElementById('formPremio').reset();
+            document.getElementById('premio_id').value = '';
+        }
+        function closeModalPremio() { document.getElementById('modalPremio').style.display = 'none'; }
+        function editPremio(p) {
+            document.getElementById('modalPremio').style.display = 'flex';
+            document.getElementById('formPremio').action = '<?= BASE_URL ?>productos/update';
+            document.getElementById('modalTitlePremio').innerText = 'Editar Premio';
+            document.getElementById('premio_id').value = p.id;
+            document.getElementById('premio_nombre').value = p.nombre;
+            document.getElementById('premio_puntos').value = p.puntos;
+            document.getElementById('premio_stock').value = p.stock;
+            document.getElementById('premio_estado').value = p.estado;
+        }
+        function confirmDeletePremio(url) {
+            Swal.fire({ title: '¿Inactivar premio?', text: "No será visible en la tienda.", icon: 'warning', showCancelButton: true, confirmButtonColor: '#000', confirmButtonText: 'Sí, inactivar' })
+                .then((r) => { if(r.isConfirmed) window.location.href = url + '&redir=ajustes'; });
+        }
+
+        // --- CONDUCTORES ---
+        function openModalCond() {
+            document.getElementById('modalCond').style.display = 'flex';
+            document.getElementById('formCond').action = '<?= BASE_URL ?>conductores/create';
+            document.getElementById('modalTitleCond').innerText = 'Nuevo Conductor';
+            document.getElementById('formCond').reset();
+            document.getElementById('cond_id').value = '';
+        }
+        function closeModalCond() { document.getElementById('modalCond').style.display = 'none'; }
+        function editCond(c) {
+            document.getElementById('modalCond').style.display = 'flex';
+            document.getElementById('formCond').action = '<?= BASE_URL ?>conductores/update';
+            document.getElementById('modalTitleCond').innerText = 'Editar Conductor';
+            document.getElementById('cond_id').value = c.id;
+            document.getElementById('cond_nombre').value = c.nombre;
+            document.getElementById('cond_usuario').value = c.usuario;
+            document.getElementById('cond_estado').value = c.estado;
+        }
+        function confirmDeleteCond(url) {
+            Swal.fire({ title: '¿Inactivar conductor?', text: "Ya no podrá acceder al sistema.", icon: 'warning', showCancelButton: true, confirmButtonColor: '#000', confirmButtonText: 'Sí, inactivar' })
+                .then((r) => { if(r.isConfirmed) window.location.href = url + '&redir=ajustes'; });
         }
     </script>
 
