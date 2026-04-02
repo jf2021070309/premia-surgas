@@ -138,8 +138,13 @@
             
             <!-- CHART -->
             <div style="background: white; border-radius: 1.25rem; padding: 1.5rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                    <h3 style="margin: 0; font-size: 1rem; color: #1e293b; display: flex; align-items: center; gap: 0.5rem;"><i class='bx bx-line-chart' style="color: var(--p-wine, #800000);"></i> Actividad (7 Días)</h3>
+                <div style="color: #1e293b; font-size: 1.1rem; font-weight: 800; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.8rem; padding-bottom: 1rem; border-bottom: 1px dashed #e2e8f0; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; gap: 0.8rem;">
+                        <div style="background: linear-gradient(135deg, var(--p-wine, #800000), #dc2626); width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem; box-shadow: 0 4px 10px rgba(220, 38, 38, 0.2);">
+                            <i class='bx bx-line-chart'></i>
+                        </div> 
+                        Actividad (7 Días)
+                    </div>
                 </div>
                 <div style="position: relative; height: 300px; width: 100%;">
                     <canvas id="actividadChart"></canvas>
@@ -158,7 +163,7 @@
                 <div style="display: flex; flex-direction: column; gap: 0.8rem; overflow-y: auto; padding-right: 0.5rem;">
                     <?php if (!empty($metricas_adicionales['ranking'])): ?>
                         <?php foreach ($metricas_adicionales['ranking'] as $index => $rank): ?>
-                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.85rem 1rem; border-radius: 1rem; background: #fff; border: 1px solid <?php echo $index === 0 ? '#fef3c7' : '#f8fafc'; ?>; box-shadow: <?php echo $index === 0 ? '0 4px 15px rgba(245,158,11,0.1)' : '0 2px 5px rgba(0,0,0,0.02)'; ?>; transition: all 0.3s ease; cursor: default;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.85rem 1rem; border-radius: 1rem; background: #fff; border: 1px solid <?php echo $index === 0 ? '#fef3c7' : ($index === 1 ? '#e2e8f0' : ($index === 2 ? '#ffedd5' : '#f8fafc')); ?>; box-shadow: <?php echo $index === 0 ? '0 4px 15px rgba(245,158,11,0.1)' : ($index === 1 ? '0 4px 15px rgba(148,163,184,0.1)' : ($index === 2 ? '0 4px 15px rgba(180,83,9,0.08)' : '0 2px 5px rgba(0,0,0,0.02)')); ?>; transition: all 0.3s ease; cursor: default;">
                                 <div style="display: flex; align-items: center; gap: 0.8rem;">
                                     
                                     <!-- Medal / Rank Number -->
