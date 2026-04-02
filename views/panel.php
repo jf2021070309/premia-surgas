@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-layout.css">
     <style>
-        [v-cloak]{display:none}
+        [v-cloak] { display: none !important; }
         .notif-card {
             background: white; border-radius: 1.5rem; padding: 1.2rem;
             box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid #f0f0f0;
@@ -72,7 +72,7 @@
     </style>
 </head>
 <body>
-<div id="app" v-cloak>
+<div id="app">
     <?php include __DIR__ . '/partials/sidebar_admin.php'; ?>
 
     <div class="admin-layout">
@@ -137,25 +137,30 @@
         <div class="middle-row-grid">
             
             <!-- CHART -->
-            <div style="background: white; border-radius: 1.25rem; padding: 1.5rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
-                <div style="margin-bottom: 1.25rem; padding-bottom: 1rem; border-bottom: 1px dashed #e2e8f0;">
+            <div style="display: flex; flex-direction: column;">
+                <div style="margin-bottom: 1rem; margin-top: 0.5rem;">
                     <h3 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 0.5rem;"><i class='bx bx-line-chart' style="color: #dc2626; font-size: 1.25rem;"></i> Actividad (7 Días)</h3>
                 </div>
-                <div style="position: relative; height: 300px; width: 100%;">
-                    <canvas id="actividadChart"></canvas>
+                <div style="background: white; border-radius: 1.25rem; padding: 1.5rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.03); flex: 1;">
+                    <div style="position: relative; height: 300px; width: 100%;">
+                        <canvas id="actividadChart"></canvas>
+                    </div>
                 </div>
             </div>
 
             <!-- RANKING -->
-            <div style="background: white; border-radius: 1.25rem; padding: 1.5rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.03); display: flex; flex-direction: column;">
-                <div style="color: #1e293b; font-size: 1.1rem; font-weight: 800; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.8rem; padding-bottom: 1rem; border-bottom: 1px dashed #e2e8f0;">
-                    <div style="background: linear-gradient(135deg, #f59e0b, #d97706); width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3);">
-                        <i class='bx bx-trophy'></i>
-                    </div> 
-                    Ranking Canjeadores
+            <div style="display: flex; flex-direction: column;">
+                <div style="margin-bottom: 1rem; margin-top: 0.5rem;">
+                    <div style="color: #1e293b; font-size: 1.1rem; font-weight: 800; display: flex; align-items: center; gap: 0.8rem;">
+                        <div style="background: linear-gradient(135deg, #f59e0b, #d97706); width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3);">
+                            <i class='bx bx-trophy'></i>
+                        </div> 
+                        Ranking Canjeadores
+                    </div>
                 </div>
                 
-                <div style="display: flex; flex-direction: column; gap: 0.8rem; overflow-y: auto; padding-right: 0.5rem;">
+                <div style="background: white; border-radius: 1.25rem; padding: 1.5rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.03); display: flex; flex-direction: column; flex: 1;">
+                    <div style="display: flex; flex-direction: column; gap: 0.8rem; overflow-y: auto; padding-right: 0.5rem;">
                     <?php if (!empty($metricas_adicionales['ranking'])): ?>
                         <?php foreach ($metricas_adicionales['ranking'] as $index => $rank): ?>
                             <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.85rem 1rem; border-radius: 1rem; background: #fff; border: 1px solid <?php echo $index === 0 ? '#fef3c7' : ($index === 1 ? '#e2e8f0' : ($index === 2 ? '#ffedd5' : '#f8fafc')); ?>; box-shadow: <?php echo $index === 0 ? '0 4px 15px rgba(245,158,11,0.1)' : ($index === 1 ? '0 4px 15px rgba(148,163,184,0.1)' : ($index === 2 ? '0 4px 15px rgba(180,83,9,0.08)' : '0 2px 5px rgba(0,0,0,0.02)')); ?>; transition: all 0.3s ease; cursor: default;">
@@ -254,8 +259,8 @@
     </div>
 
     <!-- Modal Detalle Canje -->
-    <transition name="modal" v-if="showModal">
-        <div class="modal-mask" @click="showModal = false">
+    <transition name="modal">
+        <div class="modal-mask" v-cloak v-if="showModal" @click="showModal = false">
             <div class="modal-wrapper" @click.stop>
                 <div class="modal-container">
                     <div class="modal-header-notif">
