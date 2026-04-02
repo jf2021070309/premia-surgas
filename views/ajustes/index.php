@@ -130,7 +130,7 @@
                                 </td>
                                 <td class="text-center">
                                     <div class="actions-flex" style="justify-content: center;">
-                                        <button class="btn-action" style="color: #6366f1;" onclick="viewPremioImage('<?= $p['nombre'] ?>', '<?= BASE_URL ?>assets/premios/<?= $p['imagen'] ?>')"><i class='bx bx-show'></i></button>
+                                        <button class="btn-action indigo" onclick="viewPremioImage('<?= $p['nombre'] ?>', '<?= BASE_URL ?>assets/premios/<?= $p['imagen'] ?>')"><i class='bx bx-show'></i></button>
                                         <button class="btn-action blue" onclick="editPremio(<?= htmlspecialchars(json_encode($p)) ?>)"><i class='bx bx-edit-alt'></i></button>
                                         <button class="btn-action red" onclick="confirmDeletePremio('<?= BASE_URL ?>productos/delete?id=<?= $p['id'] ?>')"><i class='bx bx-trash'></i></button>
                                     </div>
