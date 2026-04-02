@@ -112,9 +112,8 @@ $routes = [
     ['POST', 'recargas-admin/actualizar',   'RecargaAdminController', 'actualizarEstado'],
     ['POST', 'recargas-admin/subir-qr',     'RecargaAdminController', 'subirQr'],
 
-    // —— Configuración ——
-    ['GET',  'configuraciones',        'ConfiguracionController', 'index'],
-    ['POST', 'configuraciones/update', 'ConfiguracionController', 'update'],
+    // —— Configuración General (Unificada) ——
+    ['GET',  'ajustes',        'AjustesController', 'index'],
 
     // —— Tipos de Operaciones ——
     ['GET',    'operaciones',        'OperacionController', 'index'],

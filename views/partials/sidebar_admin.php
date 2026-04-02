@@ -51,19 +51,11 @@ if (!function_exists('isActiveLink')) {
             <i class='bx bx-qr-scan'></i>
             <span>Suma Puntos</span>
         </a>
-        <a href="<?= BASE_URL ?>operaciones" class="sidebar-item <?= isActiveLink('operaciones', $uri) ?>">
-            <i class='bx bx-wrench'></i>
-            <span>Gestión Operaciones</span>
-        </a>
 
         <div class="menu-label">Mantenimiento</div>
-        <a href="<?= BASE_URL ?>productos" class="sidebar-item <?= isActiveLink('productos', $uri) ?>">
-            <i class='bx bx-gift'></i>
-            <span>Gestionar Premios</span>
-        </a>
-        <a href="<?= BASE_URL ?>conductores" class="sidebar-item <?= isActiveLink('conductores', $uri) ?>">
-            <i class='bx bxs-truck'></i>
-            <span>Conductores</span>
+        <a href="<?= BASE_URL ?>ajustes" class="sidebar-item <?= isActiveLink('ajustes', $uri) ?>">
+            <i class='bx bx-cog'></i>
+            <span>Configuración General</span>
         </a>
 
     </nav>
