@@ -55,11 +55,7 @@
             .dash-card-number { font-size: 2.5rem; font-weight: 700; margin-bottom: 2px; line-height: 1; font-family: 'Inter', sans-serif; }
             .dash-card-text { font-size: 0.95rem; margin-bottom: 0; font-weight: 400; letter-spacing: 0.3px; }
             
-            .dash-card-icon { position: absolute; top: 50%; right: 15px; transform: translateY(-50%); font-size: 80px; color: rgba(0,0,0,0.15); z-index: 1; pointer-events: none; }
-            
-            .dash-card-footer { display: block; padding: 6px 15px; text-align: center; background: rgba(0,0,0,0.1); color: white; text-decoration: none; font-size: 0.85rem; position: relative; z-index: 2; transition: background 0.3s; margin-top: auto; }
-            .dash-card-footer:hover { background: rgba(0,0,0,0.15); color: inherit; }
-            .dash-card-footer i { margin-left: 5px; font-size: 1rem; vertical-align: middle; }
+            .dash-card-icon { position: absolute; top: 50%; right: 15px; transform: translateY(-50%); font-size: 80px; color: rgba(255,255,255,0.12); z-index: 1; pointer-events: none; }
         </style>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
             
@@ -69,7 +65,6 @@
                     <div class="dash-card-text">Pendientes</div>
                 </div>
                 <i class='bx bxs-time-five dash-card-icon'></i>
-                <a href="javascript:void(0)" onclick="document.getElementById('historyStatus').value=''; filterHistory();" class="dash-card-footer">Mas información <i class='bx bx-right-arrow-circle'></i></a>
             </div>
 
             <div class="dash-card" style="background: #400000;">
@@ -78,7 +73,6 @@
                     <div class="dash-card-text">Aprobados</div>
                 </div>
                 <i class='bx bxs-check-shield dash-card-icon'></i>
-                <a href="javascript:void(0)" onclick="document.getElementById('historyStatus').value='aprobado'; filterHistory();" class="dash-card-footer">Mas información <i class='bx bx-right-arrow-circle'></i></a>
             </div>
 
             <div class="dash-card" style="background: #400000;">
@@ -87,7 +81,6 @@
                     <div class="dash-card-text">Rechazados</div>
                 </div>
                 <i class='bx bxs-error-circle dash-card-icon'></i>
-                <a href="javascript:void(0)" onclick="document.getElementById('historyStatus').value='rechazado'; filterHistory();" class="dash-card-footer">Mas información <i class='bx bx-right-arrow-circle'></i></a>
             </div>
 
             <div class="dash-card" style="background: #400000;">
@@ -98,7 +91,6 @@
                     <div class="dash-card-text">Monto Acreditado</div>
                 </div>
                 <i class='bx bxs-bank dash-card-icon'></i>
-                <a href="javascript:void(0)" onclick="document.getElementById('historyStatus').value='aprobado'; filterHistory();" class="dash-card-footer">Mas información <i class='bx bx-right-arrow-circle'></i></a>
             </div>
 
         </div>
