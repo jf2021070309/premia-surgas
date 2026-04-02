@@ -86,18 +86,20 @@
 .filter-input-group input::placeholder { color: #cbd5e1; }
 
 .data-table thead th {
-    padding: 1.25rem 1.5rem;
-    font-size: 0.68rem;
+    background: #f8fafc;
+    padding: 0.85rem 1.5rem;
+    font-size: 0.72rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.06em;
     color: #94a3b8;
-    background: #fbfcfd;
-    border-bottom: 1.5px solid #f1f5f9;
+    border-bottom: 1px solid #f1f5f9;
 }
-.data-table tbody tr {
-    transition: all 0.2s ease;
-    border-bottom: 1px solid #f8fafc;
+.table-row td {
+    padding: 1.1rem 1.5rem;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+    transition: background 0.2s;
 }
 .data-table tbody tr:hover {
     background: #fbfcfe;
@@ -158,11 +160,10 @@
 
 /* Muted Badges (Image Reference Style but cleaner) */
 .badge-status {
-    padding: 5px 12px;
-    border-radius: 100px;
+    padding: 0.4rem 0.85rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
     font-weight: 700;
-    font-size: 0.7rem;
-    letter-spacing: 0.01em;
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -187,7 +188,17 @@
     background: currentColor;
 }
 
-.text-pts-plus { color: #166534; font-weight: 800; font-family: 'Inter', sans-serif; }
+.text-medium {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.text-pts-plus {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #059669;
+}
 .text-pts-minus { color: #991b1b; font-weight: 800; font-family: 'Inter', sans-serif; }
 
 .text-date-main { display: block; font-weight: 700; color: #1e293b; font-size: 0.85rem; }
