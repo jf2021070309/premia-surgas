@@ -51,10 +51,6 @@ if (!function_exists('isActiveLink')) {
             <i class='bx bx-qr-scan'></i>
             <span>Suma Puntos</span>
         </a>
-        <a href="<?= BASE_URL ?>tienda" class="sidebar-item <?= isActiveLink('tienda', $uri) ?>">
-            <i class='bx bx-shopping-bag'></i>
-            <span>Tienda</span>
-        </a>
         <a href="<?= BASE_URL ?>operaciones" class="sidebar-item <?= isActiveLink('operaciones', $uri) ?>">
             <i class='bx bx-wrench'></i>
             <span>Gestión Operaciones</span>
