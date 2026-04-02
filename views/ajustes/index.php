@@ -232,15 +232,15 @@
                 <input type="hidden" name="redir" value="ajustes">
                 <div class="form-group" style="margin-bottom: 2rem;">
                     <label class="form-label-premium">Nombre Operación</label>
-                    <input type="text" name="nombre" id="op_nombre" class="form-input" style="width: 100%;" required>
+                    <input type="text" name="nombre" id="op_nombre" class="form-input-premium" style="width: 100%;" required>
                 </div>
                 <div class="form-group" style="margin-bottom: 2rem;">
                     <label class="form-label-premium">Puntos</label>
-                    <input type="number" name="puntos" id="op_puntos" class="form-input" style="width: 100%;" required>
+                    <input type="number" name="puntos" id="op_puntos" class="form-input-premium" style="width: 100%;" required>
                 </div>
                 <div class="form-group" id="group_estadoOp" style="display: none; margin-bottom: 2rem;">
                     <label class="form-label-premium">Estado</label>
-                    <select name="estado" id="op_estado" class="form-input" style="width: 100%;">
+                    <select name="estado" id="op_estado" class="form-input-premium" style="width: 100%;">
                         <option value="1">Activo</option>
                         <option value="0">Inactivo</option>
                     </select>
@@ -264,25 +264,25 @@
                 <input type="hidden" name="redir" value="ajustes">
                 <div class="form-group" style="margin-bottom: 1.5rem;">
                     <label class="form-label-premium">Nombre</label>
-                    <input type="text" name="nombre" id="premio_nombre" class="form-input" style="width: 100%;" required>
+                    <input type="text" name="nombre" id="premio_nombre" class="form-input-premium" style="width: 100%;" required>
                 </div>
                 <div class="row" style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
                     <div style="flex: 1;">
                         <label class="form-label-premium">Puntos</label>
-                        <input type="number" name="puntos" id="premio_puntos" class="form-input" style="width: 100%;" required>
+                        <input type="number" name="puntos" id="premio_puntos" class="form-input-premium" style="width: 100%;" required>
                     </div>
                     <div style="flex: 1;">
                         <label class="form-label-premium">Stock</label>
-                        <input type="number" name="stock" id="premio_stock" class="form-input" style="width: 100%;" required>
+                        <input type="number" name="stock" id="premio_stock" class="form-input-premium" style="width: 100%;" required>
                     </div>
                 </div>
                 <div class="form-group" style="margin-bottom: 1.5rem;">
                     <label class="form-label-premium">Imagen (Archivo)</label>
-                    <input type="file" name="imagen_file" class="form-input" style="width: 100%;">
+                    <input type="file" name="imagen_file" class="form-input-premium" style="width: 100%;">
                 </div>
                 <div class="form-group" style="margin-bottom: 2rem;">
                     <label class="form-label-premium">Estado</label>
-                    <select name="estado" id="premio_estado" class="form-input" style="width: 100%;">
+                    <select name="estado" id="premio_estado" class="form-input-premium" style="width: 100%;">
                         <option value="1">Activo</option>
                         <option value="0">Inactivo</option>
                     </select>
@@ -306,19 +306,19 @@
                 <input type="hidden" name="redir" value="ajustes">
                 <div class="form-group" style="margin-bottom: 1.5rem;">
                     <label class="form-label-premium">Nombre Completo</label>
-                    <input type="text" name="nombre" id="cond_nombre" class="form-input" style="width: 100%;" required>
+                    <input type="text" name="nombre" id="cond_nombre" class="form-input-premium" style="width: 100%;" required>
                 </div>
                 <div class="form-group" style="margin-bottom: 1.5rem;">
                     <label class="form-label-premium">Usuario (Login)</label>
-                    <input type="text" name="usuario" id="cond_usuario" class="form-input" style="width: 100%;" required>
+                    <input type="text" name="usuario" id="cond_usuario" class="form-input-premium" style="width: 100%;" required>
                 </div>
                 <div class="form-group" style="margin-bottom: 1.5rem;">
                     <label class="form-label-premium">Contraseña</label>
-                    <input type="password" name="password" id="cond_pass" class="form-input" style="width: 100%;" placeholder="Dejar en blanco para no cambiar">
+                    <input type="password" name="password" id="cond_pass" class="form-input-premium" style="width: 100%;" placeholder="Dejar en blanco para no cambiar">
                 </div>
                 <div class="form-group" style="margin-bottom: 2rem;">
                     <label class="form-label-premium">Estado</label>
-                    <select name="estado" id="cond_estado" class="form-input" style="width: 100%;">
+                    <select name="estado" id="cond_estado" class="form-input-premium" style="width: 100%;">
                         <option value="1">Activo</option>
                         <option value="0">Inactivo</option>
                     </select>
