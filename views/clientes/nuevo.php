@@ -126,10 +126,7 @@
 
                 <div class="form-footer-actions">
                     <button type="submit" class="btn-premium-submit" :disabled="loading">
-                        <span v-if="!loading" style="display: flex; align-items: center; gap: 8px;">
-                            <i class='bx bx-user-plus' style="font-size: 1.1rem;"></i>
-                            REGISTRAR CLIENTE
-                        </span>
+                        <span v-if="!loading">Registrar cliente</span>
                         <span v-else>
                             <i class='bx bx-loader-alt bx-spin'></i> ESPERE...
                         </span>

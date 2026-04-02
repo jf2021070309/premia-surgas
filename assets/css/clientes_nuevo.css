@@ -125,29 +125,27 @@
 }
 
 .btn-premium-submit {
-    padding: 0.85rem 3rem;
-    background: var(--p-wine, #800000);
+    padding: 0.8rem 2.5rem;
+    background: #000000;
     border: none;
-    border-radius: 12px;
+    border-radius: 16px;
     color: white;
-    font-weight: 700;
-    font-size: 0.85rem;
-    letter-spacing: 0.02em;
+    font-weight: 500;
+    font-size: 0.95rem;
+    letter-spacing: -0.01em;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(128, 0, 0, 0.2);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
     position: relative;
-    overflow: hidden;
 }
 
 .btn-premium-submit:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(128, 0, 0, 0.35);
-    background: #a10000;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+    background: #111111;
 }
 
 .btn-premium-submit:active:not(:disabled) {
