@@ -219,19 +219,28 @@
                     <input type="hidden" name="redir" value="ajustes">
                     <div class="form-group">
                         <label class="form-label-premium">Nombre de la Operación</label>
-                        <input type="text" name="nombre" id="op_nombre" class="form-input-premium" placeholder="Ej: Recarga Gas 10kg" required>
+                        <div class="input-icon-wrapper">
+                            <i class='bx bx-rename'></i>
+                            <input type="text" name="nombre" id="op_nombre" class="form-input-premium" placeholder="Ej: Recarga Gas 10kg" required>
+                        </div>
                     </div>
                     <div class="modal-grid-2">
                         <div class="form-group">
                             <label class="form-label-premium">Puntos</label>
-                            <input type="number" name="puntos" id="op_puntos" class="form-input-premium" value="0" required>
+                            <div class="input-icon-wrapper">
+                                <i class='bx bx-medal'></i>
+                                <input type="number" name="puntos" id="op_puntos" class="form-input-premium" value="0" required>
+                            </div>
                         </div>
                         <div class="form-group" id="group_estadoOp" style="display: none;">
                             <label class="form-label-premium">Estado</label>
-                            <select name="estado" id="op_estado" class="form-input-premium">
-                                <option value="1">Activo</option>
-                                <option value="0">Inactivo</option>
-                            </select>
+                            <div class="input-icon-wrapper">
+                                <i class='bx bx-toggle-right'></i>
+                                <select name="estado" id="op_estado" class="form-input-premium">
+                                    <option value="1">Activo</option>
+                                    <option value="0">Inactivo</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -255,28 +264,43 @@
                     <input type="hidden" name="redir" value="ajustes">
                     <div class="form-group">
                         <label class="form-label-premium">Nombre Comercial del Premio</label>
-                        <input type="text" name="nombre" id="premio_nombre" class="form-input-premium" required>
+                        <div class="input-icon-wrapper">
+                            <i class='bx bx-shopping-bag'></i>
+                            <input type="text" name="nombre" id="premio_nombre" class="form-input-premium" required>
+                        </div>
                     </div>
                     <div class="modal-grid-2">
                         <div class="form-group">
                             <label class="form-label-premium">Inversión Puntos</label>
-                            <input type="number" name="puntos" id="premio_puntos" class="form-input-premium" required>
+                            <div class="input-icon-wrapper">
+                                <i class='bx bx-star'></i>
+                                <input type="number" name="puntos" id="premio_puntos" class="form-input-premium" required>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label class="form-label-premium">Stock Actual</label>
-                            <input type="number" name="stock" id="premio_stock" class="form-input-premium" required>
+                            <div class="input-icon-wrapper">
+                                <i class='bx bx-box'></i>
+                                <input type="number" name="stock" id="premio_stock" class="form-input-premium" required>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="form-label-premium">Cambiar Imagen</label>
-                        <input type="file" name="imagen_file" class="form-input-premium">
+                        <div class="input-icon-wrapper">
+                            <i class='bx bx-image-add'></i>
+                            <input type="file" name="imagen_file" class="form-input-premium">
+                        </div>
                     </div>
                     <div class="form-group">
                         <label class="form-label-premium">Estado en Tienda</label>
-                        <select name="estado" id="premio_estado" class="form-input-premium">
-                            <option value="1">Activo / Visible</option>
-                            <option value="0">Inactivo / Oculto</option>
-                        </select>
+                        <div class="input-icon-wrapper">
+                            <i class='bx bx-show-alt'></i>
+                            <select name="estado" id="premio_estado" class="form-input-premium">
+                                <option value="1">Activo / Visible</option>
+                                <option value="0">Inactivo / Oculto</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer-premium">
@@ -299,22 +323,34 @@
                     <input type="hidden" name="redir" value="ajustes">
                     <div class="form-group">
                         <label class="form-label-premium">Nombre y Apellidos</label>
-                        <input type="text" name="nombre" id="cond_nombre" class="form-input-premium" required>
+                        <div class="input-icon-wrapper">
+                            <i class='bx bx-user'></i>
+                            <input type="text" name="nombre" id="cond_nombre" class="form-input-premium" required>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label class="form-label-premium">Nombre de Usuario</label>
-                        <input type="text" name="usuario" id="cond_usuario" class="form-input-premium" required>
+                        <div class="input-icon-wrapper">
+                            <i class='bx bx-at'></i>
+                            <input type="text" name="usuario" id="cond_usuario" class="form-input-premium" required>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label class="form-label-premium">Nueva Contraseña</label>
-                        <input type="password" name="password" id="cond_pass" class="form-input-premium" placeholder="••••••••">
+                        <div class="input-icon-wrapper">
+                            <i class='bx bx-lock-alt'></i>
+                            <input type="password" name="password" id="cond_pass" class="form-input-premium" placeholder="••••••••">
+                        </div>
                     </div>
                     <div class="form-group">
                         <label class="form-label-premium">Estado de Acceso</label>
-                        <select name="estado" id="cond_estado" class="form-input-premium">
-                            <option value="1">Acceso Permitido</option>
-                            <option value="0">Bloqueado</option>
-                        </select>
+                        <div class="input-icon-wrapper">
+                            <i class='bx bx-user-check'></i>
+                            <select name="estado" id="cond_estado" class="form-input-premium">
+                                <option value="1">Acceso Permitido</option>
+                                <option value="0">Bloqueado</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer-premium">
@@ -343,9 +379,9 @@
 
         // --- PAGINATION MODULE ---
         const PagData = {
-            tableOp:      { page: 1, size: 5, search: '', status: '', footer: 'footerOp' },
-            tablePremios: { page: 1, size: 10, search: '', status: '', footer: 'footerPremios' },
-            tableCond:    { page: 1, size: 5, search: '', status: '', footer: 'footerCond' }
+            tableOp:      { page: 1, size: 5, search: '', footer: 'footerOp' },
+            tablePremios: { page: 1, size: 10, search: '', footer: 'footerPremios' },
+            tableCond:    { page: 1, size: 5, search: '', footer: 'footerCond' }
         };
 
         function renderPagination(tableId) {
@@ -357,33 +393,25 @@
             // Filter
             const visibleRows = allRows.filter(row => {
                 const matchesSearch = row.innerText.toLowerCase().includes(config.search.toLowerCase());
-                // Status filtering removed as requested
                 return matchesSearch;
             });
 
             const total = visibleRows.length;
             const totalPages = Math.ceil(total / config.size);
             
-            // Correction if page is out of range
             if (config.page > totalPages) config.page = Math.max(1, totalPages);
-
-            // Hide all rows
             allRows.forEach(r => r.style.display = 'none');
-
-            // Show page rows
             const start = (config.page - 1) * config.size;
             const end = start + config.size;
             const pageRows = visibleRows.slice(start, end);
             pageRows.forEach(r => r.style.display = '');
 
-            // Update Info
             const footer = document.getElementById(config.footer);
             const rangeSpan = footer.querySelector('.range');
             const totalSpan = footer.querySelector('.total');
             rangeSpan.innerText = total > 0 ? `${start + 1} - ${Math.min(end, total)}` : '0';
             totalSpan.innerText = total;
 
-            // Render Buttons
             const pagContainer = document.querySelector(`[data-pagination="${tableId}"]`);
             if (totalPages <= 1) {
                 pagContainer.style.display = 'none';
@@ -392,6 +420,12 @@
 
             pagContainer.style.display = 'flex';
             let html = `<a href="javascript:void(0)" class="page-btn nav-arrows ${config.page === 1 ? 'disabled' : ''}" onclick="changePage('${tableId}', ${config.page - 1})"><i class='bx bx-chevron-left'></i></a>`;
+            for (let i = 1; i <= totalPages; i++) {
+                html += `<a href="javascript:void(0)" class="page-btn ${i === config.page ? 'active' : ''}" onclick="changePage('${tableId}', i)">${i}</a>`;
+            }
+            html += `<a href="javascript:void(0)" class="page-btn nav-arrows ${config.page === totalPages ? 'disabled' : ''}" onclick="changePage('${tableId}', ${config.page + 1})"><i class='bx bx-chevron-right'></i></a>`;
+            // Fix loop variable i check
+            html = `<a href="javascript:void(0)" class="page-btn nav-arrows ${config.page === 1 ? 'disabled' : ''}" onclick="changePage('${tableId}', ${config.page - 1})"><i class='bx bx-chevron-left'></i></a>`;
             for (let i = 1; i <= totalPages; i++) {
                 html += `<a href="javascript:void(0)" class="page-btn ${i === config.page ? 'active' : ''}" onclick="changePage('${tableId}', ${i})">${i}</a>`;
             }
@@ -412,14 +446,12 @@
             renderPagination(tableId);
         }
 
-        // --- INIT ---
         document.addEventListener('DOMContentLoaded', () => {
             renderPagination('tableOp');
             renderPagination('tablePremios');
             renderPagination('tableCond');
         });
 
-        // --- MODAL HELPERS ---
         function openModalOp() {
             document.getElementById('modalOp').style.display = 'flex';
             document.getElementById('formOp').action = '<?= BASE_URL ?>operaciones/create';
