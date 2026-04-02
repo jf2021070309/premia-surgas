@@ -139,7 +139,8 @@
             <!-- CHART -->
             <div style="display: flex; flex-direction: column;">
                 <div style="margin-bottom: 1.25rem; margin-top: 0.5rem;">
-                    <h3 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 0.5rem;"><i class='bx bx-line-chart' style="color: #dc2626; font-size: 1.25rem;"></i> Actividad (7 Días)</h3>
+                    <h3 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 0.5rem;"><i class='bx bx-line-chart' style="color: var(--p-wine, #800000); font-size: 1.25rem;"></i> Actividad (7 Días)</h3>
+                    <p style="font-size: 0.75rem; color: #64748b; margin: 0; margin-top: 0.2rem; font-weight: 500;">Puntos y canjes de la última semana</p>
                 </div>
                 <div style="background: white; border-radius: 1.25rem; padding: 1.5rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.03); flex: 1;">
                     <div style="position: relative; height: 300px; width: 100%;">
@@ -151,7 +152,8 @@
             <!-- RANKING -->
             <div style="display: flex; flex-direction: column;">
                 <div style="margin-bottom: 1.25rem; margin-top: 0.5rem;">
-                    <h3 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 0.5rem;"><i class='bx bx-trophy' style="color: #f59e0b; font-size: 1.25rem;"></i> Ranking Canjeadores</h3>
+                    <h3 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 0.5rem;"><i class='bx bx-trophy' style="color: var(--p-wine, #800000); font-size: 1.25rem;"></i> Ranking Canjeadores</h3>
+                    <p style="font-size: 0.75rem; color: #64748b; margin: 0; margin-top: 0.2rem; font-weight: 500;">Top usuarios con mayor actividad de canje</p>
                 </div>
                 
                 <div style="background: white; border-radius: 1.25rem; padding: 1.5rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.03); display: flex; flex-direction: column; flex: 1;">
@@ -198,7 +200,7 @@
 
         <?php if ($_SESSION['rol'] === 'admin' && !empty($notificaciones_recargas)): ?>
         <div style="margin-top: 1.5rem; margin-bottom: 1.25rem;">
-            <h3 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 0.5rem;"><i class='bx bx-wallet' style="color: #4f46e5; font-size: 1.25rem;"></i> Nuevas Recargas de Puntos</h3>
+            <h3 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 0.5rem;"><i class='bx bx-wallet' style="color: var(--p-wine, #800000); font-size: 1.25rem;"></i> Nuevas Recargas de Puntos</h3>
             <p style="font-size: 0.75rem; color: #64748b; margin: 0; margin-top: 0.2rem; font-weight: 500;">Clientes que han enviado comprobante de pago</p>
         </div>
         <div class="notif-list">
