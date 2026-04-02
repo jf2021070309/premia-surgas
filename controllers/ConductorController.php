@@ -30,11 +30,12 @@ class ConductorController {
 
         if ($model->create($data)) {
             $_SESSION['flash'] = ['type' => 'success', 'title' => '¡Éxito!', 'message' => 'Conductor registrado correctamente.'];
-            $this->redirect('conductores');
         } else {
             $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo registrar al conductor.'];
-            $this->redirect('conductores');
         }
+        
+        $redir = $_POST['redir'] ?? 'conductores';
+        $this->redirect($redir);
     }
 
     public function editar(): void {
@@ -68,11 +69,12 @@ class ConductorController {
 
         if ($model->update($id, $data)) {
             $_SESSION['flash'] = ['type' => 'success', 'title' => '¡Éxito!', 'message' => 'Información del conductor actualizada.'];
-            $this->redirect('conductores');
         } else {
             $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo actualizar la información.'];
-            $this->redirect('conductores');
         }
+        
+        $redir = $_POST['redir'] ?? 'conductores';
+        $this->redirect($redir);
     }
 
     public function delete(): void {
@@ -84,7 +86,9 @@ class ConductorController {
         } else {
             $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo inactivar al conductor.'];
         }
-        $this->redirect('conductores');
+        
+        $redir = $_GET['redir'] ?? 'conductores';
+        $this->redirect($redir);
     }
 
     // ── helpers ──────────────────────────────────────────────────

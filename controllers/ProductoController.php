@@ -33,11 +33,12 @@ class ProductoController {
 
         if ($model->create($data)) {
             $_SESSION['flash'] = ['type' => 'success', 'title' => '¡Éxito!', 'message' => 'Producto creado correctamente.'];
-            $this->redirect('productos');
         } else {
             $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo crear el producto.'];
-            $this->redirect('productos');
         }
+        
+        $redir = $_POST['redir'] ?? 'productos';
+        $this->redirect($redir);
     }
 
     public function editar(): void {
@@ -61,6 +62,7 @@ class ProductoController {
 
         if (!$producto_actual) {
             $this->redirect('productos');
+            return;
         }
         
         $nombre_img = $_POST['nombre_imagen'] ?? pathinfo($producto_actual['imagen'], PATHINFO_FILENAME);
@@ -79,11 +81,12 @@ class ProductoController {
 
         if ($model->update($id, $data)) {
             $_SESSION['flash'] = ['type' => 'success', 'title' => '¡Éxito!', 'message' => 'Producto actualizado correctamente.'];
-            $this->redirect('productos');
         } else {
-            $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo actualizar el producto.'];
-            $this->redirect('productos');
+            $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo actualizar the product.'];
         }
+        
+        $redir = $_POST['redir'] ?? 'productos';
+        $this->redirect($redir);
     }
 
     private function handleUpload(string $nombre_base, string $imagen_anterior = ''): string {
@@ -120,7 +123,9 @@ class ProductoController {
         } else {
             $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo inactivar el producto.'];
         }
-        $this->redirect('productos');
+        
+        $redir = $_GET['redir'] ?? 'productos';
+        $this->redirect($redir);
     }
 
     // ── helpers ──────────────────────────────────────────────────
