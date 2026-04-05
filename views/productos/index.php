@@ -331,8 +331,8 @@
                     <!-- Nombre -->
                     <div style="margin-bottom: 1.1rem;">
                         <label style="display: block; font-size: 0.63rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 0.5rem;">Nombre Comercial del Premio</label>
-                        <div style="display: flex !important; align-items: center; border: 1.5px solid #e2e8f0; border-radius: 12px; background: #fff; overflow: hidden;">
-                            <span style="flex-shrink: 0; width: 42px; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 1.1rem; border-right: 1.5px solid #f1f5f9; background: #f8fafc; align-self: stretch; min-height: 44px;">
+                        <div style="display: flex !important; flex-direction: row !important; align-items: center !important; border: 1.5px solid #e2e8f0; border-radius: 12px; background: #fff; overflow: hidden;">
+                            <span style="flex-shrink: 0; width: 42px; height: 44px; display: flex !important; align-items: center !important; justify-content: center !important; color: #94a3b8; font-size: 1.1rem; border-right: 1.5px solid #f1f5f9; background: #f8fafc;">
                                 <i class='bx bx-purchase-tag'></i>
                             </span>
                             <input
@@ -342,7 +342,7 @@
                                 placeholder="Ej: Auriculares Bluetooth Premium"
                                 required
                                 autocomplete="off"
-                                style="flex: 1; border: none; outline: none; padding: 0.8rem 1rem; font-size: 0.88rem; font-family: 'Inter', sans-serif; color: #1e293b; background: transparent; min-width: 0;"
+                                style="flex: 1 !important; border: none !important; outline: none !important; padding: 0.8rem 1rem !important; font-size: 0.88rem !important; font-family: 'Inter', sans-serif !important; color: #1e293b !important; background: transparent !important; min-width: 0 !important; display: block !important;"
                             >
                         </div>
                     </div>
@@ -351,22 +351,22 @@
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.1rem;">
                         <div>
                             <label style="display: block; font-size: 0.63rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 0.5rem;">Inversión Puntos</label>
-                            <div style="display: flex !important; align-items: center; border: 1.5px solid #e2e8f0; border-radius: 12px; background: #fff; overflow: hidden;">
-                                <span style="flex-shrink: 0; width: 42px; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 1.1rem; border-right: 1.5px solid #f1f5f9; background: #f8fafc; align-self: stretch; min-height: 44px;">
+                            <div style="display: flex !important; flex-direction: row !important; align-items: center !important; border: 1.5px solid #e2e8f0; border-radius: 12px; background: #fff; overflow: hidden;">
+                                <span style="flex-shrink: 0; width: 42px; height: 44px; display: flex !important; align-items: center !important; justify-content: center !important; color: #94a3b8; font-size: 1.1rem; border-right: 1.5px solid #f1f5f9; background: #f8fafc;">
                                     <i class='bx bx-star'></i>
                                 </span>
                                 <input type="number" name="puntos" v-model="form.puntos" placeholder="0" min="0" required
-                                    style="flex: 1; border: none; outline: none; padding: 0.8rem 1rem; font-size: 0.88rem; font-family: 'Inter', sans-serif; color: #1e293b; background: transparent; min-width: 0; -moz-appearance: textfield;">
+                                    style="flex: 1 !important; border: none !important; outline: none !important; padding: 0.8rem 1rem !important; font-size: 0.88rem !important; font-family: 'Inter', sans-serif !important; color: #1e293b !important; background: transparent !important; min-width: 0 !important; display: block !important; -moz-appearance: textfield;">
                             </div>
                         </div>
                         <div>
                             <label style="display: block; font-size: 0.63rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 0.5rem;">Stock Actual</label>
-                            <div style="display: flex !important; align-items: center; border: 1.5px solid #e2e8f0; border-radius: 12px; background: #fff; overflow: hidden;">
-                                <span style="flex-shrink: 0; width: 42px; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 1.1rem; border-right: 1.5px solid #f1f5f9; background: #f8fafc; align-self: stretch; min-height: 44px;">
+                            <div style="display: flex !important; flex-direction: row !important; align-items: center !important; border: 1.5px solid #e2e8f0; border-radius: 12px; background: #fff; overflow: hidden;">
+                                <span style="flex-shrink: 0; width: 42px; height: 44px; display: flex !important; align-items: center !important; justify-content: center !important; color: #94a3b8; font-size: 1.1rem; border-right: 1.5px solid #f1f5f9; background: #f8fafc;">
                                     <i class='bx bx-cube'></i>
                                 </span>
                                 <input type="number" name="stock" v-model="form.stock" placeholder="0" min="0" required
-                                    style="flex: 1; border: none; outline: none; padding: 0.8rem 1rem; font-size: 0.88rem; font-family: 'Inter', sans-serif; color: #1e293b; background: transparent; min-width: 0; -moz-appearance: textfield;">
+                                    style="flex: 1 !important; border: none !important; outline: none !important; padding: 0.8rem 1rem !important; font-size: 0.88rem !important; font-family: 'Inter', sans-serif !important; color: #1e293b !important; background: transparent !important; min-width: 0 !important; display: block !important; -moz-appearance: textfield;">
                             </div>
                         </div>
                     </div>
@@ -376,34 +376,34 @@
                         <label style="display: block; font-size: 0.63rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 0.5rem;">{{ editando ? 'Cambiar Imagen' : 'Imagen del Premio' }}</label>
 
                         <!-- Hidden real file input -->
-                        <input type="file" name="imagen" accept="image/*" ref="fileInput" @change="onFileChange" style="display: none;" id="imgFileInput">
+                        <input type="file" name="imagen" accept="image/*" ref="fileInput" @change="onFileChange" style="position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;" id="imgFileInput">
 
                         <!-- Upload trigger row -->
                         <div @click="$refs.fileInput.click()" @dragover.prevent @drop.prevent="onDrop"
-                            style="display: flex !important; align-items: center; gap: 0.85rem; border: 1.5px dashed #e2e8f0; border-radius: 12px; padding: 0.9rem 1rem; cursor: pointer; background: #fafbfc; transition: all 0.2s;">
+                            style="display: flex !important; flex-direction: row !important; align-items: center !important; gap: 0.85rem !important; border: 1.5px dashed #e2e8f0 !important; border-radius: 12px !important; padding: 0.9rem 1rem !important; cursor: pointer !important; background: #fafbfc !important; transition: all 0.2s !important;">
 
                             <template v-if="previewUrl">
                                 <img :src="previewUrl" alt="preview"
-                                    style="width: 38px; height: 38px; border-radius: 8px; object-fit: cover; border: 2px solid #e2e8f0; flex-shrink: 0;">
-                                <div style="flex: 1; min-width: 0;">
-                                    <span style="display: block; font-size: 0.82rem; font-weight: 700; color: #1e293b;">Imagen seleccionada</span>
-                                    <span style="font-size: 0.68rem; color: #94a3b8; font-weight: 500;">Haz clic para cambiar</span>
+                                    style="width: 38px !important; height: 38px !important; border-radius: 8px !important; object-fit: cover !important; border: 2px solid #e2e8f0 !important; flex-shrink: 0 !important;">
+                                <div style="flex: 1 !important; min-width: 0 !important;">
+                                    <span style="display: block !important; font-size: 0.82rem !important; font-weight: 700 !important; color: #1e293b !important;">Imagen seleccionada</span>
+                                    <span style="font-size: 0.68rem !important; color: #94a3b8 !important; font-weight: 500 !important;">Haz clic para cambiar</span>
                                 </div>
                                 <button type="button" @click.stop="clearImage"
-                                    style="width: 26px; height: 26px; border-radius: 50%; border: none; background: #fef2f2; color: #dc2626; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0;">
+                                    style="width: 26px !important; height: 26px !important; border-radius: 50% !important; border: none !important; background: #fef2f2 !important; color: #dc2626 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; font-size: 1rem !important; flex-shrink: 0 !important;">
                                     <i class='bx bx-x'></i>
                                 </button>
                             </template>
 
                             <template v-else>
-                                <div style="width: 38px; height: 38px; border-radius: 10px; background: #f1f5f9; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #94a3b8; flex-shrink: 0;">
+                                <div style="width: 38px !important; height: 38px !important; border-radius: 10px !important; background: #f1f5f9 !important; display: flex !important; align-items: center !important; justify-content: center !important; font-size: 1.2rem !important; color: #94a3b8 !important; flex-shrink: 0 !important;">
                                     <i class='bx bx-image-add'></i>
                                 </div>
-                                <div style="flex: 1; min-width: 0;">
-                                    <span style="display: block; font-size: 0.82rem; font-weight: 700; color: #1e293b;">Seleccionar imagen</span>
-                                    <span style="font-size: 0.68rem; color: #94a3b8; font-weight: 500;">PNG, JPG, WEBP · Arrastra o haz clic</span>
+                                <div style="flex: 1 !important; min-width: 0 !important;">
+                                    <span style="display: block !important; font-size: 0.82rem !important; font-weight: 700 !important; color: #1e293b !important;">Seleccionar imagen</span>
+                                    <span style="font-size: 0.68rem !important; color: #94a3b8 !important; font-weight: 500 !important;">PNG, JPG, WEBP · Arrastra o haz clic</span>
                                 </div>
-                                <i class='bx bx-upload' style="color: #cbd5e1; font-size: 1.1rem; flex-shrink: 0;"></i>
+                                <i class='bx bx-upload' style="color: #cbd5e1 !important; font-size: 1.1rem !important; flex-shrink: 0 !important;"></i>
                             </template>
                         </div>
                     </div>
@@ -411,12 +411,12 @@
                     <!-- Estado -->
                     <div>
                         <label style="display: block; font-size: 0.63rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 0.5rem;">Estado en Tienda</label>
-                        <div style="display: flex !important; align-items: center; border: 1.5px solid #e2e8f0; border-radius: 12px; background: #fff; overflow: hidden;">
-                            <span style="flex-shrink: 0; width: 42px; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 1.1rem; border-right: 1.5px solid #f1f5f9; background: #f8fafc; align-self: stretch; min-height: 44px;">
+                        <div style="display: flex !important; flex-direction: row !important; align-items: center !important; border: 1.5px solid #e2e8f0; border-radius: 12px; background: #fff; overflow: hidden;">
+                            <span style="flex-shrink: 0; width: 42px; height: 44px; display: flex !important; align-items: center !important; justify-content: center !important; color: #94a3b8; font-size: 1.1rem; border-right: 1.5px solid #f1f5f9; background: #f8fafc;">
                                 <i class='bx bx-show'></i>
                             </span>
                             <select name="estado" v-model="form.estado"
-                                style="flex: 1; border: none; outline: none; padding: 0.8rem 1rem; font-size: 0.88rem; font-family: 'Inter', sans-serif; color: #1e293b; background: transparent; min-width: 0; cursor: pointer; appearance: none; background-image: url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 24 24%27 stroke=%27%2394a3b8%27 stroke-width=%272%27%3E%3Cpath stroke-linecap=%27round%27 stroke-linejoin=%27round%27 d=%27M19 9l-7 7-7-7%27/%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 0.85rem center; background-size: 1rem; padding-right: 2.5rem;">
+                                style="flex: 1 !important; border: none !important; outline: none !important; padding: 0.8rem 1rem !important; font-size: 0.88rem !important; font-family: 'Inter', sans-serif !important; color: #1e293b !important; background: transparent !important; min-width: 0 !important; cursor: pointer !important; appearance: none !important; background-image: url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 24 24%27 stroke=%27%2394a3b8%27 stroke-width=%272%27%3E%3Cpath stroke-linecap=%27round%27 stroke-linejoin=%27round%27 d=%27M19 9l-7 7-7-7%27/%3E%3C/svg%3E') !important; background-repeat: no-repeat !important; background-position: right 0.85rem center !important; background-size: 1rem !important; padding-right: 2.5rem !important;">
                                 <option value="1">Activo / Visible</option>
                                 <option value="0">Inactivo / Oculto</option>
                             </select>
