@@ -4,27 +4,17 @@
 /* MODERN EXTERNAL SECTION HEADER */
 .modern-section-header {
     display: flex;
-    flex-direction: column; /* Cambiamos a columna para permitir filas */
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-    padding-top: 1.5rem;
-}
-
-.header-row-top {
-    display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    margin-bottom: 2rem;
+    padding-top: 1.5rem;
     gap: 2rem;
-    width: 100%;
 }
 
-.header-row-bottom {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 1rem;
-    width: 100%;
-    padding-left: 0; /* Align with title or start */
+/* Explicitly for multi-row layouts like Client List */
+.modern-section-header.multi-row {
+    flex-direction: column;
+    gap: 1.5rem;
 }
 
 
