@@ -446,7 +446,7 @@
                             style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Nombre
                             y Apellidos</label>
                         <div style="position: relative; display: flex; align-items: center;">
-                            <i class='bx bx-user'
+                            <i class='bx bx-id-card'
                                 style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
                             <input type="text" name="nombre" id="cond_nombre" required
                                 style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none;">
@@ -458,7 +458,7 @@
                             style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Nombre
                             de Usuario</label>
                         <div style="position: relative; display: flex; align-items: center;">
-                            <i class='bx bx-at'
+                            <i class='bx bx-user'
                                 style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
                             <input type="text" name="usuario" id="cond_usuario" required
                                 style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none;">
@@ -470,7 +470,7 @@
                             style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Nueva
                             Contraseña</label>
                         <div style="position: relative; display: flex; align-items: center;">
-                            <i class='bx bx-lock-alt'
+                            <i class='bx bx-key'
                                 style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
                             <input type="password" name="password" id="cond_pass"
                                 style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none;">
@@ -482,7 +482,7 @@
                             style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Estado
                             de Acceso</label>
                         <div style="position: relative; display: flex; align-items: center;">
-                            <i class='bx bx-user-check'
+                            <i class='bx bx-shield-check'
                                 style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem; pointer-events: none;"></i>
                             <select name="estado" id="cond_estado"
                                 style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; appearance: none; cursor: pointer; outline: none; background: #fff;">
@@ -497,7 +497,7 @@
                 <div class="modal-footer-premium"
                     style="padding: 1.5rem 2.5rem 2.5rem; border-top: 1px solid #f1f5f9; display: flex; justify-content: flex-end;">
                     <button type="submit" class="btn-premium-pill-black"
-                        style="background: #000; color: #fff; border: none; padding: 0.85rem 2.2rem; border-radius: 14px; font-weight: 700; cursor: pointer;">Aceptar</button>
+                        style="background: #000; color: #fff; border: none; padding: 0.85rem 2.2rem; border-radius: 14px; font-weight: 700; cursor: pointer;">Agregar</button>
                 </div>
             </form>
         </div>
