@@ -82,19 +82,19 @@
                                     <?php if ($c['estado'] === 'pendiente'): ?>
                                         <div style="display: flex; justify-content: center;">
                                             <span class="chip chip-pending" style="padding: 6px 14px; letter-spacing: 0.05em;">
-                                                <i class='bx bxs-circle'></i> PENDIENTE
+                                                <i class='bx bxs-circle'></i> Pendiente
                                             </span>
                                         </div>
                                     <?php elseif ($c['estado'] === 'entregado'): ?>
                                         <div style="display: flex; justify-content: center;">
                                             <span class="chip chip-delivered" style="padding: 6px 14px; letter-spacing: 0.05em;">
-                                                <i class='bx bxs-circle'></i> ENTREGADO
+                                                <i class='bx bxs-circle'></i> Entregado
                                             </span>
                                         </div>
                                     <?php else: ?>
                                         <div style="display: flex; justify-content: center;">
                                             <span class="chip chip-rejected" style="padding: 6px 14px; letter-spacing: 0.05em; text-decoration: line-through;">
-                                                <i class='bx bxs-circle'></i> <?= strtoupper($c['estado']) ?>
+                                                <i class='bx bxs-circle'></i> <?= ucfirst($c['estado']) ?>
                                             </span>
                                         </div>
                                     <?php endif; ?>
