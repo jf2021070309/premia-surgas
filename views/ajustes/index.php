@@ -35,23 +35,23 @@
                     <i class='bx bx-calculator'></i>
                     <div class="section-title-text">
                         <h3>Reglas de Puntaje</h3>
-                        <span>Configura los puntos acumulados por cada operación</span>
+                        <span>Puntos acumulados por cada operación</span>
                     </div>
+                </div>
+                <div class="section-actions">
+                    <div class="header-search-modern">
+                        <i class='bx bx-search'></i>
+                        <input type="text" placeholder="Buscar" onkeyup="handleSearch('tableOp', this.value)">
+                    </div>
+                    <button class="btn-primary-premium" style="height: 48px; border-radius: 24px; padding: 0 1.5rem;" onclick="openModalOp()">
+                        <i class='bx bx-plus'></i> Nueva Regla
+                    </button>
                 </div>
             </div>
 
             <div class="card shadow-sm" id="cardOp">
-                <div class="card-header">
-                    <div class="header-controls">
-                        <div class="filter-input-group">
-                            <i class='bx bx-search'></i>
-                            <input type="text" placeholder="Buscar" onkeyup="handleSearch('tableOp', this.value)">
-                        </div>
-                        <button class="btn-premium-pill-black" style="padding: 0.6rem 1.8rem; font-size: 0.85rem;" onclick="openModalOp()">
-                            <i class='bx bx-plus'></i> Nueva Regla
-                        </button>
-                    </div>
-                </div>
+                <div class="table-wrapper">
+
 
                 <div class="table-wrapper">
                     <table class="data-table" id="tableOp">
@@ -91,28 +91,28 @@
             </div>
 
             <!-- SECTION 2: PREMIOS -->
-            <div class="modern-section-header" style="margin-top: 2.5rem;">
+            <div class="modern-section-header" style="margin-top: 3.5rem;">
                 <div class="section-title-flex">
                     <i class='bx bx-gift'></i>
                     <div class="section-title-text">
                         <h3>Catálogo de Premios</h3>
-                        <span>Gestiona los productos disponibles y sus costos en puntos</span>
+                        <span>Productos disponibles y sus costos</span>
                     </div>
+                </div>
+                <div class="section-actions">
+                    <div class="header-search-modern">
+                        <i class='bx bx-search'></i>
+                        <input type="text" placeholder="Buscar" onkeyup="handleSearch('tablePremios', this.value)">
+                    </div>
+                    <button class="btn-primary-premium" style="height: 48px; border-radius: 24px; padding: 0 1.5rem;" onclick="openModalPremio()">
+                        <i class='bx bx-plus'></i> Nuevo Premio
+                    </button>
                 </div>
             </div>
 
             <div class="card shadow-sm" id="cardPremios">
-                <div class="card-header">
-                    <div class="header-controls">
-                        <div class="filter-input-group">
-                            <i class='bx bx-search'></i>
-                            <input type="text" placeholder="Buscar" onkeyup="handleSearch('tablePremios', this.value)">
-                        </div>
-                        <button class="btn-premium-pill-black" style="padding: 0.6rem 1.8rem; font-size: 0.85rem;" onclick="openModalPremio()">
-                            <i class='bx bx-plus'></i> Nuevo Premio
-                        </button>
-                    </div>
-                </div>
+                <div class="table-wrapper">
+
 
                 <div class="table-wrapper">
                     <table class="data-table" id="tablePremios">
@@ -155,28 +155,28 @@
             </div>
 
             <!-- SECTION 3: CONDUCTORES -->
-            <div class="modern-section-header" style="margin-top: 2.5rem;">
+            <div class="modern-section-header" style="margin-top: 3.5rem;">
                 <div class="section-title-flex">
                     <i class='bx bxs-truck'></i>
                     <div class="section-title-text">
                         <h3>Directorio de Conductores</h3>
-                        <span>Control de acceso y perfiles del personal de campo</span>
+                        <span>Control de acceso y perfiles del personal</span>
                     </div>
+                </div>
+                <div class="section-actions">
+                    <div class="header-search-modern">
+                        <i class='bx bx-search'></i>
+                        <input type="text" placeholder="Buscar" onkeyup="handleSearch('tableCond', this.value)">
+                    </div>
+                    <button class="btn-primary-premium" style="height: 48px; border-radius: 24px; padding: 0 1.5rem;" onclick="openModalCond()">
+                        <i class='bx bx-plus'></i> Nuevo Conductor
+                    </button>
                 </div>
             </div>
 
             <div class="card shadow-sm" id="cardCond">
-                <div class="card-header">
-                    <div class="header-controls">
-                        <div class="filter-input-group">
-                            <i class='bx bx-search'></i>
-                            <input type="text" placeholder="Buscar" onkeyup="handleSearch('tableCond', this.value)">
-                        </div>
-                        <button class="btn-premium-pill-black" style="padding: 0.6rem 1.8rem; font-size: 0.85rem;" onclick="openModalCond()">
-                            <i class='bx bx-plus'></i> Nuevo Conductor
-                        </button>
-                    </div>
-                </div>
+                <div class="table-wrapper">
+
 
                 <div class="table-wrapper">
                     <table class="data-table" id="tableCond">

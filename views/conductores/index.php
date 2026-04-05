@@ -36,29 +36,28 @@
                         <span>Administración de equipo de reparto</span>
                     </div>
                 </div>
+                <div class="section-actions">
+                    <div class="header-filter">
+                        <i class='bx bx-filter-alt'></i>
+                        <select v-model="filtroEstado">
+                            <option value="todos">Todos los Estados</option>
+                            <option value="1">Activos</option>
+                            <option value="0">Inactivos</option>
+                        </select>
+                    </div>
+                    <div class="header-search-modern">
+                        <i class='bx bx-search'></i>
+                        <input type="text" placeholder="Buscar" v-model="busqueda">
+                    </div>
+                    <a href="<?= BASE_URL ?>conductores/nuevo" class="btn-primary-premium" style="height: 48px; border-radius: 24px; padding: 0 1.5rem; display: flex; align-items: center;">
+                        <i class='bx bx-user-plus'></i> Nuevo
+                    </a>
+                </div>
             </div>
 
             <div class="card">
-                <div class="card-header">
-                    <div class="header-actions">
+                <div class="table-wrapper">
 
-                        <div class="header-filter">
-                            <i class='bx bx-filter-alt'></i>
-                            <select v-model="filtroEstado">
-                                <option value="todos">Todos los Estados</option>
-                                <option value="1">Activos</option>
-                                <option value="0">Inactivos</option>
-                            </select>
-                        </div>
-                        <div class="header-search">
-                            <i class='bx bx-search'></i>
-                            <input type="text" placeholder="Buscar" v-model="busqueda">
-                        </div>
-                        <a href="<?= BASE_URL ?>conductores/nuevo" class="btn-primary-premium">
-                            <i class='bx bx-user-plus'></i> Nuevo
-                        </a>
-                    </div>
-                </div>
 
 
                 <div class="table-wrapper">

@@ -43,7 +43,6 @@
                 </div>
             </div>
 
-            <div class="card">
             <div class="modern-section-header">
                 <div class="section-title-flex">
                     <i class='bx bx-id-card'></i>
@@ -52,44 +51,40 @@
                         <span>Gestión y administración de beneficiarios</span>
                     </div>
                 </div>
+                <div class="section-actions">
+                    <div class="header-filter">
+                        <i class='bx bx-filter-alt'></i>
+                        <select v-model="filterTipo">
+                            <option value="">Todos los Tipos</option>
+                            <option value="Normal">Personal</option>
+                            <option value="Restaurante">Restaurante</option>
+                            <option value="Punto de Venta">Punto de Venta</option>
+                        </select>
+                    </div>
+                    <div class="header-filter">
+                        <i class='bx bx-map-alt'></i>
+                        <select v-model="filterDep">
+                            <option value="">Todos los Departamentos</option>
+                            <option value="Tacna">Tacna</option>
+                            <option value="Ilo">Ilo</option>
+                            <option value="Moquegua">Moquegua</option>
+                            <option value="Camaná">Camaná</option>
+                            <option value="Mollendo">Mollendo</option>
+                        </select>
+                    </div>
+                    <div class="header-search-modern">
+                        <i class='bx bx-search'></i>
+                        <input type="text" v-model="busqueda" placeholder="Buscar">
+                    </div>
+                    <a href="<?= BASE_URL ?>clientes/nuevo" class="btn-primary-premium" style="height: 48px; border-radius: 24px; padding: 0 1.5rem; display: flex; align-items: center;">
+                        <i class='bx bx-user-plus'></i> Nuevo
+                    </a>
+                </div>
             </div>
 
             <div class="card">
-                <div class="card-header">
+                <div class="table-wrapper">
 
-
-                    
-                    <div class="header-actions">
-                        <div class="header-filter">
-                            <i class='bx bx-filter-alt'></i>
-                            <select v-model="filterTipo">
-                                <option value="">Todos los Tipos</option>
-                                <option value="Normal">Personal</option>
-                                <option value="Restaurante">Restaurante</option>
-                                <option value="Punto de Venta">Punto de Venta</option>
-                            </select>
-                        </div>
-                        <div class="header-filter">
-                            <i class='bx bx-map-alt'></i>
-                            <select v-model="filterDep">
-                                <option value="">Todos los Departamentos</option>
-                                <option value="Tacna">Tacna</option>
-                                <option value="Ilo">Ilo</option>
-                                <option value="Moquegua">Moquegua</option>
-                                <option value="Camaná">Camaná</option>
-                                <option value="Mollendo">Mollendo</option>
-                            </select>
-                        </div>
-                        <div class="header-search">
-                            <i class='bx bx-search'></i>
-                            <input type="text" v-model="busqueda" placeholder="Buscar">
-
-                        </div>
-                        <a href="<?= BASE_URL ?>clientes/nuevo" class="btn-primary-premium">
-                            <i class='bx bx-user-plus'></i> Nuevo
-                        </a>
-                    </div>
-                </div>
 
                 <div class="table-wrapper">
                     <table class="data-table">

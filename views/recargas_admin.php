@@ -267,7 +267,7 @@
         <!-- ════════════════════════════════════════════
              SECTION 3 — Historial de Movimientos
         ════════════════════════════════════════════ -->
-        <div class="modern-section-header" style="margin-top: 2rem;">
+        <div class="modern-section-header" style="margin-top: 3.5rem;">
             <div class="section-title-flex">
                 <i class='bx bx-history'></i>
                 <div class="section-title-text">
@@ -275,30 +275,29 @@
                     <span>Panel de verificación administrativa de recargas</span>
                 </div>
             </div>
+            <div class="section-actions" style="gap: 0.75rem;">
+                <div class="header-search-modern" style="width: 160px;">
+                    <i class='bx bx-calendar'></i>
+                    <input type="date" id="historyDate" onchange="filterHistory()" style="padding-left: 2.8rem;">
+                </div>
+                <div class="header-search-modern" style="width: 140px;">
+                    <i class='bx bx-filter-alt'></i>
+                    <select id="historyStatus" onchange="filterHistory()" style="width: 100%; height: 48px; padding-left: 2.8rem; border-radius: 24px; border: 1px solid #e2e8f0; background: #fff; font-size: 0.85rem; color: #1e293b; outline: none; appearance: none; cursor: pointer;">
+                        <option value="">Todos</option>
+                        <option value="aprobado">Aprobados</option>
+                        <option value="rechazado">Rechazados</option>
+                    </select>
+                </div>
+                <div class="header-search-modern">
+                    <i class='bx bx-search'></i>
+                    <input type="text" id="historySearch" placeholder="Buscar" onkeyup="filterHistory()">
+                </div>
+            </div>
         </div>
 
         <div class="card">
-            <div class="card-header">
-                <div style="display: flex; gap: 0.75rem; align-items: center; justify-content: flex-end; width:100%;">
+            <div class="table-wrapper">
 
-                    <div class="header-search" style="max-width: 150px;">
-                        <i class='bx bx-calendar'></i>
-                        <input type="date" id="historyDate" onchange="filterHistory()">
-                    </div>
-                    <div class="header-search" style="max-width: 130px;">
-                        <i class='bx bx-filter-alt'></i>
-                        <select id="historyStatus" onchange="filterHistory()" style="width: 100%; padding: 6px 10px 6px 32px; border-radius: var(--radius-sm); border: 1px solid var(--outline-med); background: var(--surface); font-size: 0.78rem; color: var(--on-surface); outline: none; appearance: none;">
-                            <option value="">Todos</option>
-                            <option value="aprobado">Aprobados</option>
-                            <option value="rechazado">Rechazados</option>
-                        </select>
-                    </div>
-                    <div class="header-search">
-                        <i class='bx bx-search'></i>
-                        <input type="text" id="historySearch" placeholder="Buscar" onkeyup="filterHistory()">
-                    </div>
-                </div>
-            </div>
 
 
             <?php if (empty($historial)): ?>
