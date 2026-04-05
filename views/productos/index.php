@@ -329,10 +329,12 @@
                 <div class="modal-body-premium">
 
                     <!-- Nombre -->
-                    <div class="modal-field">
-                        <label class="modal-field-label">Nombre Comercial del Premio</label>
-                        <div class="modal-input-row">
-                            <span class="row-icon"><i class='bx bx-purchase-tag'></i></span>
+                    <div style="margin-bottom: 1.1rem;">
+                        <label style="display: block; font-size: 0.63rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 0.5rem;">Nombre Comercial del Premio</label>
+                        <div style="display: flex !important; align-items: center; border: 1.5px solid #e2e8f0; border-radius: 12px; background: #fff; overflow: hidden;">
+                            <span style="flex-shrink: 0; width: 42px; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 1.1rem; border-right: 1.5px solid #f1f5f9; background: #f8fafc; align-self: stretch; min-height: 44px;">
+                                <i class='bx bx-purchase-tag'></i>
+                            </span>
                             <input
                                 type="text"
                                 name="nombre"
@@ -340,77 +342,66 @@
                                 placeholder="Ej: Auriculares Bluetooth Premium"
                                 required
                                 autocomplete="off"
+                                style="flex: 1; border: none; outline: none; padding: 0.8rem 1rem; font-size: 0.88rem; font-family: 'Inter', sans-serif; color: #1e293b; background: transparent; min-width: 0;"
                             >
                         </div>
                     </div>
 
                     <!-- Puntos + Stock -->
-                    <div class="modal-grid-2">
-                        <div class="modal-field">
-                            <label class="modal-field-label">Inversión Puntos</label>
-                            <div class="modal-input-row">
-                                <span class="row-icon"><i class='bx bx-star'></i></span>
-                                <input type="number" name="puntos" v-model="form.puntos" placeholder="0" min="0" required>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.1rem;">
+                        <div>
+                            <label style="display: block; font-size: 0.63rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 0.5rem;">Inversión Puntos</label>
+                            <div style="display: flex !important; align-items: center; border: 1.5px solid #e2e8f0; border-radius: 12px; background: #fff; overflow: hidden;">
+                                <span style="flex-shrink: 0; width: 42px; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 1.1rem; border-right: 1.5px solid #f1f5f9; background: #f8fafc; align-self: stretch; min-height: 44px;">
+                                    <i class='bx bx-star'></i>
+                                </span>
+                                <input type="number" name="puntos" v-model="form.puntos" placeholder="0" min="0" required
+                                    style="flex: 1; border: none; outline: none; padding: 0.8rem 1rem; font-size: 0.88rem; font-family: 'Inter', sans-serif; color: #1e293b; background: transparent; min-width: 0; -moz-appearance: textfield;">
                             </div>
                         </div>
-                        <div class="modal-field">
-                            <label class="modal-field-label">Stock Actual</label>
-                            <div class="modal-input-row">
-                                <span class="row-icon"><i class='bx bx-cube'></i></span>
-                                <input type="number" name="stock" v-model="form.stock" placeholder="0" min="0" required>
+                        <div>
+                            <label style="display: block; font-size: 0.63rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 0.5rem;">Stock Actual</label>
+                            <div style="display: flex !important; align-items: center; border: 1.5px solid #e2e8f0; border-radius: 12px; background: #fff; overflow: hidden;">
+                                <span style="flex-shrink: 0; width: 42px; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 1.1rem; border-right: 1.5px solid #f1f5f9; background: #f8fafc; align-self: stretch; min-height: 44px;">
+                                    <i class='bx bx-cube'></i>
+                                </span>
+                                <input type="number" name="stock" v-model="form.stock" placeholder="0" min="0" required
+                                    style="flex: 1; border: none; outline: none; padding: 0.8rem 1rem; font-size: 0.88rem; font-family: 'Inter', sans-serif; color: #1e293b; background: transparent; min-width: 0; -moz-appearance: textfield;">
                             </div>
                         </div>
                     </div>
 
                     <!-- Imagen -->
-                    <div class="modal-field">
-                        <label class="modal-field-label">{{ editando ? 'Cambiar Imagen' : 'Imagen del Premio' }}</label>
+                    <div style="margin-bottom: 1.1rem;">
+                        <label style="display: block; font-size: 0.63rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 0.5rem;">{{ editando ? 'Cambiar Imagen' : 'Imagen del Premio' }}</label>
 
                         <!-- Hidden real file input -->
-                        <input
-                            type="file"
-                            name="imagen"
-                            accept="image/*"
-                            ref="fileInput"
-                            @change="onFileChange"
-                            style="display: none;"
-                            id="imgFileInput"
-                        >
+                        <input type="file" name="imagen" accept="image/*" ref="fileInput" @change="onFileChange" style="display: none;" id="imgFileInput">
 
-                        <!-- Custom trigger row -->
-                        <div
-                            class="upload-trigger"
-                            :class="{ 'has-file': !!previewUrl }"
-                            @click="$refs.fileInput.click()"
-                            @dragover.prevent="isDragging = true"
-                            @dragleave.prevent="isDragging = false"
-                            @drop.prevent="onDrop"
-                        >
-                            <!-- With preview -->
+                        <!-- Upload trigger row -->
+                        <div @click="$refs.fileInput.click()" @dragover.prevent @drop.prevent="onDrop"
+                            style="display: flex !important; align-items: center; gap: 0.85rem; border: 1.5px dashed #e2e8f0; border-radius: 12px; padding: 0.9rem 1rem; cursor: pointer; background: #fafbfc; transition: all 0.2s;">
+
                             <template v-if="previewUrl">
-                                <img :src="previewUrl" class="upload-preview-thumb" alt="preview">
-                                <div class="upload-trigger-text">
-                                    <span class="upload-trigger-title">Imagen seleccionada</span>
-                                    <span class="upload-trigger-sub">Haz clic para cambiar</span>
+                                <img :src="previewUrl" alt="preview"
+                                    style="width: 38px; height: 38px; border-radius: 8px; object-fit: cover; border: 2px solid #e2e8f0; flex-shrink: 0;">
+                                <div style="flex: 1; min-width: 0;">
+                                    <span style="display: block; font-size: 0.82rem; font-weight: 700; color: #1e293b;">Imagen seleccionada</span>
+                                    <span style="font-size: 0.68rem; color: #94a3b8; font-weight: 500;">Haz clic para cambiar</span>
                                 </div>
-                                <button
-                                    type="button"
-                                    class="upload-clear-btn"
-                                    @click.stop="clearImage"
-                                    title="Quitar imagen"
-                                >
+                                <button type="button" @click.stop="clearImage"
+                                    style="width: 26px; height: 26px; border-radius: 50%; border: none; background: #fef2f2; color: #dc2626; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0;">
                                     <i class='bx bx-x'></i>
                                 </button>
                             </template>
 
-                            <!-- Without preview -->
                             <template v-else>
-                                <div class="upload-trigger-icon">
+                                <div style="width: 38px; height: 38px; border-radius: 10px; background: #f1f5f9; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #94a3b8; flex-shrink: 0;">
                                     <i class='bx bx-image-add'></i>
                                 </div>
-                                <div class="upload-trigger-text">
-                                    <span class="upload-trigger-title">Seleccionar imagen</span>
-                                    <span class="upload-trigger-sub">PNG, JPG, WEBP — máx. 2 MB · Arrastra o haz clic</span>
+                                <div style="flex: 1; min-width: 0;">
+                                    <span style="display: block; font-size: 0.82rem; font-weight: 700; color: #1e293b;">Seleccionar imagen</span>
+                                    <span style="font-size: 0.68rem; color: #94a3b8; font-weight: 500;">PNG, JPG, WEBP · Arrastra o haz clic</span>
                                 </div>
                                 <i class='bx bx-upload' style="color: #cbd5e1; font-size: 1.1rem; flex-shrink: 0;"></i>
                             </template>
@@ -418,11 +409,14 @@
                     </div>
 
                     <!-- Estado -->
-                    <div class="modal-field" style="margin-bottom: 0;">
-                        <label class="modal-field-label">Estado en Tienda</label>
-                        <div class="modal-input-row">
-                            <span class="row-icon"><i class='bx bx-show'></i></span>
-                            <select name="estado" v-model="form.estado">
+                    <div>
+                        <label style="display: block; font-size: 0.63rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 0.5rem;">Estado en Tienda</label>
+                        <div style="display: flex !important; align-items: center; border: 1.5px solid #e2e8f0; border-radius: 12px; background: #fff; overflow: hidden;">
+                            <span style="flex-shrink: 0; width: 42px; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 1.1rem; border-right: 1.5px solid #f1f5f9; background: #f8fafc; align-self: stretch; min-height: 44px;">
+                                <i class='bx bx-show'></i>
+                            </span>
+                            <select name="estado" v-model="form.estado"
+                                style="flex: 1; border: none; outline: none; padding: 0.8rem 1rem; font-size: 0.88rem; font-family: 'Inter', sans-serif; color: #1e293b; background: transparent; min-width: 0; cursor: pointer; appearance: none; background-image: url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 24 24%27 stroke=%27%2394a3b8%27 stroke-width=%272%27%3E%3Cpath stroke-linecap=%27round%27 stroke-linejoin=%27round%27 d=%27M19 9l-7 7-7-7%27/%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 0.85rem center; background-size: 1rem; padding-right: 2.5rem;">
                                 <option value="1">Activo / Visible</option>
                                 <option value="0">Inactivo / Oculto</option>
                             </select>
@@ -433,10 +427,11 @@
 
                 <!-- Footer -->
                 <div class="modal-footer-premium" style="gap: 0.75rem;">
-                    <button type="button" class="btn-modal-cancel" @click="cerrarModal">
+                    <button type="button" @click="cerrarModal"
+                        style="background: #f8fafc; color: #64748b; padding: 0.8rem 1.65rem; border-radius: 10px; border: 1.5px solid #e2e8f0; font-family: 'Inter', sans-serif; font-weight: 700; font-size: 0.85rem; cursor: pointer;">
                         Cancelar
                     </button>
-                    <button type="submit" class="btn-premium-pill-black" :disabled="submitting">
+                    <button type="submit" class="btn-primary-premium" :disabled="submitting">
                         <i :class="['bx', submitting ? 'bx-loader-alt bx-spin' : (editando ? 'bx-save' : 'bx-plus-circle')]"></i>
                         {{ submitting ? 'Guardando...' : (editando ? 'Guardar Cambios' : 'Registrar Premio') }}
                     </button>
