@@ -45,10 +45,14 @@
 
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title">
-                        <i class='bx bx-id-card title-icon red-premium'></i>
-                        <span>Lista de Beneficiarios</span>
+                    <div class="header-title-flex">
+                        <i class='bx bx-id-card'></i>
+                        <div class="title-text-group">
+                            <h3>Directorio de Clientes</h3>
+                            <span>Gestión y administración de beneficiarios</span>
+                        </div>
                     </div>
+
                     
                     <div class="header-actions">
                         <div class="header-filter">

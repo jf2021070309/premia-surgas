@@ -265,9 +265,12 @@
         ════════════════════════════════════════════ -->
         <div class="card">
             <div class="card-header">
-                <div class="card-title">
-                    <div class="title-icon blue"><i class='bx bx-history'></i></div>
-                    Historial de Movimientos
+                <div class="header-title-flex">
+                    <i class='bx bx-history'></i>
+                    <div class="title-text-group">
+                        <h3>Historial de Movimientos</h3>
+                        <span>Panel de verificación administrativa de recargas</span>
+                    </div>
                 </div>
                 <div style="display: flex; gap: 0.75rem; align-items: center;">
                     <div class="header-search" style="max-width: 150px;">
@@ -285,10 +288,10 @@
                     <div class="header-search">
                         <i class='bx bx-search'></i>
                         <input type="text" id="historySearch" placeholder="Buscar" onkeyup="filterHistory()">
-
                     </div>
                 </div>
             </div>
+
 
             <?php if (empty($historial)): ?>
                 <div class="empty-state">

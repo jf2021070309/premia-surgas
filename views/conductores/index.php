@@ -29,9 +29,12 @@
         <div class="container">
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title">
-                        <div class="title-icon red-premium"><i class='bx bx-bus'></i></div>
-                        <span>Directorio de Conductores</span>
+                    <div class="header-title-flex">
+                        <i class='bx bx-bus'></i>
+                        <div class="title-text-group">
+                            <h3>Directorio de Conductores</h3>
+                            <span>Administración de equipo de reparto</span>
+                        </div>
                     </div>
                     <div class="header-actions">
                         <div class="header-filter">
@@ -51,6 +54,7 @@
                         </a>
                     </div>
                 </div>
+
 
                 <div class="table-wrapper">
                     <table class="data-table">

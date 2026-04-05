@@ -31,7 +31,8 @@
             
             <!-- SECTION 1: OPERACIONES -->
             <div class="card shadow-sm" id="cardOp">
-                <div class="card-header-premium">
+                <div class="card-header">
+
                     <div class="header-title-flex">
                         <i class='bx bx-calculator'></i>
                         <div class="title-text-group">
@@ -89,9 +90,11 @@
 
             <!-- SECTION 2: PREMIOS -->
             <div class="card shadow-sm" id="cardPremios">
-                <div class="card-header-premium">
+                <div class="card-header">
+
                     <div class="header-title-flex">
-                        <i class='bx bx-gift' style="color: #ea580c;"></i>
+                        <i class='bx bx-gift'></i>
+
                         <div class="title-text-group">
                             <h3>Catálogo de Premios</h3>
                             <span>Gestiona los productos disponibles y sus costos en puntos</span>
@@ -150,14 +153,15 @@
 
             <!-- SECTION 3: CONDUCTORES -->
             <div class="card shadow-sm" id="cardCond">
-                <div class="card-header-premium">
+                <div class="card-header">
                     <div class="header-title-flex">
-                        <i class='bx bxs-truck' style="color: #166534;"></i>
+                        <i class='bx bxs-truck'></i>
                         <div class="title-text-group">
                             <h3>Directorio de Conductores</h3>
                             <span>Control de acceso y perfiles del personal de campo</span>
                         </div>
                     </div>
+
                     <div class="header-controls">
                         <div class="filter-input-group">
                             <i class='bx bx-search'></i>

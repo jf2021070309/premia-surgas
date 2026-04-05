@@ -31,9 +31,12 @@
         <div class="container">
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title">
-                        <div class="title-icon red-premium"><i class='bx bx-gift'></i></div>
-                        <span>Directorio de Productos</span>
+                    <div class="header-title-flex">
+                        <i class='bx bx-gift'></i>
+                        <div class="title-text-group">
+                            <h3>Catálogo de Premios</h3>
+                            <span>Gestión de productos y recompensas</span>
+                        </div>
                     </div>
                     <div class="header-actions">
                         <div class="header-filter">
@@ -53,6 +56,7 @@
                         </button>
                     </div>
                 </div>
+
 
                 <div class="table-wrapper">
                     <table class="data-table">
