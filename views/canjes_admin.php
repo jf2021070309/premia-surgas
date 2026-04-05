@@ -25,9 +25,9 @@
             include __DIR__ . '/partials/header_admin.php';
         ?>
 
-        <div class="container animate-fade-in">
+        <div class="container animate-fade-in" style="padding-top: 0.5rem;">
             
-            <div class="modern-section-header" style="justify-content: flex-end; margin-top: 2rem;">
+            <div class="modern-section-header" style="justify-content: flex-end; margin-top: 0.5rem;">
                 <div class="header-search-modern" style="width: 320px;">
                     <i class='bx bx-search'></i>
                     <input type="text" id="searchBeneficiario" placeholder="Buscar beneficiario..." onkeyup="filterDeliveries()">
