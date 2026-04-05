@@ -121,11 +121,11 @@
     text-align: center;
 }
 /* ══════════════════════════════════════
-   Elite Action Buttons (Refined & Layered)
+   Elite Action Buttons (Universal Maroon)
    ══════════════════════════════════════ */
 .actions-flex {
     display: flex;
-    gap: 10px;
+    gap: 8px;
     align-items: center;
     justify-content: center;
 }
@@ -138,81 +138,43 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.2rem;
+    font-size: 1.25rem;
     cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    background: #ffffff;
+    transition: all 0.3s ease;
+    background: #fff5f5; /* Soft brand-tint background */
+    color: var(--primary, #800000); /* Corporate Wine/Guinda */
+    border-color: #feeae2;
     padding: 0;
-    box-shadow: 
-        0 2px 5px rgba(0,0,0,0.03),
-        0 8px 12px rgba(0,0,0,0.02);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
     position: relative;
     overflow: hidden;
 }
 
-.btn-action i {
-    z-index: 2;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
 .btn-action:hover {
-    transform: translateY(-4px) scale(1.08);
-}
-
-.btn-action:active {
-    transform: translateY(-1px) scale(0.95);
-}
-
-/* Layered Internal Glow */
-.btn-action::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 100%);
-    opacity: 0;
-    transition: opacity 0.3s;
-    z-index: 1;
-}
-.btn-action:hover::after { opacity: 0.2; }
-
-/* BRAND: WINE (Edit/View) */
-.btn-action.blue, .btn-action.indigo {
-    color: var(--primary, #800000);
-    background: #fff8f8;
-    border: 1px solid #feeae2;
-}
-.btn-action.blue:hover, .btn-action.indigo:hover {
     background: var(--primary, #800000);
     color: #ffffff;
     border-color: var(--primary, #800000);
-    box-shadow: 0 12px 25px rgba(128, 0, 0, 0.25);
+    box-shadow: 0 8px 20px rgba(128, 0, 0, 0.22);
 }
 
-/* BRAND: ORANGE (Edit/Accent) */
+/* Ensure all variants follow the same corporate style */
+.btn-action.blue, 
+.btn-action.indigo, 
+.btn-action.red, 
 .btn-action.orange {
-    color: var(--accent, #ff6600);
-    background: #fffaf5;
-    border: 1px solid #ffe8d6;
-}
-.btn-action.orange:hover {
-    background: var(--accent, #ff6600);
-    color: #ffffff;
-    border-color: var(--accent, #ff6600);
-    box-shadow: 0 12px 25px rgba(255, 102, 0, 0.25);
+    color: var(--primary, #800000);
+    background: #fff5f5;
+    border-color: #feeae2;
 }
 
-/* DANGER: RED (Delete) */
-.btn-action.red {
-    color: var(--red, #dc2626);
-    background: #fffafa;
-    border: 1px solid #fee2e2;
-}
-.btn-action.red:hover {
-    background: var(--red, #dc2626);
+.btn-action.blue:hover, 
+.btn-action.indigo:hover, 
+.btn-action.red:hover, 
+.btn-action.orange:hover {
+    background: var(--primary, #800000);
     color: #ffffff;
-    border-color: var(--red, #dc2626);
-    box-shadow: 0 12px 25px rgba(220, 38, 38, 0.25);
 }
+
 
 
 /* Muted Badges (Image Reference Style but cleaner) */

@@ -3,15 +3,20 @@
  * Sidebar Admin Component
  * Versión Premium Surgas — Estandarizada
  */
-$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$uri = str_replace('/premia-surgas/', '', $uri);
+$current_url = trim($_GET['url'] ?? '', '/');
 
 if (!function_exists('isActiveLink')) {
-    function isActiveLink($path, $uri) {
-        if ($path === '/panel' && (empty($uri) || $uri === 'panel')) {
+    function isActiveLink($targetPath, $currentUrl) {
+        $targetPath = trim($targetPath, '/');
+        // Caso especial para el panel/home
+        if ($targetPath === 'panel' && (empty($currentUrl) || $currentUrl === 'panel')) {
             return 'active';
         }
-        return strpos($uri, $path) === 0 ? 'active' : '';
+        // Match exacto o si el current URL empieza con el target (para subsecciones)
+        if ($currentUrl === $targetPath || strpos($currentUrl, $targetPath . '/') === 0) {
+            return 'active';
+        }
+        return '';
     }
 }
 ?>
@@ -23,40 +28,40 @@ if (!function_exists('isActiveLink')) {
 
     <nav class="sidebar-menu">
         <div class="menu-label">Principal</div>
-        <a href="<?= BASE_URL ?>panel" class="sidebar-item <?= isActiveLink('/panel', $uri) ?>">
+        <a href="<?= BASE_URL ?>panel" class="sidebar-item <?= isActiveLink('panel', $current_url) ?>">
             <i class='bx bx-grid-alt'></i>
             <span>Dashboard</span>
         </a>
 
         <div class="menu-label">Gestión Administrativa</div>
-        <a href="<?= BASE_URL ?>clientes/nuevo" class="sidebar-item <?= isActiveLink('clientes/nuevo', $uri) ?>">
+        <a href="<?= BASE_URL ?>clientes/nuevo" class="sidebar-item <?= isActiveLink('clientes/nuevo', $current_url) ?>">
             <i class='bx bx-user-plus'></i>
             <span>Nuevo Cliente</span>
         </a>
-        <a href="<?= BASE_URL ?>clientes/lista" class="sidebar-item <?= isActiveLink('clientes/lista', $uri) ?>">
+        <a href="<?= BASE_URL ?>clientes/lista" class="sidebar-item <?= isActiveLink('clientes/lista', $current_url) ?>">
             <i class='bx bx-group'></i>
             <span>Directorio</span>
         </a>
-        <a href="<?= BASE_URL ?>recargas-admin" class="sidebar-item <?= isActiveLink('recargas-admin', $uri) ?>">
+        <a href="<?= BASE_URL ?>recargas-admin" class="sidebar-item <?= isActiveLink('recargas-admin', $current_url) ?>">
             <i class='bx bx-wallet'></i>
             <span>Gestión Recargas</span>
         </a>
-        <a href="<?= BASE_URL ?>canjes-admin" class="sidebar-item <?= isActiveLink('canjes-admin', $uri) ?>">
+        <a href="<?= BASE_URL ?>canjes-admin" class="sidebar-item <?= isActiveLink('canjes-admin', $current_url) ?>">
             <i class='bx bx-check-double'></i>
             <span>Entregas Canjes</span>
         </a>
 
         <div class="menu-label">Operaciones</div>
-        <a href="<?= BASE_URL ?>scan" class="sidebar-item <?= isActiveLink('scan', $uri) ?>">
+        <a href="<?= BASE_URL ?>scan" class="sidebar-item <?= isActiveLink('scan', $current_url) ?>">
             <i class='bx bx-qr-scan'></i>
             <span>Suma Puntos</span>
         </a>
 
         <div class="menu-label">Mantenimiento</div>
-        <a href="<?= BASE_URL ?>ajustes" class="sidebar-item <?= isActiveLink('ajustes', $uri) ?>">
+        <a href="<?= BASE_URL ?>ajustes" class="sidebar-item <?= isActiveLink('ajustes', $current_url) ?>">
             <i class='bx bx-cog'></i>
             <span>Configuración General</span>
         </a>
-
     </nav>
 </aside>
+
