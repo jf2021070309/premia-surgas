@@ -14,15 +14,15 @@ createApp({
             busqueda: '',
             filtroEstado: 'todos',
             editando: false,
+            showModal: false,
             isDragging: false,
             previewUrl: null,
+            submitting: false,
             form: {
                 id: '',
                 nombre: '',
-                descripcion: '',
                 puntos: 0,
                 stock: 0,
-                nombre_imagen: '',
                 estado: 1,
                 imagen_actual: ''
             }
@@ -45,29 +45,41 @@ createApp({
         nuevoProducto() {
             this.editando = false;
             this.previewUrl = null;
+            this.submitting = false;
             this.form = {
-                id: '', nombre: '', descripcion: '', puntos: 0, stock: 0, 
-                nombre_imagen: '', estado: 1, imagen_actual: ''
+                id: '', nombre: '', puntos: 0, stock: 0,
+                estado: 1, imagen_actual: ''
             };
-            if (typeof bootstrap !== 'undefined') {
-                new bootstrap.Modal(document.getElementById('modalProducto')).show();
-            }
+            this.showModal = true;
+            document.body.style.overflow = 'hidden';
         },
         editarProducto(p) {
             this.editando = true;
-            this.previewUrl = p.imagen ? (typeof BASE_URL !== 'undefined' ? BASE_URL : '/') + 'assets/premios/' + p.imagen : null;
+            this.submitting = false;
+            this.previewUrl = p.imagen
+                ? (typeof BASE_URL !== 'undefined' ? BASE_URL : '/') + 'assets/uploads/productos/' + p.imagen
+                : null;
             this.form = {
                 id: p.id,
                 nombre: p.nombre,
-                descripcion: p.descripcion,
                 puntos: p.puntos,
                 stock: p.stock,
-                nombre_imagen: p.imagen ? p.imagen.split('.')[0] : '',
                 estado: p.estado,
-                imagen_actual: p.imagen
+                imagen_actual: p.imagen || ''
             };
-            if (typeof bootstrap !== 'undefined') {
-                new bootstrap.Modal(document.getElementById('modalProducto')).show();
+            this.showModal = true;
+            document.body.style.overflow = 'hidden';
+        },
+        cerrarModal() {
+            this.showModal = false;
+            this.previewUrl = null;
+            this.isDragging = false;
+            document.body.style.overflow = '';
+        },
+        clearImage() {
+            this.previewUrl = null;
+            if (this.$refs.fileInput) {
+                this.$refs.fileInput.value = '';
             }
         },
         onFileChange(e) {
@@ -87,10 +99,8 @@ createApp({
             reader.onload = (e) => { this.previewUrl = e.target.result; };
             reader.readAsDataURL(file);
         },
-        onDragOver() { this.isDragging = true; },
-        onDragLeave() { this.isDragging = false; },
         onImgError(e) {
-            e.target.src = 'https://placehold.co/100x100?text=No+Img';
+            e.target.src = (typeof BASE_URL !== 'undefined' ? BASE_URL : '/') + 'assets/premios/no-image.png';
         },
         eliminarProducto(id) {
             if (typeof Swal !== 'undefined') {
@@ -99,7 +109,7 @@ createApp({
                     text: "El producto quedará inactivo y no se mostrará en la tienda.",
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonColor: 'var(--primary)',
+                    confirmButtonColor: '#800000',
                     cancelButtonColor: '#6c757d',
                     confirmButtonText: 'Sí, eliminar',
                     cancelButtonText: 'Cancelar'
@@ -117,7 +127,7 @@ createApp({
                     text: "Esperamos verte pronto de nuevo.",
                     icon: 'question',
                     showCancelButton: true,
-                    confirmButtonColor: 'var(--primary)',
+                    confirmButtonColor: '#800000',
                     cancelButtonColor: '#6c757d',
                     confirmButtonText: 'Sí, salir',
                     cancelButtonText: 'Cancelar'
@@ -128,5 +138,13 @@ createApp({
                 });
             }
         }
+    },
+    mounted() {
+        // Close modal with Escape key
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.showModal) {
+                this.cerrarModal();
+            }
+        });
     }
 }).mount('#app');

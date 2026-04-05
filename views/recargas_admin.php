@@ -344,7 +344,7 @@
                                 <td style="text-align: center !important;"><span class="chip <?= $chipClass ?>" ><i class='bx bxs-circle'></i> <?= ucfirst($h['estado'] ?? 'pendiente') ?></span></td>
                                 <td class="text-center">
                                     <?php if (!empty($h['comprobante'])): ?>
-                                        <button class="btn-action blue" onclick="openModal('<?= BASE_URL ?>assets/uploads/comprobantes/<?= $h['comprobante'] ?>')" title="Ver Comprobante">
+                                        <button class="btn-action indigo" onclick="openModal('<?= BASE_URL ?>assets/uploads/comprobantes/<?= $h['comprobante'] ?>')" title="Ver Comprobante">
                                             <i class='bx bx-show'></i>
                                         </button>
                                     <?php else: ?>
