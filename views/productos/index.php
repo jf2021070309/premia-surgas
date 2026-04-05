@@ -13,181 +13,191 @@
     <style>
         [v-cloak] { display: none !important; }
 
-        /* Product image in table */
+        /* ── Table image ── */
         .product-img-box {
-            width: 44px;
-            height: 44px;
+            width: 44px; height: 44px;
             border-radius: 10px;
             object-fit: cover;
             border: 1px solid #f1f5f9;
             background: #fff;
         }
 
-        /* Points badge */
+        /* ── Points badge ── */
         .pts-badge {
-            background: #e0f2fe;
-            color: #0369a1;
-            font-weight: 800;
-            padding: 4px 10px;
-            border-radius: 8px;
-            font-size: 0.75rem;
+            background: #e0f2fe; color: #0369a1;
+            font-weight: 800; padding: 4px 10px;
+            border-radius: 8px; font-size: 0.75rem;
             border: 1px solid #bae6fd;
         }
 
-        /* ── Modal Form Enhancements ── */
-        .modal-icon-focal {
-            position: absolute;
-            left: 1.15rem;
-            top: 50%;
-            transform: translateY(-50%);
+        /* ══════════════════════════════════════
+           MODAL FORM — Flex Icon Inputs
+        ══════════════════════════════════════ */
+
+        /* Label premium */
+        .modal-field-label {
+            display: block;
+            font-size: 0.63rem;
+            font-weight: 800;
             color: #94a3b8;
-            font-size: 1.15rem;
-            pointer-events: none;
-            transition: color 0.2s;
-            z-index: 2;
+            text-transform: uppercase;
+            letter-spacing: 0.09em;
+            margin-bottom: 0.55rem;
         }
 
-        .form-group:focus-within .modal-icon-focal { color: #1e293b; }
-
-        /* File upload zone */
-        .upload-zone {
-            border: 2px dashed #e2e8f0;
-            border-radius: 14px;
-            padding: 1.5rem 1.25rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            background: #fafbfc;
-            position: relative;
-            overflow: hidden;
-        }
-        .upload-zone:hover, .upload-zone.drag-over {
-            border-color: #800000;
-            background: #fdf5f5;
-        }
-        .upload-zone input[type="file"] {
-            position: absolute;
-            inset: 0;
-            opacity: 0;
-            cursor: pointer;
-            width: 100%;
-            height: 100%;
-        }
-        .upload-zone-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            background: #f1f5f9;
+        /* Flex-based input row: icon | field */
+        .modal-input-row {
             display: flex;
             align-items: center;
-            justify-content: center;
-            margin: 0 auto 0.75rem;
-            font-size: 1.5rem;
-            color: #94a3b8;
-            transition: all 0.2s;
-        }
-        .upload-zone:hover .upload-zone-icon, .upload-zone.drag-over .upload-zone-icon {
-            background: #fdf2f2;
-            color: #800000;
-        }
-        .upload-zone-title {
-            font-size: 0.82rem;
-            font-weight: 700;
-            color: #1e293b;
-            margin-bottom: 3px;
-        }
-        .upload-zone-sub {
-            font-size: 0.7rem;
-            color: #94a3b8;
-            font-weight: 500;
-        }
-        /* Image preview inside upload zone */
-        .upload-preview-wrap {
-            position: relative;
-            display: inline-block;
-        }
-        .upload-preview-wrap img {
-            width: 80px;
-            height: 80px;
-            border-radius: 12px;
-            object-fit: cover;
-            border: 2px solid #e2e8f0;
-        }
-        .upload-preview-clear {
-            position: absolute;
-            top: -6px;
-            right: -6px;
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            background: #dc2626;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
-        }
-
-        /* Select icon focal */
-        .form-select-premium {
-            width: 100%;
-            padding: 0.85rem 1.15rem 0.85rem 2.8rem;
             border: 1.5px solid #e2e8f0;
             border-radius: 12px;
-            font-size: 0.9rem;
+            background: #fff;
+            overflow: hidden;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .modal-input-row:focus-within {
+            border-color: #1e293b;
+            box-shadow: 0 0 0 4px rgba(0,0,0,0.05);
+        }
+        .modal-input-row .row-icon {
+            flex-shrink: 0;
+            width: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            font-size: 1.1rem;
+            border-right: 1.5px solid #f1f5f9;
+            background: #fafbfc;
+            align-self: stretch;
+            transition: color 0.2s;
+        }
+        .modal-input-row:focus-within .row-icon {
+            color: #1e293b;
+            background: #f8fafc;
+        }
+        .modal-input-row input,
+        .modal-input-row select {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 0.8rem 1rem;
+            font-size: 0.88rem;
             font-family: 'Inter', sans-serif;
             color: #1e293b;
-            background: #fff;
-            outline: none;
-            transition: all 0.25s;
+            background: transparent;
+            min-width: 0;
+        }
+        .modal-input-row input::placeholder { color: #cbd5e1; }
+        .modal-input-row select {
             appearance: none;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
-            background-position: right 1rem center;
+            background-position: right 0.85rem center;
             background-size: 1rem;
             padding-right: 2.5rem;
             cursor: pointer;
         }
-        .form-select-premium:focus {
-            border-color: #000;
-            box-shadow: 0 0 0 4px rgba(0,0,0,0.05);
-        }
 
-        /* Modal footer btn cancel */
-        .btn-modal-cancel {
-            background: #f8fafc;
-            color: #64748b;
-            padding: 0.85rem 1.75rem;
-            border-radius: 12px;
-            border: 1.5px solid #e2e8f0;
-            font-family: 'Inter', sans-serif;
-            font-weight: 700;
-            font-size: 0.88rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .btn-modal-cancel:hover {
-            background: #f1f5f9;
-            border-color: #cbd5e1;
-            color: #1e293b;
-        }
+        /* ── Form field group ── */
+        .modal-field { margin-bottom: 1.25rem; }
+        .modal-field:last-child { margin-bottom: 0; }
 
-        /* Modal form group spacing */
-        .modal-body-premium .form-group { margin-bottom: 1.5rem; }
-        .modal-body-premium .form-group:last-child { margin-bottom: 0; }
-
-        /* Two-column grid in modal */
-        .form-grid-2 {
+        /* ── 2-col grid ── */
+        .modal-grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 1.25rem;
+            gap: 1rem;
         }
+        @media (max-width: 520px) { .modal-grid-2 { grid-template-columns: 1fr; } }
 
-        @media (max-width: 540px) {
-            .form-grid-2 { grid-template-columns: 1fr; }
+        /* ══════════════════════════════════════
+           Upload Zone
+        ══════════════════════════════════════ */
+        .upload-trigger {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            border: 1.5px dashed #e2e8f0;
+            border-radius: 12px;
+            padding: 0.9rem 1.1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #fafbfc;
+            user-select: none;
         }
+        .upload-trigger:hover {
+            border-color: #800000;
+            background: #fdf5f5;
+        }
+        .upload-trigger.has-file {
+            border-style: solid;
+            border-color: #a7f3d0;
+            background: #f0fdf4;
+        }
+        .upload-trigger-icon {
+            width: 38px; height: 38px;
+            border-radius: 10px;
+            background: #f1f5f9;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem;
+            color: #94a3b8;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+        .upload-trigger:hover .upload-trigger-icon {
+            background: #fdf2f2; color: #800000;
+        }
+        .upload-trigger.has-file .upload-trigger-icon {
+            background: #dcfce7; color: #059669;
+        }
+        .upload-trigger-text { flex: 1; min-width: 0; }
+        .upload-trigger-title {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #1e293b;
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .upload-trigger-sub {
+            font-size: 0.68rem;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+        .upload-preview-thumb {
+            width: 38px; height: 38px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 2px solid #e2e8f0;
+            flex-shrink: 0;
+        }
+        .upload-clear-btn {
+            width: 26px; height: 26px;
+            border-radius: 50%;
+            border: none;
+            background: #fef2f2;
+            color: #dc2626;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+            transition: background 0.2s;
+        }
+        .upload-clear-btn:hover { background: #fee2e2; }
+
+        /* ── Modal footer btns ── */
+        .btn-modal-cancel {
+            background: #f8fafc; color: #64748b;
+            padding: 0.8rem 1.65rem;
+            border-radius: 10px;
+            border: 1.5px solid #e2e8f0;
+            font-family: 'Inter', sans-serif;
+            font-weight: 700; font-size: 0.85rem;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .btn-modal-cancel:hover { background: #f1f5f9; color: #1e293b; border-color: #cbd5e1; }
     </style>
 </head>
 <body>
@@ -205,7 +215,6 @@
         <div class="container">
             <div class="modern-section-header">
                 <div class="section-title-flex">
-                    <i class='bx bx-gift'></i>
                     <div class="section-title-text">
                         <h3>Catálogo de Premios</h3>
                         <span>Gestión de productos y recompensas</span>
@@ -271,9 +280,9 @@
                                 </td>
                             </tr>
                             <tr v-if="productosFiltrados.length === 0">
-                                <td colspan="5" class="text-center py-5">
-                                    <div style="color: #94a3b8; font-size: 0.9rem;">
-                                        <i class='bx bx-package' style="font-size: 2.5rem; display: block; margin-bottom: 0.5rem; opacity: 0.5;"></i>
+                                <td colspan="5">
+                                    <div class="empty-table">
+                                        <i class='bx bx-package'></i>
                                         Catálogo vacío o sin resultados para la búsqueda.
                                     </div>
                                 </td>
@@ -281,7 +290,6 @@
                         </tbody>
                     </table>
                 </div>
-
                 <div class="card-footer-premium">
                     <div class="footer-info">Mostrando {{ productosFiltrados.length }} de {{ productos.length }} premios registrados</div>
                 </div>
@@ -293,7 +301,7 @@
          Modal: Nuevo / Editar Premio
     ══════════════════════════════════════ -->
     <div class="modal-overlay" v-if="showModal" @click.self="cerrarModal" id="modalProducto">
-        <div class="modal-content-wrapper" style="max-width: 520px;">
+        <div class="modal-content-wrapper" style="max-width: 500px;">
 
             <!-- Header -->
             <div class="modal-header-premium">
@@ -302,8 +310,10 @@
                         <i :class="['bx', editando ? 'bx-edit' : 'bx-gift']"></i>
                     </div>
                     <div>
-                        <h2 style="font-size: 1.1rem;">{{ editando ? 'Editar Premio' : 'Registrar Nuevo Premio' }}</h2>
-                        <p style="font-size: 0.75rem; color: #64748b; margin-top: 2px; font-weight: 500;">{{ editando ? 'Modifica los datos del producto seleccionado' : 'Completa los datos del nuevo producto' }}</p>
+                        <h2>{{ editando ? 'Editar Premio' : 'Registrar Nuevo Premio' }}</h2>
+                        <p style="font-size: 0.75rem; color: #64748b; margin-top: 3px; font-weight: 500;">
+                            {{ editando ? 'Modifica los datos del producto seleccionado' : 'Completa los datos del nuevo producto' }}
+                        </p>
                     </div>
                 </div>
                 <div class="modal-close" @click="cerrarModal" title="Cerrar">
@@ -311,104 +321,108 @@
                 </div>
             </div>
 
-            <!-- Body -->
+            <!-- Form -->
             <form :action="'<?= BASE_URL ?>productos/' + (editando ? 'update' : 'store')" method="POST" enctype="multipart/form-data" @submit="submitting = true">
                 <input type="hidden" name="id" :value="form.id" v-if="editando">
                 <input type="hidden" name="imagen_actual" :value="form.imagen_actual" v-if="editando">
 
                 <div class="modal-body-premium">
 
-                    <!-- Nombre del Premio -->
-                    <div class="form-group">
-                        <label class="form-label-premium">Nombre Comercial del Premio</label>
-                        <div style="position: relative;">
-                            <i class='bx bx-purchase-tag modal-icon-focal'></i>
+                    <!-- Nombre -->
+                    <div class="modal-field">
+                        <label class="modal-field-label">Nombre Comercial del Premio</label>
+                        <div class="modal-input-row">
+                            <span class="row-icon"><i class='bx bx-purchase-tag'></i></span>
                             <input
                                 type="text"
                                 name="nombre"
-                                class="form-input-premium"
-                                placeholder="Ej: Auriculares Bluetooth Premium"
                                 v-model="form.nombre"
+                                placeholder="Ej: Auriculares Bluetooth Premium"
                                 required
                                 autocomplete="off"
                             >
                         </div>
                     </div>
 
-                    <!-- Puntos & Stock (2 columnas) -->
-                    <div class="form-grid-2">
-                        <div class="form-group">
-                            <label class="form-label-premium">Inversión Puntos</label>
-                            <div style="position: relative;">
-                                <i class='bx bx-star modal-icon-focal'></i>
-                                <input
-                                    type="number"
-                                    name="puntos"
-                                    class="form-input-premium"
-                                    placeholder="0"
-                                    v-model="form.puntos"
-                                    min="0"
-                                    required
-                                >
+                    <!-- Puntos + Stock -->
+                    <div class="modal-grid-2">
+                        <div class="modal-field">
+                            <label class="modal-field-label">Inversión Puntos</label>
+                            <div class="modal-input-row">
+                                <span class="row-icon"><i class='bx bx-star'></i></span>
+                                <input type="number" name="puntos" v-model="form.puntos" placeholder="0" min="0" required>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label-premium">Stock Actual</label>
-                            <div style="position: relative;">
-                                <i class='bx bx-cube modal-icon-focal'></i>
-                                <input
-                                    type="number"
-                                    name="stock"
-                                    class="form-input-premium"
-                                    placeholder="0"
-                                    v-model="form.stock"
-                                    min="0"
-                                    required
-                                >
+                        <div class="modal-field">
+                            <label class="modal-field-label">Stock Actual</label>
+                            <div class="modal-input-row">
+                                <span class="row-icon"><i class='bx bx-cube'></i></span>
+                                <input type="number" name="stock" v-model="form.stock" placeholder="0" min="0" required>
                             </div>
                         </div>
                     </div>
 
                     <!-- Imagen -->
-                    <div class="form-group">
-                        <label class="form-label-premium">{{ editando ? 'Cambiar Imagen' : 'Imagen del Premio' }}</label>
+                    <div class="modal-field">
+                        <label class="modal-field-label">{{ editando ? 'Cambiar Imagen' : 'Imagen del Premio' }}</label>
+
+                        <!-- Hidden real file input -->
+                        <input
+                            type="file"
+                            name="imagen"
+                            accept="image/*"
+                            ref="fileInput"
+                            @change="onFileChange"
+                            style="display: none;"
+                            id="imgFileInput"
+                        >
+
+                        <!-- Custom trigger row -->
                         <div
-                            class="upload-zone"
-                            :class="{ 'drag-over': isDragging }"
+                            class="upload-trigger"
+                            :class="{ 'has-file': !!previewUrl }"
+                            @click="$refs.fileInput.click()"
                             @dragover.prevent="isDragging = true"
                             @dragleave.prevent="isDragging = false"
                             @drop.prevent="onDrop"
                         >
-                            <input type="file" name="imagen" accept="image/*" ref="fileInput" @change="onFileChange">
-
-                            <!-- Sin preview -->
-                            <template v-if="!previewUrl">
-                                <div class="upload-zone-icon">
-                                    <i class='bx bx-image-add'></i>
+                            <!-- With preview -->
+                            <template v-if="previewUrl">
+                                <img :src="previewUrl" class="upload-preview-thumb" alt="preview">
+                                <div class="upload-trigger-text">
+                                    <span class="upload-trigger-title">Imagen seleccionada</span>
+                                    <span class="upload-trigger-sub">Haz clic para cambiar</span>
                                 </div>
-                                <div class="upload-zone-title">Arrastra aquí o haz clic para subir</div>
-                                <div class="upload-zone-sub">PNG, JPG, WEBP — máx. 2 MB</div>
+                                <button
+                                    type="button"
+                                    class="upload-clear-btn"
+                                    @click.stop="clearImage"
+                                    title="Quitar imagen"
+                                >
+                                    <i class='bx bx-x'></i>
+                                </button>
                             </template>
 
-                            <!-- Con preview -->
+                            <!-- Without preview -->
                             <template v-else>
-                                <div class="upload-preview-wrap" @click.stop>
-                                    <img :src="previewUrl" alt="preview">
-                                    <button type="button" class="upload-preview-clear" @click.stop="clearImage" title="Quitar imagen">
-                                        <i class='bx bx-x'></i>
-                                    </button>
+                                <div class="upload-trigger-icon">
+                                    <i class='bx bx-image-add'></i>
                                 </div>
-                                <div class="upload-zone-sub" style="margin-top: 0.5rem;">Haz clic o arrastra para cambiar</div>
+                                <div class="upload-trigger-text">
+                                    <span class="upload-trigger-title">Seleccionar imagen</span>
+                                    <span class="upload-trigger-sub">PNG, JPG, WEBP — máx. 2 MB · Arrastra o haz clic</span>
+                                </div>
+                                <i class='bx bx-upload' style="color: #cbd5e1; font-size: 1.1rem; flex-shrink: 0;"></i>
                             </template>
                         </div>
                     </div>
 
-                    <!-- Estado en Tienda -->
-                    <div class="form-group" style="margin-bottom: 0;">
-                        <label class="form-label-premium">Estado en Tienda</label>
-                        <div style="position: relative;">
-                            <i class='bx bx-show modal-icon-focal'></i>
-                            <select name="estado" class="form-select-premium" v-model="form.estado">
+                    <!-- Estado -->
+                    <div class="modal-field" style="margin-bottom: 0;">
+                        <label class="modal-field-label">Estado en Tienda</label>
+                        <div class="modal-input-row">
+                            <span class="row-icon"><i class='bx bx-show'></i></span>
+                            <select name="estado" v-model="form.estado">
                                 <option value="1">Activo / Visible</option>
                                 <option value="0">Inactivo / Oculto</option>
                             </select>

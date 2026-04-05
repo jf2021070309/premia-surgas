@@ -28,6 +28,10 @@
         <div class="container animate-fade-in" style="padding-top: 0.5rem;">
             
             <div class="modern-section-header" style="justify-content: flex-end; margin-top: 0.5rem;">
+                <div class="header-search-modern" style="width: 170px;">
+                    <i class='bx bx-calendar'></i>
+                    <input type="date" id="filterFecha" onchange="filterDeliveries()" title="Filtrar por fecha">
+                </div>
                 <div class="header-search-modern" style="width: 320px;">
                     <i class='bx bx-search'></i>
                     <input type="text" id="searchBeneficiario" placeholder="Buscar beneficiario..." onkeyup="filterDeliveries()">
@@ -204,21 +208,38 @@
         }
 
         function filterDeliveries() {
-            const input = document.getElementById('searchBeneficiario');
-            const filter = input.value.toLowerCase();
+            const searchVal = document.getElementById('searchBeneficiario').value.toLowerCase();
+            const dateVal   = document.getElementById('filterFecha').value; // "YYYY-MM-DD"
             const rows = document.querySelectorAll('.delivery-row');
             let visibleCount = 0;
 
             rows.forEach(row => {
-                const name = row.querySelector('.client-name').innerText.toLowerCase();
+                const name    = row.querySelector('.client-name').innerText.toLowerCase();
                 const celular = row.querySelector('.client-subtext').innerText.toLowerCase();
-                const prize = row.querySelector('.text-medium').innerText.toLowerCase();
+                const prize   = row.querySelector('.text-medium').innerText.toLowerCase();
 
-                if (name.includes(filter) || celular.includes(filter) || prize.includes(filter)) {
-                    row.style.display = "";
+                // Search match
+                const matchesSearch = !searchVal ||
+                    name.includes(searchVal) ||
+                    celular.includes(searchVal) ||
+                    prize.includes(searchVal);
+
+                // Date match — row date-text contains e.g. "25 Mar 2026"
+                let matchesDate = true;
+                if (dateVal) {
+                    const [y, m, d] = dateVal.split('-');
+                    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+                    const jsDate = new Date(+y, +m - 1, +d);
+                    const formatted = `${String(+d).padStart(2,'0')} ${months[jsDate.getMonth()]} ${y}`;
+                    const rowDateEl = row.querySelector('.date-text');
+                    matchesDate = rowDateEl ? rowDateEl.innerText.includes(formatted) : true;
+                }
+
+                if (matchesSearch && matchesDate) {
+                    row.style.display = '';
                     visibleCount++;
                 } else {
-                    row.style.display = "none";
+                    row.style.display = 'none';
                 }
             });
 
