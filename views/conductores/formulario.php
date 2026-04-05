@@ -34,71 +34,88 @@
         </div>
     </div>
 
-    <div class="container" style="max-width: 700px">
-        <div class="card elite-form-card animate-fade-in">
-            <div class="card-header-premium">
-                <i class='bx bxs-truck'></i>
-                <span>Datos del Conductor</span>
+    <div class="container" style="max-width: 750px; margin: 3rem auto;">
+        <div class="card elite-form-card animate-fade-in" style="border-radius: 24px; overflow: hidden; border: 1px solid #f1f5f9; background: #fff;">
+            <div class="card-header-premium" style="padding: 1.5rem 2rem; background: #fff; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; gap: 12px;">
+                <div style="width: 38px; height: 38px; border-radius: 10px; background: #fdf2f2; border: 1px solid #fee2e2; display: flex; align-items: center; justify-content: center; color: #800000; font-size: 1.2rem;">
+                    <i class='bx bxs-truck'></i>
+                </div>
+                <div>
+                    <h3 style="font-weight: 800; font-size: 1.1rem; color: #0f172a; margin: 0;">Datos del Conductor</h3>
+                    <p style="font-size: 0.72rem; color: #64748b; margin-top: 1px; font-weight: 500;">Información de acceso y personal del personal de reparto</p>
+                </div>
             </div>
 
-            <form action="<?= BASE_URL ?>conductores/<?= $conductor ? 'update' : 'create' ?>" method="POST" class="premium-form">
+            <form action="<?= BASE_URL ?>conductores/<?= $conductor ? 'update' : 'create' ?>" method="POST" style="padding: 2.5rem;">
                 <?php if($conductor): ?>
                     <input type="hidden" name="id" value="<?= $conductor['id'] ?>">
                 <?php endif; ?>
 
-                <div class="form-group-modern">
-                    <label><i class='bx bx-user'></i> Nombre Completo</label>
-                    <div class="input-wrapper">
-                        <input type="text" name="nombre" value="<?= htmlspecialchars($conductor['nombre'] ?? '') ?>" required placeholder="Ej. Carlos Mendoza">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    
+                    <div style="grid-column: span 2;">
+                        <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Nombre Completo</label>
+                        <div style="position: relative; display: flex; align-items: center;">
+                            <i class='bx bx-user' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
+                            <input type="text" name="nombre" value="<?= htmlspecialchars($conductor['nombre'] ?? '') ?>" required placeholder="Ej. Carlos Mendoza"
+                                style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none; transition: border-color 0.2s;">
+                        </div>
                     </div>
+
+                    <div>
+                        <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Usuario (Login)</label>
+                        <div style="position: relative; display: flex; align-items: center;">
+                            <i class='bx bx-user-circle' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
+                            <input type="text" name="usuario" value="<?= htmlspecialchars($conductor['usuario'] ?? '') ?>" required placeholder="usuario123"
+                                style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none;">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Contraseña <?= $conductor ? '(opcional)' : '' ?></label>
+                        <div style="position: relative; display: flex; align-items: center;">
+                            <i class='bx bx-lock-alt' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
+                            <input type="password" name="password" id="input-password" <?= $conductor ? '' : 'required' ?> placeholder="••••••••"
+                                style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 3rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none;">
+                            <i class='bx bx-show' id="btn-toggle-pass" style="position: absolute; right: 1rem; color: #94a3b8; cursor: pointer; font-size: 1.2rem;"></i>
+                        </div>
+                        <?php if($conductor): ?><p style="font-size: 0.65rem; color: #94a3b8; margin-top: 0.3rem;">Dejar en blanco para mantener la actual</p><?php endif; ?>
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Departamento</label>
+                        <div style="position: relative; display: flex; align-items: center;">
+                            <i class='bx bx-map' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem; pointer-events: none;"></i>
+                            <select name="departamento" required style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none; appearance: none; cursor: pointer;">
+                                <option value="">-- Seleccionar --</option>
+                                <option value="Tacna" <?= ($conductor['departamento'] ?? '') == 'Tacna' ? 'selected' : '' ?>>Tacna</option>
+                                <option value="Moquegua" <?= ($conductor['departamento'] ?? '') == 'Moquegua' ? 'selected' : '' ?>>Moquegua</option>
+                                <option value="Arequipa" <?= ($conductor['departamento'] ?? '') == 'Arequipa' ? 'selected' : '' ?>>Arequipa</option>
+                                <option value="Ilo" <?= ($conductor['departamento'] ?? '') == 'Ilo' ? 'selected' : '' ?>>Ilo</option>
+                            </select>
+                            <i class='bx bx-chevron-down' style="position: absolute; right: 1rem; color: #94a3b8; pointer-events: none;"></i>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Estado de Cuenta</label>
+                        <div style="position: relative; display: flex; align-items: center;">
+                            <i class='bx bx-toggle-right' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem; pointer-events: none;"></i>
+                            <select name="estado" style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none; appearance: none; cursor: pointer;">
+                                <option value="1" <?= ($conductor['estado'] ?? 1) == 1 ? 'selected' : '' ?>>Activo (Acceso permitido)</option>
+                                <option value="0" <?= ($conductor['estado'] ?? 1) == 0 ? 'selected' : '' ?>>Inactivo (Acceso denegado)</option>
+                            </select>
+                            <i class='bx bx-chevron-down' style="position: absolute; right: 1rem; color: #94a3b8; pointer-events: none;"></i>
+                        </div>
+                    </div>
+
                 </div>
 
-                <div class="form-group-modern">
-                    <label><i class='bx bx-user-circle'></i> Usuario (Login)</label>
-                    <div class="input-wrapper">
-                        <input type="text" name="usuario" value="<?= htmlspecialchars($conductor['usuario'] ?? '') ?>" required placeholder="usuario123">
-                    </div>
-                </div>
-
-                <div class="form-group-modern">
-                    <label><i class='bx bx-lock-alt'></i> Contraseña <?= $conductor ? '(opcional)' : '' ?></label>
-                    <div class="input-wrapper">
-                        <input type="password" name="password" id="input-password" <?= $conductor ? '' : 'required' ?> placeholder="••••••••" style="padding-right: 3.2rem;">
-                        <i class='bx bx-show password-toggle-modern' id="btn-toggle-pass"></i>
-                    </div>
-                    <?php if($conductor): ?>
-                        <p class="form-hint" style="margin-top:0.3rem">Dejar en blanco para mantener la actual</p>
-                    <?php endif; ?>
-                </div>
-
-                <div class="form-group-modern">
-                    <label><i class='bx bx-map'></i> Departamento</label>
-                    <div class="input-wrapper">
-                        <select name="departamento" class="form-control-modern" required>
-                            <option value="">-- Seleccionar --</option>
-                            <option value="Tacna" <?= ($conductor['departamento'] ?? '') == 'Tacna' ? 'selected' : '' ?>>Tacna</option>
-                            <option value="Moquegua" <?= ($conductor['departamento'] ?? '') == 'Moquegua' ? 'selected' : '' ?>>Moquegua</option>
-                            <option value="Arequipa" <?= ($conductor['departamento'] ?? '') == 'Arequipa' ? 'selected' : '' ?>>Arequipa</option>
-                            <option value="Ilo" <?= ($conductor['departamento'] ?? '') == 'Ilo' ? 'selected' : '' ?>>Ilo</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group-modern">
-                    <label><i class='bx bx-toggle-right'></i> Estado de Cuenta</label>
-                    <div class="input-wrapper">
-                        <select name="estado" class="form-control-modern">
-                            <option value="1" <?= ($conductor['estado'] ?? 1) == 1 ? 'selected' : '' ?>>Activo (Acceso permitido)</option>
-                            <option value="0" <?= ($conductor['estado'] ?? 1) == 0 ? 'selected' : '' ?>>Inactivo (Acceso denegado)</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-footer-actions">
-                    <button type="submit" class="btn-premium-submit">
-                        <i class='bx bx-check-shield'></i> <?= $conductor ? 'Guardar Cambios' : 'Confirmar Registro' ?>
+                <div style="margin-top: 3rem; border-top: 1px solid #f1f5f9; padding-top: 2rem; display: flex; justify-content: center; flex-direction: column; align-items: center; gap: 10px;">
+                    <button type="submit" style="background: #000; color: #fff; border: none; padding: 1rem 4rem; border-radius: 14px; font-weight: 800; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: transform 0.2s, background 0.2s;">
+                        <i class='bx bx-check-shield' style="font-size: 1.2rem;"></i> <?= $conductor ? 'Guardar Cambios' : 'Confirmar Registro' ?>
                     </button>
-                    <p class="form-hint">Asegúrate de que los datos sean correctos</p>
+                    <p style="font-size: 0.68rem; color: #94a3b8; font-weight: 500;">Asegúrate de que los datos sean correctos</p>
                 </div>
             </form>
         </div>

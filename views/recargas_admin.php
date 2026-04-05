@@ -146,12 +146,14 @@
                         
                         <form action="<?= BASE_URL ?>recargas-admin/subir-qr" method="POST" enctype="multipart/form-data">
                             <div style="margin-bottom: 1.5rem;">
-                                <label class="section-label dark" style="display:block; margin-bottom:0.5rem; font-size: 0.75rem; color: #64748b; font-weight:700;">Nombre del Titular:</label>
-                                <input type="text" name="yape_nombre" id="yapeNameInput" value="<?= htmlspecialchars($nombreTitular) ?>" 
-                                       placeholder="Ej: Juan Perez"
-                                       style="width: 100%; padding: 0.8rem; border-radius: 12px; border: 1px solid #e2e8f0; font-size: 0.88rem; outline:none; transition: border 0.3s;"
-                                       onfocus="this.style.borderColor='#742183'" onblur="this.style.borderColor='#e2e8f0'"
-                                       onkeyup="updateYapePreview(this.value)">
+                                <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Nombre del Titular:</label>
+                                <div style="position: relative; display: flex; align-items: center;">
+                                    <i class='bx bx-user-circle' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
+                                    <input type="text" name="yape_nombre" id="yapeNameInput" value="<?= htmlspecialchars($nombreTitular) ?>" 
+                                           placeholder="Ej: Juan Perez"
+                                           style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; outline:none; transition: border-color 0.2s; background: #fff;"
+                                           onkeyup="updateYapePreview(this.value)">
+                                </div>
                             </div>
                             <label for="qr_file_input" id="qrDropZone">
                                 <img id="qrPreviewImg" src="" alt="" style="display:none; width:80px; height:80px; object-fit:contain; border-radius:12px; margin-bottom:0.5rem; border:2px solid #e2e8f0; padding:4px; background:#fff;">

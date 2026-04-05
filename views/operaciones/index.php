@@ -89,43 +89,59 @@
     </div> <!-- .admin-layout -->
 
     <!-- Modal de Edición/Creación -->
-    <div id="modalOp" class="modal-overlay" style="display: none;" onclick="if(event.target===this) closeModal()">
-        <div class="modal-content-wrapper" style="max-width: 450px; padding: 0;">
-            <div style="padding: 2.25rem; border-bottom: 1px solid var(--outline); position: relative; background: #fff; border-radius: 20px 20px 0 0;">
-                <h2 id="modalTitle" style="font-weight: 800; font-size: 1.15rem; color: #1e293b; margin: 0; letter-spacing: -0.01em;">Nueva Operación</h2>
-                <div class="modal-close" onclick="closeModal()" style="top: 2rem; right: 2rem;">
-                    <i class='bx bx-x'></i>
+    <div id="modalOp" class="modal-overlay" style="display: none; align-items: center; justify-content: center; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(8px); z-index: 10000;" onclick="if(event.target===this) closeModal()">
+        <div class="modal-content-wrapper" style="max-width: 450px; width: 95%; background: #fff; border-radius: 24px; overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.3); animation: slideUp 0.3s ease;">
+            
+            <div class="modal-header-premium" style="padding: 2rem 2.5rem; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 14px;">
+                    <div style="background: #fdf2f2; width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: 1px solid #fee2e2; flex-shrink: 0;">
+                        <i class='bx bx-calculator' style="color: #800000; font-size: 1.3rem;"></i>
+                    </div>
+                    <div>
+                        <h2 id="modalTitle" style="font-weight: 800; font-size: 1.2rem; color: #0f172a; margin: 0;">Nueva Operación</h2>
+                        <p style="font-size: 0.75rem; color: #64748b; margin-top: 2px; font-weight: 500;">Configura los puntos para este tipo de recarga</p>
+                    </div>
+                </div>
+                <div class="modal-close" onclick="closeModal()" style="cursor: pointer; width: 32px; height: 32px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: #64748b;">
+                    <i class='bx bx-x' style="font-size: 1.3rem;"></i>
                 </div>
             </div>
-            
-            <form id="formOp" method="POST" action="<?= BASE_URL ?>operaciones/create" style="padding: 2.5rem; background: #fff; border-radius: 0 0 20px 20px;">
+
+            <form id="formOp" method="POST" action="<?= BASE_URL ?>operaciones/create" style="padding: 2.5rem;">
                 <input type="hidden" name="id" id="op_id">
                 
-                <div class="form-group" style="margin-bottom: 2rem;">
-                    <label style="display: block; font-size: 0.72rem; font-weight: 800; color: #94a3b8; margin-bottom: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">Nombre de la Operación</label>
-                    <input type="text" name="nombre" id="op_nombre" class="form-input" 
-                           style="width: 100%; padding: 0.85rem 1.15rem; border: 1.5px solid #e2e8f0; border-radius: 12px; font-size: 0.9rem; outline: none; transition: 0.3s; font-family: 'Inter', sans-serif;"
-                           placeholder="Ej: Recarga Gas 10kg" required>
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Nombre de la Operación</label>
+                    <div style="position: relative; display: flex; align-items: center;">
+                        <i class='bx bx-purchase-tag' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
+                        <input type="text" name="nombre" id="op_nombre" placeholder="Ej: Recarga Gas 10kg" required
+                               style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none; transition: border-color 0.2s;">
+                    </div>
                 </div>
 
-                <div class="form-group" style="margin-bottom: 2rem;">
-                    <label style="display: block; font-size: 0.72rem; font-weight: 800; color: #94a3b8; margin-bottom: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">Puntos Asignados</label>
-                    <input type="number" name="puntos" id="op_puntos" class="form-input" 
-                           style="width: 100%; padding: 0.85rem 1.15rem; border: 1.5px solid #e2e8f0; border-radius: 12px; font-size: 0.9rem; outline: none; transition: 0.3s; font-family: 'Inter', sans-serif;"
-                           placeholder="0" required>
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Puntos Asignados</label>
+                    <div style="position: relative; display: flex; align-items: center;">
+                        <i class='bx bx-star' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
+                        <input type="number" name="puntos" id="op_puntos" placeholder="0" required
+                               style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none;">
+                    </div>
                 </div>
 
-                <div class="form-group" id="group_estado" style="display: none; margin-bottom: 2rem;">
-                    <label style="display: block; font-size: 0.72rem; font-weight: 800; color: #94a3b8; margin-bottom: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">Estado</label>
-                    <select name="estado" id="op_estado" class="form-input"
-                            style="width: 100%; padding: 0.85rem 1.15rem; border: 1.5px solid #e2e8f0; border-radius: 12px; font-size: 0.9rem; outline: none; transition: 0.3s; background: #fff; cursor: pointer;">
-                        <option value="1">Activo</option>
-                        <option value="0">Inactivo</option>
-                    </select>
+                <div id="group_estado" style="display: none; margin-bottom: 1.5rem;">
+                    <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Estado</label>
+                    <div style="position: relative; display: flex; align-items: center;">
+                        <i class='bx bx-toggle-right' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem; pointer-events: none;"></i>
+                        <select name="estado" id="op_estado" style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none; appearance: none; cursor: pointer;">
+                            <option value="1">Activo</option>
+                            <option value="0">Inactivo</option>
+                        </select>
+                        <i class='bx bx-chevron-down' style="position: absolute; right: 1rem; color: #94a3b8; pointer-events: none;"></i>
+                    </div>
                 </div>
 
-                <div style="display: flex; justify-content: flex-end; margin-top: 3rem;">
-                    <button type="submit" class="btn-premium-pill-black" style="padding: 1rem 3.5rem; background: #000000; border: none; border-radius: 10px; color: white; font-weight: 500; font-size: 1rem; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.15); transition: 0.3s; display: flex; align-items: center; gap: 10px;">
+                <div style="margin-top: 2.5rem; border-top: 1px solid #f1f5f9; padding-top: 1.5rem; display: flex; justify-content: center;">
+                    <button type="submit" style="background: #000; color: #fff; border: none; padding: 0.85rem 3rem; border-radius: 12px; font-weight: 800; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: transform 0.2s, background 0.2s;">
                         <i class='bx bx-save'></i> <span>Guardar cambios</span>
                     </button>
                 </div>

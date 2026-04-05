@@ -215,155 +215,182 @@
         </div>
     </div>
 
-    <!-- MODAL OPERACIONES -->
-    <div id="modalOp" class="modal-overlay" style="display: none;" onclick="if(event.target===this) closeModalOp()">
-        <div class="modal-content-wrapper" style="max-width: 480px; padding: 0;">
-            <div class="modal-header-premium">
-                <h2 id="modalTitleOp">Nueva Regla de Puntaje</h2>
-                <div class="modal-close" onclick="closeModalOp()"><i class='bx bx-x'></i></div>
+    <div id="modalOp" class="modal-overlay" style="display: none; align-items: center; justify-content: center; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(8px); z-index: 10000;" onclick="if(event.target===this) closeModalOp()">
+        <div class="modal-content-wrapper" style="max-width: 480px; width: 95%; background: #fff; border-radius: 24px; overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.3); animation: slideUp 0.3s ease;">
+            <div class="modal-header-premium" style="padding: 2rem 2.5rem; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center;">
+                <h2 id="modalTitleOp" style="font-weight: 800; font-size: 1.25rem; color: #0f172a; margin: 0;">Nueva Regla de Puntaje</h2>
+                <div class="modal-close" onclick="closeModalOp()" style="cursor: pointer; width: 32px; height: 32px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: #64748b;"><i class='bx bx-x'></i></div>
             </div>
             <form id="formOp" method="POST" action="<?= BASE_URL ?>operaciones/create">
-                <div class="modal-body-premium">
+                <div class="modal-body-premium" style="padding: 2.5rem;">
                     <input type="hidden" name="id" id="op_id">
                     <input type="hidden" name="redir" value="ajustes">
-                    <div class="form-group">
-                        <label class="form-label-premium">Nombre de la Operación</label>
-                        <div class="input-icon-wrapper">
-                            <i class='bx bx-rename'></i>
-                            <input type="text" name="nombre" id="op_nombre" class="form-input-premium" placeholder="Ej: Recarga Gas 10kg" required>
+                    
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Nombre de la Operación</label>
+                        <div style="position: relative; display: flex; align-items: center;">
+                            <i class='bx bx-rename' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
+                            <input type="text" name="nombre" id="op_nombre" placeholder="Ej: Recarga Gas 10kg" required
+                                style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none; transition: all 0.2s;">
                         </div>
                     </div>
-                    <div class="modal-grid-2">
-                        <div class="form-group">
-                            <label class="form-label-premium">Puntos</label>
-                            <div class="input-icon-wrapper">
-                                <i class='bx bx-medal'></i>
-                                <input type="number" name="puntos" id="op_puntos" class="form-input-premium" value="0" required>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+                        <div>
+                            <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Puntos</label>
+                            <div style="position: relative; display: flex; align-items: center;">
+                                <i class='bx bx-medal' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
+                                <input type="number" name="puntos" id="op_puntos" value="0" required
+                                    style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; outline: none;">
                             </div>
                         </div>
-                        <div class="form-group" id="group_estadoOp" style="display: none;">
-                            <label class="form-label-premium">Estado</label>
-                            <div class="input-icon-wrapper">
-                                <i class='bx bx-toggle-right'></i>
-                                <select name="estado" id="op_estado" class="form-input-premium">
+                        <div id="group_estadoOp" style="display: none;">
+                            <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Estado</label>
+                            <div style="position: relative; display: flex; align-items: center;">
+                                <i class='bx bx-toggle-right' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem; pointer-events: none;"></i>
+                                <select name="estado" id="op_estado" style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; appearance: none; cursor: pointer; outline: none; background: #fff;">
                                     <option value="1">Activo</option>
                                     <option value="0">Inactivo</option>
                                 </select>
+                                <i class='bx bx-chevron-down' style="position: absolute; right: 1rem; color: #94a3b8; pointer-events: none;"></i>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer-premium">
-                    <button type="submit" class="btn-premium-pill-black">Guardar Regla</button>
+                <div class="modal-footer-premium" style="padding: 1.5rem 2.5rem 2.5rem; border-top: 1px solid #f1f5f9; display: flex; justify-content: flex-end;">
+                    <button type="submit" class="btn-premium-pill-black" style="background: #000; color: #fff; border: none; padding: 0.85rem 2.2rem; border-radius: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s;">Guardar Regla</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- MODAL PREMIOS -->
-    <div id="modalPremio" class="modal-overlay" style="display: none;" onclick="if(event.target===this) closeModalPremio()">
-        <div class="modal-content-wrapper" style="max-width: 550px; padding: 0;">
-            <div class="modal-header-premium">
-                <h2 id="modalTitlePremio">Gestionar Premio</h2>
-                <div class="modal-close" onclick="closeModalPremio()"><i class='bx bx-x'></i></div>
+    <div id="modalPremio" class="modal-overlay" style="display: none; align-items: center; justify-content: center; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(8px); z-index: 10000;" onclick="if(event.target===this) closeModalPremio()">
+        <div class="modal-content-wrapper" style="max-width: 550px; width: 95%; background: #fff; border-radius: 24px; overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.3); animation: slideUp 0.3s ease;">
+            <div class="modal-header-premium" style="padding: 2rem 2.5rem; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center;">
+                <h2 id="modalTitlePremio" style="font-weight: 800; font-size: 1.25rem; color: #0f172a; margin: 0;">Gestionar Premio</h2>
+                <div class="modal-close" onclick="closeModalPremio()" style="cursor: pointer; width: 32px; height: 32px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: #64748b;"><i class='bx bx-x'></i></div>
             </div>
             <form id="formPremio" method="POST" action="<?= BASE_URL ?>productos/create" enctype="multipart/form-data">
-                <div class="modal-body-premium">
+                <div class="modal-body-premium" style="padding: 2.5rem;">
                     <input type="hidden" name="id" id="premio_id">
                     <input type="hidden" name="redir" value="ajustes">
-                    <div class="form-group">
-                        <label class="form-label-premium">Nombre Comercial del Premio</label>
-                        <div class="input-icon-wrapper">
-                            <i class='bx bx-shopping-bag'></i>
-                            <input type="text" name="nombre" id="premio_nombre" class="form-input-premium" required>
+
+                    <div style="margin-bottom: 1.4rem;">
+                        <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Nombre Comercial del Premio</label>
+                        <div style="position: relative; display: flex; align-items: center;">
+                            <i class='bx bx-shopping-bag' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
+                            <input type="text" name="nombre" id="premio_nombre" required
+                                style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none;">
                         </div>
                     </div>
-                    <div class="modal-grid-2">
-                        <div class="form-group">
-                            <label class="form-label-premium">Inversión Puntos</label>
-                            <div class="input-icon-wrapper">
-                                <i class='bx bx-star'></i>
-                                <input type="number" name="puntos" id="premio_puntos" class="form-input-premium" required>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.4rem;">
+                        <div>
+                            <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Inversión Puntos</label>
+                            <div style="position: relative; display: flex; align-items: center;">
+                                <i class='bx bx-star' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
+                                <input type="number" name="puntos" id="premio_puntos" required
+                                    style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; outline: none;">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label-premium">Stock Actual</label>
-                            <div class="input-icon-wrapper">
-                                <i class='bx bx-box'></i>
-                                <input type="number" name="stock" id="premio_stock" class="form-input-premium" required>
+                        <div>
+                            <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Stock Actual</label>
+                            <div style="position: relative; display: flex; align-items: center;">
+                                <i class='bx bx-box' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
+                                <input type="number" name="stock" id="premio_stock" required
+                                    style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; outline: none;">
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label-premium">Cambiar Imagen</label>
-                        <div class="input-icon-wrapper">
-                            <i class='bx bx-image-add'></i>
-                            <input type="file" name="imagen_file" class="form-input-premium">
+
+                    <div style="margin-bottom: 1.4rem;">
+                        <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Fotografía del Premio</label>
+                        <input type="file" name="imagen_file" id="premio_file_input" style="position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;">
+                        <div onclick="document.getElementById('premio_file_input').click()" style="display: flex; align-items: center; gap: 1rem; border: 1.5px dashed #e2e8f0; border-radius: 14px; padding: 1rem; cursor: pointer; background: #fafbfc; transition: all 0.2s;">
+                            <div style="width: 42px; height: 42px; border-radius: 10px; background: #fff; border: 1.5px solid #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: #94a3b8; flex-shrink: 0;">
+                                <i class='bx bx-image-add'></i>
+                            </div>
+                            <div style="flex: 1;">
+                                <span style="display: block; font-size: 0.88rem; font-weight: 700; color: #1e293b;">Seleccionar imagen</span>
+                                <span style="font-size: 0.72rem; color: #94a3b8; font-weight: 500;">PNG, JPG o WEBP</span>
+                            </div>
+                            <i class='bx bx-upload' style="color: #cbd5e1; font-size: 1.2rem;"></i>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label-premium">Estado en Tienda</label>
-                        <div class="input-icon-wrapper">
-                            <i class='bx bx-show-alt'></i>
-                            <select name="estado" id="premio_estado" class="form-input-premium">
+
+                    <div>
+                        <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Estado en Tienda</label>
+                        <div style="position: relative; display: flex; align-items: center;">
+                            <i class='bx bx-show-alt' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem; pointer-events: none;"></i>
+                            <select name="estado" id="premio_estado" style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; appearance: none; cursor: pointer; outline: none; background: #fff;">
                                 <option value="1">Activo / Visible</option>
                                 <option value="0">Inactivo / Oculto</option>
                             </select>
+                            <i class='bx bx-chevron-down' style="position: absolute; right: 1rem; color: #94a3b8; pointer-events: none;"></i>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer-premium">
-                    <button type="submit" class="btn-premium-pill-black">Actualizar Catálogo</button>
+                <div class="modal-footer-premium" style="padding: 1.5rem 2.5rem 2.5rem; border-top: 1px solid #f1f5f9; display: flex; justify-content: flex-end;">
+                    <button type="submit" class="btn-premium-pill-black" style="background: #000; color: #fff; border: none; padding: 0.85rem 2.2rem; border-radius: 14px; font-weight: 700; cursor: pointer;">Actualizar Catálogo</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- MODAL CONDUCTORES -->
-    <div id="modalCond" class="modal-overlay" style="display: none;" onclick="if(event.target===this) closeModalCond()">
-        <div class="modal-content-wrapper" style="max-width: 480px; padding: 0;">
-            <div class="modal-header-premium">
-                <h2 id="modalTitleCond">Datos del Conductor</h2>
-                <div class="modal-close" onclick="closeModalCond()"><i class='bx bx-x'></i></div>
+    <div id="modalCond" class="modal-overlay" style="display: none; align-items: center; justify-content: center; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(8px); z-index: 10000;" onclick="if(event.target===this) closeModalCond()">
+        <div class="modal-content-wrapper" style="max-width: 480px; width: 95%; background: #fff; border-radius: 24px; overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.3); animation: slideUp 0.3s ease;">
+            <div class="modal-header-premium" style="padding: 2rem 2.5rem; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center;">
+                <h2 id="modalTitleCond" style="font-weight: 800; font-size: 1.25rem; color: #0f172a; margin: 0;">Datos del Conductor</h2>
+                <div class="modal-close" onclick="closeModalCond()" style="cursor: pointer; width: 32px; height: 32px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: #64748b;"><i class='bx bx-x'></i></div>
             </div>
             <form id="formCond" method="POST" action="<?= BASE_URL ?>conductores/create">
-                <div class="modal-body-premium">
+                <div class="modal-body-premium" style="padding: 2.5rem;">
                     <input type="hidden" name="id" id="cond_id">
                     <input type="hidden" name="redir" value="ajustes">
-                    <div class="form-group">
-                        <label class="form-label-premium">Nombre y Apellidos</label>
-                        <div class="input-icon-wrapper">
-                            <i class='bx bx-user'></i>
-                            <input type="text" name="nombre" id="cond_nombre" class="form-input-premium" required>
+                    
+                    <div style="margin-bottom: 1.4rem;">
+                        <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Nombre y Apellidos</label>
+                        <div style="position: relative; display: flex; align-items: center;">
+                            <i class='bx bx-user' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
+                            <input type="text" name="nombre" id="cond_nombre" required
+                                style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none;">
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label-premium">Nombre de Usuario</label>
-                        <div class="input-icon-wrapper">
-                            <i class='bx bx-at'></i>
-                            <input type="text" name="usuario" id="cond_usuario" class="form-input-premium" required>
+
+                    <div style="margin-bottom: 1.4rem;">
+                        <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Nombre de Usuario</label>
+                        <div style="position: relative; display: flex; align-items: center;">
+                            <i class='bx bx-at' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
+                            <input type="text" name="usuario" id="cond_usuario" required
+                                style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none;">
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label-premium">Nueva Contraseña</label>
-                        <div class="input-icon-wrapper">
-                            <i class='bx bx-lock-alt'></i>
-                            <input type="password" name="password" id="cond_pass" class="form-input-premium" placeholder="••••••••">
+
+                    <div style="margin-bottom: 1.4rem;">
+                        <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Nueva Contraseña</label>
+                        <div style="position: relative; display: flex; align-items: center;">
+                            <i class='bx bx-lock-alt' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
+                            <input type="password" name="password" id="cond_pass" placeholder="••••••••"
+                                style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none;">
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label-premium">Estado de Acceso</label>
-                        <div class="input-icon-wrapper">
-                            <i class='bx bx-user-check'></i>
-                            <select name="estado" id="cond_estado" class="form-input-premium">
+
+                    <div>
+                        <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Estado de Acceso</label>
+                        <div style="position: relative; display: flex; align-items: center;">
+                            <i class='bx bx-user-check' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem; pointer-events: none;"></i>
+                            <select name="estado" id="cond_estado" style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; appearance: none; cursor: pointer; outline: none; background: #fff;">
                                 <option value="1">Acceso Permitido</option>
                                 <option value="0">Bloqueado</option>
                             </select>
+                            <i class='bx bx-chevron-down' style="position: absolute; right: 1rem; color: #94a3b8; pointer-events: none;"></i>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer-premium">
-                    <button type="submit" class="btn-premium-pill-black">Guardar Perfil</button>
+                <div class="modal-footer-premium" style="padding: 1.5rem 2.5rem 2.5rem; border-top: 1px solid #f1f5f9; display: flex; justify-content: flex-end;">
+                    <button type="submit" class="btn-premium-pill-black" style="background: #000; color: #fff; border: none; padding: 0.85rem 2.2rem; border-radius: 14px; font-weight: 700; cursor: pointer;">Guardar Perfil</button>
                 </div>
             </form>
         </div>

@@ -176,104 +176,118 @@
         </div>
     </div>
 
-    <!-- MODAL: EDITAR CLIENTE -->
-    <div class="modal-overlay" v-if="showEditModal" @click.self="showEditModal = false">
-        <div class="modal-content-wrapper" style="max-width: 700px; padding: 0; overflow: hidden; border-radius: 20px;">
-            <div class="modal-close" @click="showEditModal = false"><i class='bx bx-x'></i></div>
+    <div class="modal-overlay" v-if="showEditModal" @click.self="showEditModal = false" style="display: flex; align-items: center; justify-content: center; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(8px); z-index: 10000;">
+        <div class="modal-content-wrapper" style="max-width: 650px; width: 95%; background: #fff; border-radius: 24px; overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.3); animation: slideUp 0.3s ease;">
             
-            <div class="elite-form-card" style="margin: 0; box-shadow: none;">
-                <div class="card-header-premium" style="padding: 1.5rem 2rem; background: #ffffff; border-bottom: 1px solid #f1f5f9;">
-                    <div style="background: #fff1f1; width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 15px; border: 1px solid #fee2e2;">
+            <div class="modal-header-premium" style="padding: 2rem 2.5rem; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 14px;">
+                    <div style="background: #fdf2f2; width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: 1px solid #fee2e2; flex-shrink: 0;">
                         <i class='bx bx-edit-alt' style="color: #800000; font-size: 1.3rem;"></i>
                     </div>
-                    <span style="font-size: 1.25rem; font-weight: 700; color: #0f172a; letter-spacing: -0.02em;">Editar Beneficiario</span>
+                    <div>
+                        <h2 style="font-weight: 800; font-size: 1.2rem; color: #0f172a; margin: 0;">Editar Beneficiario</h2>
+                        <p style="font-size: 0.75rem; color: #64748b; margin-top: 2px; font-weight: 500;">Modifica los datos del cliente seleccionado</p>
+                    </div>
                 </div>
+                <div class="modal-close" @click="showEditModal = false" style="cursor: pointer; width: 32px; height: 32px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: #64748b;">
+                    <i class='bx bx-x' style="font-size: 1.3rem;"></i>
+                </div>
+            </div>
 
-                <form @submit.prevent="guardarCambios" class="premium-form" style="padding: 2.5rem;">
-                    <!-- Campos directos en el grid del formulario -->
-                    <div class="form-group-modern">
-                        <label>TIPO DE CLIENTE</label>
-                        <div class="input-wrapper">
-                            <i class='bx bx-category'></i>
-                            <select v-model="form.tipo_cliente" class="form-control-modern">
+            <form @submit.prevent="guardarCambios" style="padding: 2.5rem;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+                    
+                    <div>
+                        <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Tipo de Cliente</label>
+                        <div style="position: relative; display: flex; align-items: center;">
+                            <i class='bx bx-category' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem; pointer-events: none;"></i>
+                            <select v-model="form.tipo_cliente" style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; appearance: none; cursor: pointer; outline: none; background: #fff;">
                                 <option value="Normal">Personal</option>
                                 <option value="Restaurante">Restaurante</option>
                                 <option value="Punto de Venta">Punto de Venta</option>
                             </select>
+                            <i class='bx bx-chevron-down' style="position: absolute; right: 1rem; color: #94a3b8; pointer-events: none;"></i>
                         </div>
                     </div>
 
-                    <div class="form-group-modern" v-if="form.tipo_cliente === 'Normal'">
-                        <label>DNI *</label>
-                        <div class="input-wrapper">
-                            <i class='bx bx-id-card'></i>
-                            <input type="text" v-model="form.dni" maxlength="8" @blur="consultarDni" placeholder="8 dígitos">
+                    <div v-if="form.tipo_cliente === 'Normal'">
+                        <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">DNI *</label>
+                        <div style="position: relative; display: flex; align-items: center;">
+                            <i class='bx bx-id-card' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
+                            <input type="text" v-model="form.dni" maxlength="8" @blur="consultarDni" placeholder="8 dígitos"
+                                style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none;">
                         </div>
                     </div>
 
-                    <div class="form-group-modern" v-else>
-                        <label>RUC *</label>
-                        <div class="input-wrapper">
-                            <i class='bx bx-building-house'></i>
-                            <input type="text" v-model="form.ruc" maxlength="11" @blur="consultarRuc" placeholder="11 dígitos">
+                    <div v-else>
+                        <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">RUC *</label>
+                        <div style="position: relative; display: flex; align-items: center;">
+                            <i class='bx bx-building-house' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
+                            <input type="text" v-model="form.ruc" maxlength="11" @blur="consultarRuc" placeholder="11 dígitos"
+                                style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none;">
                         </div>
                     </div>
 
-                    <div class="form-group-modern full-width" v-if="form.tipo_cliente !== 'Normal'">
-                        <label>RAZÓN SOCIAL *</label>
-                        <div class="input-wrapper">
-                            <i class='bx bx-buildings'></i>
-                            <input type="text" v-model="form.razon_social" required>
+                    <div style="grid-column: span 2;" v-if="form.tipo_cliente !== 'Normal'">
+                        <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Razón Social *</label>
+                        <div style="position: relative; display: flex; align-items: center;">
+                            <i class='bx bx-buildings' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
+                            <input type="text" v-model="form.razon_social" required
+                                style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none;">
                         </div>
                     </div>
 
-                    <div class="form-group-modern full-width">
-                        <label>NOMBRE COMPLETO / CONTACTO *</label>
-                        <div class="input-wrapper">
-                            <i class='bx bx-user'></i>
-                            <input type="text" v-model="form.nombre" required>
+                    <div style="grid-column: span 2;">
+                        <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Nombre Completo / Contacto *</label>
+                        <div style="position: relative; display: flex; align-items: center;">
+                            <i class='bx bx-user' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
+                            <input type="text" v-model="form.nombre" required
+                                style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none;">
                         </div>
                     </div>
 
-                    <div class="form-group-modern">
-                        <label>CELULAR *</label>
-                        <div class="input-wrapper">
-                            <i class='bx bx-phone'></i>
-                            <input type="text" v-model="form.celular" maxlength="9" required>
+                    <div>
+                        <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Celular *</label>
+                        <div style="position: relative; display: flex; align-items: center;">
+                            <i class='bx bx-phone' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
+                            <input type="text" v-model="form.celular" maxlength="9" required
+                                style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none;">
                         </div>
                     </div>
 
-                    <div class="form-group-modern">
-                        <label>DEPARTAMENTO</label>
-                        <div class="input-wrapper">
-                            <i class='bx bx-map'></i>
-                            <select v-model="form.departamento" class="form-control-modern">
+                    <div>
+                        <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Departamento</label>
+                        <div style="position: relative; display: flex; align-items: center;">
+                            <i class='bx bx-map' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem; pointer-events: none;"></i>
+                            <select v-model="form.departamento" style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; appearance: none; cursor: pointer; outline: none; background: #fff;">
                                 <option value="Tacna">Tacna</option>
                                 <option value="Ilo">Ilo</option>
                                 <option value="Moquegua">Moquegua</option>
                                 <option value="Camaná">Camaná</option>
                                 <option value="Mollendo">Mollendo</option>
                             </select>
+                            <i class='bx bx-chevron-down' style="position: absolute; right: 1rem; color: #94a3b8; pointer-events: none;"></i>
                         </div>
                     </div>
 
-                    <div class="form-group-modern full-width">
-                        <label>DIRECCIÓN</label>
-                        <div class="input-wrapper">
-                            <i class='bx bx-map-pin'></i>
-                            <input type="text" v-model="form.direccion" placeholder="Calle, número, urbanización...">
+                    <div style="grid-column: span 2;">
+                        <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Dirección</label>
+                        <div style="position: relative; display: flex; align-items: center;">
+                            <i class='bx bx-map-pin' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
+                            <input type="text" v-model="form.direccion" placeholder="Calle, número, urbanización..."
+                                style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none;">
                         </div>
                     </div>
+                </div>
 
-                    <!-- Footer de Botones Centrado (Ajustado) -->
-                    <div class="form-footer-actions" style="margin-top: 1rem; border-top: 1px solid #f1f5f9; padding-top: 1.5rem;">
-                        <button type="submit" class="btn-primary-premium" :disabled="fetching" style="padding: 0 4rem; height: 3.5rem; width: auto; font-size: 0.95rem; border-radius: 12px; margin: 0 auto; display: flex;">
-                            <i class='bx bx-save'></i> {{ fetching ? 'Guardando...' : 'Guardar Cambios' }}
-                        </button>
-                    </div>
-                </form>
-            </div>
+                <div style="margin-top: 2.5rem; border-top: 1px solid #f1f5f9; padding-top: 1.5rem; display: flex; justify-content: center;">
+                    <button type="submit" class="btn-primary-premium" :disabled="fetching" style="padding: 0.85rem 3.5rem; height: auto; border-radius: 12px; font-weight: 700; font-size: 0.95rem;">
+                        <i class='bx bx-save'></i> {{ fetching ? 'Guardando...' : 'Guardar Cambios' }}
+                    </button>
+                </div>
+            </form>
         </div>
+    </div>
     </div>
 
 </div> <!-- #app -->

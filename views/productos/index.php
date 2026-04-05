@@ -300,23 +300,23 @@
     <!-- ══════════════════════════════════════
          Modal: Nuevo / Editar Premio
     ══════════════════════════════════════ -->
-    <div class="modal-overlay" v-if="showModal" @click.self="cerrarModal" id="modalProducto">
-        <div class="modal-content-wrapper" style="max-width: 500px;">
+    <div class="modal-overlay" v-if="showModal" @click.self="cerrarModal" id="modalProducto" style="display: flex; align-items: center; justify-content: center; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(8px); z-index: 10000;">
+        <div class="modal-content-wrapper" style="max-width: 500px; width: 95%; background: #fff; border-radius: 24px; overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.3); animation: slideUp 0.3s ease;">
 
             <!-- Header -->
-            <div class="modal-header-premium">
+            <div class="modal-header-premium" style="padding: 2rem 2.5rem; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center;">
                 <div style="display: flex; align-items: center; gap: 14px;">
                     <div style="width: 42px; height: 42px; border-radius: 12px; background: #fdf2f2; border: 1px solid #fee2e2; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: #800000; flex-shrink: 0;">
                         <i :class="['bx', editando ? 'bx-edit' : 'bx-gift']"></i>
                     </div>
                     <div>
-                        <h2>{{ editando ? 'Editar Premio' : 'Registrar Nuevo Premio' }}</h2>
-                        <p style="font-size: 0.75rem; color: #64748b; margin-top: 3px; font-weight: 500;">
+                        <h2 style="font-weight: 800; font-size: 1.2rem; color: #0f172a; margin: 0;">{{ editando ? 'Editar Premio' : 'Registrar Nuevo Premio' }}</h2>
+                        <p style="font-size: 0.75rem; color: #64748b; margin-top: 2px; font-weight: 500;">
                             {{ editando ? 'Modifica los datos del producto seleccionado' : 'Completa los datos del nuevo producto' }}
                         </p>
                     </div>
                 </div>
-                <div class="modal-close" @click="cerrarModal" title="Cerrar">
+                <div class="modal-close" @click="cerrarModal" style="cursor: pointer; width: 32px; height: 32px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: #64748b;">
                     <i class='bx bx-x' style="font-size: 1.3rem;"></i>
                 </div>
             </div>
@@ -326,15 +326,13 @@
                 <input type="hidden" name="id" :value="form.id" v-if="editando">
                 <input type="hidden" name="imagen_actual" :value="form.imagen_actual" v-if="editando">
 
-                <div class="modal-body-premium">
+                <div class="modal-body-premium" style="padding: 2.5rem;">
 
                     <!-- Nombre -->
-                    <div style="margin-bottom: 1.1rem;">
-                        <label style="display: block; font-size: 0.63rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 0.5rem;">Nombre Comercial del Premio</label>
-                        <div style="display: flex !important; flex-direction: row !important; align-items: center !important; border: 1.5px solid #e2e8f0; border-radius: 12px; background: #fff; overflow: hidden;">
-                            <span style="flex-shrink: 0; width: 42px; height: 44px; display: flex !important; align-items: center !important; justify-content: center !important; color: #94a3b8; font-size: 1.1rem; border-right: 1.5px solid #f1f5f9; background: #f8fafc;">
-                                <i class='bx bx-purchase-tag'></i>
-                            </span>
+                    <div style="margin-bottom: 1.4rem;">
+                        <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Nombre Comercial del Premio</label>
+                        <div style="position: relative; display: flex; align-items: center;">
+                            <i class='bx bx-purchase-tag' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
                             <input
                                 type="text"
                                 name="nombre"
@@ -342,96 +340,79 @@
                                 placeholder="Ej: Auriculares Bluetooth Premium"
                                 required
                                 autocomplete="off"
-                                style="flex: 1 !important; border: none !important; outline: none !important; padding: 0.8rem 1rem !important; font-size: 0.88rem !important; font-family: 'Inter', sans-serif !important; color: #1e293b !important; background: transparent !important; min-width: 0 !important; display: block !important;"
+                                style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none; transition: border-color 0.2s;"
                             >
                         </div>
                     </div>
 
                     <!-- Puntos + Stock -->
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.1rem;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.4rem;">
                         <div>
-                            <label style="display: block; font-size: 0.63rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 0.5rem;">Inversión Puntos</label>
-                            <div style="display: flex !important; flex-direction: row !important; align-items: center !important; border: 1.5px solid #e2e8f0; border-radius: 12px; background: #fff; overflow: hidden;">
-                                <span style="flex-shrink: 0; width: 42px; height: 44px; display: flex !important; align-items: center !important; justify-content: center !important; color: #94a3b8; font-size: 1.1rem; border-right: 1.5px solid #f1f5f9; background: #f8fafc;">
-                                    <i class='bx bx-star'></i>
-                                </span>
+                            <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Inversión Puntos</label>
+                            <div style="position: relative; display: flex; align-items: center;">
+                                <i class='bx bx-star' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
                                 <input type="number" name="puntos" v-model="form.puntos" placeholder="0" min="0" required
-                                    style="flex: 1 !important; border: none !important; outline: none !important; padding: 0.8rem 1rem !important; font-size: 0.88rem !important; font-family: 'Inter', sans-serif !important; color: #1e293b !important; background: transparent !important; min-width: 0 !important; display: block !important; -moz-appearance: textfield;">
+                                    style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; outline: none;">
                             </div>
                         </div>
                         <div>
-                            <label style="display: block; font-size: 0.63rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 0.5rem;">Stock Actual</label>
-                            <div style="display: flex !important; flex-direction: row !important; align-items: center !important; border: 1.5px solid #e2e8f0; border-radius: 12px; background: #fff; overflow: hidden;">
-                                <span style="flex-shrink: 0; width: 42px; height: 44px; display: flex !important; align-items: center !important; justify-content: center !important; color: #94a3b8; font-size: 1.1rem; border-right: 1.5px solid #f1f5f9; background: #f8fafc;">
-                                    <i class='bx bx-cube'></i>
-                                </span>
+                            <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Stock Actual</label>
+                            <div style="position: relative; display: flex; align-items: center;">
+                                <i class='bx bx-cube' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
                                 <input type="number" name="stock" v-model="form.stock" placeholder="0" min="0" required
-                                    style="flex: 1 !important; border: none !important; outline: none !important; padding: 0.8rem 1rem !important; font-size: 0.88rem !important; font-family: 'Inter', sans-serif !important; color: #1e293b !important; background: transparent !important; min-width: 0 !important; display: block !important; -moz-appearance: textfield;">
+                                    style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; outline: none;">
                             </div>
                         </div>
                     </div>
 
                     <!-- Imagen -->
-                    <div style="margin-bottom: 1.1rem;">
-                        <label style="display: block; font-size: 0.63rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 0.5rem;">{{ editando ? 'Cambiar Imagen' : 'Imagen del Premio' }}</label>
-
-                        <!-- Hidden real file input -->
+                    <div style="margin-bottom: 1.4rem;">
+                        <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">{{ editando ? 'Cambiar Imagen' : 'Imagen del Premio' }}</label>
                         <input type="file" name="imagen" accept="image/*" ref="fileInput" @change="onFileChange" style="position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;" id="imgFileInput">
-
-                        <!-- Upload trigger row -->
                         <div @click="$refs.fileInput.click()" @dragover.prevent @drop.prevent="onDrop"
-                            style="display: flex !important; flex-direction: row !important; align-items: center !important; gap: 0.85rem !important; border: 1.5px dashed #e2e8f0 !important; border-radius: 12px !important; padding: 0.9rem 1rem !important; cursor: pointer !important; background: #fafbfc !important; transition: all 0.2s !important;">
-
+                            style="display: flex; align-items: center; gap: 1rem; border: 1.5px dashed #e2e8f0; border-radius: 14px; padding: 1rem; cursor: pointer; background: #fafbfc; transition: all 0.2s;">
                             <template v-if="previewUrl">
-                                <img :src="previewUrl" alt="preview"
-                                    style="width: 38px !important; height: 38px !important; border-radius: 8px !important; object-fit: cover !important; border: 2px solid #e2e8f0 !important; flex-shrink: 0 !important;">
-                                <div style="flex: 1 !important; min-width: 0 !important;">
-                                    <span style="display: block !important; font-size: 0.82rem !important; font-weight: 700 !important; color: #1e293b !important;">Imagen seleccionada</span>
-                                    <span style="font-size: 0.68rem !important; color: #94a3b8 !important; font-weight: 500 !important;">Haz clic para cambiar</span>
+                                <img :src="previewUrl" alt="preview" style="width: 42px; height: 42px; border-radius: 10px; object-fit: cover; border: 2px solid #e2e8f0; flex-shrink: 0;">
+                                <div style="flex: 1; min-width: 0;">
+                                    <span style="display: block; font-size: 0.88rem; font-weight: 700; color: #1e293b; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Imagen lista</span>
+                                    <span style="font-size: 0.72rem; color: #94a3b8; font-weight: 500;">Haz clic para cambiar</span>
                                 </div>
-                                <button type="button" @click.stop="clearImage"
-                                    style="width: 26px !important; height: 26px !important; border-radius: 50% !important; border: none !important; background: #fef2f2 !important; color: #dc2626 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; font-size: 1rem !important; flex-shrink: 0 !important;">
-                                    <i class='bx bx-x'></i>
-                                </button>
+                                <button type="button" @click.stop="clearImage" style="width: 28px; height: 28px; border-radius: 50%; border: none; background: #fef2f2; color: #dc2626; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0;"><i class='bx bx-x'></i></button>
                             </template>
-
                             <template v-else>
-                                <div style="width: 38px !important; height: 38px !important; border-radius: 10px !important; background: #f1f5f9 !important; display: flex !important; align-items: center !important; justify-content: center !important; font-size: 1.2rem !important; color: #94a3b8 !important; flex-shrink: 0 !important;">
+                                <div style="width: 42px; height: 42px; border-radius: 10px; background: #fff; border: 1.5px solid #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: #94a3b8; flex-shrink: 0;">
                                     <i class='bx bx-image-add'></i>
                                 </div>
-                                <div style="flex: 1 !important; min-width: 0 !important;">
-                                    <span style="display: block !important; font-size: 0.82rem !important; font-weight: 700 !important; color: #1e293b !important;">Seleccionar imagen</span>
-                                    <span style="font-size: 0.68rem !important; color: #94a3b8 !important; font-weight: 500 !important;">PNG, JPG, WEBP · Arrastra o haz clic</span>
+                                <div style="flex: 1;">
+                                    <span style="display: block; font-size: 0.88rem; font-weight: 700; color: #1e293b;">Seleccionar imagen</span>
+                                    <span style="font-size: 0.72rem; color: #94a3b8; font-weight: 500;">Arrastra o haz clic</span>
                                 </div>
-                                <i class='bx bx-upload' style="color: #cbd5e1 !important; font-size: 1.1rem !important; flex-shrink: 0 !important;"></i>
+                                <i class='bx bx-upload' style="color: #cbd5e1; font-size: 1.2rem;"></i>
                             </template>
                         </div>
                     </div>
 
                     <!-- Estado -->
                     <div>
-                        <label style="display: block; font-size: 0.63rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 0.5rem;">Estado en Tienda</label>
-                        <div style="display: flex !important; flex-direction: row !important; align-items: center !important; border: 1.5px solid #e2e8f0; border-radius: 12px; background: #fff; overflow: hidden;">
-                            <span style="flex-shrink: 0; width: 42px; height: 44px; display: flex !important; align-items: center !important; justify-content: center !important; color: #94a3b8; font-size: 1.1rem; border-right: 1.5px solid #f1f5f9; background: #f8fafc;">
-                                <i class='bx bx-show'></i>
-                            </span>
-                            <select name="estado" v-model="form.estado"
-                                style="flex: 1 !important; border: none !important; outline: none !important; padding: 0.8rem 1rem !important; font-size: 0.88rem !important; font-family: 'Inter', sans-serif !important; color: #1e293b !important; background: transparent !important; min-width: 0 !important; cursor: pointer !important; appearance: none !important; background-image: url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 24 24%27 stroke=%27%2394a3b8%27 stroke-width=%272%27%3E%3Cpath stroke-linecap=%27round%27 stroke-linejoin=%27round%27 d=%27M19 9l-7 7-7-7%27/%3E%3C/svg%3E') !important; background-repeat: no-repeat !important; background-position: right 0.85rem center !important; background-size: 1rem !important; padding-right: 2.5rem !important;">
+                        <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Estado en Tienda</label>
+                        <div style="position: relative; display: flex; align-items: center;">
+                            <i class='bx bx-show' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem; pointer-events: none;"></i>
+                            <select name="estado" v-model="form.estado" style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; appearance: none; cursor: pointer; outline: none; background: #fff;">
                                 <option value="1">Activo / Visible</option>
                                 <option value="0">Inactivo / Oculto</option>
                             </select>
+                            <i class='bx bx-chevron-down' style="position: absolute; right: 1rem; color: #94a3b8; pointer-events: none;"></i>
                         </div>
                     </div>
 
                 </div>
 
                 <!-- Footer -->
-                <div class="modal-footer-premium" style="gap: 0.75rem;">
-                    <button type="button" @click="cerrarModal"
-                        style="background: #f8fafc; color: #64748b; padding: 0.8rem 1.65rem; border-radius: 10px; border: 1.5px solid #e2e8f0; font-family: 'Inter', sans-serif; font-weight: 700; font-size: 0.85rem; cursor: pointer;">
+                <div class="modal-footer-premium" style="padding: 1.5rem 2.5rem 2.5rem; border-top: 1px solid #f1f5f9; display: flex; justify-content: flex-end; gap: 0.8rem;">
+                    <button type="button" @click="cerrarModal" style="background: #f8fafc; color: #64748b; padding: 0.85rem 1.8rem; border-radius: 12px; border: 1.5px solid #e2e8f0; font-family: 'Inter', sans-serif; font-weight: 700; font-size: 0.88rem; cursor: pointer; transition: all 0.2s;">
                         Cancelar
                     </button>
-                    <button type="submit" class="btn-primary-premium" :disabled="submitting">
+                    <button type="submit" class="btn-primary-premium" :disabled="submitting" style="padding: 0.85rem 2rem; border-radius: 12px; font-weight: 700; display: flex; align-items: center; gap: 8px;">
                         <i :class="['bx', submitting ? 'bx-loader-alt bx-spin' : (editando ? 'bx-save' : 'bx-plus-circle')]"></i>
                         {{ submitting ? 'Guardando...' : (editando ? 'Guardar Cambios' : 'Registrar Premio') }}
                     </button>
