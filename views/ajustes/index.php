@@ -51,10 +51,8 @@
 
             <div class="card shadow-sm" id="cardOp">
                 <div class="table-wrapper">
-
-
-                <div class="table-wrapper">
                     <table class="data-table" id="tableOp">
+
                         <thead>
                             <tr>
                                 <th>Nombre Operación</th>
@@ -112,10 +110,8 @@
 
             <div class="card shadow-sm" id="cardPremios">
                 <div class="table-wrapper">
-
-
-                <div class="table-wrapper">
                     <table class="data-table" id="tablePremios">
+
                         <thead>
                             <tr>
                                 <th class="ps-3 text-start">Premio</th>
@@ -176,10 +172,8 @@
 
             <div class="card shadow-sm" id="cardCond">
                 <div class="table-wrapper">
-
-
-                <div class="table-wrapper">
                     <table class="data-table" id="tableCond">
+
                         <thead>
                             <tr>
                                 <th>Nombre Conductor</th>

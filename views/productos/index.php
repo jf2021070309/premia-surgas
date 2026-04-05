@@ -29,7 +29,6 @@
         ?>
 
         <div class="container">
-            <div class="card">
             <div class="modern-section-header">
                 <div class="section-title-flex">
                     <i class='bx bx-gift'></i>
@@ -59,11 +58,8 @@
 
             <div class="card">
                 <div class="table-wrapper">
-
-
-
-                <div class="table-wrapper">
                     <table class="data-table">
+
                         <thead>
                             <tr>
                                 <th>Premio</th>

@@ -84,10 +84,8 @@
 
             <div class="card">
                 <div class="table-wrapper">
-
-
-                <div class="table-wrapper">
                     <table class="data-table">
+
                         <thead>
                             <tr>
                                 <th>Nombre del Cliente</th>
