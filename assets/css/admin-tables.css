@@ -263,24 +263,20 @@
 }
 
 /* Elite Action Tints (Tailored for high-end look) */
-.btn-action.blue   { color: #3b82f6; background: #eff6ff; border-color: #dbeafe; }
-.btn-action.red    { color: #ef4444; background: #fef2f2; border-color: #fee2e2; }
-.btn-action.green  { color: #10b981; background: #f0fdf4; border-color: #dcfce7; }
-.btn-action.orange { color: #f59e0b; background: #fffbeb; border-color: #fef3c7; }
-.btn-action.indigo { color: #6366f1; background: #eef2ff; border-color: #e0e7ff; }
-.btn-action.gray   { color: #64748b; background: #f8fafc; border-color: #f1f5f9; }
+.btn-action.blue   { color: #1e40af; background: #eff6ff; border-color: #dbeafe; }
+.btn-action.red    { color: #b91c1c; background: #fef2f2; border-color: #fee2e2; }
+.btn-action.green  { color: #065f46; background: #f0fdf4; border-color: #dcfce7; }
+.btn-action.orange { color: #9a3412; background: #fff7ed; border-color: #ffedd5; }
+.btn-action.indigo { color: #3730a3; background: #eef2ff; border-color: #e0e7ff; }
+.btn-action.gray   { color: #334155; background: #f1f5f9; border-color: #e2e8f0; }
 
-/* Subtle Hover Transitions (No solid dark background) */
-.btn-action:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-}
-.btn-action.blue:hover   { background: #dbeafe; }
-.btn-action.red:hover    { background: #fee2e2; }
-.btn-action.green:hover  { background: #dcfce7; }
-.btn-action.orange:hover { background: #fef3c7; }
-.btn-action.indigo:hover { background: #e0e7ff; }
-.btn-action.gray:hover   { background: #f1f5f9; }
+/* Solid Hover Transitions */
+.btn-action.blue:hover   { background: #1e40af; border-color: #1e40af; color: #fff !important; }
+.btn-action.red:hover    { background: #b91c1c; border-color: #b91c1c; color: #fff !important; }
+.btn-action.green:hover  { background: #065f46; border-color: #065f46; color: #fff !important; }
+.btn-action.orange:hover { background: #9a3412; border-color: #9a3412; color: #fff !important; }
+.btn-action.indigo:hover { background: #3730a3; border-color: #3730a3; color: #fff !important; }
+.btn-action.gray:hover   { background: #334155; border-color: #334155; color: #fff !important; }
 
 
 
