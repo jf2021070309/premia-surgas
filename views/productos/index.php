@@ -408,9 +408,9 @@
                 </div>
 
                 <!-- Footer -->
-                <div class="modal-footer-premium" style="margin-top: 3rem; border-top: 1px solid #f1f5f9; padding: 2rem 2.5rem; display: flex; justify-content: center;">
-                    <button type="submit" :disabled="submitting" style="background: #000; color: #fff; border: none; padding: 1.1rem 4rem; border-radius: 14px; font-weight: 800; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: transform 0.2s, background 0.2s; text-transform: uppercase; letter-spacing: 0.02em;">
-                        <span v-if="!submitting">{{ editando ? 'ACTUALIZAR PRODUCTO' : 'AGREGAR PREMIO' }}</span>
+                <div style="margin-top: 3rem; border-top: 1px solid #f1f5f9; padding-top: 2rem; display: flex; justify-content: center;">
+                    <button type="submit" :disabled="submitting" style="background: #1e293b; color: #fff; border: none; padding: 1rem 4rem; border-radius: 14px; font-weight: 800; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: transform 0.2s, background 0.2s;">
+                        <span v-if="!submitting"><i class='bx bx-plus-circle' style="font-size: 1.2rem;"></i> Agregar</span>
                         <span v-else><i class='bx bx-loader-alt bx-spin'></i> ESPERE...</span>
                     </button>
                 </div>
