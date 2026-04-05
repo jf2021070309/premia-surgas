@@ -63,7 +63,8 @@
     align-items: center;
     gap: 10px;
     transition: all 0.3s ease;
-    width: 220px;
+    width: 360px;
+
 }
 .filter-input-group:focus-within {
     border-color: var(--primary, #800000);

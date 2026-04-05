@@ -535,7 +535,8 @@
 ══════════════════════════════════════ */
 .header-search {
     position: relative;
-    max-width: 220px;
+    max-width: 360px;
+
     width: 100%;
 }
 .header-search i {
