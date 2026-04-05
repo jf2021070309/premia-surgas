@@ -5,10 +5,10 @@
 .modern-section-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-    padding-top: 0.5rem;
-    gap: 2rem;
+    align-items: flex-start; /* Title stays higher at the top */
+    margin-bottom: 2rem;
+    padding-top: 1.5rem; /* More breath at the top */
+    gap: 3rem;
 }
 
 .section-title-flex {
@@ -232,8 +232,8 @@
     font-size: 0.95rem;
     cursor: pointer;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
+    background: #fdf2f2; /* Soft corporate wine background */
+    border: 1px solid #fee2e2;
     color: #800000; /* Corporate Wine */
     box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     outline: none;
@@ -252,13 +252,19 @@
 }
 
 /* Specific Tints for distinction while maintaining elegance */
-.btn-action.blue   { color: #1e3a8a; background: #f0f4ff; border-color: #d1dcff; }
-.btn-action.red    { color: #991b1b; background: #fef2f2; border-color: #fecaca; }
-.btn-action.green  { color: #065f46; background: #f0fdf4; border-color: #bbf7d0; }
+.btn-action.blue   { color: #1e3a8a; background: #eff6ff; border-color: #dbeafe; }
+.btn-action.red    { color: #991b1b; background: #fef2f2; border-color: #fee2e2; }
+.btn-action.green  { color: #065f46; background: #f0fdf4; border-color: #dcfce7; }
+.btn-action.orange { color: #9a3412; background: #fff7ed; border-color: #ffedd5; }
+.btn-action.indigo { color: #3730a3; background: #eef2ff; border-color: #e0e7ff; }
+.btn-action.gray   { color: #334155; background: #f8fafc; border-color: #f1f5f9; }
 
-.btn-action.blue:hover { background: #1e3a8a; border-color: #1e3a8a; }
-.btn-action.red:hover  { background: #991b1b; border-color: #991b1b; }
-.btn-action.green:hover { background: #065f46; border-color: #065f46; }
+.btn-action.blue:hover   { background: #1e3a8a; border-color: #1e3a8a; }
+.btn-action.red:hover    { background: #991b1b; border-color: #991b1b; }
+.btn-action.green:hover  { background: #065f46; border-color: #065f46; }
+.btn-action.orange:hover { background: #9a3412; border-color: #9a3412; }
+.btn-action.indigo:hover { background: #3730a3; border-color: #3730a3; }
+.btn-action.gray:hover   { background: #334155; border-color: #334155; }
 
 
 
