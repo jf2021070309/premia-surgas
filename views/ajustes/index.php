@@ -430,8 +430,7 @@
             style="max-width: 480px; width: 95%; background: #fff; border-radius: 24px; overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.3); animation: slideUp 0.3s ease;">
             <div class="modal-header-premium"
                 style="padding: 2rem 2.5rem; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center;">
-                <h2 id="modalTitleCond" style="font-weight: 800; font-size: 1.25rem; color: #0f172a; margin: 0;">Datos
-                    del Conductor</h2>
+                <h2 id="modalTitleCond" style="font-weight: 800; font-size: 1.25rem; color: #0f172a; margin: 0;">Registrar Nuevo Conductor</h2>
                 <div class="modal-close" onclick="closeModalCond()"
                     style="cursor: pointer; width: 32px; height: 32px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: #64748b;">
                     <i class='bx bx-x'></i></div>
@@ -691,7 +690,7 @@
         function openModalCond() {
             document.getElementById('modalCond').style.display = 'flex';
             document.getElementById('formCond').action = '<?= BASE_URL ?>conductores/create';
-            document.getElementById('modalTitleCond').innerText = 'Dar de alta Conductor';
+            document.getElementById('modalTitleCond').innerText = 'Registrar Nuevo Conductor';
             document.getElementById('formCond').reset();
             document.getElementById('cond_id').value = '';
         }
