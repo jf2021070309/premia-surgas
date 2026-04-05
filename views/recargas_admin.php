@@ -314,9 +314,9 @@
                                 <th>Cliente</th>
                                 <th>Puntos</th>
                                 <th>Monto</th>
-                                <th>Evidencia</th>
                                 <th>Estado</th>
                                 <th>Fecha y Hora</th>
+                                <th class="text-center">Evidencia</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -336,15 +336,6 @@
                                 </td>
                                 <td><span class="pts-positive">+<?= number_format($h['puntos']) ?> pts</span></td>
                                 <td style="color: var(--on-muted);">S/ <?= number_format($h['monto'], 2) ?></td>
-                                <td>
-                                    <?php if (!empty($h['comprobante'])): ?>
-                                        <button class="btn-view-sm" onclick="openModal('<?= BASE_URL ?>assets/uploads/comprobantes/<?= $h['comprobante'] ?>')">
-                                            <i class='bx bx-image'></i> Ver
-                                        </button>
-                                    <?php else: ?>
-                                        <span style="color:var(--on-light); font-size:0.78rem;">—</span>
-                                    <?php endif; ?>
-                                </td>
                                 <td><span class="chip <?= $chipClass ?>"><?= ucfirst($h['estado'] ?? 'pendiente') ?></span></td>
                                 <td class="date-text">
                                     <div style="font-weight: 700; color: var(--on-surface);">
@@ -353,6 +344,15 @@
                                     <div style="font-size: 0.7rem; opacity: 0.7;">
                                         <?= date('h:i A', strtotime($h['fecha'])) ?>
                                     </div>
+                                </td>
+                                <td class="text-center">
+                                    <?php if (!empty($h['comprobante'])): ?>
+                                        <button class="btn-action blue" onclick="openModal('<?= BASE_URL ?>assets/uploads/comprobantes/<?= $h['comprobante'] ?>')" title="Ver Comprobante">
+                                            <i class='bx bx-show'></i>
+                                        </button>
+                                    <?php else: ?>
+                                        <span style="color:var(--on-light); font-size:0.78rem;">—</span>
+                                    <?php endif; ?>
                                 </td>
                             </tr>
                             <?php endforeach; ?>
