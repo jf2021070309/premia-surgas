@@ -102,7 +102,7 @@
                                 <td style="text-align: center;">
                                     <div style="display: flex; justify-content: center; align-items: center; gap: 8px;">
                                         <!-- Ver Imagen -->
-                                        <button class="btn-action blue" onclick="viewPrize('<?= htmlspecialchars($c['premio_nombre']) ?>', '<?= BASE_URL ?>assets/premios/<?= $c['premio_imagen'] ?>')" title="Ver Premio">
+                                        <button class="btn-action indigo" onclick="viewPrize('<?= htmlspecialchars($c['premio_nombre']) ?>', '<?= BASE_URL ?>assets/premios/<?= $c['premio_imagen'] ?>')" title="Ver Premio">
                                             <i class='bx bx-show'></i>
                                         </button>
 
@@ -111,7 +111,7 @@
                                             <form action="<?= BASE_URL ?>canjes-admin/actualizar" method="POST" style="display:inline; margin: 0;">
                                                 <input type="hidden" name="id" value="<?= $c['id'] ?>">
                                                 <input type="hidden" name="estado" value="entregado">
-                                                <button type="submit" class="btn-action green" title="Marcar como entregado">
+                                                <button type="submit" class="btn-action blue" title="Marcar como entregado">
                                                     <i class='bx bx-check'></i>
                                                 </button>
                                             </form>
