@@ -43,25 +43,29 @@
             include __DIR__ . '/partials/header_admin.php';
         ?>
 
-        <div class="container">
+        <div class="container animate-fade-in">
             
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">
-                        <div class="title-icon red-premium">
-                            <i class='bx bx-gift'></i>
-                        </div>
-                        Canjes de Premios
-                    </div>
-                    <div class="header-actions">
-                        <div class="chip" style="background: #f8fafc; color: #64748b; border: 1px solid #e2e8f0; font-weight: 700;">
-                            Total: <?= count($canjes) ?> registros
-                        </div>
+            <div class="modern-section-header">
+                <div class="section-title-flex">
+                    <div class="section-title-text">
+                        <h3>Gestión de Entregas</h3>
+                        <span>Control de canjes y premios solicitados</span>
                     </div>
                 </div>
+                <div class="section-actions">
+                    <div class="header-search-modern" style="width: 320px;">
+                        <i class='bx bx-search'></i>
+                        <input type="text" id="searchBeneficiario" placeholder="Buscar beneficiario..." onkeyup="filterDeliveries()">
+                    </div>
+                    <div class="chip" style="background: #fff; color: #64748b; border: 1px solid #e2e8f0; font-weight: 700; height: 42px; display: flex; align-items: center; padding: 0 1rem; border-radius: 8px;">
+                        Total: <?= count($canjes) ?> registros
+                    </div>
+                </div>
+            </div>
 
+            <div class="card shadow-sm">
                 <div class="table-wrapper">
-                    <table class="data-table">
+                    <table class="data-table" id="tableDeliveries">
                         <thead>
                             <tr>
                                 <th>Fecha y Hora</th>
@@ -81,9 +85,9 @@
                                 </tr>
                             <?php endif; ?>
                             <?php foreach ($canjes as $c): ?>
-                            <tr>
+                            <tr class="delivery-row">
                                 <td class="date-text">
-                                    <div style="font-weight: 700; color: var(--on-surface);">
+                                    <div style="font-weight: 700; color: #1e293b;">
                                         <?= date('d M Y', strtotime($c['fecha'])) ?>
                                     </div>
                                     <div style="font-size: 0.72rem; opacity: 0.7;">
@@ -147,12 +151,41 @@
                         </tbody>
                     </table>
                 </div>
+                
+                <!-- Pagination / Footer Info -->
+                <div class="card-footer-premium">
+                    <div class="footer-info">
+                        Mostrando <span id="pagCount"><?= count($canjes) ?></span> de <span><?= count($canjes) ?></span> registros
+                    </div>
+                </div>
             </div>
 
         </div> <!-- .container -->
     </div> <!-- .admin-layout -->
 
     <script>
+        function filterDeliveries() {
+            const input = document.getElementById('searchBeneficiario');
+            const filter = input.value.toLowerCase();
+            const rows = document.querySelectorAll('.delivery-row');
+            let visibleCount = 0;
+
+            rows.forEach(row => {
+                const name = row.querySelector('.client-name').innerText.toLowerCase();
+                const celular = row.querySelector('.client-subtext').innerText.toLowerCase();
+                const prize = row.querySelector('.text-medium').innerText.toLowerCase();
+
+                if (name.includes(filter) || celular.includes(filter) || prize.includes(filter)) {
+                    row.style.display = "";
+                    visibleCount++;
+                } else {
+                    row.style.display = "none";
+                }
+            });
+
+            document.getElementById('pagCount').innerText = visibleCount;
+        }
+
         function confirmarCancelacion(event, form) {
             event.preventDefault();
             Swal.fire({
