@@ -372,18 +372,61 @@
     <script>
         // --- PHOTO PREVIEW ---
         function viewPremioImage(name, url) {
-            Swal.fire({
-                title: name,
-                imageUrl: url,
-                imageWidth: 320,
-                imageHeight: 280,
-                imageAlt: 'Premio Preview',
-                showConfirmButton: false,
-                showCloseButton: true,
-                customClass: {
-                    popup: 'premium-swal-popup'
-                }
-            });
+            const existing = document.getElementById('premioPreviewOverlay');
+            if (existing) existing.remove();
+
+            const overlay = document.createElement('div');
+            overlay.id = 'premioPreviewOverlay';
+            overlay.style.cssText = `
+                position: fixed; inset: 0; z-index: 9999;
+                background: rgba(15, 23, 42, 0.7);
+                backdrop-filter: blur(8px);
+                display: flex; align-items: center; justify-content: center;
+                animation: fadeInOverlay 0.2s ease;
+            `;
+            overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+
+            overlay.innerHTML = `
+                <div style="
+                    background: #fff; border-radius: 24px;
+                    padding: 0; max-width: 400px; width: 90%;
+                    box-shadow: 0 40px 80px rgba(0,0,0,0.25);
+                    overflow: hidden;
+                    animation: slideUpModal 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+                    position: relative;
+                ">
+                    <button onclick="document.getElementById('premioPreviewOverlay').remove()" style="
+                        position: absolute; top: 12px; right: 12px;
+                        width: 32px; height: 32px; border-radius: 50%;
+                        border: none; background: rgba(0,0,0,0.06);
+                        color: #64748b; font-size: 1.3rem; cursor: pointer;
+                        display: flex; align-items: center; justify-content: center;
+                        z-index: 10; transition: background 0.2s;
+                    " onmouseover="this.style.background='rgba(0,0,0,0.12)'" onmouseout="this.style.background='rgba(0,0,0,0.06)'">
+                        <i class='bx bx-x'></i>
+                    </button>
+                    <div style="
+                        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+                        padding: 44px 40px 32px;
+                        display: flex; align-items: center; justify-content: center;
+                        min-height: 250px;
+                    ">
+                        <img src="${url}" alt="${name}" style="
+                            max-width: 200px; max-height: 200px; object-fit: contain;
+                            filter: drop-shadow(0 16px 32px rgba(0,0,0,0.14));
+                        " onerror="this.src='https://placehold.co/200x200?text=Sin+Imagen'">
+                    </div>
+                    <div style="padding: 20px 28px 26px; border-top: 1px solid #f1f5f9;">
+                        <div style="font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #94a3b8; margin-bottom: 5px;">Premio</div>
+                        <div style="font-size: 1.1rem; font-weight: 700; color: #1e293b;">${name}</div>
+                    </div>
+                </div>
+                <style>
+                    @keyframes fadeInOverlay { from { opacity:0; } to { opacity:1; } }
+                    @keyframes slideUpModal  { from { opacity:0; transform: translateY(18px) scale(0.96); } to { opacity:1; transform: translateY(0) scale(1); } }
+                </style>
+            `;
+            document.body.appendChild(overlay);
         }
 
         // --- PAGINATION MODULE ---

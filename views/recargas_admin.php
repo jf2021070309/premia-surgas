@@ -331,7 +331,7 @@
                                 <td>
                                     <span class="client-name"><?= htmlspecialchars($h['cliente_nombre'] ?? '-') ?></span>
                                 </td>
-                                <td><span style="color: var(--on-surface); font-weight: 700;">+<?= number_format($h['puntos']) ?> pts</span></td>
+                                <td><span style="color: var(--on-surface);">+<?= number_format($h['puntos']) ?> pts</span></td>
                                 <td style="color: var(--on-muted);">S/ <?= number_format($h['monto'], 2) ?></td>
                                 <td style="text-align: center !important;"><span class="chip <?= $chipClass ?>"><i class='bx bxs-circle'></i> <?= ucfirst($h['estado'] ?? 'pendiente') ?></span></td>
                                 <td class="date-text">
