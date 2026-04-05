@@ -44,14 +44,19 @@
             </div>
 
             <div class="card">
-                <div class="card-header">
-                    <div class="header-title-flex">
-                        <i class='bx bx-id-card'></i>
-                        <div class="title-text-group">
-                            <h3>Directorio de Clientes</h3>
-                            <span>Gestión y administración de beneficiarios</span>
-                        </div>
+            <div class="modern-section-header">
+                <div class="section-title-flex">
+                    <i class='bx bx-id-card'></i>
+                    <div class="section-title-text">
+                        <h3>Directorio de Clientes</h3>
+                        <span>Gestión y administración de beneficiarios</span>
                     </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+
 
                     
                     <div class="header-actions">

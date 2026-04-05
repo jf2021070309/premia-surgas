@@ -102,13 +102,15 @@
             
             <!-- COLUMN 1 — Configuración QR -->
             <div class="card qr-card" style="margin-bottom:0;">
-            <div class="card-header qr-header" onclick="toggleQR()">
-                <div class="card-title">
-                    <div class="title-icon purple">
-                        <i class='bx bx-qr-scan'></i>
+            <div class="card-header" onclick="toggleQR()">
+                <div class="header-title-flex">
+                    <i class='bx bx-qr-scan'></i>
+                    <div class="title-text-group">
+                        <h3>Configuración QR de Pago</h3>
+                        <span>Sube tu código Yape para recibir recargas</span>
                     </div>
-                    Configuración QR de Pago
                 </div>
+
                 <div style="display:flex; align-items:center; gap:0.65rem;">
                     <?php if ($qrActual): ?>
                         <span class="chip" style="background:#ecfdf5; color:#059669; border:1px solid #a7f3d0; font-size:0.65rem; font-weight:700;">Activo</span>
@@ -175,13 +177,15 @@
         ════════════════════════════════════════════ -->
         <?php $numPendientes = count($recargas); ?>
         <div class="card" style="margin-bottom:0;">
-            <div class="card-header pending-header" onclick="togglePending()">
-                <div class="card-title">
-                    <div class="title-icon red">
-                        <div class="pulse-dot"></div>
+            <div class="card-header" onclick="togglePending()">
+                <div class="header-title-flex">
+                    <i class='bx bx-time-five'></i>
+                    <div class="title-text-group">
+                        <h3>Revisión Pendiente</h3>
+                        <span>Comprobantes esperando veracidad de abono</span>
                     </div>
-                    Revisión Pendiente
                 </div>
+
                 <div style="display:flex; align-items:center; gap:0.65rem;">
                     <span class="pending-badge"><?= $numPendientes ?> pendiente<?= $numPendientes !== 1 ? 's' : '' ?></span>
                     <i id="pendingChevron" class='bx bx-chevron-down toggle-chevron <?= $numPendientes > 0 ? 'open' : '' ?>' style="font-size:1.25rem;"></i>
@@ -263,16 +267,20 @@
         <!-- ════════════════════════════════════════════
              SECTION 3 — Historial de Movimientos
         ════════════════════════════════════════════ -->
+        <div class="modern-section-header" style="margin-top: 2rem;">
+            <div class="section-title-flex">
+                <i class='bx bx-history'></i>
+                <div class="section-title-text">
+                    <h3>Historial de Movimientos</h3>
+                    <span>Panel de verificación administrativa de recargas</span>
+                </div>
+            </div>
+        </div>
+
         <div class="card">
             <div class="card-header">
-                <div class="header-title-flex">
-                    <i class='bx bx-history'></i>
-                    <div class="title-text-group">
-                        <h3>Historial de Movimientos</h3>
-                        <span>Panel de verificación administrativa de recargas</span>
-                    </div>
-                </div>
-                <div style="display: flex; gap: 0.75rem; align-items: center;">
+                <div style="display: flex; gap: 0.75rem; align-items: center; justify-content: flex-end; width:100%;">
+
                     <div class="header-search" style="max-width: 150px;">
                         <i class='bx bx-calendar'></i>
                         <input type="date" id="historyDate" onchange="filterHistory()">
@@ -353,14 +361,15 @@
                     </table>
                 </div>
                 <!-- Pagination Controls -->
-                <div id="paginationControls" style="padding: 1rem 1.25rem; border-top: 1px solid var(--outline); display: flex; align-items: center; justify-content: space-between; background: var(--surface-low);">
-                    <div style="font-size: 0.78rem; color: var(--on-muted); font-weight: 500;">
-                        Mostrando <span id="pagStart">0</span> - <span id="pagEnd">0</span> de <span id="pagTotal">0</span>
+                <div class="card-footer-premium">
+                    <div class="footer-info">
+                        Mostrando <span id="pagStart">0</span> - <span id="pagEnd">0</span> de <span id="pagTotal">0</span> movimientos
                     </div>
-                    <div id="pageNumbers" style="display: flex; gap: 4px; align-items: center;">
+                    <div id="pageNumbers" class="pagination-elite">
                         <!-- JS injects here -->
                     </div>
                 </div>
+
             <?php endif; ?>
         </div>
 
@@ -531,7 +540,7 @@
 
             // Prev button
             const prev = document.createElement('button');
-            prev.className = 'pag-btn';
+            prev.className = 'page-btn nav-arrows';
             prev.innerHTML = "<i class='bx bx-chevron-left'></i>";
             prev.disabled = currentPage === 1;
             prev.onclick = () => { currentPage--; filterHistory(); };
@@ -543,8 +552,9 @@
             if (endPage - startPage < 4) startPage = Math.max(1, endPage - 4);
 
             for (let i = startPage; i <= endPage; i++) {
+                if (i < 1) continue;
                 const btn = document.createElement('button');
-                btn.className = `pag-btn ${i === currentPage ? 'active' : ''}`;
+                btn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
                 btn.textContent = i;
                 btn.onclick = () => { currentPage = i; filterHistory(); };
                 container.appendChild(btn);
@@ -552,12 +562,13 @@
 
             // Next button
             const next = document.createElement('button');
-            next.className = 'pag-btn';
+            next.className = 'page-btn nav-arrows';
             next.innerHTML = "<i class='bx bx-chevron-right'></i>";
             next.disabled = currentPage === maxPage;
             next.onclick = () => { currentPage++; filterHistory(); };
             container.appendChild(next);
         }
+
 
         function changePage(dir) {
             currentPage += dir;

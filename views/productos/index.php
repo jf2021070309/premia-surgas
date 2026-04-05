@@ -30,15 +30,20 @@
 
         <div class="container">
             <div class="card">
-                <div class="card-header">
-                    <div class="header-title-flex">
-                        <i class='bx bx-gift'></i>
-                        <div class="title-text-group">
-                            <h3>Catálogo de Premios</h3>
-                            <span>Gestión de productos y recompensas</span>
-                        </div>
+            <div class="modern-section-header">
+                <div class="section-title-flex">
+                    <i class='bx bx-gift'></i>
+                    <div class="section-title-text">
+                        <h3>Catálogo de Premios</h3>
+                        <span>Gestión de productos y recompensas</span>
                     </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
                     <div class="header-actions">
+
                         <div class="header-filter">
                             <i class='bx bx-filter-alt'></i>
                             <select v-model="filtroEstado">

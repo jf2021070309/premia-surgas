@@ -1,17 +1,60 @@
 /* ══════════════════════════════════════
    Elite Table System (Refined)
 ══════════════════════════════════════ */
-.card-header {
-    padding: 1.25rem 1.8rem;
+/* MODERN EXTERNAL SECTION HEADER */
+.modern-section-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #f1f5f9;
-    background: #fff;
-    gap: 2rem;
+    margin-bottom: 1.5rem;
+    padding-top: 0.5rem;
+}
+.section-title-flex {
+    display: flex;
+    align-items: center;
+    gap: 1.15rem;
+}
+.section-title-flex i {
+    width: 46px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: #fdf2f2;
+    color: #800000;
+    border: 1px solid #fee2e2;
+    font-size: 1.45rem;
+    box-shadow: 0 4px 10px rgba(128, 0, 0, 0.04);
+}
+.section-title-text h3 {
+    margin: 0;
+    font-size: 1.35rem;
+    font-weight: 850;
+    color: #0f172a;
+    letter-spacing: -0.02em;
+}
+.section-title-text span {
+    display: block;
+    font-size: 0.85rem;
+    color: #64748b;
+    font-weight: 500;
+    margin-top: -2px;
 }
 
+.card-header {
+    padding: 0.85rem 1.8rem;
+    display: flex;
+    justify-content: flex-end; /* Align controls to right by default */
+    align-items: center;
+    border-bottom: 1px solid #f1f5f9;
+    background: #fff;
+    gap: 1.5rem;
+}
+
+
 .header-title-flex {
+
     display: flex;
     align-items: center;
     gap: 1rem;

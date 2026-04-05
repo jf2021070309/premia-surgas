@@ -28,15 +28,20 @@
 
         <div class="container">
             <div class="card">
-                <div class="card-header">
-                    <div class="header-title-flex">
-                        <i class='bx bx-bus'></i>
-                        <div class="title-text-group">
-                            <h3>Directorio de Conductores</h3>
-                            <span>Administración de equipo de reparto</span>
-                        </div>
+            <div class="modern-section-header">
+                <div class="section-title-flex">
+                    <i class='bx bx-bus'></i>
+                    <div class="section-title-text">
+                        <h3>Directorio de Conductores</h3>
+                        <span>Administración de equipo de reparto</span>
                     </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
                     <div class="header-actions">
+
                         <div class="header-filter">
                             <i class='bx bx-filter-alt'></i>
                             <select v-model="filtroEstado">
