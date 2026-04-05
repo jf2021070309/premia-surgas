@@ -336,7 +336,7 @@
                                 </td>
                                 <td><span class="pts-positive">+<?= number_format($h['puntos']) ?> pts</span></td>
                                 <td style="color: var(--on-muted);">S/ <?= number_format($h['monto'], 2) ?></td>
-                                <td><span class="chip <?= $chipClass ?>"><?= ucfirst($h['estado'] ?? 'pendiente') ?></span></td>
+                                <td><span class="chip <?= $chipClass ?>"><i class='bx bxs-circle'></i> <?= ucfirst($h['estado'] ?? 'pendiente') ?></span></td>
                                 <td class="date-text">
                                     <div style="font-weight: 700; color: var(--on-surface);">
                                         <?= date('d M Y', strtotime($h['fecha'])) ?>
