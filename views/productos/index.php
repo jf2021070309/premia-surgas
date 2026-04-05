@@ -50,9 +50,10 @@
                         <i class='bx bx-search'></i>
                         <input type="text" placeholder="Buscar" v-model="busqueda">
                     </div>
-                    <button class="btn-primary-premium" @click="nuevoProducto" style="height: 48px; border-radius: 24px; padding: 0 1.5rem; display: flex; align-items: center;">
+                    <button class="btn-primary-premium" @click="nuevoProducto">
                         <i class='bx bx-plus'></i> Nuevo
                     </button>
+
                 </div>
             </div>
 

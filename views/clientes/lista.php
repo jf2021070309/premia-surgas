@@ -45,14 +45,13 @@
 
             <div class="modern-section-header">
                 <div class="section-title-flex">
-                    <i class='bx bx-id-card'></i>
                     <div class="section-title-text">
                         <h3>Directorio de Clientes</h3>
                         <span>Gestión y administración de beneficiarios</span>
                     </div>
                 </div>
                 <div class="section-actions">
-                    <div class="header-filter">
+                    <div class="header-search-modern" style="width: 150px;">
                         <i class='bx bx-filter-alt'></i>
                         <select v-model="filterTipo">
                             <option value="">Todos los Tipos</option>
@@ -61,7 +60,7 @@
                             <option value="Punto de Venta">Punto de Venta</option>
                         </select>
                     </div>
-                    <div class="header-filter">
+                    <div class="header-search-modern" style="width: 180px;">
                         <i class='bx bx-map-alt'></i>
                         <select v-model="filterDep">
                             <option value="">Todos los Departamentos</option>
@@ -72,15 +71,16 @@
                             <option value="Mollendo">Mollendo</option>
                         </select>
                     </div>
-                    <div class="header-search-modern">
+                    <div class="header-search-modern" style="width: 250px;">
                         <i class='bx bx-search'></i>
                         <input type="text" v-model="busqueda" placeholder="Buscar">
                     </div>
-                    <a href="<?= BASE_URL ?>clientes/nuevo" class="btn-primary-premium" style="height: 48px; border-radius: 24px; padding: 0 1.5rem; display: flex; align-items: center;">
+                    <a href="<?= BASE_URL ?>clientes/nuevo" class="btn-primary-premium">
                         <i class='bx bx-user-plus'></i> Nuevo
                     </a>
                 </div>
             </div>
+
 
             <div class="card">
                 <div class="table-wrapper">

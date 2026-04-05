@@ -43,9 +43,10 @@
                         <i class='bx bx-search'></i>
                         <input type="text" placeholder="Buscar" onkeyup="handleSearch('tableOp', this.value)">
                     </div>
-                    <button class="btn-primary-premium" style="height: 48px; border-radius: 24px; padding: 0 1.5rem;" onclick="openModalOp()">
+                    <button class="btn-primary-premium" onclick="openModalOp()">
                         <i class='bx bx-plus'></i> Nueva Regla
                     </button>
+
                 </div>
             </div>
 
@@ -102,9 +103,10 @@
                         <i class='bx bx-search'></i>
                         <input type="text" placeholder="Buscar" onkeyup="handleSearch('tablePremios', this.value)">
                     </div>
-                    <button class="btn-primary-premium" style="height: 48px; border-radius: 24px; padding: 0 1.5rem;" onclick="openModalPremio()">
+                    <button class="btn-primary-premium" onclick="openModalPremio()">
                         <i class='bx bx-plus'></i> Nuevo Premio
                     </button>
+
                 </div>
             </div>
 
@@ -164,9 +166,10 @@
                         <i class='bx bx-search'></i>
                         <input type="text" placeholder="Buscar" onkeyup="handleSearch('tableCond', this.value)">
                     </div>
-                    <button class="btn-primary-premium" style="height: 48px; border-radius: 24px; padding: 0 1.5rem;" onclick="openModalCond()">
+                    <button class="btn-primary-premium" onclick="openModalCond()">
                         <i class='bx bx-plus'></i> Nuevo Conductor
                     </button>
+
                 </div>
             </div>
 

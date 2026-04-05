@@ -48,9 +48,10 @@
                         <i class='bx bx-search'></i>
                         <input type="text" placeholder="Buscar" v-model="busqueda">
                     </div>
-                    <a href="<?= BASE_URL ?>conductores/nuevo" class="btn-primary-premium" style="height: 48px; border-radius: 24px; padding: 0 1.5rem; display: flex; align-items: center;">
+                    <a href="<?= BASE_URL ?>conductores/nuevo" class="btn-primary-premium">
                         <i class='bx bx-user-plus'></i> Nuevo
                     </a>
+
                 </div>
             </div>
 
