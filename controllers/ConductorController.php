@@ -1,30 +1,34 @@
 <?php
 require_once __DIR__ . '/../models/UsuarioModel.php';
 
-class ConductorController {
-    
-    public function index(): void {
+class ConductorController
+{
+
+    public function index(): void
+    {
         $this->requireAdmin();
         $model = new UsuarioModel();
         $conductores = $model->getAllConductores();
         $this->render('conductores/index', ['conductores' => $conductores]);
     }
 
-    public function nuevo(): void {
+    public function nuevo(): void
+    {
         $this->requireAdmin();
         $this->render('conductores/formulario', ['titulo' => 'Nuevo Conductor', 'conductor' => null]);
     }
 
-    public function create(): void {
+    public function create(): void
+    {
         $this->requireAdmin();
         $model = new UsuarioModel();
-        
+
         $data = [
-            'nombre'   => $_POST['nombre'] ?? '',
-            'usuario'      => $_POST['usuario'] ?? '',
-            'password'     => $_POST['password'] ?? '',
-            'rol'          => 'conductor',
-            'estado'       => (int)($_POST['estado'] ?? 1),
+            'nombre' => $_POST['nombre'] ?? '',
+            'usuario' => $_POST['usuario'] ?? '',
+            'password' => $_POST['password'] ?? '',
+            'rol' => 'conductor',
+            'estado' => (int) ($_POST['estado'] ?? 1),
             'departamento' => $_POST['departamento'] ?? null,
         ];
 
@@ -33,17 +37,18 @@ class ConductorController {
         } else {
             $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo registrar al conductor.'];
         }
-        
+
         $redir = $_POST['redir'] ?? 'conductores';
         $this->redirect($redir);
     }
 
-    public function editar(): void {
+    public function editar(): void
+    {
         $this->requireAdmin();
-        $id = (int)($_GET['id'] ?? 0);
+        $id = (int) ($_GET['id'] ?? 0);
         $model = new UsuarioModel();
         $conductor = $model->findById($id);
-        
+
         if (!$conductor) {
             $this->redirect('conductores');
         }
@@ -51,15 +56,16 @@ class ConductorController {
         $this->render('conductores/formulario', ['titulo' => 'Editar Conductor', 'conductor' => $conductor]);
     }
 
-    public function update(): void {
+    public function update(): void
+    {
         $this->requireAdmin();
-        $id = (int)($_POST['id'] ?? 0);
+        $id = (int) ($_POST['id'] ?? 0);
         $model = new UsuarioModel();
-        
+
         $data = [
-            'nombre'       => $_POST['nombre'] ?? '',
-            'usuario'      => $_POST['usuario'] ?? '',
-            'estado'       => (int)($_POST['estado'] ?? 1),
+            'nombre' => $_POST['nombre'] ?? '',
+            'usuario' => $_POST['usuario'] ?? '',
+            'estado' => (int) ($_POST['estado'] ?? 1),
             'departamento' => $_POST['departamento'] ?? null,
         ];
 
@@ -72,38 +78,42 @@ class ConductorController {
         } else {
             $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo actualizar la información.'];
         }
-        
+
         $redir = $_POST['redir'] ?? 'conductores';
         $this->redirect($redir);
     }
 
-    public function delete(): void {
+    public function delete(): void
+    {
         $this->requireAdmin();
-        $id = (int)($_GET['id'] ?? 0);
+        $id = (int) ($_GET['id'] ?? 0);
         $model = new UsuarioModel();
         if ($model->setEstado($id, 0)) {
             $_SESSION['flash'] = ['type' => 'success', 'title' => '¡Hecho!', 'message' => 'Conductor inactivado correctamente.'];
         } else {
             $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo inactivar al conductor.'];
         }
-        
+
         $redir = $_GET['redir'] ?? 'conductores';
         $this->redirect($redir);
     }
 
     // ── helpers ──────────────────────────────────────────────────
 
-    private function render(string $view, array $data = []): void {
+    private function render(string $view, array $data = []): void
+    {
         extract($data);
         require __DIR__ . "/../views/{$view}.php";
     }
 
-    private function redirect(string $path): void {
+    private function redirect(string $path): void
+    {
         header('Location: ' . BASE_URL . $path);
         exit;
     }
 
-    private function requireAdmin(): void {
+    private function requireAdmin(): void
+    {
         if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'admin') {
             header('Location: ' . BASE_URL . 'panel');
             exit;

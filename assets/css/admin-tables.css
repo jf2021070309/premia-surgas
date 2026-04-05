@@ -56,23 +56,25 @@
 
 .filter-input-group {
     background: #f8fafc;
-    border: 1.2px solid #eef2f6;
-    border-radius: 10px;
-    padding: 6px 14px;
+    border: 1.5px solid #edf2f7;
+    border-radius: 100px; /* Elegant pill shape */
+    padding: 8px 18px;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 240px;
 }
 .filter-input-group:focus-within {
     background: #fff;
-    border-color: #000;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    border-color: var(--primary, #800000);
+    box-shadow: 0 4px 15px rgba(128, 0, 0, 0.08);
 }
 .filter-input-group label {
     font-size: 1rem;
     color: #94a3b8;
 }
+
 .filter-input-group input, 
 .filter-input-group select {
     border: none;
@@ -118,45 +120,100 @@
 .data-table tbody td.text-center {
     text-align: center;
 }
+/* ══════════════════════════════════════
+   Elite Action Buttons (Refined & Layered)
+   ══════════════════════════════════════ */
 .actions-flex {
     display: flex;
-    gap: 12px;
+    gap: 10px;
     align-items: center;
     justify-content: center;
-    width: 100%;
-}
-.btn-action {
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 10px;
-    border: none;
-    font-size: 1.15rem;
-    cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    background: #f8fafc; /* Fallback light gray */
-    color: #94a3b8;
-}
-.btn-action:hover {
-    transform: translateY(-2px);
-    filter: brightness(0.95);
 }
 
-/* Specific Action Color Boxes (Image Reference Style) */
-.btn-action.indigo {
-    background: #eef2ff;
-    color: #6366f1;
+.btn-action {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    border: 1.5px solid transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    background: #ffffff;
+    padding: 0;
+    box-shadow: 
+        0 2px 5px rgba(0,0,0,0.03),
+        0 8px 12px rgba(0,0,0,0.02);
+    position: relative;
+    overflow: hidden;
 }
-.btn-action.blue {
-    background: #eff6ff;
-    color: #3b82f6;
+
+.btn-action i {
+    z-index: 2;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+.btn-action:hover {
+    transform: translateY(-4px) scale(1.08);
+}
+
+.btn-action:active {
+    transform: translateY(-1px) scale(0.95);
+}
+
+/* Layered Internal Glow */
+.btn-action::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 100%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 1;
+}
+.btn-action:hover::after { opacity: 0.2; }
+
+/* BRAND: WINE (Edit/View) */
+.btn-action.blue, .btn-action.indigo {
+    color: var(--primary, #800000);
+    background: #fff8f8;
+    border: 1px solid #feeae2;
+}
+.btn-action.blue:hover, .btn-action.indigo:hover {
+    background: var(--primary, #800000);
+    color: #ffffff;
+    border-color: var(--primary, #800000);
+    box-shadow: 0 12px 25px rgba(128, 0, 0, 0.25);
+}
+
+/* BRAND: ORANGE (Edit/Accent) */
+.btn-action.orange {
+    color: var(--accent, #ff6600);
+    background: #fffaf5;
+    border: 1px solid #ffe8d6;
+}
+.btn-action.orange:hover {
+    background: var(--accent, #ff6600);
+    color: #ffffff;
+    border-color: var(--accent, #ff6600);
+    box-shadow: 0 12px 25px rgba(255, 102, 0, 0.25);
+}
+
+/* DANGER: RED (Delete) */
 .btn-action.red {
-    background: #fef2f2;
-    color: #dc2626;
+    color: var(--red, #dc2626);
+    background: #fffafa;
+    border: 1px solid #fee2e2;
 }
+.btn-action.red:hover {
+    background: var(--red, #dc2626);
+    color: #ffffff;
+    border-color: var(--red, #dc2626);
+    box-shadow: 0 12px 25px rgba(220, 38, 38, 0.25);
+}
+
 
 /* Muted Badges (Image Reference Style but cleaner) */
 .badge-status {
@@ -501,34 +558,8 @@
 .pts-positive { color: var(--green); font-weight: 700; }
 
 /* Action Buttons Grid */
-.actions-flex {
-    display: flex;
-    gap: 6px;
-    justify-content: flex-end;
-}
-.btn-action {
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-decoration: none;
-    border: none;
-}
-.btn-action.blue   { background: #f0f9ff; color: #0ea5e9; }
-.btn-action.gray   { background: #f8fafc; color: #64748b; }
-.btn-action.orange { background: #fff7ed; color: #f59e0b; }
-.btn-action.red    { background: #fef2f2; color: #ef4444; }
-.btn-action.green  { background: #ecfdf5; color: #10b981; }
+/* Redundant action button styles removed - consolidated in main section */
 
-.btn-action:hover {
-    transform: scale(1.1);
-    filter: brightness(0.95);
-}
 
 /* Status Chips */
 .chip {
