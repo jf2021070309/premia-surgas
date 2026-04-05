@@ -27,15 +27,10 @@
 
         <div class="container animate-fade-in">
             
-            <div class="modern-section-header" style="justify-content: flex-start; gap: 1rem;">
+            <div class="modern-section-header" style="justify-content: flex-end; margin-top: 2rem;">
                 <div class="header-search-modern" style="width: 320px;">
                     <i class='bx bx-search'></i>
                     <input type="text" id="searchBeneficiario" placeholder="Buscar beneficiario..." onkeyup="filterDeliveries()">
-                </div>
-                <div style="flex: 1; display: flex; justify-content: flex-end; align-items: center; gap: 1rem;">
-                    <div class="chip" style="background: #fff; color: #64748b; border: 1px solid #e2e8f0; font-weight: 700; height: 42px; display: flex; align-items: center; padding: 0 1rem; border-radius: 8px;">
-                        <i class='bx bxs-circle' style="font-size: 0.4rem; color: #94a3b8; margin-right: 8px;"></i> Total: <?= count($canjes) ?> registros
-                    </div>
                 </div>
             </div>
 

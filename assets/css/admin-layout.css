@@ -136,8 +136,8 @@ body {
    Top Navigation / Header
 ══════════════════════════════════════ */
 .top-nav {
-    background: #fff;
-    border-bottom: 1px solid var(--outline);
+    background: var(--accent); /* Corporate Orange */
+    border-bottom: none;
     padding: 0 2rem;
     height: 70px;
     display: flex;
@@ -146,38 +146,41 @@ body {
     position: sticky;
     top: 0;
     z-index: 200;
+    box-shadow: 0 2px 15px rgba(255, 102, 0, 0.15);
 }
 
 .nav-left { display: flex; flex-direction: column; }
 .nav-right { display: flex; align-items: center; gap: 1.5rem; }
 
 .page-title {
-    font-size: 1.25rem; font-weight: 800;
-    color: var(--on-surface);
-    letter-spacing: -0.02em;
+    font-size: 1.35rem; font-weight: 800;
+    color: #ffffff; /* White on Orange */
+    letter-spacing: -0.015em;
     line-height: 1.2;
 }
 .page-subtitle {
-    font-size: 0.8rem; color: var(--on-muted);
+    font-size: 0.82rem; 
+    color: rgba(255, 255, 255, 0.85); /* Soft White on Orange */
     font-weight: 500;
 }
 
 .admin-pill {
     display: flex; align-items: center; gap: 14px;
-    padding: 7px 8px 7px 20px;
-    background: #ffffff;
+    padding: 6px 8px 6px 20px;
+    background: rgba(255, 255, 255, 0.15); /* Glassmorphism on Orange */
     border-radius: 100px;
-    border: 1px solid #e2e8f0;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.02);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(4px);
     transition: all 0.3s ease;
+    color: #ffffff;
 }
 .admin-pill:hover {
-    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
-    border-color: #cbd5e1;
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.4);
 }
 
 .nav-bell {
-    color: #64748b; font-size: 1.25rem; cursor: pointer;
+    color: #ffffff; font-size: 1.25rem; cursor: pointer;
     transition: all 0.2s;
 }
 .nav-bell:hover { color: var(--accent); transform: rotate(15deg); }
