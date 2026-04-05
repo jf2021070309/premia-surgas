@@ -167,7 +167,7 @@
                         <input type="text" placeholder="Buscar" onkeyup="handleSearch('tableCond', this.value)">
                     </div>
                     <button class="btn-primary-premium" onclick="openModalCond()">
-                        <i class='bx bx-plus'></i> Nuevo Conductor
+                        <i class='bx bx-user-plus'></i> Nuevo Conductor
                     </button>
 
                 </div>

@@ -51,7 +51,7 @@
                     </div>
                 </div>
                 <div class="section-actions">
-                    <div class="header-search-modern" style="width: 150px;">
+                    <div class="header-search-modern" style="width: 180px;">
                         <i class='bx bx-filter-alt'></i>
                         <select v-model="filterTipo">
                             <option value="">Todos los Tipos</option>
@@ -60,7 +60,7 @@
                             <option value="Punto de Venta">Punto de Venta</option>
                         </select>
                     </div>
-                    <div class="header-search-modern" style="width: 180px;">
+                    <div class="header-search-modern" style="width: 220px;">
                         <i class='bx bx-map-alt'></i>
                         <select v-model="filterDep">
                             <option value="">Todos los Departamentos</option>
@@ -71,7 +71,7 @@
                             <option value="Mollendo">Mollendo</option>
                         </select>
                     </div>
-                    <div class="header-search-modern" style="width: 250px;">
+                    <div class="header-search-modern" style="width: 350px;">
                         <i class='bx bx-search'></i>
                         <input type="text" v-model="busqueda" placeholder="Buscar">
                     </div>

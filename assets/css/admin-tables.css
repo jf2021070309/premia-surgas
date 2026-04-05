@@ -47,6 +47,7 @@
 
 .header-search-modern {
     position: relative;
+    width: 300px; /* Longer as requested */
 }
 
 .header-search-modern i {
