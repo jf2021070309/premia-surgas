@@ -73,7 +73,8 @@
                         </div>
                         <div class="header-search">
                             <i class='bx bx-search'></i>
-                            <input type="text" v-model="busqueda" placeholder="Buscar cliente...">
+                            <input type="text" v-model="busqueda" placeholder="Buscar">
+
                         </div>
                         <a href="<?= BASE_URL ?>clientes/nuevo" class="btn-primary-premium">
                             <i class='bx bx-user-plus'></i> Nuevo

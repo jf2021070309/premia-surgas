@@ -55,25 +55,25 @@
 }
 
 .filter-input-group {
-    background: #f8fafc;
-    border: 1.5px solid #edf2f7;
-    border-radius: 100px; /* Elegant pill shape */
-    padding: 8px 18px;
+    background: #fff;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 100px;
+    padding: 8px 16px;
     display: flex;
     align-items: center;
     gap: 10px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    width: 240px;
+    transition: all 0.3s ease;
+    width: 220px;
 }
 .filter-input-group:focus-within {
-    background: #fff;
     border-color: var(--primary, #800000);
-    box-shadow: 0 4px 15px rgba(128, 0, 0, 0.08);
+    box-shadow: 0 0 0 4px rgba(128, 0, 0, 0.05);
 }
-.filter-input-group label {
-    font-size: 1rem;
+.filter-input-group i {
     color: #94a3b8;
+    font-size: 1.1rem;
 }
+
 
 .filter-input-group input, 
 .filter-input-group select {
@@ -99,8 +99,9 @@
 }
 
 .table-row td {
-    padding: 0.68rem 1.5rem;
+    padding: 0.48rem 1.5rem; /* Más compacto, como gestión de recargas */
     border-bottom: 1px solid #f1f5f9;
+
     vertical-align: middle;
     transition: background 0.15s;
 }
@@ -132,14 +133,15 @@
 }
 
 .btn-action {
-    width: 38px;
-    height: 38px;
-    border-radius: 12px;
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
     border: 1.5px solid transparent;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.25rem;
+    font-size: 1.1rem;
+
     cursor: pointer;
     transition: all 0.3s ease;
     background: #fff5f5; /* Soft brand-tint background */
@@ -471,7 +473,8 @@
 }
 
 .data-table td {
-    padding: 0.85rem 1.25rem;
+    padding: 0.48rem 1.25rem; /* Compacto */
+
     font-size: 0.82rem;
     color: var(--on-secondary);
     border-bottom: 1px solid var(--outline);

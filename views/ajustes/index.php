@@ -42,7 +42,8 @@
                     <div class="header-controls">
                         <div class="filter-input-group">
                             <i class='bx bx-search'></i>
-                            <input type="text" placeholder="Buscar regla..." onkeyup="handleSearch('tableOp', this.value)">
+                            <input type="text" placeholder="Buscar" onkeyup="handleSearch('tableOp', this.value)">
+
                         </div>
                         <button class="btn-premium-pill-black" style="padding: 0.6rem 1.8rem; font-size: 0.85rem;" onclick="openModalOp()">
                             <i class='bx bx-plus'></i> Nueva Regla
@@ -99,7 +100,8 @@
                     <div class="header-controls">
                         <div class="filter-input-group">
                             <i class='bx bx-search'></i>
-                            <input type="text" placeholder="Buscar premio..." onkeyup="handleSearch('tablePremios', this.value)">
+                            <input type="text" placeholder="Buscar" onkeyup="handleSearch('tablePremios', this.value)">
+
                         </div>
                         <button class="btn-premium-pill-black" style="padding: 0.6rem 1.8rem; font-size: 0.85rem;" onclick="openModalPremio()">
                             <i class='bx bx-plus'></i> Nuevo Premio
@@ -159,7 +161,8 @@
                     <div class="header-controls">
                         <div class="filter-input-group">
                             <i class='bx bx-search'></i>
-                            <input type="text" placeholder="Nombre o usuario..." onkeyup="handleSearch('tableCond', this.value)">
+                            <input type="text" placeholder="Buscar" onkeyup="handleSearch('tableCond', this.value)">
+
                         </div>
                         <button class="btn-premium-pill-black" style="padding: 0.6rem 1.8rem; font-size: 0.85rem;" onclick="openModalCond()">
                             <i class='bx bx-plus'></i> Nuevo Conductor

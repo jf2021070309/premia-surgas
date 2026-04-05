@@ -29,7 +29,8 @@
             <div class="d-flex flex-wrap gap-2 align-items-center">
                 <div class="input-group input-group-sm" style="width: 250px;">
                     <span class="input-group-text bg-white border-0">🔍</span>
-                    <input type="text" class="form-control border-0" placeholder="Buscar conductor..." v-model="busqueda">
+                    <input type="text" class="form-control border-0" placeholder="Buscar" v-model="busqueda">
+
                 </div>
                 <select class="form-select form-select-sm border-0" style="width: 130px;" v-model="filtroEstado">
                     <option value="todos">Todos</option>

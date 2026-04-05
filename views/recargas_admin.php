@@ -282,7 +282,8 @@
                     </div>
                     <div class="header-search">
                         <i class='bx bx-search'></i>
-                        <input type="text" id="historySearch" placeholder="Buscar cliente..." onkeyup="filterHistory()">
+                        <input type="text" id="historySearch" placeholder="Buscar" onkeyup="filterHistory()">
+
                     </div>
                 </div>
             </div>

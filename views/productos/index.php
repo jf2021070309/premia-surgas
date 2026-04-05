@@ -74,7 +74,8 @@
             <div class="d-flex flex-wrap gap-2 justify-content-center">
                 <div class="input-group input-group-sm shadow-sm" style="width: 250px; border-radius:10px; overflow:hidden;">
                     <span class="input-group-text bg-white border-0">🔍</span>
-                    <input type="text" class="form-control border-0" placeholder="Buscar producto..." v-model="busqueda">
+                    <input type="text" class="form-control border-0" placeholder="Buscar" v-model="busqueda">
+
                 </div>
                 <select class="form-select form-select-sm border-0 shadow-sm" style="width: 130px; border-radius:10px;" v-model="filtroEstado">
                     <option value="todos">Todos los Estados</option>
