@@ -314,7 +314,7 @@
                                 <th>Cliente</th>
                                 <th>Puntos</th>
                                 <th>Monto</th>
-                                <th>Estado</th>
+                                <th style="text-align: center !important;">Estado</th>
                                 <th>Fecha y Hora</th>
                                 <th class="text-center">Evidencia</th>
                             </tr>
@@ -336,7 +336,7 @@
                                 </td>
                                 <td><span class="pts-positive">+<?= number_format($h['puntos']) ?> pts</span></td>
                                 <td style="color: var(--on-muted);">S/ <?= number_format($h['monto'], 2) ?></td>
-                                <td><span class="chip <?= $chipClass ?>"><i class='bx bxs-circle'></i> <?= ucfirst($h['estado'] ?? 'pendiente') ?></span></td>
+                                <td style="text-align: center !important;"><span class="chip <?= $chipClass ?>"><i class='bx bxs-circle'></i> <?= ucfirst($h['estado'] ?? 'pendiente') ?></span></td>
                                 <td class="date-text">
                                     <div style="font-weight: 700; color: var(--on-surface);">
                                         <?= date('d M Y', strtotime($h['fecha'])) ?>
