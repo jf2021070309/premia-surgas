@@ -109,16 +109,22 @@
                                 </td>
                                 <td style="text-align: center !important;">
                                     <?php if ($c['estado'] === 'pendiente'): ?>
-                                        <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
-                                            <span class="chip chip-pendiente" style="margin: 0 !important;">PENDIENTE</span>
+                                        <div style="display: flex; justify-content: center;">
+                                            <span class="chip chip-pending" style="padding: 6px 14px; letter-spacing: 0.05em;">
+                                                <i class='bx bxs-circle'></i> PENDIENTE
+                                            </span>
                                         </div>
                                     <?php elseif ($c['estado'] === 'entregado'): ?>
-                                        <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
-                                            <span style="font-weight: 700; color: #111827; font-size: 0.75rem; letter-spacing: 0.02em;">ENTREGADO</span>
+                                        <div style="display: flex; justify-content: center;">
+                                            <span class="chip chip-delivered" style="padding: 6px 14px; letter-spacing: 0.05em;">
+                                                <i class='bx bxs-circle'></i> ENTREGADO
+                                            </span>
                                         </div>
                                     <?php else: ?>
-                                        <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
-                                            <span style="font-weight: 700; color: #6b7280; font-size: 0.75rem; letter-spacing: 0.02em; text-decoration: line-through;"><?= strtoupper($c['estado']) ?></span>
+                                        <div style="display: flex; justify-content: center;">
+                                            <span class="chip chip-rejected" style="padding: 6px 14px; letter-spacing: 0.05em; text-decoration: line-through;">
+                                                <i class='bx bxs-circle'></i> <?= strtoupper($c['estado']) ?>
+                                            </span>
                                         </div>
                                     <?php endif; ?>
                                 </td>

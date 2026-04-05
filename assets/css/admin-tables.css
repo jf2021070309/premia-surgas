@@ -661,6 +661,18 @@
 .chip-normal   { background: #f0fdf4; color: #166534; border-color: #dcfce7; }
 .chip-business { background: #fffbeb; color: #92400e; border-color: #fef3c7; }
 
+/* Status Chips for Deliveries/General */
+.chip-approved  { background: #f0fdf4; color: #166534; border-color: #dcfce7; }
+.chip-rejected  { background: #fef2f2; color: #b91c1c; border-color: #fee2e2; }
+.chip-pending   { background: #fef2f2; color: #800000; border-color: #fee2e2; } /* Corporate Wine Red Tint */
+.chip-delivered { background: #f0fdf4; color: #166534; border-color: #dcfce7; } /* Green like Approved */
+
+.chip i {
+    font-size: 0.45rem;
+    vertical-align: middle;
+    margin-right: 2px;
+}
+
 /* Empty Table */
 .empty-table {
     padding: 3rem;
