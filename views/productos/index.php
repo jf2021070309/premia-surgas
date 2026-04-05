@@ -51,7 +51,7 @@
                         <input type="text" placeholder="Buscar" v-model="busqueda">
                     </div>
                     <button class="btn-primary-premium" @click="nuevoProducto">
-                        <i class='bx bx-plus'></i> Nuevo
+                        <i class='bx bx-plus-circle'></i> Nuevo
                     </button>
 
                 </div>

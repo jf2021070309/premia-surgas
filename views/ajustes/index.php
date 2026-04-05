@@ -44,7 +44,7 @@
                         <input type="text" placeholder="Buscar" onkeyup="handleSearch('tableOp', this.value)">
                     </div>
                     <button class="btn-primary-premium" onclick="openModalOp()">
-                        <i class='bx bx-plus'></i> Nueva Regla
+                        <i class='bx bx-layer-plus'></i> Nueva Regla
                     </button>
 
                 </div>
@@ -104,7 +104,7 @@
                         <input type="text" placeholder="Buscar" onkeyup="handleSearch('tablePremios', this.value)">
                     </div>
                     <button class="btn-primary-premium" onclick="openModalPremio()">
-                        <i class='bx bx-plus'></i> Nuevo Premio
+                        <i class='bx bxs-award'></i> Nuevo Premio
                     </button>
 
                 </div>
