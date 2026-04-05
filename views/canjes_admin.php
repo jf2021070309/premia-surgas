@@ -104,7 +104,6 @@
                                 </td>
                                 <td>
                                     <div class="row-prize">
-                                        <img src="<?= BASE_URL ?>assets/premios/<?= $c['premio_imagen'] ?>" class="prize-img" alt="Premio">
                                         <span class="text-medium"><?= htmlspecialchars($c['premio_nombre']) ?></span>
                                     </div>
                                 </td>
@@ -123,14 +122,19 @@
                                         </div>
                                     <?php endif; ?>
                                 </td>
-                                <td>
+                                <td style="text-align: center;">
                                     <div style="display: flex; justify-content: center; align-items: center; gap: 8px;">
+                                        <!-- Ver Imagen -->
+                                        <button class="btn-action blue" onclick="viewPrize('<?= htmlspecialchars($c['premio_nombre']) ?>', '<?= BASE_URL ?>assets/premios/<?= $c['premio_imagen'] ?>')" title="Ver Premio">
+                                            <i class='bx bx-show'></i>
+                                        </button>
+
                                         <?php if ($c['estado'] === 'pendiente'): ?>
                                             <!-- Entregar -->
                                             <form action="<?= BASE_URL ?>canjes-admin/actualizar" method="POST" style="display:inline; margin: 0;">
                                                 <input type="hidden" name="id" value="<?= $c['id'] ?>">
                                                 <input type="hidden" name="estado" value="entregado">
-                                                <button type="submit" class="btn-action blue" title="Marcar como entregado">
+                                                <button type="submit" class="btn-action green" title="Marcar como entregado">
                                                     <i class='bx bx-check'></i>
                                                 </button>
                                             </form>
@@ -164,6 +168,20 @@
     </div> <!-- .admin-layout -->
 
     <script>
+        function viewPrize(title, url) {
+            Swal.fire({
+                title: title,
+                imageUrl: url,
+                imageWidth: 400,
+                imageAlt: title,
+                showConfirmButton: false,
+                background: '#ffffff',
+                color: '#1e293b',
+                closeButtonHtml: '<i class="bx bx-x"></i>',
+                showCloseButton: true
+            });
+        }
+
         function filterDeliveries() {
             const input = document.getElementById('searchBeneficiario');
             const filter = input.value.toLowerCase();
