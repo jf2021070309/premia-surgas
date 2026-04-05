@@ -29,68 +29,8 @@
 
         <div class="container" style="max-width: 1200px; padding-top: 1rem;">
             
-            <!-- SECTION 1: OPERACIONES -->
+            <!-- SECTION 1: PREMIOS -->
             <div class="modern-section-header">
-                <div class="section-title-flex">
-                    <i class='bx bx-calculator'></i>
-                    <div class="section-title-text">
-                        <h3>Reglas de Puntaje</h3>
-                        <span>Puntos acumulados por cada operación</span>
-                    </div>
-                </div>
-                <div class="section-actions">
-                    <div class="header-search-modern">
-                        <i class='bx bx-search'></i>
-                        <input type="text" placeholder="Buscar" onkeyup="handleSearch('tableOp', this.value)">
-                    </div>
-                    <button class="btn-primary-premium" onclick="openModalOp()">
-                        <i class='bx bx-layer-plus'></i> Nueva Regla
-                    </button>
-
-                </div>
-            </div>
-
-            <div class="card shadow-sm" id="cardOp">
-                <div class="table-wrapper">
-                    <table class="data-table" id="tableOp">
-
-                        <thead>
-                            <tr>
-                                <th>Nombre Operación</th>
-                                <th class="text-center">Puntaje</th>
-                                <th class="text-center">Estado</th>
-                                <th class="text-center" style="width: 150px;">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($operaciones as $op): ?>
-                            <tr class="table-row">
-                                <td class="text-medium"><?= htmlspecialchars($op['nombre']) ?></td>
-                                <td class="text-center"><span class="text-pts-plus"><?= $op['puntos'] ?> pts</span></td>
-                                <td class="text-center">
-                                    <span class="chip <?= $op['estado'] ? 'chip-approved' : 'chip-rejected' ?>">
-                                        <i class='bx bxs-circle'></i> <?= $op['estado'] ? 'Activo' : 'Inactivo' ?>
-                                    </span>
-                                </td>
-                                <td class="text-center">
-                                    <div class="actions-flex" style="justify-content: center;">
-                                        <button class="btn-action blue" onclick="editOp(<?= htmlspecialchars(json_encode($op)) ?>)"><i class='bx bx-edit-alt'></i></button>
-                                        <button class="btn-action red" onclick="confirmDeleteOp('<?= BASE_URL ?>operaciones/delete?id=<?= $op['id'] ?>')"><i class='bx bx-trash'></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="card-footer-premium" id="footerOp">
-                    <div class="footer-info">Mostrando <span class="range"></span> de <span class="total"></span></div>
-                    <div class="pagination-elite" data-pagination="tableOp"></div>
-                </div>
-            </div>
-
-            <!-- SECTION 2: PREMIOS -->
-            <div class="modern-section-header" style="margin-top: 3.5rem;">
                 <div class="section-title-flex">
                     <i class='bx bx-gift'></i>
                     <div class="section-title-text">
@@ -149,6 +89,66 @@
                 <div class="card-footer-premium" id="footerPremios">
                     <div class="footer-info">Mostrando <span class="range"></span> de <span class="total"></span></div>
                     <div class="pagination-elite" data-pagination="tablePremios"></div>
+                </div>
+            </div>
+
+            <!-- SECTION 2: OPERACIONES -->
+            <div class="modern-section-header" style="margin-top: 3.5rem;">
+                <div class="section-title-flex">
+                    <i class='bx bx-calculator'></i>
+                    <div class="section-title-text">
+                        <h3>Reglas de Puntaje</h3>
+                        <span>Puntos acumulados por cada operación</span>
+                    </div>
+                </div>
+                <div class="section-actions">
+                    <div class="header-search-modern">
+                        <i class='bx bx-search'></i>
+                        <input type="text" placeholder="Buscar" onkeyup="handleSearch('tableOp', this.value)">
+                    </div>
+                    <button class="btn-primary-premium" onclick="openModalOp()">
+                        <i class='bx bx-layer-plus'></i> Nueva Regla
+                    </button>
+
+                </div>
+            </div>
+
+            <div class="card shadow-sm" id="cardOp">
+                <div class="table-wrapper">
+                    <table class="data-table" id="tableOp">
+
+                        <thead>
+                            <tr>
+                                <th>Nombre Operación</th>
+                                <th class="text-center">Puntaje</th>
+                                <th class="text-center">Estado</th>
+                                <th class="text-center" style="width: 150px;">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($operaciones as $op): ?>
+                            <tr class="table-row">
+                                <td class="text-medium"><?= htmlspecialchars($op['nombre']) ?></td>
+                                <td class="text-center"><span class="text-pts-plus"><?= $op['puntos'] ?> pts</span></td>
+                                <td class="text-center">
+                                    <span class="chip <?= $op['estado'] ? 'chip-approved' : 'chip-rejected' ?>">
+                                        <i class='bx bxs-circle'></i> <?= $op['estado'] ? 'Activo' : 'Inactivo' ?>
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <div class="actions-flex" style="justify-content: center;">
+                                        <button class="btn-action blue" onclick="editOp(<?= htmlspecialchars(json_encode($op)) ?>)"><i class='bx bx-edit-alt'></i></button>
+                                        <button class="btn-action red" onclick="confirmDeleteOp('<?= BASE_URL ?>operaciones/delete?id=<?= $op['id'] ?>')"><i class='bx bx-trash'></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer-premium" id="footerOp">
+                    <div class="footer-info">Mostrando <span class="range"></span> de <span class="total"></span></div>
+                    <div class="pagination-elite" data-pagination="tableOp"></div>
                 </div>
             </div>
 
