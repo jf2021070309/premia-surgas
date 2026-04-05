@@ -22,20 +22,21 @@
 
 .section-title-text h3 {
     margin: 0;
-    font-size: 1.55rem;
+    font-size: 1.15rem; /* Smaller as requested */
     font-weight: 800;
     color: #1e293b;
-    letter-spacing: -0.025em;
-    line-height: 1.1;
+    letter-spacing: -0.015em;
+    line-height: 1.2;
 }
 
 .section-title-text span {
     display: block;
-    font-size: 0.9rem;
+    font-size: 0.82rem;
     color: #64748b;
     font-weight: 500;
-    margin-top: 4px;
+    margin-top: 2px;
 }
+
 
 /* Header Controls (Now outside cards) */
 .section-actions {
@@ -654,4 +655,105 @@
     margin-bottom: 1rem;
     display: block;
     opacity: 0.5;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   MODERN PREMIUM PAGINATION (CARD FOOTER)
+   Matches the high-end dashboard aesthetic
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.card-footer-premium {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 2.25rem;
+    border-top: 1px solid #f1f5f9;
+    background: #ffffff;
+    border-radius: 0 0 16px 16px;
+}
+
+.footer-info {
+    font-size: 0.85rem;
+    color: #64748b;
+    font-weight: 600;
+}
+
+.footer-info .range, 
+.footer-info .total {
+    color: #1e293b;
+    font-weight: 700;
+}
+
+.pagination-elite {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+/* Base button style */
+.pagination-elite .page-btn,
+.pagination-elite button {
+    min-width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    color: #334155;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    text-decoration: none;
+    outline: none;
+}
+
+/* Hover state for inactive buttons */
+.pagination-elite .page-btn:hover:not(.active):not([disabled]),
+.pagination-elite button:hover:not(.active):not([disabled]) {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+    color: #0f172a;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+}
+
+/* ACTIVE STATE - CORPORATE WINE */
+.pagination-elite .page-btn.active,
+.pagination-elite button.active {
+    background: #800000; /* Deep Wine Primary */
+    border-color: #800000;
+    color: #ffffff !important;
+    box-shadow: 0 4px 15px rgba(128, 0, 0, 0.25);
+    transform: scale(1.05);
+    z-index: 2;
+}
+
+/* Disabled state */
+.pagination-elite .page-btn[disabled],
+.pagination-elite button[disabled] {
+    opacity: 0.35;
+    cursor: not-allowed;
+    background: #f1f5f9;
+    border-color: #e2e8f0;
+}
+
+/* Icon specific alignment if using Boxicons */
+.pagination-elite .page-btn i {
+    font-size: 1.2rem;
+    color: #94a3b8;
+}
+
+.pagination-elite .page-btn.active i {
+    color: #ffffff;
+}
+
+/* Dots wrapper if applicable */
+.pagination-elite .dots {
+    color: #94a3b8;
+    font-weight: 800;
+    padding: 0 4px;
 }
