@@ -4,12 +4,29 @@
 /* MODERN EXTERNAL SECTION HEADER */
 .modern-section-header {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start; /* Title stays higher at the top */
+    flex-direction: column; /* Cambiamos a columna para permitir filas */
+    gap: 1.5rem;
     margin-bottom: 2rem;
-    padding-top: 1.5rem; /* More breath at the top */
-    gap: 3rem;
+    padding-top: 1.5rem;
 }
+
+.header-row-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2rem;
+    width: 100%;
+}
+
+.header-row-bottom {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    padding-left: 0; /* Align with title or start */
+}
+
 
 .section-title-flex {
     display: flex;
@@ -24,7 +41,6 @@
 .section-title-text {
     display: flex;
     flex-direction: column;
-    min-width: 250px; /* Previene apiñamiento horizontal excesivo */
 }
 
 .section-title-text h3 {
@@ -33,7 +49,7 @@
     font-weight: 800;
     color: #1e293b;
     letter-spacing: -0.015em;
-    line-height: 1.32; /* Más aire vertical */
+    line-height: 1.32;
 }
 
 .section-title-text span {
@@ -41,7 +57,7 @@
     font-size: 0.82rem;
     color: #64748b;
     font-weight: 500;
-    margin-top: 8px; /* Más separación del título */
+    margin-top: 6px;
     line-height: 1.4;
 }
 
@@ -52,7 +68,6 @@
     align-items: center;
     gap: 0.75rem;
     justify-content: flex-end;
-    flex-wrap: wrap; /* Para pantallas medianas */
 }
 
 .header-search-modern {

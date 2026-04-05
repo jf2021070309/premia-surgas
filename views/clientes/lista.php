@@ -44,13 +44,27 @@
             </div>
 
             <div class="modern-section-header">
-                <div class="section-title-flex">
-                    <div class="section-title-text">
-                        <h3>Directorio de Clientes</h3>
-                        <span>Gestión y administración de beneficiarios</span>
+                <!-- Fila Superior: Título y Buscador Global -->
+                <div class="header-row-top">
+                    <div class="section-title-flex">
+                        <div class="section-title-text">
+                            <h3>Directorio de Clientes</h3>
+                            <span>Gestión y administración de beneficiarios</span>
+                        </div>
+                    </div>
+                    <div class="section-actions">
+                        <div class="header-search-modern" style="width: 350px;">
+                            <i class='bx bx-search'></i>
+                            <input type="text" v-model="busqueda" placeholder="Buscar">
+                        </div>
+                        <a href="<?= BASE_URL ?>clientes/nuevo" class="btn-primary-premium">
+                            <i class='bx bx-user-plus'></i> Nuevo
+                        </a>
                     </div>
                 </div>
-                <div class="section-actions">
+
+                <!-- Fila Inferior: Filtros de segmentación -->
+                <div class="header-row-bottom">
                     <div class="header-search-modern" style="width: 180px;">
                         <i class='bx bx-filter-alt'></i>
                         <select v-model="filterTipo">
@@ -71,13 +85,6 @@
                             <option value="Mollendo">Mollendo</option>
                         </select>
                     </div>
-                    <div class="header-search-modern" style="width: 350px;">
-                        <i class='bx bx-search'></i>
-                        <input type="text" v-model="busqueda" placeholder="Buscar">
-                    </div>
-                    <a href="<?= BASE_URL ?>clientes/nuevo" class="btn-primary-premium">
-                        <i class='bx bx-user-plus'></i> Nuevo
-                    </a>
                 </div>
             </div>
 
