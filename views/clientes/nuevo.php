@@ -62,7 +62,7 @@
                         </label>
                         <div style="position: relative; display: flex; align-items: center;">
                             <i class='bx bx-id-card' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
-                            <input type="text" v-model="form.dni" @input="validateDni" :required="form.tipo_cliente === 'Normal'" pattern="\d{8}" maxlength="8" placeholder="Ej. 12345678" :disabled="buscandoDni"
+                            <input type="text" v-model="form.dni" @input="validateDni" :required="form.tipo_cliente === 'Normal'" pattern="\d{8}" maxlength="8"  :disabled="buscandoDni"
                                 style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; outline: none; background: #fff;">
                         </div>
                     </div>
@@ -74,7 +74,7 @@
                         </label>
                         <div style="position: relative; display: flex; align-items: center;">
                             <i class='bx bx-building-house' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
-                            <input type="text" v-model="form.ruc" @input="validateRuc" :required="form.tipo_cliente !== 'Normal'" pattern="\d{11}" maxlength="11" placeholder="Ej. 20123456789" :disabled="buscandoRuc"
+                            <input type="text" v-model="form.ruc" @input="validateRuc" :required="form.tipo_cliente !== 'Normal'" pattern="\d{11}" maxlength="11"  :disabled="buscandoRuc"
                                 style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; outline: none; background: #fff;">
                         </div>
                     </div>
@@ -83,7 +83,7 @@
                         <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Razón Social / Nombre Comercial *</label>
                         <div style="position: relative; display: flex; align-items: center;">
                             <i class='bx bx-buildings' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
-                            <input type="text" v-model="form.razon_social" :required="form.tipo_cliente !== 'Normal'" placeholder="Ej. Pollería El Buen Sabor S.A.C."
+                            <input type="text" v-model="form.razon_social" :required="form.tipo_cliente !== 'Normal'" 
                                 style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; outline: none; background: #fff;">
                         </div>
                     </div>
@@ -92,7 +92,7 @@
                         <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">{{ form.tipo_cliente === 'Normal' ? 'Nombre Completo' : 'Nombre del Contacto / Encargado' }} *</label>
                         <div style="position: relative; display: flex; align-items: center;">
                             <i class='bx bx-user' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
-                            <input type="text" v-model="form.nombre" @input="validateName" required pattern="[A-Za-zñÑáéíóúÁÉÍÓÚ\s]+" placeholder="Ej. Juan Pérez"
+                            <input type="text" v-model="form.nombre" @input="validateName" required pattern="[A-Za-zñÑáéíóúÁÉÍÓÚ\s]+" 
                                 style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; outline: none; background: #fff;">
                         </div>
                     </div>
@@ -101,7 +101,7 @@
                         <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Número de Celular *</label>
                         <div style="position: relative; display: flex; align-items: center;">
                             <i class='bx bx-phone' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
-                            <input type="tel" v-model="form.celular" @input="validatePhone" required pattern="\d{9}" maxlength="9" placeholder="987 654 321"
+                            <input type="tel" v-model="form.celular" @input="validatePhone" required pattern="\d{9}" maxlength="9" 
                                 style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; outline: none; background: #fff;">
                         </div>
                     </div>
@@ -110,7 +110,7 @@
                         <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Dirección</label>
                         <div style="position: relative; display: flex; align-items: center;">
                             <i class='bx bx-map-pin' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
-                            <input type="text" v-model="form.direccion" placeholder="Av. Principal 123"
+                            <input type="text" v-model="form.direccion"
                                 style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; outline: none; background: #fff;">
                         </div>
                     </div>
@@ -118,8 +118,7 @@
 
                 <div style="margin-top: 1.5rem; border-top: 1px solid #f1f5f9; padding-top: 2rem; display: flex; justify-content: flex-end;">
                     <button type="submit" :disabled="loading" style="background: #000; color: #fff; border: none; padding: 0.75rem 2.5rem; border-radius: 10px; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s;">
-                        <span v-if="!loading"><i class='bx bx-plus-circle'></i> Agregar</span>
-                        <span v-else><i class='bx bx-loader-alt bx-spin'></i> ESPERE...</span>
+                        {{ loading ? 'ESPERE...' : 'Agregar' }}
                     </button>
                 </div>
             </form>

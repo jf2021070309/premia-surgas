@@ -114,7 +114,7 @@
                     <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Nombre de la Operación</label>
                     <div style="position: relative; display: flex; align-items: center;">
                         <i class='bx bx-purchase-tag' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
-                        <input type="text" name="nombre" id="op_nombre" placeholder="Ej: Recarga Gas 10kg" required
+                        <input type="text" name="nombre" id="op_nombre"  required
                                style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none; transition: border-color 0.2s;">
                     </div>
                 </div>
@@ -123,7 +123,7 @@
                     <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Puntos Asignados</label>
                     <div style="position: relative; display: flex; align-items: center;">
                         <i class='bx bx-star' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
-                        <input type="number" name="puntos" id="op_puntos" placeholder="0" required
+                        <input type="number" name="puntos" id="op_puntos"  required
                                style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none;">
                     </div>
                 </div>
@@ -142,7 +142,7 @@
 
                 <div style="margin-top: 1.5rem; border-top: 1px solid #f1f5f9; padding-top: 1.5rem; display: flex; justify-content: flex-end;">
                     <button type="submit" style="background: #000; color: #fff; border: none; padding: 0.75rem 2.5rem; border-radius: 10px; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s;">
-                        <i class='bx bx-plus-circle'></i> <span>Agregar</span>
+                        <span>Agregar</span>
                     </button>
                 </div>
             </form>

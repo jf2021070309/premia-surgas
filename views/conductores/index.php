@@ -46,7 +46,7 @@
                     </div>
                     <div class="header-search-modern">
                         <i class='bx bx-search'></i>
-                        <input type="text" placeholder="Buscar" v-model="busqueda">
+                        <input type="text"  v-model="busqueda">
                     </div>
                     <a href="<?= BASE_URL ?>conductores/nuevo" class="btn-primary-premium">
                         <i class='bx bx-user-plus'></i> Nuevo

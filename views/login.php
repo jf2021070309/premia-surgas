@@ -103,13 +103,13 @@
                         <div class="input-group">
                             <label class="form-label">Usuario / DNI</label>
                             <i class='bx bx-user main-icon'></i>
-                            <input type="text" v-model="form.usuario" class="form-control" required placeholder="Ingresa tu usuario o DNI">
+                            <input type="text" v-model="form.usuario" class="form-control" required >
                         </div>
                         
                         <div class="input-group">
                             <label class="form-label">Contraseña</label>
                             <i class='bx bx-lock-alt main-icon'></i>
-                            <input :type="showPassword ? 'text' : 'password'" v-model="form.password" class="form-control" required placeholder="••••••••">
+                            <input :type="showPassword ? 'text' : 'password'" v-model="form.password" class="form-control" required >
                             <i :class="['bx', showPassword ? 'bx-hide' : 'bx-show', 'password-toggle']" @click="showPassword = !showPassword"></i>
                         </div>
 
@@ -134,12 +134,12 @@
                             <div class="input-group">
                                 <label class="form-label">DNI</label>
                                 <i class='bx bx-id-card main-icon'></i>
-                                <input type="text" v-model="regForm.dni" class="form-control" maxlength="8" required placeholder="8 dígitos" @input="onDniInput">
+                                <input type="text" v-model="regForm.dni" class="form-control" maxlength="8" required  @input="onDniInput">
                             </div>
                             <div class="input-group">
                                 <label class="form-label">Celular</label>
                                 <i class='bx bx-phone main-icon'></i>
-                                <input type="text" v-model="regForm.celular" class="form-control" maxlength="9" required placeholder="9 dígitos">
+                                <input type="text" v-model="regForm.celular" class="form-control" maxlength="9" required >
                             </div>
                         </div>
 
@@ -149,7 +149,7 @@
                                 <span v-if="buscandoDni" style="color:#000;font-size:0.65rem;margin-left:10px;"><i class='bx bx-loader-alt bx-spin'></i></span>
                             </label>
                             <i class='bx bx-user main-icon'></i>
-                            <input type="text" v-model="regForm.nombre" class="form-control" required placeholder="Se llenará solo">
+                            <input type="text" v-model="regForm.nombre" class="form-control" required >
                         </div>
 
                         <div class="form-row">
@@ -167,7 +167,7 @@
                             <div class="input-group">
                                 <label class="form-label">Contraseña</label>
                                 <i class='bx bx-lock-alt main-icon'></i>
-                                <input :type="showPasswordReg ? 'text' : 'password'" v-model="regForm.password" class="form-control" required placeholder="••••••••">
+                                <input :type="showPasswordReg ? 'text' : 'password'" v-model="regForm.password" class="form-control" required >
                                 <i :class="['bx', showPasswordReg ? 'bx-hide' : 'bx-show', 'password-toggle']" @click="showPasswordReg = !showPasswordReg"></i>
                             </div>
                         </div>

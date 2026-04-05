@@ -62,7 +62,7 @@
                 <div class="section-actions">
                     <div class="header-search-modern">
                         <i class='bx bx-search'></i>
-                        <input type="text" placeholder="Buscar" onkeyup="handleSearch('tablePremios', this.value)">
+                        <input type="text"  onkeyup="handleSearch('tablePremios', this.value)">
                     </div>
                     <button class="btn-primary-premium" onclick="openModalPremio()">
                         <i class='bx bxs-award'></i> Nuevo Premio
@@ -131,7 +131,7 @@
                 <div class="section-actions">
                     <div class="header-search-modern">
                         <i class='bx bx-search'></i>
-                        <input type="text" placeholder="Buscar" onkeyup="handleSearch('tableOp', this.value)">
+                        <input type="text"  onkeyup="handleSearch('tableOp', this.value)">
                     </div>
                     <button class="btn-primary-premium" onclick="openModalOp()">
                         <i class='bx bx-layer-plus'></i> Nueva Regla
@@ -195,7 +195,7 @@
                 <div class="section-actions">
                     <div class="header-search-modern">
                         <i class='bx bx-search'></i>
-                        <input type="text" placeholder="Buscar" onkeyup="handleSearch('tableCond', this.value)">
+                        <input type="text"  onkeyup="handleSearch('tableCond', this.value)">
                     </div>
                     <button class="btn-primary-premium" onclick="openModalCond()">
                         <i class='bx bx-user-plus'></i> Nuevo Conductor
@@ -275,7 +275,7 @@
                         <div style="position: relative; display: flex; align-items: center;">
                             <i class='bx bx-rename'
                                 style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
-                            <input type="text" name="nombre" id="op_nombre" placeholder="Ej: Recarga Gas 10kg" required
+                            <input type="text" name="nombre" id="op_nombre" required
                                 style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none; transition: all 0.2s;">
                         </div>
                     </div>
@@ -472,7 +472,7 @@
                         <div style="position: relative; display: flex; align-items: center;">
                             <i class='bx bx-lock-alt'
                                 style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
-                            <input type="password" name="password" id="cond_pass" placeholder="••••••••"
+                            <input type="password" name="password" id="cond_pass"
                                 style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none;">
                         </div>
                     </div>

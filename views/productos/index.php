@@ -231,10 +231,10 @@
                     </div>
                     <div class="header-search-modern">
                         <i class='bx bx-search'></i>
-                        <input type="text" placeholder="Buscar" v-model="busqueda">
+                        <input type="text"  v-model="busqueda">
                     </div>
                     <button class="btn-primary-premium" @click="nuevoProducto">
-                        <i class='bx bx-plus-circle'></i> Nuevo
+                        Nuevo
                     </button>
                 </div>
             </div>
@@ -337,7 +337,7 @@
                                 type="text"
                                 name="nombre"
                                 v-model="form.nombre"
-                                placeholder="Ej: Auriculares Bluetooth Premium"
+                                
                                 required
                                 autocomplete="off"
                                 style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none; transition: border-color 0.2s;"
@@ -351,7 +351,7 @@
                             <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Inversión Puntos</label>
                             <div style="position: relative; display: flex; align-items: center;">
                                 <i class='bx bx-star' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
-                                <input type="number" name="puntos" v-model="form.puntos" placeholder="0" min="0" required
+                                <input type="number" name="puntos" v-model="form.puntos"  min="0" required
                                     style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; outline: none;">
                             </div>
                         </div>
@@ -359,7 +359,7 @@
                             <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Stock Actual</label>
                             <div style="position: relative; display: flex; align-items: center;">
                                 <i class='bx bx-cube' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
-                                <input type="number" name="stock" v-model="form.stock" placeholder="0" min="0" required
+                                <input type="number" name="stock" v-model="form.stock"  min="0" required
                                     style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; outline: none;">
                             </div>
                         </div>
@@ -409,8 +409,8 @@
 
                 <!-- Footer -->
                 <div style="margin-top: 1.5rem; border-top: 1px solid #f1f5f9; padding-top: 2rem; display: flex; justify-content: flex-end;">
-                    <button type="submit" :disabled="submitting" style="background: #1e293b; color: #fff; border: none; padding: 0.75rem 2.2rem; border-radius: 10px; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s;">
-                        <span v-if="!submitting"><i class='bx bx-plus-circle'></i> Agregar</span>
+                    <button type="submit" :disabled="loading" style="background: #000; color: #fff; border: none; padding: 0.75rem 2.5rem; border-radius: 10px; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s;">
+                        <span v-if="!loading">Agregar</span>
                         <span v-else><i class='bx bx-loader-alt bx-spin'></i> ESPERE...</span>
                     </button>
                 </div>

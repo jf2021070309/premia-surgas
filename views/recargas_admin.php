@@ -150,7 +150,7 @@
                                 <div style="position: relative; display: flex; align-items: center;">
                                     <i class='bx bx-user-circle' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
                                     <input type="text" name="yape_nombre" id="yapeNameInput" value="<?= htmlspecialchars($nombreTitular) ?>" 
-                                           placeholder="Ej: Juan Perez"
+                                           
                                            style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; outline:none; transition: border-color 0.2s; background: #fff;"
                                            onkeyup="updateYapePreview(this.value)">
                                 </div>
@@ -291,7 +291,7 @@
                 </div>
                 <div class="header-search-modern" style="width: 280px;">
                     <i class='bx bx-search'></i>
-                    <input type="text" id="historySearch" placeholder="Buscar" onkeyup="filterHistory()">
+                    <input type="text" id="historySearch"  onkeyup="filterHistory()">
                 </div>
             </div>
         </div>

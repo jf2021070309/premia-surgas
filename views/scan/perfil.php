@@ -59,7 +59,7 @@
                     <div class="form-group">
                         <label>Monto de la compra (S/)</label>
                         <input type="number" v-model.number="monto" min="1" step="0.50"
-                               required placeholder="Ej. 45.00">
+                               required >
                     </div>
                     <button type="submit" class="btn btn-primary btn-full" :disabled="loading">
                         {{ loading ? 'Registrando...' : 'Registrar Venta y Sumar Puntos' }}

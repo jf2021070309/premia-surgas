@@ -96,12 +96,12 @@
                     <div class="input-group">
                         <label class="form-label">DNI</label>
                         <i class='bx bx-id-card main-icon'></i>
-                        <input type="text" v-model="form.dni" class="form-control" maxlength="8" required placeholder="8 dígitos" @input="onDniInput">
+                        <input type="text" v-model="form.dni" class="form-control" maxlength="8" required  @input="onDniInput">
                     </div>
                     <div class="input-group">
                         <label class="form-label">Celular</label>
                         <i class='bx bx-phone main-icon'></i>
-                        <input type="text" v-model="form.celular" class="form-control" maxlength="9" required placeholder="9 dígitos">
+                        <input type="text" v-model="form.celular" class="form-control" maxlength="9" required >
                     </div>
                 </div>
 
@@ -113,7 +113,7 @@
                         </span>
                     </label>
                     <i class='bx bx-user main-icon'></i>
-                    <input type="text" v-model="form.nombre" class="form-control" required placeholder="Se llenará solo al poner el DNI">
+                    <input type="text" v-model="form.nombre" class="form-control" required >
                 </div>
 
                 <div class="form-row">
@@ -131,7 +131,7 @@
                     <div class="input-group">
                         <label class="form-label">Nueva Contraseña</label>
                         <i class='bx bx-lock-alt main-icon'></i>
-                        <input :type="showPassword ? 'text' : 'password'" v-model="form.password" class="form-control" required placeholder="••••••••">
+                        <input :type="showPassword ? 'text' : 'password'" v-model="form.password" class="form-control" required >
                         <i :class="['bx', showPassword ? 'bx-hide' : 'bx-show', 'password-toggle']" @click="showPassword = !showPassword"></i>
                     </div>
                 </div>

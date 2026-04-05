@@ -338,7 +338,7 @@
                         <div>
                             <label class="scan-label">Búsqueda Manual</label>
                             <div class="elite-input-wrapper">
-                                <input type="tel" id="manual-dni" class="elite-input" placeholder="DNI..." maxlength="8" onkeydown="if(event.key==='Enter') buscarPorDni()">
+                                <input type="tel" id="manual-dni" class="elite-input"  maxlength="8" onkeydown="if(event.key==='Enter') buscarPorDni()">
                                 <button class="btn-search-icon" onclick="buscarPorDni()" title="Buscar">
                                     <i class='bx bx-search'></i>
                                 </button>
@@ -428,7 +428,7 @@
                                         <div id="main-op-unit" class="elite-subtotal-box">0 PTS</div>
                                     </div>
                                     <button class="btn-scan-add" onclick="addOperation()">
-                                        <i class='bx bx-plus-circle'></i> Añadir Servicio
+                                        Añadir Servicio
                                     </button>
                                 </div>
                             </div>

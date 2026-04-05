@@ -34,7 +34,7 @@
                 </div>
                 <div class="header-search-modern" style="width: 320px;">
                     <i class='bx bx-search'></i>
-                    <input type="text" id="searchBeneficiario" placeholder="Buscar beneficiario..." onkeyup="filterDeliveries()">
+                    <input type="text" id="searchBeneficiario"  onkeyup="filterDeliveries()">
                 </div>
             </div>
 
