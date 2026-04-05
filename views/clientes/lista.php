@@ -115,19 +115,24 @@
                                 <td><span class="text-medium">{{ c.puntos }} pts</span></td>
                                 <td>
                                     <div class="actions-flex">
+                                        <!-- Ver Carnet (Azul) -->
                                         <button @click="abrirCarnet(c)" class="btn-action blue" title="Ver Carnet">
                                             <i class='bx bx-id-card'></i>
                                         </button>
+                                        <!-- Descargar/Imprimir (Gris) -->
                                         <button @click="descargarTarjeta(c)" class="btn-action gray" title="Descargar Tarjeta">
                                             <i class='bx bx-printer'></i>
                                         </button>
                                         <?php if ($_SESSION['rol'] === 'admin'): ?>
-                                        <button @click="abrirEditar(c)" class="btn-action orange" title="Editar">
+                                        <!-- Editar (Índigo/Morado) -->
+                                        <button @click="abrirEditar(c)" class="btn-action indigo" title="Editar">
                                             <i class='bx bx-edit'></i>
                                         </button>
+                                        <!-- Desactivar (Rojo) -->
                                         <button v-if="c.estado == 1" @click="toggleEstado(c.id, 0)" class="btn-action red" title="Desactivar">
                                             <i class='bx bx-block'></i>
                                         </button>
+                                        <!-- Activar (Verde - se mantiene como acción positiva) -->
                                         <button v-else @click="toggleEstado(c.id, 1)" class="btn-action green" title="Activar">
                                             <i class='bx bx-check-circle'></i>
                                         </button>
