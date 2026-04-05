@@ -9,7 +9,9 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-layout.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-tables.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/recargas_admin.css">
+
 </head>
 <body>
 
