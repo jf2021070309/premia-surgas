@@ -68,8 +68,8 @@
                                 <td class="text-medium"><?= htmlspecialchars($op['nombre']) ?></td>
                                 <td class="text-center"><span class="text-pts-plus"><?= $op['puntos'] ?> pts</span></td>
                                 <td class="text-center">
-                                    <span class="badge-status <?= $op['estado'] ? 'badge-approved' : 'badge-rejected' ?>">
-                                        <?= $op['estado'] ? 'Activo' : 'Inactivo' ?>
+                                    <span class="chip <?= $op['estado'] ? 'chip-approved' : 'chip-rejected' ?>">
+                                        <i class='bx bxs-circle'></i> <?= $op['estado'] ? 'Activo' : 'Inactivo' ?>
                                     </span>
                                 </td>
                                 <td class="text-center">
@@ -130,8 +130,8 @@
                                 <td class="text-center"><span class="text-pts-plus"><?= $p['puntos'] ?> pts</span></td>
                                 <td class="text-center"><?= $p['stock'] ?></td>
                                 <td class="text-center">
-                                    <span class="badge-status <?= $p['estado'] ? 'badge-approved' : 'badge-rejected' ?>">
-                                        <?= $p['estado'] ? 'Activo' : 'Inactivo' ?>
+                                    <span class="chip <?= $p['estado'] ? 'chip-approved' : 'chip-rejected' ?>">
+                                        <i class='bx bxs-circle'></i> <?= $p['estado'] ? 'Activo' : 'Inactivo' ?>
                                     </span>
                                 </td>
                                 <td class="text-center">
@@ -191,8 +191,8 @@
                                 <td class="text-medium"><?= htmlspecialchars($c['nombre']) ?></td>
                                 <td class="text-center text-muted"><?= htmlspecialchars($c['usuario']) ?></td>
                                 <td class="text-center">
-                                    <span class="badge-status <?= $c['estado'] ? 'badge-approved' : 'badge-rejected' ?>">
-                                        <?= $c['estado'] ? 'Activo' : 'Inactivo' ?>
+                                    <span class="chip <?= $c['estado'] ? 'chip-approved' : 'chip-rejected' ?>">
+                                        <i class='bx bxs-circle'></i> <?= $c['estado'] ? 'Activo' : 'Inactivo' ?>
                                     </span>
                                 </td>
                                 <td class="text-center">

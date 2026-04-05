@@ -64,7 +64,7 @@
                                 <th># ID</th>
                                 <th>Conductor</th>
                                 <th>Usuario</th>
-                                <th>Estado</th>
+                                <th class="text-center">Estado</th>
                                 <th class="text-center">Acciones</th>
                             </tr>
                         </thead>
@@ -80,9 +80,9 @@
                                     </div>
                                 </td>
                                 <td><span class="text-medium">{{ c.usuario }}</span></td>
-                                <td>
-                                    <span :class="['badge-status', c.estado == 1 ? 'badge-approved' : 'badge-rejected']">
-                                        {{ c.estado == 1 ? 'Activo' : 'Inactivo' }}
+                                <td class="text-center">
+                                    <span :class="['chip', c.estado == 1 ? 'chip-approved' : 'chip-rejected']">
+                                        <i class='bx bxs-circle'></i> {{ c.estado == 1 ? 'Activo' : 'Inactivo' }}
                                     </span>
                                 </td>
                                 <td>

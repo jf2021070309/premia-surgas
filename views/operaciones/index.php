@@ -64,8 +64,8 @@
                                     <span class="chip-puntos"><?= $op['puntos'] ?> pts</span>
                                 </td>
                                 <td class="text-center">
-                                    <span class="chip <?= $op['estado'] ? 'chip-active' : 'chip-inactive' ?>">
-                                        <?= $op['estado'] ? 'ACTIVO' : 'INACTIVO' ?>
+                                    <span class="chip <?= $op['estado'] ? 'chip-approved' : 'chip-rejected' ?>">
+                                        <i class='bx bxs-circle'></i> <?= $op['estado'] ? 'Activo' : 'Inactivo' ?>
                                     </span>
                                 </td>
                                 <td class="text-center">

@@ -113,9 +113,9 @@
 
                 <div style="display:flex; align-items:center; gap:0.65rem;">
                     <?php if ($qrActual): ?>
-                        <span class="chip" style="background:#ecfdf5; color:#059669; border:1px solid #a7f3d0; font-size:0.65rem; font-weight:700;">Activo</span>
+                        <span class="chip chip-approved"><i class='bx bxs-circle'></i> Activo</span>
                     <?php else: ?>
-                        <span class="chip" style="background:#f9fafb; color:#6b7280; border:1px solid #e5e7eb; font-size:0.65rem; font-weight:700;">Inactivo</span>
+                        <span class="chip chip-rejected"><i class='bx bxs-circle'></i> Inactivo</span>
                     <?php endif; ?>
                     <i id="toggleIcon" class='bx bx-chevron-down toggle-chevron' style="font-size:1.25rem;"></i>
                 </div>
