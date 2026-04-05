@@ -112,8 +112,8 @@
                 </div>
 
                 <div style="margin-top: 3rem; border-top: 1px solid #f1f5f9; padding-top: 2rem; display: flex; justify-content: center; flex-direction: column; align-items: center; gap: 10px;">
-                    <button type="submit" style="background: #000; color: #fff; border: none; padding: 1rem 4rem; border-radius: 14px; font-weight: 800; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: transform 0.2s, background 0.2s;">
-                        <i class='bx bx-check-shield' style="font-size: 1.2rem;"></i> <?= $conductor ? 'Guardar Cambios' : 'Confirmar Registro' ?>
+                    <button type="submit" style="background: #000; color: #fff; border: none; padding: 1rem 4rem; border-radius: 14px; font-weight: 800; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: transform 0.2s, background 0.2s; text-transform: uppercase;">
+                        <i class='bx bx-check-shield' style="font-size: 1.2rem;"></i> <?= $conductor ? 'ACTUALIZAR CONDUCTOR' : 'AGREGAR CONDUCTOR' ?>
                     </button>
                     <p style="font-size: 0.68rem; color: #94a3b8; font-weight: 500;">Asegúrate de que los datos sean correctos</p>
                 </div>

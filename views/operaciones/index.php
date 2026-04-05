@@ -141,8 +141,8 @@
                 </div>
 
                 <div style="margin-top: 2.5rem; border-top: 1px solid #f1f5f9; padding-top: 1.5rem; display: flex; justify-content: center;">
-                    <button type="submit" style="background: #000; color: #fff; border: none; padding: 0.85rem 3rem; border-radius: 12px; font-weight: 800; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: transform 0.2s, background 0.2s;">
-                        <i class='bx bx-save'></i> <span>Guardar cambios</span>
+                    <button type="submit" style="background: #000; color: #fff; border: none; padding: 0.85rem 3rem; border-radius: 12px; font-weight: 800; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: transform 0.2s, background 0.2s; text-transform: uppercase;">
+                        <i class='bx bx-save'></i> <span>ACTUALIZAR REGLA</span>
                     </button>
                 </div>
             </form>

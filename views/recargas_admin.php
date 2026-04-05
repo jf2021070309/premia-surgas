@@ -162,8 +162,8 @@
                                 <div id="qrUploadHint" class="dz-hint">Formatos: JPG, PNG o WebP (Máx 2MB)</div>
                             </label>
                             <input type="file" id="qr_file_input" name="qr_imagen" accept="image/*" style="display:none;">
-                            <button type="submit" id="qrSubmitBtn" <?= $nombreTitular ? '' : 'disabled' ?>>
-                                <i class='bx bx-check-circle'></i> Guardar Cambios
+                            <button type="submit" id="qrSubmitBtn" <?= $nombreTitular ? '' : 'disabled' ?> style="width: 100%; padding: 1rem; border-radius: 12px; border: none; background: #000; color: #fff; font-weight: 800; font-size: 0.9rem; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; text-transform: uppercase;">
+                                <i class='bx bx-check-circle'></i> ACTUALIZAR CONFIGURACIÓN
                             </button>
                         </form>
                     </div>
