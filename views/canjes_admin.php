@@ -11,25 +11,7 @@
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-layout.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-tables.css">
     <style>
-        .chip-pendiente { 
-            background: #fff7ed; 
-            color: #ff6600; 
-            border: 1px solid #ffedd5; 
-            animation: pulse-orange 2s infinite; 
-            box-shadow: 0 0 0 0 rgba(255, 102, 0, 0.4);
-            font-weight: 800;
-        }
-        .chip-entregado { background: #f0fdf4; color: #166534; border: 1px solid #dcfce7; }
-        
-        @keyframes pulse-orange {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 102, 0, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(255, 102, 0, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 102, 0, 0); }
-        }
         .row-prize { display: flex; align-items: center; gap: 0.75rem; }
-        .prize-img { width: 40px; height: 40px; object-fit: contain; background: #f8fafc; border-radius: 8px; padding: 4px; border: 1px solid #e2e8f0; }
-        .btn-deliver { background: #000; color: #fff; border: none; padding: 6px 14px; border-radius: 8px; font-weight: 700; font-size: 0.78rem; cursor: pointer; transition: 0.2s; }
-        .btn-deliver:hover { background: #222; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
@@ -45,20 +27,14 @@
 
         <div class="container animate-fade-in">
             
-            <div class="modern-section-header">
-                <div class="section-title-flex">
-                    <div class="section-title-text">
-                        <h3>Gestión de Entregas</h3>
-                        <span>Control de canjes y premios solicitados</span>
-                    </div>
+            <div class="modern-section-header" style="justify-content: flex-start; gap: 1rem;">
+                <div class="header-search-modern" style="width: 320px;">
+                    <i class='bx bx-search'></i>
+                    <input type="text" id="searchBeneficiario" placeholder="Buscar beneficiario..." onkeyup="filterDeliveries()">
                 </div>
-                <div class="section-actions">
-                    <div class="header-search-modern" style="width: 320px;">
-                        <i class='bx bx-search'></i>
-                        <input type="text" id="searchBeneficiario" placeholder="Buscar beneficiario..." onkeyup="filterDeliveries()">
-                    </div>
+                <div style="flex: 1; display: flex; justify-content: flex-end; align-items: center; gap: 1rem;">
                     <div class="chip" style="background: #fff; color: #64748b; border: 1px solid #e2e8f0; font-weight: 700; height: 42px; display: flex; align-items: center; padding: 0 1rem; border-radius: 8px;">
-                        Total: <?= count($canjes) ?> registros
+                        <i class='bx bxs-circle' style="font-size: 0.4rem; color: #94a3b8; margin-right: 8px;"></i> Total: <?= count($canjes) ?> registros
                     </div>
                 </div>
             </div>
