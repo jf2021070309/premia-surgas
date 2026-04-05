@@ -116,9 +116,9 @@
                     </div>
                 </div>
 
-                <div style="margin-top: 3rem; border-top: 1px solid #f1f5f9; padding-top: 2rem; display: flex; justify-content: center;">
-                    <button type="submit" :disabled="loading" style="background: #000; color: #fff; border: none; padding: 1rem 4rem; border-radius: 14px; font-weight: 800; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: transform 0.2s, background 0.2s; text-transform: uppercase;">
-                        <span v-if="!loading"><i class='bx bx-user-plus' style="font-size: 1.2rem;"></i> AGREGAR CLIENTE</span>
+                <div style="margin-top: 1.5rem; border-top: 1px solid #f1f5f9; padding-top: 2rem; display: flex; justify-content: flex-end;">
+                    <button type="submit" :disabled="loading" style="background: #000; color: #fff; border: none; padding: 0.75rem 2.5rem; border-radius: 10px; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s;">
+                        <span v-if="!loading"><i class='bx bx-plus-circle'></i> Agregar</span>
                         <span v-else><i class='bx bx-loader-alt bx-spin'></i> ESPERE...</span>
                     </button>
                 </div>

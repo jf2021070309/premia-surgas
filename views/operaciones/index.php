@@ -140,9 +140,9 @@
                     </div>
                 </div>
 
-                <div style="margin-top: 2.5rem; border-top: 1px solid #f1f5f9; padding-top: 1.5rem; display: flex; justify-content: center;">
-                    <button type="submit" style="background: #000; color: #fff; border: none; padding: 0.85rem 3rem; border-radius: 12px; font-weight: 800; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: transform 0.2s, background 0.2s; text-transform: uppercase;">
-                        <i class='bx bx-save'></i> <span>ACTUALIZAR REGLA</span>
+                <div style="margin-top: 1.5rem; border-top: 1px solid #f1f5f9; padding-top: 1.5rem; display: flex; justify-content: flex-end;">
+                    <button type="submit" style="background: #000; color: #fff; border: none; padding: 0.75rem 2.5rem; border-radius: 10px; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s;">
+                        <i class='bx bx-plus-circle'></i> <span>Agregar</span>
                     </button>
                 </div>
             </form>

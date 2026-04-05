@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,28 +8,48 @@
     <link rel="icon" type="image/png" href="<?= BASE_URL ?>assets/premios/icono.png">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-layout.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-tables.css">
     <style>
-        .settings-grid { display: grid; grid-template-columns: 1fr; gap: 2.5rem; margin-bottom: 3rem; }
-        .preview-img-circle { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        [data-pagination] { display: none; } /* Hidden by default till JS runs */
+        .settings-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .preview-img-circle {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-pagination] {
+            display: none;
+        }
+
+        /* Hidden by default till JS runs */
     </style>
 </head>
+
 <body>
 
     <?php include __DIR__ . '/../partials/sidebar_admin.php'; ?>
 
     <div class="admin-layout">
         <?php
-            $pageTitle    = 'Configuración General';
-            $pageSubtitle = 'Panel maestro de reglas, catálogo y equipo';
-            include __DIR__ . '/../partials/header_admin.php';
+        $pageTitle = 'Configuración General';
+        $pageSubtitle = 'Panel maestro de reglas, catálogo y equipo';
+        include __DIR__ . '/../partials/header_admin.php';
         ?>
 
         <div class="container" style="max-width: 1200px; padding-top: 1rem;">
-            
+
             <!-- SECTION 1: PREMIOS -->
             <div class="modern-section-header">
                 <div class="section-title-flex">
@@ -65,23 +86,29 @@
                         </thead>
                         <tbody>
                             <?php foreach ($premios as $p): ?>
-                            <tr class="table-row">
-                                <td class="text-medium ps-3"><?= htmlspecialchars($p['nombre']) ?></td>
-                                <td class="text-center"><span class="text-pts-plus"><?= $p['puntos'] ?> pts</span></td>
-                                <td class="text-center"><?= $p['stock'] ?></td>
-                                <td class="text-center">
-                                    <span class="chip <?= $p['estado'] ? 'chip-approved' : 'chip-rejected' ?>">
-                                        <i class='bx bxs-circle'></i> <?= $p['estado'] ? 'Activo' : 'Inactivo' ?>
-                                    </span>
-                                </td>
-                                <td class="text-center">
-                                    <div class="actions-flex" style="justify-content: center;">
-                                        <button class="btn-action indigo" onclick="viewPremioImage('<?= $p['nombre'] ?>', '<?= BASE_URL ?>assets/premios/<?= $p['imagen'] ?>')"><i class='bx bx-show'></i></button>
-                                        <button class="btn-action blue" onclick="editPremio(<?= htmlspecialchars(json_encode($p)) ?>)"><i class='bx bx-edit-alt'></i></button>
-                                        <button class="btn-action red" onclick="confirmDeletePremio('<?= BASE_URL ?>productos/delete?id=<?= $p['id'] ?>')"><i class='bx bx-trash'></i></button>
-                                    </div>
-                                </td>
-                            </tr>
+                                <tr class="table-row">
+                                    <td class="text-medium ps-3"><?= htmlspecialchars($p['nombre']) ?></td>
+                                    <td class="text-center"><span class="text-pts-plus"><?= $p['puntos'] ?> pts</span></td>
+                                    <td class="text-center"><?= $p['stock'] ?></td>
+                                    <td class="text-center">
+                                        <span class="chip <?= $p['estado'] ? 'chip-approved' : 'chip-rejected' ?>">
+                                            <i class='bx bxs-circle'></i> <?= $p['estado'] ? 'Activo' : 'Inactivo' ?>
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="actions-flex" style="justify-content: center;">
+                                            <button class="btn-action indigo"
+                                                onclick="viewPremioImage('<?= $p['nombre'] ?>', '<?= BASE_URL ?>assets/premios/<?= $p['imagen'] ?>')"><i
+                                                    class='bx bx-show'></i></button>
+                                            <button class="btn-action blue"
+                                                onclick="editPremio(<?= htmlspecialchars(json_encode($p)) ?>)"><i
+                                                    class='bx bx-edit-alt'></i></button>
+                                            <button class="btn-action red"
+                                                onclick="confirmDeletePremio('<?= BASE_URL ?>productos/delete?id=<?= $p['id'] ?>')"><i
+                                                    class='bx bx-trash'></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
@@ -127,21 +154,25 @@
                         </thead>
                         <tbody>
                             <?php foreach ($operaciones as $op): ?>
-                            <tr class="table-row">
-                                <td class="text-medium"><?= htmlspecialchars($op['nombre']) ?></td>
-                                <td class="text-center"><span class="text-pts-plus"><?= $op['puntos'] ?> pts</span></td>
-                                <td class="text-center">
-                                    <span class="chip <?= $op['estado'] ? 'chip-approved' : 'chip-rejected' ?>">
-                                        <i class='bx bxs-circle'></i> <?= $op['estado'] ? 'Activo' : 'Inactivo' ?>
-                                    </span>
-                                </td>
-                                <td class="text-center">
-                                    <div class="actions-flex" style="justify-content: center;">
-                                        <button class="btn-action blue" onclick="editOp(<?= htmlspecialchars(json_encode($op)) ?>)"><i class='bx bx-edit-alt'></i></button>
-                                        <button class="btn-action red" onclick="confirmDeleteOp('<?= BASE_URL ?>operaciones/delete?id=<?= $op['id'] ?>')"><i class='bx bx-trash'></i></button>
-                                    </div>
-                                </td>
-                            </tr>
+                                <tr class="table-row">
+                                    <td class="text-medium"><?= htmlspecialchars($op['nombre']) ?></td>
+                                    <td class="text-center"><span class="text-pts-plus"><?= $op['puntos'] ?> pts</span></td>
+                                    <td class="text-center">
+                                        <span class="chip <?= $op['estado'] ? 'chip-approved' : 'chip-rejected' ?>">
+                                            <i class='bx bxs-circle'></i> <?= $op['estado'] ? 'Activo' : 'Inactivo' ?>
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="actions-flex" style="justify-content: center;">
+                                            <button class="btn-action blue"
+                                                onclick="editOp(<?= htmlspecialchars(json_encode($op)) ?>)"><i
+                                                    class='bx bx-edit-alt'></i></button>
+                                            <button class="btn-action red"
+                                                onclick="confirmDeleteOp('<?= BASE_URL ?>operaciones/delete?id=<?= $op['id'] ?>')"><i
+                                                    class='bx bx-trash'></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
@@ -187,21 +218,25 @@
                         </thead>
                         <tbody>
                             <?php foreach ($conductores as $c): ?>
-                            <tr class="table-row">
-                                <td class="text-medium"><?= htmlspecialchars($c['nombre']) ?></td>
-                                <td class="text-center text-muted"><?= htmlspecialchars($c['usuario']) ?></td>
-                                <td class="text-center">
-                                    <span class="chip <?= $c['estado'] ? 'chip-approved' : 'chip-rejected' ?>">
-                                        <i class='bx bxs-circle'></i> <?= $c['estado'] ? 'Activo' : 'Inactivo' ?>
-                                    </span>
-                                </td>
-                                <td class="text-center">
-                                    <div class="actions-flex" style="justify-content: center;">
-                                        <button class="btn-action blue" onclick="editCond(<?= htmlspecialchars(json_encode($c)) ?>)"><i class='bx bx-edit-alt'></i></button>
-                                        <button class="btn-action red" onclick="confirmDeleteCond('<?= BASE_URL ?>conductores/delete?id=<?= $c['id'] ?>')"><i class='bx bx-trash'></i></button>
-                                    </div>
-                                </td>
-                            </tr>
+                                <tr class="table-row">
+                                    <td class="text-medium"><?= htmlspecialchars($c['nombre']) ?></td>
+                                    <td class="text-center text-muted"><?= htmlspecialchars($c['usuario']) ?></td>
+                                    <td class="text-center">
+                                        <span class="chip <?= $c['estado'] ? 'chip-approved' : 'chip-rejected' ?>">
+                                            <i class='bx bxs-circle'></i> <?= $c['estado'] ? 'Activo' : 'Inactivo' ?>
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="actions-flex" style="justify-content: center;">
+                                            <button class="btn-action blue"
+                                                onclick="editCond(<?= htmlspecialchars(json_encode($c)) ?>)"><i
+                                                    class='bx bx-edit-alt'></i></button>
+                                            <button class="btn-action red"
+                                                onclick="confirmDeleteCond('<?= BASE_URL ?>conductores/delete?id=<?= $c['id'] ?>')"><i
+                                                    class='bx bx-trash'></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
@@ -215,21 +250,31 @@
         </div>
     </div>
 
-    <div id="modalOp" class="modal-overlay" style="display: none; align-items: center; justify-content: center; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(8px); z-index: 10000;" onclick="if(event.target===this) closeModalOp()">
-        <div class="modal-content-wrapper" style="max-width: 480px; width: 95%; background: #fff; border-radius: 24px; overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.3); animation: slideUp 0.3s ease;">
-            <div class="modal-header-premium" style="padding: 2rem 2.5rem; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center;">
-                <h2 id="modalTitleOp" style="font-weight: 800; font-size: 1.25rem; color: #0f172a; margin: 0;">Nueva Regla de Puntaje</h2>
-                <div class="modal-close" onclick="closeModalOp()" style="cursor: pointer; width: 32px; height: 32px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: #64748b;"><i class='bx bx-x'></i></div>
+    <div id="modalOp" class="modal-overlay"
+        style="display: none; align-items: center; justify-content: center; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(8px); z-index: 10000;"
+        onclick="if(event.target===this) closeModalOp()">
+        <div class="modal-content-wrapper"
+            style="max-width: 480px; width: 95%; background: #fff; border-radius: 24px; overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.3); animation: slideUp 0.3s ease;">
+            <div class="modal-header-premium"
+                style="padding: 2rem 2.5rem; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center;">
+                <h2 id="modalTitleOp" style="font-weight: 800; font-size: 1.25rem; color: #0f172a; margin: 0;">Nueva
+                    Regla de Puntaje</h2>
+                <div class="modal-close" onclick="closeModalOp()"
+                    style="cursor: pointer; width: 32px; height: 32px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: #64748b;">
+                    <i class='bx bx-x'></i></div>
             </div>
             <form id="formOp" method="POST" action="<?= BASE_URL ?>operaciones/create">
                 <div class="modal-body-premium" style="padding: 2.5rem;">
                     <input type="hidden" name="id" id="op_id">
                     <input type="hidden" name="redir" value="ajustes">
-                    
+
                     <div style="margin-bottom: 1.5rem;">
-                        <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Nombre de la Operación</label>
+                        <label
+                            style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Nombre
+                            de la Operación</label>
                         <div style="position: relative; display: flex; align-items: center;">
-                            <i class='bx bx-rename' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
+                            <i class='bx bx-rename'
+                                style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
                             <input type="text" name="nombre" id="op_nombre" placeholder="Ej: Recarga Gas 10kg" required
                                 style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none; transition: all 0.2s;">
                         </div>
@@ -237,39 +282,54 @@
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
                         <div>
-                            <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Puntos</label>
+                            <label
+                                style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Puntos</label>
                             <div style="position: relative; display: flex; align-items: center;">
-                                <i class='bx bx-medal' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
+                                <i class='bx bx-medal'
+                                    style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
                                 <input type="number" name="puntos" id="op_puntos" value="0" required
                                     style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; outline: none;">
                             </div>
                         </div>
                         <div id="group_estadoOp" style="display: none;">
-                            <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Estado</label>
+                            <label
+                                style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Estado</label>
                             <div style="position: relative; display: flex; align-items: center;">
-                                <i class='bx bx-toggle-right' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem; pointer-events: none;"></i>
-                                <select name="estado" id="op_estado" style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; appearance: none; cursor: pointer; outline: none; background: #fff;">
+                                <i class='bx bx-toggle-right'
+                                    style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem; pointer-events: none;"></i>
+                                <select name="estado" id="op_estado"
+                                    style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; appearance: none; cursor: pointer; outline: none; background: #fff;">
                                     <option value="1">Activo</option>
                                     <option value="0">Inactivo</option>
                                 </select>
-                                <i class='bx bx-chevron-down' style="position: absolute; right: 1rem; color: #94a3b8; pointer-events: none;"></i>
+                                <i class='bx bx-chevron-down'
+                                    style="position: absolute; right: 1rem; color: #94a3b8; pointer-events: none;"></i>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer-premium" style="padding: 1.5rem 2.5rem 2.5rem; border-top: 1px solid #f1f5f9; display: flex; justify-content: flex-end;">
-                    <button type="submit" class="btn-premium-pill-black" style="background: #000; color: #fff; border: none; padding: 0.85rem 2.2rem; border-radius: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s;">Guardar Regla</button>
+                <div class="modal-footer-premium"
+                    style="padding: 1.5rem 2.5rem 2.5rem; border-top: 1px solid #f1f5f9; display: flex; justify-content: flex-end;">
+                    <button type="submit" class="btn-premium-pill-black"
+                        style="background: #000; color: #fff; border: none; padding: 0.85rem 2.2rem; border-radius: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s;">Aceptar</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- MODAL PREMIOS -->
-    <div id="modalPremio" class="modal-overlay" style="display: none; align-items: center; justify-content: center; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(8px); z-index: 10000;" onclick="if(event.target===this) closeModalPremio()">
-        <div class="modal-content-wrapper" style="max-width: 550px; width: 95%; background: #fff; border-radius: 24px; overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.3); animation: slideUp 0.3s ease;">
-            <div class="modal-header-premium" style="padding: 2rem 2.5rem; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center;">
-                <h2 id="modalTitlePremio" style="font-weight: 800; font-size: 1.25rem; color: #0f172a; margin: 0;">Gestionar Premio</h2>
-                <div class="modal-close" onclick="closeModalPremio()" style="cursor: pointer; width: 32px; height: 32px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: #64748b;"><i class='bx bx-x'></i></div>
+    <div id="modalPremio" class="modal-overlay"
+        style="display: none; align-items: center; justify-content: center; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(8px); z-index: 10000;"
+        onclick="if(event.target===this) closeModalPremio()">
+        <div class="modal-content-wrapper"
+            style="max-width: 550px; width: 95%; background: #fff; border-radius: 24px; overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.3); animation: slideUp 0.3s ease;">
+            <div class="modal-header-premium"
+                style="padding: 2rem 2.5rem; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center;">
+                <h2 id="modalTitlePremio" style="font-weight: 800; font-size: 1.25rem; color: #0f172a; margin: 0;">
+                    Gestionar Premio</h2>
+                <div class="modal-close" onclick="closeModalPremio()"
+                    style="cursor: pointer; width: 32px; height: 32px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: #64748b;">
+                    <i class='bx bx-x'></i></div>
             </div>
             <form id="formPremio" method="POST" action="<?= BASE_URL ?>productos/create" enctype="multipart/form-data">
                 <div class="modal-body-premium" style="padding: 2.5rem;">
@@ -277,9 +337,12 @@
                     <input type="hidden" name="redir" value="ajustes">
 
                     <div style="margin-bottom: 1.4rem;">
-                        <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Nombre Comercial del Premio</label>
+                        <label
+                            style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Nombre
+                            Comercial del Premio</label>
                         <div style="position: relative; display: flex; align-items: center;">
-                            <i class='bx bx-shopping-bag' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
+                            <i class='bx bx-shopping-bag'
+                                style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
                             <input type="text" name="nombre" id="premio_nombre" required
                                 style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none;">
                         </div>
@@ -287,17 +350,23 @@
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.4rem;">
                         <div>
-                            <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Inversión Puntos</label>
+                            <label
+                                style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Inversión
+                                Puntos</label>
                             <div style="position: relative; display: flex; align-items: center;">
-                                <i class='bx bx-star' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
+                                <i class='bx bx-star'
+                                    style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
                                 <input type="number" name="puntos" id="premio_puntos" required
                                     style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; outline: none;">
                             </div>
                         </div>
                         <div>
-                            <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Stock Actual</label>
+                            <label
+                                style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Stock
+                                Actual</label>
                             <div style="position: relative; display: flex; align-items: center;">
-                                <i class='bx bx-box' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
+                                <i class='bx bx-box'
+                                    style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
                                 <input type="number" name="stock" id="premio_stock" required
                                     style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; outline: none;">
                             </div>
@@ -305,92 +374,130 @@
                     </div>
 
                     <div style="margin-bottom: 1.4rem;">
-                        <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Fotografía del Premio</label>
-                        <input type="file" name="imagen_file" id="premio_file_input" style="position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;">
-                        <div onclick="document.getElementById('premio_file_input').click()" style="display: flex; align-items: center; gap: 1rem; border: 1.5px dashed #e2e8f0; border-radius: 14px; padding: 1rem; cursor: pointer; background: #fafbfc; transition: all 0.2s;">
-                            <div style="width: 42px; height: 42px; border-radius: 10px; background: #fff; border: 1.5px solid #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: #94a3b8; flex-shrink: 0;">
+                        <label
+                            style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Fotografía
+                            del Premio</label>
+                        <input type="file" name="imagen_file" id="premio_file_input"
+                            style="position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;">
+                        <div onclick="document.getElementById('premio_file_input').click()"
+                            style="display: flex; align-items: center; gap: 1rem; border: 1.5px dashed #e2e8f0; border-radius: 14px; padding: 1rem; cursor: pointer; background: #fafbfc; transition: all 0.2s;">
+                            <div
+                                style="width: 42px; height: 42px; border-radius: 10px; background: #fff; border: 1.5px solid #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: #94a3b8; flex-shrink: 0;">
                                 <i class='bx bx-image-add'></i>
                             </div>
                             <div style="flex: 1;">
-                                <span style="display: block; font-size: 0.88rem; font-weight: 700; color: #1e293b;">Seleccionar imagen</span>
-                                <span style="font-size: 0.72rem; color: #94a3b8; font-weight: 500;">PNG, JPG o WEBP</span>
+                                <span
+                                    style="display: block; font-size: 0.88rem; font-weight: 700; color: #1e293b;">Seleccionar
+                                    imagen</span>
+                                <span style="font-size: 0.72rem; color: #94a3b8; font-weight: 500;">PNG, JPG o
+                                    WEBP</span>
                             </div>
                             <i class='bx bx-upload' style="color: #cbd5e1; font-size: 1.2rem;"></i>
                         </div>
                     </div>
 
                     <div>
-                        <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Estado en Tienda</label>
+                        <label
+                            style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Estado
+                            en Tienda</label>
                         <div style="position: relative; display: flex; align-items: center;">
-                            <i class='bx bx-show-alt' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem; pointer-events: none;"></i>
-                            <select name="estado" id="premio_estado" style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; appearance: none; cursor: pointer; outline: none; background: #fff;">
+                            <i class='bx bx-show-alt'
+                                style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem; pointer-events: none;"></i>
+                            <select name="estado" id="premio_estado"
+                                style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; appearance: none; cursor: pointer; outline: none; background: #fff;">
                                 <option value="1">Activo / Visible</option>
                                 <option value="0">Inactivo / Oculto</option>
                             </select>
-                            <i class='bx bx-chevron-down' style="position: absolute; right: 1rem; color: #94a3b8; pointer-events: none;"></i>
+                            <i class='bx bx-chevron-down'
+                                style="position: absolute; right: 1rem; color: #94a3b8; pointer-events: none;"></i>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer-premium" style="padding: 1.5rem 2.5rem 2.5rem; border-top: 1px solid #f1f5f9; display: flex; justify-content: flex-end;">
-                    <button type="submit" class="btn-premium-pill-black" style="background: #000; color: #fff; border: none; padding: 0.85rem 2.2rem; border-radius: 14px; font-weight: 700; cursor: pointer;">Actualizar Catálogo</button>
+                <div class="modal-footer-premium"
+                    style="padding: 1.5rem 2.5rem 2.5rem; border-top: 1px solid #f1f5f9; display: flex; justify-content: flex-end;">
+                    <button type="submit" class="btn-premium-pill-black"
+                        style="background: #000; color: #fff; border: none; padding: 0.85rem 2.2rem; border-radius: 14px; font-weight: 700; cursor: pointer;">Aceptar</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- MODAL CONDUCTORES -->
-    <div id="modalCond" class="modal-overlay" style="display: none; align-items: center; justify-content: center; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(8px); z-index: 10000;" onclick="if(event.target===this) closeModalCond()">
-        <div class="modal-content-wrapper" style="max-width: 480px; width: 95%; background: #fff; border-radius: 24px; overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.3); animation: slideUp 0.3s ease;">
-            <div class="modal-header-premium" style="padding: 2rem 2.5rem; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center;">
-                <h2 id="modalTitleCond" style="font-weight: 800; font-size: 1.25rem; color: #0f172a; margin: 0;">Datos del Conductor</h2>
-                <div class="modal-close" onclick="closeModalCond()" style="cursor: pointer; width: 32px; height: 32px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: #64748b;"><i class='bx bx-x'></i></div>
+    <div id="modalCond" class="modal-overlay"
+        style="display: none; align-items: center; justify-content: center; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(8px); z-index: 10000;"
+        onclick="if(event.target===this) closeModalCond()">
+        <div class="modal-content-wrapper"
+            style="max-width: 480px; width: 95%; background: #fff; border-radius: 24px; overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.3); animation: slideUp 0.3s ease;">
+            <div class="modal-header-premium"
+                style="padding: 2rem 2.5rem; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center;">
+                <h2 id="modalTitleCond" style="font-weight: 800; font-size: 1.25rem; color: #0f172a; margin: 0;">Datos
+                    del Conductor</h2>
+                <div class="modal-close" onclick="closeModalCond()"
+                    style="cursor: pointer; width: 32px; height: 32px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: #64748b;">
+                    <i class='bx bx-x'></i></div>
             </div>
             <form id="formCond" method="POST" action="<?= BASE_URL ?>conductores/create">
                 <div class="modal-body-premium" style="padding: 2.5rem;">
                     <input type="hidden" name="id" id="cond_id">
                     <input type="hidden" name="redir" value="ajustes">
-                    
+
                     <div style="margin-bottom: 1.4rem;">
-                        <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Nombre y Apellidos</label>
+                        <label
+                            style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Nombre
+                            y Apellidos</label>
                         <div style="position: relative; display: flex; align-items: center;">
-                            <i class='bx bx-user' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
+                            <i class='bx bx-user'
+                                style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
                             <input type="text" name="nombre" id="cond_nombre" required
                                 style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none;">
                         </div>
                     </div>
 
                     <div style="margin-bottom: 1.4rem;">
-                        <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Nombre de Usuario</label>
+                        <label
+                            style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Nombre
+                            de Usuario</label>
                         <div style="position: relative; display: flex; align-items: center;">
-                            <i class='bx bx-at' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
+                            <i class='bx bx-at'
+                                style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
                             <input type="text" name="usuario" id="cond_usuario" required
                                 style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none;">
                         </div>
                     </div>
 
                     <div style="margin-bottom: 1.4rem;">
-                        <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Nueva Contraseña</label>
+                        <label
+                            style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Nueva
+                            Contraseña</label>
                         <div style="position: relative; display: flex; align-items: center;">
-                            <i class='bx bx-lock-alt' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
+                            <i class='bx bx-lock-alt'
+                                style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
                             <input type="password" name="password" id="cond_pass" placeholder="••••••••"
                                 style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none;">
                         </div>
                     </div>
 
                     <div>
-                        <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Estado de Acceso</label>
+                        <label
+                            style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Estado
+                            de Acceso</label>
                         <div style="position: relative; display: flex; align-items: center;">
-                            <i class='bx bx-user-check' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem; pointer-events: none;"></i>
-                            <select name="estado" id="cond_estado" style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; appearance: none; cursor: pointer; outline: none; background: #fff;">
+                            <i class='bx bx-user-check'
+                                style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem; pointer-events: none;"></i>
+                            <select name="estado" id="cond_estado"
+                                style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; appearance: none; cursor: pointer; outline: none; background: #fff;">
                                 <option value="1">Acceso Permitido</option>
                                 <option value="0">Bloqueado</option>
                             </select>
-                            <i class='bx bx-chevron-down' style="position: absolute; right: 1rem; color: #94a3b8; pointer-events: none;"></i>
+                            <i class='bx bx-chevron-down'
+                                style="position: absolute; right: 1rem; color: #94a3b8; pointer-events: none;"></i>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer-premium" style="padding: 1.5rem 2.5rem 2.5rem; border-top: 1px solid #f1f5f9; display: flex; justify-content: flex-end;">
-                    <button type="submit" class="btn-premium-pill-black" style="background: #000; color: #fff; border: none; padding: 0.85rem 2.2rem; border-radius: 14px; font-weight: 700; cursor: pointer;">Guardar Perfil</button>
+                <div class="modal-footer-premium"
+                    style="padding: 1.5rem 2.5rem 2.5rem; border-top: 1px solid #f1f5f9; display: flex; justify-content: flex-end;">
+                    <button type="submit" class="btn-premium-pill-black"
+                        style="background: #000; color: #fff; border: none; padding: 0.85rem 2.2rem; border-radius: 14px; font-weight: 700; cursor: pointer;">Aceptar</button>
                 </div>
             </form>
         </div>
@@ -458,9 +565,9 @@
 
         // --- PAGINATION MODULE ---
         const PagData = {
-            tableOp:      { page: 1, size: 5, search: '', footer: 'footerOp' },
+            tableOp: { page: 1, size: 5, search: '', footer: 'footerOp' },
             tablePremios: { page: 1, size: 10, search: '', footer: 'footerPremios' },
-            tableCond:    { page: 1, size: 5, search: '', footer: 'footerCond' }
+            tableCond: { page: 1, size: 5, search: '', footer: 'footerCond' }
         };
 
         function renderPagination(tableId) {
@@ -468,7 +575,7 @@
             const table = document.getElementById(tableId);
             const tbody = table.querySelector('tbody');
             const allRows = Array.from(tbody.querySelectorAll('tr'));
-            
+
             // Filter
             const visibleRows = allRows.filter(row => {
                 const matchesSearch = row.innerText.toLowerCase().includes(config.search.toLowerCase());
@@ -477,7 +584,7 @@
 
             const total = visibleRows.length;
             const totalPages = Math.ceil(total / config.size);
-            
+
             if (config.page > totalPages) config.page = Math.max(1, totalPages);
             allRows.forEach(r => r.style.display = 'none');
             const start = (config.page - 1) * config.size;
@@ -539,7 +646,7 @@
             document.getElementById('group_estadoOp').style.display = 'none';
         }
         function closeModalOp() { document.getElementById('modalOp').style.display = 'none'; }
-        
+
         function editOp(op) {
             document.getElementById('modalOp').style.display = 'flex';
             document.getElementById('formOp').action = '<?= BASE_URL ?>operaciones/update';
@@ -553,7 +660,7 @@
 
         function confirmDeleteOp(url) {
             Swal.fire({ title: '¿Inactivar regla?', text: "Se quitará de las opciones de carga de puntos.", icon: 'warning', showCancelButton: true, confirmButtonColor: '#400000', confirmButtonText: 'Sí, inactivar' })
-                .then((r) => { if(r.isConfirmed) window.location.href = url + '&redir=ajustes'; });
+                .then((r) => { if (r.isConfirmed) window.location.href = url + '&redir=ajustes'; });
         }
 
         function openModalPremio() {
@@ -564,7 +671,7 @@
             document.getElementById('premio_id').value = '';
         }
         function closeModalPremio() { document.getElementById('modalPremio').style.display = 'none'; }
-        
+
         function editPremio(p) {
             document.getElementById('modalPremio').style.display = 'flex';
             document.getElementById('formPremio').action = '<?= BASE_URL ?>productos/update';
@@ -578,7 +685,7 @@
 
         function confirmDeletePremio(url) {
             Swal.fire({ title: '¿Ocultar premio?', text: "Los clientes ya no podrán verlo en el catálogo.", icon: 'warning', showCancelButton: true, confirmButtonColor: '#400000', confirmButtonText: 'Sí, ocultar' })
-                .then((r) => { if(r.isConfirmed) window.location.href = url + '&redir=ajustes'; });
+                .then((r) => { if (r.isConfirmed) window.location.href = url + '&redir=ajustes'; });
         }
 
         function openModalCond() {
@@ -589,7 +696,7 @@
             document.getElementById('cond_id').value = '';
         }
         function closeModalCond() { document.getElementById('modalCond').style.display = 'none'; }
-        
+
         function editCond(c) {
             document.getElementById('modalCond').style.display = 'flex';
             document.getElementById('formCond').action = '<?= BASE_URL ?>conductores/update';
@@ -602,7 +709,7 @@
 
         function confirmDeleteCond(url) {
             Swal.fire({ title: '¿Bloquear conductor?', text: "Se le denegará el acceso al sistema de escaneo.", icon: 'warning', showCancelButton: true, confirmButtonColor: '#400000', confirmButtonText: 'Sí, bloquear' })
-                .then((r) => { if(r.isConfirmed) window.location.href = url + '&redir=ajustes'; });
+                .then((r) => { if (r.isConfirmed) window.location.href = url + '&redir=ajustes'; });
         }
     </script>
 
@@ -619,4 +726,5 @@
     <?php unset($_SESSION['flash']); endif; ?>
 
 </body>
+
 </html>
