@@ -503,21 +503,22 @@
 .btn-primary-premium {
     background: #000000;
     color: #fff;
-    padding: 8px 16px;
-    border-radius: 12px;
-    font-weight: 600;
-    font-size: 0.85rem;
+    padding: 10px 20px;
+    border-radius: 8px; /* Less rounded as requested */
+    font-weight: 700;
+    font-size: 0.88rem;
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     text-decoration: none;
     transition: all 0.3s;
-    border: 1px solid rgba(255,255,255,0.1);
+    border: none;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     position: relative;
     overflow: hidden;
 }
+
 .btn-primary-premium:hover {
     background: #111;
     transform: translateY(-1px);
