@@ -1,12 +1,15 @@
 <?php
 require_once __DIR__ . '/../models/RecargaModel.php';
 require_once __DIR__ . '/../models/ConfiguracionModel.php';
+require_once __DIR__ . '/../models/AuditoriaModel.php';
 
 class RecargaAdminController {
+    private AuditoriaModel $audit;
 
     public function __construct() {
         if (session_status() === PHP_SESSION_NONE) session_start();
         $this->requireAdmin();
+        $this->audit = new AuditoriaModel();
     }
 
     private function requireAdmin(): void {
@@ -69,6 +72,7 @@ class RecargaAdminController {
 
             if (move_uploaded_file($file['tmp_name'], $dest)) {
                 $configModel->upsert('yape_qr_imagen', $filename, 'Imagen QR de Yape para pagos');
+                $this->audit->registrar($_SESSION['id_usuario'], 'ACTUALIZAR_QR_PAGO', "Actualizó el código QR de Yape y nombre titular ($nombre)", 'RECARGAS');
             }
         }
 
@@ -85,9 +89,14 @@ class RecargaAdminController {
 
         if ($id > 0 && ($estado === 'aprobado' || $estado === 'rechazado')) {
             $model = new RecargaModel();
+
+            // Info para auditoria
+            $recarga = $model->findById($id);
+
             $result = $model->actualizarEstado($id, $estado, $validador_id);
-            
             if ($result) {
+                $statusText = strtoupper($estado);
+                $this->audit->registrar($_SESSION['id_usuario'], 'MODERAR_RECARGA', "$statusText la recarga de {$recarga['puntos']} puntos del cliente #{$recarga['cliente_id']}", 'RECARGAS');
                 $_SESSION['flash'] = ['type' => 'success', 'title' => 'Éxito', 'message' => "La recarga ha sido marcada como $estado."];
             } else {
                 $error = $_SESSION['db_error'] ?? 'No se pudo procesar la recarga.';

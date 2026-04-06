@@ -1,7 +1,13 @@
 <?php
 require_once __DIR__ . '/../models/TipoOperacionModel.php';
+require_once __DIR__ . '/../models/AuditoriaModel.php';
 
 class OperacionController {
+    private AuditoriaModel $audit;
+
+    public function __construct() {
+        $this->audit = new AuditoriaModel();
+    }
 
     public function index(): void {
         $this->requireAdmin();
@@ -21,6 +27,7 @@ class OperacionController {
         ];
 
         if ($model->create($data)) {
+            $this->audit->registrar($_SESSION['id_usuario'], 'NUEVA_REGLA_PUNTOS', "Creó regla: " . $data['nombre'] . " (" . $data['puntos'] . " pts)", 'LOGISTICA');
             $_SESSION['flash'] = ['type' => 'success', 'title' => '¡Éxito!', 'message' => 'Operación creada correctamente.'];
         } else {
             $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo crear la operación.'];
@@ -35,6 +42,8 @@ class OperacionController {
         $id = (int) ($_POST['id'] ?? 0);
         $model = new TipoOperacionModel();
         
+        $original = $model->findById($id);
+
         $data = [
             'nombre' => $_POST['nombre'] ?? '',
             'puntos' => (int) ($_POST['puntos'] ?? 0),
@@ -42,6 +51,14 @@ class OperacionController {
         ];
 
         if ($model->update($id, $data)) {
+            $changes = [];
+            foreach (['nombre', 'puntos', 'estado'] as $f) {
+                if ($original[$f] != $data[$f]) $changes[$f] = ['ant' => $original[$f], 'des' => $data[$f]];
+            }
+            $desc = "Actualizó regla de puntos: " . $data['nombre'];
+            if(!empty($changes)) $desc .= " (" . count($changes) . " campos modificados)";
+            
+            $this->audit->registrar($_SESSION['id_usuario'], 'ACTUALIZAR_REGLA_PUNTOS', $desc, 'LOGISTICA', $changes);
             $_SESSION['flash'] = ['type' => 'success', 'title' => '¡Éxito!', 'message' => 'Operación actualizada correctamente.'];
         } else {
             $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo actualizar la operación.'];
@@ -56,7 +73,10 @@ class OperacionController {
         $id = (int) ($_GET['id'] ?? 0);
         $model = new TipoOperacionModel();
         
+        $original = $model->findById($id);
+
         if ($model->delete($id)) {
+            $this->audit->registrar($_SESSION['id_usuario'], 'INACTIVAR_REGLA_PUNTOS', "Inactivó regla: " . ($original['nombre'] ?? 'ID '.$id), 'LOGISTICA');
             $_SESSION['flash'] = ['type' => 'success', 'title' => '¡Éxito!', 'message' => 'Operación inactivada.'];
         } else {
             $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo inactivar la operación.'];

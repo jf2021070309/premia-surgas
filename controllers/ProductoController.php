@@ -137,7 +137,11 @@ class ProductoController {
         $this->requireAdmin();
         $id = (int)($_GET['id'] ?? 0);
         $model = new PremioModel();
+        
+        $p = $model->findById($id);
+
         if ($model->delete($id)) {
+            $this->audit->registrar($_SESSION['id_usuario'], 'BAJA_PRODUCTO', "Inactivó el producto: " . ($p['nombre'] ?? 'ID '.$id), 'PRODUCTOS');
             $_SESSION['flash'] = ['type' => 'success', 'title' => '¡Éxito!', 'message' => 'Producto inactivado.'];
         } else {
             $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo inactivar el producto.'];

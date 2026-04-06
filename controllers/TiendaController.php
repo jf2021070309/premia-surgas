@@ -1,8 +1,14 @@
 <?php
 require_once __DIR__ . '/../models/ClienteModel.php';
 require_once __DIR__ . '/../models/ConfiguracionModel.php';
+require_once __DIR__ . '/../models/AuditoriaModel.php';
 
 class TiendaController {
+    private AuditoriaModel $audit;
+
+    public function __construct() {
+        $this->audit = new AuditoriaModel();
+    }
 
     public function index(): void {
         $this->requireAuth();
@@ -88,6 +94,12 @@ class TiendaController {
         $result = $canjeModel->registrar($id_cliente, $premioId, $puntosUsados, $monto);
 
         if ($result) {
+            // AUDITORIA
+            require_once __DIR__ . '/../models/PremioModel.php';
+            $pModel = new PremioModel();
+            $p = $pModel->findById($premioId);
+            $this->audit->registrar($_SESSION['id_usuario'], 'SOLICITUD_CANJE', "Cliente solicitó canje de: {$p['nombre']} por $puntosUsados pts", 'FIDELIZACION');
+
             $_SESSION['flash'] = [
                 'type' => 'success', 
                 'title' => '¡Éxito!', 
@@ -178,6 +190,10 @@ class TiendaController {
             try {
                 $stmt = $db->prepare("INSERT INTO recargas (cliente_id, puntos, monto, comprobante) VALUES (?, ?, ?, ?)");
                 $stmt->execute([$id_cliente, $puntos, $monto, $fileName]);
+                
+                // AUDITORIA
+                $this->audit->registrar($_SESSION['id_usuario'], 'ENVIO_COMPROBANTE', "Cliente envió comprobante por $puntos puntos (S/ $monto)", 'RECARGAS');
+
                 echo json_encode(['success' => true]);
             } catch (Exception $e) {
                 echo json_encode(['success' => false, 'message' => 'Error BD: ' . $e->getMessage()]);

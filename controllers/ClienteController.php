@@ -69,6 +69,10 @@ class ClienteController
             'creado_por' => null,
         ]);
 
+        if ($id) {
+            $this->audit->registrar($id, 'AUTOREGISTRO_CLIENTE', "Nuevo cliente registrado vía web: $nombre ($codigo)", 'SEGURIDAD');
+        }
+
         echo json_encode(['success' => true, 'message' => 'Registro exitoso. Ya puedes iniciar sesión.']);
         exit;
     }
@@ -325,7 +329,14 @@ class ClienteController
         $id = (int)($_GET['id'] ?? 0);
         $estado = (int)($_GET['v'] ?? 1);
         $model = new ClienteModel();
+        
+        $c = $model->findById($id);
+
         if ($model->setEstado($id, $estado)) {
+            $accion = $estado ? 'ALTA_CLIENTE' : 'BAJA_CLIENTE';
+            $msgStatus = $estado ? 'Activó' : 'Inactivó';
+            $this->audit->registrar($_SESSION['id_usuario'], $accion, "$msgStatus al cliente: " . ($c['nombre'] ?? 'ID '.$id), 'CLIENTES');
+            
             $_SESSION['flash'] = ['type' => 'success', 'title' => '¡Hecho!', 'message' => ($estado ? 'Cliente activado.' : 'Cliente inactivado.')];
         }
         else {
