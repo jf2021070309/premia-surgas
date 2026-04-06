@@ -321,10 +321,10 @@
 
     <!-- MODAL PREMIOS -->
     <div id="modalPremio" class="modal-overlay"
-        style="display: none; align-items: center; justify-content: center; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(8px); z-index: 10000;"
+        style="display: none; align-items: flex-start; justify-content: center; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(8px); z-index: 10000; padding: 2.5rem 0; overflow-y: auto;"
         onclick="if(event.target===this) closeModalPremio()">
         <div class="modal-content-wrapper"
-            style="max-width: 550px; width: 95%; background: #fff; border-radius: 24px; overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.3); animation: slideUp 0.3s ease;">
+            style="max-width: 550px; width: 95%; background: #fff; border-radius: 24px; overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.3); animation: slideUp 0.3s ease; margin: auto;">
             <div class="modal-header-premium"
                 style="padding: 2rem 2.5rem; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center;">
                 <h2 id="modalTitlePremio" style="font-weight: 800; font-size: 1.25rem; color: #0f172a; margin: 0;">
@@ -437,10 +437,10 @@
 
     <!-- MODAL CONDUCTORES -->
     <div id="modalCond" class="modal-overlay"
-        style="display: none; align-items: center; justify-content: center; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(8px); z-index: 10000;"
+        style="display: none; align-items: flex-start; justify-content: center; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(8px); z-index: 10000; padding: 2.5rem 0; overflow-y: auto;"
         onclick="if(event.target===this) closeModalCond()">
         <div class="modal-content-wrapper"
-            style="max-width: 480px; width: 95%; background: #fff; border-radius: 24px; overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.3); animation: slideUp 0.3s ease;">
+            style="max-width: 480px; width: 95%; background: #fff; border-radius: 24px; overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.3); animation: slideUp 0.3s ease; margin: auto;">
             <div class="modal-header-premium"
                 style="padding: 2rem 2.5rem; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center;">
                 <h2 id="modalTitleCond" style="font-weight: 800; font-size: 1.25rem; color: #0f172a; margin: 0;">Registrar Nuevo Conductor</h2>

@@ -300,8 +300,8 @@
     <!-- ══════════════════════════════════════
          Modal: Nuevo / Editar Premio
     ══════════════════════════════════════ -->
-    <div class="modal-overlay" v-if="showModal" @click.self="cerrarModal" id="modalProducto" style="display: flex; align-items: center; justify-content: center; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(8px); z-index: 10000;">
-        <div class="modal-content-wrapper" style="max-width: 500px; width: 95%; background: #fff; border-radius: 24px; overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.3); animation: slideUp 0.3s ease;">
+    <div class="modal-overlay" v-if="showModal" @click.self="cerrarModal" id="modalProducto" style="display: flex; align-items: flex-start; justify-content: center; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(8px); z-index: 10000; padding: 2.5rem 0; overflow-y: auto;">
+        <div class="modal-content-wrapper" style="max-width: 500px; width: 95%; background: #fff; border-radius: 24px; overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.3); animation: slideUp 0.3s ease; margin: auto;">
 
             <!-- Header -->
             <div class="modal-header-premium" style="padding: 2rem 2.5rem; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center;">
@@ -337,11 +337,24 @@
                                 type="text"
                                 name="nombre"
                                 v-model="form.nombre"
-                                
                                 required
                                 autocomplete="off"
                                 style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none; transition: border-color 0.2s;"
                             >
+                        </div>
+                    </div>
+
+                    <!-- Descripción -->
+                    <div style="margin-bottom: 1.4rem;">
+                        <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Descripción / Detalles</label>
+                        <div style="position: relative; display: flex;">
+                            <i class='bx bx-detail' style="position: absolute; left: 1.1rem; top: 0.9rem; color: #94a3b8; font-size: 1.2rem;"></i>
+                            <textarea
+                                name="descripcion"
+                                v-model="form.descripcion"
+                                rows="3"
+                                style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none; resize: none; font-family: inherit; transition: border-color 0.2s;"
+                            ></textarea>
                         </div>
                     </div>
 

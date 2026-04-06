@@ -21,6 +21,7 @@ createApp({
             form: {
                 id: '',
                 nombre: '',
+                descripcion: '',
                 puntos: 0,
                 stock: 0,
                 estado: 1,
@@ -36,7 +37,7 @@ createApp({
             }
             if (this.busqueda) {
                 const q = this.busqueda.toLowerCase();
-                list = list.filter(p => p.nombre.toLowerCase().includes(q));
+                list = list.filter(p => p.nombre.toLowerCase().includes(q) || (p.descripcion && p.descripcion.toLowerCase().includes(q)));
             }
             return list;
         }
@@ -47,7 +48,7 @@ createApp({
             this.previewUrl = null;
             this.submitting = false;
             this.form = {
-                id: '', nombre: '', puntos: 0, stock: 0,
+                id: '', nombre: '', descripcion: '', puntos: 0, stock: 0,
                 estado: 1, imagen_actual: ''
             };
             this.showModal = true;
@@ -62,6 +63,7 @@ createApp({
             this.form = {
                 id: p.id,
                 nombre: p.nombre,
+                descripcion: p.descripcion || '',
                 puntos: p.puntos,
                 stock: p.stock,
                 estado: p.estado,
