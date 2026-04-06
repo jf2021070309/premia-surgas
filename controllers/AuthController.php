@@ -90,7 +90,21 @@ class AuthController {
         if (isset($_SESSION['id_usuario'])) {
             $this->audit->registrar($_SESSION['id_usuario'], 'CIERRE_SESION', 'El usuario cerró su sesión', 'SEGURIDAD');
         }
+        
+        // Limpiar el array de sesión
+        $_SESSION = [];
+
+        // Si se desea eliminar la cookie de sesión también
+        if (ini_get("session.use_cookies")) {
+            $params = session_get_cookie_params();
+            setcookie(session_name(), '', time() - 42000,
+                $params["path"], $params["domain"],
+                $params["secure"], $params["httponly"]
+            );
+        }
+
         session_destroy();
+        session_write_close(); // Forzar el guardado y cierre del archivo de sesión
         $this->redirect('login');
     }
 

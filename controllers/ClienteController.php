@@ -296,8 +296,21 @@ class ClienteController
             exit;
         }
 
+        // Detectar cambios antes vs después
+        $changes = [];
+        $fieldsToTrack = ['tipo_cliente', 'dni', 'ruc', 'razon_social', 'nombre', 'celular', 'direccion', 'estado'];
+        foreach ($fieldsToTrack as $f) {
+            $valAnt = $clienteOriginal[$f] ?? null;
+            $valDev = $data[$f] ?? null;
+            if (trim((string)$valAnt) !== trim((string)$valDev)) {
+                $changes[$f] = ['ant' => $valAnt, 'des' => $valDev];
+            }
+        }
+
         if ($model->update($id, $data)) {
-            $this->audit->registrar($_SESSION['id_usuario'], 'ACTUALIZAR_CLIENTE', "Editó datos del cliente: " . $data['nombre'], 'CLIENTES');
+            $desc = "Editó datos del cliente: " . $data['nombre'];
+            if (!empty($changes)) $desc .= " (" . count($changes) . " campos modificados)";
+            $this->audit->registrar($_SESSION['id_usuario'], 'ACTUALIZAR_CLIENTE', $desc, 'CLIENTES', $changes);
             echo json_encode(['success' => true, 'message' => 'Cliente actualizado correctamente.']);
         }
         else {

@@ -6,7 +6,7 @@
     <title>Auditoría de Movimientos — PremiaSurgas</title>
     <link rel="icon" type="image/png" href="<?= BASE_URL ?>assets/premios/icono.png">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-layout.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-tables.css">
     <style>
@@ -25,6 +25,18 @@
         
         .user-tag { display: flex; align-items: center; gap: 0.75rem; }
         .user-avatar { width: 32px; height: 32px; border-radius: 9px; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: #800000; font-weight: 700; font-size: 0.75rem; border: 1px solid #e2e8f0; }
+
+        .change-detail { margin-top: 8px; padding: 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 0.72rem; }
+        .change-item { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; color: #475569; }
+        .change-item b { color: #0f172a; text-transform: capitalize; }
+        .val-old { color: #991b1b; text-decoration: line-through; opacity: 0.7; }
+        .val-new { color: #15803d; font-weight: 600; }
+
+        .filter-group { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; background: #fff; padding: 1.5rem; border-radius: 20px; border: 1px solid #f1f5f9; }
+        .filter-item { display: flex; flex-direction: column; gap: 6px; }
+        .filter-item label { font-size: 0.68rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; }
+        .filter-input { border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 0.6rem 1rem; font-size: 0.85rem; color: #1e293b; outline: none; transition: border 0.2s; }
+        .filter-input:focus { border-color: #800000; }
     </style>
 </head>
 <body>
@@ -34,20 +46,37 @@
         <div class="admin-layout">
             <?php
             $pageTitle = 'Auditoría de Sistema';
-            $pageSubtitle = 'Monitoreo de movimientos y acciones del personal';
+            $pageSubtitle = 'Monitoreo dinámico de acciones y cambios estructurales';
             include __DIR__ . '/../partials/header_admin.php';
             ?>
 
             <div class="container animate-fade-in" style="margin-top: 2rem;">
                 
-                <div class="modern-section-header" style="margin-bottom: 1.5rem; justify-content: space-between;">
-                    <div class="header-search-modern" style="flex: 1; max-width: 400px;">
-                        <i class='bx bx-search'></i>
-                        <input type="text" v-model="busqueda" placeholder="Buscar por acción, usuario o descripción...">
+                <!-- Filtros Dinámicos -->
+                <div class="filter-group">
+                    <div class="filter-item" style="flex: 1; min-width: 250px;">
+                        <label>Buscar Evento</label>
+                        <input type="text" v-model="filters.busqueda" class="filter-input" placeholder="Acción, detalles o IP...">
                     </div>
-                    <div class="d-flex gap-2">
-                        <button @click="cargarDatos" class="btn-action gray" title="Actualizar" style="width: auto; padding: 0 1.2rem; border-radius: 12px; height: 3.2rem;">
-                            <i class='bx bx-refresh'></i> <span style="font-size: 0.8rem; font-weight: 600; margin-left: 5px;">Actualizar</span>
+                    <div class="filter-item">
+                        <label>Rol Trabajador</label>
+                        <select v-model="filters.rol" class="filter-input" style="width: 160px;">
+                            <option value="">TODOS</option>
+                            <option value="ADMIN">ADMINISTRADORES</option>
+                            <option value="CONDUCTOR">CONDUCTORES</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label>Desde</label>
+                        <input type="date" v-model="filters.fechaInicio" class="filter-input">
+                    </div>
+                    <div class="filter-item">
+                        <label>Hasta</label>
+                        <input type="date" v-model="filters.fechaFin" class="filter-input">
+                    </div>
+                    <div class="filter-item" style="justify-content: flex-end;">
+                        <button @click="exportToExcel" class="btn-primary-premium" style="height: 3.2rem; background: #15803d;">
+                            <i class='bx bx-file'></i> Exportar a Excel
                         </button>
                     </div>
                 </div>
@@ -58,11 +87,11 @@
                             <thead>
                                 <tr>
                                     <th style="width: 15%">Fecha / Hora</th>
-                                    <th style="width: 20%">Usuario / Trabajador</th>
-                                    <th style="width: 15%">Módulo</th>
-                                    <th style="width: 15%">Acción</th>
-                                    <th style="width: 25%">Detalles</th>
-                                    <th style="width: 10%">IP</th>
+                                    <th style="width: 18%">Usuario / Trabajador</th>
+                                    <th style="width: 12%">Módulo</th>
+                                    <th style="width: 13%">Acción</th>
+                                    <th style="width: 32%">Detalles / Cambios</th>
+                                    <th style="width: 10%">Dispositivo</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -75,8 +104,8 @@
                                         <div class="user-tag">
                                             <div class="user-avatar">{{ (log.usuario_nombre || 'S').charAt(0) }}</div>
                                             <div>
-                                                <div style="font-weight: 700; color: #0f172a; font-size: 0.8rem; line-height: 1.2; margin-bottom: 4px;">{{ log.usuario_nombre || 'Sistema' }}</div>
-                                                <div v-if="log.usuario_rol" style="font-size: 0.6rem; font-weight: 800; color: #64748b; background: #f1f5f9; padding: 2px 8px; border-radius: 4px; display: inline-block; text-transform: uppercase; letter-spacing: 0.02em;">
+                                                <div style="font-weight: 700; color: #0f172a; font-size: 0.8rem; line-height: 1.2; margin-bottom: 3px;">{{ log.usuario_nombre || 'Sistema' }}</div>
+                                                <div v-if="log.usuario_rol" style="font-size: 0.6rem; font-weight: 800; color: #64748b; background: #f1f5f9; padding: 2px 8px; border-radius: 4px; display: inline-block; text-transform: uppercase;">
                                                     {{ log.usuario_rol }}
                                                 </div>
                                             </div>
@@ -84,14 +113,30 @@
                                     </td>
                                     <td><span class="modulo-pill">{{ log.modulo }}</span></td>
                                     <td><span :class="['audit-badge', getBadgeClass(log.accion)]">{{ log.accion }}</span></td>
-                                    <td style="font-size: 0.78rem; color: #475569; line-height: 1.4;">{{ log.descripcion }}</td>
-                                    <td style="font-family: monospace; font-size: 0.7rem; color: #94a3b8;">{{ log.ip_address }}</td>
+                                    <td>
+                                        <div style="font-size: 0.78rem; color: #475569; font-weight: 500;">{{ log.descripcion }}</div>
+                                        
+                                        <!-- Detalles del Cambio (Metadatos) -->
+                                        <div v-if="log.parsedMetadata" class="change-detail">
+                                            <div v-for="(val, field) in log.parsedMetadata" :key="field" class="change-item">
+                                                <i class='bx bx-chevron-right' style="color: #94a3b8;"></i>
+                                                <b>{{ field.replace('_', ' ') }}:</b> 
+                                                <span class="val-old" v-if="val.ant">{{ val.ant }}</span>
+                                                <i class='bx bx-right-arrow-alt' style="font-size: 0.9rem; opacity: 0.5;"></i>
+                                                <span class="val-new">{{ val.des }}</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style="font-size: 0.72rem; color: #0f172a; font-weight: 600;">{{ log.user_agent }}</div>
+                                        <div style="font-family: monospace; font-size: 0.65rem; color: #94a3b8;">IP: {{ log.ip_address }}</div>
+                                    </td>
                                 </tr>
                                 <tr v-if="filtrados.length === 0">
                                     <td colspan="6">
                                         <div class="empty-table">
-                                            <i class='bx bx-info-circle'></i>
-                                            <p>No se encontraron registros de auditoría.</p>
+                                            <i class='bx bx-search-alt'></i>
+                                            <p>No se encontraron registros con los filtros aplicados.</p>
                                         </div>
                                     </td>
                                 </tr>
@@ -109,20 +154,36 @@
         createApp({
             data() {
                 return {
-                    busqueda: '',
-                    logs: <?= json_encode($logs) ?>
+                    filters: {
+                        busqueda: '',
+                        rol: '',
+                        fechaInicio: '',
+                        fechaFin: ''
+                    },
+                    logs: []
                 }
             },
             computed: {
                 filtrados() {
-                    if (!this.busqueda) return this.logs;
-                    const t = this.busqueda.toLowerCase();
-                    return this.logs.filter(l => 
-                        (l.usuario_nombre || '').toLowerCase().includes(t) ||
-                        (l.accion || '').toLowerCase().includes(t) ||
-                        (l.modulo || '').toLowerCase().includes(t) ||
-                        (l.descripcion || '').toLowerCase().includes(t)
-                    );
+                    return this.logs.filter(l => {
+                        // Filtro Busqueda
+                        const t = this.filters.busqueda.toLowerCase();
+                        const matchesSearch = !t || 
+                            (l.usuario_nombre || '').toLowerCase().includes(t) ||
+                            (l.accion || '').toLowerCase().includes(t) ||
+                            (l.descripcion || '').toLowerCase().includes(t) ||
+                            (l.ip_address || '').toLowerCase().includes(t);
+                        
+                        // Filtro Rol
+                        const matchesRol = !this.filters.rol || (l.usuario_rol || '').toUpperCase() === this.filters.rol;
+
+                        // Filtro Fecha
+                        const date = l.fecha_hora.split(' ')[0];
+                        const matchesInicio = !this.filters.fechaInicio || date >= this.filters.fechaInicio;
+                        const matchesFin = !this.filters.fechaFin || date <= this.filters.fechaFin;
+
+                        return matchesSearch && matchesRol && matchesInicio && matchesFin;
+                    });
                 }
             },
             methods: {
@@ -138,22 +199,51 @@
                     return new Date(fh).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
                 },
                 formatHora(fh) {
-                    return new Date(fh).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                    return new Date(fh).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
                 },
                 cargarDatos() {
                     fetch('<?= BASE_URL ?>reporte/getAuditLogsJson')
                         .then(res => res.json())
                         .then(data => {
-                            this.logs = data;
-                        })
-                        .catch(err => console.error('Error al actualizar auditoría:', err));
+                            this.logs = data.map(l => {
+                                let parsed = null;
+                                try { if(l.metadata) parsed = JSON.parse(l.metadata); } catch(e){}
+                                return { ...l, parsedMetadata: parsed };
+                            });
+                        });
+                },
+                exportToExcel() {
+                    // Generar CSV simple para exportar
+                    const header = ["Fecha", "Hora", "Usuario", "Rol", "Modulo", "Accion", "Descripcion", "IP", "Dispositivo"];
+                    const rows = this.filtrados.map(l => [
+                        l.fecha_hora.split(' ')[0],
+                        l.fecha_hora.split(' ')[1],
+                        l.usuario_nombre,
+                        l.usuario_rol,
+                        l.modulo,
+                        l.accion,
+                        l.descripcion,
+                        l.ip_address,
+                        l.user_agent
+                    ]);
+
+                    let csvContent = "data:text/csv;charset=utf-8," 
+                        + "\uFEFF" // Byte Order Mark para Excel en español
+                        + header.join(",") + "\n" 
+                        + rows.map(r => r.map(c => `"${(c || '').toString().replace(/"/g, '""')}"`).join(",")).join("\n");
+
+                    const encodedUri = encodeURI(csvContent);
+                    const link = document.createElement("a");
+                    link.setAttribute("href", encodedUri);
+                    link.setAttribute("download", `auditoria_surgas_${new Date().toISOString().split('T')[0]}.csv`);
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
                 }
             },
             mounted() {
-                // Actualizar cada 5 segundos
-                setInterval(() => {
-                    this.cargarDatos();
-                }, 5000);
+                this.cargarDatos();
+                setInterval(this.cargarDatos, 5000);
             }
         }).mount('#app');
     </script>

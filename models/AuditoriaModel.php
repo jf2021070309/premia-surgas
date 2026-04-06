@@ -10,33 +10,53 @@ class AuditoriaModel {
     }
 
     /**
-     * Registra un evento en la auditoría
+     * Registra un evento en la auditoría con soporte para metadatos y detección de dispositivo
      * 
-     * @param int|null $idUsuario ID del usuario que realiza la acción
-     * @param string $accion Título o nombre de la acción (e.g., 'INICIO_SESION', 'REGISTRO_CLIENTE')
-     * @param string $descripcion Detalle de lo que ocurrió
-     * @param string $modulo Nombre del módulo afectado
+     * @param int|null $idUsuario ID del usuario
+     * @param string $accion Nombre de la acción
+     * @param string $descripcion Detalle legible
+     * @param string $modulo Módulo afectado
+     * @param array/null $metadata Datos adicionales (antes/después de un cambio)
      * @return bool
      */
-    public function registrar(?int $idUsuario, string $accion, string $descripcion = '', string $modulo = 'GENERAL'): bool {
-        if ($idUsuario === null && isset($_SESSION['user_id'])) {
-            $idUsuario = $_SESSION['user_id'];
+    public function registrar(?int $idUsuario, string $accion, string $descripcion = '', string $modulo = 'GENERAL', ?array $metadata = null): bool {
+        if ($idUsuario === null && isset($_SESSION['id_usuario'])) {
+            $idUsuario = $_SESSION['id_usuario'];
         }
         
         $ip = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+        $fullAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'Desconocido';
+        
+        // Parsear dispositivo básico
+        $device = 'Escritorio';
+        if (preg_match('/(android|iphone|ipad|mobile)/i', $fullAgent)) {
+            $device = 'Móvil';
+        }
+        $userAgentInfo = $device . ' — ' . $this->getBrowser($fullAgent);
 
         $stmt = $this->db->prepare(
-            "INSERT INTO auditoria (id_usuario, accion, descripcion, modulo, ip_address) 
-             VALUES (:u, :a, :d, :m, :ip)"
+            "INSERT INTO auditoria (id_usuario, accion, descripcion, modulo, ip_address, user_agent, metadata) 
+             VALUES (:u, :a, :d, :m, :ip, :ua, :meta)"
         );
 
         return $stmt->execute([
-            ':u'  => $idUsuario,
-            ':a'  => strtoupper($accion),
-            ':d'  => $descripcion,
-            ':m'  => strtoupper($modulo),
-            ':ip' => $ip
+            ':u'    => $idUsuario,
+            ':a'    => strtoupper($accion),
+            ':d'    => $descripcion,
+            ':m'    => strtoupper($modulo),
+            ':ip'   => $ip,
+            ':ua'   => $userAgentInfo,
+            ':meta' => $metadata ? json_encode($metadata) : null
         ]);
+    }
+
+    private function getBrowser(string $agent): string {
+        if (strpos($agent, 'Firefox') !== false) return 'Firefox';
+        if (strpos($agent, 'Chrome') !== false) return 'Chrome';
+        if (strpos($agent, 'Safari') !== false) return 'Safari';
+        if (strpos($agent, 'Edge') !== false) return 'Edge';
+        if (strpos($agent, 'MSIE') !== false || strpos($agent, 'Trident') !== false) return 'IE';
+        return 'Browser';
     }
 
     /**
