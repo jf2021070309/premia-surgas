@@ -321,20 +321,23 @@
 
     <!-- MODAL PREMIOS -->
     <div id="modalPremio" class="modal-overlay"
-        style="display: none; align-items: flex-start; justify-content: center; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(8px); z-index: 10000; padding: 2.5rem 0; overflow-y: auto;"
+        style="display: none; align-items: center; justify-content: center; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(8px); z-index: 10000; padding: 2rem;"
         onclick="if(event.target===this) closeModalPremio()">
         <div class="modal-content-wrapper"
-            style="max-width: 550px; width: 95%; background: #fff; border-radius: 24px; overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.3); animation: slideUp 0.3s ease; margin: auto;">
+            style="max-width: 550px; width: 100%; max-height: 92vh; background: #fff; border-radius: 24px; overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.3); animation: slideUp 0.3s ease; display: flex; flex-direction: column;">
             <div class="modal-header-premium"
-                style="padding: 2rem 2.5rem; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center;">
+                style="padding: 1.8rem 2.5rem; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;">
                 <h2 id="modalTitlePremio" style="font-weight: 800; font-size: 1.25rem; color: #0f172a; margin: 0;">
                     Gestionar Premio</h2>
                 <div class="modal-close" onclick="closeModalPremio()"
                     style="cursor: pointer; width: 32px; height: 32px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: #64748b;">
-                    <i class='bx bx-x'></i></div>
+                    <i class='bx bx-x'></i>
+                </div>
             </div>
-            <form id="formPremio" method="POST" action="<?= BASE_URL ?>productos/create" enctype="multipart/form-data">
-                <div class="modal-body-premium" style="padding: 2.5rem;">
+
+            <form id="formPremio" method="POST" action="<?= BASE_URL ?>productos/create" enctype="multipart/form-data"
+                style="display: flex; flex-direction: column; overflow: hidden; height: 100%;">
+                <div class="modal-body-premium" style="padding: 2.5rem; overflow-y: auto; flex-grow: 1;">
                     <input type="hidden" name="id" id="premio_id">
                     <input type="hidden" name="redir" value="ajustes">
 
@@ -357,7 +360,7 @@
                             <i class='bx bx-detail'
                                 style="position: absolute; left: 1.1rem; top: 0.9rem; color: #94a3b8; font-size: 1.2rem;"></i>
                             <textarea name="descripcion" id="premio_descripcion" rows="3"
-                                style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none; resize: none; font-family: inherit;"></textarea>
+                                style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none; resize: none; font-family: inherit; transition: border-color 0.2s;"></textarea>
                         </div>
                     </div>
 
@@ -427,7 +430,7 @@
                     </div>
                 </div>
                 <div class="modal-footer-premium"
-                    style="padding: 1.5rem 2.5rem 2.5rem; border-top: 1px solid #f1f5f9; display: flex; justify-content: flex-end;">
+                    style="padding: 1.5rem 2.5rem; border-top: 1px solid #f1f5f9; display: flex; justify-content: flex-end; shrink: 0; background: #fafbfc;">
                     <button type="submit" class="btn-premium-pill-black"
                         style="background: #000; color: #fff; border: none; padding: 0.85rem 2.2rem; border-radius: 14px; font-weight: 700; cursor: pointer;">Aceptar</button>
                 </div>
@@ -437,19 +440,19 @@
 
     <!-- MODAL CONDUCTORES -->
     <div id="modalCond" class="modal-overlay"
-        style="display: none; align-items: flex-start; justify-content: center; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(8px); z-index: 10000; padding: 2.5rem 0; overflow-y: auto;"
+        style="display: none; align-items: center; justify-content: center; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(8px); z-index: 10000; padding: 2rem;"
         onclick="if(event.target===this) closeModalCond()">
         <div class="modal-content-wrapper"
-            style="max-width: 480px; width: 95%; background: #fff; border-radius: 24px; overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.3); animation: slideUp 0.3s ease; margin: auto;">
+            style="max-width: 480px; width: 100%; max-height: 92vh; background: #fff; border-radius: 24px; overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.3); animation: slideUp 0.3s ease; display: flex; flex-direction: column;">
             <div class="modal-header-premium"
-                style="padding: 2rem 2.5rem; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center;">
+                style="padding: 1.8rem 2.5rem; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;">
                 <h2 id="modalTitleCond" style="font-weight: 800; font-size: 1.25rem; color: #0f172a; margin: 0;">Registrar Nuevo Conductor</h2>
                 <div class="modal-close" onclick="closeModalCond()"
                     style="cursor: pointer; width: 32px; height: 32px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: #64748b;">
                     <i class='bx bx-x'></i></div>
             </div>
-            <form id="formCond" method="POST" action="<?= BASE_URL ?>conductores/create">
-                <div class="modal-body-premium" style="padding: 2.5rem;">
+            <form id="formCond" method="POST" action="<?= BASE_URL ?>conductores/create" style="display: flex; flex-direction: column; overflow: hidden; height: 100%;">
+                <div class="modal-body-premium" style="padding: 2.5rem; overflow-y: auto; flex-grow: 1;">
                     <input type="hidden" name="id" id="cond_id">
                     <input type="hidden" name="redir" value="ajustes">
 
@@ -526,9 +529,9 @@
                     </div>
                 </div>
                 <div class="modal-footer-premium"
-                    style="padding: 1.5rem 2.5rem 2.5rem; border-top: 1px solid #f1f5f9; display: flex; justify-content: flex-end;">
+                    style="padding: 1.5rem 2.5rem; border-top: 1px solid #f1f5f9; display: flex; justify-content: flex-end; flex-shrink: 0; background: #fafbfc;">
                     <button type="submit" class="btn-premium-pill-black"
-                        style="background: #000; color: #fff; border: none; padding: 0.85rem 2.2rem; border-radius: 14px; font-weight: 700; cursor: pointer;">Agregar</button>
+                        style="background: #000; color: #fff; border: none; padding: 0.85rem 2.2rem; border-radius: 14px; font-weight: 700; cursor: pointer;">Aceptar</button>
                 </div>
             </form>
         </div>
