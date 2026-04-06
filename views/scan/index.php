@@ -298,7 +298,7 @@
 
                 <!-- ── Card 1: Búsqueda QR ── -->
                 <div class="card" style="margin-bottom: 0;">
-                    <div class="card-header" style="justify-content: flex-start;">
+                    <div class="card-header" style="justify-content: flex-start; background: #f1f5f9;">
                         <div class="header-title-flex">
                             <i class='bx bx-qr-scan'></i>
                             <div class="title-text-group">
@@ -365,7 +365,7 @@
 
                 <template id="tpl-main-form">
                     <div class="card" style="margin-bottom: 0;">
-                        <div class="card-header">
+                        <div class="card-header" style="justify-content: flex-start; background: #f1f5f9;">
                             <div class="header-title-flex">
                                 <i class='bx bx-receipt'></i>
                                 <div class="title-text-group">
