@@ -211,6 +211,7 @@
                         <thead>
                             <tr>
                                 <th>Nombre Conductor</th>
+                                <th class="text-center">Departamento</th>
                                 <th class="text-center">Usuario</th>
                                 <th class="text-center">Estado</th>
                                 <th class="text-center" style="width: 150px;">Acciones</th>
@@ -220,6 +221,7 @@
                             <?php foreach ($conductores as $c): ?>
                                 <tr class="table-row">
                                     <td class="text-medium"><?= htmlspecialchars($c['nombre']) ?></td>
+                                    <td class="text-center"><span class="badge" style="background:#f1f5f9; color:#475569; font-weight:700; font-size:0.7rem; padding:4px 10px; border-radius:6px;"><?= htmlspecialchars($c['departamento'] ?? 'N/A') ?></span></td>
                                     <td class="text-center text-muted"><?= htmlspecialchars($c['usuario']) ?></td>
                                     <td class="text-center">
                                         <span class="chip <?= $c['estado'] ? 'chip-approved' : 'chip-rejected' ?>">
@@ -476,6 +478,25 @@
                         </div>
                     </div>
 
+                    <div style="margin-bottom: 1.4rem;">
+                        <label
+                            style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Departamento</label>
+                        <div style="position: relative; display: flex; align-items: center;">
+                            <i class='bx bx-map'
+                                style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem; pointer-events: none;"></i>
+                            <select name="departamento" id="cond_departamento" required
+                                style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; appearance: none; cursor: pointer; outline: none; background: #fff;">
+                                <option value="">-- Seleccionar --</option>
+                                <option value="Tacna">Tacna</option>
+                                <option value="Moquegua">Moquegua</option>
+                                <option value="Arequipa">Arequipa</option>
+                                <option value="Ilo">Ilo</option>
+                            </select>
+                            <i class='bx bx-chevron-down'
+                                style="position: absolute; right: 1rem; color: #94a3b8; pointer-events: none;"></i>
+                        </div>
+                    </div>
+
                     <div>
                         <label
                             style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Estado
@@ -703,6 +724,7 @@
             document.getElementById('cond_id').value = c.id;
             document.getElementById('cond_nombre').value = c.nombre;
             document.getElementById('cond_usuario').value = c.usuario;
+            document.getElementById('cond_departamento').value = c.departamento || '';
             document.getElementById('cond_estado').value = c.estado;
         }
 

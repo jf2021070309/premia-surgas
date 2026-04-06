@@ -63,6 +63,7 @@
                             <tr>
                                 <th># ID</th>
                                 <th>Conductor</th>
+                                <th>Departamento</th>
                                 <th>Usuario</th>
                                 <th class="text-center">Estado</th>
                                 <th class="text-center">Acciones</th>
@@ -79,6 +80,7 @@
                                         <span class="text-medium">{{ c.nombre }}</span>
                                     </div>
                                 </td>
+                                <td><span class="badge" style="background:#f1f5f9; color:#475569; font-weight:700; font-size:0.7rem; padding:4px 10px; border-radius:6px;">{{ c.departamento || 'N/A' }}</span></td>
                                 <td><span class="text-medium">{{ c.usuario }}</span></td>
                                 <td class="text-center">
                                     <span :class="['chip', c.estado == 1 ? 'chip-approved' : 'chip-rejected']">
