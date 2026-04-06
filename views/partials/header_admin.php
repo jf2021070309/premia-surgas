@@ -10,7 +10,16 @@ $pageTitle    = $pageTitle    ?? 'Panel Admin';
 $pageSubtitle = $pageSubtitle ?? '';
 
 // Nombre del usuario de sesión
-$adminName = $_SESSION['usuario'] ?? $_SESSION['nombre'] ?? 'Admin';
+$adminName = $_SESSION['nombre_usuario'] ?? $_SESSION['usuario'] ?? 'Usuario';
+$rawRole   = $_SESSION['rol'] ?? 'admin';
+
+// Mapeo de roles para visualización elegante
+$roleMap = [
+    'admin'     => 'ADMINISTRADOR',
+    'conductor' => 'CONDUCTOR'
+];
+$displayRole = $roleMap[strtolower($rawRole)] ?? strtoupper($rawRole);
+
 $adminInitial = strtoupper(substr($adminName, 0, 1));
 ?>
 
@@ -29,7 +38,7 @@ $adminInitial = strtoupper(substr($adminName, 0, 1));
             <div class="admin-avatar"><?= $adminInitial ?></div>
 
             <div class="admin-pill-text">
-                <span class="admin-pill-role">ADMIN</span>
+                <span class="admin-pill-role"><?= $displayRole ?></span>
                 <span class="admin-pill-name"><?= htmlspecialchars($adminName) ?></span>
             </div>
 

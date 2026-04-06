@@ -1,9 +1,15 @@
 <?php
 require_once __DIR__ . '/../models/ClienteModel.php';
+require_once __DIR__ . '/../models/AuditoriaModel.php';
 require_once __DIR__ . '/../config/config.php';
 
 class ClienteController
 {
+    private AuditoriaModel $audit;
+
+    public function __construct() {
+        $this->audit = new AuditoriaModel();
+    }
 
     public function nuevo(): void
     {
@@ -178,6 +184,10 @@ class ClienteController
             'creado_por' => $_SESSION['id_usuario'],
         ]);
 
+        if ($id) {
+            $this->audit->registrar($_SESSION['id_usuario'], 'REGISTRO_CLIENTE', "Nuevo cliente: $nombre ($codigo)", 'CLIENTES');
+        }
+
         echo json_encode(['success' => true, 'id' => $id, 'codigo' => $codigo]);
         exit;
     }
@@ -287,6 +297,7 @@ class ClienteController
         }
 
         if ($model->update($id, $data)) {
+            $this->audit->registrar($_SESSION['id_usuario'], 'ACTUALIZAR_CLIENTE', "Editó datos del cliente: " . $data['nombre'], 'CLIENTES');
             echo json_encode(['success' => true, 'message' => 'Cliente actualizado correctamente.']);
         }
         else {

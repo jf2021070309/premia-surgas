@@ -101,7 +101,9 @@ $routes = [
     ['GET',  'tienda/check-pendientes', 'TiendaController', 'checkPendientes'],
 
     // —— Reportes ——
-    ['GET',  'reportes',     'ReporteController', 'index'],
+    ['GET',  'reportes',          'ReporteController', 'index'],
+    ['GET',  'reporte/auditoria', 'ReporteController', 'auditoria'],
+    ['GET',  'reporte/getAuditLogsJson', 'ReporteController', 'getAuditLogsJson'],
 
     // —— Gestión de Canjes (Admin) ——
     ['GET',  'canjes-admin',            'CanjeAdminController', 'index'],

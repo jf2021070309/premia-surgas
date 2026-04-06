@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../models/ReporteModel.php';
+require_once __DIR__ . '/../models/AuditoriaModel.php';
 
 class ReporteController {
     
@@ -29,5 +30,18 @@ class ReporteController {
         ];
 
         require_once __DIR__ . '/../views/reportes/index.php';
+    }
+
+    public function auditoria(): void {
+        $model = new AuditoriaModel();
+        $logs = $model->getAll(500); // Obtener los primeros para carga rápida
+        require_once __DIR__ . '/../views/reportes/auditoria.php';
+    }
+
+    public function getAuditLogsJson(): void {
+        header('Content-Type: application/json');
+        $model = new AuditoriaModel();
+        echo json_encode($model->getAll(500));
+        exit;
     }
 }

@@ -1,8 +1,14 @@
 <?php
 require_once __DIR__ . '/../models/UsuarioModel.php';
 require_once __DIR__ . '/../models/ClienteModel.php';
+require_once __DIR__ . '/../models/AuditoriaModel.php';
 
 class AuthController {
+    private AuditoriaModel $audit;
+
+    public function __construct() {
+        $this->audit = new AuditoriaModel();
+    }
 
     public function login(): void {
         if (isset($_SESSION['id_usuario'])) {
@@ -41,6 +47,9 @@ class AuthController {
             $_SESSION['departamento']     = $user['departamento'];
             $_SESSION['session_id']       = $sessId;
 
+            // Registro de Auditoría
+            $this->audit->registrar($user['id'], 'INICIO_SESION', 'Inicio de sesión exitoso (Trabajador)', 'SEGURIDAD');
+
             echo json_encode(['success' => true, 'redirect' => 'panel']);
             exit;
         }
@@ -66,6 +75,9 @@ class AuthController {
             $_SESSION['codigo_cliente'] = $cliente['codigo'];
             $_SESSION['token_cliente']  = $cliente['token'];
 
+            // Registro de Auditoría
+            $this->audit->registrar($cliente['id'], 'INICIO_SESION', 'Inicio de sesión exitoso (Cliente)', 'SEGURIDAD');
+
             echo json_encode(['success' => true, 'redirect' => 'scan?c=' . $cliente['codigo'] . '&t=' . $cliente['token']]);
             exit;
         }
@@ -75,6 +87,9 @@ class AuthController {
     }
 
     public function logout(): void {
+        if (isset($_SESSION['id_usuario'])) {
+            $this->audit->registrar($_SESSION['id_usuario'], 'CIERRE_SESION', 'El usuario cerró su sesión', 'SEGURIDAD');
+        }
         session_destroy();
         $this->redirect('login');
     }

@@ -62,6 +62,10 @@ if (!function_exists('isActiveLink')) {
             <i class='bx bx-cog'></i>
             <span>Configuración General</span>
         </a>
+        <a href="<?= BASE_URL ?>reporte/auditoria" class="sidebar-item <?= isActiveLink('reporte/auditoria', $current_url) ?>">
+            <i class='bx bx-history'></i>
+            <span>Auditoría de Sistema</span>
+        </a>
     </nav>
 </aside>
 
