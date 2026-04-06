@@ -379,26 +379,25 @@
                             <!-- Izquierda: Cliente + Servicio -->
                             <div class="elite-card-main">
                                 <div>
-                                    <label class="scan-label">Cliente Identificado</label>
-                                    <div class="elite-customer-box" style="background: linear-gradient(135deg, #fdf2f2 0%, #fff8f8 100%); border: 1.5px solid #fee2e2; border-radius: 12px; padding: 0.95rem 1.15rem; display: flex; align-items: center; gap: 1rem; position: relative; overflow: hidden;">
-                                        <!-- Decorative background dot -->
-                                        <div style="position: absolute; right: -20px; top: -20px; width: 80px; height: 80px; background: rgba(128,0,0,0.04); border-radius: 50%;"></div>
-                                        <!-- Avatar with initials -->
-                                        <div id="customer-avatar-circle" style="width: 46px; height: 46px; background: linear-gradient(135deg, #800000, #a00000); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 800; color: #fff; flex-shrink: 0; box-shadow: 0 4px 12px rgba(128,0,0,0.25); letter-spacing: -0.5px;">
-                                            <i class='bx bx-user' style="font-size: 1.3rem;"></i>
+                                    <label class="scan-label">Cliente</label>
+                                    <div style="display: flex; align-items: center; gap: 1rem; padding: 0.9rem 1.1rem; border: 1px solid #e9edf2; border-radius: 14px; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+                                        <!-- Elegant circular avatar -->
+                                        <div style="position: relative; flex-shrink: 0;">
+                                            <div style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(145deg, #f8fafc, #e9edf2); border: 2px solid #e2e8f0; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);">
+                                                <i class='bx bxs-user-circle' style="font-size: 2.2rem; color: #800000; line-height: 1;"></i>
+                                            </div>
+                                            <!-- Online dot -->
+                                            <span style="position: absolute; bottom: 1px; right: 1px; width: 12px; height: 12px; background: #22c55e; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 2px rgba(34,197,94,0.2);"></span>
                                         </div>
                                         <!-- Info -->
                                         <div style="flex: 1; min-width: 0;">
-                                            <b id="res-name" style="display: block; font-size: 0.92rem; font-weight: 800; color: #1e293b; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">— — —</b>
-                                            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                                <i class='bx bx-phone' style="font-size: 0.75rem; color: #94a3b8;"></i>
-                                                <span id="res-phone" style="font-size: 0.75rem; color: #64748b; font-weight: 500;">No detectado</span>
-                                            </div>
+                                            <b id="res-name" style="display: block; font-size: 0.9rem; font-weight: 700; color: #0f172a; letter-spacing: -0.01em; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">— — —</b>
+                                            <span id="res-phone" style="font-size: 0.75rem; color: #94a3b8; font-weight: 500; letter-spacing: 0.02em;">No detectado</span>
                                         </div>
-                                        <!-- Verified badge -->
-                                        <div style="display: flex; align-items: center; gap: 4px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 20px; padding: 3px 10px; flex-shrink: 0;">
-                                            <i class='bx bxs-check-circle' style="color: #16a34a; font-size: 0.75rem;"></i>
-                                            <span style="font-size: 0.65rem; font-weight: 800; color: #16a34a; text-transform: uppercase; letter-spacing: 0.04em;">Verificado</span>
+                                        <!-- Status chip -->
+                                        <div style="display: flex; align-items: center; gap: 5px; padding: 4px 12px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 20px; flex-shrink: 0;">
+                                            <span style="width: 6px; height: 6px; background: #22c55e; border-radius: 50%; display: inline-block;"></span>
+                                            <span style="font-size: 0.65rem; font-weight: 800; color: #15803d; text-transform: uppercase; letter-spacing: 0.06em;">Activo</span>
                                         </div>
                                         <input type="hidden" id="client-id">
                                     </div>
@@ -587,11 +586,6 @@
                     document.getElementById('res-name').innerText = data.cliente.nombre;
                     document.getElementById('res-phone').innerText = data.cliente.celular;
                     document.getElementById('client-id').value = data.cliente.id;
-                    // Avatar con iniciales
-                    const parts = data.cliente.nombre.trim().split(' ');
-                    const initials = (parts[0]?.[0] || '') + (parts[1]?.[0] || '');
-                    const av = document.getElementById('customer-avatar-circle');
-                    if (av) { av.innerHTML = initials.toUpperCase(); av.style.fontSize = '1rem'; }
                     rightPanel.classList.add('active');
                     updateSubtotal();
                 } else {
