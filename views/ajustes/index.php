@@ -350,6 +350,17 @@
                         </div>
                     </div>
 
+                    <div style="margin-bottom: 1.4rem;">
+                        <label
+                            style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Descripción / Detalles</label>
+                        <div style="position: relative; display: flex;">
+                            <i class='bx bx-detail'
+                                style="position: absolute; left: 1.1rem; top: 0.9rem; color: #94a3b8; font-size: 1.2rem;"></i>
+                            <textarea name="descripcion" id="premio_descripcion" rows="3"
+                                style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none; resize: none; font-family: inherit;"></textarea>
+                        </div>
+                    </div>
+
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.4rem;">
                         <div>
                             <label
@@ -698,6 +709,7 @@
             document.getElementById('modalTitlePremio').innerText = 'Ajustar Inventario';
             document.getElementById('premio_id').value = p.id;
             document.getElementById('premio_nombre').value = p.nombre;
+            document.getElementById('premio_descripcion').value = p.descripcion || '';
             document.getElementById('premio_puntos').value = p.puntos;
             document.getElementById('premio_stock').value = p.stock;
             document.getElementById('premio_estado').value = p.estado;
