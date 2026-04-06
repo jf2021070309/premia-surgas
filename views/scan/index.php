@@ -378,14 +378,27 @@
                         <div class="elite-card-content">
                             <!-- Izquierda: Cliente + Servicio -->
                             <div class="elite-card-main">
-                                <!-- Cliente -->
                                 <div>
-                                    <label class="scan-label">Cliente</label>
-                                    <div class="elite-customer-box">
-                                        <div class="customer-avatar"><i class='bx bx-user'></i></div>
-                                        <div>
-                                            <b id="res-name" style="display: block; font-size: 0.88rem; color: #1e293b; margin-bottom: 2px;">— — —</b>
-                                            <span id="res-phone" style="font-size: 0.75rem; color: #94a3b8; font-weight: 500;">No detectado</span>
+                                    <label class="scan-label">Cliente Identificado</label>
+                                    <div class="elite-customer-box" style="background: linear-gradient(135deg, #fdf2f2 0%, #fff8f8 100%); border: 1.5px solid #fee2e2; border-radius: 12px; padding: 0.95rem 1.15rem; display: flex; align-items: center; gap: 1rem; position: relative; overflow: hidden;">
+                                        <!-- Decorative background dot -->
+                                        <div style="position: absolute; right: -20px; top: -20px; width: 80px; height: 80px; background: rgba(128,0,0,0.04); border-radius: 50%;"></div>
+                                        <!-- Avatar with initials -->
+                                        <div id="customer-avatar-circle" style="width: 46px; height: 46px; background: linear-gradient(135deg, #800000, #a00000); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 800; color: #fff; flex-shrink: 0; box-shadow: 0 4px 12px rgba(128,0,0,0.25); letter-spacing: -0.5px;">
+                                            <i class='bx bx-user' style="font-size: 1.3rem;"></i>
+                                        </div>
+                                        <!-- Info -->
+                                        <div style="flex: 1; min-width: 0;">
+                                            <b id="res-name" style="display: block; font-size: 0.92rem; font-weight: 800; color: #1e293b; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">— — —</b>
+                                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                                <i class='bx bx-phone' style="font-size: 0.75rem; color: #94a3b8;"></i>
+                                                <span id="res-phone" style="font-size: 0.75rem; color: #64748b; font-weight: 500;">No detectado</span>
+                                            </div>
+                                        </div>
+                                        <!-- Verified badge -->
+                                        <div style="display: flex; align-items: center; gap: 4px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 20px; padding: 3px 10px; flex-shrink: 0;">
+                                            <i class='bx bxs-check-circle' style="color: #16a34a; font-size: 0.75rem;"></i>
+                                            <span style="font-size: 0.65rem; font-weight: 800; color: #16a34a; text-transform: uppercase; letter-spacing: 0.04em;">Verificado</span>
                                         </div>
                                         <input type="hidden" id="client-id">
                                     </div>
@@ -574,6 +587,11 @@
                     document.getElementById('res-name').innerText = data.cliente.nombre;
                     document.getElementById('res-phone').innerText = data.cliente.celular;
                     document.getElementById('client-id').value = data.cliente.id;
+                    // Avatar con iniciales
+                    const parts = data.cliente.nombre.trim().split(' ');
+                    const initials = (parts[0]?.[0] || '') + (parts[1]?.[0] || '');
+                    const av = document.getElementById('customer-avatar-circle');
+                    if (av) { av.innerHTML = initials.toUpperCase(); av.style.fontSize = '1rem'; }
                     rightPanel.classList.add('active');
                     updateSubtotal();
                 } else {
