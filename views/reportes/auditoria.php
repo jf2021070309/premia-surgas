@@ -121,9 +121,9 @@
                                             <div v-for="(val, field) in log.parsedMetadata" :key="field" class="change-item">
                                                 <i class='bx bx-chevron-right' style="color: #94a3b8;"></i>
                                                 <b>{{ field.replace('_', ' ') }}:</b> 
-                                                <span class="val-old" v-if="val.ant">{{ val.ant }}</span>
+                                                <span class="val-old" v-if="val.ant !== null && val.ant !== undefined">{{ formatValue(field, val.ant) }}</span>
                                                 <i class='bx bx-right-arrow-alt' style="font-size: 0.9rem; opacity: 0.5;"></i>
-                                                <span class="val-new">{{ val.des }}</span>
+                                                <span class="val-new">{{ formatValue(field, val.des) }}</span>
                                             </div>
                                         </div>
                                     </td>
@@ -200,6 +200,22 @@
                 },
                 formatHora(fh) {
                     return new Date(fh).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+                },
+                formatValue(field, val) {
+                    const f = (field || '').toLowerCase();
+                    const v = (val !== null && val !== undefined) ? val.toString() : '';
+
+                    // Estados de Productos o de Acceso
+                    if (f.includes('estado') || f.includes('acceso')) {
+                        if (v === '1') return 'Activo / Permitido';
+                        if (v === '0') return 'Inactivo / Bloqueado';
+                    }
+
+                    // Otros booleanos comunes
+                    if (v === '1' && (f.includes('visible') || f.includes('requerido'))) return 'SÍ';
+                    if (v === '0' && (f.includes('visible') || f.includes('requerido'))) return 'NO';
+
+                    return val;
                 },
                 cargarDatos() {
                     fetch('<?= BASE_URL ?>reporte/getAuditLogsJson')
