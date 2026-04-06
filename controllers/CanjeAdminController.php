@@ -1,15 +1,18 @@
 <?php
 require_once __DIR__ . '/../models/CanjeModel.php';
+require_once __DIR__ . '/../models/AuditoriaModel.php';
 
 class CanjeAdminController {
+    private AuditoriaModel $audit;
 
     public function __construct() {
         if (session_status() === PHP_SESSION_NONE) session_start();
         $this->requireAdmin();
+        $this->audit = new AuditoriaModel();
     }
 
     private function requireAdmin(): void {
-        if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'admin') {
+        if (!isset($_SESSION['rol']) || !in_array($_SESSION['rol'], ['admin', 'administrador'])) {
             header('Location: ' . BASE_URL . 'panel');
             exit;
         }
@@ -17,8 +20,6 @@ class CanjeAdminController {
 
     public function index(): void {
         $model = new CanjeModel();
-        // Usamos el método que ya tiene pero con un límite más alto o quizás uno nuevo si fuera necesario
-        // Pero para gestión, mejor traer todos los recientes o implementar listado completo
         $canjes = $model->getRecientes(100); 
 
         require_once __DIR__ . '/../views/canjes_admin.php';
@@ -30,9 +31,22 @@ class CanjeAdminController {
 
         if ($id > 0) {
             $model = new CanjeModel();
+            
+            // Obtener datos del canje para el log
+            $sql = "SELECT c.*, p.nombre as producto_nombre, cl.nombre as cliente_nombre 
+                    FROM canjes c 
+                    JOIN premios p ON c.premio_id = p.id 
+                    JOIN clientes cl ON c.cliente_id = cl.id 
+                    WHERE c.id = ?";
+            $stmt = Database::getConnection()->prepare($sql);
+            $stmt->execute([$id]);
+            $canje = $stmt->fetch();
+
             $result = $model->actualizarEstado($id, $estado);
             if ($result) {
-                $_SESSION['flash'] = ['type' => 'success', 'title' => 'Éxito', 'message' => 'Estado actualizado.'];
+                $statusText = strtoupper($estado);
+                $this->audit->registrar($_SESSION['id_usuario'], 'ESTADO_CANJE', "Cambió a $statusText el canje de {$canje['producto_nombre']} para {$canje['cliente_nombre']}", 'CANJES');
+                $_SESSION['flash'] = ['type' => 'success', 'title' => 'Éxito', 'message' => "Estado actualizado a $estado."];
             } else {
                 $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo actualizar el estado.'];
             }

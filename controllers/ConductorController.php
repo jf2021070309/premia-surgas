@@ -1,8 +1,14 @@
 <?php
 require_once __DIR__ . '/../models/UsuarioModel.php';
+require_once __DIR__ . '/../models/AuditoriaModel.php';
 
 class ConductorController
 {
+    private AuditoriaModel $audit;
+
+    public function __construct() {
+        $this->audit = new AuditoriaModel();
+    }
 
     public function index(): void
     {
@@ -33,6 +39,7 @@ class ConductorController
         ];
 
         if ($model->create($data)) {
+            $this->audit->registrar($_SESSION['id_usuario'], 'NUEVO_CONDUCTOR', "Registró al conductor: " . ($data['nombre']), 'CONDUCTORES');
             $_SESSION['flash'] = ['type' => 'success', 'title' => '¡Éxito!', 'message' => 'Conductor registrado correctamente.'];
         } else {
             $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo registrar al conductor.'];
@@ -61,6 +68,11 @@ class ConductorController
         $this->requireAdmin();
         $id = (int) ($_POST['id'] ?? 0);
         $model = new UsuarioModel();
+        
+        $conductorOriginal = $model->findById($id);
+        if (!$conductorOriginal) {
+            $this->redirect('conductores');
+        }
 
         $data = [
             'nombre' => $_POST['nombre'] ?? '',
@@ -73,7 +85,21 @@ class ConductorController
             $data['password'] = $_POST['password'];
         }
 
+        // Tracking de cambios
+        $changes = [];
+        $fields = ['nombre', 'usuario', 'estado', 'departamento'];
+        foreach($fields as $f) {
+            $ant = $conductorOriginal[$f] ?? null;
+            $des = $data[$f] ?? null;
+            if (trim((string)$ant) !== trim((string)$des)) {
+                $changes[$f] = ['ant' => $ant, 'des' => $des];
+            }
+        }
+
         if ($model->update($id, $data)) {
+            $desc = "Actualizó datos del conductor: " . ($data['nombre']);
+            if(!empty($changes)) $desc .= " (" . count($changes) . " campos modificados)";
+            $this->audit->registrar($_SESSION['id_usuario'], 'ACTUALIZAR_CONDUCTOR', $desc, 'CONDUCTORES', $changes);
             $_SESSION['flash'] = ['type' => 'success', 'title' => '¡Éxito!', 'message' => 'Información del conductor actualizada.'];
         } else {
             $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo actualizar la información.'];
@@ -88,7 +114,11 @@ class ConductorController
         $this->requireAdmin();
         $id = (int) ($_GET['id'] ?? 0);
         $model = new UsuarioModel();
+        
+        $conductor = $model->findById($id);
+
         if ($model->setEstado($id, 0)) {
+            $this->audit->registrar($_SESSION['id_usuario'], 'BAJA_CONDUCTOR', "Inactivó al conductor: " . ($conductor['nombre'] ?? 'ID '.$id), 'CONDUCTORES');
             $_SESSION['flash'] = ['type' => 'success', 'title' => '¡Hecho!', 'message' => 'Conductor inactivado correctamente.'];
         } else {
             $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo inactivar al conductor.'];

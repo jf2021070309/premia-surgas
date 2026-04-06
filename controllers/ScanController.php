@@ -3,6 +3,7 @@ require_once __DIR__ . '/../models/ClienteModel.php';
 require_once __DIR__ . '/../models/VentaModel.php';
 require_once __DIR__ . '/../models/ConfiguracionModel.php';
 require_once __DIR__ . '/../models/TipoOperacionModel.php';
+require_once __DIR__ . '/../models/AuditoriaModel.php';
 require_once __DIR__ . '/../config/config.php';
 
 class ScanController {
@@ -136,6 +137,12 @@ class ScanController {
         if ($idVenta) {
             // 2. Actualizar puntos totales del cliente
             $clienteModel->sumarPuntos($clienteId, $puntos);
+
+            // AUDITORIA
+            $c = $clienteModel->findById($clienteId);
+            $audit = new AuditoriaModel();
+            $audit->registrar($_SESSION['id_usuario'], 'CARGA_PUNTOS', "Cargó $puntos puntos a {$c['nombre']} ($detalle)", 'RECARGAS');
+            
             $this->json(['success' => true, 'message' => 'Puntos registrados correctamente.']);
         } else {
             $this->json(['success' => false, 'message' => 'Error al registrar puntos.']);
@@ -171,6 +178,11 @@ class ScanController {
 
         $ventaModel->create($clienteId, $_SESSION['id_usuario'], $monto, $puntos, "Compra por monto: S/ $monto (+$puntos pts)");
         $clienteModel->sumarPuntos($clienteId, $puntos);
+
+        // AUDITORIA
+        $c = $clienteModel->findById($clienteId);
+        $audit = new AuditoriaModel();
+        $audit->registrar($_SESSION['id_usuario'], 'VENTA_PUNTOS', "Asignó $puntos puntos por venta de S/ $monto a {$c['nombre']}", 'RECARGAS');
 
         echo json_encode(['success' => true, 'puntos_sumados' => $puntos]);
         exit;

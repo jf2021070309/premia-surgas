@@ -1,7 +1,13 @@
 <?php
 require_once __DIR__ . '/../models/PremioModel.php';
+require_once __DIR__ . '/../models/AuditoriaModel.php';
 
 class ProductoController {
+    private AuditoriaModel $audit;
+
+    public function __construct() {
+        $this->audit = new AuditoriaModel();
+    }
     
     public function index(): void {
         $this->requireAdmin();
@@ -32,6 +38,7 @@ class ProductoController {
         ];
 
         if ($model->create($data)) {
+            $this->audit->registrar($_SESSION['id_usuario'], 'NUEVO_PRODUCTO', "Creó producto: " . ($data['nombre']), 'PRODUCTOS');
             $_SESSION['flash'] = ['type' => 'success', 'title' => '¡Éxito!', 'message' => 'Producto creado correctamente.'];
         } else {
             $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo crear el producto.'];
@@ -79,7 +86,19 @@ class ProductoController {
             'estado'      => (int)($_POST['estado'] ?? 1),
         ];
 
+        // Track cambios
+        $changes = [];
+        $fields = ['nombre', 'descripcion', 'puntos', 'stock', 'estado'];
+        foreach($fields as $f) {
+            if (trim((string)$producto_actual[$f]) !== trim((string)$data[$f])) {
+                $changes[$f] = ['ant' => $producto_actual[$f], 'des' => $data[$f]];
+            }
+        }
+
         if ($model->update($id, $data)) {
+            $desc = "Actualizó producto: " . ($data['nombre']);
+            if(!empty($changes)) $desc .= " (" . count($changes) . " campos modificados)";
+            $this->audit->registrar($_SESSION['id_usuario'], 'ACTUALIZAR_PRODUCTO', $desc, 'PRODUCTOS', $changes);
             $_SESSION['flash'] = ['type' => 'success', 'title' => '¡Éxito!', 'message' => 'Producto actualizado correctamente.'];
         } else {
             $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo actualizar the product.'];
