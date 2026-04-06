@@ -293,22 +293,12 @@
 
         <div class="container">
 
-            <!-- Section Header -->
-            <div class="modern-section-header">
-                <div class="section-title-flex">
-                    <div class="section-title-text">
-                        <h3>Gestión de Puntos</h3>
-                        <span>Escanea el QR del cliente o búscalo por DNI para registrar su servicio</span>
-                    </div>
-                </div>
-            </div>
-
             <div class="scan-wrapper">
                 <input type="file" id="qr-input-file" accept="image/*" style="display: none;" onchange="onFileChange(event)">
 
                 <!-- ── Card 1: Búsqueda QR ── -->
                 <div class="card" style="margin-bottom: 0;">
-                    <div class="card-header">
+                    <div class="card-header" style="justify-content: flex-start;">
                         <div class="header-title-flex">
                             <i class='bx bx-qr-scan'></i>
                             <div class="title-text-group">
