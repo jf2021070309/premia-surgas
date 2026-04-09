@@ -449,54 +449,77 @@
                     <!-- ══════════════════════════════════════ 
                          PREMIUM CONDUCTOR DASHBOARD 
                          ══════════════════════════════════════ -->
-                    <div style="margin-bottom: 2.5rem; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem;">
-                        <div>
-                            <h2 style="font-weight: 900; color: #1e293b; margin: 0; font-size: 1.8rem; letter-spacing: -0.5px;">¡Hola, <?= explode(' ', $_SESSION['nombre_usuario'])[0] ?>! 👋</h2>
-                            <p style="color: #64748b; font-weight: 500; margin-top: 0.2rem; font-size: 0.95rem;">Tu resumen de hoy en <span style="color: #800000; font-weight: 700;">PremiaSurgas</span></p>
+                    <!-- Unified Banner with Image and KPIs -->
+                    <style>
+                        @keyframes slideFadeDown {
+                            0% { opacity: 0; transform: translateY(-30px); }
+                            100% { opacity: 1; transform: translateY(0); }
+                        }
+                        .anim-welcome {
+                            opacity: 0;
+                            animation: slideFadeDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+                        }
+                        .anim-card {
+                            opacity: 0;
+                            animation: slideFadeDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+                            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                        }
+                        .anim-card:hover {
+                            transform: translateY(-6px);
+                            box-shadow: 0 15px 30px rgba(0,0,0,0.15) !important;
+                            filter: brightness(1.1);
+                        }
+                    </style>
+                    <div class="anim-welcome" style="background: white; border-radius: 20px; border: 1px solid #e2e8f0; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 2.5rem; display: flex; overflow: hidden; position: relative;">
+                        
+                        <!-- Left Image Column -->
+                        <div style="width: 300px; background: transparent; display: flex; align-items: flex-end; justify-content: center; position: relative; flex-shrink: 0; padding-bottom: 15px;">
+                            <img src="<?= BASE_URL ?>assets/premios/panelgas.png" style="width: 85%; height: auto; object-fit: contain; object-position: bottom; transform-origin: bottom center; margin-bottom: -15px;">
                         </div>
-                        <div style="background: white; padding: 0.5rem 1rem; border-radius: 12px; border: 1px solid #e2e8f0; display: flex; align-items: center; gap: 0.75rem; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
-                           <div style="width: 10px; height: 10px; background: #22c55e; border-radius: 50%; box-shadow: 0 0 8px rgba(34, 197, 94, 0.4);"></div>
-                           <span style="font-weight: 700; color: #334155; font-size: 0.85rem;">Conexión Activa</span>
-                        </div>
-                    </div>
 
-                    <!-- KPI Row -->
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
-                        <!-- Puntos Hoy -->
-                        <div class="dash-card card-orange" style="min-height: 140px; border-radius: 12px;">
-                            <div class="dash-card-body">
-                                <div style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.7); margin-bottom: 0.5rem;">Puntos Entregados Hoy</div>
-                                <div class="dash-card-number" style="font-size: 3.5rem;"><?= $metricas_adicionales['puntos_hoy'] ?></div>
-                                <div style="margin-top: auto; font-size: 0.85rem; font-weight: 600; color: rgba(255,255,255,0.9); display: flex; align-items: center; gap: 0.4rem;">
-                                    <i class='bx bx-trending-up'></i> Buen ritmo hoy
+                        <!-- Right Content Column -->
+                        <div style="flex: 1; padding: 2.5rem 2.5rem 2.5rem 0; display: flex; flex-direction: column; justify-content: center; gap: 2.5rem;">
+                            
+                            <!-- Header Text -->
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                <div class="anim-welcome" style="animation-delay: 0.1s;">
+                                    <h2 style="font-weight: 900; color: #0f172a; margin: 0; font-size: 3rem; letter-spacing: -1.5px; line-height: 1;">Bienvenido, <?= explode(' ', $_SESSION['nombre_usuario'])[0] ?></h2>
+                                    <p style="color: #64748b; margin: 0.8rem 0 0; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 800;">Resumen Operativo <span style="color: #cbd5e1; margin: 0 0.5rem;">•</span> <span style="color: #800000; font-weight: 900;">PREMIASURGAS</span></p>
                                 </div>
-                                <i class='bx bxs-zap dash-card-icon'></i>
                             </div>
-                        </div>
 
-                        <!-- Puntos Históricos -->
-                        <div class="dash-card card-dark" style="min-height: 140px; border-radius: 12px;">
-                            <div class="dash-card-body">
-                                <div style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.7); margin-bottom: 0.5rem;">Total Histórico</div>
-                                <div class="dash-card-number" style="font-size: 3.5rem;"><?= $metricas_adicionales['total_historico'] ?></div>
-                                <div style="margin-top: auto; font-size: 0.85rem; font-weight: 600; color: rgba(255,255,255,0.9);">Total de puntos acumulados</div>
-                                <i class='bx bxs-award dash-card-icon'></i>
-                            </div>
-                        </div>
+                            <!-- KPI Cards Row -->
+                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                                
+                                <!-- Puntos Hoy (Orange) -->
+                                <div class="anim-card" style="animation-delay: 0.2s; background: #f97316; border-radius: 16px; padding: 1.5rem; color: white; display: flex; flex-direction: column; justify-content: space-between; min-height: 130px; box-shadow: 0 10px 20px rgba(249, 115, 22, 0.15);">
+                                    <div style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.9); margin-bottom: 0.5rem;">Puntos Entregados Hoy</div>
+                                    <div class="dash-card-number-conductor" data-value="<?= $metricas_adicionales['puntos_hoy'] ?>" style="font-size: 3.2rem; font-weight: 900; line-height: 1; margin-bottom: 0.5rem;">0</div>
+                                    <div style="font-size: 0.8rem; font-weight: 600; color: rgba(255,255,255,1); display: flex; align-items: center; gap: 0.4rem;">
+                                        <i class='bx bx-trending-up'></i> Buen ritmo hoy
+                                    </div>
+                                </div>
 
-                        <!-- Clientes -->
-                        <div class="dash-card card-wine" style="min-height: 140px; border-radius: 12px;">
-                            <div class="dash-card-body">
-                                <div style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.7); margin-bottom: 0.5rem;">Clientes Atendidos</div>
-                                <div class="dash-card-number" style="font-size: 3.5rem;"><?= $metricas_adicionales['total_clientes_propios'] ?></div>
-                                <div style="margin-top: auto; font-size: 0.85rem; font-weight: 600; color: rgba(255,255,255,0.9);">Base de datos personal</div>
-                                <i class='bx bxs-user-detail dash-card-icon'></i>
+                                <!-- Total Historico (Dark Wine) -->
+                                <div class="anim-card" style="animation-delay: 0.3s; background: #380b0d; border-radius: 16px; padding: 1.5rem; color: white; display: flex; flex-direction: column; justify-content: space-between; min-height: 130px; box-shadow: 0 10px 20px rgba(56, 11, 13, 0.15);">
+                                    <div style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.7); margin-bottom: 0.5rem;">Total Histórico</div>
+                                    <div class="dash-card-number-conductor" data-value="<?= $metricas_adicionales['total_historico'] ?>" style="font-size: 3.2rem; font-weight: 900; line-height: 1; margin-bottom: 0.5rem;">0</div>
+                                    <div style="font-size: 0.8rem; font-weight: 500; color: rgba(255,255,255,0.6);">Total de puntos acumulados</div>
+                                </div>
+
+                                <!-- Clientes Atendidos (Dark Wine) -->
+                                <div class="anim-card" style="animation-delay: 0.4s; background: #380b0d; border-radius: 16px; padding: 1.5rem; color: white; display: flex; flex-direction: column; justify-content: space-between; min-height: 130px; box-shadow: 0 10px 20px rgba(56, 11, 13, 0.15);">
+                                    <div style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.7); margin-bottom: 0.5rem;">Clientes Atendidos</div>
+                                    <div class="dash-card-number-conductor" data-value="<?= $metricas_adicionales['total_clientes_propios'] ?>" style="font-size: 3.2rem; font-weight: 900; line-height: 1; margin-bottom: 0.5rem;">0</div>
+                                    <div style="font-size: 0.8rem; font-weight: 500; color: rgba(255,255,255,0.6);">Base de datos personal</div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
 
                     <!-- Main Grid -->
-                    <div style="display: grid; grid-template-columns: 2fr 1.2fr; gap: 2rem; align-items: start;">
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 2rem; align-items: start;">
                         
                         <!-- LEFT COLUMN: Charts & Activity -->
                         <div style="display: flex; flex-direction: column; gap: 2rem;">
@@ -552,82 +575,7 @@
                             </div>
                         </div>
 
-                        <!-- RIGHT COLUMN: Motivation & Tools -->
-                        <div style="display: flex; flex-direction: column; gap: 2rem;">
-                            
-                            <!-- Ranking Motivation -->
-                            <div style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border-radius: 20px; padding: 2rem; color: white; box-shadow: 0 10px 25px rgba(0,0,0,0.15); position: relative; overflow: hidden;">
-                                <div style="position: relative; z-index: 2;">
-                                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem;">
-                                        <div>
-                                            <div style="font-size: 0.75rem; font-weight: 800; letter-spacing: 1px; color: rgba(255,255,255,0.6); text-transform: uppercase; margin-bottom: 0.4rem;">Tu Ranking Actual</div>
-                                            <div style="font-size: 2.2rem; font-weight: 900; line-height: 1;">Posición #<?= $metricas_adicionales['mi_posicion'] ?></div>
-                                        </div>
-                                        <div style="width: 50px; height: 50px; background: rgba(255,255,255,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; color: #f59e0b;">
-                                            <i class='bx bxs-trophy'></i>
-                                        </div>
-                                    </div>
-
-                                    <?php if ($metricas_adicionales['distancia_siguiente'] > 0): ?>
-                                        <div style="background: rgba(255,255,255,0.05); padding: 1.25rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
-                                            <div style="font-size: 0.8rem; font-weight: 600; color: rgba(255,255,255,0.8); margin-bottom: 0.5rem;">Próximo objetivo:</div>
-                                            <div style="font-size: 1.2rem; font-weight: 800; color: #fbbf24; border-bottom: 2px solid rgba(251, 191, 36, 0.3); display: inline-block;">
-                                                <i class='bx bx-chevrons-up'></i> Falta <?= $metricas_adicionales['distancia_siguiente'] ?> ptos
-                                            </div>
-                                            <div style="font-size: 0.75rem; color: rgba(255,255,255,0.5); margin-top: 0.5rem;">Para subir al siguiente puesto</div>
-                                        </div>
-                                    <?php else: ?>
-                                        <div style="background: rgba(34, 197, 94, 0.1); padding: 1.25rem; border-radius: 12px; border: 1px solid rgba(34, 197, 94, 0.3);">
-                                            <div style="font-size: 1.2rem; font-weight: 800; color: #4ade80;">👑 ¡Eres el líder!</div>
-                                            <div style="font-size: 0.75rem; color: rgba(255,255,255,0.7); margin-top: 0.4rem;">Sigue así para mantener tu corona</div>
-                                        </div>
-                                    <?php endif; ?>
-                                </div>
-                                <!-- Background decoration -->
-                                <i class='bx bxs-star' style="position: absolute; bottom: -20px; right: -20px; font-size: 120px; opacity: 0.1; color: white;"></i>
-                            </div>
-
-                            <!-- Premium Actions -->
-                            <div style="display: flex; flex-direction: column; gap: 1rem;">
-                                <h3 style="margin: 0 0 0.5rem; font-size: 1.15rem; font-weight: 900; color: #1e293b; letter-spacing: -0.3px;">Acciones Premium</h3>
-                                
-                                <a href="<?= BASE_URL ?>scan" style="display: flex; align-items: center; gap: 1.2rem; background: #800000; color: white; padding: 1.5rem; border-radius: 16px; text-decoration: none; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 15px rgba(128, 0, 0, 0.2);" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 12px 25px rgba(128, 0, 0, 0.3)'" onmouseout="this.style.transform='none'; this.style.boxShadow='0 4px 15px rgba(128, 0, 0, 0.2)'">
-                                    <div style="width: 54px; height: 54px; background: rgba(255,255,255,0.2); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; flex-shrink: 0;">
-                                        <i class='bx bx-qr-scan'></i>
-                                    </div>
-                                    <div style="flex: 1;">
-                                        <div style="font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; justify-content: space-between;">
-                                            Sumar Puntos <i class='bx bx-chevron-right'></i>
-                                        </div>
-                                        <div style="font-size: 0.8rem; opacity: 0.8; font-weight: 500;">Escanear QR de cliente</div>
-                                    </div>
-                                </a>
-
-                                <a href="<?= BASE_URL ?>clientes/nuevo" style="display: flex; align-items: center; gap: 1.2rem; background: #f97316; color: white; padding: 1.5rem; border-radius: 16px; text-decoration: none; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 15px rgba(249, 115, 22, 0.2);" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 12px 25px rgba(249, 115, 22, 0.3)'" onmouseout="this.style.transform='none'; this.style.boxShadow='0 4px 15px rgba(249, 115, 22, 0.2)'">
-                                    <div style="width: 54px; height: 54px; background: rgba(255,255,255,0.2); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; flex-shrink: 0;">
-                                        <i class='bx bx-user-plus'></i>
-                                    </div>
-                                    <div style="flex: 1;">
-                                        <div style="font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; justify-content: space-between;">
-                                            Nuevo Cliente <i class='bx bx-chevron-right'></i>
-                                        </div>
-                                        <div style="font-size: 0.8rem; opacity: 0.8; font-weight: 500;">Registrar en el sistema</div>
-                                    </div>
-                                </a>
-
-                                <a href="<?= BASE_URL ?>clientes/lista" style="display: flex; align-items: center; gap: 1.2rem; background: #334155; color: white; padding: 1.5rem; border-radius: 16px; text-decoration: none; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 15px rgba(51, 65, 85, 0.2);" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 12px 25px rgba(51, 65, 85, 0.3)'" onmouseout="this.style.transform='none'; this.style.boxShadow='0 4px 15px rgba(51, 65, 85, 0.2)'">
-                                    <div style="width: 54px; height: 54px; background: rgba(255,255,255,0.2); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; flex-shrink: 0;">
-                                        <i class='bx bx-group'></i>
-                                    </div>
-                                    <div style="flex: 1;">
-                                        <div style="font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; justify-content: space-between;">
-                                            Mi Directorio <i class='bx bx-chevron-right'></i>
-                                        </div>
-                                        <div style="font-size: 0.8rem; opacity: 0.8; font-weight: 500;">Lista de clientes Premia</div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
+                        <!-- RIGHT COLUMN REMOVED -->
                     </div>
                 <?php endif; ?>
             </div>
@@ -826,6 +774,27 @@
     <?php if ($_SESSION['rol'] === 'conductor'): ?>
         <script>
             document.addEventListener("DOMContentLoaded", function () {
+                // Counting Animation for Cards
+                setTimeout(() => {
+                    const counters = document.querySelectorAll('.dash-card-number-conductor');
+                    counters.forEach(counter => {
+                        const target = +counter.getAttribute('data-value');
+                        const duration = 1200; // ms
+                        const increment = target / (duration / 16);
+                        let current = 0;
+                        const updateCounter = () => {
+                            current += increment;
+                            if (current < target) {
+                                counter.innerText = Math.ceil(current);
+                                requestAnimationFrame(updateCounter);
+                            } else {
+                                counter.innerText = target;
+                            }
+                        };
+                        updateCounter();
+                    });
+                }, 300); // slight delay to sync with entrance animation
+
                 const historial = <?php echo json_encode($metricas_adicionales['mi_historial'] ?? []); ?>;
                 const ctxHistMi = document.getElementById('miHistorialChart');
                 if (ctxHistMi && historial.length > 0) {
