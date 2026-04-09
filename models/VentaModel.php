@@ -28,4 +28,65 @@ class VentaModel {
         $stmt->execute([$clienteId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    public function getByConductor(int $conductorId): array {
+        $stmt = $this->db->prepare(
+            "SELECT v.*, c.nombre as cliente_nombre, c.dni as cliente_dni, c.celular as cliente_celular
+             FROM ventas v
+             JOIN clientes c ON c.id = v.cliente_id
+             WHERE v.conductor_id = ?
+             ORDER BY v.fecha DESC"
+        );
+        $stmt->execute([$conductorId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getByConductorPaginated(int $conductorId, int $offset, int $limit, string $search = '', string $fechaDesde = '', string $fechaHasta = ''): array {
+        $params = [$conductorId];
+        $where = "v.conductor_id = ?";
+
+        if (!empty($search)) {
+            $where .= " AND (c.nombre LIKE ? OR c.dni LIKE ?)";
+            $params[] = "%$search%";
+            $params[] = "%$search%";
+        }
+
+        if (!empty($fechaDesde)) {
+            $where .= " AND DATE(v.fecha) >= ?";
+            $params[] = $fechaDesde;
+        }
+
+        if (!empty($fechaHasta)) {
+            $where .= " AND DATE(v.fecha) <= ?";
+            $params[] = $fechaHasta;
+        }
+
+        // Count total
+        $countQuery = "SELECT COUNT(*) as total FROM ventas v JOIN clientes c ON c.id = v.cliente_id WHERE $where";
+        $stmtCount = $this->db->prepare($countQuery);
+        $stmtCount->execute($params);
+        $totalRows = $stmtCount->fetch(PDO::FETCH_ASSOC)['total'];
+
+        // Sum points
+        $sumQuery = "SELECT SUM(v.puntos) as total_puntos FROM ventas v JOIN clientes c ON c.id = v.cliente_id WHERE $where";
+        $stmtSum = $this->db->prepare($sumQuery);
+        $stmtSum->execute($params);
+        $totalPuntos = $stmtSum->fetch(PDO::FETCH_ASSOC)['total_puntos'] ?? 0;
+
+        // Data
+        $query = "SELECT v.*, c.nombre as cliente_nombre, c.dni as cliente_dni, c.celular as cliente_celular
+                 FROM ventas v
+                 JOIN clientes c ON c.id = v.cliente_id
+                 WHERE $where
+                 ORDER BY v.fecha DESC
+                 LIMIT " . (int)$limit . " OFFSET " . (int)$offset;
+        $stmt = $this->db->prepare($query);
+        $stmt->execute($params);
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return [
+            'data' => $data,
+            'total' => $totalRows,
+            'total_puntos' => $totalPuntos
+        ];
+    }
 }

@@ -298,14 +298,21 @@
             <?php else: ?>
                 <?php foreach (array_slice($ventas, 0, 4) as $v): ?>
                 <div class="history-item">
-                    <div class="history-main-row">
-                        <div class="item-name">
-                            <i class='bx bx-check-circle'></i>
-                            <?= htmlspecialchars($v['detalle'] ?: 'Operación') ?>
+                    <?php 
+                        $detalleLimpio = str_replace(['), ', ', Recarga'], [")\n• Recarga", "\n• Recarga"], $v['detalle']);
+                        if (!str_starts_with($detalleLimpio, '•') && !str_starts_with($detalleLimpio, 'Compra')) {
+                            $detalleLimpio = '• ' . $detalleLimpio;
+                        }
+                    ?>
+                    <div class="history-main-row" style="align-items: flex-start;">
+                        <div class="item-name" style="align-items: flex-start; line-height: 1.5; white-space: pre-line; background: #f8fafc; padding: 0.6rem 0.8rem; border-radius: 12px; border: 1px solid #eef2f7; font-size: 0.8rem; color: #475569; width: 100%;">
+                            <?= nl2br(htmlspecialchars($detalleLimpio)) ?>
                         </div>
-                        <span class="item-pts">+<?= $v['puntos'] ?></span>
                     </div>
-                    <span class="history-date"><?= date('d/m/Y', strtotime($v['fecha'])) ?></span>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.8rem; padding: 0 0.5rem;">
+                        <span class="history-date" style="padding-left: 0;"><?= date('d/m/Y', strtotime($v['fecha'])) ?></span>
+                        <span class="item-pts" style="font-size: 0.95rem; color: var(--primary);">+<?= $v['puntos'] ?> pts</span>
+                    </div>
                 </div>
                 <?php endforeach; ?>
             <?php endif; ?>

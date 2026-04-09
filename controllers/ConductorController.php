@@ -140,6 +140,38 @@ class ConductorController
         $this->redirect($redir);
     }
 
+    public function miHistorial(): void
+    {
+        $this->requireConductor();
+        require_once __DIR__ . '/../models/VentaModel.php';
+        
+        $model = new VentaModel();
+        
+        $search = trim($_GET['search'] ?? '');
+        $fechaDesde = trim($_GET['fecha_desde'] ?? '');
+        $fechaHasta = trim($_GET['fecha_hasta'] ?? '');
+        
+        $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+        $limit = 10;
+        $offset = ($page - 1) * $limit;
+        
+        $result = $model->getByConductorPaginated($_SESSION['id_usuario'], $offset, $limit, $search, $fechaDesde, $fechaHasta);
+        $historial = $result['data'];
+        $totalPages = ceil($result['total'] / $limit);
+        
+        $this->render('conductores/mi_historial', [
+            'historial' => $historial,
+            'totalRows' => $result['total'],
+            'totalPuntosFiltrado' => $result['total_puntos'],
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
+            'search' => $search,
+            'fechaDesde' => $fechaDesde,
+            'fechaHasta' => $fechaHasta,
+            'titulo' => 'Mi Historial de Puntos'
+        ]);
+    }
+
     // ── helpers ──────────────────────────────────────────────────
 
     private function render(string $view, array $data = []): void
@@ -157,6 +189,14 @@ class ConductorController
     private function requireAdmin(): void
     {
         if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'admin') {
+            header('Location: ' . BASE_URL . 'panel');
+            exit;
+        }
+    }
+
+    private function requireConductor(): void
+    {
+        if (!isset($_SESSION['rol']) || ($_SESSION['rol'] !== 'conductor' && $_SESSION['rol'] !== 'admin')) {
             header('Location: ' . BASE_URL . 'panel');
             exit;
         }

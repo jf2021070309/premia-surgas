@@ -59,6 +59,10 @@ if (!function_exists('isActiveLink')) {
             <i class='bx bx-qr-scan'></i>
             <span>Suma Puntos</span>
         </a>
+        <a href="<?= BASE_URL ?>conductores/mi-historial" class="sidebar-item <?= isActiveLink('conductores/mi-historial', $current_url) ?>">
+            <i class='bx bx-history'></i>
+            <span>Mi Historial</span>
+        </a>
 
         <?php if ($_SESSION['rol'] === 'admin'): ?>
             <div class="menu-label">Mantenimiento</div>

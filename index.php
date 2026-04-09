@@ -84,6 +84,7 @@ $routes = [
     ['GET',  'conductores/editar',   'ConductorController', 'editar'],
     ['POST', 'conductores/update',   'ConductorController', 'update'],
     ['GET',  'conductores/delete',   'ConductorController', 'delete'],
+    ['GET',  'conductores/mi-historial', 'ConductorController', 'miHistorial'],
 
     // —— QR ——
     ['GET',  'qr/generate',  'QrController',     'generate'],

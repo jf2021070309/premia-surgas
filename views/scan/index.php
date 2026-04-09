@@ -663,7 +663,10 @@
             btn.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i> Guardando...";
             btn.disabled = true;
             try {
-                const detalleString = operations.map(op => `${op.name} x${op.qty} (+${op.subtotal} pts)`).join(', ');
+                let detalleString = operations.map(op => `• ${op.name} x${op.qty} (+${op.subtotal} pts)`).join('\n');
+                if (operations.length > 1) {
+                    detalleString += `\n──────────\nTOTAL: ${total} pts`;
+                }
                 const res = await fetch(baseUrl + 'scan/registrar', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
