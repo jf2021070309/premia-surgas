@@ -443,6 +443,191 @@
                                 </div>
                             </div>
                         <?php endforeach; ?>
+                <?php endif; ?>
+
+                <?php if ($_SESSION['rol'] === 'conductor'): ?>
+                    <!-- ══════════════════════════════════════ 
+                         PREMIUM CONDUCTOR DASHBOARD 
+                         ══════════════════════════════════════ -->
+                    <div style="margin-bottom: 2.5rem; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem;">
+                        <div>
+                            <h2 style="font-weight: 900; color: #1e293b; margin: 0; font-size: 1.8rem; letter-spacing: -0.5px;">¡Hola, <?= explode(' ', $_SESSION['nombre_usuario'])[0] ?>! 👋</h2>
+                            <p style="color: #64748b; font-weight: 500; margin-top: 0.2rem; font-size: 0.95rem;">Tu resumen de hoy en <span style="color: #800000; font-weight: 700;">PremiaSurgas</span></p>
+                        </div>
+                        <div style="background: white; padding: 0.5rem 1rem; border-radius: 12px; border: 1px solid #e2e8f0; display: flex; align-items: center; gap: 0.75rem; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+                           <div style="width: 10px; height: 10px; background: #22c55e; border-radius: 50%; box-shadow: 0 0 8px rgba(34, 197, 94, 0.4);"></div>
+                           <span style="font-weight: 700; color: #334155; font-size: 0.85rem;">Conexión Activa</span>
+                        </div>
+                    </div>
+
+                    <!-- KPI Row -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
+                        <!-- Puntos Hoy -->
+                        <div class="dash-card card-orange" style="min-height: 140px; border-radius: 12px;">
+                            <div class="dash-card-body">
+                                <div style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.7); margin-bottom: 0.5rem;">Puntos Entregados Hoy</div>
+                                <div class="dash-card-number" style="font-size: 3.5rem;"><?= $metricas_adicionales['puntos_hoy'] ?></div>
+                                <div style="margin-top: auto; font-size: 0.85rem; font-weight: 600; color: rgba(255,255,255,0.9); display: flex; align-items: center; gap: 0.4rem;">
+                                    <i class='bx bx-trending-up'></i> Buen ritmo hoy
+                                </div>
+                                <i class='bx bxs-zap dash-card-icon'></i>
+                            </div>
+                        </div>
+
+                        <!-- Puntos Históricos -->
+                        <div class="dash-card card-dark" style="min-height: 140px; border-radius: 12px;">
+                            <div class="dash-card-body">
+                                <div style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.7); margin-bottom: 0.5rem;">Total Histórico</div>
+                                <div class="dash-card-number" style="font-size: 3.5rem;"><?= $metricas_adicionales['total_historico'] ?></div>
+                                <div style="margin-top: auto; font-size: 0.85rem; font-weight: 600; color: rgba(255,255,255,0.9);">Total de puntos acumulados</div>
+                                <i class='bx bxs-award dash-card-icon'></i>
+                            </div>
+                        </div>
+
+                        <!-- Clientes -->
+                        <div class="dash-card card-wine" style="min-height: 140px; border-radius: 12px;">
+                            <div class="dash-card-body">
+                                <div style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.7); margin-bottom: 0.5rem;">Clientes Atendidos</div>
+                                <div class="dash-card-number" style="font-size: 3.5rem;"><?= $metricas_adicionales['total_clientes_propios'] ?></div>
+                                <div style="margin-top: auto; font-size: 0.85rem; font-weight: 600; color: rgba(255,255,255,0.9);">Base de datos personal</div>
+                                <i class='bx bxs-user-detail dash-card-icon'></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main Grid -->
+                    <div style="display: grid; grid-template-columns: 2fr 1.2fr; gap: 2rem; align-items: start;">
+                        
+                        <!-- LEFT COLUMN: Charts & Activity -->
+                        <div style="display: flex; flex-direction: column; gap: 2rem;">
+                            
+                            <!-- Progress Chart -->
+                            <div style="background: white; border-radius: 20px; padding: 2rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                                    <div>
+                                        <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 0.6rem;">
+                                            <i class='bx bx-line-chart' style="color: #800000; font-size: 1.5rem;"></i> Mi Rendimiento
+                                        </h3>
+                                        <p style="margin: 0.2rem 0 0; font-size: 0.8rem; color: #94a3b8; font-weight: 500;">Puntos entregados en la última semana</p>
+                                    </div>
+                                    <div style="background: #f8fafc; padding: 0.4rem 0.8rem; border-radius: 8px; font-weight: 700; color: #64748b; font-size: 0.75rem; border: 1px solid #e2e8f0;">Lunes - Domingo</div>
+                                </div>
+                                <div style="height: 280px;">
+                                    <canvas id="miHistorialChart"></canvas>
+                                </div>
+                            </div>
+
+                            <!-- Recent Transaction List -->
+                            <div style="background: white; border-radius: 20px; padding: 2rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
+                                <h3 style="margin: 0 0 1.5rem; font-size: 1.15rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 0.6rem;">
+                                    <i class='bx bx-history' style="color: #f97316; font-size: 1.5rem;"></i> Última Actividad
+                                </h3>
+                                
+                                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                    <?php if (!empty($metricas_adicionales['ultimas_ventas'])): ?>
+                                        <?php foreach ($metricas_adicionales['ultimas_ventas'] as $v): ?>
+                                            <div style="display: flex; align-items: center; justify-content: space-between; padding: 1rem; border-radius: 12px; background: #fafafa; border: 1px solid #f1f5f9; transition: all 0.2s ease;" onmouseover="this.style.background='#fff'; this.style.borderColor='#80000033'; this.style.transform='translateX(5px)'" onmouseout="this.style.background='#fafafa'; this.style.borderColor='#f1f5f9'; this.style.transform='none'">
+                                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                                    <div style="width: 42px; height: 42px; border-radius: 10px; background: white; border: 1px solid #eee; display: flex; align-items: center; justify-content: center; color: #800000; font-size: 1.2rem;">
+                                                        <i class='bx bxs-star'></i>
+                                                    </div>
+                                                    <div>
+                                                        <div style="font-weight: 700; color: #334155; font-size: 0.9rem;"><?= htmlspecialchars($v['cliente_nombre']) ?></div>
+                                                        <div style="font-size: 0.75rem; color: #94a3b8; font-weight: 500;"><?= date('d M, H:i', strtotime($v['fecha'])) ?></div>
+                                                    </div>
+                                                </div>
+                                                <div style="text-align: right;">
+                                                    <div style="font-weight: 900; color: #800000; font-size: 1.1rem;">+ <?= $v['puntos'] ?></div>
+                                                    <div style="font-size: 0.65rem; font-weight: 800; color: #cbd5e1; text-transform: uppercase;">puntos</div>
+                                                </div>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    <?php else: ?>
+                                        <div style="text-align: center; padding: 2rem; color: #94a3b8; font-size: 0.85rem;">
+                                            <i class='bx bx-ghost' style="font-size: 2rem; display: block; margin-bottom: 0.5rem; opacity: 0.5;"></i>
+                                            No has realizado transacciones hoy
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- RIGHT COLUMN: Motivation & Tools -->
+                        <div style="display: flex; flex-direction: column; gap: 2rem;">
+                            
+                            <!-- Ranking Motivation -->
+                            <div style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border-radius: 20px; padding: 2rem; color: white; box-shadow: 0 10px 25px rgba(0,0,0,0.15); position: relative; overflow: hidden;">
+                                <div style="position: relative; z-index: 2;">
+                                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem;">
+                                        <div>
+                                            <div style="font-size: 0.75rem; font-weight: 800; letter-spacing: 1px; color: rgba(255,255,255,0.6); text-transform: uppercase; margin-bottom: 0.4rem;">Tu Ranking Actual</div>
+                                            <div style="font-size: 2.2rem; font-weight: 900; line-height: 1;">Posición #<?= $metricas_adicionales['mi_posicion'] ?></div>
+                                        </div>
+                                        <div style="width: 50px; height: 50px; background: rgba(255,255,255,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; color: #f59e0b;">
+                                            <i class='bx bxs-trophy'></i>
+                                        </div>
+                                    </div>
+
+                                    <?php if ($metricas_adicionales['distancia_siguiente'] > 0): ?>
+                                        <div style="background: rgba(255,255,255,0.05); padding: 1.25rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+                                            <div style="font-size: 0.8rem; font-weight: 600; color: rgba(255,255,255,0.8); margin-bottom: 0.5rem;">Próximo objetivo:</div>
+                                            <div style="font-size: 1.2rem; font-weight: 800; color: #fbbf24; border-bottom: 2px solid rgba(251, 191, 36, 0.3); display: inline-block;">
+                                                <i class='bx bx-chevrons-up'></i> Falta <?= $metricas_adicionales['distancia_siguiente'] ?> ptos
+                                            </div>
+                                            <div style="font-size: 0.75rem; color: rgba(255,255,255,0.5); margin-top: 0.5rem;">Para subir al siguiente puesto</div>
+                                        </div>
+                                    <?php else: ?>
+                                        <div style="background: rgba(34, 197, 94, 0.1); padding: 1.25rem; border-radius: 12px; border: 1px solid rgba(34, 197, 94, 0.3);">
+                                            <div style="font-size: 1.2rem; font-weight: 800; color: #4ade80;">👑 ¡Eres el líder!</div>
+                                            <div style="font-size: 0.75rem; color: rgba(255,255,255,0.7); margin-top: 0.4rem;">Sigue así para mantener tu corona</div>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                                <!-- Background decoration -->
+                                <i class='bx bxs-star' style="position: absolute; bottom: -20px; right: -20px; font-size: 120px; opacity: 0.1; color: white;"></i>
+                            </div>
+
+                            <!-- Premium Actions -->
+                            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                                <h3 style="margin: 0 0 0.5rem; font-size: 1.15rem; font-weight: 900; color: #1e293b; letter-spacing: -0.3px;">Acciones Premium</h3>
+                                
+                                <a href="<?= BASE_URL ?>scan" style="display: flex; align-items: center; gap: 1.2rem; background: #800000; color: white; padding: 1.5rem; border-radius: 16px; text-decoration: none; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 15px rgba(128, 0, 0, 0.2);" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 12px 25px rgba(128, 0, 0, 0.3)'" onmouseout="this.style.transform='none'; this.style.boxShadow='0 4px 15px rgba(128, 0, 0, 0.2)'">
+                                    <div style="width: 54px; height: 54px; background: rgba(255,255,255,0.2); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; flex-shrink: 0;">
+                                        <i class='bx bx-qr-scan'></i>
+                                    </div>
+                                    <div style="flex: 1;">
+                                        <div style="font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; justify-content: space-between;">
+                                            Sumar Puntos <i class='bx bx-chevron-right'></i>
+                                        </div>
+                                        <div style="font-size: 0.8rem; opacity: 0.8; font-weight: 500;">Escanear QR de cliente</div>
+                                    </div>
+                                </a>
+
+                                <a href="<?= BASE_URL ?>clientes/nuevo" style="display: flex; align-items: center; gap: 1.2rem; background: #f97316; color: white; padding: 1.5rem; border-radius: 16px; text-decoration: none; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 15px rgba(249, 115, 22, 0.2);" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 12px 25px rgba(249, 115, 22, 0.3)'" onmouseout="this.style.transform='none'; this.style.boxShadow='0 4px 15px rgba(249, 115, 22, 0.2)'">
+                                    <div style="width: 54px; height: 54px; background: rgba(255,255,255,0.2); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; flex-shrink: 0;">
+                                        <i class='bx bx-user-plus'></i>
+                                    </div>
+                                    <div style="flex: 1;">
+                                        <div style="font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; justify-content: space-between;">
+                                            Nuevo Cliente <i class='bx bx-chevron-right'></i>
+                                        </div>
+                                        <div style="font-size: 0.8rem; opacity: 0.8; font-weight: 500;">Registrar en el sistema</div>
+                                    </div>
+                                </a>
+
+                                <a href="<?= BASE_URL ?>clientes/lista" style="display: flex; align-items: center; gap: 1.2rem; background: #334155; color: white; padding: 1.5rem; border-radius: 16px; text-decoration: none; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 15px rgba(51, 65, 85, 0.2);" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 12px 25px rgba(51, 65, 85, 0.3)'" onmouseout="this.style.transform='none'; this.style.boxShadow='0 4px 15px rgba(51, 65, 85, 0.2)'">
+                                    <div style="width: 54px; height: 54px; background: rgba(255,255,255,0.2); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; flex-shrink: 0;">
+                                        <i class='bx bx-group'></i>
+                                    </div>
+                                    <div style="flex: 1;">
+                                        <div style="font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; justify-content: space-between;">
+                                            Mi Directorio <i class='bx bx-chevron-right'></i>
+                                        </div>
+                                        <div style="font-size: 0.8rem; opacity: 0.8; font-weight: 500;">Lista de clientes Premia</div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 <?php endif; ?>
             </div>
@@ -630,6 +815,76 @@
                             scales: {
                                 y: { beginAtZero: true, ticks: { font: { size: 9 } } },
                                 x: { ticks: { font: { size: 9 } } }
+                            }
+                        }
+                    });
+                }
+            });
+        </script>
+    <?php endif; ?>
+
+    <?php if ($_SESSION['rol'] === 'conductor'): ?>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const historial = <?php echo json_encode($metricas_adicionales['mi_historial'] ?? []); ?>;
+                const ctxHistMi = document.getElementById('miHistorialChart');
+                if (ctxHistMi && historial.length > 0) {
+                    const gradient = ctxHistMi.getContext('2d').createLinearGradient(0, 0, 0, 300);
+                    gradient.addColorStop(0, 'rgba(128, 0, 0, 0.25)');
+                    gradient.addColorStop(1, 'rgba(128, 0, 0, 0.01)');
+
+                    new Chart(ctxHistMi, {
+                        type: 'line',
+                        data: {
+                            labels: historial.map(h => {
+                                const d = new Date(h.fecha + 'T00:00:00');
+                                return d.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+                            }),
+                            datasets: [{
+                                label: 'Puntos Dados',
+                                data: historial.map(h => h.total),
+                                borderColor: '#800000',
+                                backgroundColor: gradient,
+                                fill: true,
+                                tension: 0.45,
+                                borderWidth: 4,
+                                pointBackgroundColor: '#fff',
+                                pointBorderColor: '#800000',
+                                pointBorderWidth: 2,
+                                pointRadius: 4,
+                                pointHoverRadius: 6,
+                                pointHoverBackgroundColor: '#800000',
+                                pointHoverBorderColor: '#fff',
+                                pointHoverBorderWidth: 2
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { 
+                                legend: { display: false },
+                                tooltip: {
+                                    backgroundColor: '#1e293b',
+                                    titleFont: { size: 13, weight: '700', family: 'Inter' },
+                                    bodyFont: { size: 12, family: 'Inter' },
+                                    padding: 12,
+                                    cornerRadius: 10,
+                                    displayColors: false,
+                                    callbacks: {
+                                        label: (context) => ` ${context.parsed.y} puntos entregados`
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: { 
+                                    beginAtZero: true, 
+                                    grid: { borderDash: [5, 5], color: '#f1f5f9', drawBorder: false },
+                                    ticks: { font: { size: 11, weight: '600', family: 'Inter' }, color: '#94a3b8', padding: 10 }
+                                },
+                                x: { 
+                                    grid: { display: false },
+                                    ticks: { font: { size: 11, weight: '600', family: 'Inter' }, color: '#64748b', padding: 10 }
+                                }
                             }
                         }
                     });

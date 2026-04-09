@@ -33,7 +33,7 @@ if (!function_exists('isActiveLink')) {
             <span>Dashboard</span>
         </a>
 
-        <div class="menu-label">Gestión Administrativa</div>
+        <div class="menu-label">Gestión</div>
         <a href="<?= BASE_URL ?>clientes/nuevo" class="sidebar-item <?= isActiveLink('clientes/nuevo', $current_url) ?>">
             <i class='bx bx-user-plus'></i>
             <span>Nuevo Cliente</span>
@@ -42,14 +42,17 @@ if (!function_exists('isActiveLink')) {
             <i class='bx bx-group'></i>
             <span>Directorio</span>
         </a>
-        <a href="<?= BASE_URL ?>recargas-admin" class="sidebar-item <?= isActiveLink('recargas-admin', $current_url) ?>">
-            <i class='bx bx-wallet'></i>
-            <span>Gestión Recargas</span>
-        </a>
-        <a href="<?= BASE_URL ?>canjes-admin" class="sidebar-item <?= isActiveLink('canjes-admin', $current_url) ?>">
-            <i class='bx bx-check-double'></i>
-            <span>Entregas Canjes</span>
-        </a>
+
+        <?php if ($_SESSION['rol'] === 'admin'): ?>
+            <a href="<?= BASE_URL ?>recargas-admin" class="sidebar-item <?= isActiveLink('recargas-admin', $current_url) ?>">
+                <i class='bx bx-wallet'></i>
+                <span>Gestión Recargas</span>
+            </a>
+            <a href="<?= BASE_URL ?>canjes-admin" class="sidebar-item <?= isActiveLink('canjes-admin', $current_url) ?>">
+                <i class='bx bx-check-double'></i>
+                <span>Entregas Canjes</span>
+            </a>
+        <?php endif; ?>
 
         <div class="menu-label">Operaciones</div>
         <a href="<?= BASE_URL ?>scan" class="sidebar-item <?= isActiveLink('scan', $current_url) ?>">
@@ -57,15 +60,17 @@ if (!function_exists('isActiveLink')) {
             <span>Suma Puntos</span>
         </a>
 
-        <div class="menu-label">Mantenimiento</div>
-        <a href="<?= BASE_URL ?>ajustes" class="sidebar-item <?= isActiveLink('ajustes', $current_url) ?>">
-            <i class='bx bx-cog'></i>
-            <span>Configuración General</span>
-        </a>
-        <a href="<?= BASE_URL ?>reporte/auditoria" class="sidebar-item <?= isActiveLink('reporte/auditoria', $current_url) ?>">
-            <i class='bx bx-history'></i>
-            <span>Auditoría de Sistema</span>
-        </a>
+        <?php if ($_SESSION['rol'] === 'admin'): ?>
+            <div class="menu-label">Mantenimiento</div>
+            <a href="<?= BASE_URL ?>ajustes" class="sidebar-item <?= isActiveLink('ajustes', $current_url) ?>">
+                <i class='bx bx-cog'></i>
+                <span>Configuración General</span>
+            </a>
+            <a href="<?= BASE_URL ?>reporte/auditoria" class="sidebar-item <?= isActiveLink('reporte/auditoria', $current_url) ?>">
+                <i class='bx bx-history'></i>
+                <span>Auditoría de Sistema</span>
+            </a>
+        <?php endif; ?>
     </nav>
 </aside>
 
