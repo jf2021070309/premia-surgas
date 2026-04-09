@@ -181,17 +181,17 @@
 
         function confirmDelete(url) {
             Swal.fire({
-                title: '¿Inactivar operación?',
-                text: "Ya no se podrá usar para nuevas recargas.",
+                title: '¿Eliminar regla?',
+                text: "Esta acción es irreversible y la regla se borrará definitivamente.",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#000000',
+                confirmButtonColor: '#800000',
                 cancelButtonColor: '#64748b',
-                confirmButtonText: 'Sí, inactivar',
+                confirmButtonText: 'Sí, eliminar',
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = url;
+                    window.location.href = url + '&redir=operaciones';
                 }
             });
         }

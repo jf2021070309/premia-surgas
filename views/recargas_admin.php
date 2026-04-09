@@ -207,7 +207,7 @@
                     <ul class="ticket-list">
                         <?php foreach ($recargas as $r): ?>
                         <li class="ticket-card">
-                            <div class="ticket-avatar"><?= strtoupper(substr($r['cliente_nombre'], 0, 1)) ?></div>
+
 
                             <div class="ticket-info">
                                 <div class="ticket-name"><?= htmlspecialchars($r['cliente_nombre']) ?></div>

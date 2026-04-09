@@ -108,7 +108,7 @@ createApp({
             if (typeof Swal !== 'undefined') {
                 Swal.fire({
                     title: '¿Eliminar producto?',
-                    text: "El producto quedará inactivo y no se mostrará en la tienda.",
+                    text: "Esta acción es irreversible y se eliminará definitivamente del catálogo.",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#800000',

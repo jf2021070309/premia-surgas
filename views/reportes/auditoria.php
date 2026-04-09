@@ -24,7 +24,6 @@
         .modulo-pill { background: #f8fafc; padding: 4px 10px; border-radius: 8px; font-size: 0.65rem; font-weight: 700; color: #64748b; border: 1px solid #e2e8f0; text-transform: uppercase; }
         
         .user-tag { display: flex; align-items: center; gap: 0.75rem; }
-        .user-avatar { width: 32px; height: 32px; border-radius: 9px; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: #800000; font-weight: 700; font-size: 0.75rem; border: 1px solid #e2e8f0; }
 
         .change-detail { margin-top: 8px; padding: 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 0.72rem; }
         .change-item { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; color: #475569; }
@@ -32,11 +31,16 @@
         .val-old { color: #991b1b; text-decoration: line-through; opacity: 0.7; }
         .val-new { color: #15803d; font-weight: 600; }
 
-        .filter-group { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; background: #fff; padding: 1.5rem; border-radius: 20px; border: 1px solid #f1f5f9; }
+        .filter-group { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; background: #fff; padding: 1rem 1.5rem; border-radius: 12px; border: 1px solid #f1f5f9; }
         .filter-item { display: flex; flex-direction: column; gap: 6px; }
         .filter-item label { font-size: 0.68rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; }
-        .filter-input { border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 0.6rem 1rem; font-size: 0.85rem; color: #1e293b; outline: none; transition: border 0.2s; }
-        .filter-input:focus { border-color: #800000; }
+        .filter-input { border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 0 1rem; font-size: 0.85rem; color: #1e293b; outline: none; transition: border 0.2s; height: 43px; box-sizing: border-box; }
+        .filter-input:focus { border-color: #800000; box-shadow: 0 0 0 4px rgba(128, 0, 0, 0.05); }
+
+        /* Ajuste específico para que el buscador con icono encaje en la fila */
+        .filter-item .header-search-modern { width: 100%; }
+        .filter-item .header-search-modern input { padding-left: 2.8rem; border-radius: 8px; border: 1.5px solid #e2e8f0; height: 43px; outline: none; transition: all 0.2s ease; box-sizing: border-box; }
+        .filter-item .header-search-modern input:focus { border-color: #800000; box-shadow: 0 0 0 4px rgba(128, 0, 0, 0.05); }
     </style>
 </head>
 <body>
@@ -55,8 +59,11 @@
                 <!-- Filtros Dinámicos -->
                 <div class="filter-group">
                     <div class="filter-item" style="flex: 1; min-width: 250px;">
-                        <label>Buscar Evento</label>
-                        <input type="text" v-model="filters.busqueda" class="filter-input" placeholder="Acción, detalles o IP...">
+                        <label>Buscar por Nombre</label>
+                        <div class="header-search-modern">
+                            <i class='bx bx-search'></i>
+                            <input type="text" v-model="filters.busqueda" placeholder="Nombre del usuario...">
+                        </div>
                     </div>
                     <div class="filter-item">
                         <label>Rol Trabajador</label>
@@ -95,14 +102,13 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="log in filtrados" :key="log.id">
+                                <tr v-for="log in paginados" :key="log.id">
                                     <td>
                                         <div style="font-weight: 700; color: #0f172a; font-size: 0.82rem;">{{ formatFecha(log.fecha_hora) }}</div>
                                         <div style="font-size: 0.7rem; color: #94a3b8;">{{ formatHora(log.fecha_hora) }}</div>
                                     </td>
                                     <td>
                                         <div class="user-tag">
-                                            <div class="user-avatar">{{ (log.usuario_nombre || 'S').charAt(0) }}</div>
                                             <div>
                                                 <div style="font-weight: 700; color: #0f172a; font-size: 0.8rem; line-height: 1.2; margin-bottom: 3px;">{{ log.usuario_nombre || 'Sistema' }}</div>
                                                 <div v-if="log.usuario_rol" style="font-size: 0.6rem; font-weight: 800; color: #64748b; background: #f1f5f9; padding: 2px 8px; border-radius: 4px; display: inline-block; text-transform: uppercase;">
@@ -114,7 +120,7 @@
                                     <td><span class="modulo-pill">{{ log.modulo }}</span></td>
                                     <td><span :class="['audit-badge', getBadgeClass(log.accion)]">{{ log.accion }}</span></td>
                                     <td>
-                                        <div style="font-size: 0.78rem; color: #475569; font-weight: 500;">{{ log.descripcion }}</div>
+                                        <div class="audit-simple-desc" v-html="renderStructuredDesc(log.descripcion)"></div>
                                         
                                         <!-- Detalles del Cambio (Metadatos) -->
                                         <div v-if="log.parsedMetadata" class="change-detail">
@@ -143,12 +149,37 @@
                             </tbody>
                         </table>
                     </div>
+                    
+                    <!-- Footer con Paginación -->
+                    <div class="card-footer-premium" style="padding: 1rem 2rem; border-top: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; background: #fafbfc;">
+                        <div style="font-size: 0.8rem; color: #64748b; font-weight: 500;">
+                            Mostrando <span style="font-weight: 700; color: #0f172a;">{{ ((currentPage - 1) * perPage) + 1 }} - {{ Math.min(currentPage * perPage, filtrados.length) }}</span> 
+                            de <span style="font-weight: 700; color: #0f172a;">{{ filtrados.length }}</span> registros
+                        </div>
+                        
+                        <div class="pagination-elite" v-if="totalPages > 1">
+                            <button @click="currentPage--" :disabled="currentPage === 1" class="page-btn nav-arrows">
+                                <i class='bx bx-chevron-left'></i>
+                            </button>
+                            
+                            <button v-for="p in paginatedRange" :key="p" 
+                                    @click="currentPage = p" 
+                                    :class="['page-btn', { active: currentPage === p }]">
+                                {{ p }}
+                            </button>
+
+                            <button @click="currentPage++" :disabled="currentPage === totalPages" class="page-btn nav-arrows">
+                                <i class='bx bx-chevron-right'></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
     <script>
         const { createApp } = Vue;
         createApp({
@@ -160,7 +191,17 @@
                         fechaInicio: '',
                         fechaFin: ''
                     },
-                    logs: []
+                    logs: [],
+                    currentPage: 1,
+                    perPage: 15
+                }
+            },
+            watch: {
+                filters: {
+                    handler() {
+                        this.currentPage = 1;
+                    },
+                    deep: true
                 }
             },
             computed: {
@@ -169,10 +210,7 @@
                         // Filtro Busqueda
                         const t = this.filters.busqueda.toLowerCase();
                         const matchesSearch = !t || 
-                            (l.usuario_nombre || '').toLowerCase().includes(t) ||
-                            (l.accion || '').toLowerCase().includes(t) ||
-                            (l.descripcion || '').toLowerCase().includes(t) ||
-                            (l.ip_address || '').toLowerCase().includes(t);
+                            (l.usuario_nombre || '').toLowerCase().includes(t);
                         
                         // Filtro Rol
                         const matchesRol = !this.filters.rol || (l.usuario_rol || '').toUpperCase() === this.filters.rol;
@@ -184,6 +222,22 @@
 
                         return matchesSearch && matchesRol && matchesInicio && matchesFin;
                     });
+                },
+                paginados() {
+                    const start = (this.currentPage - 1) * this.perPage;
+                    return this.filtrados.slice(start, start + this.perPage);
+                },
+                totalPages() {
+                    return Math.ceil(this.filtrados.length / this.perPage);
+                },
+                paginatedRange() {
+                    let range = [];
+                    for (let i = 1; i <= this.totalPages; i++) {
+                        if (i === 1 || i === this.totalPages || (i >= this.currentPage - 2 && i <= this.currentPage + 2)) {
+                            range.push(i);
+                        }
+                    }
+                    return range;
                 }
             },
             methods: {
@@ -199,7 +253,45 @@
                     return new Date(fh).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
                 },
                 formatHora(fh) {
-                    return new Date(fh).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+                    const d = new Date(fh);
+                    return d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+                },
+                renderStructuredDesc(desc) {
+                    if (!desc) return '';
+                    
+                    // Patrón mejorado: (Cargó X puntos a) (Nombre) (Desglose...)
+                    // Usamos una lógica más robusta dividiendo por el primer '(' que encontremos
+                    if (desc.startsWith('Cargó') && desc.includes('a ') && desc.includes('(')) {
+                        const firstParen = desc.indexOf('(');
+                        const lastParen = desc.lastIndexOf(')');
+                        
+                        const leadText = desc.substring(0, firstParen).trim(); // "Cargó X puntos a NOMBRE"
+                        const actionPart = leadText.substring(0, leadText.indexOf(' a ') + 3); // "Cargó X puntos a"
+                        const clientPart = leadText.substring(leadText.indexOf(' a ') + 3); // "NOMBRE"
+                        
+                        const itemsText = desc.substring(firstParen + 1, lastParen).trim(); // Todo lo que hay entre el primer '(' y último ')'
+                        
+                        // Dividimos items por coma, pero cuidando de no romper los paréntesis internos de los puntos (+X pts)
+                        const items = itemsText.split(/,\s*(?![^()]*\))/).map(i => i.trim());
+                        
+                        let html = `<div style="font-size: 0.75rem; color: #64748b; font-weight: 500; margin-bottom: 2px;">${actionPart}</div>`;
+                        html += `<div style="font-size: 0.88rem; font-weight: 500; color: #1e293b; margin-bottom: 10px; line-height: 1.2;">${clientPart}</div>`;
+                        
+                        // Contenedor tipo CARD (change-detail)
+                        html += `<div class="change-detail" style="display: flex; flex-direction: column; gap: 8px; margin-top: 5px;">`;
+                        items.forEach(item => {
+                            if (item) {
+                                html += `<div style="font-size: 0.78rem; color: #475569; display: flex; align-items: flex-start; gap: 10px; line-height: 1.4;">
+                                            <i class='bx bx-chevron-right' style='font-size: 1rem; color: #94a3b8; margin-top: 1px;'></i>
+                                            <span style="font-weight: 500;">${item}</span>
+                                         </div>`;
+                            }
+                        });
+                        html += `</div>`;
+                        return html;
+                    }
+                    
+                    return desc;
                 },
                 formatValue(field, val) {
                     const f = (field || '').toLowerCase();
@@ -229,32 +321,91 @@
                         });
                 },
                 exportToExcel() {
-                    // Generar CSV simple para exportar
-                    const header = ["Fecha", "Hora", "Usuario", "Rol", "Modulo", "Accion", "Descripcion", "IP", "Dispositivo"];
-                    const rows = this.filtrados.map(l => [
-                        l.fecha_hora.split(' ')[0],
-                        l.fecha_hora.split(' ')[1],
-                        l.usuario_nombre,
-                        l.usuario_rol,
-                        l.modulo,
-                        l.accion,
-                        l.descripcion,
-                        l.ip_address,
-                        l.user_agent
-                    ]);
+                    if (!this.filtrados.length) {
+                        Swal.fire('No hay datos', 'No existen registros para exportar.', 'info');
+                        return;
+                    }
 
-                    let csvContent = "data:text/csv;charset=utf-8," 
-                        + "\uFEFF" // Byte Order Mark para Excel en español
-                        + header.join(",") + "\n" 
-                        + rows.map(r => r.map(c => `"${(c || '').toString().replace(/"/g, '""')}"`).join(",")).join("\n");
+                    // 1. Preparar datos (DESC - Recientes al inicio)
+                    const dataToExport = [...this.filtrados]; 
+                    const header = ["FECHA", "HORA", "USUARIO", "ROL", "MÓDULO", "ACCIÓN", "DETALLES / CAMBIOS", "IP", "DISPOSITIVO"];
+                    
+                    const rows = dataToExport.map(l => {
+                        let descriptionTxt = l.descripcion;
+                        
+                        // Si hay cambios detallados (metadata), los agregamos a la celda de descripción
+                        if (l.parsedMetadata) {
+                            descriptionTxt += "\n\nCAMBIOS DETALLADOS:";
+                            for (const [field, val] of Object.entries(l.parsedMetadata)) {
+                                const fName = field.replace(/_/g, ' ').toUpperCase();
+                                const oldV = this.formatValue(field, val.ant) || '—';
+                                const newV = this.formatValue(field, val.des) || '—';
+                                descriptionTxt += `\n• ${fName}: ${oldV}  →  ${newV}`;
+                            }
+                        }
 
-                    const encodedUri = encodeURI(csvContent);
-                    const link = document.createElement("a");
-                    link.setAttribute("href", encodedUri);
-                    link.setAttribute("download", `auditoria_surgas_${new Date().toISOString().split('T')[0]}.csv`);
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
+                        return [
+                            l.fecha_hora.split(' ')[0],
+                            l.fecha_hora.split(' ')[1],
+                            l.usuario_nombre,
+                            l.usuario_rol,
+                            l.modulo,
+                            l.accion,
+                            descriptionTxt,
+                            l.ip_address,
+                            l.user_agent
+                        ];
+                    });
+
+                    // 2. Crear libro y hoja
+                    const wb = XLSX.utils.book_new();
+                    const ws = XLSX.utils.aoa_to_sheet([header, ...rows]);
+
+                    // Estilo base: Bordes para todas las celdas
+                    const borderStyle = {
+                        top: { style: "thin", color: { rgb: "000000" } },
+                        bottom: { style: "thin", color: { rgb: "000000" } },
+                        left: { style: "thin", color: { rgb: "000000" } },
+                        right: { style: "thin", color: { rgb: "000000" } }
+                    };
+
+                    const range = XLSX.utils.decode_range(ws['!ref']);
+
+                    for (let R = range.s.r; R <= range.e.r; ++R) {
+                        for (let C = range.s.c; C <= range.e.c; ++C) {
+                            const cell_address = { c: C, r: R };
+                            const cell_ref = XLSX.utils.encode_cell(cell_address);
+                            if (!ws[cell_ref]) ws[cell_ref] = { t: 's', v: '' };
+
+                            ws[cell_ref].s = {
+                                border: borderStyle,
+                                alignment: { vertical: "center", horizontal: "left", wrapText: true }
+                            };
+
+                            // Estilo específico para el Encabezado (Fila 0)
+                            if (R === 0) {
+                                ws[cell_ref].s.font = { bold: true, color: { rgb: "000000" } };
+                                ws[cell_ref].s.fill = { fgColor: { rgb: "F1F5F9" } };
+                                ws[cell_ref].s.alignment.horizontal = "center"; // Encabezados centrados
+                            }
+                        }
+                    }
+
+                    // 3. Ajustes de columnas (Wider columns for Action and Description)
+                    ws['!cols'] = [
+                        {wch: 12}, // FECHA
+                        {wch: 10}, // HORA
+                        {wch: 22}, // USUARIO
+                        {wch: 12}, // ROL
+                        {wch: 15}, // MÓDULO
+                        {wch: 32}, // ACCIÓN (Wider as requested)
+                        {wch: 70}, // DESCRIPCIÓN
+                        {wch: 15}, // IP
+                        {wch: 35}  // DISPOSITIVO
+                    ];
+
+                    XLSX.utils.book_append_sheet(wb, ws, "Auditoria");
+                    XLSX.writeFile(wb, `auditoria_surgas_${new Date().toISOString().split('T')[0]}.xlsx`);
                 }
             },
             mounted() {

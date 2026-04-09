@@ -75,11 +75,23 @@ class OperacionController {
         
         $original = $model->findById($id);
 
-        if ($model->delete($id)) {
-            $this->audit->registrar($_SESSION['id_usuario'], 'INACTIVAR_REGLA_PUNTOS', "Inactivó regla: " . ($original['nombre'] ?? 'ID '.$id), 'LOGISTICA');
-            $_SESSION['flash'] = ['type' => 'success', 'title' => '¡Éxito!', 'message' => 'Operación inactivada.'];
-        } else {
-            $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo inactivar la operación.'];
+        try {
+            if ($model->delete($id)) {
+                $this->audit->registrar($_SESSION['id_usuario'], 'ELIMINAR_REGLA_PUNTOS', "Eliminó definitivamente la regla: " . ($original['nombre'] ?? 'ID '.$id), 'LOGISTICA');
+                $_SESSION['flash'] = ['type' => 'success', 'title' => '¡Éxito!', 'message' => 'Operación eliminada del sistema.'];
+            } else {
+                $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo eliminar la operación.'];
+            }
+        } catch (PDOException $e) {
+            if ($e->getCode() == "23000") {
+                $_SESSION['flash'] = [
+                    'type' => 'warning',
+                    'title' => 'Restricción de Seguridad',
+                    'message' => 'Esta regla no puede ser eliminada porque existen registros históricos asociados a ella.'
+                ];
+            } else {
+                $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error Crítico', 'message' => 'Ocurrió un error inesperado al eliminar.'];
+            }
         }
         
         $redir = $_GET['redir'] ?? 'ajustes';

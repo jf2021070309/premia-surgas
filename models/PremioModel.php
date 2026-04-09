@@ -60,7 +60,7 @@ class PremioModel {
     }
 
     public function delete(int $id): bool {
-        $stmt = $this->db->prepare("UPDATE premios SET estado = 0 WHERE id = ?");
+        $stmt = $this->db->prepare("DELETE FROM premios WHERE id = ?");
         return $stmt->execute([$id]);
     }
 

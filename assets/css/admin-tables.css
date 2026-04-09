@@ -408,7 +408,7 @@
 .container {
     max-width: 1400px;
     margin: 1.5rem auto;
-    padding: 0 2rem 3rem;
+    padding: 0 2rem 0.5rem;
     width: 100%;
 }
 
@@ -417,7 +417,7 @@
     border: 1px solid var(--outline);
     border-radius: var(--radius-lg);
     overflow: hidden;
-    margin-bottom: 2rem;
+    margin-bottom: 0.5rem;
     box-shadow: var(--shadow-sm);
 }
 

@@ -117,11 +117,23 @@ class ConductorController
         
         $conductor = $model->findById($id);
 
-        if ($model->setEstado($id, 0)) {
-            $this->audit->registrar($_SESSION['id_usuario'], 'BAJA_CONDUCTOR', "Inactivó al conductor: " . ($conductor['nombre'] ?? 'ID '.$id), 'CONDUCTORES');
-            $_SESSION['flash'] = ['type' => 'success', 'title' => '¡Hecho!', 'message' => 'Conductor inactivado correctamente.'];
-        } else {
-            $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo inactivar al conductor.'];
+        try {
+            if ($model->delete($id)) {
+                $this->audit->registrar($_SESSION['id_usuario'], 'ELIMINAR_CONDUCTOR', "Eliminó definitivamente al conductor: " . ($conductor['nombre'] ?? 'ID '.$id), 'CONDUCTORES');
+                $_SESSION['flash'] = ['type' => 'success', 'title' => '¡Éxito!', 'message' => 'El conductor ha sido eliminado del sistema.'];
+            } else {
+                $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo eliminar al conductor.'];
+            }
+        } catch (PDOException $e) {
+            if ($e->getCode() == "23000") {
+                $_SESSION['flash'] = [
+                    'type' => 'warning',
+                    'title' => 'Restricción de Seguridad',
+                    'message' => 'Este conductor no puede ser eliminado porque tiene registros de operaciones vinculados.'
+                ];
+            } else {
+                $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error Crítico', 'message' => 'Ocurrió un error inesperado al eliminar.'];
+            }
         }
 
         $redir = $_GET['redir'] ?? 'conductores';

@@ -32,35 +32,37 @@ class PanelController {
             // Canjes realizados hoy
             $canjes_hoy = $db->query("SELECT COUNT(*) as total FROM canjes WHERE DATE(fecha) = CURDATE()")->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
             
+            // Gráfico Barras: Top 10 Premios más canjeados
+            $top_premios = $db->query("
+                SELECT p.nombre, COUNT(cj.id) as total 
+                FROM canjes cj 
+                JOIN premios p ON cj.premio_id = p.id 
+                GROUP BY p.id 
+                ORDER BY total DESC 
+                LIMIT 10
+            ")->fetchAll(PDO::FETCH_ASSOC);
+
+            // Rendimiento de TODOS los conductores (incluso con 0 puntos)
+            $ranking_conductores = $db->query("
+                SELECT u.id, u.nombre, COALESCE(SUM(v.puntos), 0) as total_puntos 
+                FROM usuarios u
+                LEFT JOIN ventas v ON v.conductor_id = u.id 
+                WHERE u.rol = 'conductor'
+                GROUP BY u.id 
+                ORDER BY total_puntos DESC
+            ")->fetchAll(PDO::FETCH_ASSOC);
+
+            // Ranking de usuarios con más canjes (lista lateral)
+            $ranking = $db->query("SELECT c.nombre, COUNT(cj.id) as total_canjes FROM canjes cj JOIN clientes c ON cj.cliente_id = c.id GROUP BY c.id ORDER BY total_canjes DESC LIMIT 10")->fetchAll(PDO::FETCH_ASSOC);
+            
             // Puntos entregados hoy (desde ventas)
             $puntos_hoy = $db->query("SELECT SUM(puntos) as total FROM ventas WHERE DATE(fecha) = CURDATE()")->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
 
-            // Gráfico: Puntos entregados en los últimos 7 días
-            $chart_puntos = $db->query("
-                SELECT DATE(fecha) as fecha, SUM(puntos) as total 
-                FROM ventas 
-                WHERE fecha >= DATE_SUB(CURDATE(), INTERVAL 6 DAY) 
-                GROUP BY DATE(fecha) 
-                ORDER BY DATE(fecha) ASC
-            ")->fetchAll(PDO::FETCH_ASSOC);
-
-            // Gráfico: Canjes en los últimos 7 días
-            $chart_canjes = $db->query("
-                SELECT DATE(fecha) as fecha, COUNT(id) as total 
-                FROM canjes 
-                WHERE fecha >= DATE_SUB(CURDATE(), INTERVAL 6 DAY) 
-                GROUP BY DATE(fecha) 
-                ORDER BY DATE(fecha) ASC
-            ")->fetchAll(PDO::FETCH_ASSOC);
-
-            // Ranking de usuarios con más canjes
-            $ranking = $db->query("SELECT c.nombre, COUNT(cj.id) as total_canjes FROM canjes cj JOIN clientes c ON cj.cliente_id = c.id GROUP BY c.id ORDER BY total_canjes DESC LIMIT 5")->fetchAll(PDO::FETCH_ASSOC);
-            
             $metricas_adicionales['canjes_hoy'] = $canjes_hoy;
             $metricas_adicionales['puntos_hoy'] = $puntos_hoy;
-            $metricas_adicionales['chart_puntos'] = $chart_puntos;
-            $metricas_adicionales['chart_canjes'] = $chart_canjes;
+            $metricas_adicionales['top_premios'] = $top_premios;
             $metricas_adicionales['ranking'] = $ranking;
+            $metricas_adicionales['ranking_conductores'] = $ranking_conductores;
         }
 
         $this->render('panel', [
@@ -69,6 +71,30 @@ class PanelController {
             'notificaciones_recargas' => $notificaciones_recargas,
             'metricas_adicionales' => $metricas_adicionales
         ]);
+    }
+
+    public function conductorHistory(): void {
+        header('Content-Type: application/json');
+        $id = $_GET['id'] ?? null;
+        if (!$id) {
+            echo json_encode(['success' => false]);
+            exit;
+        }
+
+        $db = Database::getConnection();
+        // Obtener historial de puntos del conductor en los últimos 15 días (Barras por día + sumatoria acumulada)
+        $history = $db->prepare("
+            SELECT DATE(fecha) as fecha, SUM(puntos) as total 
+            FROM ventas 
+            WHERE conductor_id = ? AND fecha >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+            GROUP BY DATE(fecha)
+            ORDER BY DATE(fecha) ASC
+        ");
+        $history->execute([$id]);
+        $rows = $history->fetchAll(PDO::FETCH_ASSOC);
+
+        echo json_encode(['success' => true, 'data' => $rows]);
+        exit;
     }
 
     // ── helpers ──────────────────────────────────────────────────

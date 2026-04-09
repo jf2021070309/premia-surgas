@@ -27,13 +27,13 @@ createApp({
     methods: {
         confirmInactivar(id) {
             Swal.fire({
-                title: '¿Estás seguro?',
-                text: "El conductor ya no podrá usar el sistema hasta que sea reactivado.",
+                title: '¿Eliminar conductor?',
+                text: "El conductor será borrado permanentemente y no podrá acceder al sistema.",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: 'var(--primary)',
-                cancelButtonColor: '#6c757d',
-                confirmButtonText: 'Sí, inactivar',
+                confirmButtonColor: '#800000',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Sí, eliminar',
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {

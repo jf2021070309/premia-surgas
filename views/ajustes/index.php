@@ -513,15 +513,14 @@
 
                     <div>
                         <label
-                            style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Estado
-                            de Acceso</label>
+                            style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Estado</label>
                         <div style="position: relative; display: flex; align-items: center;">
-                            <i class='bx bx-shield-check'
+                            <i class='bx bx-toggle-right'
                                 style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem; pointer-events: none;"></i>
                             <select name="estado" id="cond_estado"
                                 style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; appearance: none; cursor: pointer; outline: none; background: #fff;">
-                                <option value="1">Acceso Permitido</option>
-                                <option value="0">Bloqueado</option>
+                                <option value="1">Activo</option>
+                                <option value="0">Inactivo</option>
                             </select>
                             <i class='bx bx-chevron-down'
                                 style="position: absolute; right: 1rem; color: #94a3b8; pointer-events: none;"></i>
@@ -693,8 +692,16 @@
         }
 
         function confirmDeleteOp(url) {
-            Swal.fire({ title: '¿Inactivar regla?', text: "Se quitará de las opciones de carga de puntos.", icon: 'warning', showCancelButton: true, confirmButtonColor: '#400000', confirmButtonText: 'Sí, inactivar' })
-                .then((r) => { if (r.isConfirmed) window.location.href = url + '&redir=ajustes'; });
+            Swal.fire({
+                title: '¿Eliminar regla?',
+                text: "Esta acción es irreversible y la regla se borrará definitivamente.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#800000',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((r) => { if (r.isConfirmed) window.location.href = url + '&redir=ajustes'; });
         }
 
         function openModalPremio() {
@@ -719,8 +726,15 @@
         }
 
         function confirmDeletePremio(url) {
-            Swal.fire({ title: '¿Ocultar premio?', text: "Los clientes ya no podrán verlo en el catálogo.", icon: 'warning', showCancelButton: true, confirmButtonColor: '#400000', confirmButtonText: 'Sí, ocultar' })
-                .then((r) => { if (r.isConfirmed) window.location.href = url + '&redir=ajustes'; });
+            Swal.fire({
+                title: '¿Eliminar producto?',
+                text: "Esta acción es irreversible y se eliminará definitivamente del catálogo.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#800000',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((r) => { if (r.isConfirmed) window.location.href = url + '&redir=ajustes'; });
         }
 
         function openModalCond() {
@@ -744,8 +758,16 @@
         }
 
         function confirmDeleteCond(url) {
-            Swal.fire({ title: '¿Bloquear conductor?', text: "Se le denegará el acceso al sistema de escaneo.", icon: 'warning', showCancelButton: true, confirmButtonColor: '#400000', confirmButtonText: 'Sí, bloquear' })
-                .then((r) => { if (r.isConfirmed) window.location.href = url + '&redir=ajustes'; });
+            Swal.fire({
+                title: '¿Eliminar conductor?',
+                text: "El conductor será borrado permanentemente y no podrá acceder al sistema.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#800000',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((r) => { if (r.isConfirmed) window.location.href = url + '&redir=ajustes'; });
         }
     </script>
 

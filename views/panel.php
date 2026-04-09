@@ -17,61 +17,65 @@
             display: none !important;
         }
 
+        /* ══════════════════════════════════════ 
+           Premium Dashboard Components 
+           ══════════════════════════════════════ */
         .notif-card {
             background: white;
-            border-radius: 1.5rem;
-            padding: 1.2rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
-            border: 1px solid #f0f0f0;
-            margin-bottom: 1rem;
+            border-radius: 1rem;
+            padding: 0.85rem 1.25rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            border: 1px solid #f1f5f9;
+            margin-bottom: 0.75rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             align-items: center;
             gap: 1rem;
         }
 
         .notif-card:hover {
-            transform: translateX(5px);
-            border-color: var(--primary);
+            transform: translateY(-2px);
+            border-color: var(--primary, #800000);
+            box-shadow: 0 8px 20px rgba(128, 0, 0, 0.05);
         }
 
         .notif-icon {
-            width: 45px;
-            height: 45px;
+            width: 42px;
+            height: 42px;
             border-radius: 12px;
-            background: #fffcf0;
-            color: #f39c12;
+            background: #f8fafc;
+            color: #64748b;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.4rem;
+            font-size: 1.25rem;
+            flex-shrink: 0;
         }
 
-        .notif-icon.full {
-            background: #f0fdf4;
-            color: #22c55e;
-        }
-
-        .notif-icon.mix {
-            background: #fdf2f2;
-            color: #ef4444;
-        }
+        .notif-icon.full { background: #f0fdf4; color: #166534; border: 1px solid #dcfce7; }
+        .notif-icon.mix  { background: #fff7ed; color: #9a3412; border: 1px solid #ffedd5; }
+        .notif-icon.wait { background: #fdf2f2; color: #800000; border: 1px solid #fee2e2; }
 
         .notif-content {
             flex: 1;
+            min-width: 0;
         }
 
         .notif-title {
-            font-weight: 700;
-            color: #333;
-            font-size: 0.95rem;
-            margin-bottom: 0.1rem;
+            font-weight: 800;
+            color: #1e293b;
+            font-size: 0.88rem;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .notif-sub {
-            color: #888;
-            font-size: 0.8rem;
+            color: #64748b;
+            font-size: 0.78rem;
+            font-weight: 500;
         }
 
         /* Modal Detallado */
@@ -145,95 +149,70 @@
             }
         }
 
+        /* ══════════════════════════════════════ 
+           Elite KPI Cards (Soft-Tint Style) 
+           ══════════════════════════════════════ */
         .dash-card {
-            border-radius: 4px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+            background: #4a0000; /* Deep Wine Default */
+            border-radius: 4px; /* Sharp corners */
+            border: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             position: relative;
             overflow: hidden;
-            color: white;
             display: flex;
             flex-direction: column;
-        }
-
-        .dash-card.card-blue {
-            background: #17a2b8;
-        }
-
-        .dash-card.card-green {
-            background: #28a745;
-        }
-
-        .dash-card.card-yellow {
-            background: #ffc107;
-            color: #333;
-        }
-
-        .dash-card.card-red {
-            background: #dc3545;
+            transition: all 0.2s ease;
+            min-height: 120px;
         }
 
         .dash-card-body {
-            padding: 15px 20px;
+            padding: 1.5rem;
             flex: 1;
             position: relative;
             z-index: 2;
-            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
         }
 
         .dash-card-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 2px;
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 0px;
             line-height: 1;
-            font-family: 'Inter', sans-serif;
+            color: white;
+            letter-spacing: -1px;
         }
 
         .dash-card-text {
-            font-size: 0.95rem;
-            margin-bottom: 0;
-            font-weight: 400;
-            letter-spacing: 0.3px;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.9);
+            text-transform: none; /* Corporate style */
         }
 
         .dash-card-icon {
             position: absolute;
-            top: 50%;
-            right: 15px;
-            transform: translateY(-50%);
-            font-size: 80px;
-            color: rgba(0, 0, 0, 0.15);
+            bottom: 10px;
+            right: 10px;
+            font-size: 70px;
+            opacity: 0.15;
             z-index: 1;
-            pointer-events: none;
-        }
-
-        .dash-card-footer {
-            display: block;
-            padding: 6px 15px;
-            text-align: center;
-            background: rgba(0, 0, 0, 0.1);
             color: white;
-            text-decoration: none;
-            font-size: 0.85rem;
-            position: relative;
-            z-index: 2;
-            transition: background 0.3s;
-            margin-top: auto;
         }
 
-        .dash-card.card-yellow .dash-card-footer {
-            color: #333;
+        /* Interaction - subtle brightness */
+        .dash-card:hover {
+            filter: brightness(1.1);
+            cursor: pointer;
         }
 
-        .dash-card-footer:hover {
-            background: rgba(0, 0, 0, 0.15);
-            color: inherit;
-        }
-
-        .dash-card-footer i {
-            margin-left: 5px;
-            font-size: 1rem;
-            vertical-align: middle;
-        }
+        /* Specific Colors from Image */
+        .card-orange { background-color: #f97316 !important; } /* Vibrant Orange */
+        .card-wine   { background-color: #4a0000 !important; } /* Deep Wine */
+        .card-dark   { background-color: #310000 !important; } /* Darker Wine */
     </style>
 </head>
 
@@ -254,173 +233,181 @@
 
                     <!-- TOP ROW: KPI Metrics -->
                     <div
-                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
 
-                        <!-- Blue Card (Usuarios) -->
-                        <div class="dash-card card-blue">
+                        <!-- Orange Card (Usuarios) -->
+                        <div class="dash-card card-orange" onclick="location.href='<?= BASE_URL ?>clientes/lista'">
                             <div class="dash-card-body">
                                 <div class="dash-card-number"><?= $totales['clientes'] ?></div>
-                                <div class="dash-card-text">Usuarios Registrados</div>
+                                <div class="dash-card-text">Usuarios</div>
+                                <i class='bx bx-user-plus dash-card-icon'></i>
                             </div>
-                            <i class='bx bx-user-plus dash-card-icon'></i>
-                            <a href="<?= BASE_URL ?>clientes/lista" class="dash-card-footer">Mas información <i
-                                    class='bx bx-right-arrow-circle'></i></a>
                         </div>
 
-                        <!-- Green Card (Canjes) -->
-                        <div class="dash-card card-green">
+                        <!-- Wine Card (Canjes) -->
+                        <div class="dash-card card-wine" onclick="location.href='<?= BASE_URL ?>canjes-admin'">
                             <div class="dash-card-body">
                                 <div class="dash-card-number"><?= $metricas_adicionales['canjes_hoy'] ?></div>
                                 <div class="dash-card-text">Canjes Hoy</div>
+                                <i class='bx bx-gift dash-card-icon'></i>
                             </div>
-                            <i class='bx bx-gift dash-card-icon'></i>
-                            <a href="<?= BASE_URL ?>canjes-admin" class="dash-card-footer">Mas información <i
-                                    class='bx bx-right-arrow-circle'></i></a>
                         </div>
 
-                        <!-- Yellow Card (Puntos) -->
-                        <div class="dash-card card-yellow">
+                        <!-- Darker Card (Puntos) -->
+                        <div class="dash-card card-dark" onclick="location.href='<?= BASE_URL ?>scan'">
                             <div class="dash-card-body">
-                                <div class="dash-card-number" style="display: flex; align-items: baseline; gap: 4px;">
-                                    <span
-                                        style="font-size: 0.5em; font-weight: 800; position: relative; top: -5px;">Pts/</span>
-                                    <?= $metricas_adicionales['puntos_hoy'] ?>
-                                </div>
-                                <div class="dash-card-text">Puntos Dados Hoy</div>
+                                <div class="dash-card-number"><?= $metricas_adicionales['puntos_hoy'] ?></div>
+                                <div class="dash-card-text">Puntos Dados</div>
+                                <i class='bx bx-star dash-card-icon'></i>
                             </div>
-                            <i class='bx bx-star dash-card-icon'></i>
-                            <a href="<?= BASE_URL ?>scan" class="dash-card-footer">Mas información <i
-                                    class='bx bx-right-arrow-circle'></i></a>
                         </div>
 
-                        <!-- Red Card (Recargas) -->
-                        <div class="dash-card card-red">
+                        <!-- Wine Card (Pendientes) -->
+                    <div class="dash-card card-wine" onclick="location.href='<?= BASE_URL ?>recargas-admin'">
                             <div class="dash-card-body">
                                 <div class="dash-card-number"><?= count($notificaciones_recargas) ?></div>
-                                <div class="dash-card-text">Recargas Pendientes</div>
+                                <div class="dash-card-text">Pendientes</div>
+                                <i class='bx bx-wallet dash-card-icon'></i>
                             </div>
-                            <i class='bx bx-wallet dash-card-icon'></i>
-                            <a href="<?= BASE_URL ?>recargas-admin" class="dash-card-footer">Mas información <i
-                                    class='bx bx-right-arrow-circle'></i></a>
                         </div>
 
                     </div>
 
-                    <!-- MIDDLE ROW: Chart & Ranking -->
+                    <!-- MIDDLE ROW: Chart & Rankings -->
                     <div class="middle-row-grid">
 
-                        <!-- CHART -->
-                        <div style="display: flex; flex-direction: column;">
-                            <div style="margin-bottom: 1.25rem; margin-top: 0.5rem;">
-                                <h3
-                                    style="margin: 0; font-size: 1.1rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 0.5rem;">
-                                    <i class='bx bx-line-chart'
-                                        style="color: var(--p-wine, #800000); font-size: 1.25rem;"></i> Actividad (8 Días)
-                                </h3>
-                                <p
-                                    style="font-size: 0.75rem; color: #64748b; margin: 0; margin-top: 0.2rem; font-weight: 500;">
-                                    Puntos y canjes de la última semana</p>
+                        <!-- LEFT COLUMN: Main Charts -->
+                        <div style="display: flex; flex-direction: column; gap: 1.5rem; min-width: 0;">
+                            
+                            <!-- TOP 10 PREMIOS (Full Width, Colorful) -->
+                            <div style="display: flex; flex-direction: column;">
+                                <div style="margin-bottom: 0.8rem; margin-top: 0.5rem;">
+                                    <h3 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 0.5rem;">
+                                        <i class='bx bx-bar-chart-alt-2' style="color: #800000; font-size: 1.25rem;"></i> Top 10 Premios Más Populares
+                                    </h3>
+                                    <p style="font-size: 0.75rem; color: #64748b; margin: 0; margin-top: 0.2rem; font-weight: 500;">Los productos preferidos por los clientes</p>
+                                </div>
+                                <div style="background: white; border-radius: 1.25rem; padding: 1.5rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.03); min-height: 300px;">
+                                    <div style="position: relative; height: 260px; width: 100%;">
+                                        <canvas id="premiosBarChart"></canvas>
+                                    </div>
+                                </div>
                             </div>
-                            <div
-                                style="background: white; border-radius: 1.25rem; padding: 1.5rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.03); flex: 1;">
-                                <div style="position: relative; height: 300px; width: 100%;">
-                                    <canvas id="actividadChart"></canvas>
+
+                            <!-- RENDIMIENTO CONDUCTORES (Interactive) -->
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                                <!-- Ranking Bars -->
+                                <div style="display: flex; flex-direction: column;">
+                                    <div style="margin-bottom: 0.8rem;">
+                                        <h3 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 0.5rem;">
+                                            <i class='bx bx-trophy' style="color: #f59e0b; font-size: 1.25rem;"></i> Rendimiento de Conductores
+                                        </h3>
+                                        <p style="font-size: 0.75rem; color: #64748b; margin: 0; margin-top: 0.2rem; font-weight: 500;">Datos de rendimiento de todos los conductores</p>
+                                    </div>
+                                    <div style="background: white; border-radius: 1.25rem; padding: 1.5rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.03); min-height: 300px;">
+                                        <div style="position: relative; height: 260px; width: 100%;">
+                                            <canvas id="conductoresBarChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Detail History (Interactive) -->
+                                <div style="display: flex; flex-direction: column;">
+                                    <div style="margin-bottom: 0.8rem;">
+                                        <h3 id="historyTitle" style="margin: 0; font-size: 1.1rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 0.5rem;">
+                                            <i class='bx bx-line-chart' style="color: #4f46e5; font-size: 1.25rem;"></i> Historial Detallado
+                                        </h3>
+                                        <p id="historySubtitle" style="font-size: 0.75rem; color: #64748b; margin: 0; margin-top: 0.2rem; font-weight: 500;">Selecciona un conductor a la izquierda</p>
+                                    </div>
+                                    <div style="background: white; border-radius: 1.25rem; padding: 1.5rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.03); min-height: 300px; display: flex; align-items: center; justify-content: center;">
+                                        <div id="historyPlaceholder" style="color: #94a3b8; font-size: 0.85rem; font-weight: 500; text-align: center;">
+                                            <i class='bx bx-mouse-alt' style="font-size: 2.5rem; display: block; margin-bottom: 0.5rem; opacity: 0.5;"></i>
+                                            Toca una barra del ranking para cargar datos
+                                        </div>
+                                        <div id="historyContainer" style="position: relative; height: 260px; width: 100%; display: none;">
+                                            <canvas id="historyChart"></canvas>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- RANKING -->
-                        <div style="display: flex; flex-direction: column;">
-                            <div style="margin-bottom: 1.25rem; margin-top: 0.5rem;">
-                                <h3
-                                    style="margin: 0; font-size: 1.1rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 0.5rem;">
-                                    <i class='bx bx-trophy' style="color: var(--p-wine, #800000); font-size: 1.25rem;"></i>
-                                    Ranking Canjeadores</h3>
-                                <p
-                                    style="font-size: 0.75rem; color: #64748b; margin: 0; margin-top: 0.2rem; font-weight: 500;">
-                                    Top usuarios con mayor actividad de canje</p>
-                            </div>
-
-                            <div
-                                style="background: white; border-radius: 1.25rem; padding: 1.5rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.03); display: flex; flex-direction: column; flex: 1;">
-                                <div
-                                    style="display: flex; flex-direction: column; gap: 0.8rem; overflow-y: auto; padding-right: 0.5rem;">
-                                    <?php if (!empty($metricas_adicionales['ranking'])): ?>
-                                        <?php foreach ($metricas_adicionales['ranking'] as $index => $rank): ?>
-                                            <div
-                                                style="display: flex; justify-content: space-between; align-items: center; padding: 0.85rem 1rem; border-radius: 1rem; background: #fff; border: 1px solid <?php echo $index === 0 ? '#fef3c7' : ($index === 1 ? '#e2e8f0' : ($index === 2 ? '#ffedd5' : '#f8fafc')); ?>; box-shadow: <?php echo $index === 0 ? '0 4px 15px rgba(245,158,11,0.1)' : ($index === 1 ? '0 4px 15px rgba(148,163,184,0.1)' : ($index === 2 ? '0 4px 15px rgba(180,83,9,0.08)' : '0 2px 5px rgba(0,0,0,0.02)')); ?>; transition: all 0.3s ease; cursor: default;">
-                                                <div style="display: flex; align-items: center; gap: 0.8rem;">
-
-                                                    <!-- Medal / Rank Number -->
-                                                    <?php if ($index === 0): ?>
-                                                        <div style="font-size: 1.6rem; color: #fbbf24;"><i class='bx bxs-medal'></i>
+                        <!-- RIGHT COLUMN: Rankings (Minified) -->
+                        <div style="display: flex; flex-direction: column; gap: 1.5rem; min-width: 0;">
+                            
+                            <!-- Ranking Canjeadores (Clientes) -->
+                            <div style="display: flex; flex-direction: column; flex: 1;">
+                                <div style="margin-bottom: 0.8rem;">
+                                    <h5 style="margin: 0; font-size: 0.95rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 0.4rem;">
+                                        <i class='bx bx-star' style="color: #f59e0b;"></i> Top Canjeadores
+                                    </h5>
+                                </div>
+                                <div style="background: white; border-radius: 1.25rem; padding: 1rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 15px rgba(0,0,0,0.02); flex: 1; display: flex; flex-direction: column; max-height: 520px;">
+                                    <div style="flex: 1; overflow-y: auto; padding-right: 5px; scrollbar-width: thin; scrollbar-color: #f1f5f9 transparent;">
+                                        <?php if (!empty($metricas_adicionales['ranking'])): ?>
+                                            <?php foreach ($metricas_adicionales['ranking'] as $idx => $rank): 
+                                                $initials = strtoupper(substr($rank['nombre'], 0, 1));
+                                                $isFirst = ($idx === 0);
+                                            ?>
+                                                <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 1rem; border-radius: 1rem; background: <?= $isFirst ? '#fffcf0' : 'white' ?>; border: 1px solid <?= $isFirst ? '#fef3ac' : '#f1f5f9' ?>; margin-bottom: 0.5rem; transition: all 0.2s ease; box-shadow: <?= $isFirst ? '0 4px 12px rgba(245, 158, 11, 0.08)' : '0 2px 4px rgba(0,0,0,0.01)' ?>;">
+                                                    <div style="display: flex; align-items: center; gap: 0.8rem; min-width: 0; flex: 1;">
+                                                        <div style="width: 36px; height: 36px; border-radius: 50%; background: <?= $isFirst ? '#f59e0b' : '#f1f5f9' ?>; color: <?= $isFirst ? 'white' : '#64748b' ?>; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.9rem; flex-shrink: 0; border: 2px solid <?= $isFirst ? '#fbbf24' : 'white' ?>;">
+                                                            <?= $initials ?>
                                                         </div>
-                                                    <?php elseif ($index === 1): ?>
-                                                        <div style="font-size: 1.6rem; color: #94a3b8;"><i class='bx bxs-medal'></i>
+                                                        <div style="min-width: 0; flex: 1;">
+                                                            <div style="font-weight: 700; color: #1e293b; font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                                <?= htmlspecialchars($rank['nombre']) ?>
+                                                            </div>
+                                                            <div style="font-size: 0.68rem; font-weight: 600; color: #94a3b8; display: flex; align-items: center; gap: 0.3rem;">
+                                                                <?php if ($isFirst): ?>
+                                                                    <i class='bx bxs-trophy' style="color: #f59e0b;"></i> Líder Actual
+                                                                <?php else: ?>
+                                                                    Posición <?= $idx + 1 ?>
+                                                                <?php endif; ?>
+                                                            </div>
                                                         </div>
-                                                    <?php elseif ($index === 2): ?>
-                                                        <div style="font-size: 1.6rem; color: #b45309;"><i class='bx bxs-medal'></i>
-                                                        </div>
-                                                    <?php else: ?>
-                                                        <div
-                                                            style="font-size: 1rem; font-weight: 800; color: #cbd5e1; width: 1.6rem; text-align: center;">
-                                                            <?= $index + 1 ?></div>
-                                                    <?php endif; ?>
-
-                                                    <!-- User Name -->
-                                                    <div style="font-weight: 800; color: #1e293b; font-size: 0.9rem;">
-                                                        <?= htmlspecialchars($rank['nombre']) ?>
+                                                    </div>
+                                                    <div style="text-align: right; flex-shrink: 0; margin-left: 0.5rem;">
+                                                        <div style="font-size: 0.95rem; font-weight: 900; color: #334155; line-height: 1;"><?= $rank['total_canjes'] ?></div>
+                                                        <div style="font-size: 0.6rem; font-weight: 800; color: #cbd5e1; text-transform: uppercase; margin-top: 2px;">Canjes</div>
                                                     </div>
                                                 </div>
-
-                                                <!-- Score / Canjes -->
-                                                <div style="font-weight: 900; color: var(--p-wine, #800000); font-size: 1.1rem;">
-                                                    <?= $rank['total_canjes'] ?> <span
-                                                        style="font-size: 0.8rem; font-weight: 700; opacity: 0.7;">pts</span>
-                                                </div>
+                                            <?php endforeach; ?>
+                                        <?php else: ?>
+                                            <div style="text-align: center; padding: 2rem 0;">
+                                                <i class='bx bx-ghost' style="font-size: 2.5rem; color: #f1f5f9; display: block; margin-bottom: 0.5rem;"></i>
+                                                <p style="font-size: 0.75rem; color: #94a3b8; margin: 0;">Aún no hay canjes registrados</p>
                                             </div>
-                                        <?php endforeach; ?>
-                                    <?php else: ?>
-                                        <div
-                                            style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2.5rem 0;">
-                                            <div style="font-size: 3rem; color: #e2e8f0; margin-bottom: 0.5rem;"><i
-                                                    class='bx bx-ghost'></i></div>
-                                            <div style="font-size: 0.85rem; color: #94a3b8; font-weight: 600;">Ningún registro
-                                                top aún</div>
-                                        </div>
-                                    <?php endif; ?>
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 <?php endif; ?>
 
                 <?php if ($_SESSION['rol'] === 'admin' && !empty($notificaciones_recargas)): ?>
                     <div style="margin-top: 1.5rem; margin-bottom: 1.25rem;">
-                        <h3
-                            style="margin: 0; font-size: 1.1rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 0.5rem;">
-                            <i class='bx bx-wallet' style="color: var(--p-wine, #800000); font-size: 1.25rem;"></i> Nuevas
-                            Recargas de Puntos</h3>
-                        <p style="font-size: 0.75rem; color: #64748b; margin: 0; margin-top: 0.2rem; font-weight: 500;">
-                            Clientes que han enviado comprobante de pago</p>
+                        <h3 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class='bx bx-wallet' style="color: var(--p-wine, #800000); font-size: 1.25rem;"></i> Solicitudes de Recarga
+                        </h3>
                     </div>
                     <div class="notif-list">
                         <?php foreach ($notificaciones_recargas as $r): ?>
                             <div class="notif-card" onclick="location.href='<?= BASE_URL ?>recargas-admin'">
-                                <div class="notif-icon" style="background: #eef2ff; color: #4f46e5;">
-                                    <i class='bx bx-wallet'></i>
+                                <div class="notif-icon wait">
+                                    <i class='bx bx-time-five'></i>
                                 </div>
                                 <div class="notif-content">
                                     <div class="notif-title"><?= htmlspecialchars($r['cliente_nombre']) ?></div>
-                                    <div class="notif-sub">Solicita recarga de: <b><?= $r['puntos'] ?> puntos</b></div>
+                                    <div class="notif-sub">Monto de recarga: <b><?= $r['puntos'] ?> puntos</b></div>
                                 </div>
-                                <div style="text-align: right;">
-                                    <div class="badge badge-warning"
-                                        style="font-size: 0.65rem; padding: 0.3rem 0.6rem; background: #fffbeb; color: #d97706; border: 1px solid #fde68a;">
-                                        Pendiente Revisar
+                                <div style="text-align: right; flex-shrink: 0;">
+                                    <div style="font-size: 0.72rem; font-weight: 800; color: #800000; background: #fee2e2; padding: 2px 8px; border-radius: 6px; display: inline-block; margin-bottom: 4px;">
+                                        PENDIENTE
                                     </div>
-                                    <div style="font-size: 0.7rem; color: #bbb; margin-top: 0.3rem;">
-                                        <?= date('H:i', strtotime($r['fecha'])) ?></div>
+                                    <div style="font-size: 0.7rem; color: #94a3b8; font-weight: 500;"><?= date('H:i', strtotime($r['fecha'])) ?></div>
                                 </div>
                             </div>
                         <?php endforeach; ?>
@@ -428,14 +415,10 @@
                 <?php endif; ?>
 
                 <?php if ($_SESSION['rol'] === 'admin' && !empty($notificaciones)): ?>
-                    <div
-                        style="margin-top: <?= !empty($notificaciones_recargas) ? '2rem' : '1.5rem' ?>; margin-bottom: 1.25rem;">
-                        <h3
-                            style="margin: 0; font-size: 1.1rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 0.5rem;">
-                            <i class='bx bx-gift' style="color: var(--p-wine, #800000); font-size: 1.25rem;"></i>
-                            Notificaciones de Canjes</h3>
-                        <p style="font-size: 0.75rem; color: #64748b; margin: 0; margin-top: 0.2rem; font-weight: 500;">
-                            Últimos canjes solicitados por clientes</p>
+                    <div style="margin-top: 2rem; margin-bottom: 1.25rem;">
+                        <h3 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class='bx bx-gift' style="color: var(--p-wine, #800000); font-size: 1.25rem;"></i> Notificaciones de Canjes
+                        </h3>
                     </div>
 
                     <div class="notif-list">
@@ -448,15 +431,15 @@
                                 </div>
                                 <div class="notif-content">
                                     <div class="notif-title"><?= htmlspecialchars($n['cliente_nombre']) ?></div>
-                                    <div class="notif-sub">Canjeó: <b><?= htmlspecialchars($n['premio_nombre']) ?></b></div>
+                                    <div class="notif-sub">Premio: <b><?= htmlspecialchars($n['premio_nombre']) ?></b></div>
                                 </div>
                                 <div style="text-align: right;">
-                                    <div class="badge <?= $esMix ? 'badge-danger' : 'badge-success' ?>"
-                                        style="font-size: 0.65rem; padding: 0.3rem 0.6rem;">
+                                    <div class="badge <?= $esMix ? 'badge-danger' : 'badge-success' ?>" style="font-size: 0.65rem; padding: 0.3rem 0.6rem;">
                                         <?= $esMix ? 'Puntos + S/' . $n['monto'] : 'Canje Full' ?>
                                     </div>
                                     <div style="font-size: 0.7rem; color: #bbb; margin-top: 0.3rem;">
-                                        <?= date('H:i', strtotime($n['fecha'])) ?></div>
+                                        <?= date('H:i', strtotime($n['fecha'])) ?>
+                                    </div>
                                 </div>
                             </div>
                         <?php endforeach; ?>
@@ -471,29 +454,22 @@
                 <div class="modal-wrapper" @click.stop>
                     <div class="modal-container">
                         <div class="modal-header-notif">
-                            <div
-                                style="width: 80px; height: 80px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; font-size: 2.5rem;">
+                            <div style="width: 80px; height: 80px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; font-size: 2.5rem;">
                                 <i class='bx bx-receipt'></i>
                             </div>
                             <h3 style="margin: 0; font-weight: 800;">Detalle del Canje</h3>
                         </div>
                         <div class="modal-body-notif">
                             <div style="margin-bottom: 1.5rem; border-bottom: 1px dashed #eee; padding-bottom: 1rem;">
-                                <small
-                                    style="color: #999; text-transform: uppercase; font-weight: 700; letter-spacing: 1px;">Cliente</small>
-                                <div style="font-size: 1.2rem; font-weight: 800; color: #333; margin-top: 0.2rem;">{{
-                                    detail.cliente_nombre }}</div>
-                                <div style="color: #666; font-size: 0.9rem;"><i class='bx bx-phone'></i> {{
-                                    detail.cliente_celular }}</div>
+                                <small style="color: #999; text-transform: uppercase; font-weight: 700; letter-spacing: 1px;">Cliente</small>
+                                <div style="font-size: 1.2rem; font-weight: 800; color: #333; margin-top: 0.2rem;">{{ detail.cliente_nombre }}</div>
+                                <div style="color: #666; font-size: 0.9rem;"><i class='bx bx-phone'></i> {{ detail.cliente_celular }}</div>
                             </div>
 
                             <div style="margin-bottom: 1.5rem; display: flex; gap: 1rem; align-items: center;">
-                                <img :src="'<?= BASE_URL ?>assets/premios/' + detail.premio_imagen"
-                                    style="width: 60px; height: 60px; object-fit: contain; background: #f8fafc; border-radius: 12px; padding: 0.5rem;">
+                                <img :src="'<?= BASE_URL ?>assets/premios/' + detail.premio_imagen" style="width: 60px; height: 60px; object-fit: contain; background: #f8fafc; border-radius: 12px; padding: 0.5rem;">
                                 <div>
-                                    <small
-                                        style="color: #999; text-transform: uppercase; font-weight: 700; font-size: 0.7rem;">Premio
-                                        Solicitado</small>
+                                    <small style="color: #999; text-transform: uppercase; font-weight: 700; font-size: 0.7rem;">Premio Solicitado</small>
                                     <div style="font-weight: 700; color: #333;">{{ detail.premio_nombre }}</div>
                                 </div>
                             </div>
@@ -512,9 +488,7 @@
                             </div>
 
                             <div style="margin-top: 2rem;">
-                                <button class="btn btn-primary w-100"
-                                    style="padding: 1rem; border-radius: 1rem; background: var(--p-wine, #800000); color: white; border: none; font-weight: 700; width: 100%; cursor: pointer;"
-                                    @click="showModal = false">Cerrar Notificación</button>
+                                <button class="btn btn-primary w-100" style="padding: 1rem; border-radius: 1rem; background: var(--p-wine, #800000); color: white; border: none; font-weight: 700; width: 100%; cursor: pointer;" @click="showModal = false">Cerrar</button>
                             </div>
                         </div>
                     </div>
@@ -531,73 +505,134 @@
     <?php if ($_SESSION['rol'] === 'admin'): ?>
         <script>
             document.addEventListener("DOMContentLoaded", function () {
-                const chartDataPuntos = <?php echo json_encode($metricas_adicionales['chart_puntos'] ?? []); ?>;
-                const chartDataCanjes = <?php echo json_encode($metricas_adicionales['chart_canjes'] ?? []); ?>;
+                let historyChartInstance = null;
 
-                const allDates = [...new Set([...chartDataPuntos.map(d => d.fecha), ...chartDataCanjes.map(d => d.fecha)])].sort();
-
-                const puntosMap = Object.fromEntries(chartDataPuntos.map(d => [d.fecha, d.total]));
-                const canjesMap = Object.fromEntries(chartDataCanjes.map(d => [d.fecha, d.total]));
-
-                const dataPuntos = allDates.map(fecha => puntosMap[fecha] || 0);
-                const dataCanjes = allDates.map(fecha => canjesMap[fecha] || 0);
-
-                const formatFecha = (d) => {
-                    const date = new Date(d + 'T00:00:00');
-                    return date.toLocaleDateString('es-ES', { month: 'short', day: 'numeric' });
-                };
-
-                const ctx = document.getElementById('actividadChart');
-                if (ctx && allDates.length > 0) {
-                    new Chart(ctx.getContext('2d'), {
+                // 1. Gráfico Top Premios (Full Width, Colorful)
+                const topPremios = <?php echo json_encode($metricas_adicionales['top_premios'] ?? []); ?>;
+                const ctxBar = document.getElementById('premiosBarChart');
+                if (ctxBar && topPremios.length > 0) {
+                    new Chart(ctxBar.getContext('2d'), {
                         type: 'bar',
                         data: {
-                            labels: allDates.map(formatFecha),
+                            labels: topPremios.map(p => p.nombre),
+                            datasets: [{
+                                data: topPremios.map(p => p.total),
+                                backgroundColor: [
+                                    '#800000', '#D4AF37', '#22c55e', '#0891b2', '#4f46e5',
+                                    '#f59e0b', '#ec4899', '#8b5cf6', '#10b981', '#6366f1'
+                                ],
+                                borderRadius: 0,
+                                barThickness: 35
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { legend: { display: false } },
+                            scales: {
+                                y: { beginAtZero: true, grid: { borderDash: [4, 4], color: '#f1f5f9', drawBorder: false }, ticks: { font: { size: 10, weight: '700' }, color: '#94a3b8' } },
+                                x: { grid: { display: false }, ticks: { font: { size: 10, weight: '700' }, color: '#334155' } }
+                            }
+                        }
+                    });
+                }
+
+                // 2. Gráfico Ranking Conductores (Interactivo - Barras Horizontales)
+                const rankingCond = <?php echo json_encode($metricas_adicionales['ranking_conductores'] ?? []); ?>;
+                const ctxCond = document.getElementById('conductoresBarChart');
+                if (ctxCond && rankingCond.length > 0) {
+                    const condChart = new Chart(ctxCond.getContext('2d'), {
+                        type: 'bar',
+                        data: {
+                            labels: rankingCond.map(u => u.nombre),
+                            datasets: [{
+                                data: rankingCond.map(u => u.total_puntos),
+                                backgroundColor: 'rgba(245, 158, 11, 0.15)',
+                                borderColor: '#f59e0b',
+                                borderWidth: 2,
+                                borderRadius: 0,
+                                hoverBackgroundColor: '#f59e0b'
+                            }]
+                        },
+                        options: {
+                            indexAxis: 'y',
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            onClick: (evt, elements) => {
+                                if (elements.length > 0) {
+                                    const index = elements[0].index;
+                                    const conductor = rankingCond[index];
+                                    loadConductorHistory(conductor.id, conductor.nombre);
+                                }
+                            },
+                            plugins: { legend: { display: false } },
+                            scales: {
+                                x: { beginAtZero: true, grid: { borderDash: [4, 4], color: '#f1f5f9', drawBorder: false }, ticks: { font: { size: 9, weight: '700' }, color: '#94a3b8' } },
+                                y: { grid: { display: false }, ticks: { font: { size: 10, weight: '700' }, color: '#64748b' } }
+                            }
+                        }
+                    });
+                }
+
+                // 3. Función Drill-down: Cargar Historial
+                async function loadConductorHistory(id, name) {
+                    document.getElementById('historyPlaceholder').style.display = 'none';
+                    document.getElementById('historyContainer').style.display = 'block';
+                    document.getElementById('historyTitle').innerHTML = `<i class='bx bx-line-chart' style="color: #4f46e5;"></i> Historial: ${name}`;
+                    document.getElementById('historySubtitle').innerText = 'Puntos entregados en los últimos 15 días';
+
+                    try {
+                        const resp = await fetch(`${BASE_URL}panel/conductor-history?id=${id}`);
+                        const json = await resp.json();
+                        
+                        if (json.success) {
+                            renderHistoryChart(json.data);
+                        }
+                    } catch (e) { console.error(e); }
+                }
+
+                function renderHistoryChart(data) {
+                    const ctxHist = document.getElementById('historyChart').getContext('2d');
+                    if (historyChartInstance) historyChartInstance.destroy();
+
+                    const labels = data.map(d => {
+                        const date = new Date(d.fecha + 'T00:00:00');
+                        return date.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+                    });
+                    const values = data.map(d => d.total);
+
+                    historyChartInstance = new Chart(ctxHist, {
+                        data: {
+                            labels: labels,
                             datasets: [
                                 {
                                     type: 'line',
-                                    label: 'Canjes',
-                                    data: dataCanjes,
+                                    label: 'Tendencia',
+                                    data: values,
                                     borderColor: '#4f46e5',
-                                    backgroundColor: 'rgba(79, 70, 229, 0.1)',
-                                    borderWidth: 3,
-                                    tension: 0.4,
-                                    yAxisID: 'y1'
+                                    borderWidth: 2,
+                                    pointRadius: 3,
+                                    tension: 0.4
                                 },
                                 {
                                     type: 'bar',
-                                    label: 'Puntos Entregados',
-                                    data: dataPuntos,
-                                    backgroundColor: 'rgba(128, 0, 0, 0.8)',
-                                    borderRadius: 6,
-                                    yAxisID: 'y'
+                                    label: 'Puntos',
+                                    data: values,
+                                    backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                                    borderRadius: 0
                                 }
                             ]
                         },
                         options: {
                             responsive: true,
                             maintainAspectRatio: false,
-                            interaction: { mode: 'index', intersect: false },
-                            plugins: {
-                                legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 8, font: { family: 'Inter' } } },
-                                tooltip: { backgroundColor: 'rgba(0,0,0,0.8)', padding: 12, cornerRadius: 8 }
-                            },
+                            plugins: { legend: { display: false } },
                             scales: {
-                                y: {
-                                    type: 'linear', display: true, position: 'left',
-                                    grid: { borderDash: [4, 4], color: '#f1f5f9' }
-                                },
-                                y1: {
-                                    type: 'linear', display: true, position: 'right',
-                                    grid: { drawOnChartArea: false }
-                                },
-                                x: { grid: { display: false } }
+                                y: { beginAtZero: true, ticks: { font: { size: 9 } } },
+                                x: { ticks: { font: { size: 9 } } }
                             }
                         }
                     });
-                } else if (ctx) {
-                    ctx.style.display = 'none';
-                    ctx.parentNode.innerHTML = '<div style="display:flex; height:100%; align-items:center; justify-content:center; color:#94a3b8; font-size:0.9rem;">Sin datos en los últimos 7 días</div>';
                 }
             });
         </script>

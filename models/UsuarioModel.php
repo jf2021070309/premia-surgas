@@ -79,4 +79,9 @@ class UsuarioModel {
         $stmt = $this->db->prepare("UPDATE usuarios SET session_id = ? WHERE id = ?");
         return $stmt->execute([$sessionId, $id]);
     }
+
+    public function delete(int $id): bool {
+        $stmt = $this->db->prepare("DELETE FROM usuarios WHERE id = ?");
+        return $stmt->execute([$id]);
+    }
 }

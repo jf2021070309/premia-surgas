@@ -53,6 +53,7 @@ $routes = [
     // —— Panel ——
     ['GET',  'panel',                     'PanelController',   'index'],
     ['GET',  'panel/live-notifications',  'PanelController',   'liveNotifications'],
+    ['GET',  'panel/conductor-history',   'PanelController',   'conductorHistory'],
 
     // —— Clientes ——
     ['GET',  'registro',          'ClienteController', 'registro'],

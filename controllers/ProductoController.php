@@ -140,11 +140,37 @@ class ProductoController {
         
         $p = $model->findById($id);
 
-        if ($model->delete($id)) {
-            $this->audit->registrar($_SESSION['id_usuario'], 'BAJA_PRODUCTO', "Inactivó el producto: " . ($p['nombre'] ?? 'ID '.$id), 'PRODUCTOS');
-            $_SESSION['flash'] = ['type' => 'success', 'title' => '¡Éxito!', 'message' => 'Producto inactivado.'];
-        } else {
-            $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo inactivar el producto.'];
+        if (!$p) {
+            $this->redirect('productos');
+            return;
+        }
+
+        try {
+            if ($model->delete($id)) {
+                // Borrar imagen física si existe
+                if ($p['imagen']) {
+                    $img_path = __DIR__ . '/../assets/uploads/productos/' . $p['imagen'];
+                    if (file_exists($img_path)) {
+                        @unlink($img_path);
+                    }
+                }
+
+                $this->audit->registrar($_SESSION['id_usuario'], 'ELIMINAR_PRODUCTO', "Eliminó definitivamente el producto: " . ($p['nombre']), 'PRODUCTOS');
+                $_SESSION['flash'] = ['type' => 'success', 'title' => '¡Eliminado!', 'message' => 'El producto ha sido eliminado del catálogo.'];
+            } else {
+                $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo eliminar el producto.'];
+            }
+        } catch (PDOException $e) {
+            // Manejar error de llave foránea (si tiene canjes)
+            if ($e->getCode() == '23000') {
+                $_SESSION['flash'] = [
+                    'type' => 'warning', 
+                    'title' => 'No es posible eliminar', 
+                    'message' => 'Este producto tiene registros de canjes asociados y no puede ser borrado. En su lugar, puedes inactivarlo.'
+                ];
+            } else {
+                $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'Ocurrió un error al intentar eliminar el producto.'];
+            }
         }
         
         $redir = $_GET['redir'] ?? 'productos';

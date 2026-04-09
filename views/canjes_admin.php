@@ -27,14 +27,27 @@
 
         <div class="container animate-fade-in" style="padding-top: 0.5rem;">
             
-            <div class="modern-section-header" style="justify-content: flex-end; margin-top: 0.5rem;">
-                <div class="header-search-modern" style="width: 170px;">
-                    <i class='bx bx-calendar'></i>
-                    <input type="date" id="filterFecha" onchange="filterDeliveries()" title="Filtrar por fecha">
-                </div>
-                <div class="header-search-modern" style="width: 320px;">
+            <div class="modern-section-header" style="justify-content: space-between; margin-top: 0.5rem;">
+                <!-- Buscador a la izquierda -->
+                <div class="header-search-modern" style="width: 350px;">
                     <i class='bx bx-search'></i>
-                    <input type="text" id="searchBeneficiario"  onkeyup="filterDeliveries()">
+                    <input type="text" id="searchBeneficiario" placeholder="Buscar por beneficiario o premio..." onkeyup="filterDeliveries()">
+                </div>
+
+                <!-- Filtros a la derecha -->
+                <div style="display: flex; gap: 0.75rem;">
+                    <div class="header-search-modern" style="width: 200px;">
+                        <i class='bx bx-filter-alt'></i>
+                        <select id="filterEstado" onchange="filterDeliveries()">
+                            <option value="">TODOS LOS ESTADOS</option>
+                            <option value="entregado">ENTREGADO</option>
+                            <option value="no_entregado">NO ENTREGADO</option>
+                        </select>
+                    </div>
+                    <div class="header-search-modern" style="width: 170px;">
+                        <i class='bx bx-calendar'></i>
+                        <input type="date" id="filterFecha" onchange="filterDeliveries()" title="Filtrar por fecha">
+                    </div>
                 </div>
             </div>
 
@@ -60,7 +73,7 @@
                                 </tr>
                             <?php endif; ?>
                             <?php foreach ($canjes as $c): ?>
-                            <tr class="delivery-row">
+                            <tr class="delivery-row" data-estado="<?= $c['estado'] ?>">
                                 <td class="date-text">
                                     <div style="font-weight: 700; color: #1e293b;">
                                         <?= date('d M Y', strtotime($c['fecha'])) ?>
@@ -210,6 +223,7 @@
         function filterDeliveries() {
             const searchVal = document.getElementById('searchBeneficiario').value.toLowerCase();
             const dateVal   = document.getElementById('filterFecha').value; // "YYYY-MM-DD"
+            const estadoVal = document.getElementById('filterEstado').value; 
             const rows = document.querySelectorAll('.delivery-row');
             let visibleCount = 0;
 
@@ -235,7 +249,19 @@
                     matchesDate = rowDateEl ? rowDateEl.innerText.includes(formatted) : true;
                 }
 
-                if (matchesSearch && matchesDate) {
+                // Estado match
+                let matchesEstado = true;
+                if (estadoVal) {
+                    const rowEstado = row.getAttribute('data-estado');
+                    if (estadoVal === 'entregado') {
+                        matchesEstado = (rowEstado === 'entregado');
+                    } else {
+                        // No entregado = pendiente o cancelado
+                        matchesEstado = (rowEstado === 'pendiente' || rowEstado === 'cancelado');
+                    }
+                }
+
+                if (matchesSearch && matchesDate && matchesEstado) {
                     row.style.display = '';
                     visibleCount++;
                 } else {

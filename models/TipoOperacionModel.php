@@ -45,8 +45,7 @@ class TipoOperacionModel {
     }
 
     public function delete(int $id): bool {
-        // Inactivación lógica
-        $stmt = $this->db->prepare("UPDATE tipos_operaciones SET estado = 0 WHERE id = ?");
+        $stmt = $this->db->prepare("DELETE FROM tipos_operaciones WHERE id = ?");
         return $stmt->execute([$id]);
     }
 }
