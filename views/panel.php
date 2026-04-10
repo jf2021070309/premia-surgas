@@ -213,6 +213,100 @@
         .card-orange { background-color: #f97316 !important; } /* Vibrant Orange */
         .card-wine   { background-color: #4a0000 !important; } /* Deep Wine */
         .card-dark   { background-color: #310000 !important; } /* Darker Wine */
+
+        /* ══════════════════════════════════════ 
+           PREMIUM CONDUCTOR DASHBOARD BANNERS 
+           ══════════════════════════════════════ */
+        @keyframes slideFadeDown {
+            0% { opacity: 0; transform: translateY(-30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .anim-welcome {
+            opacity: 0;
+            animation: slideFadeDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .anim-card {
+            opacity: 0;
+            animation: slideFadeDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .anim-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15) !important;
+            filter: brightness(1.1);
+        }
+        /* Banner Container (Static White) */
+        .banner-container {
+            background-color: white !important;
+            border-radius: 20px; 
+            border: 1px solid #e5e7eb !important; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
+            margin-bottom: 2.5rem; 
+            display: flex; 
+            overflow: hidden; 
+            position: relative;
+        }
+
+        /* Banner Text Elements (Static Light) */
+        .b-title {
+            font-weight: 900; color: #0f172a !important; margin: 0; font-size: 3rem; letter-spacing: -1.5px; line-height: 1;
+        }
+        .b-subtitle {
+            color: #64748b !important; margin: 0.8rem 0 0; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 800;
+        }
+        .b-brand {
+            color: #800000 !important; font-weight: 900;
+        }
+        .b-dot {
+            color: #cbd5e1 !important; margin: 0 0.5rem;
+        }
+
+        /* Card Styles */
+        .banner-card-orange {
+            background-color: #f97316 !important; /* Vibrant Orange */
+            box-shadow: 0 10px 20px rgba(249, 115, 22, 0.25) !important;
+        }
+        .banner-card-wine {
+            background-color: #380b0d !important; /* Dark Wine */
+            box-shadow: 0 10px 20px rgba(56, 11, 13, 0.25) !important;
+        }
+
+        /* Activity List Animation & Styling */
+        .activity-row {
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 1rem 0.5rem; 
+            border-bottom: 1px solid #f1f5f9;
+            transition: all 0.2s ease;
+            opacity: 0;
+            animation: slideFadeDown 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            background: transparent;
+        }
+        .activity-row:last-child {
+            border-bottom: none;
+        }
+        .activity-row:hover {
+            background: #f1f5f9;
+            border-radius: 8px;
+            border-bottom-color: transparent;
+            transform: translateX(4px);
+        }
+        .activity-avatar {
+            width: 40px; height: 40px; 
+            border-radius: 50%; 
+            background: #f8fafc; 
+            border: 1px solid #e2e8f0;
+            display: flex; align-items: center; justify-content: center; 
+            color: #64748b; font-size: 1rem; font-weight: 800;
+            transition: all 0.3s ease;
+        }
+        .activity-row:hover .activity-avatar {
+            background: #f97316;
+            border-color: #f97316;
+            color: white;
+            box-shadow: 0 4px 10px rgba(249, 115, 22, 0.2);
+        }
     </style>
 </head>
 
@@ -450,27 +544,7 @@
                          PREMIUM CONDUCTOR DASHBOARD 
                          ══════════════════════════════════════ -->
                     <!-- Unified Banner with Image and KPIs -->
-                    <style>
-                        @keyframes slideFadeDown {
-                            0% { opacity: 0; transform: translateY(-30px); }
-                            100% { opacity: 1; transform: translateY(0); }
-                        }
-                        .anim-welcome {
-                            opacity: 0;
-                            animation: slideFadeDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-                        }
-                        .anim-card {
-                            opacity: 0;
-                            animation: slideFadeDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-                            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                        }
-                        .anim-card:hover {
-                            transform: translateY(-6px);
-                            box-shadow: 0 15px 30px rgba(0,0,0,0.15) !important;
-                            filter: brightness(1.1);
-                        }
-                    </style>
-                    <div class="anim-welcome" style="background: white; border-radius: 20px; border: 1px solid #e2e8f0; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 2.5rem; display: flex; overflow: hidden; position: relative;">
+                    <div class="anim-welcome banner-container">
                         
                         <!-- Left Image Column -->
                         <div style="width: 300px; background: transparent; display: flex; align-items: flex-end; justify-content: center; position: relative; flex-shrink: 0; padding-bottom: 15px;">
@@ -483,35 +557,35 @@
                             <!-- Header Text -->
                             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                                 <div class="anim-welcome" style="animation-delay: 0.1s;">
-                                    <h2 style="font-weight: 900; color: #0f172a; margin: 0; font-size: 3rem; letter-spacing: -1.5px; line-height: 1;">Bienvenido, <?= explode(' ', $_SESSION['nombre_usuario'])[0] ?></h2>
-                                    <p style="color: #64748b; margin: 0.8rem 0 0; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 800;">Resumen Operativo <span style="color: #cbd5e1; margin: 0 0.5rem;">•</span> <span style="color: #800000; font-weight: 900;">PREMIASURGAS</span></p>
+                                    <h2 class="b-title">Bienvenido, <?= explode(' ', $_SESSION['nombre_usuario'])[0] ?></h2>
+                                    <p class="b-subtitle">Resumen Operativo <span class="b-dot">•</span> <span class="b-brand">PREMIASURGAS</span></p>
                                 </div>
                             </div>
 
                             <!-- KPI Cards Row -->
                             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
                                 
-                                <!-- Puntos Hoy (Orange) -->
-                                <div class="anim-card" style="animation-delay: 0.2s; background: #f97316; border-radius: 16px; padding: 1.5rem; color: white; display: flex; flex-direction: column; justify-content: space-between; min-height: 130px; box-shadow: 0 10px 20px rgba(249, 115, 22, 0.15);">
-                                    <div style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.9); margin-bottom: 0.5rem;">Puntos Entregados Hoy</div>
+                                <!-- Puntos Hoy -->
+                                <div class="anim-card banner-card-orange" style="animation-delay: 0.2s; border-radius: 16px; padding: 1.5rem; color: white; display: flex; flex-direction: column; justify-content: space-between; min-height: 130px;">
+                                    <div style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem; opacity: 0.9;">Puntos Entregados Hoy</div>
                                     <div class="dash-card-number-conductor" data-value="<?= $metricas_adicionales['puntos_hoy'] ?>" style="font-size: 3.2rem; font-weight: 900; line-height: 1; margin-bottom: 0.5rem;">0</div>
-                                    <div style="font-size: 0.8rem; font-weight: 600; color: rgba(255,255,255,1); display: flex; align-items: center; gap: 0.4rem;">
+                                    <div style="font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 0.4rem;">
                                         <i class='bx bx-trending-up'></i> Buen ritmo hoy
                                     </div>
                                 </div>
 
-                                <!-- Total Historico (Dark Wine) -->
-                                <div class="anim-card" style="animation-delay: 0.3s; background: #380b0d; border-radius: 16px; padding: 1.5rem; color: white; display: flex; flex-direction: column; justify-content: space-between; min-height: 130px; box-shadow: 0 10px 20px rgba(56, 11, 13, 0.15);">
-                                    <div style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.7); margin-bottom: 0.5rem;">Total Histórico</div>
+                                <!-- Total Historico -->
+                                <div class="anim-card banner-card-wine" style="animation-delay: 0.3s; border-radius: 16px; padding: 1.5rem; color: white; display: flex; flex-direction: column; justify-content: space-between; min-height: 130px;">
+                                    <div style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem; opacity: 0.9;">Total Histórico</div>
                                     <div class="dash-card-number-conductor" data-value="<?= $metricas_adicionales['total_historico'] ?>" style="font-size: 3.2rem; font-weight: 900; line-height: 1; margin-bottom: 0.5rem;">0</div>
-                                    <div style="font-size: 0.8rem; font-weight: 500; color: rgba(255,255,255,0.6);">Total de puntos acumulados</div>
+                                    <div style="font-size: 0.8rem; font-weight: 600; opacity: 0.8;">Total de puntos acumulados</div>
                                 </div>
 
-                                <!-- Clientes Atendidos (Dark Wine) -->
-                                <div class="anim-card" style="animation-delay: 0.4s; background: #380b0d; border-radius: 16px; padding: 1.5rem; color: white; display: flex; flex-direction: column; justify-content: space-between; min-height: 130px; box-shadow: 0 10px 20px rgba(56, 11, 13, 0.15);">
-                                    <div style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.7); margin-bottom: 0.5rem;">Clientes Atendidos</div>
+                                <!-- Clientes Atendidos -->
+                                <div class="anim-card banner-card-wine" style="animation-delay: 0.4s; border-radius: 16px; padding: 1.5rem; color: white; display: flex; flex-direction: column; justify-content: space-between; min-height: 130px;">
+                                    <div style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem; opacity: 0.9;">Clientes Atendidos</div>
                                     <div class="dash-card-number-conductor" data-value="<?= $metricas_adicionales['total_clientes_propios'] ?>" style="font-size: 3.2rem; font-weight: 900; line-height: 1; margin-bottom: 0.5rem;">0</div>
-                                    <div style="font-size: 0.8rem; font-weight: 500; color: rgba(255,255,255,0.6);">Base de datos personal</div>
+                                    <div style="font-size: 0.8rem; font-weight: 600; opacity: 0.8;">Base de datos personal</div>
                                 </div>
 
                             </div>
@@ -524,44 +598,40 @@
                         <!-- LEFT COLUMN: Charts & Activity -->
                         <div style="display: flex; flex-direction: column; gap: 2rem;">
                             
-                            <!-- Progress Chart -->
-                            <div style="background: white; border-radius: 20px; padding: 2rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                                    <div>
-                                        <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 0.6rem;">
-                                            <i class='bx bx-line-chart' style="color: #800000; font-size: 1.5rem;"></i> Mi Rendimiento
-                                        </h3>
-                                        <p style="margin: 0.2rem 0 0; font-size: 0.8rem; color: #94a3b8; font-weight: 500;">Puntos entregados en la última semana</p>
-                                    </div>
-                                    <div style="background: #f8fafc; padding: 0.4rem 0.8rem; border-radius: 8px; font-weight: 700; color: #64748b; font-size: 0.75rem; border: 1px solid #e2e8f0;">Lunes - Domingo</div>
-                                </div>
-                                <div style="height: 280px;">
-                                    <canvas id="miHistorialChart"></canvas>
-                                </div>
-                            </div>
+
 
                             <!-- Recent Transaction List -->
-                            <div style="background: white; border-radius: 20px; padding: 2rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
-                                <h3 style="margin: 0 0 1.5rem; font-size: 1.15rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 0.6rem;">
-                                    <i class='bx bx-history' style="color: #f97316; font-size: 1.5rem;"></i> Última Actividad
-                                </h3>
+                            <div style="background: white; border-radius: 12px; border: 1px solid #e5e7eb; box-shadow: none; overflow: hidden;">
+                                <div style="background: #f4f6f8; padding: 1.25rem 1.5rem; display: flex; align-items: center; gap: 1rem;">
+                                    <div style="width: 48px; height: 48px; border-radius: 12px; background: #fff5f5; border: 1px solid #fee2e2; display: flex; align-items: center; justify-content: center; color: #800000; font-size: 1.5rem; flex-shrink: 0;">
+                                        <i class='bx bx-history'></i>
+                                    </div>
+                                    <div>
+                                        <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a; line-height: 1.2;">Última Actividad</h3>
+                                        <p style="margin: 0.15rem 0 0; font-size: 0.8rem; color: #64748b; font-weight: 500;">Historial reciente de puntos entregados</p>
+                                    </div>
+                                </div>
                                 
-                                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                <div style="display: flex; flex-direction: column; padding: 0.5rem 1.5rem 1.5rem;">
                                     <?php if (!empty($metricas_adicionales['ultimas_ventas'])): ?>
-                                        <?php foreach ($metricas_adicionales['ultimas_ventas'] as $v): ?>
-                                            <div style="display: flex; align-items: center; justify-content: space-between; padding: 1rem; border-radius: 12px; background: #fafafa; border: 1px solid #f1f5f9; transition: all 0.2s ease;" onmouseover="this.style.background='#fff'; this.style.borderColor='#80000033'; this.style.transform='translateX(5px)'" onmouseout="this.style.background='#fafafa'; this.style.borderColor='#f1f5f9'; this.style.transform='none'">
+                                        <?php foreach ($metricas_adicionales['ultimas_ventas'] as $i => $v): 
+                                            $delay = 0.5 + ($i * 0.1);    
+                                            $initials = strtoupper(substr($v['cliente_nombre'], 0, 1));
+                                        ?>
+                                            <div class="activity-row" style="animation-delay: <?= $delay ?>s;">
                                                 <div style="display: flex; align-items: center; gap: 1rem;">
-                                                    <div style="width: 42px; height: 42px; border-radius: 10px; background: white; border: 1px solid #eee; display: flex; align-items: center; justify-content: center; color: #800000; font-size: 1.2rem;">
-                                                        <i class='bx bxs-star'></i>
+                                                    <div class="activity-avatar">
+                                                        <?= $initials ?>
                                                     </div>
                                                     <div>
-                                                        <div style="font-weight: 700; color: #334155; font-size: 0.9rem;"><?= htmlspecialchars($v['cliente_nombre']) ?></div>
-                                                        <div style="font-size: 0.75rem; color: #94a3b8; font-weight: 500;"><?= date('d M, H:i', strtotime($v['fecha'])) ?></div>
+                                                        <div style="font-weight: 700; color: #1e293b; font-size: 0.95rem; margin-bottom: 2px;"><?= htmlspecialchars($v['cliente_nombre']) ?></div>
+                                                        <div style="font-size: 0.75rem; color: #94a3b8; font-weight: 500; display: flex; align-items: center; gap: 4px;">
+                                                            <?= date('d M, H:i', strtotime($v['fecha'])) ?>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div style="text-align: right;">
-                                                    <div style="font-weight: 900; color: #800000; font-size: 1.1rem;">+ <?= $v['puntos'] ?></div>
-                                                    <div style="font-size: 0.65rem; font-weight: 800; color: #cbd5e1; text-transform: uppercase;">puntos</div>
+                                                    <div style="font-weight: 900; color: #1e293b; font-size: 1.1rem; letter-spacing: -0.5px;">+ <?= $v['puntos'] ?> <span style="font-weight: 700; color: #94a3b8; font-size: 0.8rem;">pts</span></div>
                                                 </div>
                                             </div>
                                         <?php endforeach; ?>
@@ -795,69 +865,7 @@
                     });
                 }, 300); // slight delay to sync with entrance animation
 
-                const historial = <?php echo json_encode($metricas_adicionales['mi_historial'] ?? []); ?>;
-                const ctxHistMi = document.getElementById('miHistorialChart');
-                if (ctxHistMi && historial.length > 0) {
-                    const gradient = ctxHistMi.getContext('2d').createLinearGradient(0, 0, 0, 300);
-                    gradient.addColorStop(0, 'rgba(128, 0, 0, 0.25)');
-                    gradient.addColorStop(1, 'rgba(128, 0, 0, 0.01)');
 
-                    new Chart(ctxHistMi, {
-                        type: 'line',
-                        data: {
-                            labels: historial.map(h => {
-                                const d = new Date(h.fecha + 'T00:00:00');
-                                return d.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
-                            }),
-                            datasets: [{
-                                label: 'Puntos Dados',
-                                data: historial.map(h => h.total),
-                                borderColor: '#800000',
-                                backgroundColor: gradient,
-                                fill: true,
-                                tension: 0.45,
-                                borderWidth: 4,
-                                pointBackgroundColor: '#fff',
-                                pointBorderColor: '#800000',
-                                pointBorderWidth: 2,
-                                pointRadius: 4,
-                                pointHoverRadius: 6,
-                                pointHoverBackgroundColor: '#800000',
-                                pointHoverBorderColor: '#fff',
-                                pointHoverBorderWidth: 2
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: { 
-                                legend: { display: false },
-                                tooltip: {
-                                    backgroundColor: '#1e293b',
-                                    titleFont: { size: 13, weight: '700', family: 'Inter' },
-                                    bodyFont: { size: 12, family: 'Inter' },
-                                    padding: 12,
-                                    cornerRadius: 10,
-                                    displayColors: false,
-                                    callbacks: {
-                                        label: (context) => ` ${context.parsed.y} puntos entregados`
-                                    }
-                                }
-                            },
-                            scales: {
-                                y: { 
-                                    beginAtZero: true, 
-                                    grid: { borderDash: [5, 5], color: '#f1f5f9', drawBorder: false },
-                                    ticks: { font: { size: 11, weight: '600', family: 'Inter' }, color: '#94a3b8', padding: 10 }
-                                },
-                                x: { 
-                                    grid: { display: false },
-                                    ticks: { font: { size: 11, weight: '600', family: 'Inter' }, color: '#64748b', padding: 10 }
-                                }
-                            }
-                        }
-                    });
-                }
             });
         </script>
     <?php endif; ?>
