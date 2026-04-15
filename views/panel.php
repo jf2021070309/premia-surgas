@@ -136,6 +136,35 @@
             }
         }
 
+        /* ── Dashboard container padding responsive ── */
+        .dashboard-container {
+            padding: 1.5rem 2rem;
+        }
+        @media (max-width: 900px) {
+            .dashboard-container {
+                padding: 1.25rem 1.25rem;
+            }
+        }
+        @media (max-width: 600px) {
+            .dashboard-container {
+                padding: 1rem 0.85rem;
+            }
+        }
+
+        /* ── KPI grid responsive ── */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        @media (max-width: 600px) {
+            .kpi-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 0.75rem;
+            }
+        }
+
         .middle-row-grid {
             display: grid;
             grid-template-columns: 2.2fr 1fr;
@@ -146,6 +175,40 @@
         @media (max-width: 1000px) {
             .middle-row-grid {
                 grid-template-columns: 1fr;
+            }
+        }
+
+        /* ── Chart containers responsive ── */
+        @media (max-width: 600px) {
+            .mobile-chart-h { height: 220px !important; }
+            .rankings-container { max-height: 400px !important; }
+        }
+
+        /* ── Conductor banner responsive ── */
+        @media (max-width: 700px) {
+            .banner-container {
+                flex-direction: column !important;
+                padding: 1.5rem !important;
+            }
+            .banner-img-col {
+                display: none !important;
+            }
+            .banner-content-col {
+                padding: 0 !important;
+            }
+            .b-title {
+                font-size: 2rem !important;
+            }
+            .conductor-kpi-grid {
+                grid-template-columns: 1fr 1fr !important;
+            }
+            .dash-card-number-conductor {
+                font-size: 2.2rem !important;
+            }
+        }
+        @media (max-width: 480px) {
+            .conductor-kpi-grid {
+                grid-template-columns: 1fr !important;
             }
         }
 
@@ -213,6 +276,15 @@
         .card-orange { background-color: #f97316 !important; } /* Vibrant Orange */
         .card-wine   { background-color: #4a0000 !important; } /* Deep Wine */
         .card-dark   { background-color: #310000 !important; } /* Darker Wine */
+
+        /* ── Dash card responsive ── */
+        @media (max-width: 600px) {
+            .dash-card { min-height: 100px; }
+            .dash-card-body { padding: 1rem 1rem; }
+            .dash-card-number { font-size: 2.2rem; letter-spacing: -0.5px; }
+            .dash-card-text { font-size: 0.78rem; }
+            .dash-card-icon { font-size: 48px; }
+        }
 
         /* ══════════════════════════════════════ 
            PREMIUM CONDUCTOR DASHBOARD BANNERS 
@@ -321,13 +393,12 @@
             include __DIR__ . '/partials/header_admin.php';
             ?>
 
-            <div class="container" style="width: 100%; max-width: 100%; padding: 1.5rem 2rem;">
+            <div class="container dashboard-container" style="width: 100%; max-width: 100%;">
 
                 <?php if ($_SESSION['rol'] === 'admin'): ?>
 
                     <!-- TOP ROW: KPI Metrics -->
-                    <div
-                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+                    <div class="kpi-grid">
 
                         <!-- Orange Card (Usuarios) -->
                         <div class="dash-card card-orange" onclick="location.href='<?= BASE_URL ?>clientes/lista'">
@@ -381,8 +452,8 @@
                                     </h3>
                                     <p style="font-size: 0.75rem; color: #64748b; margin: 0; margin-top: 0.2rem; font-weight: 500;">Los productos preferidos por los clientes</p>
                                 </div>
-                                <div style="background: white; border-radius: 1.25rem; padding: 1.5rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.03); min-height: 300px;">
-                                    <div style="position: relative; height: 260px; width: 100%;">
+                                <div style="background: white; border-radius: 1.25rem; padding: 1.5rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
+                                    <div class="mobile-chart-h" style="position: relative; height: 260px; width: 100%;">
                                         <canvas id="premiosBarChart"></canvas>
                                     </div>
                                 </div>
@@ -398,8 +469,8 @@
                                         </h3>
                                         <p style="font-size: 0.75rem; color: #64748b; margin: 0; margin-top: 0.2rem; font-weight: 500;">Datos de rendimiento de todos los conductores</p>
                                     </div>
-                                    <div style="background: white; border-radius: 1.25rem; padding: 1.5rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.03); min-height: 300px;">
-                                        <div style="position: relative; height: 260px; width: 100%;">
+                                    <div style="background: white; border-radius: 1.25rem; padding: 1.5rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
+                                        <div class="mobile-chart-h" style="position: relative; height: 260px; width: 100%;">
                                             <canvas id="conductoresBarChart"></canvas>
                                         </div>
                                     </div>
@@ -413,12 +484,12 @@
                                         </h3>
                                         <p id="historySubtitle" style="font-size: 0.75rem; color: #64748b; margin: 0; margin-top: 0.2rem; font-weight: 500;">Selecciona un conductor a la izquierda</p>
                                     </div>
-                                    <div style="background: white; border-radius: 1.25rem; padding: 1.5rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.03); min-height: 300px; display: flex; align-items: center; justify-content: center;">
+                                    <div style="background: white; border-radius: 1.25rem; padding: 1.5rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.03); display: flex; align-items: center; justify-content: center;">
                                         <div id="historyPlaceholder" style="color: #94a3b8; font-size: 0.85rem; font-weight: 500; text-align: center;">
                                             <i class='bx bx-mouse-alt' style="font-size: 2.5rem; display: block; margin-bottom: 0.5rem; opacity: 0.5;"></i>
                                             Toca una barra del ranking para cargar datos
                                         </div>
-                                        <div id="historyContainer" style="position: relative; height: 260px; width: 100%; display: none;">
+                                        <div id="historyContainer" class="mobile-chart-h" style="position: relative; height: 260px; width: 100%; display: none;">
                                             <canvas id="historyChart"></canvas>
                                         </div>
                                     </div>
@@ -436,8 +507,8 @@
                                         <i class='bx bx-star' style="color: #f59e0b;"></i> Top Canjeadores
                                     </h5>
                                 </div>
-                                <div style="background: white; border-radius: 1.25rem; padding: 1rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 15px rgba(0,0,0,0.02); flex: 1; display: flex; flex-direction: column; max-height: 520px;">
-                                    <div style="flex: 1; overflow-y: auto; padding-right: 5px; scrollbar-width: thin; scrollbar-color: #f1f5f9 transparent;">
+                                <div style="background: white; border-radius: 1.25rem; padding: 1rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 15px rgba(0,0,0,0.02); flex: 1; display: flex; flex-direction: column;">
+                                    <div class="rankings-container" style="flex: 1; overflow-y: auto; padding-right: 5px; scrollbar-width: thin; scrollbar-color: #f1f5f9 transparent; max-height: 520px;">
                                         <?php if (!empty($metricas_adicionales['ranking'])): ?>
                                             <?php foreach ($metricas_adicionales['ranking'] as $idx => $rank): 
                                                 $initials = strtoupper(substr($rank['nombre'], 0, 1));
@@ -546,13 +617,13 @@
                     <!-- Unified Banner with Image and KPIs -->
                     <div class="anim-welcome banner-container">
                         
-                        <!-- Left Image Column -->
-                        <div style="width: 300px; background: transparent; display: flex; align-items: flex-end; justify-content: center; position: relative; flex-shrink: 0; padding-bottom: 15px;">
+                        <!-- Left Image Column (hidden on mobile) -->
+                        <div class="banner-img-col" style="width: 300px; background: transparent; display: flex; align-items: flex-end; justify-content: center; position: relative; flex-shrink: 0; padding-bottom: 15px;">
                             <img src="<?= BASE_URL ?>assets/premios/panelgas.png" style="width: 85%; height: auto; object-fit: contain; object-position: bottom; transform-origin: bottom center; margin-bottom: -15px;">
                         </div>
 
                         <!-- Right Content Column -->
-                        <div style="flex: 1; padding: 2.5rem 2.5rem 2.5rem 0; display: flex; flex-direction: column; justify-content: center; gap: 2.5rem;">
+                        <div class="banner-content-col" style="flex: 1; padding: 2.5rem 2.5rem 2.5rem 0; display: flex; flex-direction: column; justify-content: center; gap: 2rem;">
                             
                             <!-- Header Text -->
                             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
@@ -563,7 +634,7 @@
                             </div>
 
                             <!-- KPI Cards Row -->
-                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                            <div class="conductor-kpi-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
                                 
                                 <!-- Puntos Hoy -->
                                 <div class="anim-card banner-card-orange" style="animation-delay: 0.2s; border-radius: 16px; padding: 1.5rem; color: white; display: flex; flex-direction: column; justify-content: space-between; min-height: 130px;">

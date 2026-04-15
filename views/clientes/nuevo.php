@@ -10,7 +10,43 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-layout.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/clientes_nuevo.css">
-    <style>[v-cloak]{display:none}</style>
+    <style>
+        [v-cloak]{display:none}
+        /* Responsividad para Formulario de Nuevo Cliente */
+        .form-grid {
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 1.25rem;
+        }
+        .form-footer {
+            margin-top: 2rem; 
+            padding-top: 1.5rem; 
+            border-top: 1px solid #f1f5f9; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between;
+        }
+        @media (max-width: 600px) {
+            .form-grid {
+                display: flex !important;
+                flex-direction: column !important;
+            }
+            .form-footer {
+                flex-direction: column-reverse; /* El texto required abajo o arriba del boton */
+                gap: 1.25rem;
+                align-items: stretch !important;
+                text-align: center;
+            }
+            .form-footer button {
+                width: 100%;
+                justify-content: center;
+                padding: 1rem !important; /* Más grande en celular */
+            }
+            form {
+                padding: 1.5rem !important;
+            }
+        }
+    </style>
 </head>
 <body>
 <div id="app" v-cloak>
@@ -24,7 +60,7 @@
             include __DIR__ . '/../partials/header_admin.php';
         ?>
 
-    <div class="container">
+    <div class="container dashboard-container">
 
         <div class="card elite-form-card animate-fade-in" style="max-width: 780px; margin: 1.5rem auto; border-radius: 18px; overflow: hidden; border: 1px solid #e2e8f0; box-shadow: 0 2px 16px rgba(0,0,0,0.06);">
 
@@ -32,7 +68,7 @@
 
             <form @submit.prevent="guardar" style="padding: 2.5rem;">
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+                <div class="form-grid">
 
                     <!-- Tipo de Cliente -->
                     <div>
@@ -117,7 +153,7 @@
                 </div>
 
                 <!-- Footer -->
-                <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;">
+                <div class="form-footer">
                     <span style="font-size: 0.72rem; color: #94a3b8; font-weight: 500;">* Campos requeridos</span>
                     <button type="submit" :disabled="loading"
                         style="background: #000; color: #fff; border: none; padding: 0.78rem 2.2rem; border-radius: 10px; font-weight: 700; font-size: 0.85rem; font-family:'Inter',sans-serif; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">

@@ -1,7 +1,7 @@
 <?php
 /**
  * Sidebar Admin Component
- * Versión Premium Surgas — Estandarizada
+ * Versión Premium Surgas — Estandarizada + Responsive Collapsible
  */
 $current_url = trim($_GET['url'] ?? '', '/');
 
@@ -21,9 +21,23 @@ if (!function_exists('isActiveLink')) {
 }
 ?>
 
-<aside class="sidebar">
+<!-- Overlay (mobile) -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<aside class="sidebar" id="mainSidebar">
     <div class="sidebar-brand">
-        <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" alt="Surgas" style="width: 140px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));">
+        <!-- Brand img is hidden on mobile mini-mode -->
+        <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" alt="Surgas">
+        
+        <!-- Toggle button inside sidebar (visible when mini) -->
+        <button class="sidebar-toggle-mini-btn" id="sidebarToggleMiniBtn" title="Abrir menú">
+            <i class='bx bx-menu'></i>
+        </button>
+
+        <!-- Close button (visible when open on mobile) -->
+        <button class="sidebar-close-btn" id="sidebarCloseBtn" title="Cerrar menú">
+            <i class='bx bx-x'></i>
+        </button>
     </div>
 
     <nav class="sidebar-menu">
@@ -78,3 +92,50 @@ if (!function_exists('isActiveLink')) {
     </nav>
 </aside>
 
+<script>
+// Evitar reinicializaciones si el script se carga múltiples veces
+if (!window._sidebarInitialized) {
+    window._sidebarInitialized = true;
+
+    // Funciones globales de apertura y cierre
+    window.openAdminSidebar = function() {
+        const sidebar = document.getElementById('mainSidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        if (sidebar && overlay) {
+            sidebar.classList.add('open');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Evita scroll
+        }
+    };
+
+    window.closeAdminSidebar = function() {
+        const sidebar = document.getElementById('mainSidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        if (sidebar && overlay) {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    };
+
+    // Usar event delegation a nivel de document para sobrevivir reacondicionamiento del DOM (ej. Vue)
+    document.addEventListener('click', function(e) {
+        // Cierre al hacer click en el overlay
+        if (e.target && e.target.id === 'sidebarOverlay') {
+            window.closeAdminSidebar();
+        }
+        
+        // Cierre al hacer click en el botón "X" o dentro de él
+        if (e.target && e.target.closest('#sidebarCloseBtn')) {
+            window.closeAdminSidebar();
+        }
+
+        // Apertura al hacer click en el toggle del sidebar mini
+        if (e.target && (e.target.closest('#sidebarToggleBtn') || e.target.closest('#sidebarToggleMiniBtn'))) {
+            // Evitar comportamiento por defecto
+            e.preventDefault();
+            window.openAdminSidebar();
+        }
+    });
+}
+</script>

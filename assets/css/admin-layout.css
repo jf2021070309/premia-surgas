@@ -63,6 +63,24 @@ body {
 }
 
 /* ══════════════════════════════════════
+   Sidebar Overlay (Mobile)
+══════════════════════════════════════ */
+.sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(3px);
+    z-index: 4000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition);
+}
+.sidebar-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ══════════════════════════════════════
    Sidebar
 ══════════════════════════════════════ */
 .sidebar {
@@ -75,6 +93,7 @@ body {
     display: flex;
     flex-direction: column;
     z-index: 1000;
+    transition: transform var(--transition);
 }
 
 .sidebar-brand {
@@ -82,8 +101,48 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
+    min-height: 80px; /* Asegurar espacio para el toggle */
 }
-.sidebar-brand img { width: 150px; height: auto; object-fit: contain; }
+.sidebar-brand img { width: 140px; height: auto; object-fit: contain; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); }
+
+/* Toggle menu dentro del sidebar (solo visible en modo mini) */
+.sidebar-toggle-mini-btn {
+    display: none;
+    background: transparent;
+    border: none;
+    color: rgba(255,255,255,0.7);
+    font-size: 1.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 40px; height: 40px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+}
+.sidebar-toggle-mini-btn:hover {
+    color: #fff;
+    background: rgba(255,255,255,0.1);
+}
+
+/* Botón cerrar dentro del sidebar (solo mobile) */
+.sidebar-close-btn {
+    display: none;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 32px; height: 32px;
+    background: rgba(255,255,255,0.1);
+    border: none;
+    border-radius: 8px;
+    color: rgba(255,255,255,0.7);
+    cursor: pointer;
+    font-size: 1.2rem;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+.sidebar-close-btn:hover { background: rgba(255,255,255,0.2); color: #fff; }
 
 .sidebar-menu {
     flex: 1; padding: 0.5rem 0.85rem; overflow-y: auto;
@@ -106,12 +165,13 @@ body {
     position: relative;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    border-radius: 6px;
 }
 .sidebar-item i { font-size: 1.35rem; opacity: 0.6; transition: all 0.3s; }
 .sidebar-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
 .sidebar-item:hover i { opacity: 1; transform: translateX(2px); }
 .sidebar-item.active {
-    background: #5a0a0a; /* Defined lighter crimson block for contrast */
+    background: #5a0a0a;
     color: #ff6600 !important;
     border-right: 5px solid #ff6600;
 }
@@ -130,13 +190,14 @@ body {
     flex: 1; margin-left: var(--sidebar-width);
     display: flex; flex-direction: column;
     min-width: 0; min-height: 100vh;
+    transition: margin-left var(--transition);
 }
 
 /* ══════════════════════════════════════
    Top Navigation / Header
 ══════════════════════════════════════ */
 .top-nav {
-    background: #f8fafc; /* Premium Light Gray (Slate 50) */
+    background: #f8fafc;
     border-bottom: 1px solid var(--outline);
     padding: 0 2rem;
     height: 70px;
@@ -146,21 +207,28 @@ body {
     position: sticky;
     top: 0;
     z-index: 200;
+    gap: 1rem;
 }
 
-.nav-left { display: flex; flex-direction: column; }
-.nav-right { display: flex; align-items: center; gap: 1.5rem; }
+.nav-left { display: flex; flex-direction: column; flex: 1; min-width: 0; padding-left: 0.5rem; }
+.nav-right { display: flex; align-items: center; gap: 1.5rem; flex-shrink: 0; }
 
 .page-title {
     font-size: 1.35rem; font-weight: 800;
-    color: var(--on-surface); /* Back to dark for readability on light gray */
+    color: var(--on-surface);
     letter-spacing: -0.015em;
     line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .page-subtitle {
     font-size: 0.82rem; 
     color: var(--on-muted);
     font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .admin-pill {
@@ -230,8 +298,129 @@ body {
 }
 
 /* ══════════════════════════════════════
-   Responsive Base
+   Responsive — Tablet (≤ 900px)
 ══════════════════════════════════════ */
+@media (max-width: 900px) {
+    .sidebar {
+        transform: translateX(0);
+        width: 70px;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.05); /* Pequeña sombra permanente */
+        z-index: 5000; /* Asegurar que esté por encima de todo */
+        overflow-x: hidden;
+    }
+    /* El botón menu se muestra en mini */
+    .sidebar-toggle-mini-btn {
+        display: flex;
+    }
+    .sidebar .sidebar-brand img { display: none; }
+    .sidebar .menu-label { display: none; }
+    .sidebar .sidebar-item span { display: none; }
+    
+    /* Centrar los iconos en estado mini */
+    .sidebar .sidebar-item {
+        justify-content: center;
+        padding: 0.85rem 0;
+    }
+    .sidebar .sidebar-item i {
+        font-size: 1.5rem;
+    }
+
+    /* Estado expandido (cuando se pulsa botón menú) */
+    .sidebar.open {
+        width: 280px;
+        box-shadow: 10px 0 40px rgba(0,0,0,0.4);
+    }
+    .sidebar.open .sidebar-toggle-mini-btn { display: none; }
+    .sidebar.open .sidebar-brand img { display: block; }
+    .sidebar.open .menu-label { display: block; }
+    .sidebar.open .sidebar-item span { display: block; }
+    .sidebar.open .sidebar-item {
+        justify-content: flex-start;
+        padding: 0.85rem 1.5rem;
+    }
+    
+    /* El botón de cerrar solo se muestra al expandirlo */
+    .sidebar-close-btn { display: none; }
+    .sidebar.open .sidebar-close-btn {
+        display: flex;
+    }
+
+    /* Quitar reglas redundantes o contradictorias del overlay */
+    .sidebar-overlay {
+        display: block; /* Siempre bloque pero controlado por visibility y opacity arriba */
+    }
+
+    .admin-layout {
+        margin-left: 70px !important; /* Espacio para el mini-sidebar */
+    }
+
+    .top-nav {
+        padding: 0 1rem;
+    }
+
+    /* Ajustar pill en tablet en lugar de ocultar sus elementos */
+    .admin-pill { padding: 6px 12px 6px 16px; gap: 10px; }
+    .admin-pill-name { max-width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+}
+
+/* ══════════════════════════════════════
+   Responsive — Mobile (≤ 600px)
+══════════════════════════════════════ */
+@media (max-width: 600px) {
+    .top-nav {
+        height: auto;
+        min-height: 60px;
+        padding: 0.5rem 0.5rem 0.5rem 0; /* Menos padding izquierdo porque ya hay 70px de sidebar */
+        flex-direction: row;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .nav-left { flex: 1; min-width: 0; padding-left: 0.5rem; }
+    .nav-right { flex-shrink: 0; }
+
+    .page-title {
+        font-size: 1.05rem;
+        white-space: normal; /* Permitir salto si es muy muy largo */
+        line-height: 1.1;
+    }
+    .page-subtitle {
+        display: block; 
+        font-size: 0.65rem;
+        max-width: 100%;
+        white-space: normal; /* Permitir texto completo */
+        margin-top: 2px;
+    }
+
+    .nav-bell { font-size: 1.25rem; }
+
+    /* Hacer que el "pill" deje de parecer una cápsula larga para ahorrar espacio */
+    .admin-pill {
+        padding: 2px;
+        gap: 6px;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+    }
+    /* Ocultar todo el texto del usuario en la cabecera móvil (mejor práctica UI/UX) */
+    .admin-pill-text {
+        display: none;
+    }
+    
+    .admin-avatar {
+        width: 32px; height: 32px;
+        font-size: 0.9rem;
+    }
+    
+    .nav-divider { display: none; }
+    .header-logout-btn { 
+        width: 32px; height: 32px; font-size: 1.2rem; 
+        background: transparent; border-color: transparent; color: #94a3b8;
+    }
+    .header-logout-btn:hover { background: #ffe4e6; border-color: #fecaca; }
+
+    /* El sidebar open se mantiene igual que en tablet */
+}
+
 /* ══════════════════════════════════════
    Modal System (Elite)
 ══════════════════════════════════════ */
@@ -292,10 +481,9 @@ body {
     background: #000;
     color: #fff;
     padding: 0.85rem 2.2rem;
-    border-radius: 14px; /* Menos redondeado, estilo rectángulo suave */
+    border-radius: 14px;
     border: 1px solid rgba(255,255,255,0.1);
     font-family: 'Inter', sans-serif;
-
     font-weight: 700;
     font-size: 0.92rem;
     cursor: pointer;

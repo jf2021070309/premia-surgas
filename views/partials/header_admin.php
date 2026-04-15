@@ -24,6 +24,8 @@ $adminInitial = strtoupper(substr($adminName, 0, 1));
 ?>
 
 <header class="top-nav">
+    <!-- El botón de menú ahora vive en el sidebar directamente -->
+
     <div class="nav-left">
         <h1 class="page-title"><?= htmlspecialchars($pageTitle) ?></h1>
         <?php if ($pageSubtitle): ?>
