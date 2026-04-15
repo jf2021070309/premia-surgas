@@ -59,37 +59,38 @@
                     </div>
                 </div>
 
-                <div class="modern-section-header" style="margin-top: 2rem; justify-content: flex-start; gap: 1rem;">
-                    <!-- Filtros -->
-                    <div class="header-search-modern" style="width: 180px;">
-                        <i class='bx bx-filter-alt'></i>
-                        <select v-model="filterTipo">
-                            <option value="">Todos los Tipos</option>
-                            <option value="Normal">Personal</option>
-                            <option value="Restaurante">Restaurante</option>
-                            <option value="Punto de Venta">Punto de Venta</option>
-                        </select>
+                <!-- Toolbar responsiva: Fila 1 (filtros) + Fila 2 (buscador + botón) -->
+                <div class="clientes-toolbar">
+                    <div class="clientes-toolbar-filters">
+                        <div class="header-search-modern">
+                            <i class='bx bx-filter-alt'></i>
+                            <select v-model="filterTipo">
+                                <option value="">Todos los Tipos</option>
+                                <option value="Normal">Personal</option>
+                                <option value="Restaurante">Restaurante</option>
+                                <option value="Punto de Venta">Punto de Venta</option>
+                            </select>
+                        </div>
+                        <div class="header-search-modern">
+                            <i class='bx bx-map-alt'></i>
+                            <select v-model="filterDep">
+                                <option value="">Todos los Departamentos</option>
+                                <option value="Tacna">Tacna</option>
+                                <option value="Ilo">Ilo</option>
+                                <option value="Moquegua">Moquegua</option>
+                                <option value="Camaná">Camaná</option>
+                                <option value="Mollendo">Mollendo</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="header-search-modern" style="width: 220px;">
-                        <i class='bx bx-map-alt'></i>
-                        <select v-model="filterDep">
-                            <option value="">Todos los Departamentos</option>
-                            <option value="Tacna">Tacna</option>
-                            <option value="Ilo">Ilo</option>
-                            <option value="Moquegua">Moquegua</option>
-                            <option value="Camaná">Camaná</option>
-                            <option value="Mollendo">Mollendo</option>
-                        </select>
-                    </div>
-                    <!-- Buscador -->
-                    <div class="header-search-modern" style="flex: 1; max-width: 400px;">
-                        <i class='bx bx-search'></i>
-                        <input type="text" v-model="busqueda" >
-                    </div>
-                    <!-- Acción -->
-                    <div style="flex: 1; display: flex; justify-content: flex-end;">
-                        <a href="<?= BASE_URL ?>clientes/nuevo" class="btn-primary-premium">
-                            <i class='bx bx-user-plus'></i> Nuevo Cliente
+                    <div class="clientes-toolbar-search">
+                        <div class="header-search-modern clientes-search-input">
+                            <i class='bx bx-search'></i>
+                            <input type="text" v-model="busqueda" placeholder="Buscar cliente...">
+                        </div>
+                        <a href="<?= BASE_URL ?>clientes/nuevo" class="btn-primary-premium btn-nuevo-cliente">
+                            <i class='bx bx-user-plus'></i>
+                            <span>Nuevo Cliente</span>
                         </a>
                     </div>
                 </div>
@@ -103,9 +104,9 @@
                                 <tr>
                                     <th>Nombre del Cliente</th>
                                     <th>Categoría</th>
-                                    <th>Celular</th>
-                                    <th>Documento</th>
-                                    <th>Departamento</th>
+                                    <th class="col-hide-mobile">Celular</th>
+                                    <th class="col-hide-mobile">Documento</th>
+                                    <th class="col-hide-mobile">Departamento</th>
                                     <th>Puntos</th>
                                     <th style="text-align: right;">Acciones</th>
                                 </tr>
@@ -115,10 +116,13 @@
                                     <td>
                                         <div class="row-client">
                                             <div class="client-info">
-                                                <div class="client-name">{{ c.tipo_cliente === 'Normal' ? c.nombre :
-                                                    (c.razon_social || c.nombre) }}</div>
-                                                <div v-if="c.tipo_cliente !== 'Normal'" class="client-subtext">{{
-                                                    c.nombre }}</div>
+                                                <div class="client-name">{{ c.tipo_cliente === 'Normal' ? c.nombre : (c.razon_social || c.nombre) }}</div>
+                                                <div v-if="c.tipo_cliente !== 'Normal'" class="client-subtext">{{ c.nombre }}</div>
+                                                <!-- Info compacta visible solo en móvil -->
+                                                <div class="mobile-client-meta">
+                                                    <span v-if="c.celular"><i class='bx bx-phone'></i> {{ c.celular }}</span>
+                                                    <span v-if="c.departamento"><i class='bx bx-map-pin'></i> {{ c.departamento }}</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </td>
@@ -127,10 +131,9 @@
                                             {{ c.tipo_cliente || 'Normal' }}
                                         </span>
                                     </td>
-                                    <td><span class="text-medium">{{ c.celular }}</span></td>
-                                    <td><span class="text-medium">{{ c.tipo_cliente !== 'Normal' ? (c.ruc || '—') :
-                                            (c.dni || '—') }}</span></td>
-                                    <td><span class="text-medium">{{ c.departamento || '—' }}</span></td>
+                                    <td class="col-hide-mobile"><span class="text-medium">{{ c.celular }}</span></td>
+                                    <td class="col-hide-mobile"><span class="text-medium">{{ c.tipo_cliente !== 'Normal' ? (c.ruc || '—') : (c.dni || '—') }}</span></td>
+                                    <td class="col-hide-mobile"><span class="text-medium">{{ c.departamento || '—' }}</span></td>
                                     <td><span class="text-medium">{{ c.puntos }} pts</span></td>
                                     <td>
                                         <div class="actions-flex">

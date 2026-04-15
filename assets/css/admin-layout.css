@@ -358,9 +358,9 @@ body {
         padding: 0 1rem;
     }
 
-    /* Ajustar pill en tablet en lugar de ocultar sus elementos */
-    .admin-pill { padding: 6px 12px 6px 16px; gap: 10px; }
-    .admin-pill-name { max-width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    /* Ajustar pill en tablet */
+    .admin-pill { padding: 6px 12px 6px 14px; gap: 10px; }
+    .admin-pill-name { max-width: 110px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 }
 
 /* ══════════════════════════════════════
@@ -379,46 +379,73 @@ body {
     .nav-right { flex-shrink: 0; }
 
     .page-title {
-        font-size: 1.05rem;
-        white-space: normal; /* Permitir salto si es muy muy largo */
-        line-height: 1.1;
+        font-size: 1rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.2;
     }
     .page-subtitle {
         display: block; 
         font-size: 0.65rem;
         max-width: 100%;
-        white-space: normal; /* Permitir texto completo */
-        margin-top: 2px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-top: 1px;
     }
 
     .nav-bell { font-size: 1.25rem; }
 
-    /* Hacer que el "pill" deje de parecer una cápsula larga para ahorrar espacio */
+    /* Pill compacto con nombre en móvil */
     .admin-pill {
-        padding: 2px;
-        gap: 6px;
-        background: transparent;
-        border: none;
-        box-shadow: none;
+        padding: 5px 10px 5px 6px;
+        gap: 8px;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        border-radius: 100px;
     }
-    /* Ocultar todo el texto del usuario en la cabecera móvil (mejor práctica UI/UX) */
+    /* Mostrar texto pero compacto */
     .admin-pill-text {
-        display: none;
+        display: flex;
+        flex-direction: column;
+        line-height: 1.15;
+        max-width: 90px;
+    }
+    .admin-pill-name {
+        font-size: 0.75rem;
+        font-weight: 800;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .admin-pill-role {
+        font-size: 0.55rem;
     }
     
     .admin-avatar {
-        width: 32px; height: 32px;
-        font-size: 0.9rem;
+        width: 28px; height: 28px;
+        font-size: 0.8rem;
     }
     
     .nav-divider { display: none; }
     .header-logout-btn { 
-        width: 32px; height: 32px; font-size: 1.2rem; 
+        width: 28px; height: 28px; font-size: 1.1rem; 
         background: transparent; border-color: transparent; color: #94a3b8;
     }
     .header-logout-btn:hover { background: #ffe4e6; border-color: #fecaca; }
+}
 
-    /* El sidebar open se mantiene igual que en tablet */
+/* ══════════════════════════════════════
+   Responsive — Very Small (≤ 420px)
+══════════════════════════════════════ */
+@media (max-width: 420px) {
+    /* Ocultar campana para dar espacio al pill con nombre */
+    .nav-bell { display: none; }
+    /* Limitar aún más el max-width del nombre */
+    .admin-pill-text { max-width: 72px; }
+    .page-title { font-size: 0.92rem; }
 }
 
 /* ══════════════════════════════════════

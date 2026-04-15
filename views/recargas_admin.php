@@ -51,15 +51,7 @@
                 }
             }
         ?>
-        <style>
-            .dash-card { border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); position: relative; overflow: hidden; color: white; display: flex; flex-direction: column; }
-            .dash-card-body { padding: 15px 20px; flex: 1; position: relative; z-index: 2; min-height: 132px; }
-            .dash-card-number { font-size: 2.5rem; font-weight: 700; margin-bottom: 2px; line-height: 1; font-family: 'Inter', sans-serif; }
-            .dash-card-text { font-size: 0.95rem; margin-bottom: 0; font-weight: 400; letter-spacing: 0.3px; }
-            
-            .dash-card-icon { position: absolute; top: 50%; right: 15px; transform: translateY(-50%); font-size: 80px; color: rgba(255,255,255,0.12); z-index: 1; pointer-events: none; }
-        </style>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+        <div class="stats-grid-modern">
             
             <div class="dash-card" style="background: #f97316;">
                 <div class="dash-card-body">
@@ -156,13 +148,13 @@
                                 </div>
                             </div>
                             <label for="qr_file_input" id="qrDropZone">
-                                <img id="qrPreviewImg" src="" alt="" style="display:none; width:80px; height:80px; object-fit:contain; border-radius:12px; margin-bottom:0.5rem; border:2px solid #e2e8f0; padding:4px; background:#fff;">
+                                <img id="qrPreviewImg" src="" alt="">
                                 <i id="qrUploadIcon" class='bx bx-cloud-upload'></i>
                                 <div id="qrUploadLabel" class="dz-label">Selecciona una imagen</div>
                                 <div id="qrUploadHint" class="dz-hint">Formatos: JPG, PNG o WebP (Máx 2MB)</div>
                             </label>
                             <input type="file" id="qr_file_input" name="qr_imagen" accept="image/*" style="display:none;">
-                            <button type="submit" id="qrSubmitBtn" <?= $nombreTitular ? '' : 'disabled' ?> style="width: 100%; padding: 1rem; border-radius: 12px; border: none; background: #000; color: #fff; font-weight: 800; font-size: 0.9rem; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; text-transform: uppercase;">
+                            <button type="submit" id="qrSubmitBtn" <?= $nombreTitular ? '' : 'disabled' ?>>
                                 <i class='bx bx-check-circle'></i> ACTUALIZAR CONFIGURACIÓN
                             </button>
                         </form>

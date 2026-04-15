@@ -559,11 +559,31 @@
 /* Data Table */
 .table-wrapper {
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: auto;           /* En Firefox: scrollbar visible (no thin) */
+    scrollbar-color: #94a3b8 #f1f5f9;
+}
+.table-wrapper::-webkit-scrollbar {
+    height: 8px;                     /* Más gruesa y visible */
+}
+.table-wrapper::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 10px;
+    margin: 0 4px;
+}
+.table-wrapper::-webkit-scrollbar-thumb {
+    background: #94a3b8;             /* Gris visible */
+    border-radius: 10px;
+    border: 2px solid #f1f5f9;
+}
+.table-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #800000;             /* Vino al hover */
 }
 .data-table {
     width: 100%;
     border-collapse: collapse;
     text-align: left;
+    min-width: 480px; /* Evita que se comprima demasiado — fuerza scroll */
 }
 .data-table th {
     background: #f8fafc; /* Refined plomiso background */
@@ -780,4 +800,189 @@
     color: #94a3b8;
     font-weight: 800;
     padding: 0 4px;
+}
+
+/* ══════════════════════════════════════════════════════
+   Clientes Toolbar — Sistema Responsive
+   ══════════════════════════════════════════════════════ */
+.clientes-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+}
+.clientes-toolbar-filters {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-shrink: 0;
+}
+.clientes-toolbar-filters .header-search-modern {
+    width: 180px;
+}
+.clientes-toolbar-search {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+}
+.clientes-search-input {
+    flex: 1;
+    width: auto !important;
+    max-width: 400px;
+}
+.btn-nuevo-cliente {
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* Meta-info inline del cliente (solo mobile) */
+.mobile-client-meta {
+    display: none;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 3px;
+}
+.mobile-client-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 0.71rem;
+    color: #64748b;
+    font-weight: 500;
+}
+.mobile-client-meta i {
+    font-size: 0.82rem;
+    color: #94a3b8;
+}
+
+/* ══════════════════════════════════════
+   Responsive — Tablet (≤ 768px)
+══════════════════════════════════════ */
+@media (max-width: 768px) {
+    .container { padding: 0 1.25rem 0.5rem; }
+
+    .clientes-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.6rem;
+    }
+    .clientes-toolbar-filters {
+        width: 100%;
+    }
+    .clientes-toolbar-filters .header-search-modern {
+        flex: 1;
+        width: auto;
+    }
+    .clientes-toolbar-search {
+        width: 100%;
+    }
+    .clientes-search-input {
+        max-width: none;
+    }
+}
+
+/* ══════════════════════════════════════
+   Responsive — Mobile (≤ 600px)
+══════════════════════════════════════ */
+@media (max-width: 600px) {
+    .container {
+        padding: 0 0.75rem 0.5rem;
+        margin: 1rem auto;
+    }
+
+    /* Toolbar */
+    .clientes-toolbar { gap: 0.5rem; margin-top: 1.25rem; }
+
+    .clientes-toolbar-filters {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    .clientes-toolbar-filters .header-search-modern,
+    .clientes-search-input {
+        width: 100% !important;
+        max-width: none;
+    }
+    .clientes-toolbar-search { gap: 0.5rem; }
+
+    /* Botón compacto: solo ícono */
+    .btn-nuevo-cliente {
+        padding: 10px 14px;
+        font-size: 0.82rem;
+        gap: 6px;
+    }
+    .btn-nuevo-cliente span { display: none; }
+
+    /* Ocultar columnas secundarias */
+    .col-hide-mobile { display: none !important; }
+
+    /* Mostrar meta-info compacta en celda nombre */
+    .mobile-client-meta { display: flex; }
+
+    /* Tabla más compacta */
+    .data-table th,
+    .data-table td {
+        padding: 0.75rem 0.65rem;
+        font-size: 0.8rem;
+    }
+
+    /* Centrar columnas Categoría (2ª) y Puntos (penúltima) en mobile */
+    .data-table th:nth-child(2),
+    .data-table td:nth-child(2),
+    .data-table th:nth-last-child(2),
+    .data-table td:nth-last-child(2) {
+        text-align: center;
+    }
+
+    /* Botones de acción pequeños */
+    .actions-flex { gap: 5px; }
+    .btn-action {
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+    }
+    .btn-action i { font-size: 0.95rem; }
+
+    /* Card */
+    .card { border-radius: 10px; }
+
+    /* Scroll hint: sombra en borde derecho de la tabla para indicar que hay más contenido */
+    .table-wrapper {
+        position: relative;
+    }
+    .card {
+        position: relative;
+        overflow: visible;
+    }
+    .table-wrapper::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 28px;
+        height: 100%;
+        background: linear-gradient(to right, transparent, rgba(255,255,255,0.85));
+        pointer-events: none;
+        border-radius: 0 10px 10px 0;
+    }
+
+    /* Paginación */
+    .card-footer-premium {
+        flex-direction: column;
+        gap: 0.75rem;
+        align-items: flex-start;
+        padding: 0.75rem 1rem;
+    }
+    .pagination-elite { align-self: center; }
+}
+
+/* ══════════════════════════════════════
+   Responsive — Very Small (≤ 420px)
+══════════════════════════════════════ */
+@media (max-width: 420px) {
+    .btn-nuevo-cliente { padding: 9px 12px; }
+    .actions-flex { flex-wrap: wrap; gap: 4px; }
 }
