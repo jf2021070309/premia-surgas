@@ -25,23 +25,23 @@
             include __DIR__ . '/partials/header_admin.php';
         ?>
 
-        <div class="container animate-fade-in" style="padding-top: 0.5rem;">
+        <div class="container animate-fade-in">
             
-            <div class="modern-section-header" style="justify-content: space-between; margin-top: 0.5rem;">
+            <div class="modern-section-header">
                 <!-- Buscador a la izquierda -->
-                <div class="header-search-modern" style="width: 350px;">
+                <div class="header-search-modern" style="width: 100%; max-width: 400px;">
                     <i class='bx bx-search'></i>
                     <input type="text" id="searchBeneficiario" placeholder="Buscar por beneficiario o premio..." onkeyup="filterDeliveries()">
                 </div>
 
                 <!-- Filtros a la derecha -->
-                <div style="display: flex; gap: 0.75rem;">
+                <div class="section-actions">
                     <div class="header-search-modern" style="width: 200px;">
                         <i class='bx bx-filter-alt'></i>
                         <select id="filterEstado" onchange="filterDeliveries()">
-                            <option value="">TODOS LOS ESTADOS</option>
-                            <option value="entregado">ENTREGADO</option>
-                            <option value="no_entregado">NO ENTREGADO</option>
+                            <option value="">Todos los estados</option>
+                            <option value="entregado">Entregados</option>
+                            <option value="no_entregado">No entregados</option>
                         </select>
                     </div>
                     <div class="header-search-modern" style="width: 170px;">
@@ -56,9 +56,9 @@
                     <table class="data-table" id="tableDeliveries">
                         <thead>
                             <tr>
-                                <th>Fecha y Hora</th>
-                                <th>Beneficiario</th>
-                                <th>Premio Canjeado</th>
+                                <th class="col-hide-mobile">Fecha y Hora</th>
+                                <th>Beneficiario y Premio</th>
+                                <th class="col-hide-mobile">Premio</th>
                                 <th class="text-center">Estado</th>
                                 <th style="text-align: center !important;">Acciones</th>
                             </tr>
@@ -74,7 +74,7 @@
                             <?php endif; ?>
                             <?php foreach ($canjes as $c): ?>
                             <tr class="delivery-row" data-estado="<?= $c['estado'] ?>">
-                                <td class="date-text">
+                                <td class="date-text col-hide-mobile">
                                     <div style="font-weight: 700; color: #1e293b;">
                                         <?= date('d M Y', strtotime($c['fecha'])) ?>
                                     </div>
@@ -86,38 +86,39 @@
                                     <div class="row-client">
                                         <div class="client-info">
                                             <span class="client-name"><?= htmlspecialchars($c['cliente_nombre']) ?></span>
+                                            
+                                            <!-- Meta info solo para móvil -->
+                                            <div class="mobile-client-meta">
+                                                <span><i class='bx bx-gift'></i> <?= htmlspecialchars($c['premio_nombre']) ?></span>
+                                                <span><i class='bx bx-calendar-event'></i> <?= date('d M, h:i A', strtotime($c['fecha'])) ?></span>
+                                            </div>
+
                                             <span class="client-subtext"><?= $c['cliente_celular'] ?></span>
                                         </div>
                                     </div>
                                 </td>
-                                <td>
+                                <td class="col-hide-mobile">
                                     <div class="row-prize">
                                         <span class="text-medium"><?= htmlspecialchars($c['premio_nombre']) ?></span>
                                     </div>
                                 </td>
                                 <td style="text-align: center !important;">
                                     <?php if ($c['estado'] === 'pendiente'): ?>
-                                        <div style="display: flex; justify-content: center;">
-                                            <span class="chip chip-pending" style="padding: 6px 14px; letter-spacing: 0.05em;">
-                                                <i class='bx bxs-circle'></i> Pendiente
-                                            </span>
-                                        </div>
+                                        <span class="chip chip-pending">
+                                            <i class='bx bxs-circle'></i> Pendiente
+                                        </span>
                                     <?php elseif ($c['estado'] === 'entregado'): ?>
-                                        <div style="display: flex; justify-content: center;">
-                                            <span class="chip chip-delivered" style="padding: 6px 14px; letter-spacing: 0.05em;">
-                                                <i class='bx bxs-circle'></i> Entregado
-                                            </span>
-                                        </div>
+                                        <span class="chip chip-delivered">
+                                            <i class='bx bxs-circle'></i> Entregado
+                                        </span>
                                     <?php else: ?>
-                                        <div style="display: flex; justify-content: center;">
-                                            <span class="chip chip-rejected" style="padding: 6px 14px; letter-spacing: 0.05em; text-decoration: line-through;">
-                                                <i class='bx bxs-circle'></i> <?= ucfirst($c['estado']) ?>
-                                            </span>
-                                        </div>
+                                        <span class="chip chip-rejected" style="text-decoration: line-through;">
+                                            <i class='bx bxs-circle'></i> <?= ucfirst($c['estado']) ?>
+                                        </span>
                                     <?php endif; ?>
                                 </td>
                                 <td style="text-align: center;">
-                                    <div style="display: flex; justify-content: center; align-items: center; gap: 8px;">
+                                    <div class="actions-flex" style="justify-content: center;">
                                         <!-- Ver Imagen -->
                                         <button class="btn-action indigo" onclick="viewPrize('<?= htmlspecialchars($c['premio_nombre']) ?>', '<?= BASE_URL ?>assets/premios/<?= $c['premio_imagen'] ?>')" title="Ver Premio">
                                             <i class='bx bx-show'></i>
@@ -128,7 +129,7 @@
                                             <form action="<?= BASE_URL ?>canjes-admin/actualizar" method="POST" style="display:inline; margin: 0;">
                                                 <input type="hidden" name="id" value="<?= $c['id'] ?>">
                                                 <input type="hidden" name="estado" value="entregado">
-                                                <button type="submit" class="btn-action blue" title="Marcar como entregado">
+                                                <button type="submit" class="btn-action green" title="Marcar como entregado">
                                                     <i class='bx bx-check'></i>
                                                 </button>
                                             </form>
