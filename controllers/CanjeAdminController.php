@@ -44,9 +44,9 @@ class CanjeAdminController {
 
             $result = $model->actualizarEstado($id, $estado);
             if ($result) {
-                $statusText = strtoupper($estado);
+                $statusText = strtoupper(str_replace('_', ' ', $estado));
                 $this->audit->registrar($_SESSION['id_usuario'], 'ESTADO_CANJE', "Cambió a $statusText el canje de {$canje['producto_nombre']} para {$canje['cliente_nombre']}", 'CANJES');
-                $_SESSION['flash'] = ['type' => 'success', 'title' => 'Éxito', 'message' => "Estado actualizado a $estado."];
+                $_SESSION['flash'] = ['type' => 'success', 'title' => 'Éxito', 'message' => "Estado actualizado a $statusText."];
             } else {
                 $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo actualizar el estado.'];
             }

@@ -25,15 +25,32 @@
         .history-card {
             background: white; border-radius: 1.5rem; overflow: hidden;
             box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            margin-bottom: 1.5rem; transition: transform 0.3s;
+            margin-bottom: 1.5rem; transition: 0.3s;
             border: 1px solid rgba(0,0,0,0.05);
+            display: flex; align-items: center; padding: 1.2rem; gap: 1.2rem;
         }
-        .history-card:hover { transform: translateY(-5px); }
+        .history-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
 
-        .prize-thumb { width: 80px; height: 80px; object-fit: contain; background: #fff; padding: 10px; border-radius: 1rem; }
+        .prize-thumb { width: 70px; height: 70px; object-fit: contain; background: #f8fafc; padding: 8px; border-radius: 1rem; border: 1px solid #edf2f7; }
         
-        .badge-points { background: #fff3e0; color: #e67e22; font-weight: 700; border-radius: 50px; padding: 0.4rem 1rem; }
-        .badge-date { background: #f1f2f6; color: #747d8c; font-weight: 600; border-radius: 50px; padding: 0.4rem 1rem; }
+        .badge-pts-red { color: #e11d48; font-weight: 850; font-size: 1.1rem; }
+        .modality-badge {
+            font-size: 0.6rem; font-weight: 800; color: #821515; 
+            background: #ffebeb; padding: 2px 8px; border-radius: 4px;
+            text-transform: uppercase; letter-spacing: 0.5px;
+            display: inline-block; margin-top: 4px;
+        }
+        .status-badge {
+            font-size: 0.65rem; font-weight: 800; padding: 4px 10px; border-radius: 50px;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .st-pendiente { background: #fff7ed; color: #d97706; }
+        .st-pago_aprobado { background: #f0fdf4; color: #16a34a; }
+        .st-pago_pendiente { background: #eff6ff; color: #1d4ed8; }
+        .st-entregado { background: #f1f5f9; color: #64748b; }
+        .st-canjeado { background: #f1f5f9; color: #64748b; }
+        .st-rechazado { background: #fef2f2; color: #dc2626; }
+        .st-pago_rechazado { background: #fef2f2; color: #dc2626; }
         
         .empty-state { text-align: center; padding: 5rem 2rem; background: white; border-radius: 2rem; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
     </style>
@@ -76,25 +93,34 @@
         <?php else: ?>
             <div class="row">
                 <?php foreach ($canjes as $c): ?>
-                    <div class="col-12">
-                        <div class="history-card p-4">
-                            <div class="d-flex align-items-center flex-wrap gap-4">
-                                <img src="<?= BASE_URL ?>assets/premios/<?= $c['premio_imagen'] ?>" alt="<?= $c['premio_nombre'] ?>" class="prize-thumb shadow-sm">
-                                
-                                <div class="flex-grow-1">
-                                    <h5 class="fw-bold mb-1"><?= $c['premio_nombre'] ?></h5>
-                                    <p class="text-muted small mb-0"><?= $c['premio_descripcion'] ?></p>
+                    <?php 
+                        $modStr = 'Canje Total';
+                        if ($c['monto'] > 0) {
+                            $modStr = !empty($c['comprobante_url']) ? 'Puntos + Depósito' : 'Puntos + Efectivo';
+                        }
+                    ?>
+                    <div class="col-12 col-lg-6">
+                        <div class="history-card">
+                            <img src="<?= BASE_URL ?>assets/premios/<?= $c['premio_imagen'] ?>" alt="<?= $c['premio_nombre'] ?>" class="prize-thumb">
+                            
+                            <div class="flex-grow-1">
+                                <h6 class="fw-bold mb-1 text-dark"><?= $c['premio_nombre'] ?></h6>
+                                <div class="modality-badge mb-2"><?= $modStr ?></div>
+                                <div class="text-muted small">
+                                    <i class='bx bx-calendar-alt'></i> <?= date('d/m/Y', strtotime($c['fecha'])) ?>
                                 </div>
-
-                                <div class="text-end d-flex flex-column gap-2">
-                                    <span class="badge-points">⭐ <?= number_format($c['puntos_usados'] ?? 0) ?> Pts</span>
-                                    <?php if ($c['monto'] > 0): ?>
-                                        <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3 py-2 fw-bold">
-                                            + S/ <?= number_format($c['monto'], 2) ?>
-                                        </span>
-                                    <?php endif; ?>
-                                    <span class="badge-date small">🗓️ <?= date('d/m/Y', strtotime($c['fecha'])) ?></span>
+                                <div class="mt-2">
+                                    <span class="status-badge st-<?= $c['estado'] ?>">
+                                        <?= str_replace('_', ' ', $c['estado']) ?>
+                                    </span>
                                 </div>
+                            </div>
+ 
+                            <div class="text-end">
+                                <div class="badge-pts-red">-<?= number_format($c['puntos_usados'] ?? 0) ?> pts</div>
+                                <?php if ($c['monto'] > 0): ?>
+                                    <div class="fw-bold text-dark small">+ S/ <?= number_format($c['monto'], 2) ?></div>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>

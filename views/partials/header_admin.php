@@ -35,7 +35,9 @@ $adminInitial = strtoupper(substr($adminName, 0, 1));
 
     <div class="nav-right">
         <div class="admin-pill">
-            <i class='bx bxs-bell nav-bell'></i>
+            <?php if ($_SESSION['rol'] === 'admin'): ?>
+                <i class='bx bxs-bell nav-bell'></i>
+            <?php endif; ?>
 
             <div class="admin-avatar"><?= $adminInitial ?></div>
 

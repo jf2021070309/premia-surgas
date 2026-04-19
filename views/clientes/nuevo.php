@@ -77,8 +77,10 @@
                             <i class='bx bx-category' style="position: absolute; left: 1rem; color: #94a3b8; font-size: 1.1rem; pointer-events: none;"></i>
                             <select v-model="form.tipo_cliente" @change="onChangeTipo" style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 0.78rem 1rem 0.78rem 2.75rem; font-size: 0.88rem; font-family:'Inter',sans-serif; color: #1e293b; appearance: none; cursor: pointer; outline: none; background: #fff; transition: border-color 0.2s, box-shadow 0.2s;">
                                 <option value="Normal">Personal (Normal)</option>
-                                <option value="Restaurante">Restaurante</option>
-                                <option value="Punto de Venta">Punto de Venta</option>
+                                <?php if ($_SESSION['rol'] === 'admin'): ?>
+                                    <option value="Restaurante">Restaurante</option>
+                                    <option value="Punto de Venta">Punto de Venta</option>
+                                <?php endif; ?>
                             </select>
                             <i class='bx bx-chevron-down' style="position: absolute; right: 1rem; color: #94a3b8; pointer-events: none;"></i>
                         </div>

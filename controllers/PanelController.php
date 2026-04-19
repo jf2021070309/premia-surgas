@@ -65,27 +65,29 @@ class PanelController {
             $metricas_adicionales['ranking_conductores'] = $ranking_conductores;
         }
 
-        if ($_SESSION['rol'] === 'conductor') {
+        if ($_SESSION['rol'] === 'conductor' || $_SESSION['rol'] === 'aliado') {
             $db = Database::getConnection();
-            $id_conductor = $_SESSION['id_usuario'];
+            $id_usuario = $_SESSION['id_usuario'];
+            $rol_sesion = $_SESSION['rol'];
 
-            // Puntos dados por este conductor HOY
-            $puntos_hoy = $db->query("SELECT SUM(puntos) as total FROM ventas WHERE conductor_id = $id_conductor AND DATE(fecha) = CURDATE()")->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
+            // Puntos dados por este usuario HOY
+            $puntos_hoy = $db->query("SELECT SUM(puntos) as total FROM ventas WHERE conductor_id = $id_usuario AND DATE(fecha) = CURDATE()")->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
             
             // Total puntos HISTORICO
-            $total_historico = $db->query("SELECT SUM(puntos) as total FROM ventas WHERE conductor_id = $id_conductor")->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
+            $total_historico = $db->query("SELECT SUM(puntos) as total FROM ventas WHERE conductor_id = $id_usuario")->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
 
-            // Total clientes atendidos por este conductor
-            $total_clientes = $db->query("SELECT COUNT(DISTINCT cliente_id) as total FROM ventas WHERE conductor_id = $id_conductor")->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
+            // Total clientes atendidos por este usuario
+            $total_clientes = $db->query("SELECT COUNT(DISTINCT cliente_id) as total FROM ventas WHERE conductor_id = $id_usuario")->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
             
-            // Ranking posicion y distancia al siguiente
-            $ranking_all = $db->query("SELECT u.id, SUM(v.puntos) as total FROM usuarios u LEFT JOIN ventas v ON v.conductor_id = u.id WHERE u.rol = 'conductor' GROUP BY u.id ORDER BY total DESC")->fetchAll(PDO::FETCH_ASSOC);
+            // Ranking posicion (por ahora comparados con conductores si es conductor, o general si es aliado?)
+            // Para simplificar, los comparamos en sus respectivos grupos o general
+            $ranking_all = $db->query("SELECT u.id, COALESCE(SUM(v.puntos), 0) as total FROM usuarios u LEFT JOIN ventas v ON v.conductor_id = u.id WHERE u.rol = '$rol_sesion' GROUP BY u.id ORDER BY total DESC")->fetchAll(PDO::FETCH_ASSOC);
             $mi_posicion = 0;
             $distancia_siguiente = 0;
             $total_lider = $ranking_all[0]['total'] ?? 0;
 
             foreach($ranking_all as $pos => $row) {
-                if($row['id'] == $id_conductor) {
+                if($row['id'] == $id_usuario) {
                     $mi_posicion = $pos + 1;
                     if ($pos > 0) {
                         $distancia_siguiente = $ranking_all[$pos-1]['total'] - $row['total'];
@@ -95,14 +97,14 @@ class PanelController {
             }
 
             // Historial para su propio grafico (ultimos 7 dias)
-            $mi_historial = $db->query("SELECT DATE(fecha) as fecha, SUM(puntos) as total FROM ventas WHERE conductor_id = $id_conductor AND fecha >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) GROUP BY DATE(fecha) ORDER BY fecha ASC")->fetchAll(PDO::FETCH_ASSOC);
+            $mi_historial = $db->query("SELECT DATE(fecha) as fecha, SUM(puntos) as total FROM ventas WHERE conductor_id = $id_usuario AND fecha >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) GROUP BY DATE(fecha) ORDER BY fecha ASC")->fetchAll(PDO::FETCH_ASSOC);
 
             // Ultimas 5 ventas realizadas
             $ultimas_ventas = $db->query("
                 SELECT v.*, c.nombre as cliente_nombre 
                 FROM ventas v 
                 JOIN clientes c ON v.cliente_id = c.id 
-                WHERE v.conductor_id = $id_conductor 
+                WHERE v.conductor_id = $id_usuario 
                 ORDER BY v.fecha DESC 
                 LIMIT 5
             ")->fetchAll(PDO::FETCH_ASSOC);

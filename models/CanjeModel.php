@@ -12,7 +12,7 @@ class CanjeModel {
      * Registra un canje, descuenta puntos al cliente y resta stock al premio.
      * Todo dentro de una transacción para asegurar integridad.
      */
-    public function registrar(int $clienteId, int $premioId, int $puntosUsados, float $monto = 0): bool {
+    public function registrar(int $clienteId, int $premioId, int $puntosUsados, float $monto = 0, ?string $comprobanteUrl = null): bool {
         try {
             $this->db->beginTransaction();
 
@@ -34,18 +34,24 @@ class CanjeModel {
                 throw new Exception("Sin stock disponible.");
             }
 
+            // Determinar estado inicial
+            // Si hay monto > 0 y el método es depósito, esperamos validación digital (pago_pendiente).
+            // Si es efectivo (yape), el cliente paga en planta, así que no hay "espera" de confirmación digital (pendiente).
+            $metodoPago = $_POST['metodo_pago'] ?? '';
+            $estadoInicial = ($monto > 0 && $metodoPago === 'deposito') ? 'pago_pendiente' : 'pendiente';
+
             // 3. Insertar el canje
             $stmt = $this->db->prepare(
-                "INSERT INTO canjes (cliente_id, premio_id, puntos_usados, monto, estado) 
-                 VALUES (?, ?, ?, ?, 'pendiente')"
+                "INSERT INTO canjes (cliente_id, premio_id, puntos_usados, monto, comprobante_url, estado) 
+                 VALUES (?, ?, ?, ?, ?, ?)"
             );
-            $stmt->execute([$clienteId, $premioId, $puntosUsados, $monto]);
+            $stmt->execute([$clienteId, $premioId, $puntosUsados, $monto, $comprobanteUrl, $estadoInicial]);
 
-            // 4. Descontar puntos al cliente
+            // 4. Descontar puntos al cliente (Incluso si es híbrido, se descuentan los puntos que puso)
             $stmt = $this->db->prepare("UPDATE clientes SET puntos = puntos - ? WHERE id = ?");
             $stmt->execute([$puntosUsados, $clienteId]);
 
-            // 5. Restar stock del premio
+            // 5. Restar stock del premio (Se reserva el item)
             $stmt = $this->db->prepare("UPDATE premios SET stock = stock - 1 WHERE id = ?");
             $stmt->execute([$premioId]);
 
@@ -56,6 +62,7 @@ class CanjeModel {
             if ($this->db->inTransaction()) {
                 $this->db->rollBack();
             }
+            error_log("Error al registrar canje: " . $e->getMessage());
             return false;
         }
     }
@@ -70,18 +77,20 @@ class CanjeModel {
     }
 
     public function actualizarEstado(int $id, string $estado): bool {
-        // Si el estado es cancelado, necesitamos devolver puntos y stock
-        if ($estado === 'cancelado') {
+        // Estados que requieren devolución de puntos y stock
+        $estadosDevolucion = ['cancelado', 'pago_rechazado'];
+
+        if (in_array($estado, $estadosDevolucion)) {
             try {
                 $this->db->beginTransaction();
 
-                // 1. Obtener datos del canje (Solo si aún está pendiente para evitar dobles devoluciones)
+                // 1. Obtener datos del canje (Solo si no ha sido devuelto ya)
                 $stmt = $this->db->prepare("SELECT cliente_id, premio_id, puntos_usados, estado FROM canjes WHERE id = ? FOR UPDATE");
                 $stmt->execute([$id]);
                 $canje = $stmt->fetch(PDO::FETCH_ASSOC);
 
-                if (!$canje || $canje['estado'] !== 'pendiente') {
-                     throw new Exception("Canje no válido para cancelación.");
+                if (!$canje || in_array($canje['estado'], $estadosDevolucion)) {
+                     throw new Exception("Canje no válido para devolución o ya procesado.");
                 }
 
                 // 2. Devolver puntos al cliente
@@ -93,18 +102,19 @@ class CanjeModel {
                 $stmt->execute([$canje['premio_id']]);
 
                 // 4. Actualizar estado del canje
-                $stmt = $this->db->prepare("UPDATE canjes SET estado = 'cancelado' WHERE id = ?");
-                $stmt->execute([$id]);
+                $stmt = $this->db->prepare("UPDATE canjes SET estado = ? WHERE id = ?");
+                $stmt->execute([$estado, $id]);
 
                 $this->db->commit();
                 return true;
             } catch (Exception $e) {
                 if ($this->db->inTransaction()) $this->db->rollBack();
+                error_log("Error al actualizar estado canje: " . $e->getMessage());
                 return false;
             }
         }
 
-        // Caso normal (ej: pendiente -> entregado)
+        // Caso normal (ej: pago_pendiente -> pago_aprobado, o pendiente -> entregado)
         $stmt = $this->db->prepare("UPDATE canjes SET estado = ? WHERE id = ?");
         return $stmt->execute([$estado, $id]);
     }

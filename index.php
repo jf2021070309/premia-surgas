@@ -86,6 +86,15 @@ $routes = [
     ['GET',  'conductores/delete',   'ConductorController', 'delete'],
     ['GET',  'conductores/mi-historial', 'ConductorController', 'miHistorial'],
 
+    // —— Aliados (Admin) ——
+    ['GET',  'aliados',              'AliadoController', 'index'],
+    ['GET',  'aliados/nuevo',        'AliadoController', 'nuevo'],
+    ['POST', 'aliados/create',       'AliadoController', 'create'],
+    ['GET',  'aliados/editar',       'AliadoController', 'editar'],
+    ['POST', 'aliados/update',       'AliadoController', 'update'],
+    ['GET',  'aliados/delete',       'AliadoController', 'delete'],
+    ['GET',  'aliados/mi-historial', 'AliadoController', 'miHistorial'],
+
     // —— QR ——
     ['GET',  'qr/generate',  'QrController',     'generate'],
 
@@ -117,7 +126,8 @@ $routes = [
     ['POST', 'recargas-admin/subir-qr',     'RecargaAdminController', 'subirQr'],
 
     // —— Configuración General (Unificada) ——
-    ['GET',  'ajustes',        'AjustesController', 'index'],
+    ['GET',  'ajustes',               'AjustesController', 'index'],
+    ['POST', 'ajustes/update-puntos', 'AjustesController', 'updatePuntos'],
 
     // —— Tipos de Operaciones ——
     ['GET',    'operaciones',        'OperacionController', 'index'],

@@ -66,6 +66,10 @@ if (!function_exists('isActiveLink')) {
                 <i class='bx bx-check-double'></i>
                 <span>Entregas Canjes</span>
             </a>
+            <a href="<?= BASE_URL ?>aliados" class="sidebar-item <?= isActiveLink('aliados', $current_url) ?>">
+                <i class='bx bx-store-alt'></i>
+                <span>Gestión Aliados</span>
+            </a>
         <?php endif; ?>
 
         <div class="menu-label">Operaciones</div>
@@ -73,10 +77,18 @@ if (!function_exists('isActiveLink')) {
             <i class='bx bx-qr-scan'></i>
             <span>Suma Puntos</span>
         </a>
-        <a href="<?= BASE_URL ?>conductores/mi-historial" class="sidebar-item <?= isActiveLink('conductores/mi-historial', $current_url) ?>">
-            <i class='bx bx-history'></i>
-            <span>Mi Historial</span>
-        </a>
+        <?php if ($_SESSION['rol'] === 'conductor' || $_SESSION['rol'] === 'admin'): ?>
+            <a href="<?= BASE_URL ?>conductores/mi-historial" class="sidebar-item <?= isActiveLink('conductores/mi-historial', $current_url) ?>">
+                <i class='bx bx-history'></i>
+                <span>Mi Historial</span>
+            </a>
+        <?php endif; ?>
+        <?php if ($_SESSION['rol'] === 'aliado'): ?>
+            <a href="<?= BASE_URL ?>aliados/mi-historial" class="sidebar-item <?= isActiveLink('aliados/mi-historial', $current_url) ?>">
+                <i class='bx bx-history'></i>
+                <span>Mi Historial</span>
+            </a>
+        <?php endif; ?>
 
         <?php if ($_SESSION['rol'] === 'admin'): ?>
             <div class="menu-label">Mantenimiento</div>

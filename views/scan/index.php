@@ -670,7 +670,17 @@
                 const res = await fetch(baseUrl + 'scan/registrar', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ cliente_id: clientId, puntos: total, detalle: detalleString })
+                    body: JSON.stringify({ 
+                        cliente_id: clientId, 
+                        puntos: total, 
+                        detalle: detalleString,
+                        items: operations.map(op => ({
+                            nombre: op.name,
+                            cantidad: op.qty,
+                            puntos_unitarios: op.unit,
+                            subtotal: op.subtotal
+                        }))
+                    })
                 });
                 const data = await res.json();
                 if (data.success) {

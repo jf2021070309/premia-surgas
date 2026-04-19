@@ -84,6 +84,12 @@ class ClienteController
 
         $data = json_decode(file_get_contents('php://input'), true);
         $tipo_cliente = trim($data['tipo_cliente'] ?? 'Normal');
+
+        // Backend Restriction: Only admins can register non-Normal clients
+        if ($_SESSION['rol'] !== 'admin' && $tipo_cliente !== 'Normal') {
+            echo json_encode(['success' => false, 'message' => 'No tienes permisos para registrar este tipo de cliente.']);
+            exit;
+        }
         $dni = trim($data['dni'] ?? '');
         $ruc = trim($data['ruc'] ?? '');
         $razon_social = trim($data['razon_social'] ?? '');

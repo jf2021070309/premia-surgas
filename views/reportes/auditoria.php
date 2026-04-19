@@ -260,27 +260,32 @@
                     if (!desc) return '';
                     
                     // Patrón mejorado: (Cargó X puntos a) (Nombre) (Desglose...)
-                    // Usamos una lógica más robusta dividiendo por el primer '(' que encontremos
                     if (desc.startsWith('Cargó') && desc.includes('a ') && desc.includes('(')) {
                         const firstParen = desc.indexOf('(');
                         const lastParen = desc.lastIndexOf(')');
                         
-                        const leadText = desc.substring(0, firstParen).trim(); // "Cargó X puntos a NOMBRE"
-                        const actionPart = leadText.substring(0, leadText.indexOf(' a ') + 3); // "Cargó X puntos a"
-                        const clientPart = leadText.substring(leadText.indexOf(' a ') + 3); // "NOMBRE"
+                        const leadText = desc.substring(0, firstParen).trim();
+                        const actionPart = leadText.substring(0, leadText.indexOf(' a ') + 3);
+                        const clientPart = leadText.substring(leadText.indexOf(' a ') + 3);
                         
-                        const itemsText = desc.substring(firstParen + 1, lastParen).trim(); // Todo lo que hay entre el primer '(' y último ')'
+                        let itemsText = desc.substring(firstParen + 1, lastParen).trim();
                         
-                        // Dividimos items por coma, pero cuidando de no romper los paréntesis internos de los puntos (+X pts)
-                        const items = itemsText.split(/,\s*(?![^()]*\))/).map(i => i.trim());
+                        // Si tiene balas • iniciales, las quitamos para segmentar limpio
+                        if (itemsText.startsWith('•')) itemsText = itemsText.substring(1).trim();
+
+                        // Dividimos por coma, salto de linea o bala. Filtramos líneas de separación (───)
+                        const items = itemsText.split(/[\n,•]\s*(?![^()]*\))/).map(i => i.trim()).filter(i => i !== '' && !i.startsWith('────'));
                         
                         let html = `<div style="font-size: 0.75rem; color: #64748b; font-weight: 500; margin-bottom: 2px;">${actionPart}</div>`;
                         html += `<div style="font-size: 0.88rem; font-weight: 500; color: #1e293b; margin-bottom: 10px; line-height: 1.2;">${clientPart}</div>`;
                         
-                        // Contenedor tipo CARD (change-detail)
                         html += `<div class="change-detail" style="display: flex; flex-direction: column; gap: 8px; margin-top: 5px;">`;
                         items.forEach(item => {
-                            if (item) {
+                            if (item.includes('TOTAL:')) {
+                                html += `<div style="margin-top: 5px; padding-top: 5px; border-top: 1px dashed #e2e8f0; font-weight: 700; color: #1e293b; font-size: 0.8rem; display: flex; align-items: center; gap: 8px;">
+                                            <i class='bx bx-calculator' style='color: #800000;'></i> ${item}
+                                         </div>`;
+                            } else {
                                 html += `<div style="font-size: 0.78rem; color: #475569; display: flex; align-items: flex-start; gap: 10px; line-height: 1.4;">
                                             <i class='bx bx-chevron-right' style='font-size: 1rem; color: #94a3b8; margin-top: 1px;'></i>
                                             <span style="font-weight: 500;">${item}</span>
@@ -291,7 +296,7 @@
                         return html;
                     }
                     
-                    return desc;
+                    return desc.replace(/\n/g, '<br>');
                 },
                 formatValue(field, val) {
                     const f = (field || '').toLowerCase();

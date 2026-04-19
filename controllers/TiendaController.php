@@ -64,56 +64,106 @@ class TiendaController {
         $configModel = new ConfiguracionModel();
         $montoPorPunto = (float) ($configModel->getValor('monto_por_punto') ?? 0.05);
         $yapeQrImagen  = $configModel->getValor('yape_qr_imagen');
+        $bbvaQrImagen  = $configModel->getValor('bbva_qr_imagen');
 
         $this->render('tienda', [
             'premios'      => $premios,
             'cliente'      => $cliente,
             'montoPorPunto'=> $montoPorPunto,
-            'yapeQrImagen' => $yapeQrImagen
+            'yapeQrImagen' => $yapeQrImagen,
+            'bbvaQrImagen' => $bbvaQrImagen
         ]);
     }
 
     public function canjear(): void {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') redirigir(BASE_URL . 'tienda');
+        header('Content-Type: application/json; charset=utf-8');
+        
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            echo json_encode(['success' => false, 'message' => 'Método no permitido']);
+            return;
+        }
+
         $this->requireAuth();
 
         $premioId     = (int) ($_POST['premio_id'] ?? 0);
-        $tipoCanje    = $_POST['tipo'] ?? 'total'; // 'total' o 'descuento'
         $puntosUsados = (int) ($_POST['puntos'] ?? 0);
         $monto        = (float) ($_POST['monto'] ?? 0);
+        $comprobanteUrl = null;
 
         if (!$premioId) {
-            $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'Premio no seleccionado.'];
-            redirigir(BASE_URL . 'tienda');
+            echo json_encode(['success' => false, 'message' => 'Premio no seleccionado.']);
+            return;
+        }
+
+        $metodoPago   = $_POST['metodo_pago'] ?? 'yape'; // 'yape' = Efectivo, 'deposito' = QR/Transferencia
+
+        // Si es un canje híbrido (con pago)
+        if ($monto > 0) {
+            // Solo exigimos comprobante si es Depósito
+            if ($metodoPago === 'deposito') {
+                if (!isset($_FILES['comprobante']) || $_FILES['comprobante']['error'] !== UPLOAD_ERR_OK) {
+                    echo json_encode(['success' => false, 'message' => 'Debes adjuntar el comprobante de pago para la opción de depósito.']);
+                    return;
+                }
+
+                require_once __DIR__ . '/../helpers/UploadHelper.php';
+                $comprobanteUrl = UploadHelper::uploadToImgBB($_FILES['comprobante']['tmp_name']);
+
+                if (!$comprobanteUrl) {
+                    echo json_encode(['success' => false, 'message' => 'Error al subir el comprobante a ImgBB. Inténtalo de nuevo.']);
+                    return;
+                }
+            }
         }
 
         require_once __DIR__ . '/../models/CanjeModel.php';
         $canjeModel = new CanjeModel();
 
-        $id_cliente = $_SESSION['id_cliente'] ?? $_SESSION['id_usuario'] ?? null;
-        $result = $canjeModel->registrar($id_cliente, $premioId, $puntosUsados, $monto);
+        $id_cliente   = $_SESSION['id_cliente'] ?? $_SESSION['id_usuario'] ?? null;
+        $result       = $canjeModel->registrar($id_cliente, $premioId, $puntosUsados, $monto, $comprobanteUrl);
 
         if ($result) {
             // AUDITORIA
             require_once __DIR__ . '/../models/PremioModel.php';
             $pModel = new PremioModel();
             $p = $pModel->findById($premioId);
-            $this->audit->registrar($_SESSION['id_usuario'], 'SOLICITUD_CANJE', "Cliente solicitó canje de: {$p['nombre']} por $puntosUsados pts", 'FIDELIZACION');
+            
+            $metodoDesc = ($metodoPago === 'deposito') ? 'DEPÓSITO BBVA' : 'YAPE/EFECTIVO';
+            $desc = "Cliente solicitó canje " . ($monto > 0 ? "HÍBRIDO ($metodoDesc)" : "TOTAL") . " de: {$p['nombre']}";
+            
+            if ($monto > 0) $desc .= " (S/ $monto + $puntosUsados pts)";
+            else $desc .= " ($puntosUsados pts)";
+
+            $this->audit->registrar($_SESSION['id_usuario'], 'SOLICITUD_CANJE', $desc, 'FIDELIZACION');
+
+            $successMsg = 'Tu solicitud de canje ha sido registrada correctamente.';
+            if ($monto > 0) {
+                if ($metodoPago === 'deposito') {
+                    $successMsg .= ' En espera de validación de pago.';
+                } else {
+                    $successMsg .= ' Recuerda pagar S/ ' . number_format($monto, 2) . ' en efectivo al recoger tu premio.';
+                }
+            }
+
+            require_once __DIR__ . '/../models/PremioModel.php';
+            $pModel = new PremioModel();
+            $p = $pModel->findById($premioId);
 
             $_SESSION['flash'] = [
-                'type' => 'success', 
-                'title' => '¡Éxito!', 
-                'message' => 'El canje se ha registrado correctamente.'
+                'type'    => 'success',
+                'title'   => '¡CANJE EXITOSO!',
+                'message' => $successMsg,
+                'prize_name' => $p['nombre'] ?? 'Premio',
+                'prize_image' => $p['imagen'] ?? ''
             ];
+
+            echo json_encode([
+                'success' => true,
+                'message' => $successMsg
+            ]);
         } else {
-            $_SESSION['flash'] = [
-                'type' => 'error', 
-                'title' => 'Error', 
-                'message' => 'No se pudo procesar el canje. Verifica tu saldo de puntos.'
-            ];
+            echo json_encode(['success' => false, 'message' => 'No se pudo procesar el canje. Verifica tu saldo de puntos o el stock del premio.']);
         }
-
-        redirigir(BASE_URL . 'tienda');
     }
 
     public function historial(): void {

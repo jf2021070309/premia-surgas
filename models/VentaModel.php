@@ -8,13 +8,47 @@ class VentaModel {
         $this->db = Database::getConnection();
     }
 
-    public function create(int $clienteId, int $conductorId, float $monto, int $puntos, ?string $detalle = null): int {
-        $stmt = $this->db->prepare(
-            "INSERT INTO ventas (cliente_id, conductor_id, monto, puntos, detalle)
-             VALUES (?, ?, ?, ?, ?)"
-        );
-        $stmt->execute([$clienteId, $conductorId, $monto, $puntos, $detalle]);
-        return (int) $this->db->lastInsertId();
+    public function create(int $clienteId, int $conductorId, float $monto, int $puntos, ?string $detalle = null, array $items = []): int {
+        try {
+            $this->db->beginTransaction();
+
+            $stmt = $this->db->prepare(
+                "INSERT INTO ventas (cliente_id, conductor_id, monto, puntos, detalle)
+                 VALUES (?, ?, ?, ?, ?)"
+            );
+            $stmt->execute([$clienteId, $conductorId, $monto, $puntos, $detalle]);
+            $ventaId = (int) $this->db->lastInsertId();
+
+            if (!empty($items)) {
+                $stmtDet = $this->db->prepare(
+                    "INSERT INTO venta_detalles (venta_id, nombre_item, cantidad, puntos_unitarios, puntos_subtotal)
+                     VALUES (?, ?, ?, ?, ?)"
+                );
+                foreach ($items as $item) {
+                    $stmtDet->execute([
+                        $ventaId,
+                        $item['nombre'],
+                        $item['cantidad'],
+                        $item['puntos_unitarios'],
+                        $item['subtotal']
+                    ]);
+                }
+            }
+
+            $this->db->commit();
+            return $ventaId;
+        } catch (Exception $e) {
+            if ($this->db->inTransaction()) {
+                $this->db->rollBack();
+            }
+            throw $e;
+        }
+    }
+
+    public function getDetalles(int $ventaId): array {
+        $stmt = $this->db->prepare("SELECT * FROM venta_detalles WHERE venta_id = ?");
+        $stmt->execute([$ventaId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getByCliente(int $clienteId): array {
@@ -26,7 +60,8 @@ class VentaModel {
              ORDER BY v.fecha DESC"
         );
         $stmt->execute([$clienteId]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $ventas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $this->attachDetalles($ventas);
     }
     public function getByConductor(int $conductorId): array {
         $stmt = $this->db->prepare(
@@ -37,7 +72,8 @@ class VentaModel {
              ORDER BY v.fecha DESC"
         );
         $stmt->execute([$conductorId]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $ventas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $this->attachDetalles($ventas);
     }
 
     public function getByConductorPaginated(int $conductorId, int $offset, int $limit, string $search = '', string $fechaDesde = '', string $fechaHasta = ''): array {
@@ -84,9 +120,33 @@ class VentaModel {
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         return [
-            'data' => $data,
+            'data' => $this->attachDetalles($data),
             'total' => $totalRows,
             'total_puntos' => $totalPuntos
         ];
+    }
+
+    private function attachDetalles(array $ventas): array {
+        if (empty($ventas)) return [];
+        
+        $ids = array_column($ventas, 'id');
+        $placeholders = str_repeat('?,', count($ids) - 1) . '?';
+        
+        $stmt = $this->db->prepare("SELECT * FROM venta_detalles WHERE venta_id IN ($placeholders)");
+        $stmt->execute($ids);
+        $allDetalles = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        // Group by venta_id
+        $grouped = [];
+        foreach ($allDetalles as $det) {
+            $grouped[$det['venta_id']][] = $det;
+        }
+        
+        // Assign to ventas
+        foreach ($ventas as &$v) {
+            $v['items'] = $grouped[$v['id']] ?? [];
+        }
+        
+        return $ventas;
     }
 }

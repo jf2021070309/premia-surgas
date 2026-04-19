@@ -293,8 +293,8 @@
 
         <div class="admin-layout">
             <?php 
-                $pageTitle = 'Operaciones';
-                $pageSubtitle = 'Mi historial detallado de entregas';
+                $pageTitle = 'Operaciones Aliado';
+                $pageSubtitle = 'Mi historial detallado de asignaciones';
                 include __DIR__ . '/../partials/header_admin.php'; 
             ?>
 
@@ -304,7 +304,7 @@
                 <div class="history-summary">
                     <div>
                         <div class="sum-title">Rendimiento Histórico</div>
-                        <h2 style="font-weight: 900; color: var(--slate-text); margin: 0; font-size: 1.8rem;">Entregas de Puntos</h2>
+                        <h2 style="font-weight: 900; color: var(--slate-text); margin: 0; font-size: 1.8rem;">Asignaciones de Puntos</h2>
                     </div>
                     <div style="text-align: right;">
                         <div class="sum-title">Total Generado</div>
@@ -313,11 +313,11 @@
                 </div>
 
                 <!-- Filters -->
-                <form method="GET" action="<?= BASE_URL ?>conductores/mi-historial" class="filter-bar">
+                <form method="GET" action="<?= BASE_URL ?>aliados/mi-historial" class="filter-bar">
                     <div class="filter-group search-group">
                         <div class="search-input-wrapper">
                             <i class='bx bx-search'></i>
-                            <input type="text" name="search" class="filter-input with-icon" value="<?= htmlspecialchars($search ?? '') ?>" placeholder="Busca por nombre o DNI...">
+                            <input type="text" name="search" class="filter-input with-icon" value="<?= htmlspecialchars($search ?? '') ?>" placeholder="Busca por cliente o detalle...">
                         </div>
                     </div>
                     <div class="filter-group">
@@ -331,7 +331,7 @@
                     <div style="display: flex; gap: 0.5rem;">
                         <button type="submit" class="btn-filter"><i class='bx bx-search'></i> Filtrar</button>
                         <?php if(!empty($search) || !empty($fechaDesde) || !empty($fechaHasta)): ?>
-                            <a href="<?= BASE_URL ?>conductores/mi-historial" class="btn-reset" title="Limpiar Filtros"><i class='bx bx-x'></i></a>
+                            <a href="<?= BASE_URL ?>aliados/mi-historial" class="btn-reset" title="Limpiar Filtros"><i class='bx bx-x'></i></a>
                         <?php endif; ?>
                     </div>
                 </form>
@@ -467,15 +467,15 @@
                             <?= (!empty($search) || !empty($fechaDesde) || !empty($fechaHasta)) ? 'No hay resultados' : 'Sin historial disponible' ?>
                         </h3>
                         <p style="color: var(--gray-sub); font-weight: 500;">
-                            <?= (!empty($search) || !empty($fechaDesde) || !empty($fechaHasta)) ? 'No se encontraron entregas con los filtros actuales.' : 'Aún no has registrado ninguna entrega de puntos a clientes.' ?>
+                            <?= (!empty($search) || !empty($fechaDesde) || !empty($fechaHasta)) ? 'No se encontraron registros con los filtros actuales.' : 'Aún no has registrado ninguna asignación de puntos a clientes.' ?>
                         </p>
                         <?php if(!empty($search) || !empty($fechaDesde) || !empty($fechaHasta)): ?>
-                            <a href="<?= BASE_URL ?>conductores/mi-historial" class="btn-primary-premium" style="display: inline-flex; margin-top: 2rem; text-decoration: none;">
+                            <a href="<?= BASE_URL ?>aliados/mi-historial" class="btn-primary-premium" style="display: inline-flex; margin-top: 2rem; text-decoration: none;">
                                 Limpiar Filtros
                             </a>
                         <?php else: ?>
                             <a href="<?= BASE_URL ?>scan" class="btn-primary-premium" style="display: inline-flex; margin-top: 2rem; text-decoration: none;">
-                                Escanear Primer Cliente
+                                Asignar Mis Primeros Puntos
                             </a>
                         <?php endif; ?>
                     </div>

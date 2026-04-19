@@ -3,6 +3,7 @@ require_once __DIR__ . '/../models/ClienteModel.php';
 require_once __DIR__ . '/../models/VentaModel.php';
 require_once __DIR__ . '/../models/ConfiguracionModel.php';
 require_once __DIR__ . '/../models/TipoOperacionModel.php';
+require_once __DIR__ . '/../models/CanjeModel.php';
 require_once __DIR__ . '/../models/AuditoriaModel.php';
 require_once __DIR__ . '/../config/config.php';
 
@@ -48,9 +49,14 @@ class ScanController {
                     return strtotime($b['fecha']) - strtotime($a['fecha']);
                 });
 
+                // Fetch redemption history
+                $canjeModel = new CanjeModel();
+                $canjes = $canjeModel->getByCliente($cliente['id']);
+
                 $this->render('scan/perfil_cliente', [
                     'cliente' => $cliente,
-                    'ventas'  => $historial
+                    'ventas'  => $historial,
+                    'canjes'  => $canjes
                 ]);
                 return;
             }
@@ -123,6 +129,7 @@ class ScanController {
         $clienteId = (int) ($data['cliente_id'] ?? 0);
         $puntos    = (int) ($data['puntos'] ?? 0);
         $detalle   = trim($data['detalle'] ?? '');
+        $items     = $data['items'] ?? []; // Nuevo: Recibir array de items
 
         if (!$clienteId || !$puntos) {
             $this->json(['success' => false, 'message' => 'Datos incompletos.']);
@@ -131,8 +138,8 @@ class ScanController {
         $ventaModel   = new VentaModel();
         $clienteModel = new ClienteModel();
 
-        // 1. Registrar "venta" con monto 0 (carga manual de puntos)
-        $idVenta = $ventaModel->create($clienteId, $_SESSION['id_usuario'], 0, $puntos, $detalle);
+        // 1. Registrar "venta" con el array de items
+        $idVenta = $ventaModel->create($clienteId, $_SESSION['id_usuario'], 0, $puntos, $detalle, $items);
 
         if ($idVenta) {
             // 2. Actualizar puntos totales del cliente

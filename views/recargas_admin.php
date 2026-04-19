@@ -219,7 +219,10 @@
                                     <span class="detail-sep">•</span>
                                     <span class="ticket-detail-item">
                                         <i class='bx bx-time'></i>
-                                        <?= date('d M, g:i a', strtotime($r['fecha'])) ?>
+                                        <?php
+                                            $meses = ["January"=>"Enero", "February"=>"Febrero", "March"=>"Marzo", "April"=>"Abril", "May"=>"Mayo", "June"=>"Junio", "July"=>"Julio", "August"=>"Agosto", "September"=>"Septiembre", "October"=>"Octubre", "November"=>"Noviembre", "December"=>"Diciembre"];
+                                            echo strtr(date('d F, g:i a', strtotime($r['fecha'])), $meses);
+                                        ?>
                                     </span>
                                 </div>
                             </div>
@@ -324,7 +327,10 @@
                             <tr>
                                 <td class="date-text">
                                     <div style="font-weight: 700; color: var(--on-surface);">
-                                        <?= date('d M Y', strtotime($h['fecha'])) ?>
+                                        <?php
+                                            $meses = ["January"=>"Enero", "February"=>"Febrero", "March"=>"Marzo", "April"=>"Abril", "May"=>"Mayo", "June"=>"Junio", "July"=>"Julio", "August"=>"Agosto", "September"=>"Septiembre", "October"=>"Octubre", "November"=>"Noviembre", "December"=>"Diciembre"];
+                                            echo strtr(date('d F Y', strtotime($h['fecha'])), $meses);
+                                        ?>
                                     </div>
                                     <div style="font-size: 0.7rem; opacity: 0.7;">
                                         <?= date('h:i A', strtotime($h['fecha'])) ?>
@@ -486,18 +492,18 @@
             let visibleRows = rows.filter(row => {
                 const name = row.querySelector('.client-name').textContent.toLowerCase();
                 const rowStatus = row.querySelector('.chip').textContent.toLowerCase();
-                const rowDate = row.querySelector('.date-text').textContent; // Format: "dd M Y, H:i"
+                const rowDate = row.querySelector('.date-text').textContent; // Format: "dd F Y, H:i"
                 
                 // Match search
                 const matchesSearch = name.includes(query);
                 // Match status
                 const matchesStatus = status === "" || rowStatus.includes(status);
-                // Match date (simplistic date check, rowDate contains "25 Mar 2026")
+                // Match date (simplistic date check, rowDate contains "25 Abril 2026")
                 let matchesDate = true;
                 if (dateVal) {
                     const [y, m, d] = dateVal.split('-');
                     const dateObj = new Date(y, m - 1, d);
-                    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]; // match your data format
+                    const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
                     const formattedDate = `${d.padStart(2, '0')} ${months[dateObj.getMonth()]} ${y}`;
                     matchesDate = rowDate.includes(formattedDate);
                 }

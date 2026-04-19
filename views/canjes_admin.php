@@ -57,8 +57,9 @@
                         <thead>
                             <tr>
                                 <th class="col-hide-mobile">Fecha y Hora</th>
-                                <th>Beneficiario y Premio</th>
+                                <th>Beneficiario</th>
                                 <th class="col-hide-mobile">Premio</th>
+                                <th class="text-center">Costo (Pts / S/)</th>
                                 <th class="text-center">Estado</th>
                                 <th style="text-align: center !important;">Acciones</th>
                             </tr>
@@ -76,7 +77,10 @@
                             <tr class="delivery-row" data-estado="<?= $c['estado'] ?>">
                                 <td class="date-text col-hide-mobile">
                                     <div style="font-weight: 700; color: #1e293b;">
-                                        <?= date('d M Y', strtotime($c['fecha'])) ?>
+                                        <?php
+                                            $meses = ["January"=>"Enero", "February"=>"Febrero", "March"=>"Marzo", "April"=>"Abril", "May"=>"Mayo", "June"=>"Junio", "July"=>"Julio", "August"=>"Agosto", "September"=>"Septiembre", "October"=>"Octubre", "November"=>"Noviembre", "December"=>"Diciembre"];
+                                            echo strtr(date('d F Y', strtotime($c['fecha'])), $meses);
+                                        ?>
                                     </div>
                                     <div style="font-size: 0.72rem; opacity: 0.7;">
                                         <?= date('h:i A', strtotime($c['fecha'])) ?>
@@ -90,7 +94,12 @@
                                             <!-- Meta info solo para móvil -->
                                             <div class="mobile-client-meta">
                                                 <span><i class='bx bx-gift'></i> <?= htmlspecialchars($c['premio_nombre']) ?></span>
-                                                <span><i class='bx bx-calendar-event'></i> <?= date('d M, h:i A', strtotime($c['fecha'])) ?></span>
+                                                <span><i class='bx bx-calendar-event'></i> 
+                                                    <?php
+                                                        $meses = ["January"=>"Enero", "February"=>"Febrero", "March"=>"Marzo", "April"=>"Abril", "May"=>"Mayo", "June"=>"Junio", "July"=>"Julio", "August"=>"Agosto", "September"=>"Septiembre", "October"=>"Octubre", "November"=>"Noviembre", "December"=>"Diciembre"];
+                                                        echo strtr(date('d F, h:i A', strtotime($c['fecha'])), $meses);
+                                                    ?>
+                                                </span>
                                             </div>
 
                                             <span class="client-subtext"><?= $c['cliente_celular'] ?></span>
@@ -102,10 +111,28 @@
                                         <span class="text-medium"><?= htmlspecialchars($c['premio_nombre']) ?></span>
                                     </div>
                                 </td>
+                                <td class="text-center">
+                                    <div style="font-weight: 700; color: #1e293b;"><?= number_format($c['puntos_usados']) ?> <small class="text-muted">pts</small></div>
+                                    <?php if ($c['monto'] > 0): ?>
+                                        <div style="font-size: 0.8rem; color: #e11d48; font-weight: 600;">+ S/ <?= number_format($c['monto'], 2) ?></div>
+                                    <?php endif; ?>
+                                </td>
                                 <td style="text-align: center !important;">
                                     <?php if ($c['estado'] === 'pendiente'): ?>
                                         <span class="chip chip-pending">
                                             <i class='bx bxs-circle'></i> Pendiente
+                                        </span>
+                                    <?php elseif ($c['estado'] === 'pago_pendiente'): ?>
+                                        <span class="chip chip-pending" style="background: #fff7ed; color: #c2410c; border: 1px solid #ffedd5;">
+                                            <i class='bx bxs-time'></i> Pago Pendiente
+                                        </span>
+                                    <?php elseif ($c['estado'] === 'pago_aprobado'): ?>
+                                        <span class="chip chip-delivered" style="background: #f0fdf4; color: #15803d; border: 1px solid #dcfce7;">
+                                            <i class='bx bxs-check-shield'></i> Pago Aprobado
+                                        </span>
+                                    <?php elseif ($c['estado'] === 'pago_rechazado'): ?>
+                                        <span class="chip chip-rejected">
+                                            <i class='bx bxs-x-circle'></i> Pago Rechazado
                                         </span>
                                     <?php elseif ($c['estado'] === 'entregado'): ?>
                                         <span class="chip chip-delivered">
@@ -119,12 +146,39 @@
                                 </td>
                                 <td style="text-align: center;">
                                     <div class="actions-flex" style="justify-content: center;">
-                                        <!-- Ver Imagen -->
+                                        <!-- Ver Imagen Premio -->
                                         <button class="btn-action indigo" onclick="viewPrize('<?= htmlspecialchars($c['premio_nombre']) ?>', '<?= BASE_URL ?>assets/premios/<?= $c['premio_imagen'] ?>')" title="Ver Premio">
-                                            <i class='bx bx-show'></i>
+                                            <i class='bx bx-gift'></i>
                                         </button>
 
-                                        <?php if ($c['estado'] === 'pendiente'): ?>
+                                        <!-- Ver Comprobante si existe -->
+                                        <?php if (!empty($c['comprobante_url'])): ?>
+                                            <button class="btn-action blue" onclick="viewEvidence('<?= $c['comprobante_url'] ?>')" title="Ver Comprobante">
+                                                <i class='bx bx-receipt'></i>
+                                            </button>
+                                        <?php endif; ?>
+
+                                        <?php if ($c['estado'] === 'pago_pendiente'): ?>
+                                            <!-- Aprobar Pago -->
+                                            <form action="<?= BASE_URL ?>canjes-admin/actualizar" method="POST" style="display:inline; margin: 0;" onsubmit="return confirmarAprobacionPago(event, this);">
+                                                <input type="hidden" name="id" value="<?= $c['id'] ?>">
+                                                <input type="hidden" name="estado" value="pago_aprobado">
+                                                <button type="submit" class="btn-action green" title="Aprobar Pago">
+                                                    <i class='bx bx-like'></i>
+                                                </button>
+                                            </form>
+
+                                            <!-- Rechazar Pago -->
+                                            <form action="<?= BASE_URL ?>canjes-admin/actualizar" method="POST" style="display:inline; margin: 0;" onsubmit="return confirmarRechazoPago(event, this);">
+                                                <input type="hidden" name="id" value="<?= $c['id'] ?>">
+                                                <input type="hidden" name="estado" value="pago_rechazado">
+                                                <button type="submit" class="btn-action red" title="Rechazar Pago">
+                                                    <i class='bx bx-dislike'></i>
+                                                </button>
+                                            </form>
+                                        <?php endif; ?>
+
+                                        <?php if ($c['estado'] === 'pendiente' || $c['estado'] === 'pago_aprobado'): ?>
                                             <!-- Entregar -->
                                             <form action="<?= BASE_URL ?>canjes-admin/actualizar" method="POST" style="display:inline; margin: 0;">
                                                 <input type="hidden" name="id" value="<?= $c['id'] ?>">
@@ -163,6 +217,38 @@
     </div> <!-- .admin-layout -->
 
     <script>
+        function viewEvidence(url) {
+            Swal.fire({
+                title: 'Comprobante de Pago',
+                imageUrl: url,
+                imageAlt: 'Cargando comprobante...',
+                confirmButtonText: 'Cerrar',
+                confirmButtonColor: '#821515',
+                width: '80%',
+                background: '#fff',
+                backdrop: `rgba(15, 23, 42, 0.7)`
+            });
+        }
+
+        function confirmarRechazoPago(event, form) {
+            event.preventDefault();
+            Swal.fire({
+                title: '¿Rechazar Pago?',
+                text: "Se notificará que el pago fue rechazado y se devolverán los puntos y el stock reservado al sistema.",
+                icon: 'error',
+                showCancelButton: true,
+                confirmButtonColor: '#e11d48',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Sí, rechazar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+            return false;
+        }
+
         function viewPrize(name, url) {
             const existing = document.getElementById('prizePreviewOverlay');
             if (existing) existing.remove();
@@ -221,6 +307,59 @@
             document.body.appendChild(overlay);
         }
 
+        function viewEvidence(url) {
+            const existing = document.getElementById('evidencePreviewOverlay');
+            if (existing) existing.remove();
+
+            const overlay = document.createElement('div');
+            overlay.id = 'evidencePreviewOverlay';
+            overlay.style.cssText = `
+                position: fixed; inset: 0; z-index: 9999;
+                background: rgba(15, 23, 42, 0.65);
+                backdrop-filter: blur(4px);
+                display: flex; align-items: center; justify-content: center;
+                animation: fadeInOverlay 0.3s ease;
+                padding: 30px;
+            `;
+            overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+
+            overlay.innerHTML = `
+                <div style="
+                    position: relative;
+                    animation: zoomInModal 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                    display: flex; justify-content: center;
+                ">
+                    <button onclick="document.getElementById('evidencePreviewOverlay').remove()" style="
+                        position: absolute; top: -20px; right: -20px;
+                        width: 44px; height: 44px; border-radius: 50%;
+                        border: none; background: #fff;
+                        color: #111; font-size: 1.8rem; cursor: pointer;
+                        display: flex; align-items: center; justify-content: center;
+                        z-index: 20; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                        transition: transform 0.2s;
+                    " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                        <i class='bx bx-x'></i>
+                    </button>
+                    
+                    <img src="${url}" style="
+                        max-width: 95vw; max-height: 90vh; 
+                        width: auto; height: auto;
+                        display: block;
+                        border-radius: 16px;
+                        box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+                        border: 2px solid rgba(255,255,255,0.1);
+                    " onerror="this.src='https://placehold.co/400x600?text=Error+al+cargar+comprobante'">
+                </div>
+                <style>
+                    @keyframes zoomInModal {
+                        from { opacity: 0; transform: scale(0.9) translateY(20px); }
+                        to { opacity: 1; transform: scale(1) translateY(0); }
+                    }
+                </style>
+            `;
+            document.body.appendChild(overlay);
+        }
+
         function filterDeliveries() {
             const searchVal = document.getElementById('searchBeneficiario').value.toLowerCase();
             const dateVal   = document.getElementById('filterFecha').value; // "YYYY-MM-DD"
@@ -239,11 +378,11 @@
                     celular.includes(searchVal) ||
                     prize.includes(searchVal);
 
-                // Date match — row date-text contains e.g. "25 Mar 2026"
+                // Date match — row date-text contains e.g. "25 Marzo 2026"
                 let matchesDate = true;
                 if (dateVal) {
                     const [y, m, d] = dateVal.split('-');
-                    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+                    const months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
                     const jsDate = new Date(+y, +m - 1, +d);
                     const formatted = `${String(+d).padStart(2,'0')} ${months[jsDate.getMonth()]} ${y}`;
                     const rowDateEl = row.querySelector('.date-text');
@@ -271,6 +410,44 @@
             });
 
             document.getElementById('pagCount').innerText = visibleCount;
+        }
+
+        function confirmarAprobacionPago(event, form) {
+            event.preventDefault();
+            Swal.fire({
+                title: '¿Aprobar pago?',
+                text: "Confirmas que has verificado el depósito o transferencia del cliente.",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#10b981',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Sí, aprobar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+            return false;
+        }
+
+        function confirmarRechazoPago(event, form) {
+            event.preventDefault();
+            Swal.fire({
+                title: '¿Rechazar pago?',
+                text: "El pago será marcado como inválido y se le notificará al cliente.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#e11d48',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Sí, rechazar',
+                cancelButtonText: 'Volver'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+            return false;
         }
 
         function confirmarCancelacion(event, form) {

@@ -269,19 +269,6 @@ INSERT INTO `recargas` (`id`, `cliente_id`, `puntos`, `monto`, `comprobante`, `e
 	(42, 1, 1000, 50.00, 'recarga_1774463254_1.jpg', 'aprobado', '2026-03-25 18:27:34', '2026-03-25 18:27:46', 1),
 	(43, 1, 1000, 50.00, 'recarga_1774469676_1.jpg', 'aprobado', '2026-03-25 20:14:36', '2026-03-25 20:15:07', 1);
 
--- Volcando estructura para tabla surgas.sesiones_qr
-CREATE TABLE IF NOT EXISTS `sesiones_qr` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `cliente_id` int(11) DEFAULT NULL,
-  `token` varchar(255) DEFAULT NULL,
-  `fecha` timestamp NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`),
-  KEY `cliente_id` (`cliente_id`),
-  CONSTRAINT `sesiones_qr_ibfk_1` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- Volcando datos para la tabla surgas.sesiones_qr: ~0 rows (aproximadamente)
-
 -- Volcando estructura para tabla surgas.tipos_operaciones
 CREATE TABLE IF NOT EXISTS `tipos_operaciones` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -303,7 +290,7 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `nombre` varchar(100) DEFAULT NULL,
   `usuario` varchar(50) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
-  `rol` enum('admin','conductor') NOT NULL,
+  `rol` enum('admin','conductor', "aliado") NOT NULL,
   `departamento` enum('Tacna','Moquegua','Arequipa','Ilo') DEFAULT NULL,
   `estado` tinyint(4) DEFAULT 1,
   `fecha_creacion` timestamp NULL DEFAULT current_timestamp(),
@@ -353,6 +340,19 @@ INSERT INTO `ventas` (`id`, `cliente_id`, `conductor_id`, `monto`, `puntos`, `de
 	(15, 1, 3, 0.00, 18, '• Recarga gas Premium x1 (+10 pts)\n• Recarga gas Normal x1 (+6 pts)\n• Accesorio / Otros x1 (+2 pts)\n──────────\nTOTAL: 18 pts', '2026-04-09 17:42:28'),
 	(16, 1, 3, 0.00, 160, '• Recarga gas Normal x8 (+48 pts)\n• Recarga gas Premium x8 (+80 pts)\n• Accesorio / Otros x8 (+16 pts)\n• Accesorio / Otros x8 (+16 pts)\n──────────\nTOTAL: 160 pts', '2026-04-10 14:19:24'),
 	(17, 1, 3, 0.00, 10, '• Recarga gas Premium x1 (+10 pts)', '2026-04-10 14:20:04');
+ 
+-- Volcando estructura para tabla surgas.venta_detalles
+CREATE TABLE IF NOT EXISTS `venta_detalles` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `venta_id` int(11) NOT NULL,
+  `nombre_item` varchar(255) NOT NULL,
+  `cantidad` int(11) NOT NULL,
+  `puntos_unitarios` int(11) NOT NULL,
+  `puntos_subtotal` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `venta_id` (`venta_id`),
+  CONSTRAINT `fk_venta_detalles_venta` FOREIGN KEY (`venta_id`) REFERENCES `ventas` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

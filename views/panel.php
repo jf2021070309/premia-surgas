@@ -610,7 +610,7 @@
                         <?php endforeach; ?>
                 <?php endif; ?>
 
-                <?php if ($_SESSION['rol'] === 'conductor'): ?>
+                <?php if ($_SESSION['rol'] === 'conductor' || $_SESSION['rol'] === 'aliado'): ?>
                     <!-- ══════════════════════════════════════ 
                          PREMIUM CONDUCTOR DASHBOARD 
                          ══════════════════════════════════════ -->
@@ -688,6 +688,10 @@
                                         <?php foreach ($metricas_adicionales['ultimas_ventas'] as $i => $v): 
                                             $delay = 0.5 + ($i * 0.1);    
                                             $initials = strtoupper(substr($v['cliente_nombre'], 0, 1));
+                                            
+                                            // Spanish Month Formatting
+                                            $meses = ["January"=>"Enero", "February"=>"Febrero", "March"=>"Marzo", "April"=>"Abril", "May"=>"Mayo", "June"=>"Junio", "July"=>"Julio", "August"=>"Agosto", "September"=>"Septiembre", "October"=>"Octubre", "November"=>"Noviembre", "December"=>"Diciembre"];
+                                            $fecha_esp = strtr(date('d F, H:i', strtotime($v['fecha'])), $meses);
                                         ?>
                                             <div class="activity-row" style="animation-delay: <?= $delay ?>s;">
                                                 <div style="display: flex; align-items: center; gap: 1rem;">
@@ -697,7 +701,7 @@
                                                     <div>
                                                         <div style="font-weight: 700; color: #1e293b; font-size: 0.95rem; margin-bottom: 2px;"><?= htmlspecialchars($v['cliente_nombre']) ?></div>
                                                         <div style="font-size: 0.75rem; color: #94a3b8; font-weight: 500; display: flex; align-items: center; gap: 4px;">
-                                                            <?= date('d M, H:i', strtotime($v['fecha'])) ?>
+                                                            <?= $fecha_esp ?>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -912,7 +916,7 @@
         </script>
     <?php endif; ?>
 
-    <?php if ($_SESSION['rol'] === 'conductor'): ?>
+    <?php if ($_SESSION['rol'] === 'conductor' || $_SESSION['rol'] === 'aliado'): ?>
         <script>
             document.addEventListener("DOMContentLoaded", function () {
                 // Counting Animation for Cards

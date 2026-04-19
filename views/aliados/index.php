@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Aliados Comercial — PremiaSurgas</title>
+    <link rel="icon" type="image/png" href="<?= BASE_URL ?>assets/premios/icono.png">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-layout.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-tables.css">
+    <style>
+        [v-cloak] { display: none !important; }
+    </style>
+</head>
+<body>
+<div id="app" v-cloak>
+    
+    <?php include __DIR__ . '/../partials/sidebar_admin.php'; ?>
+
+    <div class="admin-layout">
+        <?php
+            $pageTitle    = 'Aliados Comerciales';
+            $pageSubtitle = 'Establecimientos en convenio';
+            include __DIR__ . '/../partials/header_admin.php';
+        ?>
+
+        <div class="container">
+            <div class="modern-section-header">
+                <div class="section-title-flex">
+                    <i class='bx bx-store-alt'></i>
+                    <div class="section-title-text">
+                        <h3>Directorio de Aliados</h3>
+                        <span>Administración de puntos de venta asociados</span>
+                    </div>
+                </div>
+                <div class="section-actions">
+                    <div class="header-filter">
+                        <i class='bx bx-filter-alt'></i>
+                        <select v-model="filtroEstado">
+                            <option value="todos">Todos los Estados</option>
+                            <option value="1">Activos</option>
+                            <option value="0">Inactivos</option>
+                        </select>
+                    </div>
+                    <div class="header-search-modern">
+                        <i class='bx bx-search'></i>
+                        <input type="text"  v-model="busqueda">
+                    </div>
+                    <a href="<?= BASE_URL ?>aliados/nuevo" class="btn-primary-premium">
+                        <i class='bx bx-plus-circle'></i> Nuevo
+                    </a>
+
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="table-wrapper">
+                    <table class="data-table">
+
+                        <thead>
+                            <tr>
+                                <th># ID</th>
+                                <th>Aliado Comercial</th>
+                                <th>Departamento</th>
+                                <th>Usuario</th>
+                                <th class="text-center">Estado</th>
+                                <th class="text-center">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="a in aliadosFiltrados" :key="a.id">
+                                <td><span class="text-medium">#{{ a.id }}</span></td>
+                                <td>
+                                    <div class="row-client">
+                                        <div class="row-avatar" style="background:#f0fdf4; color:#166534; display:flex; align-items:center; justify-content:center; border-radius:50%; width:36px; height:36px; border:1px solid #dcfce7;">
+                                            <i class='bx bx-store'></i>
+                                        </div>
+                                        <span class="text-medium">{{ a.nombre }}</span>
+                                    </div>
+                                </td>
+                                <td><span class="badge" style="background:#f1f5f9; color:#475569; font-weight:700; font-size:0.7rem; padding:4px 10px; border-radius:6px;">{{ a.departamento || 'N/A' }}</span></td>
+                                <td><span class="text-medium">{{ a.usuario }}</span></td>
+                                <td class="text-center">
+                                    <span :class="['chip', a.estado == 1 ? 'chip-approved' : 'chip-rejected']">
+                                        <i class='bx bxs-circle'></i> {{ a.estado == 1 ? 'Activo' : 'Inactivo' }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="actions-flex" style="justify-content: center;">
+                                        <a :href="'<?= BASE_URL ?>aliados/editar?id=' + a.id" class="btn-action blue" title="Editar">
+                                            <i class='bx bx-edit-alt'></i>
+                                        </a>
+                                        <button class="btn-action red" @click="confirmInactivar(a.id)" :title="a.estado == 1 ? 'Desactivar' : 'Reactivar'">
+                                            <i :class="['bx', a.estado == 1 ? 'bx-trash' : 'bx-refresh']"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr v-if="aliadosFiltrados.length === 0">
+                                <td colspan="5" class="text-center py-5">
+                                    <div style="color: #94a3b8; font-size: 0.9rem;">
+                                        <i class='bx bx-search-alt' style="font-size: 2rem; display: block; margin-bottom: 0.5rem; opacity: 0.5;"></i>
+                                        No se encontraron aliados comerciales.
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="card-footer-premium">
+                    <div class="footer-info">Mostrando {{ aliadosFiltrados.length }} de {{ aliados.length }} aliados</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>
+    var ALIADOS = <?= json_encode($aliados) ?>;
+    var BASE_URL = '<?= BASE_URL ?>';
+</script>
+<script src="<?= BASE_URL ?>views/aliados/index.js"></script>
+
+<?php if (isset($_SESSION['flash'])): ?>
+<script>
+    Swal.fire({
+        icon: '<?= $_SESSION['flash']['type'] ?>',
+        title: '<?= $_SESSION['flash']['title'] ?>',
+        text: '<?= $_SESSION['flash']['message'] ?>',
+        toast: true, position: 'top-end', showConfirmButton: false, timer: 3000
+    });
+</script>
+<?php unset($_SESSION['flash']); endif; ?>
+
+</body>
+</html>

@@ -29,6 +29,12 @@ class UsuarioModel {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getAllAliados(): array {
+        $stmt = $this->db->prepare("SELECT id, nombre, usuario, rol, estado, departamento, fecha_creacion FROM usuarios WHERE rol = 'aliado' ORDER BY id DESC");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function findById(int $id): ?array {
         $stmt = $this->db->prepare("SELECT id, nombre, usuario, rol, estado, departamento, fecha_creacion FROM usuarios WHERE id = ?");
         $stmt->execute([$id]);

@@ -144,6 +144,29 @@
             }
         }
 
+        /* ── Direct Badge ── */
+        .option-badge-direct {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #10b981;
+            color: white;
+            font-size: 0.6rem;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .option-card.active .option-badge-direct {
+            background: #fff;
+            color: #10b981;
+        }
+
         /* History Link Premium */
         .history-link-premium {
             margin-top: 2rem;
@@ -198,6 +221,194 @@
             border-color: rgba(255, 255, 255, 0.3);
             color: #fff;
             transform: translateX(-3px);
+        }
+
+        /* ── Success Premium Ticket Modal ── */
+        .premium-swal-popup {
+            border-radius: 2rem !important;
+            overflow: hidden !important;
+            background: #fff !important;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.4) !important;
+            border: none !important;
+        }
+
+        .success-premium-ticket {
+            text-align: center;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ticket-celebration {
+            background: linear-gradient(135deg, #821515 0%, #4a0808 100%);
+            padding: 2.5rem 2rem;
+            color: white;
+            position: relative;
+        }
+
+        .pulse-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            animation: pulse-celebrate 2s infinite;
+        }
+
+        @keyframes pulse-celebrate {
+            0% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(255,255,255,0.4)); }
+            50% { transform: scale(1.1); filter: drop-shadow(0 0 20px rgba(255,255,255,0.6)); }
+            100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(255,255,255,0.4)); }
+        }
+
+        .congrats-title {
+            font-size: 2.2rem;
+            font-weight: 900;
+            margin: 0;
+            letter-spacing: -1px;
+            line-height: 1;
+        }
+
+        .congrats-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            font-weight: 500;
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .prize-showcase {
+            padding: 2rem;
+            position: relative;
+            background: #fff;
+        }
+
+        .prize-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(130, 21, 21, 0.1) 0%, transparent 70%);
+            z-index: 1;
+        }
+
+        .prize-hero-img {
+            max-width: 180px;
+            height: 180px;
+            object-fit: contain;
+            position: relative;
+            z-index: 2;
+            filter: drop-shadow(0 15px 30px rgba(0,0,0,0.1));
+            animation: prizeFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes prizeFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .prize-hero-name {
+            margin-top: 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            line-height: 1.2;
+        }
+
+        .claim-details-box {
+            padding: 1.5rem 2.5rem 2rem;
+            background: #f8f9fa;
+            border-top: 2px dashed #eee;
+            position: relative;
+        }
+
+        /* Fake ticket notches */
+        .claim-details-box::before, .claim-details-box::after {
+            content: '';
+            position: absolute;
+            top: -15px;
+            width: 30px;
+            height: 30px;
+            background: #fff;
+            border-radius: 50%;
+        }
+        .claim-details-box::before { left: -15px; }
+        .claim-details-box::after { right: -15px; }
+
+        .claim-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .claim-label {
+            font-size: 0.75rem;
+            color: #888;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .claim-val {
+            font-size: 0.85rem;
+            color: #333;
+            font-weight: 700;
+        }
+
+        .claim-divider {
+            height: 1px;
+            background: rgba(0,0,0,0.05);
+            margin: 1rem 0;
+        }
+
+        .claim-instruction {
+            font-size: 0.85rem;
+            color: #555;
+            font-weight: 500;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .btn-ticket-action {
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-ticket-action.whatsapp {
+            background: #25D366;
+            color: white;
+            box-shadow: 0 10px 20px rgba(37, 211, 102, 0.2);
+        }
+
+        .btn-ticket-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            color: white;
+        }
+
+        .premium-swal-confirm-btn {
+            border-radius: 100px !important;
+            padding: 12px 40px !important;
+            font-weight: 800 !important;
+            letter-spacing: 1px !important;
+            text-transform: uppercase !important;
+            margin-bottom: 1.5rem !important;
+            box-shadow: 0 10px 20px rgba(130, 21, 21, 0.2) !important;
+        }
+
+        .footer-thanks {
+            font-size: 0.7rem;
+            color: #bbb;
+            font-weight: 600;
+            margin-top: 1rem;
+            letter-spacing: 0.5px;
         }
 
         /* ── Level Section & Header ── */
@@ -426,27 +637,48 @@
         .back-nav { position: absolute; top: 20px; left: 20px; }
         .btn-back { background: rgba(255,255,255,0.1); color: white; padding: 0.5rem 1.2rem; border-radius: 50px; text-decoration: none; border: 1px solid rgba(255,255,255,0.2); }
 
-        /* Comprar Puntos Button Style */
-        .btn-buy-pts {
-            background: white; color: var(--primary); border: 2px solid var(--primary);
-            padding: 8px 18px; border-radius: 100px; font-weight: 800; font-size: 0.85rem;
-            text-transform: uppercase; letter-spacing: 1px; transition: 0.3s;
-            display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
-            box-shadow: 0 4px 15px rgba(130, 21, 21, 0.1);
-        }
-        .btn-buy-pts:hover { 
-            background: var(--primary); color: white; transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(130, 21, 21, 0.2);
+
+        .option-card {
+            border: 2px solid #eee;
+            border-radius: 1rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
         }
 
-        .buy-card {
-            border: 2px solid #eee; border-radius: 1.5rem; padding: 1.5rem; cursor: pointer;
-            transition: 0.3s; text-align: center; background: #fff;
+        .option-card:hover { border-color: var(--primary); }
+        .option-card.active { 
+            border-color: var(--primary); 
+            background: rgba(130, 21, 21, 0.05); 
+            box-shadow: 0 4px 15px rgba(130, 21, 21, 0.1);
         }
-        .buy-card:hover { border-color: var(--primary); transform: translateY(-5px); }
-        .buy-card.active { border-color: var(--primary); background: rgba(130, 21, 21, 0.05); }
-        .buy-pts-val { font-size: 2rem; font-weight: 800; color: var(--primary); display: block; }
-        .buy-price-val { font-size: 1.1rem; font-weight: 700; color: #444; }
+
+        .option-card.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background: #f8f9fa;
+        }
+
+        .option-check {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--primary);
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            opacity: 0;
+            transition: 0.3s;
+        }
+
+        .option-card.active .option-check { opacity: 1; }
 
         .payment-qr-wrap {
             background: #fff; border: 2px dashed #ddd; border-radius: 20px;
@@ -534,9 +766,6 @@
             </div>
 
             <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem;">
-                <button @click="abrirCompra()" class="btn-buy-pts">
-                    <i class='bx bxs-cart-add'></i> COMPRAR PUNTOS
-                </button>
                 <a href="<?= BASE_URL ?>tienda/historial" class="history-link-premium" style="margin-top: 0;">
                     <i class='bx bx-history'></i> VER HISTORIAL
                 </a>
@@ -599,89 +828,6 @@
         <?php endforeach; ?>
     </div>
 
-    <!-- Modal Buy Points Selection -->
-    <div class="modal fade" id="modalComprarPuntos" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content shadow-lg">
-                <div class="modal-header">
-                    <h4 class="modal-title fw-bold" style="color: var(--primary);">Recargar Puntos</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body p-4">
-                    <p class="text-center text-muted mb-4">Selecciona el paquete de puntos que deseas adquirir:</p>
-                    <div class="row g-3">
-                        <div v-for="pkg in paquetes" :key="pkg.id" class="col-md-4">
-                            <div @click="seleccionarPaquete(pkg)" :class="['buy-card', selectedPkg.id === pkg.id ? 'active' : '']">
-                                <span class="buy-pts-val">{{ pkg.pts }}</span>
-                                <span class="text-uppercase small fw-bold text-muted mb-2 d-block">Puntos Surgas</span>
-                                <div class="buy-price-val">S/ {{ pkg.price }}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer border-0 p-4">
-                    <button :disabled="!selectedPkg.pts" @click="irAPago()" class="btn btn-primary w-100 py-3 rounded-4 shadow-sm fw-bold">
-                        CONTINUAR AL PAGO
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Digital Payment (Yape Ficticio) -->
-    <div class="modal fade" id="modalPagoPuntos" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content shadow-lg">
-                <div class="modal-header">
-                    <h5 class="modal-title fw-bold">Finalizar Compra</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body p-4">
-                    <div class="payment-qr-wrap">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Logo_Yape.svg" class="yape-logo" alt="Yape">
-                        <div class="mb-3">
-                            <h6 class="fw-bold mb-1">Monto a pagar:</h6>
-                            <span class="h3 fw-bold text-primary">S/ {{ selectedPkg.price }}</span>
-                        </div>
-                        <?php if (!empty($yapeQrImagen)): ?>
-                            <img src="<?= BASE_URL ?>assets/uploads/qr/<?= htmlspecialchars($yapeQrImagen) ?>"
-                                 alt="QR Yape"
-                                 class="img-fluid rounded shadow-sm"
-                                 style="max-width:200px;">
-                        <?php else: ?>
-                            <div style="width:200px;height:200px;background:#f3e8ff;border-radius:1rem;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#a855f7;margin:0 auto;">
-                                <i class='bx bx-qr' style="font-size:3rem;"></i>
-                                <span style="font-size:0.8rem;margin-top:0.5rem;">QR no configurado</span>
-                            </div>
-                        <?php endif; ?>
-                        <p class="small text-muted mt-3">Escanea el QR o yapea al número: <br><b>931 187 102</b></p>
-                    </div>
-
-                    <div class="evidence-section">
-                        <label class="fw-bold mb-2">Adjuntar Comprobante (Captura):</label>
-                        <div class="evidence-upload" @click="$refs.fileInput.click()">
-                            <input type="file" ref="fileInput" class="d-none" @change="onFileSelected" accept="image/*">
-                            <div v-if="!filePreview">
-                                <i class='bx bx-cloud-upload' style="font-size: 2.5rem; color: var(--primary);"></i>
-                                <p class="mb-0 mt-2 fw-bold">Haz clic para subir imagen</p>
-                                <span class="small text-muted">JPG, PNG ó Captura de pantalla</span>
-                            </div>
-                            <div v-else>
-                                <img :src="filePreview" class="img-fluid rounded" style="max-height: 150px;">
-                                <p class="mb-0 mt-2 small text-success fw-bold">¡Imagen seleccionada!</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer border-0 p-4">
-                    <button :disabled="!evidenceFile" @click="confirmarPago()" class="btn btn-success w-100 py-3 rounded-4 shadow-sm fw-bold">
-                        ENVIAR PARA VERIFICACIÓN
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Modal canje -->
     <div class="modal fade" id="modalCanje" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -697,8 +843,15 @@
                         <p class="text-muted small">{{ selected.puntos }} Puntos requeridos</p>
                     </div>
 
+                    <div class="p-3 mb-4 text-center" style="background: #fff9f0; border: 1px solid #ffe8cc; border-radius: 1rem;">
+                        <h6 class="fw-bold mb-1" style="color: #d9480f;">¿Cómo deseas canjear?</h6>
+                        <p class="small text-muted mb-0">Selecciona una modalidad para continuar con tu solicitud.</p>
+                    </div>
+
+                    <!-- 1. CANJE TOTAL -->
                     <div :class="['option-card', tipo === 'total' ? 'active' : '', saldoInsuficiente ? 'disabled' : '']"
-                         @click="!saldoInsuficiente && (tipo = 'total')">
+                         @click="canjeTotalDirecto">
+                        <div class="option-badge-direct" v-if="!saldoInsuficiente">Canje Directo</div>
                         <span class="option-check">✓</span>
                         <div class="fw-bold h6 mb-1">Canje Total</div>
                         <p class="small text-muted mb-0">Usa todos tus puntos para obtener el premio gratis.</p>
@@ -710,36 +863,101 @@
                         </div>
                     </div>
 
-                    <div :class="['option-card', tipo === 'descuento' ? 'active' : '']"
-                         @click="tipo = 'descuento'">
+                    <!-- 2. PUNTOS + EFECTIVO -->
+                    <div :class="['option-card', tipo === 'yape' ? 'active' : '']"
+                         @click="tipo = 'yape'">
                         <span class="option-check">✓</span>
                         <div class="fw-bold h6 mb-1">Puntos + Efectivo</div>
-                        <p class="small text-muted mb-2">Paga una parte con puntos y el resto en efectivo.</p>
-                        
-                        <div class="bg-light p-2 rounded small">
-                            <div class="d-flex justify-content-between mb-1">
-                                <span>Puntos ({{ pct }}%)</span>
-                                <b>{{ puntosDcto }} pts</b>
+                        <p class="small text-muted mb-0">Paga una parte con puntos y el resto en efectivo/Yape.</p>
+                    </div>
+
+                    <!-- Detalle Efectivo (Solo si está seleccionado) -->
+                    <div v-if="tipo === 'yape'" class="mt-3 mb-4 animate__animated animate__fadeIn">
+                        <div class="bg-light p-3 rounded-4 mb-3">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="fw-bold small">Uso de Puntos ({{ pct }}%)</span>
+                                <b class="text-primary">{{ puntosDcto }} pts</b>
                             </div>
                             <input type="range" class="form-range" v-model="pct" min="0" :max="maxSliderPct" step="1">
-                            <div class="d-flex justify-content-between mt-2">
-                                <span>Pagarás:</span>
-                                <b class="text-danger">S/ {{ montoEfectivo }}</b>
+                            <div class="d-flex justify-content-between mt-3 pt-2 border-top">
+                                <span class="fw-bold">Monto a pagar:</span>
+                                <b class="text-danger h5 mb-0">S/ {{ montoEfectivo }}</b>
+                            </div>
+                            <p class="small text-muted mt-2 mb-0" style="font-size: 0.7rem;">
+                                Conversión: {{ (1 / montoPorPunto).toFixed(0) }} puntos restantes = S/ 1.00
+                            </p>
+                        </div>
+                        <div class="p-3 text-center rounded-4 shadow-sm" style="background: #fff9f9; border: 1px solid #feebeb;">
+                            <i class='bx bx-home-alt text-danger mb-2' style="font-size: 1.5rem;"></i>
+                            <p class="small mb-0 text-dark"><b>Paga en efectivo</b> directamente al recoger tu premio en nuestra planta principal.</p>
+                        </div>
+                    </div>
+
+                    <!-- 3. PUNTOS + DEPÓSITO -->
+                    <div :class="['option-card', tipo === 'deposito' ? 'active' : '']"
+                         @click="tipo = 'deposito'">
+                        <span class="option-check">✓</span>
+                        <div class="fw-bold h6 mb-1">Puntos + Depósito</div>
+                        <p class="small text-muted mb-0">Paga una parte con puntos y el resto mediante depósito.</p>
+                    </div>
+
+                    <!-- Detalle Depósito (Solo si está seleccionado) -->
+                    <div v-if="tipo === 'deposito'" class="mt-3 mb-4 animate__animated animate__fadeIn">
+                        <div class="bg-light p-3 rounded-4 mb-3">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="fw-bold small">Uso de Puntos ({{ pct }}%)</span>
+                                <b class="text-primary">{{ puntosDcto }} pts</b>
+                            </div>
+                            <input type="range" class="form-range" v-model="pct" min="0" :max="maxSliderPct" step="1">
+                            <div class="d-flex justify-content-between mt-3 pt-2 border-top">
+                                <span class="fw-bold">Monto a pagar:</span>
+                                <b class="text-danger h5 mb-0">S/ {{ montoEfectivo }}</b>
+                            </div>
+                            <p class="small text-muted mt-2 mb-0" style="font-size: 0.7rem;">
+                                Conversión: {{ (1 / montoPorPunto).toFixed(0) }} puntos restantes = S/ 1.00
+                            </p>
+                        </div>
+
+                        <div class="payment-qr-wrap p-3 mb-3 text-center" style="background: #fdfdfd; border: 2px dashed #eee; border-radius: 1rem;">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Logo_Yape.svg" class="yape-logo mb-2" style="width: 60px;">
+                            <div class="mb-3">
+                                <span class="d-block small text-muted">Escanea y yapea el monto de:</span>
+                                <span class="h4 fw-bold text-primary">S/ {{ montoEfectivo }}</span>
+                            </div>
+                            <?php if (!empty($yapeQrImagen)): ?>
+                                <img src="<?= BASE_URL ?>assets/uploads/qr/<?= htmlspecialchars($yapeQrImagen) ?>" 
+                                     class="img-fluid rounded shadow-sm mx-auto d-block" 
+                                     style="max-width: 150px;">
+                            <?php else: ?>
+                                <div class="p-3 bg-light rounded text-muted small">QR No configurado</div>
+                            <?php endif; ?>
+                            <p class="small text-muted mt-2 mb-0">Yapea al número: <b>931 187 102</b></p>
+                        </div>
+
+                        <div class="evidence-section">
+                            <label class="fw-bold small mb-2">Sube tu comprobante de depósito:</label>
+                            <div class="evidence-upload p-3" @click="$refs.canjeFileInput.click()" 
+                                 :style="evidenceFile ? 'border-color: #2ecc71; background: #f0fff4;' : ''">
+                                <input type="file" ref="canjeFileInput" class="d-none" @change="onFileSelected" accept="image/*">
+                                <div v-if="!filePreview" class="text-center">
+                                    <i class='bx bx-cloud-upload text-primary' style="font-size: 2rem;"></i>
+                                    <p class="mb-0 small fw-bold">Subir Captura</p>
+                                </div>
+                                <div v-else class="text-center">
+                                    <img :src="filePreview" class="img-fluid rounded mb-2" style="max-height: 80px;">
+                                    <p class="mb-0 small text-success fw-bold">Imagen lista</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer border-0 p-4 pt-0">
-                    <form action="<?= BASE_URL ?>tienda/canjear" method="POST" style="width: 100%;">
-                        <input type="hidden" name="premio_id" :value="selected.id">
-                        <input type="hidden" name="tipo" :value="tipo">
-                        <input type="hidden" name="puntos" :value="tipo === 'total' ? selected.puntos : puntosDcto">
-                        <input type="hidden" name="monto" :value="tipo === 'total' ? 0 : montoEfectivo">
-                        
-                        <button type="submit" class="btn btn-primary w-100 py-3 rounded-4 shadow-sm" style="font-weight: 700;">
-                            Confirmar Canje
-                        </button>
-                    </form>
+                    <button class="btn btn-primary w-100 py-3 rounded-4 shadow-sm" 
+                            style="font-weight: 700;"
+                            @click="confirmarCanje"
+                            :disabled="tipo === 'deposito' && !evidenceFile">
+                        {{ tipo === 'deposito' ? 'ENVIAR PAGO Y CANJEAR' : 'CONFIRMAR CANJE' }}
+                    </button>
                 </div>
             </div>
         </div>
@@ -781,43 +999,60 @@
         }, 250);
 
         Swal.fire({
-            title: '<h3 style="color: #821515; font-weight: 800; margin-bottom: 0; font-size: 1.4rem;">¡EXCELENTE CANJE!</h3>',
             html: `
-                <div style="padding: 0.5rem;">
-                    <p style="font-size: 1.1rem; color: #333; margin-bottom: 1rem;">
-                        <b>¡Felicidades!</b> Acabas de canjear un premio increíble.
-                    </p>
-                    <div style="background: #f8f9fa; border-radius: 12px; padding: 1rem; border: 1px dashed #821515; margin-bottom: 1rem;">
-                        <p style="margin-bottom: 0.3rem; color: #666; font-size: 0.9rem;">Para reclamar tu producto:</p>
-                        <h5 style="color: #821515; font-weight: 700; margin-bottom: 0.8rem;">📍 Planta principal</h5>
-                        <p style="margin-bottom: 0.3rem; color: #666; font-size: 0.85rem;">O escríbenos:</p>
-                        <a href="https://wa.me/51931187102" target="_blank" style="text-decoration: none; background: #25D366; color: white; padding: 0.6rem 1.2rem; border-radius: 50px; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 0.9rem;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
-                                <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.06 3.973L0 16l4.204-1.102a7.934 7.934 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/>
-                            </svg>
-                            931187102
-                        </a>
+                <div class="success-premium-ticket">
+                    <div class="ticket-celebration">
+                        <i class='bx bxs-party pulse-icon'></i>
+                        <h2 class="congrats-title">¡LO LOGRASTE!</h2>
+                        <p class="congrats-subtitle">Canje realizado con éxito</p>
                     </div>
-                    <p style="font-size: 0.8rem; color: #888;">¡Gracias por ser parte de PremiaSurgas!</p>
+                    
+                    <div class="prize-showcase">
+                        <div class="prize-glow"></div>
+                        <?php if (!empty($_SESSION['flash']['prize_image'])): ?>
+                            <img src="<?= BASE_URL ?>assets/premios/<?= $_SESSION['flash']['prize_image'] ?>" class="prize-hero-img">
+                        <?php endif; ?>
+                        <h3 class="prize-hero-name"><?= $_SESSION['flash']['prize_name'] ?></h3>
+                    </div>
+
+                    <div class="claim-details-box">
+                        <div class="claim-row">
+                            <span class="claim-label">📍 Recoger en:</span>
+                            <span class="claim-val">Planta Principal</span>
+                        </div>
+                        <div class="claim-row">
+                            <span class="claim-label">📅 Fecha:</span>
+                            <span class="claim-val"><?= date('d/m/Y H:i') ?></span>
+                        </div>
+                        <div class="claim-divider"></div>
+                        <p class="claim-instruction">Muestra tu comprobante en caja para recibir tu premio.</p>
+                        
+                        <div class="d-flex justify-content-center gap-2 mt-3">
+                            <a href="https://wa.me/51931187102" target="_blank" class="btn-ticket-action whatsapp">
+                                <i class='bx bxl-whatsapp'></i> Coordinar
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <p class="footer-thanks">¡Gracias por ser parte de PremiaSurgas!</p>
                 </div>
             `,
             showConfirmButton: true,
-            confirmButtonText: '¡ENTENDIDO!',
+            confirmButtonText: '¡GRACIAS!',
             confirmButtonColor: '#821515',
-            width: '90%',
-            maxWidth: '380px',
-            padding: '1rem',
-            background: '#fff',
-            backdrop: `rgba(130, 21, 21, 0.6)`,
+            width: '420px',
+            padding: '0',
+            background: 'transparent',
+            backdrop: `rgba(130, 21, 21, 0.75)`,
             showClass: {
-                popup: 'animate__animated animate__zoomIn'
+                popup: 'animate__animated animate__backInDown'
             },
             hideClass: {
                 popup: 'animate__animated animate__fadeOutDown'
             },
             customClass: {
-                title: 'text-dark',
-                popup: 'rounded-5 border-0 shadow-lg'
+                popup: 'premium-swal-popup',
+                confirmButton: 'premium-swal-confirm-btn'
             }
         });
     <?php else: ?>

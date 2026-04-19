@@ -119,6 +119,62 @@
                 </div>
             </div>
 
+            <!-- SECTION: REGLAS DE CANJE HÍBRIDO -->
+            <div class="modern-section-header" style="margin-top: 3.5rem;">
+                <div class="section-title-flex">
+                    <i class='bx bx-coin-stack'></i>
+                    <div class="section-title-text">
+                        <h3>Reglas de Canje Híbrido</h3>
+                        <span>Define la equivalencia de puntos a soles para pagos</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-5" style="border-radius: 24px; border: none; overflow: hidden; background: #fff;">
+                <div style="padding: 2.5rem;">
+                    <form action="<?= BASE_URL ?>ajustes/update-puntos" method="POST">
+                        <div style="display: grid; grid-template-columns: 1.2fr 1.5fr 0.8fr; gap: 2rem; align-items: start;">
+                            
+                            <!-- Input Group -->
+                            <div>
+                                <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.8rem;">
+                                    Valor de 1 punto (en Soles)
+                                </label>
+                                <div style="position: relative; display: flex; align-items: center;">
+                                    <i class='bx bx-money' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.25rem;"></i>
+                                    <input type="number" name="valor" step="0.0001" 
+                                           value="<?= $montoPorPunto ?>" 
+                                           required
+                                           style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 14px; padding: 0.9rem 1rem 0.9rem 2.8rem; font-size: 1rem; color: #1e293b; background: #fff; outline: none; transition: all 0.2s;">
+                                </div>
+                            </div>
+
+                            <!-- Info Box -->
+                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 1.2rem; display: flex; align-items: center; gap: 0.8rem;">
+                                <div style="width: 32px; height: 32px; border-radius: 50%; background: #fff; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; color: #3b82f6; flex-shrink: 0;">
+                                    <i class='bx bx-info-circle' style="font-size: 1.1rem;"></i>
+                                </div>
+                                <p style="margin: 0; font-size: 0.85rem; color: #475569; line-height: 1.5;">
+                                    <b>Guía de conversión:</b> Si ingresas <code style="background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 4px; font-weight: 600;">0.001</code>, el sistema calculará <b>1000 puntos = S/ 1.00</b>.
+                                </p>
+                            </div>
+
+                            <!-- Action -->
+                            <div style="height: 100%; display: flex; align-items: flex-end;">
+                                <button type="submit" class="btn-premium-pill-black" style="width: 100%; background: #000; color: #fff; border: none; padding: 1rem; border-radius: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                                    <i class='bx bx-save' style="font-size: 1.1rem;"></i>
+                                    Actualizar Regla
+                                </button>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+                <div style="background: #fafbfc; padding: 0.8rem 2.5rem; border-top: 1px solid #f1f5f9;">
+                    <p style="margin: 0; font-size: 0.7rem; color: #94a3b8; font-weight: 500;">Esta configuración afecta los canjes parciales (Puntos + Efectivo/Depósito).</p>
+                </div>
+            </div>
+
             <!-- SECTION 2: OPERACIONES -->
             <div class="modern-section-header" style="margin-top: 3.5rem;">
                 <div class="section-title-flex">
