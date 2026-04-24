@@ -25,18 +25,13 @@ if (!function_exists('isActiveLink')) {
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
 <aside class="sidebar" id="mainSidebar">
-    <div class="sidebar-brand">
-        <!-- Brand img is hidden on mobile mini-mode -->
-        <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" alt="Surgas">
+    <div class="sidebar-brand" style="justify-content: center; padding: 2rem 1.5rem;">
+        <!-- Brand img -->
+        <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" alt="Surgas" style="width: 140px; height: auto;">
         
         <!-- Toggle button inside sidebar (visible when mini) -->
         <button class="sidebar-toggle-mini-btn" id="sidebarToggleMiniBtn" title="Abrir menú">
             <i class='bx bx-menu'></i>
-        </button>
-
-        <!-- Close button (visible when open on mobile) -->
-        <button class="sidebar-close-btn" id="sidebarCloseBtn" title="Cerrar menú">
-            <i class='bx bx-x'></i>
         </button>
     </div>
 

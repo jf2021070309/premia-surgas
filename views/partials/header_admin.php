@@ -24,13 +24,16 @@ $adminInitial = strtoupper(substr($adminName, 0, 1));
 ?>
 
 <header class="top-nav">
-    <!-- El botón de menú ahora vive en el sidebar directamente -->
-
-    <div class="nav-left">
+    <div class="nav-left" style="display: flex; align-items: center; gap: 0.5rem; flex-direction: row;">
+        <button class="sidebar-toggle-btn" id="sidebarToggleBtn" title="Abrir menú">
+            <i class='bx bx-menu'></i>
+        </button>
+        <div style="display: flex; flex-direction: column; min-width: 0;">
         <h1 class="page-title"><?= htmlspecialchars($pageTitle) ?></h1>
         <?php if ($pageSubtitle): ?>
             <p class="page-subtitle"><?= htmlspecialchars($pageSubtitle) ?></p>
         <?php endif; ?>
+        </div>
     </div>
 
     <div class="nav-right">

@@ -53,38 +53,38 @@
         ?>
         <div class="stats-grid-modern">
             
-            <div class="dash-card" style="background: #f97316;">
+            <div class="dash-card card-orange">
                 <div class="dash-card-body">
                     <div class="dash-card-number count-up" data-target="<?= $totalPendientes ?>">0</div>
                     <div class="dash-card-text">Pendientes</div>
                 </div>
-                <i class='bx bxs-time-five dash-card-icon'></i>
+                <i class='bx bx-time-five dash-card-icon'></i>
             </div>
 
-            <div class="dash-card" style="background: #400000;">
+            <div class="dash-card card-wine">
                 <div class="dash-card-body">
                     <div class="dash-card-number count-up" data-target="<?= $totalAprobados ?>">0</div>
                     <div class="dash-card-text">Aprobados</div>
                 </div>
-                <i class='bx bxs-check-shield dash-card-icon'></i>
+                <i class='bx bx-check-shield dash-card-icon'></i>
             </div>
 
-            <div class="dash-card" style="background: #400000;">
+            <div class="dash-card card-dark">
                 <div class="dash-card-body">
                     <div class="dash-card-number count-up" data-target="<?= $totalRechazados ?>">0</div>
                     <div class="dash-card-text">Rechazados</div>
                 </div>
-                <i class='bx bxs-error-circle dash-card-icon'></i>
+                <i class='bx bx-error-circle dash-card-icon'></i>
             </div>
 
-            <div class="dash-card" style="background: #400000;">
+            <div class="dash-card card-wine">
                 <div class="dash-card-body">
                     <div class="dash-card-number" style="display: flex; align-items: baseline; gap: 4px;">
                         <span style="font-size: 0.5em; font-weight: 800; position: relative; top: -5px;">S/</span> <span class="count-up" data-target="<?= $montoTotal ?>">0</span>
                     </div>
                     <div class="dash-card-text">Monto Acreditado</div>
                 </div>
-                <i class='bx bxs-bank dash-card-icon'></i>
+                <i class='bx bx-bank dash-card-icon'></i>
             </div>
 
         </div>
@@ -162,15 +162,13 @@
                 </div>
                 </div>
             </div> <!-- End COLUMN 1 -->
-
-            <!-- COLUMN 2 — Revisión Pendiente -->
-            <!-- COLUMN 2 — Revisión Pendiente -->
+        </div>
 
         <!-- ════════════════════════════════════════════
              SECTION 2 — Revisión Pendiente
         ════════════════════════════════════════════ -->
         <?php $numPendientes = count($recargas); ?>
-        <div class="card" style="margin-bottom:0;">
+        <div class="card" style="margin-top: 2rem; margin-bottom:0;">
             <div class="card-header" onclick="togglePending()">
                 <div class="header-title-flex">
                     <i class='bx bx-time-five'></i>
@@ -259,34 +257,37 @@
                 <?php endif; ?>
             </div>
         </div>
-        </div>
 
         <!-- ════════════════════════════════════════════
              SECTION 3 — Historial de Movimientos
         ════════════════════════════════════════════ -->
-        <div class="modern-section-header" style="margin-top: 3.5rem;">
-            <div class="section-title-flex">
-                <div class="section-title-text">
-                    <h3>Historial de Movimientos</h3>
-                    <span>Panel de verificación administrativa de recargas</span>
+        <div class="clientes-toolbar" style="margin-top: 3.5rem; margin-bottom: 1.5rem;">
+            <div class="clientes-toolbar-filters">
+                <div class="section-title-flex">
+                    <div class="section-title-text">
+                        <h3 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: #0f172a;">Historial de Movimientos</h3>
+                        <span style="font-size: 0.75rem; color: #64748b; font-weight: 500;">Panel de verificación administrativa de recargas</span>
+                    </div>
                 </div>
             </div>
-            <div class="section-actions">
-                <div class="header-search-modern" style="width: 160px;">
-                    <i class='bx bx-calendar'></i>
-                    <input type="date" id="historyDate" onchange="filterHistory()">
+            <div class="clientes-toolbar-search" style="flex: 1; justify-content: flex-end; gap: 0.75rem; flex-wrap: wrap;">
+                <div class="filter-group-mobile" style="width: auto;">
+                    <div class="header-search-modern" style="width: 160px;">
+                        <i class='bx bx-calendar'></i>
+                        <input type="date" id="historyDate" onchange="filterHistory()">
+                    </div>
+                    <div class="header-search-modern" style="width: 150px;">
+                        <i class='bx bx-filter-alt'></i>
+                        <select id="historyStatus" onchange="filterHistory()">
+                            <option value="">Todos</option>
+                            <option value="aprobado">Aprobados</option>
+                            <option value="rechazado">Rechazados</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="header-search-modern" style="width: 150px;">
-                    <i class='bx bx-filter-alt'></i>
-                    <select id="historyStatus" onchange="filterHistory()">
-                        <option value="">Todos</option>
-                        <option value="aprobado">Aprobados</option>
-                        <option value="rechazado">Rechazados</option>
-                    </select>
-                </div>
-                <div class="header-search-modern" style="width: 280px;">
+                <div class="header-search-modern clientes-search-input" style="max-width: 280px;">
                     <i class='bx bx-search'></i>
-                    <input type="text" id="historySearch"  onkeyup="filterHistory()">
+                    <input type="text" id="historySearch" placeholder="Buscar por cliente..." onkeyup="filterHistory()">
                 </div>
             </div>
         </div>

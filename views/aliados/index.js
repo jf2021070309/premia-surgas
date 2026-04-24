@@ -5,7 +5,18 @@ createApp({
         return {
             aliados: typeof ALIADOS !== 'undefined' ? ALIADOS : [],
             busqueda: '',
-            filtroEstado: 'todos'
+            filtroEstado: 'todos',
+            showModal: false,
+            showPass: false,
+            loading: false,
+            form: {
+                id: null,
+                nombre: '',
+                usuario: '',
+                password: '',
+                departamento: '',
+                estado: '1'
+            }
         };
     },
     computed: {
@@ -25,6 +36,51 @@ createApp({
         }
     },
     methods: {
+        openModal(aliado = null) {
+            this.showPass = false;
+            if (aliado) {
+                this.form = { ...aliado, password: '' };
+            } else {
+                this.form = { id: null, nombre: '', usuario: '', password: '', departamento: '', estado: '1' };
+            }
+            this.showModal = true;
+        },
+        closeModal() {
+            this.showModal = false;
+        },
+        async saveAliado() {
+            this.loading = true;
+            try {
+                const formData = new FormData();
+                for (let key in this.form) {
+                    formData.append(key, this.form[key]);
+                }
+
+                const action = this.form.id ? 'update' : 'create';
+                const response = await fetch(`${BASE_URL}aliados/${action}`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Éxito!',
+                        text: this.form.id ? 'Aliado actualizado correctamente' : 'Aliado registrado correctamente',
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                } else {
+                    throw new Error('Error en la respuesta del servidor');
+                }
+            } catch (error) {
+                Swal.fire('Error', 'No se pudo procesar la solicitud', 'error');
+            } finally {
+                this.loading = false;
+            }
+        },
         confirmInactivar(id) {
             Swal.fire({
                 title: '¿Eliminar aliado?',

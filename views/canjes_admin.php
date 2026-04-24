@@ -36,17 +36,19 @@
 
                 <!-- Filtros a la derecha -->
                 <div class="section-actions">
-                    <div class="header-search-modern" style="width: 200px;">
-                        <i class='bx bx-filter-alt'></i>
-                        <select id="filterEstado" onchange="filterDeliveries()">
-                            <option value="">Todos los estados</option>
-                            <option value="entregado">Entregados</option>
-                            <option value="no_entregado">No entregados</option>
-                        </select>
-                    </div>
-                    <div class="header-search-modern" style="width: 170px;">
-                        <i class='bx bx-calendar'></i>
-                        <input type="date" id="filterFecha" onchange="filterDeliveries()" title="Filtrar por fecha">
+                    <div class="filter-group-mobile">
+                        <div class="header-search-modern" style="width: 200px;">
+                            <i class='bx bx-filter-alt'></i>
+                            <select id="filterEstado" onchange="filterDeliveries()">
+                                <option value="">Todos los estados</option>
+                                <option value="entregado">Entregados</option>
+                                <option value="no_entregado">No entregados</option>
+                            </select>
+                        </div>
+                        <div class="header-search-modern" style="width: 170px;">
+                            <i class='bx bx-calendar'></i>
+                            <input type="date" id="filterFecha" onchange="filterDeliveries()" title="Filtrar por fecha">
+                        </div>
                     </div>
                 </div>
             </div>

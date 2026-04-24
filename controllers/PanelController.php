@@ -58,11 +58,27 @@ class PanelController {
             // Puntos entregados hoy (desde ventas)
             $puntos_hoy = $db->query("SELECT SUM(puntos) as total FROM ventas WHERE DATE(fecha) = CURDATE()")->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
 
-            $metricas_adicionales['canjes_hoy'] = $canjes_hoy;
-            $metricas_adicionales['puntos_hoy'] = $puntos_hoy;
-            $metricas_adicionales['top_premios'] = $top_premios;
-            $metricas_adicionales['ranking'] = $ranking;
+            // Donut: Canjes Full (monto=0) vs Mix (monto>0)
+            $canjes_full = $db->query("SELECT COUNT(*) as total FROM canjes WHERE monto = 0 OR monto IS NULL")->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
+            $canjes_mix  = $db->query("SELECT COUNT(*) as total FROM canjes WHERE monto > 0")->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
+
+            // Line/Area: Puntos entregados por día (últimos 14 días)
+            $puntos_por_dia = $db->query("
+                SELECT DATE(fecha) as fecha, SUM(puntos) as total
+                FROM ventas
+                WHERE fecha >= DATE_SUB(CURDATE(), INTERVAL 13 DAY)
+                GROUP BY DATE(fecha)
+                ORDER BY fecha ASC
+            ")->fetchAll(PDO::FETCH_ASSOC);
+
+            $metricas_adicionales['canjes_hoy']          = $canjes_hoy;
+            $metricas_adicionales['puntos_hoy']          = $puntos_hoy;
+            $metricas_adicionales['top_premios']         = $top_premios;
+            $metricas_adicionales['ranking']             = $ranking;
             $metricas_adicionales['ranking_conductores'] = $ranking_conductores;
+            $metricas_adicionales['canjes_full']         = (int)$canjes_full;
+            $metricas_adicionales['canjes_mix']          = (int)$canjes_mix;
+            $metricas_adicionales['puntos_por_dia']      = $puntos_por_dia;
         }
 
         if ($_SESSION['rol'] === 'conductor' || $_SESSION['rol'] === 'aliado') {

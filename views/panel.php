@@ -139,15 +139,16 @@
         /* ── Dashboard container padding responsive ── */
         .dashboard-container {
             padding: 1.5rem 2rem;
+            overflow-x: hidden; /* Prevent horizontal scroll */
         }
         @media (max-width: 900px) {
             .dashboard-container {
-                padding: 1.25rem 1.25rem;
+                padding: 1.25rem 1rem;
             }
         }
         @media (max-width: 600px) {
             .dashboard-container {
-                padding: 1rem 0.85rem;
+                padding: 1rem 0.75rem;
             }
         }
 
@@ -167,7 +168,7 @@
 
         .middle-row-grid {
             display: grid;
-            grid-template-columns: 2.2fr 1fr;
+            grid-template-columns: 1fr;
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
@@ -178,10 +179,25 @@
             }
         }
 
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 2.5fr 1fr;
+            gap: 1.5rem;
+            align-items: stretch;
+        }
+
         /* ── Chart containers responsive ── */
+        @media (max-width: 1100px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
         @media (max-width: 600px) {
-            .mobile-chart-h { height: 220px !important; }
+            .mobile-chart-h { height: 350px !important; }
             .rankings-container { max-height: 400px !important; }
+            .donut-container { height: 300px !important; }
+            .charts-grid > div > div:last-child { padding: 1rem 0.75rem !important; } /* Reduce card padding on mobile */
         }
 
         /* ── Conductor banner responsive ── */
@@ -212,79 +228,7 @@
             }
         }
 
-        /* ══════════════════════════════════════ 
-           Elite KPI Cards (Soft-Tint Style) 
-           ══════════════════════════════════════ */
-        .dash-card {
-            background: #4a0000; /* Deep Wine Default */
-            border-radius: 4px; /* Sharp corners */
-            border: none;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            transition: all 0.2s ease;
-            min-height: 120px;
-        }
 
-        .dash-card-body {
-            padding: 1.5rem;
-            flex: 1;
-            position: relative;
-            z-index: 2;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: flex-start;
-        }
-
-        .dash-card-number {
-            font-size: 3rem;
-            font-weight: 800;
-            margin-bottom: 0px;
-            line-height: 1;
-            color: white;
-            letter-spacing: -1px;
-        }
-
-        .dash-card-text {
-            font-size: 0.9rem;
-            margin-top: 5px;
-            font-weight: 600;
-            color: rgba(255,255,255,0.9);
-            text-transform: none; /* Corporate style */
-        }
-
-        .dash-card-icon {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            font-size: 70px;
-            opacity: 0.15;
-            z-index: 1;
-            color: white;
-        }
-
-        /* Interaction - subtle brightness */
-        .dash-card:hover {
-            filter: brightness(1.1);
-            cursor: pointer;
-        }
-
-        /* Specific Colors from Image */
-        .card-orange { background-color: #f97316 !important; } /* Vibrant Orange */
-        .card-wine   { background-color: #4a0000 !important; } /* Deep Wine */
-        .card-dark   { background-color: #310000 !important; } /* Darker Wine */
-
-        /* ── Dash card responsive ── */
-        @media (max-width: 600px) {
-            .dash-card { min-height: 100px; }
-            .dash-card-body { padding: 1rem 1rem; }
-            .dash-card-number { font-size: 2.2rem; letter-spacing: -0.5px; }
-            .dash-card-text { font-size: 0.78rem; }
-            .dash-card-icon { font-size: 48px; }
-        }
 
         /* ══════════════════════════════════════ 
            PREMIUM CONDUCTOR DASHBOARD BANNERS 
@@ -444,58 +388,52 @@
                         <!-- LEFT COLUMN: Main Charts -->
                         <div style="display: flex; flex-direction: column; gap: 1.5rem; min-width: 0;">
                             
-                            <!-- TOP 10 PREMIOS (Full Width, Colorful) -->
-                            <div style="display: flex; flex-direction: column;">
-                                <div style="margin-bottom: 0.8rem; margin-top: 0.5rem;">
-                                    <h3 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 0.5rem;">
-                                        <i class='bx bx-bar-chart-alt-2' style="color: #800000; font-size: 1.25rem;"></i> Top 10 Premios Más Populares
-                                    </h3>
-                                    <p style="font-size: 0.75rem; color: #64748b; margin: 0; margin-top: 0.2rem; font-weight: 500;">Los productos preferidos por los clientes</p>
-                                </div>
-                                <div style="background: white; border-radius: 1.25rem; padding: 1.5rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
-                                    <div class="mobile-chart-h" style="position: relative; height: 260px; width: 100%;">
-                                        <canvas id="premiosBarChart"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- RENDIMIENTO CONDUCTORES (Interactive) -->
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
-                                <!-- Ranking Bars -->
+                            <!-- CONSOLIDATED ROW: Top 10 + Donut -->
+                            <div class="charts-grid">
+                                
+                                <!-- TOP 10 PREMIOS (Wider) -->
                                 <div style="display: flex; flex-direction: column;">
-                                    <div style="margin-bottom: 0.8rem;">
-                                        <h3 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 0.5rem;">
-                                            <i class='bx bx-trophy' style="color: #f59e0b; font-size: 1.25rem;"></i> Rendimiento de Conductores
+                                    <div style="margin-bottom: 0.8rem; margin-top: 0.5rem;">
+                                        <h3 style="margin: 0; font-size: 1rem; font-weight: 600; color: #111827; display: flex; align-items: center; gap: 0.5rem;">
+                                            <i class='bx bx-bar-chart-alt-2' style="color: #7B1A1A; font-size: 1.1rem;"></i> Top 10 Premios Más Populares
                                         </h3>
-                                        <p style="font-size: 0.75rem; color: #64748b; margin: 0; margin-top: 0.2rem; font-weight: 500;">Datos de rendimiento de todos los conductores</p>
+                                        <p style="font-size: 0.73rem; color: #6B7280; margin: 0; margin-top: 0.2rem; font-weight: 400;">Los productos preferidos por los clientes</p>
                                     </div>
-                                    <div style="background: white; border-radius: 1.25rem; padding: 1.5rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
-                                        <div class="mobile-chart-h" style="position: relative; height: 260px; width: 100%;">
-                                            <canvas id="conductoresBarChart"></canvas>
+                                    <div style="background: white; border-radius: 14px; padding: 1.25rem 1.5rem; border: 1px solid #E5E7EB; box-shadow: 0 1px 3px rgba(0,0,0,0.04); flex: 1; display: flex; flex-direction: column; justify-content: center;">
+                                        <div class="mobile-chart-h" style="position: relative; height: 380px; width: 100%;">
+                                            <canvas id="premiosBarChart"></canvas>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Detail History (Interactive) -->
+                                <!-- DONUT: Tipo de Canjes -->
                                 <div style="display: flex; flex-direction: column;">
-                                    <div style="margin-bottom: 0.8rem;">
-                                        <h3 id="historyTitle" style="margin: 0; font-size: 1.1rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 0.5rem;">
-                                            <i class='bx bx-line-chart' style="color: #4f46e5; font-size: 1.25rem;"></i> Historial Detallado
+                                    <div style="margin-bottom: 0.8rem; margin-top: 0.5rem;">
+                                        <h3 style="margin: 0; font-size: 1rem; font-weight: 600; color: #111827; display: flex; align-items: center; gap: 0.5rem;">
+                                            <i class='bx bx-pie-chart-alt-2' style="color: #7B1A1A; font-size: 1.1rem;"></i> Canjes
                                         </h3>
-                                        <p id="historySubtitle" style="font-size: 0.75rem; color: #64748b; margin: 0; margin-top: 0.2rem; font-weight: 500;">Selecciona un conductor a la izquierda</p>
+                                        <p style="font-size: 0.73rem; color: #6B7280; margin: 0; margin-top: 0.2rem; font-weight: 400;">Distribución Full vs Mix</p>
                                     </div>
-                                    <div style="background: white; border-radius: 1.25rem; padding: 1.5rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.03); display: flex; align-items: center; justify-content: center;">
-                                        <div id="historyPlaceholder" style="color: #94a3b8; font-size: 0.85rem; font-weight: 500; text-align: center;">
-                                            <i class='bx bx-mouse-alt' style="font-size: 2.5rem; display: block; margin-bottom: 0.5rem; opacity: 0.5;"></i>
-                                            Toca una barra del ranking para cargar datos
+                                    <div style="background: white; border-radius: 14px; padding: 1.5rem 1rem; border: 1px solid #E5E7EB; box-shadow: 0 1px 3px rgba(0,0,0,0.04); flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                    <div class="donut-container" style="position: relative; height: 240px; width: 100%;">
+                                            <canvas id="donutCanjesChart"></canvas>
                                         </div>
-                                        <div id="historyContainer" class="mobile-chart-h" style="position: relative; height: 260px; width: 100%; display: none;">
-                                            <canvas id="historyChart"></canvas>
+                                        <div style="display: flex; flex-direction: column; gap: 0.6rem; padding: 1.5rem 1rem 0; font-size: 0.75rem; font-weight: 600; color: #6B7280; width: 100%;">
+                                            <div style="display:flex;justify-content:space-between;align-items:center; border-bottom: 1px solid #F3F4F6; padding-bottom: 0.5rem;">
+                                                <span style="display:flex;align-items:center;"><span style="width:10px;height:10px;border-radius:50%;background:#7B1A1A;display:inline-block;margin-right:8px;"></span> Canjes Full</span>
+                                                <span style="color:#111827; font-size: 0.85rem; font-weight: 700;"><?= $metricas_adicionales['canjes_full'] ?></span>
+                                            </div>
+                                            <div style="display:flex;justify-content:space-between;align-items:center; padding-top: 0.2rem;">
+                                                <span style="display:flex;align-items:center;"><span style="width:10px;height:10px;border-radius:50%;background:#C4722A;display:inline-block;margin-right:8px;"></span> Canjes Mix</span>
+                                                <span style="color:#111827; font-size: 0.85rem; font-weight: 700;"><?= $metricas_adicionales['canjes_mix'] ?></span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
-                        </div>
+
+                        </div> <!-- End LEFT COLUMN -->
 
                         <!-- RIGHT COLUMN: Rankings (Minified) -->
                         <div style="display: flex; flex-direction: column; gap: 1.5rem; min-width: 0;">
@@ -503,11 +441,11 @@
                             <!-- Ranking Canjeadores (Clientes) -->
                             <div style="display: flex; flex-direction: column; flex: 1;">
                                 <div style="margin-bottom: 0.8rem;">
-                                    <h5 style="margin: 0; font-size: 0.95rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 0.4rem;">
-                                        <i class='bx bx-star' style="color: #f59e0b;"></i> Top Canjeadores
+                                    <h5 style="margin: 0; font-size: 0.9rem; font-weight: 600; color: #111827; display: flex; align-items: center; gap: 0.4rem;">
+                                        <i class='bx bx-star' style="color: #C4722A;"></i> Top Canjeadores
                                     </h5>
                                 </div>
-                                <div style="background: white; border-radius: 1.25rem; padding: 1rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 15px rgba(0,0,0,0.02); flex: 1; display: flex; flex-direction: column;">
+                                <div style="background: white; border-radius: 14px; padding: 1rem; border: 1px solid #E5E7EB; box-shadow: 0 1px 3px rgba(0,0,0,0.04); flex: 1; display: flex; flex-direction: column;">
                                     <div class="rankings-container" style="flex: 1; overflow-y: auto; padding-right: 5px; scrollbar-width: thin; scrollbar-color: #f1f5f9 transparent; max-height: 520px;">
                                         <?php if (!empty($metricas_adicionales['ranking'])): ?>
                                             <?php foreach ($metricas_adicionales['ranking'] as $idx => $rank): 
@@ -582,7 +520,7 @@
                 <?php if ($_SESSION['rol'] === 'admin' && !empty($notificaciones)): ?>
                     <div style="margin-top: 2rem; margin-bottom: 1.25rem;">
                         <h3 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 0.5rem;">
-                            <i class='bx bx-gift' style="color: var(--p-wine, #800000); font-size: 1.25rem;"></i> Notificaciones de Canjes
+                            <i class='bx bx-gift' style="color: var(--p-wine, #800000); font-size: 1.25rem;"></i> Últimos Canjes
                         </h3>
                     </div>
 
@@ -795,21 +733,52 @@
                             labels: topPremios.map(p => p.nombre),
                             datasets: [{
                                 data: topPremios.map(p => p.total),
-                                backgroundColor: [
-                                    '#800000', '#D4AF37', '#22c55e', '#0891b2', '#4f46e5',
-                                    '#f59e0b', '#ec4899', '#8b5cf6', '#10b981', '#6366f1'
-                                ],
-                                borderRadius: 0,
-                                barThickness: 35
+                                backgroundColor: '#7B1A1A',
+                                borderRadius: 6,
+                                barThickness: 22,
+                                hoverBackgroundColor: '#9B2828'
                             }]
                         },
                         options: {
+                            indexAxis: 'y',
                             responsive: true,
                             maintainAspectRatio: false,
-                            plugins: { legend: { display: false } },
+                            plugins: {
+                                legend: { display: false },
+                                tooltip: {
+                                    backgroundColor: '#111827',
+                                    padding: 10,
+                                    titleFont: { size: 12, weight: '600' },
+                                    bodyFont: { size: 11 },
+                                    callbacks: {
+                                        label: ctx => ` ${ctx.parsed.x} canjes`
+                                    }
+                                }
+                            },
+                            layout: {
+                                padding: { left: 5, right: 25, top: 0, bottom: 0 }
+                            },
                             scales: {
-                                y: { beginAtZero: true, grid: { borderDash: [4, 4], color: '#f1f5f9', drawBorder: false }, ticks: { font: { size: 10, weight: '700' }, color: '#94a3b8' } },
-                                x: { grid: { display: false }, ticks: { font: { size: 10, weight: '700' }, color: '#334155' } }
+                                x: { 
+                                    beginAtZero: true, 
+                                    grid: { color: '#F3F4F6', drawBorder: false }, 
+                                    ticks: { font: { size: 10, weight: '500' }, color: '#9CA3AF', stepSize: 1 },
+                                    suggestedMax: function(context) { return context.chart.data.datasets[0].data.reduce((a, b) => Math.max(a, b), 0) + 1; }
+                                },
+                                y: { 
+                                    grid: { display: false }, 
+                                    ticks: { 
+                                        font: { size: window.innerWidth < 600 ? 9 : 11, weight: '500' }, 
+                                        color: '#374151',
+                                        callback: function(value) {
+                                            const label = this.getLabelForValue(value);
+                                            if (window.innerWidth < 600 && label.length > 12) {
+                                                return label.substr(0, 10) + '..';
+                                            }
+                                            return label;
+                                        }
+                                    } 
+                                }
                             }
                         }
                     });
@@ -913,6 +882,90 @@
                     });
                 }
             });
+
+            // 3. Donut — Tipo de Canjes
+            const canjesFull = <?= $metricas_adicionales['canjes_full'] ?? 0 ?>;
+            const canjesMix  = <?= $metricas_adicionales['canjes_mix']  ?? 0 ?>;
+            const ctxDonut   = document.getElementById('donutCanjesChart');
+            if (ctxDonut && (canjesFull + canjesMix) > 0) {
+                new Chart(ctxDonut.getContext('2d'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Full (solo puntos)', 'Mix (puntos + S/)'],
+                        datasets: [{
+                            data: [canjesFull, canjesMix],
+                            backgroundColor: ['#7B1A1A', '#C4722A'],
+                            borderWidth: 0,
+                            hoverOffset: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '68%',
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                backgroundColor: '#111827',
+                                padding: 10,
+                                callbacks: {
+                                    label: ctx => ` ${ctx.parsed} canjes (${((ctx.parsed / (canjesFull + canjesMix)) * 100).toFixed(1)}%)`
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // 4. Area — Puntos entregados por día (últimos 14 días)
+            const puntosDia = <?php echo json_encode($metricas_adicionales['puntos_por_dia'] ?? []); ?>;
+            const ctxArea   = document.getElementById('puntosAreaChart');
+            if (ctxArea) {
+                const areaLabels = puntosDia.map(d => {
+                    const date = new Date(d.fecha + 'T00:00:00');
+                    return date.toLocaleDateString('es-PE', { day: 'numeric', month: 'short' });
+                });
+                const areaValues = puntosDia.map(d => d.total);
+                new Chart(ctxArea.getContext('2d'), {
+                    type: 'line',
+                    data: {
+                        labels: areaLabels.length ? areaLabels : ['Sin datos'],
+                        datasets: [{
+                            label: 'Puntos',
+                            data: areaValues.length ? areaValues : [0],
+                            borderColor: '#7B1A1A',
+                            borderWidth: 2,
+                            pointBackgroundColor: '#7B1A1A',
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            tension: 0.4,
+                            fill: true,
+                            backgroundColor: (ctx) => {
+                                const gradient = ctx.chart.ctx.createLinearGradient(0, 0, 0, 200);
+                                gradient.addColorStop(0, 'rgba(123,26,26,0.15)');
+                                gradient.addColorStop(1, 'rgba(123,26,26,0.01)');
+                                return gradient;
+                            }
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                backgroundColor: '#111827',
+                                padding: 10,
+                                callbacks: { label: ctx => ` ${ctx.parsed.y} puntos` }
+                            }
+                        },
+                        scales: {
+                            x: { grid: { display: false }, ticks: { font: { size: 10 }, color: '#9CA3AF' } },
+                            y: { beginAtZero: true, grid: { color: '#F3F4F6', drawBorder: false }, ticks: { font: { size: 10 }, color: '#9CA3AF' } }
+                        }
+                    }
+                });
+            }
         </script>
     <?php endif; ?>
 

@@ -29,6 +29,61 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
+        .hybrid-rules-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1.5fr 0.8fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .info-box-premium {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .info-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #3b82f6;
+            flex-shrink: 0;
+        }
+
+        .info-box-premium p {
+            margin: 0;
+            font-size: 0.85rem;
+            color: #475569;
+            line-height: 1.5;
+        }
+
+        .code-highlight {
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 992px) {
+            .hybrid-rules-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .action-container {
+                margin-top: 0.5rem;
+            }
+        }
+
         [data-pagination] {
             display: none;
         }
@@ -51,23 +106,24 @@
         <div class="container" style="max-width: 1200px; padding-top: 1rem;">
 
             <!-- SECTION 1: PREMIOS -->
-            <div class="modern-section-header">
-                <div class="section-title-flex">
-                    <i class='bx bx-gift'></i>
-                    <div class="section-title-text">
-                        <h3>Catálogo de Premios</h3>
-                        <span>Productos disponibles y sus costos</span>
+            <div class="clientes-toolbar" style="margin-top: 1.5rem; margin-bottom: 1.5rem;">
+                <div class="clientes-toolbar-filters">
+                    <div class="section-title-flex">
+                        <i class='bx bx-gift'></i>
+                        <div class="section-title-text">
+                            <h3 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: #0f172a;">Catálogo de Premios</h3>
+                            <span style="font-size: 0.75rem; color: #64748b; font-weight: 500;">Productos disponibles y sus costos</span>
+                        </div>
                     </div>
                 </div>
-                <div class="section-actions">
-                    <div class="header-search-modern">
+                <div class="clientes-toolbar-search" style="flex: 1; justify-content: flex-end;">
+                    <div class="header-search-modern clientes-search-input" style="max-width: 320px;">
                         <i class='bx bx-search'></i>
-                        <input type="text"  onkeyup="handleSearch('tablePremios', this.value)">
+                        <input type="text" placeholder="Buscar..." onkeyup="handleSearch('tablePremios', this.value)">
                     </div>
-                    <button class="btn-primary-premium" onclick="openModalPremio()">
-                        <i class='bx bxs-award'></i> Nuevo Premio
+                    <button class="btn-primary-premium btn-nuevo-cliente" onclick="openModalPremio()">
+                        <i class='bx bxs-award'></i> <span>Nuevo Premio</span>
                     </button>
-
                 </div>
             </div>
 
@@ -120,12 +176,14 @@
             </div>
 
             <!-- SECTION: REGLAS DE CANJE HÍBRIDO -->
-            <div class="modern-section-header" style="margin-top: 3.5rem;">
-                <div class="section-title-flex">
-                    <i class='bx bx-coin-stack'></i>
-                    <div class="section-title-text">
-                        <h3>Reglas de Canje Híbrido</h3>
-                        <span>Define la equivalencia de puntos a soles para pagos</span>
+            <div class="clientes-toolbar" style="margin-top: 3.5rem; margin-bottom: 1.5rem;">
+                <div class="clientes-toolbar-filters">
+                    <div class="section-title-flex">
+                        <i class='bx bx-coin-stack'></i>
+                        <div class="section-title-text">
+                            <h3 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: #0f172a;">Reglas de Canje Híbrido</h3>
+                            <span style="font-size: 0.75rem; color: #64748b; font-weight: 500;">Define la equivalencia de puntos a soles para pagos</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -133,10 +191,10 @@
             <div class="card shadow-sm mb-5" style="border-radius: 24px; border: none; overflow: hidden; background: #fff;">
                 <div style="padding: 2.5rem;">
                     <form action="<?= BASE_URL ?>ajustes/update-puntos" method="POST">
-                        <div style="display: grid; grid-template-columns: 1.2fr 1.5fr 0.8fr; gap: 2rem; align-items: start;">
+                        <div class="hybrid-rules-grid">
                             
                             <!-- Input Group -->
-                            <div>
+                            <div class="form-group">
                                 <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.8rem;">
                                     Valor de 1 punto (en Soles)
                                 </label>
@@ -150,17 +208,17 @@
                             </div>
 
                             <!-- Info Box -->
-                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 1.2rem; display: flex; align-items: center; gap: 0.8rem;">
-                                <div style="width: 32px; height: 32px; border-radius: 50%; background: #fff; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; color: #3b82f6; flex-shrink: 0;">
-                                    <i class='bx bx-info-circle' style="font-size: 1.1rem;"></i>
+                            <div class="info-box-premium">
+                                <div class="info-icon">
+                                    <i class='bx bx-info-circle'></i>
                                 </div>
-                                <p style="margin: 0; font-size: 0.85rem; color: #475569; line-height: 1.5;">
-                                    <b>Guía de conversión:</b> Si ingresas <code style="background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 4px; font-weight: 600;">0.001</code>, el sistema calculará <b>1000 puntos = S/ 1.00</b>.
+                                <p>
+                                    <b>Guía de conversión:</b> Si ingresas <code class="code-highlight">0.001</code>, el sistema calculará <b>1000 puntos = S/ 1.00</b>.
                                 </p>
                             </div>
 
                             <!-- Action -->
-                            <div style="height: 100%; display: flex; align-items: flex-end;">
+                            <div class="action-container">
                                 <button type="submit" class="btn-premium-pill-black" style="width: 100%; background: #000; color: #fff; border: none; padding: 1rem; border-radius: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;">
                                     <i class='bx bx-save' style="font-size: 1.1rem;"></i>
                                     Actualizar Regla
@@ -176,23 +234,24 @@
             </div>
 
             <!-- SECTION 2: OPERACIONES -->
-            <div class="modern-section-header" style="margin-top: 3.5rem;">
-                <div class="section-title-flex">
-                    <i class='bx bx-calculator'></i>
-                    <div class="section-title-text">
-                        <h3>Reglas de Puntaje</h3>
-                        <span>Puntos acumulados por cada operación</span>
+            <div class="clientes-toolbar" style="margin-top: 3.5rem; margin-bottom: 1.5rem;">
+                <div class="clientes-toolbar-filters">
+                    <div class="section-title-flex">
+                        <i class='bx bx-calculator'></i>
+                        <div class="section-title-text">
+                            <h3 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: #0f172a;">Reglas de Puntaje</h3>
+                            <span style="font-size: 0.75rem; color: #64748b; font-weight: 500;">Puntos acumulados por cada operación</span>
+                        </div>
                     </div>
                 </div>
-                <div class="section-actions">
-                    <div class="header-search-modern">
+                <div class="clientes-toolbar-search" style="flex: 1; justify-content: flex-end;">
+                    <div class="header-search-modern clientes-search-input" style="max-width: 320px;">
                         <i class='bx bx-search'></i>
-                        <input type="text"  onkeyup="handleSearch('tableOp', this.value)">
+                        <input type="text" placeholder="Buscar..." onkeyup="handleSearch('tableOp', this.value)">
                     </div>
-                    <button class="btn-primary-premium" onclick="openModalOp()">
-                        <i class='bx bx-layer-plus'></i> Nueva Regla
+                    <button class="btn-primary-premium btn-nuevo-cliente" onclick="openModalOp()">
+                        <i class='bx bx-layer-plus'></i> <span>Nueva Regla</span>
                     </button>
-
                 </div>
             </div>
 
@@ -240,23 +299,24 @@
             </div>
 
             <!-- SECTION 3: CONDUCTORES -->
-            <div class="modern-section-header" style="margin-top: 3.5rem;">
-                <div class="section-title-flex">
-                    <i class='bx bxs-truck'></i>
-                    <div class="section-title-text">
-                        <h3>Directorio de Conductores</h3>
-                        <span>Control de acceso y perfiles del personal</span>
+            <div class="clientes-toolbar" style="margin-top: 3.5rem; margin-bottom: 1.5rem;">
+                <div class="clientes-toolbar-filters">
+                    <div class="section-title-flex">
+                        <i class='bx bxs-truck'></i>
+                        <div class="section-title-text">
+                            <h3 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: #0f172a;">Directorio de Conductores</h3>
+                            <span style="font-size: 0.75rem; color: #64748b; font-weight: 500;">Control de acceso y perfiles del personal</span>
+                        </div>
                     </div>
                 </div>
-                <div class="section-actions">
-                    <div class="header-search-modern">
+                <div class="clientes-toolbar-search" style="flex: 1; justify-content: flex-end;">
+                    <div class="header-search-modern clientes-search-input" style="max-width: 320px;">
                         <i class='bx bx-search'></i>
-                        <input type="text"  onkeyup="handleSearch('tableCond', this.value)">
+                        <input type="text" placeholder="Buscar..." onkeyup="handleSearch('tableCond', this.value)">
                     </div>
-                    <button class="btn-primary-premium" onclick="openModalCond()">
-                        <i class='bx bx-user-plus'></i> Nuevo Conductor
+                    <button class="btn-primary-premium btn-nuevo-cliente" onclick="openModalCond()">
+                        <i class='bx bx-user-plus'></i> <span>Nuevo Conductor</span>
                     </button>
-
                 </div>
             </div>
 
