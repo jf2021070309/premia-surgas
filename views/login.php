@@ -82,10 +82,80 @@
         .fade-header-enter-from, .fade-header-leave-to { opacity: 0; }
 
         [v-cloak] { display: none; }
+
+        /* Loading Overlay Glassmorphism */
+        .loading-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            z-index: 10000;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .loader-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loader-ring {
+            width: 80px;
+            height: 80px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top: 4px solid #ff5e14; /* Surgas Orange */
+            border-radius: 50%;
+            animation: spin 1s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        }
+
+        .loader-ring-inner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border: 4px solid transparent;
+            border-bottom: 4px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: spin-reverse 1.5s linear infinite;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes spin-reverse { 0% { transform: rotate(360deg); } 100% { transform: rotate(0deg); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .loading-pulse {
+            margin-top: 25px;
+            color: white;
+            font-size: 0.8rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-weight: 600;
+            opacity: 0.8;
+            animation: pulse-text 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse-text {
+            0%, 100% { opacity: 0.4; transform: scale(0.95); }
+            50% { opacity: 1; transform: scale(1); }
+        }
     </style>
 </head>
 <body>
 <div id="app" v-cloak>
+    <!-- Loading Overlay -->
+    <transition name="fade-header">
+        <div class="loading-overlay" v-if="loading">
+            <div class="loader-container">
+                <div class="loader-ring"></div>
+                <div class="loader-ring-inner"></div>
+            </div>
+            <div class="loading-pulse">Procesando</div>
+        </div>
+    </transition>
+
     <div class="login-wrap" :class="'mode-' + mode">
         <div class="login-header">
             <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" alt="Logo PremiaSurgas" class="login-logo">
@@ -114,8 +184,7 @@
                         </div>
 
                         <button type="submit" class="btn-premium-submit" :disabled="loading">
-                            <span v-if="loading">Verificando...</span>
-                            <span v-else>Iniciar sesión</span>
+                            <span>Iniciar sesión</span>
                         </button>
 
                         <div style="text-align: center; margin-top: 2rem;">
@@ -173,8 +242,7 @@
                         </div>
 
                         <button type="submit" class="btn-premium-submit" :disabled="loading">
-                            <span v-if="loading">Registrando...</span>
-                            <span v-else>Registrarse</span>
+                            <span>Registrarse</span>
                         </button>
 
                         <div style="text-align: center; margin-top: 2rem;">
@@ -213,8 +281,7 @@
                 try {
                     const res = await axios.post('login', this.form);
                     if (res.data.success) {
-                        Swal.fire({ icon: 'success', title: '¡Bienvenido!', timer: 1500, showConfirmButton: false })
-                            .then(() => window.location.href = res.data.redirect || 'panel');
+                        window.location.href = res.data.redirect || 'panel';
                     } else {
                         Swal.fire({ icon: 'error', title: 'Acceso Denegado', text: res.data.message });
                     }
@@ -238,11 +305,8 @@
                 try {
                     const res = await axios.post('clientes/register', this.regForm);
                     if (res.data.success) {
-                        Swal.fire({ icon: 'success', title: '¡Registro Exitoso!', text: res.data.message })
-                            .then(() => { 
-                                this.mode = 'login'; 
-                                this.form.usuario = this.regForm.dni; 
-                            });
+                        this.mode = 'login'; 
+                        this.form.usuario = this.regForm.dni; 
                     } else {
                         Swal.fire({ icon: 'error', title: 'Error', text: res.data.message });
                     }

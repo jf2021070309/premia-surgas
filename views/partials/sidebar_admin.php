@@ -36,65 +36,85 @@ if (!function_exists('isActiveLink')) {
     </div>
 
     <nav class="sidebar-menu">
-        <div class="menu-label">Principal</div>
-        <a href="<?= BASE_URL ?>panel" class="sidebar-item <?= isActiveLink('panel', $current_url) ?>">
-            <i class='bx bx-grid-alt'></i>
-            <span>Dashboard</span>
-        </a>
-
-        <div class="menu-label">Gestión</div>
-        <a href="<?= BASE_URL ?>clientes/nuevo" class="sidebar-item <?= isActiveLink('clientes/nuevo', $current_url) ?>">
-            <i class='bx bx-user-plus'></i>
-            <span>Nuevo Cliente</span>
-        </a>
-        <a href="<?= BASE_URL ?>clientes/lista" class="sidebar-item <?= isActiveLink('clientes/lista', $current_url) ?>">
-            <i class='bx bx-group'></i>
-            <span>Directorio</span>
-        </a>
-
-        <?php if ($_SESSION['rol'] === 'admin'): ?>
-            <a href="<?= BASE_URL ?>recargas-admin" class="sidebar-item <?= isActiveLink('recargas-admin', $current_url) ?>">
-                <i class='bx bx-wallet'></i>
-                <span>Gestión Recargas</span>
+        <?php if ($_SESSION['rol'] === 'cliente'): ?>
+            <div class="menu-label">Mi Cuenta</div>
+            <a href="<?= BASE_URL ?>scan?c=<?= $_SESSION['codigo_cliente'] ?>&t=<?= $_SESSION['token_cliente'] ?>" class="sidebar-item <?= isActiveLink('scan', $current_url) ?>" onclick="window.location.hash=''; return true;">
+                <i class='bx bx-user-circle'></i>
+                <span>Mi Perfil</span>
             </a>
-            <a href="<?= BASE_URL ?>canjes-admin" class="sidebar-item <?= isActiveLink('canjes-admin', $current_url) ?>">
-                <i class='bx bx-check-double'></i>
-                <span>Entregas Canjes</span>
-            </a>
-            <a href="<?= BASE_URL ?>aliados" class="sidebar-item <?= isActiveLink('aliados', $current_url) ?>">
-                <i class='bx bx-store-alt'></i>
-                <span>Gestión Aliados</span>
-            </a>
-        <?php endif; ?>
-
-        <div class="menu-label">Operaciones</div>
-        <a href="<?= BASE_URL ?>scan" class="sidebar-item <?= isActiveLink('scan', $current_url) ?>">
-            <i class='bx bx-qr-scan'></i>
-            <span>Suma Puntos</span>
-        </a>
-        <?php if ($_SESSION['rol'] === 'conductor' || $_SESSION['rol'] === 'admin'): ?>
-            <a href="<?= BASE_URL ?>conductores/mi-historial" class="sidebar-item <?= isActiveLink('conductores/mi-historial', $current_url) ?>">
+            <a href="#" class="sidebar-item" onclick="window.location.hash='actividad'; return false;">
                 <i class='bx bx-history'></i>
-                <span>Mi Historial</span>
+                <span>Mi Actividad</span>
             </a>
-        <?php endif; ?>
-        <?php if ($_SESSION['rol'] === 'aliado'): ?>
-            <a href="<?= BASE_URL ?>aliados/mi-historial" class="sidebar-item <?= isActiveLink('aliados/mi-historial', $current_url) ?>">
-                <i class='bx bx-history'></i>
-                <span>Mi Historial</span>
+            <a href="<?= BASE_URL ?>tienda" class="sidebar-item <?= isActiveLink('tienda', $current_url) ?>">
+                <i class='bx bx-shopping-bag'></i>
+                <span>Tienda de Premios</span>
             </a>
-        <?php endif; ?>
+            <a href="#" class="sidebar-item" onclick="window.location.hash='canjes'; return false;">
+                <i class='bx bx-gift'></i>
+                <span>Mis Canjes</span>
+            </a>
+        <?php else: ?>
+            <div class="menu-label">Principal</div>
+            <a href="<?= BASE_URL ?>panel" class="sidebar-item <?= isActiveLink('panel', $current_url) ?>">
+                <i class='bx bx-grid-alt'></i>
+                <span>Dashboard</span>
+            </a>
 
-        <?php if ($_SESSION['rol'] === 'admin'): ?>
-            <div class="menu-label">Mantenimiento</div>
-            <a href="<?= BASE_URL ?>ajustes" class="sidebar-item <?= isActiveLink('ajustes', $current_url) ?>">
-                <i class='bx bx-cog'></i>
-                <span>Configuración General</span>
+            <div class="menu-label">Gestión</div>
+            <a href="<?= BASE_URL ?>clientes/nuevo" class="sidebar-item <?= isActiveLink('clientes/nuevo', $current_url) ?>">
+                <i class='bx bx-user-plus'></i>
+                <span>Nuevo Cliente</span>
             </a>
-            <a href="<?= BASE_URL ?>reporte/auditoria" class="sidebar-item <?= isActiveLink('reporte/auditoria', $current_url) ?>">
-                <i class='bx bx-history'></i>
-                <span>Auditoría de Sistema</span>
+            <a href="<?= BASE_URL ?>clientes/lista" class="sidebar-item <?= isActiveLink('clientes/lista', $current_url) ?>">
+                <i class='bx bx-group'></i>
+                <span>Directorio</span>
             </a>
+
+            <?php if ($_SESSION['rol'] === 'admin'): ?>
+                <a href="<?= BASE_URL ?>recargas-admin" class="sidebar-item <?= isActiveLink('recargas-admin', $current_url) ?>">
+                    <i class='bx bx-wallet'></i>
+                    <span>Gestión Recargas</span>
+                </a>
+                <a href="<?= BASE_URL ?>canjes-admin" class="sidebar-item <?= isActiveLink('canjes-admin', $current_url) ?>">
+                    <i class='bx bx-check-double'></i>
+                    <span>Entregas Canjes</span>
+                </a>
+                <a href="<?= BASE_URL ?>aliados" class="sidebar-item <?= isActiveLink('aliados', $current_url) ?>">
+                    <i class='bx bx-store-alt'></i>
+                    <span>Gestión Aliados</span>
+                </a>
+            <?php endif; ?>
+
+            <div class="menu-label">Operaciones</div>
+            <a href="<?= BASE_URL ?>scan" class="sidebar-item <?= isActiveLink('scan', $current_url) ?>">
+                <i class='bx bx-qr-scan'></i>
+                <span>Suma Puntos</span>
+            </a>
+            <?php if ($_SESSION['rol'] === 'conductor' || $_SESSION['rol'] === 'admin'): ?>
+                <a href="<?= BASE_URL ?>conductores/mi-historial" class="sidebar-item <?= isActiveLink('conductores/mi-historial', $current_url) ?>">
+                    <i class='bx bx-history'></i>
+                    <span>Mi Historial</span>
+                </a>
+            <?php endif; ?>
+            <?php if ($_SESSION['rol'] === 'aliado'): ?>
+                <a href="<?= BASE_URL ?>aliados/mi-historial" class="sidebar-item <?= isActiveLink('aliados/mi-historial', $current_url) ?>">
+                    <i class='bx bx-history'></i>
+                    <span>Mi Historial</span>
+                </a>
+            <?php endif; ?>
+
+            <?php if ($_SESSION['rol'] === 'admin'): ?>
+                <div class="menu-label">Mantenimiento</div>
+                <a href="<?= BASE_URL ?>ajustes" class="sidebar-item <?= isActiveLink('ajustes', $current_url) ?>">
+                    <i class='bx bx-cog'></i>
+                    <span>Configuración General</span>
+                </a>
+                <a href="<?= BASE_URL ?>reporte/auditoria" class="sidebar-item <?= isActiveLink('reporte/auditoria', $current_url) ?>">
+                    <i class='bx bx-history'></i>
+                    <span>Auditoría de Sistema</span>
+                </a>
+            <?php endif; ?>
         <?php endif; ?>
     </nav>
 </aside>
@@ -144,5 +164,33 @@ if (!window._sidebarInitialized) {
             window.openAdminSidebar();
         }
     });
+
+    // --- Dynamic Sidebar Highlighting for Hashes ---
+    function updateSidebarActive() {
+        const hash = window.location.hash;
+        const sidebarItems = document.querySelectorAll('.sidebar-item');
+        
+        sidebarItems.forEach(item => {
+            const onclick = item.getAttribute('onclick') || '';
+            const href = item.getAttribute('href') || '';
+            
+            // Default: remove active
+            item.classList.remove('active');
+
+            if (hash === '#actividad') {
+                if (onclick.includes('actividad')) item.classList.add('active');
+            } else if (hash === '#canjes') {
+                if (onclick.includes('canjes')) item.classList.add('active');
+            } else if (!hash || hash === '') {
+                // If we are in the main scan page without hash
+                if (href.includes('scan') && !onclick.includes('actividad') && !onclick.includes('canjes')) {
+                    item.classList.add('active');
+                }
+            }
+        });
+    }
+
+    window.addEventListener('hashchange', updateSidebarActive);
+    window.addEventListener('load', updateSidebarActive);
 }
 </script>

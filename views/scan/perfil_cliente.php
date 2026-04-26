@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Perfil — PremiaSurgas</title>
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/main.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-layout.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-tables.css">
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <style>
         :root { 
@@ -82,7 +84,7 @@
         /* --- 3D FLIP CARD BLACK EDITION --- */
         .vip-card-container {
             perspective: 1500px;
-            margin: -4.5rem auto 3rem;
+            margin: 4rem auto 3rem;
             max-width: 420px;
             width: 92%;
             height: 250px; /* Base height for mobile aspect ratio */
@@ -139,7 +141,7 @@
         }
         @keyframes cardShineEffect { 0% { left: -150%; } 15% { left: 150%; } 100% { left: 150%; } }
 
-        .card-header { display: flex; justify-content: space-between; align-items: flex-start; }
+        .vip-card-header { display: flex; justify-content: space-between; align-items: flex-start; }
         .card-logo { height: 26px; filter: brightness(0) invert(1) opacity(0.8); }
         
         .membership-badge {
@@ -208,7 +210,13 @@
         .btn-store:hover { background: #000; transform: translateY(-3px); box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
 
         /* Historial */
-        .container { padding: 0 1.5rem 4rem; max-width: 500px; margin: 0 auto; }
+        .container { 
+            padding: 0 2rem 4rem; 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            position: relative;
+            z-index: 10;
+        }
         .section-title { font-size: 1rem; font-weight: 700; margin-bottom: 1.2rem; opacity: 0.8; letter-spacing: 1px; }
         .history-card { background: white; border-radius: 2rem; border: 1px solid #eef2f7; box-shadow: 0 10px 30px rgba(0,0,0,0.03); overflow: hidden; }
         .history-item { padding: 1.25rem 1.5rem; border-bottom: 1px solid #f0f4f8; transition: 0.3s; }
@@ -338,15 +346,128 @@
         .btn-view-ticket:hover { background: #821515; color: #fff; transform: translateY(-2px); }
 
         .canje-badge {
-            padding: 4px 10px; border-radius: 50px; font-size: 0.6rem;
-            font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;
+            padding: 5px 12px; border-radius: 50px; font-size: 0.65rem;
+            font-weight: 900; text-transform: uppercase; letter-spacing: 1px;
             margin-top: 8px; display: inline-block;
+            border: 1px solid transparent;
         }
-        .badge-pendiente { background: #fff7ed; color: #d97706; border: 1px solid #ffedd5; }
-        .badge-pago_aprobado { background: #f0fdf4; color: #16a34a; border: 1px solid #dcfce7; }
-        .badge-canjeado { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
-        .badge-rechazado { background: #fef2f2; color: #dc2626; border: 1px solid #fee2e2; }
-        .badge-pago_pendiente { background: #eff6ff; color: #1d4ed8; border: 1px solid #dbeafe; }
+        .badge-pendiente { background: #fffbeb; color: #d97706; border-color: #fef3c7; }
+        .badge-pago_aprobado { background: #f0fdf4; color: #16a34a; border-color: #dcfce7; }
+        .badge-canjeado { background: #f8fafc; color: #64748b; border-color: #e2e8f0; }
+        .badge-rechazado { background: #fef2f2; color: #dc2626; border-color: #fee2e2; }
+        .badge-pago_pendiente { background: #eff6ff; color: #1d4ed8; border-color: #dbeafe; }
+
+        /* ── Modern Activity Items ── */
+        .activity-card-group {
+            background: #fff; border-radius: 24px; padding: 1.5rem;
+            border: 1px solid #f1f5f9; box-shadow: 0 10px 25px rgba(0,0,0,0.02);
+            margin-bottom: 1.5rem; transition: transform 0.3s;
+        }
+        .activity-card-group:hover { transform: translateY(-3px); }
+        .activity-date-header {
+            font-size: 0.72rem; font-weight: 850; color: #94a3b8;
+            text-transform: uppercase; letter-spacing: 1.5px;
+            margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.8rem;
+        }
+        .activity-date-header::after { content: ''; flex: 1; height: 1px; background: #f1f5f9; }
+        
+        .activity-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0.75rem 0; border-bottom: 1px solid #f8fafc;
+        }
+        .activity-row:last-child { border-bottom: none; }
+        .activity-info { display: flex; align-items: center; gap: 1rem; }
+        .activity-icon {
+            width: 40px; height: 40px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; background: #f8fafc; color: #475569;
+        }
+        .activity-details { display: flex; flex-direction: column; }
+        .activity-title { font-size: 0.88rem; font-weight: 700; color: #1e293b; }
+        .activity-subtitle { font-size: 0.75rem; color: #94a3b8; font-weight: 500; }
+        .activity-pts { font-size: 1.05rem; font-weight: 900; color: #22c55e; }
+        .activity-pts.red { color: #ef4444; }
+
+        /* ── Elite Activity Table Overrides ── */
+        .elite-table-wrapper {
+            background: #fff; border-radius: 24px; padding: 1.5rem;
+            border: 1px solid #f1f5f9; box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+            overflow-x: auto;
+        }
+        .elite-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+        .elite-table th {
+            text-align: left; padding: 1rem 1.5rem; font-size: 0.65rem;
+            font-weight: 850; text-transform: uppercase; color: #94a3b8;
+            letter-spacing: 1px; border-bottom: 1px solid #f1f5f9;
+        }
+        .elite-table td {
+            padding: 1.25rem 1.5rem; vertical-align: middle;
+            border-bottom: 1px solid #f8fafc; font-size: 0.88rem;
+        }
+        .elite-table tr:last-child td { border-bottom: none; }
+        .elite-table tr:hover td { background: #fcfdfe; }
+        
+        .col-date { font-weight: 800; color: #1e293b; width: 160px; }
+        .col-type { width: 140px; text-align: center; }
+        .type-badge {
+            padding: 6px 14px; border-radius: 8px; font-size: 0.72rem;
+            font-weight: 850; text-transform: uppercase;
+            display: inline-block;
+        }
+        .badge-recarga { background: #f0fdf4; color: #16a34a; border: 1px solid #dcfce7; }
+        .badge-compra { background: #eff6ff; color: #1d4ed8; border: 1px solid #dbeafe; }
+        
+        .col-detail { padding-left: 2rem !important; }
+        .col-pts { text-align: right; font-weight: 900; font-size: 1.2rem; color: #22c55e; width: 150px; padding-right: 2rem !important; }
+
+        @media (max-width: 768px) {
+            .elite-table-wrapper { padding: 0.5rem; border-radius: 16px; }
+            .elite-table th { display: none; }
+            .elite-table td { display: block; padding: 1rem; border: none; text-align: left; }
+            .elite-table tr { 
+                display: block; margin-bottom: 1rem; background: #fff; 
+                border: 1px solid #f1f5f9; border-radius: 16px; padding: 0.5rem;
+            }
+            .col-date { width: 100%; font-size: 0.75rem; color: #94a3b8; }
+            .col-pts { text-align: left; width: 100%; margin-top: 0.5rem; font-size: 1.2rem; }
+            .col-type { width: 100%; margin-top: 0.5rem; }
+        }
+
+        /* ── Elite Filter Bar ── */
+        .filter-bar {
+            background: #fff; border-radius: 20px; padding: 1.5rem;
+            border: 1px solid #f1f5f9; box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+            display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: flex-end;
+            margin-bottom: 2rem;
+        }
+        .filter-group { display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 200px; }
+        .filter-label { 
+            font-size: 0.65rem; font-weight: 800; color: #8a99af; 
+            text-transform: uppercase; letter-spacing: 1.2px; 
+            margin-bottom: 8px; margin-left: 2px;
+        }
+        .filter-input {
+            height: 52px; background: #fff; border: 1.5px solid #f1f5f9;
+            border-radius: 14px; padding: 0 1.2rem; font-size: 0.95rem;
+            font-weight: 500; color: #1e293b; outline: none; transition: 0.3s;
+        }
+        .filter-input:focus { border-color: #16a34a; box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.05); }
+        
+        .btn-clear {
+            height: 52px; background: #111; color: #fff; border: none;
+            border-radius: 12px; padding: 0 2rem; font-weight: 800;
+            display: flex; align-items: center; gap: 12px; cursor: pointer;
+            transition: 0.3s; text-transform: uppercase; font-size: 0.85rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            letter-spacing: 1px;
+        }
+        .btn-clear:hover { background: #000; transform: translateY(-2px); box-shadow: 0 15px 35px rgba(0,0,0,0.25); }
+
+        @media (max-width: 991px) {
+            .filter-bar { flex-direction: column; align-items: stretch; gap: 1rem; }
+            .filter-group { min-width: 0; }
+            .btn-export { width: 100%; justify-content: center; }
+        }
 
         .flip-hint { 
             width: 100%;
@@ -474,33 +595,53 @@
         }
         .btn-view-ticket:hover { background: var(--primary); color: #fff; transform: scale(1.1); }
 
-        [v-cloak] { display: none; }
+        /* Admin layout overrides for client profile */
+        .main-content-client { 
+            flex: 1; 
+            min-height: 100vh; 
+            background: #ffffff;
+            position: relative;
+        }
+        
+        .sidebar { z-index: 1000; }
+
+        @media (max-width: 991px) {
+            .admin-layout { display: block; }
+            .header-wrapper { padding-top: 5.5rem; }
+            #mobile-toggle-zone { 
+                display: block !important; 
+                position: fixed !important;
+                top: 1.5rem !important; 
+                left: 1rem !important; 
+                z-index: 2000; 
+            }
+            #mobile-toggle-zone .logout-btn-client {
+                background: #000 !important;
+                color: #fff !important;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            }
+        }
     </style>
 </head>
 <body>
 
-    <div class="header-wrapper">
-        <div class="header-content">
-            <a href="<?= BASE_URL ?>logout" class="logout-btn-client" title="Cerrar Sesión">
-                <i class='bx bx-log-out'></i>
-            </a>
-            <div class="user-greeting">
-                <div class="profile-avatar"><?= strtoupper(substr($cliente['nombre'], 0, 1)) ?></div>
-                <div class="greeting-text">
-                    <p>Digital Membership</p>
-                    <h1>¡Hola, <?= explode(' ', $cliente['nombre'])[0] ?>!</h1>
-                </div>
-            </div>
-        </div>
-    </div>
+    <?php include __DIR__ . '/../partials/sidebar_admin.php'; ?>
 
+    <div class="admin-layout">
+        <div class="main-content-client">
+            <?php 
+                $pageTitle = 'Mi Perfil';
+                $pageSubtitle = 'Membresía Digital';
+                include __DIR__ . '/../partials/header_admin.php'; 
+            ?>
+            
     <!-- VIP CARD BLACK EDITION (3D FLIP) -->
     <div class="vip-card-container" id="profileCard">
         <div class="vip-card-inner">
             <!-- FRONT SIDE -->
             <div class="card-front">
                 <div class="card-shine"></div>
-                <div class="card-header">
+                <div class="vip-card-header">
                     <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" class="card-logo">
                     <span class="membership-badge">ELITE MEMBER</span>
                 </div>
@@ -530,11 +671,10 @@
 
     <div class="flip-hint"><i class='bx bx-refresh'></i> Toca la tarjeta para ver tu QR</div>
 
-    <a href="<?= BASE_URL ?>tienda" class="btn-store">
-        <i class='bx bxs-shopping-bag'></i> Ir a la tienda
-    </a>
 
-    <div class="container">
+
+    <!-- Contenedor de Actividad y Canjes (Oculto por defecto para evitar parpadeos) -->
+    <div class="container" style="display: none;">
         
         <!-- Tab Switcher -->
         <div class="tab-switcher">
@@ -548,108 +688,145 @@
 
         <!-- PANE 1: ACTIVIDAD -->
         <div id="pane-actividad" class="tab-content-pane active">
-            <div class="section-title">Actividad Reciente</div>
-            <div class="history-card">
-                <?php if (empty($ventas)): ?>
-                    <div style="padding: 3rem 2rem; text-align: center; opacity: 0.3; font-size: 0.9rem;">No hay movimientos recientes.</div>
-                <?php else: ?>
-                    <?php foreach (array_slice($ventas, 0, 10) as $v): ?>
-                    <div class="history-item">
-                        <div class="history-main-row">
-                            <div class="item-name" style="line-height: 1.5; background: #f8fafc; padding: 0.8rem 1rem; border-radius: 16px; border: 1px solid #eef2f7; font-size: 0.85rem; color: #475569; width: 100%;">
-                                <?php if (!empty($v['items'])): ?>
-                                    <div style="display: flex; flex-direction: column; gap: 4px; width: 100%;">
-                                        <?php foreach ($v['items'] as $it): ?>
-                                            <div style="display: flex; justify-content: space-between; align-items: baseline; width: 100%;">
-                                                <span>• <?= htmlspecialchars($it['nombre_item']) ?> x<?= $it['cantidad'] ?></span>
-                                                <b style="color: #1e293b; margin-left: 8px;">+<?= $it['puntos_subtotal'] ?> pts</b>
-                                            </div>
-                                        <?php endforeach; ?>
-                                    </div>
-                                <?php else: ?>
-                                    <?php 
-                                        $detalleLimpio = str_replace(['), ', ', Recarga'], [")\n• Recarga", "\n• Recarga"], $v['detalle'] ?? '');
-                                        if (!empty($detalleLimpio) && !str_starts_with($detalleLimpio, '•') && !str_starts_with($detalleLimpio, 'Compra')) {
-                                            $detalleLimpio = '• ' . $detalleLimpio;
-                                        }
-                                        echo nl2br(htmlspecialchars($detalleLimpio));
-                                    ?>
-                                <?php endif; ?>
-                            </div>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.8rem; padding: 0 0.5rem;">
-                            <span class="history-date" style="padding-left: 0;"><?= date('d/m/Y', strtotime($v['fecha'])) ?></span>
-                            <span class="item-pts" style="font-size: 0.95rem; color: var(--primary);">+<?= $v['puntos'] ?> pts</span>
-                        </div>
-                    </div>
-                    <?php endforeach; ?>
-                <?php endif; ?>
+            
+            <div class="filter-bar" style="justify-content: flex-start; gap: 2rem;">
+                <div class="filter-group" style="flex: 0.8; min-width: 150px;">
+                    <label class="filter-label">DESDE</label>
+                    <input type="date" id="f-desde" class="filter-input" onchange="filterActivityTable()">
+                </div>
+                <div class="filter-group" style="flex: 0.8; min-width: 150px;">
+                    <label class="filter-label">HASTA</label>
+                    <input type="date" id="f-hasta" class="filter-input" onchange="filterActivityTable()">
+                </div>
+                <button class="btn-clear" onclick="clearFilters()">
+                    <i class='bx bx-eraser'></i>
+                    LIMPIAR FILTROS
+                </button>
             </div>
+
+            <?php if (empty($ventas)): ?>
+                <div style="padding: 5rem 2rem; text-align: center; opacity: 0.3;">
+                    <i class='bx bx-file-blank' style="font-size: 3.5rem; display: block; margin-bottom: 1rem;"></i>
+                    <span style="font-size: 0.9rem; font-weight: 600;">No hay movimientos registrados.</span>
+                </div>
+            <?php else: ?>
+                <div class="elite-table-wrapper">
+                    <table class="elite-table">
+                        <thead>
+                            <tr>
+                                <th class="col-date">FECHA / HORA</th>
+                                <th class="col-type" style="text-align: center;">OPERACIÓN</th>
+                                <th class="col-detail">DETALLE / COMPROBANTE</th>
+                                <th class="col-pts" style="text-align: right;">PUNTOS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($ventas as $v): ?>
+                            <?php 
+                                $esRecarga = strpos($v['detalle'], 'Recarga') !== false;
+                                $tipoClase = $esRecarga ? 'badge-recarga' : 'badge-compra';
+                                $tipoTexto = $esRecarga ? 'RECARGA' : 'COMPRA';
+                                $sortDate = date('Y-m-d', strtotime($v['fecha']));
+                            ?>
+                            <tr class="activity-row-data" data-tipo="<?= $tipoTexto ?>" data-fecha="<?= $sortDate ?>">
+                                <td class="col-date">
+                                    <?= date('d/m/Y', strtotime($v['fecha'])) ?>
+                                    <div style="font-size: 0.7rem; color: #94a3b8; font-weight: 600;"><?= date('H:i', strtotime($v['fecha'])) ?></div>
+                                </td>
+                                <td class="col-type">
+                                    <span class="type-badge <?= $tipoClase ?>"><?= $tipoTexto ?></span>
+                                </td>
+                                <td>
+                                    <div style="font-weight: 700; color: #1e293b; line-height: 1.4;">
+                                        <?php if (!empty($v['items'])): ?>
+                                            <ul style="list-style: none; padding: 0; margin: 0;">
+                                                <?php foreach ($v['items'] as $it): ?>
+                                                    <li style="display: flex; align-items: center; gap: 6px;">
+                                                        <i class='bx bx-chevron-right' style="color: #94a3b8;"></i>
+                                                        <?= htmlspecialchars($it['nombre_item']) ?> x<?= $it['cantidad'] ?>
+                                                    </li>
+                                                <?php endforeach; ?>
+                                            </ul>
+                                        <?php else: ?>
+                                            <?= htmlspecialchars($v['detalle']) ?>
+                                        <?php endif; ?>
+                                    </div>
+                                    <div style="font-size: 0.72rem; color: #64748b; margin-top: 4px; font-weight: 500;">
+                                        <?= $esRecarga ? 'Abono directo de puntos' : 'Transacción en establecimiento' ?>
+                                    </div>
+                                </td>
+                                <td class="col-pts">
+                                    +<?= $v['puntos'] ?>
+                                    <span style="font-size: 0.65rem; opacity: 0.5; font-weight: 700;">PTS</span>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            <?php endif; ?>
         </div>
 
         <!-- PANE 2: CANJES -->
         <div id="pane-canjes" class="tab-content-pane">
-            <div class="section-title">Historial de Canjes</div>
-            <div class="history-card">
-                <?php if (empty($canjes)): ?>
-                    <div style="padding: 3rem 2rem; text-align: center; opacity: 0.3; font-size: 0.9rem;">Aún no has canjeado premios.</div>
-                <?php else: ?>
+            <?php if (empty($canjes)): ?>
+                <div style="padding: 5rem 2rem; text-align: center; opacity: 0.3;">
+                    <i class='bx bx-gift' style="font-size: 3.5rem; display: block; margin-bottom: 1rem;"></i>
+                    <span style="font-size: 0.9rem; font-weight: 600;">Aún no has canjeado premios.</span>
+                </div>
+            <?php else: ?>
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
                     <?php foreach ($canjes as $c): ?>
                     <?php 
-                        // Calcular modalidad
-                        $modStr = 'Canje Total';
-                        if ($c['monto'] > 0) {
-                            $modStr = !empty($c['comprobante_url']) ? 'Puntos + Depósito' : 'Puntos + Efectivo';
-                        }
+                        $modStr = $c['monto'] > 0 ? (!empty($c['comprobante_url']) ? 'Puntos + Depósito' : 'Puntos + Efectivo') : 'Canje Total';
                     ?>
-                    <div class="history-item">
-                        <div class="canje-wallet-card">
-                            <div class="canje-icon-circle">
-                                <i class='bx bx-gift'></i>
+                    <div class="canje-wallet-card" style="padding: 1.5rem; border-radius: 24px; border-color: #f1f5f9; transition: transform 0.3s; display: flex; align-items: center; justify-content: space-between; background: #fff; border: 1px solid #f1f5f9; box-shadow: 0 4px 15px rgba(0,0,0,0.02); position: relative; overflow: hidden;">
+                        <div style="display: flex; align-items: center; gap: 1rem; flex: 1;">
+                            <div class="canje-icon-circle" style="width: 56px; height: 56px; border-radius: 18px; background: #fff1f2; color: #e11d48; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; flex-shrink: 0; border: 1px solid #ffe4e6;">
+                                <i class='bx bxs-gift'></i>
                             </div>
 
                             <div class="canje-info-main">
-                                <div class="canje-prize-title"><?= htmlspecialchars($c['premio_nombre']) ?></div>
-                                <div class="modality-tag-mini"><?= $modStr ?></div>
-                                <div class="canje-info-meta">
-                                    <i class='bx bx-calendar-alt'></i> <?= date('d/m/Y', strtotime($c['fecha'])) ?>
+                                <div class="canje-prize-title" style="font-size: 1.05rem; font-weight: 850; color: #1e293b;"><?= htmlspecialchars($c['premio_nombre']) ?></div>
+                                <div class="modality-tag-mini" style="font-size: 0.65rem; font-weight: 800; color: #821515; background: rgba(130, 21, 21, 0.05); padding: 2px 10px; border-radius: 6px; display: inline-block; margin-top: 4px; text-transform: uppercase;"><?= $modStr ?></div>
+                                <div class="canje-info-meta" style="font-size: 0.75rem; color: #94a3b8; font-weight: 600; margin-top: 8px; display: flex; align-items: center; gap: 4px;">
+                                    <i class='bx bx-time' style="font-size: 0.9rem;"></i> <?= date('d/m/Y', strtotime($c['fecha'])) ?>
                                 </div>
                             </div>
-
-                            <div class="canje-metrics-side">
-                                <div class="canje-pts-val">-<?= $c['puntos_usados'] ?> pts</div>
-                                <?php if ($c['monto'] > 0): ?>
-                                    <div style="font-size: 0.7rem; font-weight: 950; color: #1e293b; margin-top: 1px;">+ S/ <?= number_format($c['monto'], 2) ?></div>
-                                <?php endif; ?>
-                                <div class="canje-status-pill badge-<?= $c['estado'] ?>">
-                                    <?= str_replace('_', ' ', $c['estado']) ?>
-                                </div>
-                            </div>
-
-                            <?php if ($c['estado'] === 'pago_aprobado' || $c['estado'] === 'pendiente'): ?>
-                                <button class="btn-float-ticket" title="Ver Ticket para reclamar" 
-                                        onclick='showClaimTicket(<?= json_encode([
-                                            "id"     => $c["id"],
-                                            "premio" => $c["premio_nombre"],
-                                            "puntos" => $c["puntos_usados"],
-                                            "monto"  => $c["monto"],
-                                            "modalidad" => $modStr,
-                                            "fecha"  => date("d/m/Y H:i", strtotime($c["fecha"]))
-                                        ]) ?>)'>
-                                    <i class="bx bx-show"></i>
-                                </button>
-                            <?php endif; ?>
                         </div>
+
+                        <div class="canje-metrics-side" style="text-align: right; margin-right: 3.5rem;">
+                            <div class="canje-pts-val" style="font-size: 1.25rem; font-weight: 900; color: #e11d48; line-height: 1;">-<?= $c['puntos_usados'] ?> <span style="font-size: 0.75rem; opacity: 0.5;">PTS</span></div>
+                            <div class="canje-status-pill badge-<?= $c['estado'] ?>" style="margin-top: 8px;">
+                                <?= str_replace('_', ' ', $c['estado']) ?>
+                            </div>
+                        </div>
+
+                        <?php if ($c['estado'] === 'pago_aprobado' || $c['estado'] === 'pendiente'): ?>
+                            <button class="btn-float-ticket" style="position: absolute; right: 1.5rem; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border-radius: 14px; background: #000; color: #fff; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s;"
+                                    onclick='showClaimTicket(<?= json_encode([
+                                        "id"     => $c["id"],
+                                        "premio" => $c["premio_nombre"],
+                                        "puntos" => $c["puntos_usados"],
+                                        "monto"  => $c["monto"],
+                                        "modalidad" => $modStr,
+                                        "fecha"  => date("d/m/Y H:i", strtotime($c["fecha"]))
+                                    ]) ?>)'>
+                                <i class="bx bx-qr" style="font-size: 1.4rem;"></i>
+                            </button>
+                        <?php endif; ?>
                     </div>
                     <?php endforeach; ?>
-                <?php endif; ?>
-            </div>
+                </div>
+            <?php endif; ?>
         </div>
         
         <div class="footer">
             &copy; <?= date('Y') ?> Surgas — Premium Digital Member Card
         </div>
     </div>
+</div>
+</div>
 
     <script>
         const cardContainer = document.getElementById('profileCard');
@@ -669,17 +846,120 @@
         });
 
         // Tab Switching Logic
-        function switchTab(paneId, btnElement) {
+        function switchTab(paneId, btnElement, hideCard = false) {
             // Remove active from all buttons
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             // Add active to current button
-            btnElement.classList.add('active');
+            if (btnElement) btnElement.classList.add('active');
 
             // Hide all panes
             document.querySelectorAll('.tab-content-pane').forEach(pane => pane.classList.remove('active'));
             // Show selected pane
-            document.getElementById('pane-' + paneId).classList.add('active');
+            const targetPane = document.getElementById('pane-' + paneId);
+            if (targetPane) targetPane.classList.add('active');
+
+            // Toggle visibility of profile card elements
+            const cardElements = [
+                document.getElementById('profileCard'),
+                document.querySelector('.flip-hint'),
+                document.querySelector('.btn-store')
+            ];
+
+            const tabsContainer = document.querySelector('.container');
+
+            if (hideCard) {
+                // VIEW: ACTIVITY or REDEMPTIONS (Detail)
+                cardElements.forEach(el => { if(el) el.style.display = 'none'; });
+                if(document.querySelector('.header-wrapper')) document.querySelector('.header-wrapper').style.display = 'none';
+                
+                if(tabsContainer) {
+                    tabsContainer.style.display = 'block';
+                    tabsContainer.style.marginTop = '0';
+                    tabsContainer.style.paddingTop = '2rem';
+                }
+                document.querySelector('.tab-switcher').style.display = 'none';
+                document.querySelector('.main-content-client').style.paddingTop = '2rem';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                // VIEW: MAIN PROFILE (VIP Card Only)
+                cardElements.forEach(el => { if(el) el.style.display = ''; });
+                if(document.querySelector('.header-wrapper')) document.querySelector('.header-wrapper').style.display = '';
+                
+                if(tabsContainer) {
+                    tabsContainer.style.display = 'none'; // Hide Activity/Canjes in Profile view
+                }
+                document.querySelector('.main-content-client').style.paddingTop = '';
+            }
         }
+
+        // Handle URL Hash for direct navigation
+        function handleNavigation() {
+            const hash = window.location.hash.replace('#', '');
+            const titleEl = document.querySelector('.page-title');
+            const subTitleEl = document.querySelector('.page-subtitle');
+
+            if (hash === 'canjes') {
+                if(titleEl) titleEl.innerText = 'Mis Beneficios';
+                if(subTitleEl) subTitleEl.innerText = 'Premios y canjes realizados';
+                switchTab('canjes', document.querySelectorAll('.tab-btn')[1], true);
+            } else if (hash === 'actividad') {
+                if(titleEl) titleEl.innerText = 'Historial de Actividad';
+                if(subTitleEl) subTitleEl.innerText = 'Tus puntos acumulados';
+                switchTab('actividad', document.querySelectorAll('.tab-btn')[0], true);
+            } else {
+                // Default: Profile view
+                if(titleEl) titleEl.innerText = 'Mi Perfil';
+                if(subTitleEl) subTitleEl.innerText = 'Membresía Digital';
+                window.location.hash = '';
+                switchTab('actividad', document.querySelectorAll('.tab-btn')[0], false);
+            }
+        }
+
+        // --- Real-time Activity Filtering Logic ---
+        function filterActivityTable() {
+            const searchInput = document.getElementById('f-search');
+            const opInput = document.getElementById('f-op');
+            
+            const search = searchInput ? searchInput.value.toLowerCase() : '';
+            const op = opInput ? opInput.value : 'todos';
+            const desde = document.getElementById('f-desde').value;
+            const hasta = document.getElementById('f-hasta').value;
+
+            const rows = document.querySelectorAll('.activity-row-data');
+
+            rows.forEach(row => {
+                const text = row.innerText.toLowerCase();
+                const rowOp = row.getAttribute('data-tipo');
+                const rowDate = row.getAttribute('data-fecha');
+
+                let show = true;
+
+                // Filter by Search Text (if exists)
+                if (search && !text.includes(search)) show = false;
+
+                // Filter by Operation Type (if exists)
+                if (op !== 'todos' && rowOp !== op) show = false;
+
+                // Filter by Date Range
+                if (desde && rowDate < desde) show = false;
+                if (hasta && rowDate > hasta) show = false;
+
+                row.style.display = show ? '' : 'none';
+            });
+        }
+
+        function clearFilters() {
+            document.getElementById('f-desde').value = '';
+            document.getElementById('f-hasta').value = '';
+            const searchInput = document.getElementById('f-search');
+            const opInput = document.getElementById('f-op');
+            if(searchInput) searchInput.value = '';
+            if(opInput) opInput.value = 'todos';
+            filterActivityTable();
+        }
+
+        window.addEventListener('load', handleNavigation);
+        window.addEventListener('hashchange', handleNavigation);
 
         // Ticket Viewer Logic (Horizontal Style)
         function showClaimTicket(data) {
