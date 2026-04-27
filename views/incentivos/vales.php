@@ -64,6 +64,12 @@ $pageSubtitle = 'Gestión y verificación de vales de descuento / premios';
             padding: 10px 16px; border: 1.5px solid #e2e8f0; border-radius: 12px;
             font-size: 0.85rem; font-weight: 600; outline: none; background: #fff;
         }
+
+        .content-body { padding: 2.5rem; }
+        
+        @media (max-width: 768px) {
+            .content-body { padding: 1.5rem; }
+        }
     </style>
 </head>
 <body>

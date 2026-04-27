@@ -42,3 +42,14 @@ CREATE TABLE IF NOT EXISTS incentivos_vales (
     INDEX idx_estado (estado),
     INDEX idx_codigo (codigo)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ============================================================
+-- REGLAS POR DEFECTO
+-- ============================================================
+
+INSERT INTO incentivos_reglas 
+(nombre, descripcion, tipo_cliente, meta_cantidad, periodo, tipo_premio, valor_premio, descripcion_premio, vigencia_dias)
+VALUES 
+('Meta Mensual Restaurantes', '¡Completa 10 compras en el mes y obtén un 50% de descuento en tu próximo balón!', 'Restaurante', 10, 'mensual', 'vale_descuento', 50.00, 'Vale de 50% de Descuento', 30),
+('Bono Puntos de Venta', 'Premio especial para puntos de venta: 15 compras al mes = ¡Vale de S/ 20 en efectivo!', 'Punto de Venta', 15, 'mensual', 'vale_dinero', 20.00, 'Vale de S/ 20 Efectivo', 30),
+('Bono de Frecuencia Semanal', 'Premio rápido: Realiza 3 compras esta semana y llévate un Gas Premium gratis.', 'Todos', 3, 'semanal', 'vale_producto', 0.00, 'Vale por 1 Balón de Gas Premium', 15);

@@ -84,12 +84,54 @@
         /* --- 3D FLIP CARD BLACK EDITION --- */
         .vip-card-container {
             perspective: 1500px;
-            margin: 4rem auto 3rem;
+            margin: 0;
             max-width: 420px;
-            width: 92%;
+            width: 100%;
             height: 250px; /* Base height for mobile aspect ratio */
             cursor: pointer;
             z-index: 10;
+        }
+        
+        /* Layout superior del Perfil */
+        .profile-header-layout {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3rem;
+            max-width: 1000px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+        }
+        
+        .profile-card-column {
+            flex: 0 0 auto;
+            width: 100%;
+            max-width: 420px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .profile-info-column {
+            flex: 1;
+            background: #fff;
+            border-radius: 24px;
+            padding: 2.2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+            border: 1px solid #f1f5f9;
+            min-width: 300px;
+        }
+
+        @media (max-width: 991px) {
+            .profile-header-layout {
+                flex-direction: column;
+                gap: 2rem;
+                margin: 2rem auto;
+            }
+            .profile-info-column {
+                width: 100%;
+                max-width: 420px;
+            }
         }
 
         .vip-card-inner {
@@ -602,8 +644,7 @@
             background: #ffffff;
             position: relative;
         }
-        
-        .sidebar { z-index: 1000; }
+        .sidebar { z-index: 5000; }
 
         @media (max-width: 991px) {
             .admin-layout { display: block; }
@@ -635,47 +676,111 @@
                 include __DIR__ . '/../partials/header_admin.php'; 
             ?>
             
-    <!-- VIP CARD BLACK EDITION (3D FLIP) -->
-    <div class="vip-card-container" id="profileCard">
-        <div class="vip-card-inner">
-            <!-- FRONT SIDE -->
-            <div class="card-front">
-                <div class="card-shine"></div>
-                <div class="vip-card-header">
-                    <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" class="card-logo">
-                    <span class="membership-badge">ELITE MEMBER</span>
-                </div>
-                <div class="card-middle">
-                    <div class="label-small">Titular de Cuenta</div>
-                    <div class="holder-name"><?= htmlspecialchars($cliente['nombre']) ?></div>
-                </div>
-                <div class="card-footer">
-                    <div class="client-code"><?= htmlspecialchars($cliente['codigo']) ?></div>
-                    <div class="points-box">
-                        <span class="label-small">Saldo Actual</span>
-                        <b class="points-val" id="points-counter">0</b>
-                        <span class="points-unit">pts surgas</span>
+    <!-- VIEW: MI PERFIL (Por Defecto) -->
+    <div id="profile-main-view">
+        <!-- BANNER INCENTIVOS (Top de Mi Perfil) -->
+        <div style="max-width: 1000px; margin: 2rem auto -1rem; padding: 0 1.5rem;">
+            <div class="promo-banner-metas" onclick="window.location.hash='incentivos'" style="background: linear-gradient(135deg, #7c3aed, #4c1d95); border-radius: 20px; padding: 1.5rem; color: #fff; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 10px 25px rgba(124, 58, 237, 0.25); position: relative; overflow: hidden; cursor: pointer; transition: transform 0.3s;">
+            <!-- Elementos decorativos -->
+            <i class='bx bx-target-lock' style="position: absolute; right: -15px; top: -15px; font-size: 8rem; opacity: 0.1; transform: rotate(-15deg);"></i>
+            
+            <div style="position: relative; z-index: 2;">
+                <div style="font-size: 0.75rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; color: #c4b5fd; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;"><i class='bx bxs-zap' style="color: #fef08a;"></i> NUEVO PROGRAMA DE METAS</div>
+                <div style="font-size: 1.15rem; font-weight: 850; line-height: 1.2;">Cumple tus compras y gana<br><span style="color:#fef08a;">Vales de Descuento</span> automáticamente.</div>
+            </div>
+            
+            <div style="position: relative; z-index: 2; background: #fff; color: #7c3aed; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                <i class='bx bx-right-arrow-alt'></i>
+            </div>
+        </div>
+    </div>
+            
+    <!-- Header Section: Card + Info -->
+    <div class="profile-header-layout">
+        
+        <!-- Tarjeta VIP y Hint (Lado Izquierdo) -->
+        <div class="profile-card-column">
+            <!-- VIP CARD BLACK EDITION (3D FLIP) -->
+            <div class="vip-card-container" id="profileCard">
+                <div class="vip-card-inner">
+                    <!-- FRONT SIDE -->
+                    <div class="card-front">
+                        <div class="card-shine"></div>
+                        <div class="vip-card-header">
+                            <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" class="card-logo">
+                            <span class="membership-badge">ELITE MEMBER</span>
+                        </div>
+                        <div class="card-middle">
+                            <div class="label-small">Titular de Cuenta</div>
+                            <div class="holder-name"><?= htmlspecialchars($cliente['nombre']) ?></div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="client-code"><?= htmlspecialchars($cliente['codigo']) ?></div>
+                            <div class="points-box">
+                                <span class="label-small">Saldo Actual</span>
+                                <b class="points-val" id="points-counter">0</b>
+                                <span class="points-unit">pts surgas</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BACK SIDE -->
+                    <div class="card-back">
+                        <div class="qr-container">
+                            <div id="qrcode"></div>
+                        </div>
+                        <div class="qr-help">Muestra para acumular</div>
                     </div>
                 </div>
             </div>
 
-            <!-- BACK SIDE -->
-            <div class="card-back">
-                <div class="qr-container">
-                    <div id="qrcode"></div>
+            <div class="flip-hint" style="margin-top: 1rem;"><i class='bx bx-refresh'></i> Toca la tarjeta para ver tu QR</div>
+        </div>
+
+        <!-- Información del Cliente (Lado Derecho) -->
+        <div class="profile-info-column">
+            <h3 style="font-size: 1.1rem; font-weight: 800; color: #1e293b; margin-top: 0; margin-bottom: 1.5rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 0.8rem; display: flex; align-items: center; gap: 8px;">
+                <i class='bx bx-id-card' style="color: #7c3aed; font-size: 1.4rem;"></i> Información de Cuenta
+            </h3>
+            
+            <div style="display: grid; grid-template-columns: 1fr; gap: 1.25rem;">
+                <div style="display: flex; flex-direction: column;">
+                    <span style="font-size: 0.65rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">DNI / RUC</span>
+                    <span style="font-size: 0.95rem; font-weight: 700; color: #1e293b;"><?= htmlspecialchars($cliente['dni'] ?? $cliente['ruc'] ?? 'No registrado') ?></span>
                 </div>
-                <div class="qr-help">Muestra para acumular</div>
+                
+                <div style="display: flex; flex-direction: column;">
+                    <span style="font-size: 0.65rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">Teléfono</span>
+                    <span style="font-size: 0.95rem; font-weight: 700; color: #1e293b;"><?= htmlspecialchars($cliente['celular'] ?? 'No registrado') ?></span>
+                </div>
+                
+                <div style="display: flex; flex-direction: column;">
+                    <span style="font-size: 0.65rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">Ubicación</span>
+                    <span style="font-size: 0.95rem; font-weight: 700; color: #1e293b;"><?= htmlspecialchars(($cliente['direccion'] ?? 'Sin dirección') . ($cliente['departamento'] ? ', ' . $cliente['departamento'] : '')) ?></span>
+                </div>
+                
+                <div style="display: flex; flex-direction: column;">
+                    <span style="font-size: 0.65rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">Tipo de Cliente</span>
+                    <span style="font-size: 0.95rem; font-weight: 700; color: #7c3aed;"><?= htmlspecialchars($cliente['tipo_cliente'] ?? 'Normal') ?></span>
+                </div>
+                
+                <div style="display: flex; flex-direction: column;">
+                    <span style="font-size: 0.65rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">Miembro Desde</span>
+                    <span style="font-size: 0.95rem; font-weight: 700; color: #1e293b;"><?= isset($cliente['fecha_creacion']) ? date('d/m/Y', strtotime($cliente['fecha_creacion'])) : 'No registrado' ?></span>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="flip-hint"><i class='bx bx-refresh'></i> Toca la tarjeta para ver tu QR</div>
+    </div>
+</div>
+<!-- END VIEW: MI PERFIL -->
 
 
 
     <!-- Contenedor de Actividad y Canjes (Oculto por defecto para evitar parpadeos) -->
     <div class="container" style="display: none;">
         
+
         <!-- Tab Switcher -->
         <div class="tab-switcher">
             <div class="tab-btn active" onclick="switchTab('actividad', this)">
@@ -884,8 +989,7 @@
 
             // Toggle visibility of profile card elements
             const cardElements = [
-                document.getElementById('profileCard'),
-                document.querySelector('.flip-hint'),
+                document.getElementById('profile-main-view'),
                 document.querySelector('.btn-store')
             ];
 

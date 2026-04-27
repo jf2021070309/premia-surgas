@@ -54,6 +54,10 @@ if (!function_exists('isActiveLink')) {
                 <i class='bx bx-gift'></i>
                 <span>Mis Canjes</span>
             </a>
+            <a href="#" class="sidebar-item" onclick="window.location.hash='incentivos'; return false;">
+                <i class='bx bx-target-lock'></i>
+                <span>Metas & Vales</span>
+            </a>
         <?php else: ?>
             <div class="menu-label">Principal</div>
             <a href="<?= BASE_URL ?>panel" class="sidebar-item <?= isActiveLink('panel', $current_url) ?>">
@@ -178,6 +182,10 @@ if (!window._sidebarInitialized) {
 
     // --- Dynamic Sidebar Highlighting for Hashes ---
     function updateSidebarActive() {
+        // Solo aplicar la lógica de hash si estamos en la vista de cliente (que tiene hashes en los onclick)
+        const isClientView = document.querySelector('.sidebar-item[onclick*="actividad"]');
+        if (!isClientView) return; // Si somos admin, dejamos que PHP maneje el .active
+
         const hash = window.location.hash;
         const sidebarItems = document.querySelectorAll('.sidebar-item');
         

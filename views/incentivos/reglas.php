@@ -153,10 +153,13 @@ $pageSubtitle = 'Configura metas y premios por volumen de compra';
         .empty-state i { font-size: 4rem; color: #cbd5e1; display: block; margin-bottom: 1rem; }
         .empty-state p { font-size: 1rem; color: #94a3b8; font-weight: 600; }
 
+        .content-body { padding: 2.5rem; }
+
         @media (max-width: 768px) {
             .rules-grid { grid-template-columns: 1fr; }
             .form-row { grid-template-columns: 1fr; }
             .stats-row { grid-template-columns: 1fr 1fr; }
+            .content-body { padding: 1.5rem; }
         }
     </style>
 </head>
