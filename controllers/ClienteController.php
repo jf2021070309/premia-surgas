@@ -180,6 +180,8 @@ class ClienteController
         $codigo = $model->generarCodigo();
         $token = hash_hmac('sha256', $codigo, SECRET_KEY);
 
+        $defaultPassword = ($tipo_cliente === 'Normal') ? $dni : $ruc;
+
         $id = $model->create([
             'codigo' => $codigo,
             'dni' => $dni,
@@ -191,6 +193,7 @@ class ClienteController
             'direccion' => $dir,
             'departamento' => $dep,
             'token' => $token,
+            'password' => hash('sha256', $defaultPassword),
             'creado_por' => $_SESSION['id_usuario'],
         ]);
 
@@ -430,6 +433,32 @@ class ClienteController
         }
 
         echo json_encode(['success' => false, 'message' => 'RUC no encontrado o API no disponible. Digite manualmente.']);
+        exit;
+    }
+
+    public function changePassword(): void
+    {
+        header('Content-Type: application/json');
+        if (!isset($_SESSION['id_cliente'])) {
+            echo json_encode(['success' => false, 'message' => 'Sesión no válida.']);
+            exit;
+        }
+
+        $data = json_decode(file_get_contents('php://input'), true);
+        $newPass = trim($data['password'] ?? '');
+
+        if (strlen($newPass) < 4) {
+            echo json_encode(['success' => false, 'message' => 'La contraseña debe tener al menos 4 caracteres.']);
+            exit;
+        }
+
+        $model = new ClienteModel();
+        if ($model->updatePassword($_SESSION['id_cliente'], $newPass)) {
+            $this->audit->registrar($_SESSION['id_cliente'], 'CAMBIO_PASSWORD', 'Cliente actualizó su contraseña', 'SEGURIDAD');
+            echo json_encode(['success' => true, 'message' => 'Contraseña actualizada correctamente.']);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'No se pudo actualizar la contraseña.']);
+        }
         exit;
     }
 

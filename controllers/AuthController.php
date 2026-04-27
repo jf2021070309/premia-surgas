@@ -64,7 +64,7 @@ class AuthController {
 
             $_SESSION['id_usuario']       = $cliente['id'];
             $_SESSION['nombre_usuario']   = $cliente['nombre'];
-            $_SESSION['usuario']          = $cliente['dni'];
+            $_SESSION['usuario']          = $cliente['dni'] ?: $cliente['ruc'];
             $_SESSION['rol']              = 'cliente';
             $_SESSION['departamento']     = $cliente['departamento'];
             $_SESSION['session_id']       = $sessId;

@@ -98,10 +98,15 @@ class ClienteModel {
         return $stmt->fetchAll();
     }
 
-    public function loginCliente(string $dni, string $password): ?array {
-        $stmt = $this->db->prepare("SELECT * FROM clientes WHERE dni = ? AND password = ? LIMIT 1");
-        $stmt->execute([$dni, hash('sha256', $password)]);
+    public function loginCliente(string $identificador, string $password): ?array {
+        $stmt = $this->db->prepare("SELECT * FROM clientes WHERE (dni = ? OR ruc = ?) AND password = ? LIMIT 1");
+        $stmt->execute([$identificador, $identificador, hash('sha256', $password)]);
         return $stmt->fetch() ?: null;
+    }
+
+    public function updatePassword(int $id, string $newPassword): bool {
+        $stmt = $this->db->prepare("UPDATE clientes SET password = ? WHERE id = ?");
+        return $stmt->execute([hash('sha256', $newPassword), $id]);
     }
 
     public function sumarPuntos(int $id, int $puntos): void {

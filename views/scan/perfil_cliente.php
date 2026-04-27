@@ -1,5 +1,23 @@
 <!DOCTYPE html>
 <html lang="es">
+<?php
+$isDefaultPassword = false;
+$hpw = $cliente['password'] ?? '';
+if (empty($hpw)) {
+    // Si no tiene contraseña, es inseguro y se considera "default" para forzar cambio
+    $isDefaultPassword = true;
+} else {
+    $dni = trim($cliente['dni'] ?? '');
+    $ruc = trim($cliente['ruc'] ?? '');
+    
+    $checkDni = $dni ? hash('sha256', $dni) : '---no-dni---';
+    $checkRuc = $ruc ? hash('sha256', $ruc) : '---no-ruc---';
+    
+    if ($hpw === $checkDni || $hpw === $checkRuc) {
+        $isDefaultPassword = true;
+    }
+}
+?>
 
 <head>
     <meta charset="UTF-8">
@@ -1353,8 +1371,26 @@
             include __DIR__ . '/../partials/header_admin.php';
             ?>
 
+            <?php if ($isDefaultPassword): ?>
+                <!-- ALERT BANNER: DEFAULT PASSWORD -->
+                <div style="max-width: 1000px; margin: 2rem auto 0; padding: 0 1.5rem; position: relative; z-index: 10;">
+                    <div onclick="window.location.hash='seguridad'"
+                        style="background: linear-gradient(135deg, #f59e0b, #d97706); border-radius: 20px; padding: 1.25rem; color: #fff; display: flex; align-items: center; gap: 1rem; box-shadow: 0 10px 25px rgba(245, 158, 11, 0.2); cursor: pointer; transition: 0.3s; border-left: 5px solid #fff;">
+                        <div style="background: rgba(255,255,255,0.2); width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0;">
+                            <i class='bx bx-lock-open-alt'></i>
+                        </div>
+                        <div style="flex: 1;">
+                            <div style="font-size: 0.9rem; font-weight: 850; line-height: 1.2;">Contraseña predeterminada detectada</div>
+                            <div style="font-size: 0.75rem; opacity: 0.9; font-weight: 500; margin-top: 2px;">Tu seguridad es importante. Cambia tu contraseña (DNI/RUC) por una nueva aquí.</div>
+                        </div>
+                        <i class='bx bx-chevron-right' style="font-size: 1.5rem; opacity: 0.7;"></i>
+                    </div>
+                </div>
+            <?php endif; ?>
+
             <!-- VIEW: MI PERFIL (Por Defecto) -->
             <div id="profile-main-view">
+
                 <!-- BANNER INCENTIVOS (Top de Mi Perfil) -->
                 <div style="max-width: 1000px; margin: 2rem auto -1rem; padding: 0 1.5rem;">
                     <div class="promo-banner-metas" onclick="window.location.hash='incentivos'"
@@ -1490,6 +1526,9 @@
                     </div>
                     <div class="tab-btn" onclick="switchTab('incentivos', this)">
                         <i class='bx bx-target-lock'></i> Metas & Vales
+                    </div>
+                    <div class="tab-btn" onclick="switchTab('seguridad', this)">
+                        <i class='bx bx-lock-alt'></i> Seguridad
                     </div>
                 </div>
 
@@ -1666,6 +1705,38 @@
                     </div>
                 </div>
 
+                <!-- PANE 4: SEGURIDAD -->
+                <div id="pane-seguridad" class="tab-content-pane">
+                    <div style="max-width: 500px; margin: 0 auto; background: #fff; padding: 2.5rem; border-radius: 24px; border: 1px solid #f1f5f9; box-shadow: 0 10px 30px rgba(0,0,0,0.02);">
+                        <div style="text-align: center; margin-bottom: 2rem;">
+                            <div style="background: #f8fafc; width: 64px; height: 64px; border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: #7c3aed; font-size: 2rem;">
+                                <i class='bx bx-lock-alt'></i>
+                            </div>
+                            <h3 style="font-size: 1.3rem; font-weight: 850; color: #1e293b;">Cambiar Contraseña</h3>
+                            <p style="font-size: 0.85rem; color: #94a3b8; font-weight: 500; margin-top: 5px;">Asegura tu cuenta con una nueva clave.</p>
+                        </div>
+
+                        <div class="filter-group" style="margin-bottom: 1.5rem;">
+                            <label class="filter-label">NUEVA CONTRASEÑA</label>
+                            <input type="password" id="new-password" class="filter-input" placeholder="Mínimo 4 caracteres" style="width: 100%;">
+                        </div>
+
+                        <button onclick="updateClientPassword()" style="width: 100%; height: 52px; background: #1e293b; color: #fff; border: none; border-radius: 14px; font-weight: 800; font-size: 0.9rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                            <i class='bx bx-check-shield' style="font-size: 1.2rem;"></i>
+                            ACTUALIZAR CONTRASEÑA
+                        </button>
+                        
+                        <?php if ($isDefaultPassword): ?>
+                        <div style="margin-top: 1.5rem; background: #fffbeb; padding: 1rem; border-radius: 14px; border: 1px solid #fef3c7; display: flex; gap: 10px; align-items: flex-start;">
+                            <i class='bx bx-info-circle' style="color: #d97706; font-size: 1.2rem; margin-top: 2px;"></i>
+                            <div style="font-size: 0.75rem; color: #b45309; font-weight: 600; line-height: 1.4;">
+                                Actualmente estás usando tu DNI/RUC como clave. Te recomendamos cambiarla lo antes posible.
+                            </div>
+                        </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+
                 <div class="footer">
                     &copy; <?= date('Y') ?> Surgas — Premium Digital Member Card
                 </div>
@@ -1758,6 +1829,10 @@
                 if (titleEl) titleEl.innerText = 'Metas y Vales';
                 if (subTitleEl) subTitleEl.innerText = 'Gana vales por tus compras';
                 switchTab('incentivos', document.querySelectorAll('.tab-btn')[2], true);
+            } else if (hash === 'seguridad') {
+                if (titleEl) titleEl.innerText = 'Seguridad de Cuenta';
+                if (subTitleEl) subTitleEl.innerText = 'Protege tu acceso';
+                switchTab('seguridad', document.querySelectorAll('.tab-btn')[3], true);
             } else {
                 // Default: Profile view
                 if (titleEl) titleEl.innerText = 'Mi Perfil';
@@ -1765,6 +1840,34 @@
                 window.location.hash = '';
                 switchTab('actividad', document.querySelectorAll('.tab-btn')[0], false);
             }
+        }
+
+        function updateClientPassword() {
+            const pass = document.getElementById('new-password').value;
+            if (!pass || pass.length < 4) {
+                alert('La contraseña debe tener al menos 4 caracteres.');
+                return;
+            }
+
+            if (!confirm('¿Estás seguro de cambiar tu contraseña?')) return;
+
+            fetch(BASE_URL + 'clientes/changePassword', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password: pass })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Contraseña actualizada con éxito. Úsala en tu próximo inicio de sesión.');
+                    location.reload();
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            })
+            .catch(err => {
+                alert('Error de conexión al intentar actualizar.');
+            });
         }
 
         // --- Incentivos Logic ---

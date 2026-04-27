@@ -58,6 +58,10 @@ if (!function_exists('isActiveLink')) {
                 <i class='bx bx-target-lock'></i>
                 <span>Metas & Vales</span>
             </a>
+            <a href="#" class="sidebar-item" onclick="window.location.hash='seguridad'; return false;">
+                <i class='bx bx-lock-alt'></i>
+                <span>Seguridad</span>
+            </a>
         <?php else: ?>
             <div class="menu-label">Principal</div>
             <a href="<?= BASE_URL ?>panel" class="sidebar-item <?= isActiveLink('panel', $current_url) ?>">
