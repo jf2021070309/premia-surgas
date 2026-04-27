@@ -732,14 +732,53 @@
         }
 
         async function initScanner() {
-            document.getElementById('qr-reader-container').style.display = 'block';
-            if (!html5QrCode) html5QrCode = new Html5Qrcode("reader");
-            const config = { fps: 20, qrbox: { width: 250, height: 250 }, aspectRatio: 1.0 };
+            const container = document.getElementById('qr-reader-container');
+            container.style.display = 'block';
+            
+            // Reiniciar instancia si ya existe
+            if (html5QrCode) {
+                try { await html5QrCode.stop(); } catch(e) {}
+            }
+            
+            html5QrCode = new Html5Qrcode("reader");
+            const config = { 
+                fps: 25, 
+                qrbox: (viewfinderWidth, viewfinderHeight) => {
+                    const minEdge = Math.min(viewfinderWidth, viewfinderHeight);
+                    const size = Math.floor(minEdge * 0.7);
+                    return { width: size, height: size };
+                }
+            };
+
             try {
+                // Intento 1: Cámara trasera preferida
                 await html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess);
             } catch (err) {
-                Swal.fire({ icon: 'error', title: 'Error de cámara', text: 'No se pudo acceder a la cámara.' });
-                document.getElementById('qr-reader-container').style.display = 'none';
+                console.warn("Error con facingMode: environment:", err);
+                try {
+                    // Intento 2: Buscar cámaras disponibles manualmente
+                    const devices = await Html5Qrcode.getCameras();
+                    if (devices && devices.length > 0) {
+                        // Usar la última cámara (usualmente la trasera en móviles)
+                        const cameraId = devices[devices.length - 1].id;
+                        await html5QrCode.start(cameraId, config, onScanSuccess);
+                    } else {
+                        throw new Error("No cameras found");
+                    }
+                } catch (err2) {
+                    console.error("Error final al iniciar cámara:", err2);
+                    Swal.fire({ 
+                        icon: 'error', 
+                        title: 'Error de cámara', 
+                        html: `No se pudo acceder a la cámara.<br><br>
+                               <small style="color: #666; font-weight: 500;">
+                               1. Asegúrate de dar permisos en el navegador.<br>
+                               2. Verifica que el sitio use <b>HTTPS</b>.<br>
+                               3. Cierra otras apps que usen la cámara.
+                               </small>`
+                    });
+                    container.style.display = 'none';
+                }
             }
         }
 
