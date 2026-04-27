@@ -486,6 +486,48 @@
             .elite-abono-card { flex-direction: column; gap: 1.5rem; text-align: center; padding: 1.5rem !important; }
             .elite-add-btn { width: 100%; justify-content: center; height: 60px !important; }
         }
+
+        /* ── Scanner Overlay ── */
+        .scanner-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(8px);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            animation: fadeIn 0.3s ease;
+        }
+        .scanner-modal {
+            background: #fff;
+            width: 100%;
+            max-width: 480px;
+            border-radius: 32px;
+            overflow: hidden;
+            box-shadow: 0 40px 120px rgba(0, 0, 0, 0.6);
+            display: flex;
+            flex-direction: column;
+            animation: modalPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes modalPop { from { transform: scale(0.8) translateY(40px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        #reader {
+            width: 100% !important;
+            border: none !important;
+            background: #000;
+        }
+        #reader video {
+            object-fit: cover !important;
+        }
+        #reader__scan_region {
+            background: #000 !important;
+        }
+        #reader__dashboard {
+            display: none !important;
+        }
     </style>
 </head>
 <body onload="initLayout()">
@@ -553,23 +595,48 @@
                     </div>
                 </div>
 
-                <!-- QR Scanner floating card -->
-                <div id="qr-reader-container" style="display: none;">
-                    <div class="card" style="margin-bottom: 0;">
-                        <div class="card-header">
-                            <div class="header-title-flex">
-                                <i class='bx bx-camera'></i>
-                                <div class="title-text-group">
-                                    <h3>Escaneando QR</h3>
-                                    <span>Apunta la cámara al código QR del cliente</span>
+                <!-- QR Scanner Overlay -->
+                <div id="qr-reader-overlay" class="scanner-overlay">
+                    <div class="scanner-modal">
+                        <div style="padding: 1.5rem 1.8rem; background: #fff; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;">
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <div style="background: #fdf2f2; color: #800000; width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                                    <i class='bx bx-camera'></i>
+                                </div>
+                                <div style="display: flex; flex-direction: column;">
+                                    <h3 style="font-size: 0.95rem; font-weight: 850; color: #1e293b; margin: 0;">Escaneando QR</h3>
+                                    <span style="font-size: 0.7rem; color: #94a3b8; font-weight: 600;">Apunta al código del cliente</span>
                                 </div>
                             </div>
-                        </div>
-                        <div style="padding: 1.25rem 1.8rem;">
-                            <div id="reader"></div>
-                            <button class="btn-close-scanner" onclick="stopScanner()">
-                                <i class='bx bx-x'></i> Cerrar escáner
+                            <button onclick="stopScanner()" style="background: #f1f5f9; border: none; width: 32px; height: 32px; border-radius: 50%; color: #64748b; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                                <i class='bx bx-x'></i>
                             </button>
+                        </div>
+                        
+                        <div style="position: relative; background: #000;">
+                            <div id="reader"></div>
+                            <!-- Visual Frame Overlay -->
+                            <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; display: flex; align-items: center; justify-content: center;">
+                                <div style="width: 250px; height: 250px; border: 2px solid rgba(255,255,255,0.3); border-radius: 24px; position: relative;">
+                                    <div style="position: absolute; top: -2px; left: -2px; width: 40px; height: 40px; border-top: 4px solid #fff; border-left: 4px solid #fff; border-radius: 20px 0 0 0;"></div>
+                                    <div style="position: absolute; top: -2px; right: -2px; width: 40px; height: 40px; border-top: 4px solid #fff; border-right: 4px solid #fff; border-radius: 0 20px 0 0;"></div>
+                                    <div style="position: absolute; bottom: -2px; left: -2px; width: 40px; height: 40px; border-bottom: 4px solid #fff; border-left: 4px solid #fff; border-radius: 0 0 0 20px;"></div>
+                                    <div style="position: absolute; bottom: -2px; right: -2px; width: 40px; height: 40px; border-bottom: 4px solid #fff; border-right: 4px solid #fff; border-radius: 0 0 20px 0;"></div>
+                                    
+                                    <!-- Animated scanning line -->
+                                    <div style="position: absolute; width: 100%; height: 2px; background: linear-gradient(to right, transparent, #fff, transparent); top: 0; box-shadow: 0 0 15px #fff; animation: scanMove 2s infinite ease-in-out;"></div>
+                                </div>
+                                <style>
+                                    @keyframes scanMove { 0% { top: 5%; opacity: 0; } 50% { opacity: 1; } 100% { top: 95%; opacity: 0; } }
+                                </style>
+                            </div>
+                        </div>
+
+                        <div style="padding: 1.5rem; background: #f8fafc; text-align: center;">
+                            <div style="display: flex; align-items: center; justify-content: center; gap: 8px; color: #64748b; font-size: 0.75rem; font-weight: 600;">
+                                <i class='bx bx-loader-alt bx-spin' style="color: #800000;"></i>
+                                BUSCANDO CÓDIGO...
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -732,34 +799,31 @@
         }
 
         async function initScanner() {
-            const container = document.getElementById('qr-reader-container');
-            container.style.display = 'block';
+            const overlay = document.getElementById('qr-reader-overlay');
+            overlay.style.display = 'flex';
             
-            // Reiniciar instancia si ya existe
             if (html5QrCode) {
                 try { await html5QrCode.stop(); } catch(e) {}
             }
             
             html5QrCode = new Html5Qrcode("reader");
             const config = { 
-                fps: 25, 
-                qrbox: (viewfinderWidth, viewfinderHeight) => {
-                    const minEdge = Math.min(viewfinderWidth, viewfinderHeight);
-                    const size = Math.floor(minEdge * 0.7);
-                    return { width: size, height: size };
+                fps: 15, // Bajamos FPS para que el procesador del móvil se enfoque en el detalle
+                qrbox: { width: 250, height: 250 },
+                aspectRatio: 1.0,
+                experimentalFeatures: {
+                    useBarCodeDetectorIfSupported: true
                 }
             };
 
             try {
-                // Intento 1: Cámara trasera preferida
+                // Forzamos video a pantalla completa en el contenedor
                 await html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess);
             } catch (err) {
                 console.warn("Error con facingMode: environment:", err);
                 try {
-                    // Intento 2: Buscar cámaras disponibles manualmente
                     const devices = await Html5Qrcode.getCameras();
                     if (devices && devices.length > 0) {
-                        // Usar la última cámara (usualmente la trasera en móviles)
                         const cameraId = devices[devices.length - 1].id;
                         await html5QrCode.start(cameraId, config, onScanSuccess);
                     } else {
@@ -770,14 +834,9 @@
                     Swal.fire({ 
                         icon: 'error', 
                         title: 'Error de cámara', 
-                        html: `No se pudo acceder a la cámara.<br><br>
-                               <small style="color: #666; font-weight: 500;">
-                               1. Asegúrate de dar permisos en el navegador.<br>
-                               2. Verifica que el sitio use <b>HTTPS</b>.<br>
-                               3. Cierra otras apps que usen la cámara.
-                               </small>`
+                        text: 'No se pudo acceder a la cámara.'
                     });
-                    container.style.display = 'none';
+                    overlay.style.display = 'none';
                 }
             }
         }
@@ -798,11 +857,23 @@
         }
 
         function stopScanner() {
-            if (html5QrCode) html5QrCode.stop().then(() => document.getElementById('qr-reader-container').style.display = 'none');
-            else document.getElementById('qr-reader-container').style.display = 'none';
+            if (html5QrCode) {
+                html5QrCode.stop().then(() => {
+                    document.getElementById('qr-reader-overlay').style.display = 'none';
+                }).catch(() => {
+                    document.getElementById('qr-reader-overlay').style.display = 'none';
+                });
+            } else {
+                document.getElementById('qr-reader-overlay').style.display = 'none';
+            }
         }
 
         function onScanSuccess(decodedText) {
+            console.log("QR Detectado:", decodedText);
+            
+            // Vibración feedback
+            if (navigator.vibrate) navigator.vibrate(100);
+
             let codigo = decodedText;
             if (decodedText.includes('c=')) {
                 const urlParams = new URLSearchParams(decodedText.split('?')[1]);
@@ -810,12 +881,19 @@
             } else if (decodedText.includes('/')) {
                 codigo = decodedText.split('/').pop();
             }
-            if (html5QrCode && html5QrCode.getState() === 2) {
+            
+            if (html5QrCode) {
                 html5QrCode.stop().then(() => {
-                    document.getElementById('qr-reader-container').style.display = 'none';
+                    document.getElementById('qr-reader-overlay').style.display = 'none';
+                    buscarCliente(codigo);
+                }).catch(() => {
+                    document.getElementById('qr-reader-overlay').style.display = 'none';
                     buscarCliente(codigo);
                 });
-            } else buscarCliente(codigo);
+            } else {
+                document.getElementById('qr-reader-overlay').style.display = 'none';
+                buscarCliente(codigo);
+            }
         }
 
         function buscarManual() {
