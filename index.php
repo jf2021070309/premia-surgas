@@ -68,6 +68,7 @@ $routes = [
     ['GET',  'clientes/estado',   'ClienteController', 'cambiarEstado'],
     ['GET',  'clientes/consultarDni', 'ClienteController', 'consultarDni'],
     ['GET',  'clientes/consultarRuc', 'ClienteController', 'consultarRuc'],
+    ['POST', 'clientes/changePassword', 'ClienteController', 'changePassword'],
 
     // —— Productos (Admin) ——
     ['GET',  'productos',          'ProductoController', 'index'],

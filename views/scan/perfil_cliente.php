@@ -9,10 +9,10 @@ if (empty($hpw)) {
 } else {
     $dni = trim($cliente['dni'] ?? '');
     $ruc = trim($cliente['ruc'] ?? '');
-    
+
     $checkDni = $dni ? hash('sha256', $dni) : '---no-dni---';
     $checkRuc = $ruc ? hash('sha256', $ruc) : '---no-ruc---';
-    
+
     if ($hpw === $checkDni || $hpw === $checkRuc) {
         $isDefaultPassword = true;
     }
@@ -27,9 +27,11 @@ if (empty($hpw)) {
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-layout.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-tables.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-layout.css">
+
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         :root {
             --primary: #821515;
@@ -1376,12 +1378,15 @@ if (empty($hpw)) {
                 <div style="max-width: 1000px; margin: 2rem auto 0; padding: 0 1.5rem; position: relative; z-index: 10;">
                     <div onclick="window.location.hash='seguridad'"
                         style="background: linear-gradient(135deg, #f59e0b, #d97706); border-radius: 20px; padding: 1.25rem; color: #fff; display: flex; align-items: center; gap: 1rem; box-shadow: 0 10px 25px rgba(245, 158, 11, 0.2); cursor: pointer; transition: 0.3s; border-left: 5px solid #fff;">
-                        <div style="background: rgba(255,255,255,0.2); width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0;">
+                        <div
+                            style="background: rgba(255,255,255,0.2); width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0;">
                             <i class='bx bx-lock-open-alt'></i>
                         </div>
                         <div style="flex: 1;">
-                            <div style="font-size: 0.9rem; font-weight: 850; line-height: 1.2;">Contraseña predeterminada detectada</div>
-                            <div style="font-size: 0.75rem; opacity: 0.9; font-weight: 500; margin-top: 2px;">Tu seguridad es importante. Cambia tu contraseña (DNI/RUC) por una nueva aquí.</div>
+                            <div style="font-size: 0.9rem; font-weight: 850; line-height: 1.2;">Contraseña predeterminada
+                                detectada</div>
+                            <div style="font-size: 0.75rem; opacity: 0.9; font-weight: 500; margin-top: 2px;">Tu seguridad
+                                es importante. Cambia tu contraseña (DNI/RUC) por una nueva aquí.</div>
                         </div>
                         <i class='bx bx-chevron-right' style="font-size: 1.5rem; opacity: 0.7;"></i>
                     </div>
@@ -1402,7 +1407,8 @@ if (empty($hpw)) {
                         <div style="position: relative; z-index: 2;">
                             <div
                                 style="font-size: 0.75rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; color: #c4b5fd; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
-                                <i class='bx bxs-zap' style="color: #fef08a;"></i> NUEVO PROGRAMA DE METAS</div>
+                                <i class='bx bxs-zap' style="color: #fef08a;"></i> NUEVO PROGRAMA DE METAS
+                            </div>
                             <div style="font-size: 1.15rem; font-weight: 850; line-height: 1.2;">Cumple tus compras y
                                 gana<br><span style="color:#fef08a;">Vales de Descuento</span> automáticamente.</div>
                         </div>
@@ -1579,7 +1585,8 @@ if (empty($hpw)) {
                                             <td class="col-date">
                                                 <?= date('d/m/Y', strtotime($v['fecha'])) ?>
                                                 <div style="font-size: 0.7rem; color: #94a3b8; font-weight: 600;">
-                                                    <?= date('H:i', strtotime($v['fecha'])) ?></div>
+                                                    <?= date('H:i', strtotime($v['fecha'])) ?>
+                                                </div>
                                             </td>
                                             <td class="col-type">
                                                 <span class="type-badge <?= $tipoClase ?>"><?= $tipoTexto ?></span>
@@ -1640,10 +1647,12 @@ if (empty($hpw)) {
                                         <div class="canje-info-main" style="min-width: 0;">
                                             <div class="canje-prize-title"
                                                 style="font-size: 0.95rem; font-weight: 850; color: #1e293b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                                <?= htmlspecialchars($c['premio_nombre']) ?></div>
+                                                <?= htmlspecialchars($c['premio_nombre']) ?>
+                                            </div>
                                             <div class="modality-tag-mini"
                                                 style="font-size: 0.6rem; font-weight: 800; color: #821515; background: rgba(130, 21, 21, 0.05); padding: 2px 8px; border-radius: 6px; display: inline-block; margin-top: 4px; text-transform: uppercase; white-space: nowrap;">
-                                                <?= $modStr ?></div>
+                                                <?= $modStr ?>
+                                            </div>
                                             <div class="canje-info-meta"
                                                 style="font-size: 0.7rem; color: #94a3b8; font-weight: 600; margin-top: 6px; display: flex; align-items: center; gap: 4px;">
                                                 <i class='bx bx-time' style="font-size: 0.85rem;"></i>
@@ -1658,7 +1667,8 @@ if (empty($hpw)) {
                                                 style="font-size: 1.15rem; font-weight: 900; color: #e11d48; line-height: 1;">
                                                 -<?= $c['puntos_usados'] ?> <span
                                                     style="font-size: 0.7rem; opacity: 0.5;">PTS</span></div>
-                                            <div class="canje-status-pill badge-<?= $c['estado'] ?>" style="margin-top: 6px; font-size: 0.5rem; padding: 2px 6px;">
+                                            <div class="canje-status-pill badge-<?= $c['estado'] ?>"
+                                                style="margin-top: 6px; font-size: 0.5rem; padding: 2px 6px;">
                                                 <?= str_replace('_', ' ', $c['estado']) ?>
                                             </div>
                                         </div>
@@ -1707,32 +1717,40 @@ if (empty($hpw)) {
 
                 <!-- PANE 4: SEGURIDAD -->
                 <div id="pane-seguridad" class="tab-content-pane">
-                    <div style="max-width: 500px; margin: 0 auto; background: #fff; padding: 2.5rem; border-radius: 24px; border: 1px solid #f1f5f9; box-shadow: 0 10px 30px rgba(0,0,0,0.02);">
+                    <div
+                        style="max-width: 500px; margin: 0 auto; background: #fff; padding: 2.5rem; border-radius: 24px; border: 1px solid #f1f5f9; box-shadow: 0 10px 30px rgba(0,0,0,0.02);">
                         <div style="text-align: center; margin-bottom: 2rem;">
-                            <div style="background: #f8fafc; width: 64px; height: 64px; border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: #7c3aed; font-size: 2rem;">
+                            <div
+                                style="background: #f8fafc; width: 64px; height: 64px; border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: #7c3aed; font-size: 2rem;">
                                 <i class='bx bx-lock-alt'></i>
                             </div>
                             <h3 style="font-size: 1.3rem; font-weight: 850; color: #1e293b;">Cambiar Contraseña</h3>
-                            <p style="font-size: 0.85rem; color: #94a3b8; font-weight: 500; margin-top: 5px;">Asegura tu cuenta con una nueva clave.</p>
+                            <p style="font-size: 0.85rem; color: #94a3b8; font-weight: 500; margin-top: 5px;">Asegura tu
+                                cuenta con una nueva clave.</p>
                         </div>
 
                         <div class="filter-group" style="margin-bottom: 1.5rem;">
                             <label class="filter-label">NUEVA CONTRASEÑA</label>
-                            <input type="password" id="new-password" class="filter-input" placeholder="Mínimo 4 caracteres" style="width: 100%;">
+                            <input type="password" id="new-password" class="filter-input"
+                                placeholder="Mínimo 4 caracteres" style="width: 100%;">
                         </div>
 
-                        <button onclick="updateClientPassword()" style="width: 100%; height: 52px; background: #1e293b; color: #fff; border: none; border-radius: 14px; font-weight: 800; font-size: 0.9rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                        <button onclick="updateClientPassword()"
+                            style="width: 100%; height: 52px; background: #1e293b; color: #fff; border: none; border-radius: 14px; font-weight: 800; font-size: 0.9rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px;">
                             <i class='bx bx-check-shield' style="font-size: 1.2rem;"></i>
                             ACTUALIZAR CONTRASEÑA
                         </button>
-                        
+
                         <?php if ($isDefaultPassword): ?>
-                        <div style="margin-top: 1.5rem; background: #fffbeb; padding: 1rem; border-radius: 14px; border: 1px solid #fef3c7; display: flex; gap: 10px; align-items: flex-start;">
-                            <i class='bx bx-info-circle' style="color: #d97706; font-size: 1.2rem; margin-top: 2px;"></i>
-                            <div style="font-size: 0.75rem; color: #b45309; font-weight: 600; line-height: 1.4;">
-                                Actualmente estás usando tu DNI/RUC como clave. Te recomendamos cambiarla lo antes posible.
+                            <div
+                                style="margin-top: 1.5rem; background: #fffbeb; padding: 1rem; border-radius: 14px; border: 1px solid #fef3c7; display: flex; gap: 10px; align-items: flex-start;">
+                                <i class='bx bx-info-circle'
+                                    style="color: #d97706; font-size: 1.2rem; margin-top: 2px;"></i>
+                                <div style="font-size: 0.75rem; color: #b45309; font-weight: 600; line-height: 1.4;">
+                                    Actualmente estás usando tu DNI/RUC como clave. Te recomendamos cambiarla lo antes
+                                    posible.
+                                </div>
                             </div>
-                        </div>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -1745,6 +1763,7 @@ if (empty($hpw)) {
     </div>
 
     <script>
+        const BASE_URL = '<?= BASE_URL ?>';
         const cardContainer = document.getElementById('profileCard');
         cardContainer.addEventListener('click', () => {
             cardContainer.classList.toggle('is-flipped');
@@ -1845,28 +1864,65 @@ if (empty($hpw)) {
         function updateClientPassword() {
             const pass = document.getElementById('new-password').value;
             if (!pass || pass.length < 4) {
-                alert('La contraseña debe tener al menos 4 caracteres.');
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Contraseña corta',
+                    text: 'La contraseña debe tener al menos 4 caracteres.',
+                    confirmButtonColor: '#1e293b'
+                });
                 return;
             }
 
-            if (!confirm('¿Estás seguro de cambiar tu contraseña?')) return;
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "Tu sesión se mantendrá activa, pero deberás usar la nueva clave la próxima vez.",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#1e293b',
+                cancelButtonColor: '#94a3b8',
+                confirmButtonText: 'Sí, actualizar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Procesando...',
+                        didOpen: () => { Swal.showLoading(); }
+                    });
 
-            fetch(BASE_URL + 'clientes/changePassword', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ password: pass })
-            })
-            .then(r => r.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Contraseña actualizada con éxito. Úsala en tu próximo inicio de sesión.');
-                    location.reload();
-                } else {
-                    alert('Error: ' + data.message);
+                    fetch(BASE_URL + 'clientes/changePassword', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ password: pass })
+                    })
+                        .then(r => r.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: '¡Actualizado!',
+                                    text: 'Tu contraseña ha sido cambiada con éxito.',
+                                    confirmButtonColor: '#1e293b'
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: data.message,
+                                    confirmButtonColor: '#1e293b'
+                                });
+                            }
+                        })
+                        .catch(err => {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error de conexión',
+                                text: 'No se pudo contactar con el servidor.',
+                                confirmButtonColor: '#1e293b'
+                            });
+                        });
                 }
-            })
-            .catch(err => {
-                alert('Error de conexión al intentar actualizar.');
             });
         }
 
@@ -2104,7 +2160,6 @@ if (empty($hpw)) {
             }
         }, interval);
     </script>
-    <script> const BASE_URL = '<?= BASE_URL ?>'; </script>
     <script src="<?= BASE_URL ?>assets/js/session_check.js"></script>
 </body>
 
