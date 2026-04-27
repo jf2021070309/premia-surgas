@@ -684,6 +684,9 @@
             <div class="tab-btn" onclick="switchTab('canjes', this)">
                 <i class='bx bx-gift'></i> Canjes
             </div>
+            <div class="tab-btn" onclick="switchTab('incentivos', this)">
+                <i class='bx bx-target-lock'></i> Metas & Vales
+            </div>
         </div>
 
         <!-- PANE 1: ACTIVIDAD -->
@@ -820,6 +823,23 @@
                 </div>
             <?php endif; ?>
         </div>
+
+        <!-- PANE 3: INCENTIVOS -->
+        <div id="pane-incentivos" class="tab-content-pane">
+            <div id="incentivos-loader" style="padding: 5rem 2rem; text-align: center; color: #94a3b8;">
+                <i class='bx bx-loader-alt bx-spin' style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                <div>Cargando tus metas...</div>
+            </div>
+            <div id="incentivos-content" style="display: none;">
+                <!-- PROGRESO DE METAS -->
+                <h3 style="font-size: 1.1rem; font-weight: 850; color: #1e293b; margin-bottom: 1rem;"><i class='bx bx-target-lock' style="color:#7c3aed"></i> Progreso de Metas (<span id="inc-periodo-lbl"></span>)</h3>
+                <div id="progreso-container" style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem;"></div>
+
+                <!-- VALES DISPONIBLES -->
+                <h3 style="font-size: 1.1rem; font-weight: 850; color: #1e293b; margin-bottom: 1rem;"><i class='bx bx-receipt' style="color:#16a34a"></i> Mis Vales Disponibles</h3>
+                <div id="vales-container" style="display: flex; flex-direction: column; gap: 1rem;"></div>
+            </div>
+        </div>
         
         <div class="footer">
             &copy; <?= date('Y') ?> Surgas — Premium Digital Member Card
@@ -857,6 +877,10 @@
             // Show selected pane
             const targetPane = document.getElementById('pane-' + paneId);
             if (targetPane) targetPane.classList.add('active');
+
+            if (paneId === 'incentivos' && !window.incentivosLoaded) {
+                loadIncentivos();
+            }
 
             // Toggle visibility of profile card elements
             const cardElements = [
@@ -906,6 +930,10 @@
                 if(titleEl) titleEl.innerText = 'Historial de Actividad';
                 if(subTitleEl) subTitleEl.innerText = 'Tus puntos acumulados';
                 switchTab('actividad', document.querySelectorAll('.tab-btn')[0], true);
+            } else if (hash === 'incentivos') {
+                if(titleEl) titleEl.innerText = 'Metas y Vales';
+                if(subTitleEl) subTitleEl.innerText = 'Gana vales por tus compras';
+                switchTab('incentivos', document.querySelectorAll('.tab-btn')[2], true);
             } else {
                 // Default: Profile view
                 if(titleEl) titleEl.innerText = 'Mi Perfil';
@@ -913,6 +941,112 @@
                 window.location.hash = '';
                 switchTab('actividad', document.querySelectorAll('.tab-btn')[0], false);
             }
+        }
+
+        // --- Incentivos Logic ---
+        function loadIncentivos() {
+            window.incentivosLoaded = true;
+            fetch(BASE_URL + 'incentivos/progresoJson?cliente_id=<?= $cliente['id'] ?>')
+                .then(r => r.json())
+                .then(data => {
+                    document.getElementById('incentivos-loader').style.display = 'none';
+                    document.getElementById('incentivos-content').style.display = 'block';
+                    
+                    if(data.success) {
+                        renderProgreso(data.progreso);
+                        renderVales(data.vales);
+                    } else {
+                        document.getElementById('incentivos-content').innerHTML = '<div style="text-align:center; padding:3rem; color:#ef4444;">Error al cargar datos.</div>';
+                    }
+                })
+                .catch(err => {
+                    document.getElementById('incentivos-loader').innerHTML = '<div style="color:#ef4444;">Error de conexión.</div>';
+                });
+        }
+
+        function renderProgreso(progreso) {
+            const container = document.getElementById('progreso-container');
+            if(!progreso || progreso.length === 0) {
+                container.innerHTML = '<div style="background:#f8fafc; padding:2rem; border-radius:16px; text-align:center; color:#94a3b8; font-size:0.9rem; font-weight:600;">No hay metas activas en este momento.</div>';
+                return;
+            }
+
+            let html = '';
+            progreso.forEach(p => {
+                document.getElementById('inc-periodo-lbl').innerText = p.periodo.toUpperCase();
+                const color = p.cumplida ? '#16a34a' : '#7c3aed';
+                const bg = p.cumplida ? '#dcfce7' : '#f3e8ff';
+                const statusText = p.vale_generado ? '<span style="color:#16a34a; font-weight:800; font-size:0.7rem;"><i class="bx bx-check-circle"></i> VALE GENERADO</span>' : `<span style="font-weight:700; font-size:0.8rem; color:#64748b;">${p.actual} / ${p.meta} ops</span>`;
+
+                html += `
+                    <div style="background:#fff; border:1px solid #f1f5f9; border-radius:20px; padding:1.5rem; box-shadow:0 4px 15px rgba(0,0,0,0.02);">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1rem;">
+                            <div>
+                                <div style="font-weight:850; color:#1e293b; font-size:1rem;">${p.regla_nombre}</div>
+                                <div style="font-size:0.75rem; color:#94a3b8; font-weight:600; margin-top:2px;">Premio: ${p.premio}</div>
+                            </div>
+                            <div style="background:${bg}; color:${color}; padding:6px 12px; border-radius:50px; font-weight:900; font-size:0.7rem;">
+                                ${p.porcentaje}%
+                            </div>
+                        </div>
+                        
+                        <div style="height:12px; background:#f1f5f9; border-radius:50px; overflow:hidden; margin-bottom:0.8rem;">
+                            <div style="height:100%; background:${color}; width:${p.porcentaje}%; border-radius:50px; transition:1s ease;"></div>
+                        </div>
+                        
+                        <div style="display:flex; justify-content:flex-end;">
+                            ${statusText}
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function renderVales(vales) {
+            const container = document.getElementById('vales-container');
+            if(!vales || vales.length === 0) {
+                container.innerHTML = '<div style="background:#f8fafc; padding:2rem; border-radius:16px; text-align:center; color:#94a3b8; font-size:0.9rem; font-weight:600;">No tienes vales disponibles. ¡Completa tus metas!</div>';
+                return;
+            }
+
+            let html = '';
+            vales.forEach(v => {
+                // Formatting date:
+                const d = new Date(v.fecha_vencimiento);
+                const dateStr = d.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                
+                const valStr = v.tipo_premio === 'vale_descuento' ? `${parseInt(v.valor)}%` : `S/ ${parseFloat(v.valor).toFixed(2)}`;
+
+                html += `
+                    <div style="background:linear-gradient(135deg, #1e293b, #0f172a); border-radius:24px; padding:1.5rem; color:#fff; position:relative; overflow:hidden; box-shadow:0 10px 25px rgba(0,0,0,0.15);">
+                        <!-- Decoraciones -->
+                        <i class='bx bxs-star' style="position:absolute; top:-20px; right:-20px; font-size:8rem; opacity:0.05;"></i>
+                        
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.5rem; position:relative; z-index:2;">
+                            <div>
+                                <div style="font-size:0.7rem; font-weight:800; color:#94a3b8; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">Vale Disponible</div>
+                                <div style="font-size:1.1rem; font-weight:850; color:#fff;">${v.descripcion}</div>
+                            </div>
+                            <div style="background:#fef08a; color:#854d0e; font-weight:900; font-size:1.2rem; padding:8px 16px; border-radius:14px; transform:rotate(5deg);">
+                                ${valStr}
+                            </div>
+                        </div>
+
+                        <div style="background:rgba(255,255,255,0.1); border-radius:16px; padding:1rem; display:flex; justify-content:space-between; align-items:center; position:relative; z-index:2; border:1px solid rgba(255,255,255,0.05);">
+                            <div>
+                                <div style="font-size:0.65rem; color:#cbd5e1; font-weight:600; text-transform:uppercase;">CÓDIGO ÚNICO</div>
+                                <div style="font-family:monospace; font-size:1.2rem; font-weight:800; color:#fff; letter-spacing:1px;">${v.codigo}</div>
+                            </div>
+                            <div style="text-align:right;">
+                                <div style="font-size:0.65rem; color:#cbd5e1; font-weight:600; text-transform:uppercase;">VÁLIDO HASTA</div>
+                                <div style="font-size:0.9rem; font-weight:700; color:#fff;">${dateStr}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
         }
 
         // --- Real-time Activity Filtering Logic ---

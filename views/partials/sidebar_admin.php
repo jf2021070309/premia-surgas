@@ -72,6 +72,17 @@ if (!function_exists('isActiveLink')) {
             </a>
 
             <?php if ($_SESSION['rol'] === 'admin'): ?>
+                <div class="menu-label">Incentivos</div>
+                <a href="<?= BASE_URL ?>incentivos/reglas" class="sidebar-item <?= isActiveLink('incentivos/reglas', $current_url) ?>">
+                    <i class='bx bx-target-lock'></i>
+                    <span>Reglas de Metas</span>
+                </a>
+                <a href="<?= BASE_URL ?>incentivos/vales" class="sidebar-item <?= isActiveLink('incentivos/vales', $current_url) ?>">
+                    <i class='bx bx-receipt'></i>
+                    <span>Vales Emitidos</span>
+                </a>
+
+                <div class="menu-label">Canjes y Recargas</div>
                 <a href="<?= BASE_URL ?>recargas-admin" class="sidebar-item <?= isActiveLink('recargas-admin', $current_url) ?>">
                     <i class='bx bx-wallet'></i>
                     <span>Gestión Recargas</span>

@@ -5,6 +5,7 @@ require_once __DIR__ . '/../models/ConfiguracionModel.php';
 require_once __DIR__ . '/../models/TipoOperacionModel.php';
 require_once __DIR__ . '/../models/CanjeModel.php';
 require_once __DIR__ . '/../models/AuditoriaModel.php';
+require_once __DIR__ . '/../models/IncentivoModel.php';
 require_once __DIR__ . '/../config/config.php';
 
 class ScanController {
@@ -145,6 +146,10 @@ class ScanController {
             // 2. Actualizar puntos totales del cliente
             $clienteModel->sumarPuntos($clienteId, $puntos);
 
+            // 3. Evaluar reglas de incentivos
+            $incentivoModel = new IncentivoModel();
+            $incentivoModel->evaluarMetas($clienteId);
+
             // AUDITORIA
             $c = $clienteModel->findById($clienteId);
             $audit = new AuditoriaModel();
@@ -185,6 +190,10 @@ class ScanController {
 
         $ventaModel->create($clienteId, $_SESSION['id_usuario'], $monto, $puntos, "Compra por monto: S/ $monto (+$puntos pts)");
         $clienteModel->sumarPuntos($clienteId, $puntos);
+
+        // Evaluar reglas de incentivos
+        $incentivoModel = new IncentivoModel();
+        $incentivoModel->evaluarMetas($clienteId);
 
         // AUDITORIA
         $c = $clienteModel->findById($clienteId);

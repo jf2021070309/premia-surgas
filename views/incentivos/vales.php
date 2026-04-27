@@ -1,0 +1,246 @@
+<?php
+$pageTitle = 'Incentivos — Vales Emitidos';
+$pageSubtitle = 'Gestión y verificación de vales de descuento / premios';
+?>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?= $pageTitle ?> — PremiaSurgas</title>
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/main.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-layout.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-tables.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
+        .stat-card {
+            background: #fff; border-radius: 20px; padding: 1.5rem;
+            border: 1px solid #f1f5f9; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            display: flex; align-items: center; gap: 1rem;
+        }
+        .stat-icon {
+            width: 52px; height: 52px; border-radius: 16px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; flex-shrink: 0;
+        }
+        .stat-icon.purple { background: #f3e8ff; color: #7c3aed; }
+        .stat-icon.green  { background: #dcfce7; color: #16a34a; }
+        .stat-icon.amber  { background: #fef3c7; color: #d97706; }
+        .stat-icon.blue   { background: #dbeafe; color: #2563eb; }
+        .stat-val { font-size: 1.8rem; font-weight: 900; color: #1e293b; line-height: 1; }
+        .stat-label { font-size: 0.72rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .table-badge { padding: 4px 12px; border-radius: 50px; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .badge-activo { background: #dcfce7; color: #16a34a; }
+        .badge-usado { background: #fef3c7; color: #d97706; }
+        .badge-vencido { background: #fee2e2; color: #ef4444; }
+        .badge-cancelado { background: #f1f5f9; color: #64748b; }
+
+        .btn-action-sm {
+            padding: 6px 12px; border-radius: 8px; font-weight: 800; font-size: 0.7rem;
+            border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;
+            transition: 0.2s; text-transform: uppercase;
+        }
+        .btn-use { background: #1e293b; color: #fff; }
+        .btn-use:hover { background: #0f172a; }
+        .btn-cancel { background: #fee2e2; color: #ef4444; }
+        .btn-cancel:hover { background: #fecaca; }
+
+        .filter-bar {
+            display: flex; gap: 1rem; margin-bottom: 1.5rem; align-items: center;
+            background: #fff; padding: 1rem 1.5rem; border-radius: 16px;
+            border: 1px solid #f1f5f9; box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+        }
+        .filter-input {
+            padding: 10px 16px; border: 1.5px solid #e2e8f0; border-radius: 12px;
+            font-size: 0.85rem; font-weight: 600; outline: none; transition: 0.3s;
+            min-width: 250px;
+        }
+        .filter-input:focus { border-color: #7c3aed; }
+        .filter-select {
+            padding: 10px 16px; border: 1.5px solid #e2e8f0; border-radius: 12px;
+            font-size: 0.85rem; font-weight: 600; outline: none; background: #fff;
+        }
+    </style>
+</head>
+<body>
+<?php include __DIR__ . '/../partials/sidebar_admin.php'; ?>
+
+<div class="admin-layout">
+    <div class="main-content">
+        <?php include __DIR__ . '/../partials/header_admin.php'; ?>
+
+        <div class="content-body">
+            <!-- Stats -->
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-icon purple"><i class='bx bx-target-lock'></i></div>
+                    <div><div class="stat-val"><?= $stats['reglas_activas'] ?></div><div class="stat-label">Reglas Activas</div></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green"><i class='bx bx-badge-check'></i></div>
+                    <div><div class="stat-val"><?= $stats['vales_activos'] ?></div><div class="stat-label">Vales Vigentes</div></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon amber"><i class='bx bx-check-double'></i></div>
+                    <div><div class="stat-val"><?= $stats['vales_usados'] ?></div><div class="stat-label">Vales Usados</div></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon blue"><i class='bx bx-receipt'></i></div>
+                    <div><div class="stat-val"><?= $stats['vales_total'] ?></div><div class="stat-label">Total Emitidos</div></div>
+                </div>
+            </div>
+
+            <!-- Header Actions -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <h2 style="font-size: 1.3rem; font-weight: 900; color: #1e293b; margin: 0;">Vales Emitidos</h2>
+                    <p style="font-size: 0.85rem; color: #94a3b8; font-weight: 600; margin: 4px 0 0;">Historial y validación de vales generados</p>
+                </div>
+                <a href="<?= BASE_URL ?>incentivos/reglas" style="text-decoration: none; background: #f8fafc; color: #475569; padding: 12px 20px; border-radius: 12px; font-weight: 800; font-size: 0.85rem; border: 1px solid #e2e8f0; transition: 0.3s;">
+                    <i class='bx bx-cog'></i> Configurar Reglas
+                </a>
+            </div>
+
+            <!-- Filters -->
+            <div class="filter-bar">
+                <i class='bx bx-search' style="color: #94a3b8; font-size: 1.2rem;"></i>
+                <input type="text" id="searchInput" class="filter-input" placeholder="Buscar por código, cliente o DNI/RUC..." onkeyup="filterTable()">
+                
+                <select id="statusFilter" class="filter-select" onchange="filterTable()">
+                    <option value="all">Todos los estados</option>
+                    <option value="activo">Activos</option>
+                    <option value="usado">Usados</option>
+                    <option value="vencido">Vencidos</option>
+                    <option value="cancelado">Cancelados</option>
+                </select>
+            </div>
+
+            <!-- Table -->
+            <div class="table-container" style="background: #fff; border-radius: 20px; border: 1px solid #f1f5f9; padding: 1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                <table class="data-table" id="valesTable" style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left; padding: 1rem; font-size: 0.75rem; color: #64748b; font-weight: 800; text-transform: uppercase; border-bottom: 1px solid #f1f5f9;">Código</th>
+                            <th style="text-align: left; padding: 1rem; font-size: 0.75rem; color: #64748b; font-weight: 800; text-transform: uppercase; border-bottom: 1px solid #f1f5f9;">Cliente</th>
+                            <th style="text-align: left; padding: 1rem; font-size: 0.75rem; color: #64748b; font-weight: 800; text-transform: uppercase; border-bottom: 1px solid #f1f5f9;">Regla / Premio</th>
+                            <th style="text-align: left; padding: 1rem; font-size: 0.75rem; color: #64748b; font-weight: 800; text-transform: uppercase; border-bottom: 1px solid #f1f5f9;">Emisión/Vence</th>
+                            <th style="text-align: center; padding: 1rem; font-size: 0.75rem; color: #64748b; font-weight: 800; text-transform: uppercase; border-bottom: 1px solid #f1f5f9;">Estado</th>
+                            <th style="text-align: right; padding: 1rem; font-size: 0.75rem; color: #64748b; font-weight: 800; text-transform: uppercase; border-bottom: 1px solid #f1f5f9;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if(empty($vales)): ?>
+                        <tr><td colspan="6" style="text-align: center; padding: 3rem; color: #94a3b8; font-weight: 600;">No hay vales registrados</td></tr>
+                        <?php else: ?>
+                            <?php foreach($vales as $v): ?>
+                            <tr class="vale-row" data-status="<?= $v['estado'] ?>" style="border-bottom: 1px solid #f8fafc;">
+                                <td style="padding: 1rem;">
+                                    <div style="font-weight: 800; color: #1e293b; font-size: 0.95rem; font-family: monospace; letter-spacing: 0.5px;"><?= $v['codigo'] ?></div>
+                                    <div style="font-size: 0.75rem; color: #94a3b8; font-weight: 600;">Metas: <?= $v['cantidad_lograda'] ?> ops</div>
+                                </td>
+                                <td style="padding: 1rem;">
+                                    <div style="font-weight: 700; color: #1e293b; font-size: 0.9rem;"><?= htmlspecialchars($v['cliente_nombre']) ?></div>
+                                    <div style="font-size: 0.75rem; color: #64748b; font-weight: 600;"><?= $v['cliente_codigo'] ?> • <?= $v['tipo_cliente'] ?></div>
+                                </td>
+                                <td style="padding: 1rem;">
+                                    <div style="font-weight: 700; color: #7c3aed; font-size: 0.85rem; margin-bottom: 2px;"><?= htmlspecialchars($v['descripcion']) ?></div>
+                                    <div style="font-size: 0.7rem; color: #94a3b8; font-weight: 600;">Regla: <?= htmlspecialchars($v['regla_nombre']) ?></div>
+                                </td>
+                                <td style="padding: 1rem;">
+                                    <div style="font-size: 0.85rem; color: #475569; font-weight: 600;"><?= date('d/m/Y', strtotime($v['fecha_emision'])) ?></div>
+                                    <div style="font-size: 0.75rem; color: <?= (strtotime($v['fecha_vencimiento']) < time() && $v['estado'] === 'activo') ? '#ef4444' : '#94a3b8' ?>; font-weight: 600;">
+                                        Vence: <?= date('d/m/Y', strtotime($v['fecha_vencimiento'])) ?>
+                                    </div>
+                                </td>
+                                <td style="padding: 1rem; text-align: center;">
+                                    <span class="table-badge badge-<?= $v['estado'] ?>"><?= strtoupper($v['estado']) ?></span>
+                                    <?php if($v['estado'] === 'usado'): ?>
+                                        <div style="font-size: 0.65rem; color: #94a3b8; margin-top: 4px; font-weight: 600;">
+                                            <?= date('d/m/Y H:i', strtotime($v['usado_fecha'])) ?>
+                                        </div>
+                                    <?php endif; ?>
+                                </td>
+                                <td style="padding: 1rem; text-align: right;">
+                                    <?php if($v['estado'] === 'activo'): ?>
+                                        <form method="POST" action="<?= BASE_URL ?>incentivos/vales/usar" style="display:inline;" onsubmit="return confirmAction(event, '¿Marcar vale como usado?', 'Se registrará que el cliente redimió este vale.', 'Sí, usar vale', '#1e293b')">
+                                            <input type="hidden" name="id" value="<?= $v['id'] ?>">
+                                            <button type="submit" class="btn-action-sm btn-use" title="Marcar como usado">
+                                                <i class='bx bx-check-circle'></i> Usar
+                                            </button>
+                                        </form>
+                                        <form method="POST" action="<?= BASE_URL ?>incentivos/vales/cancelar" style="display:inline;" onsubmit="return confirmAction(event, '¿Cancelar vale?', 'El vale quedará inválido de forma permanente.', 'Sí, cancelar', '#ef4444')">
+                                            <input type="hidden" name="id" value="<?= $v['id'] ?>">
+                                            <button type="submit" class="btn-action-sm btn-cancel" title="Cancelar vale">
+                                                <i class='bx bx-x'></i>
+                                            </button>
+                                        </form>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function filterTable() {
+    const search = document.getElementById('searchInput').value.toLowerCase();
+    const status = document.getElementById('statusFilter').value;
+    const rows = document.querySelectorAll('.vale-row');
+
+    rows.forEach(row => {
+        const text = row.innerText.toLowerCase();
+        const rowStatus = row.getAttribute('data-status');
+        
+        let show = true;
+        if (search && !text.includes(search)) show = false;
+        if (status !== 'all' && rowStatus !== status) show = false;
+
+        row.style.display = show ? '' : 'none';
+    });
+}
+
+function confirmAction(e, title, text, btnText, btnColor) {
+    e.preventDefault();
+    const form = e.target;
+    Swal.fire({
+        title: title,
+        text: text,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: btnColor,
+        cancelButtonColor: '#94a3b8',
+        confirmButtonText: btnText,
+        cancelButtonText: 'No, regresar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            form.submit();
+        }
+    });
+    return false;
+}
+
+// Flash Messages
+<?php if (isset($_SESSION['flash'])): ?>
+    Swal.fire({
+        icon: '<?= $_SESSION['flash']['type'] ?>',
+        title: '<?= $_SESSION['flash']['title'] ?>',
+        text: '<?= $_SESSION['flash']['message'] ?>',
+        timer: 3000,
+        showConfirmButton: false
+    });
+    <?php unset($_SESSION['flash']); ?>
+<?php endif; ?>
+</script>
+<script> const BASE_URL = '<?= BASE_URL ?>'; </script>
+<script src="<?= BASE_URL ?>assets/js/session_check.js"></script>
+</body>
+</html>

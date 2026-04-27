@@ -125,6 +125,16 @@ $routes = [
     ['POST', 'recargas-admin/actualizar',   'RecargaAdminController', 'actualizarEstado'],
     ['POST', 'recargas-admin/subir-qr',     'RecargaAdminController', 'subirQr'],
 
+    // —— Sistema de Incentivos (Admin) ——
+    ['GET',  'incentivos/reglas',           'IncentivoController', 'reglas'],
+    ['POST', 'incentivos/reglas/create',    'IncentivoController', 'createRegla'],
+    ['POST', 'incentivos/reglas/update',    'IncentivoController', 'updateRegla'],
+    ['GET',  'incentivos/reglas/delete',    'IncentivoController', 'deleteRegla'],
+    ['GET',  'incentivos/vales',            'IncentivoController', 'vales'],
+    ['POST', 'incentivos/vales/usar',       'IncentivoController', 'marcarUsado'],
+    ['POST', 'incentivos/vales/cancelar',   'IncentivoController', 'cancelarVale'],
+    ['GET',  'incentivos/progresoJson',     'IncentivoController', 'progresoJson'],
+
     // —— Configuración General (Unificada) ——
     ['GET',  'ajustes',               'AjustesController', 'index'],
     ['POST', 'ajustes/update-puntos', 'AjustesController', 'updatePuntos'],

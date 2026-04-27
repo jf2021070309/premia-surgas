@@ -18,16 +18,17 @@
   - [Dashboard / Panel de Control](#2--dashboard--panel-de-control)
   - [Gestión de Clientes](#3--gestión-de-clientes)
   - [Sistema de Puntos](#4--sistema-de-puntos)
-  - [Tienda de Premios y Canjes](#5--tienda-de-premios-y-canjes)
-  - [Sistema de Recargas](#6--sistema-de-recargas)
-  - [Gestión de Productos/Premios](#7--gestión-de-productospremios)
-  - [Gestión de Conductores](#8--gestión-de-conductores)
-  - [Gestión de Aliados Comerciales](#9--gestión-de-aliados-comerciales)
-  - [Tipos de Operaciones](#10--tipos-de-operaciones)
-  - [Reportes y Auditoría](#11--reportes-y-auditoría)
-  - [Configuración General](#12--configuración-general)
-  - [Código QR del Cliente](#13--código-qr-del-cliente)
-  - [Notificaciones en Tiempo Real](#14--notificaciones-en-tiempo-real)
+  - [Sistema de Incentivos (Metas)](#5--sistema-de-incentivos-metas)
+  - [Tienda de Premios y Canjes](#6--tienda-de-premios-y-canjes)
+  - [Sistema de Recargas](#7--sistema-de-recargas)
+  - [Gestión de Productos/Premios](#8--gestión-de-productospremios)
+  - [Gestión de Conductores](#9--gestión-de-conductores)
+  - [Gestión de Aliados Comerciales](#10--gestión-de-aliados-comerciales)
+  - [Tipos de Operaciones](#11--tipos-de-operaciones)
+  - [Reportes y Auditoría](#12--reportes-y-auditoría)
+  - [Configuración General](#13--configuración-general)
+  - [Código QR del Cliente](#14--código-qr-del-cliente)
+  - [Notificaciones en Tiempo Real](#15--notificaciones-en-tiempo-real)
 - [Stack Tecnológico](#-stack-tecnológico)
 - [Estructura del Proyecto](#-estructura-del-proyecto)
 - [Despliegue](#-despliegue)
@@ -113,7 +114,17 @@ View (PHP + Vue.js 3 + Chart.js)
 - **Suma automática** al saldo del cliente tras confirmar
 - **Auditoría completa** — Cada carga queda registrada con el detalle exacto
 
-### 5. 🛍 Tienda de Premios y Canjes
+### 5. 🎯 Sistema de Incentivos (Metas)
+
+- **Independiente a los puntos** — Sistema paralelo diseñado para fidelizar negocios B2B (Restaurantes, Puntos de Venta) y clientes top.
+- **Reglas Configurables** — El administrador define metas de volumen de compras (ej. "Comprar 10 balones al mes").
+- **Tipos de Recompensa** — Descuento porcentual (ej. 50%), monto fijo en soles, o un vale de producto.
+- **Evaluación Automática (*Hook*)** — Cada vez que se registra una venta, el sistema evalúa silenciosamente si el cliente alcanzó la meta del periodo.
+- **Generación de Vales Digitales** — Al cumplir la meta, se emite automáticamente un vale único (`VALE-YYYYMMDD-XXXX`) con una vigencia definida en días.
+- **Panel Administrativo** — Dashboard dedicado para crear o editar reglas, y consultar o marcar los vales redimidos físicamente por el cliente.
+- **Vista del Cliente** — Pestaña interactiva en el perfil que muestra una barra de progreso en vivo ("Llevas 7/10 ops") y el listado de vales disponibles para su redención inmediata.
+
+### 6. 🛍 Tienda de Premios y Canjes
 
 - **Catálogo visual por niveles** — Los premios se organizan en 4 niveles según puntos:
   - Nivel Bajo (≤250 pts): Tazas, vasos, platos
@@ -139,7 +150,7 @@ View (PHP + Vue.js 3 + Chart.js)
 | `pago_rechazado` | Comprobante no válido |
 | `cancelado` | Canje cancelado |
 
-### 6. 💳 Sistema de Recargas
+### 7. 💳 Sistema de Recargas
 
 #### Lado Cliente
 - **Solicitud de recarga** — El cliente selecciona un paquete de puntos, adjunta comprobante de pago (foto/captura) y envía la solicitud
@@ -152,7 +163,7 @@ View (PHP + Vue.js 3 + Chart.js)
 - **Historial completo** — Todas las recargas con estado, fecha de validación y quién la validó
 - **Configuración de QR de Yape** — Subir/actualizar el código QR y nombre del titular para pagos
 
-### 7. 📦 Gestión de Productos/Premios
+### 8. 📦 Gestión de Productos/Premios
 
 - **CRUD completo** de premios (`/productos`)
 - **Campos**: nombre, descripción, puntos requeridos, stock, imagen, estado (activo/inactivo)
@@ -161,7 +172,7 @@ View (PHP + Vue.js 3 + Chart.js)
 - **Eliminación definitiva** con auditoría
 - **Solo acceso admin**
 
-### 8. 🚛 Gestión de Conductores
+### 9. 🚛 Gestión de Conductores
 
 - **CRUD completo** (`/conductores`)
 - **Campos**: nombre, usuario de acceso, contraseña, departamento (Tacna, Moquegua, Arequipa, Ilo), estado
@@ -174,14 +185,14 @@ View (PHP + Vue.js 3 + Chart.js)
 - **Tracking de cambios** — Cada edición registra qué campos se modificaron (antes vs. después)
 - **Restricción de eliminación** — No se puede eliminar un conductor con ventas vinculadas
 
-### 9. 🤝 Gestión de Aliados Comerciales
+### 10. 🤝 Gestión de Aliados Comerciales
 
 - **CRUD completo** (`/aliados`) — Misma estructura que conductores pero con rol `aliado`
 - **Los aliados pueden**: Registrar clientes nuevos, asignar puntos, ver su historial de asignaciones
 - **Historial paginado** con filtros de búsqueda y fechas
 - **Se crean como usuarios con rol `aliado`** en la tabla `usuarios`
 
-### 10. ⚙️ Tipos de Operaciones
+### 11. ⚙️ Tipos de Operaciones
 
 - **Gestión de reglas de puntos** (`/operaciones`) — Define qué operaciones generan puntos y cuántos
 - **CRUD completo**: crear, editar, activar/inactivar, eliminar reglas
@@ -191,7 +202,7 @@ View (PHP + Vue.js 3 + Chart.js)
   - Accesorio / Otros → 2 puntos
 - **Protección referencial** — No se puede eliminar una regla con historial asociado
 
-### 11. 📈 Reportes y Auditoría
+### 12. 📈 Reportes y Auditoría
 
 #### Reportes (`/reportes`)
 - Resumen general del sistema
@@ -207,7 +218,7 @@ View (PHP + Vue.js 3 + Chart.js)
 - **Categorías de acciones**: INICIO_SESION, CIERRE_SESION, REGISTRO_CLIENTE, CARGA_PUNTOS, SOLICITUD_CANJE, ESTADO_CANJE, ACTUALIZAR_CLIENTE, NUEVO_CONDUCTOR, MODERAR_RECARGA, etc.
 - **Carga JSON asíncrona** para la tabla de auditoría
 
-### 12. 🔧 Configuración General
+### 13. 🔧 Configuración General
 
 - **Panel unificado** (`/ajustes`) que agrupa:
   - Gestión de tipos de operaciones (reglas de puntos)
@@ -216,7 +227,7 @@ View (PHP + Vue.js 3 + Chart.js)
   - Configuración del monto por punto (equivalencia en Soles para canjes mixtos)
 - **Monto por punto** — Valor configurable que define cuánto vale cada punto en Soles (ej: S/ 0.10 por punto)
 
-### 13. 📱 Código QR del Cliente
+### 14. 📱 Código QR del Cliente
 
 - **Generación automática** al registrar un cliente
 - **URL codificada** — `{BASE_URL}/scan?c={codigo}&t={token}` embebida en el QR
@@ -225,7 +236,7 @@ View (PHP + Vue.js 3 + Chart.js)
   - **Conductor lo escanea** → Abre la interfaz para asignar puntos
 - **Vista de impresión** — Página optimizada para imprimir tarjetas con QR
 
-### 14. 🔔 Notificaciones en Tiempo Real
+### 15. 🔔 Notificaciones en Tiempo Real
 
 - **Polling periódico** — El panel admin consulta cada pocos segundos por nuevas solicitudes
 - **Endpoint API** (`/panel/live-notifications`) — Devuelve JSON con recargas pendientes y canjes pendientes
@@ -275,6 +286,7 @@ premia-surgas/
 │   ├── ConductorController.php     # CRUD conductores
 │   ├── AliadoController.php        # CRUD aliados comerciales
 │   ├── OperacionController.php     # CRUD tipos de operaciones
+│   ├── IncentivoController.php     # Gestión de incentivos y metas
 │   ├── CanjeAdminController.php    # Gestión de entregas de canjes
 │   ├── RecargaAdminController.php  # Moderación de recargas
 │   ├── AjustesController.php       # Configuración general
@@ -288,6 +300,7 @@ premia-surgas/
 │   ├── PremioModel.php
 │   ├── RecargaModel.php
 │   ├── TipoOperacionModel.php
+│   ├── IncentivoModel.php
 │   ├── ConfiguracionModel.php
 │   ├── AuditoriaModel.php
 │   └── ReporteModel.php
@@ -303,6 +316,7 @@ premia-surgas/
 │   ├── productos/                  # Vistas de gestión de premios
 │   ├── conductores/                # Vistas de gestión de conductores
 │   ├── aliados/                    # Vistas de gestión de aliados
+│   ├── incentivos/                 # Vistas del sistema de incentivos
 │   ├── operaciones/                # Vistas de tipos de operaciones
 │   ├── ajustes/                    # Vistas de configuración
 │   ├── reportes/                   # Vistas de reportes y auditoría
@@ -352,6 +366,8 @@ premia-surgas/
 | `canjes` | Solicitudes de canje de premios |
 | `recargas` | Solicitudes de recarga de puntos |
 | `tipos_operaciones` | Reglas de puntos por tipo de operación |
+| `incentivos_reglas` | Configuración de metas B2B y premios |
+| `incentivos_vales` | Vales digitales generados automáticamente |
 | `configuraciones` | Parámetros globales del sistema |
 | `auditoria` | Log de todas las acciones del sistema |
 
