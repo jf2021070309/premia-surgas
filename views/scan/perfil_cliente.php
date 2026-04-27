@@ -1,31 +1,34 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Perfil — PremiaSurgas</title>
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/main.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-layout.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-tables.css">
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <style>
-        :root { 
-            --primary: #821515; 
+        :root {
+            --primary: #821515;
             --bg-color: #f7f9fc;
             --text-main: #1a1c1e;
             --silver-text: linear-gradient(135deg, #1a1a1a 0%, #444444 50%, #1a1a1a 100%);
             --silver-metal: linear-gradient(135deg, #70706F, #E9E9E7, #70706F, #E9E9E7, #70706F);
             --card-silver: linear-gradient(135deg, #a8a8a8 0%, #ffffff 50%, #a8a8a8 100%);
         }
-        body { 
-            font-family: 'Outfit', sans-serif; 
+
+        body {
+            font-family: 'Outfit', sans-serif;
             background: var(--bg-color);
             background: radial-gradient(circle at top right, #ffffff 0%, #eef2f7 100%);
             background-attachment: fixed;
-            margin: 0; 
-            color: var(--text-main); 
+            margin: 0;
+            color: var(--text-main);
             min-height: 100vh;
             overflow-x: hidden;
         }
@@ -35,7 +38,7 @@
             color: var(--primary);
         }
 
-        
+
         /* Layout */
         .header-wrapper {
             background: linear-gradient(135deg, var(--primary) 0%, #4a0b0b 100%);
@@ -62,24 +65,37 @@
         }
 
         .profile-avatar {
-            width: 55px; height: 55px; 
-            background: rgba(255,255,255,0.1);
-            border: 2px solid rgba(255,255,255,0.3);
+            width: 55px;
+            height: 55px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
             color: #fff;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 1.6rem; font-weight: 700;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            font-weight: 700;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
             backdrop-filter: blur(10px);
         }
 
-        .greeting-text h1 { 
-            margin: 0; 
-            font-size: 1.6rem; 
+        .greeting-text h1 {
+            margin: 0;
+            font-size: 1.6rem;
             font-weight: 700;
             letter-spacing: -0.5px;
             color: #fff;
         }
-        .greeting-text p { margin: 0; font-size: 0.85rem; opacity: 0.7; text-transform: uppercase; letter-spacing: 1px; color: #fff; }
+
+        .greeting-text p {
+            margin: 0;
+            font-size: 0.85rem;
+            opacity: 0.7;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #fff;
+        }
 
         /* --- 3D FLIP CARD BLACK EDITION --- */
         .vip-card-container {
@@ -87,11 +103,12 @@
             margin: 0;
             max-width: 420px;
             width: 100%;
-            height: 250px; /* Base height for mobile aspect ratio */
+            height: 250px;
+            /* Base height for mobile aspect ratio */
             cursor: pointer;
             z-index: 10;
         }
-        
+
         /* Layout superior del Perfil */
         .profile-header-layout {
             display: flex;
@@ -102,7 +119,7 @@
             margin: 3rem auto;
             padding: 0 1.5rem;
         }
-        
+
         .profile-card-column {
             flex: 0 0 auto;
             width: 100%;
@@ -117,7 +134,7 @@
             background: #fff;
             border-radius: 24px;
             padding: 2.2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
             border: 1px solid #f1f5f9;
             min-width: 300px;
         }
@@ -128,6 +145,7 @@
                 gap: 2rem;
                 margin: 2rem auto;
             }
+
             .profile-info-column {
                 width: 100%;
                 max-width: 420px;
@@ -147,24 +165,26 @@
             transform: rotateY(180deg);
         }
 
-        .card-front, .card-back {
+        .card-front,
+        .card-back {
             position: absolute;
             width: 100%;
             height: 100%;
             -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
             border-radius: 24px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.1);
             overflow: hidden;
-            color: white; /* Forzar texto blanco dentro de la tarjeta */
+            color: white;
+            /* Forzar texto blanco dentro de la tarjeta */
         }
 
         /* LADO FRONTAL: BLACK METALLIC */
         .card-front {
             background: #0a0a0a;
-            background-image: 
-                radial-gradient(circle at 20% 20%, rgba(255,255,255,0.05) 0%, transparent 40%),
+            background-image:
+                radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 40%),
                 linear-gradient(45deg, #0a0a0a 0%, #1a1a1a 100%);
             display: flex;
             flex-direction: column;
@@ -175,17 +195,40 @@
         /* Efecto de Brillo Silver */
         .card-shine {
             position: absolute;
-            top: 0; left: -100%;
-            width: 50%; height: 100%;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
             transform: skewX(-25deg);
             animation: cardShineEffect 8s infinite;
         }
-        @keyframes cardShineEffect { 0% { left: -150%; } 15% { left: 150%; } 100% { left: 150%; } }
 
-        .vip-card-header { display: flex; justify-content: space-between; align-items: flex-start; }
-        .card-logo { height: 26px; filter: brightness(0) invert(1) opacity(0.8); }
-        
+        @keyframes cardShineEffect {
+            0% {
+                left: -150%;
+            }
+
+            15% {
+                left: 150%;
+            }
+
+            100% {
+                left: 150%;
+            }
+        }
+
+        .vip-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .card-logo {
+            height: 26px;
+            filter: brightness(0) invert(1) opacity(0.8);
+        }
+
         .membership-badge {
             font-size: 0.65rem;
             font-weight: 800;
@@ -194,19 +237,62 @@
             color: #111;
             padding: 6px 14px;
             border-radius: 50px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
 
-        .card-middle { text-align: left; }
-        .label-small { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.4; margin-bottom: 4px; }
-        .holder-name { font-size: 1.25rem; font-weight: 700; color: #fff; letter-spacing: 1px; }
+        .card-middle {
+            text-align: left;
+        }
 
-        .card-footer { display: flex; justify-content: space-between; align-items: flex-end; }
-        .client-code { font-family: 'Courier New', Courier, monospace; font-size: 0.9rem; letter-spacing: 2.5px; opacity: 0.6; }
-        
-        .points-box { text-align: right; }
-        .points-val { font-size: 2.4rem; font-weight: 800; line-height: 1; display: block; background: var(--card-silver); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .points-unit { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; opacity: 0.6; }
+        .label-small {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.4;
+            margin-bottom: 4px;
+        }
+
+        .holder-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .client-code {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            letter-spacing: 2.5px;
+            opacity: 0.6;
+        }
+
+        .points-box {
+            text-align: right;
+        }
+
+        .points-val {
+            font-size: 2.4rem;
+            font-weight: 800;
+            line-height: 1;
+            display: block;
+            background: var(--card-silver);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .points-unit {
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.6;
+        }
 
         /* LADO TRASERO: QR & INFO */
         .card-back {
@@ -217,7 +303,7 @@
             align-items: center;
             justify-content: center;
             padding: 2rem;
-            background-image: 
+            background-image:
                 radial-gradient(circle at center, #1a1a1a 0%, #0a0a0a 100%);
         }
 
@@ -225,22 +311,35 @@
             background: white;
             padding: 12px;
             border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
-        #qrcode img { display: block; }
-        
-        .qr-help { margin-top: 1.5rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.6; }
+
+        #qrcode img {
+            display: block;
+        }
+
+        .qr-help {
+            margin-top: 1.5rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.6;
+        }
 
         /* Botón Tienda */
         .btn-store {
             background: #111;
-            color: #fff; 
-            text-decoration: none; 
-            padding: 1.2rem 2.5rem; 
+            color: #fff;
+            text-decoration: none;
+            padding: 1.2rem 2.5rem;
             border-radius: 100px;
-            display: flex; align-items: center; justify-content: center; gap: 0.8rem;
-            font-weight: 800; font-size: 1rem; 
-            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            font-weight: 800;
+            font-size: 1rem;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
             transition: all 0.3s ease;
             width: 85%;
             max-width: 380px;
@@ -249,32 +348,101 @@
             letter-spacing: 2px;
             border: none;
         }
-        .btn-store:hover { background: #000; transform: translateY(-3px); box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
+
+        .btn-store:hover {
+            background: #000;
+            transform: translateY(-3px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+        }
 
         /* Historial */
-        .container { 
-            padding: 0 2rem 4rem; 
-            max-width: 1400px; 
-            margin: 0 auto; 
+        .container {
+            padding: 0 2rem 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
             position: relative;
             z-index: 10;
         }
-        .section-title { font-size: 1rem; font-weight: 700; margin-bottom: 1.2rem; opacity: 0.8; letter-spacing: 1px; }
-        .history-card { background: white; border-radius: 2rem; border: 1px solid #eef2f7; box-shadow: 0 10px 30px rgba(0,0,0,0.03); overflow: hidden; }
-        .history-item { padding: 1.25rem 1.5rem; border-bottom: 1px solid #f0f4f8; transition: 0.3s; }
-        .history-item:active { background: #f8fafd; }
-        .history-main-row { display: flex; flex-direction: column; gap: 10px; }
-        .item-name { font-size: 0.9rem; font-weight: 600; display: flex; flex-direction: column; gap: 6px; color: #444; width: 100%; }
-        .item-name i { color: var(--primary); font-size: 1.1rem; }
-        .item-pts { color: var(--text-main); font-weight: 800; font-size: 1.1rem; }
-        .history-date { font-size: 0.75rem; opacity: 0.6; margin-top: 4px; color: #64748b; }
 
-        .footer { text-align: center; padding: 3rem 0; color: rgba(0,0,0,0.3); font-size: 0.75rem; }
-        
+        .section-title {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+            opacity: 0.8;
+            letter-spacing: 1px;
+        }
+
+        .history-card {
+            background: white;
+            border-radius: 2rem;
+            border: 1px solid #eef2f7;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+            overflow: hidden;
+        }
+
+        .history-item {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid #f0f4f8;
+            transition: 0.3s;
+        }
+
+        .history-item:active {
+            background: #f8fafd;
+        }
+
+        .history-main-row {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .item-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            color: #444;
+            width: 100%;
+        }
+
+        .item-name i {
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .item-pts {
+            color: var(--text-main);
+            font-weight: 800;
+            font-size: 1.1rem;
+        }
+
+        .history-date {
+            font-size: 0.75rem;
+            opacity: 0.6;
+            margin-top: 4px;
+            color: #64748b;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 3rem 0;
+            color: rgba(0, 0, 0, 0.3);
+            font-size: 0.75rem;
+        }
+
         .logout-btn-client {
-            position: absolute; top: -0.5rem; right: 0; color: rgba(255,255,255,0.6);
-            background: rgba(255,255,255,0.1); width: 40px; height: 40px; border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
+            position: absolute;
+            top: -0.5rem;
+            right: 0;
+            color: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             backdrop-filter: blur(10px);
         }
 
@@ -285,8 +453,9 @@
             border-radius: 100px;
             margin-bottom: 2rem;
             border: 1px solid #eef2f7;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.02);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.02);
         }
+
         .tab-btn {
             flex: 1;
             padding: 12px 10px;
@@ -304,654 +473,1205 @@
             justify-content: center;
             gap: 8px;
         }
-        .tab-btn i { font-size: 1.1rem; }
+
+        .tab-btn i {
+            font-size: 1.1rem;
+        }
+
         .tab-btn.active {
             background: var(--primary);
             color: #fff;
             box-shadow: 0 8px 20px rgba(130, 21, 21, 0.2);
         }
+
         .tab-content-pane {
             display: none;
             animation: paneFadeIn 0.5s ease;
-}
+        }
 
         .tab-content-pane.active {
             display: block;
         }
+
         @keyframes paneFadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .history-item {
-            padding: 1rem 0.5rem; border-bottom: 1px solid #f1f5f9;
+            padding: 1rem 0.5rem;
+            border-bottom: 1px solid #f1f5f9;
             transition: 0.3s;
         }
 
         .canje-wallet-card {
-            background: #fff; border-radius: 20px; padding: 1rem;
-            display: flex; align-items: center; gap: 1rem;
-            border: 1px solid #f1f5f9; box-shadow: 0 4px 15px rgba(0,0,0,0.02);
-            position: relative; overflow: hidden;
+            background: #fff;
+            border-radius: 20px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border: 1px solid #f1f5f9;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+            position: relative;
+            overflow: hidden;
         }
 
         .canje-icon-circle {
-            width: 48px; height: 48px; border-radius: 14px;
-            background: #fff1f2; color: #e11d48;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.4rem; flex-shrink: 0;
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: #fff1f2;
+            color: #e11d48;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
             border: 1px solid #ffe4e6;
         }
 
-        .canje-info-main { flex-grow: 1; min-width: 0; }
-        .canje-prize-title { font-size: 0.95rem; font-weight: 850; color: #1e293b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2; }
-        
+        .canje-info-main {
+            flex-grow: 1;
+            min-width: 0;
+        }
+
+        .canje-prize-title {
+            font-size: 0.95rem;
+            font-weight: 850;
+            color: #1e293b;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.2;
+        }
+
         .modality-tag-mini {
-            font-size: 0.6rem; font-weight: 800; color: #821515;
-            background: rgba(130, 21, 21, 0.05); padding: 2px 8px;
-            border-radius: 6px; display: inline-block; margin-top: 2px;
+            font-size: 0.6rem;
+            font-weight: 800;
+            color: #821515;
+            background: rgba(130, 21, 21, 0.05);
+            padding: 2px 8px;
+            border-radius: 6px;
+            display: inline-block;
+            margin-top: 2px;
             text-transform: uppercase;
         }
 
-        .canje-info-meta { font-size: 0.7rem; color: #94a3b8; font-weight: 600; margin-top: 4px; }
+        .canje-info-meta {
+            font-size: 0.7rem;
+            color: #94a3b8;
+            font-weight: 600;
+            margin-top: 4px;
+        }
 
-        .canje-metrics-side { text-align: right; margin-right: 2.5rem; }
-        .canje-pts-val { font-size: 1rem; font-weight: 900; color: #e11d48; line-height: 1; }
+        .canje-metrics-side {
+            text-align: right;
+        }
+
+        .canje-pts-val {
+            font-size: 1rem;
+            font-weight: 900;
+            color: #e11d48;
+            line-height: 1;
+        }
+
         .canje-status-pill {
-            font-size: 0.55rem; font-weight: 900; text-transform: uppercase;
-            padding: 3px 8px; border-radius: 50px; margin-top: 6px;
-            display: inline-block; letter-spacing: 0.5px;
+            font-size: 0.55rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            padding: 3px 8px;
+            border-radius: 50px;
+            margin-top: 6px;
+            display: inline-block;
+            letter-spacing: 0.5px;
         }
 
         .btn-float-ticket {
-            position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
-            width: 32px; height: 32px; border-radius: 10px;
-            background: #f8fafc; border: 1px solid #eef2f7; color: #64748b;
-            display: flex; align-items: center; justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            background: #f8fafc;
+            border: 1px solid #eef2f7;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: 0.3s;
         }
-        .btn-float-ticket:hover { background: #821515; color: #fff; border-color: #821515; }
+
+        .btn-float-ticket:hover {
+            background: #821515;
+            color: #fff;
+            border-color: #821515;
+        }
+
         .modality-badge {
-            font-size: 0.55rem; font-weight: 900; color: #821515; 
-            background: #ffebeb; padding: 2px 8px; border-radius: 50px;
-            text-transform: uppercase; letter-spacing: 0.5px;
-            display: inline-block; margin-top: 4px;
+            font-size: 0.55rem;
+            font-weight: 900;
+            color: #821515;
+            background: #ffebeb;
+            padding: 2px 8px;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: inline-block;
+            margin-top: 4px;
         }
 
         .btn-view-ticket {
-            background: #fff; color: #821515; border: 1.5px solid #ffebeb;
-            width: 32px; height: 32px; border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-            transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+            background: #fff;
+            color: #821515;
+            border: 1.5px solid #ffebeb;
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
             text-decoration: none;
         }
-        .btn-view-ticket:hover { background: #821515; color: #fff; transform: translateY(-2px); }
+
+        .btn-view-ticket:hover {
+            background: #821515;
+            color: #fff;
+            transform: translateY(-2px);
+        }
 
         .canje-badge {
-            padding: 5px 12px; border-radius: 50px; font-size: 0.65rem;
-            font-weight: 900; text-transform: uppercase; letter-spacing: 1px;
-            margin-top: 8px; display: inline-block;
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 0.65rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 8px;
+            display: inline-block;
             border: 1px solid transparent;
         }
-        .badge-pendiente { background: #fffbeb; color: #d97706; border-color: #fef3c7; }
-        .badge-pago_aprobado { background: #f0fdf4; color: #16a34a; border-color: #dcfce7; }
-        .badge-canjeado { background: #f8fafc; color: #64748b; border-color: #e2e8f0; }
-        .badge-rechazado { background: #fef2f2; color: #dc2626; border-color: #fee2e2; }
-        .badge-pago_pendiente { background: #eff6ff; color: #1d4ed8; border-color: #dbeafe; }
+
+        .badge-pendiente {
+            background: #fffbeb;
+            color: #d97706;
+            border-color: #fef3c7;
+        }
+
+        .badge-pago_aprobado {
+            background: #f0fdf4;
+            color: #16a34a;
+            border-color: #dcfce7;
+        }
+
+        .badge-canjeado {
+            background: #f8fafc;
+            color: #64748b;
+            border-color: #e2e8f0;
+        }
+
+        .badge-rechazado {
+            background: #fef2f2;
+            color: #dc2626;
+            border-color: #fee2e2;
+        }
+
+        .badge-pago_pendiente {
+            background: #eff6ff;
+            color: #1d4ed8;
+            border-color: #dbeafe;
+        }
 
         /* ── Modern Activity Items ── */
         .activity-card-group {
-            background: #fff; border-radius: 24px; padding: 1.5rem;
-            border: 1px solid #f1f5f9; box-shadow: 0 10px 25px rgba(0,0,0,0.02);
-            margin-bottom: 1.5rem; transition: transform 0.3s;
+            background: #fff;
+            border-radius: 24px;
+            padding: 1.5rem;
+            border: 1px solid #f1f5f9;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.02);
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s;
         }
-        .activity-card-group:hover { transform: translateY(-3px); }
+
+        .activity-card-group:hover {
+            transform: translateY(-3px);
+        }
+
         .activity-date-header {
-            font-size: 0.72rem; font-weight: 850; color: #94a3b8;
-            text-transform: uppercase; letter-spacing: 1.5px;
-            margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.8rem;
+            font-size: 0.72rem;
+            font-weight: 850;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
         }
-        .activity-date-header::after { content: ''; flex: 1; height: 1px; background: #f1f5f9; }
-        
+
+        .activity-date-header::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #f1f5f9;
+        }
+
         .activity-row {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 0.75rem 0; border-bottom: 1px solid #f8fafc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f8fafc;
         }
-        .activity-row:last-child { border-bottom: none; }
-        .activity-info { display: flex; align-items: center; gap: 1rem; }
+
+        .activity-row:last-child {
+            border-bottom: none;
+        }
+
+        .activity-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
         .activity-icon {
-            width: 40px; height: 40px; border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.2rem; background: #f8fafc; color: #475569;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            background: #f8fafc;
+            color: #475569;
         }
-        .activity-details { display: flex; flex-direction: column; }
-        .activity-title { font-size: 0.88rem; font-weight: 700; color: #1e293b; }
-        .activity-subtitle { font-size: 0.75rem; color: #94a3b8; font-weight: 500; }
-        .activity-pts { font-size: 1.05rem; font-weight: 900; color: #22c55e; }
-        .activity-pts.red { color: #ef4444; }
+
+        .activity-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .activity-title {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .activity-subtitle {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        .activity-pts {
+            font-size: 1.05rem;
+            font-weight: 900;
+            color: #22c55e;
+        }
+
+        .activity-pts.red {
+            color: #ef4444;
+        }
 
         /* ── Elite Activity Table Overrides ── */
         .elite-table-wrapper {
-            background: #fff; border-radius: 24px; padding: 1.5rem;
-            border: 1px solid #f1f5f9; box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+            background: #fff;
+            border-radius: 24px;
+            padding: 1.5rem;
+            border: 1px solid #f1f5f9;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
             overflow-x: auto;
         }
-        .elite-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+
+        .elite-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
         .elite-table th {
-            text-align: left; padding: 1rem 1.5rem; font-size: 0.65rem;
-            font-weight: 850; text-transform: uppercase; color: #94a3b8;
-            letter-spacing: 1px; border-bottom: 1px solid #f1f5f9;
+            text-align: left;
+            padding: 1rem 1.5rem;
+            font-size: 0.65rem;
+            font-weight: 850;
+            text-transform: uppercase;
+            color: #94a3b8;
+            letter-spacing: 1px;
+            border-bottom: 1px solid #f1f5f9;
         }
+
         .elite-table td {
-            padding: 1.25rem 1.5rem; vertical-align: middle;
-            border-bottom: 1px solid #f8fafc; font-size: 0.88rem;
+            padding: 1.25rem 1.5rem;
+            vertical-align: middle;
+            border-bottom: 1px solid #f8fafc;
+            font-size: 0.88rem;
         }
-        .elite-table tr:last-child td { border-bottom: none; }
-        .elite-table tr:hover td { background: #fcfdfe; }
-        
-        .col-date { font-weight: 800; color: #1e293b; width: 160px; }
-        .col-type { width: 140px; text-align: center; }
+
+        .elite-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .elite-table tr:hover td {
+            background: #fcfdfe;
+        }
+
+        .col-date {
+            font-weight: 800;
+            color: #1e293b;
+            width: 160px;
+        }
+
+        .col-type {
+            width: 140px;
+            text-align: center;
+        }
+
         .type-badge {
-            padding: 6px 14px; border-radius: 8px; font-size: 0.72rem;
-            font-weight: 850; text-transform: uppercase;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.72rem;
+            font-weight: 850;
+            text-transform: uppercase;
             display: inline-block;
         }
-        .badge-recarga { background: #f0fdf4; color: #16a34a; border: 1px solid #dcfce7; }
-        .badge-compra { background: #eff6ff; color: #1d4ed8; border: 1px solid #dbeafe; }
-        
-        .col-detail { padding-left: 2rem !important; }
-        .col-pts { text-align: right; font-weight: 900; font-size: 1.2rem; color: #22c55e; width: 150px; padding-right: 2rem !important; }
+
+        .badge-recarga {
+            background: #f0fdf4;
+            color: #16a34a;
+            border: 1px solid #dcfce7;
+        }
+
+        .badge-compra {
+            background: #eff6ff;
+            color: #1d4ed8;
+            border: 1px solid #dbeafe;
+        }
+
+        .col-detail {
+            padding-left: 2rem !important;
+        }
+
+        .col-pts {
+            text-align: right;
+            font-weight: 900;
+            font-size: 1.2rem;
+            color: #22c55e;
+            width: 150px;
+            padding-right: 2rem !important;
+        }
 
         @media (max-width: 768px) {
-            .elite-table-wrapper { padding: 0.5rem; border-radius: 16px; }
-            .elite-table th { display: none; }
-            .elite-table td { display: block; padding: 1rem; border: none; text-align: left; }
-            .elite-table tr { 
-                display: block; margin-bottom: 1rem; background: #fff; 
-                border: 1px solid #f1f5f9; border-radius: 16px; padding: 0.5rem;
+            .elite-table-wrapper {
+                padding: 0.5rem;
+                border-radius: 16px;
             }
-            .col-date { width: 100%; font-size: 0.75rem; color: #94a3b8; }
-            .col-pts { text-align: left; width: 100%; margin-top: 0.5rem; font-size: 1.2rem; }
-            .col-type { width: 100%; margin-top: 0.5rem; }
+
+            .elite-table th {
+                display: none;
+            }
+
+            .elite-table td {
+                display: block;
+                padding: 1rem;
+                border: none;
+                text-align: left;
+            }
+
+            .elite-table tr {
+                display: block;
+                margin-bottom: 1rem;
+                background: #fff;
+                border: 1px solid #f1f5f9;
+                border-radius: 16px;
+                padding: 0.5rem;
+            }
+
+            .col-date {
+                width: 100%;
+                font-size: 0.75rem;
+                color: #94a3b8;
+            }
+
+            .col-pts {
+                text-align: left;
+                width: 100%;
+                margin-top: 0.5rem;
+                font-size: 1.2rem;
+            }
+
+            .col-type {
+                width: 100%;
+                margin-top: 0.5rem;
+            }
         }
 
         /* ── Elite Filter Bar ── */
         .filter-bar {
-            background: #fff; border-radius: 20px; padding: 1.5rem;
-            border: 1px solid #f1f5f9; box-shadow: 0 10px 30px rgba(0,0,0,0.02);
-            display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: flex-end;
+            background: #fff;
+            border-radius: 20px;
+            padding: 1.5rem;
+            border: 1px solid #f1f5f9;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            align-items: flex-end;
             margin-bottom: 2rem;
         }
-        .filter-group { display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 200px; }
-        .filter-label { 
-            font-size: 0.65rem; font-weight: 800; color: #8a99af; 
-            text-transform: uppercase; letter-spacing: 1.2px; 
-            margin-bottom: 8px; margin-left: 2px;
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+            min-width: 200px;
         }
+
+        .filter-label {
+            font-size: 0.65rem;
+            font-weight: 800;
+            color: #8a99af;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            margin-bottom: 8px;
+            margin-left: 2px;
+        }
+
         .filter-input {
-            height: 52px; background: #fff; border: 1.5px solid #f1f5f9;
-            border-radius: 14px; padding: 0 1.2rem; font-size: 0.95rem;
-            font-weight: 500; color: #1e293b; outline: none; transition: 0.3s;
+            height: 52px;
+            background: #fff;
+            border: 1.5px solid #f1f5f9;
+            border-radius: 14px;
+            padding: 0 1.2rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #1e293b;
+            outline: none;
+            transition: 0.3s;
         }
-        .filter-input:focus { border-color: #16a34a; box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.05); }
-        
+
+        .filter-input:focus {
+            border-color: #16a34a;
+            box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.05);
+        }
+
         .btn-clear {
-            height: 52px; background: #111; color: #fff; border: none;
-            border-radius: 12px; padding: 0 2rem; font-weight: 800;
-            display: flex; align-items: center; gap: 12px; cursor: pointer;
-            transition: 0.3s; text-transform: uppercase; font-size: 0.85rem;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            height: 52px;
+            background: #111;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 0 2rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
             letter-spacing: 1px;
         }
-        .btn-clear:hover { background: #000; transform: translateY(-2px); box-shadow: 0 15px 35px rgba(0,0,0,0.25); }
 
-        @media (max-width: 991px) {
-            .filter-bar { flex-direction: column; align-items: stretch; gap: 1rem; }
-            .filter-group { min-width: 0; }
-            .btn-export { width: 100%; justify-content: center; }
+        .btn-clear:hover {
+            background: #000;
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
         }
 
-        .flip-hint { 
+        @media (max-width: 991px) {
+            .filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 1rem;
+            }
+
+            .filter-group {
+                min-width: 0;
+            }
+
+            .btn-export {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        .flip-hint {
             width: 100%;
-            text-align: center; 
-            font-size: 0.7rem; 
-            opacity: 0.4; 
-            text-transform: uppercase; 
-            letter-spacing: 1px; 
-            margin: -1.5rem auto 2rem; 
-        }        /* HORIZONTAL VOUCHER MODAL STYLE */
+            text-align: center;
+            font-size: 0.7rem;
+            opacity: 0.4;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: -1.5rem auto 2rem;
+        }
+
+        /* HORIZONTAL VOUCHER MODAL STYLE */
         /* HORIZONTAL VOUCHER MODAL STYLE */
         .ticket-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(10px);
-            display: flex; align-items: center; justify-content: center;
-            padding: 1.5rem; animation: fadeInOverlay 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            animation: fadeInOverlay 0.3s ease;
             z-index: 10000;
         }
 
         .ticket-container {
-            background: #fff; width: 100%; max-width: 550px;
-            border-radius: 24px; overflow: hidden;
-            box-shadow: 0 40px 120px rgba(0,0,0,0.6);
-            display: flex; /* Mandatory for horizontal */
+            background: #fff;
+            width: 100%;
+            max-width: 550px;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 40px 120px rgba(0, 0, 0, 0.6);
+            display: flex;
+            /* Mandatory for horizontal */
             animation: ticketPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            position: relative; border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .ticket-side-brand {
-            background: #821515; width: 85px; flex-shrink: 0;
-            display: flex; flex-direction: column; align-items: center; justify-content: space-between;
-            padding: 2rem 0; color: #fff; position: relative;
+            background: #821515;
+            width: 85px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 2rem 0;
+            color: #fff;
+            position: relative;
         }
+
         .side-title {
-            writing-mode: vertical-lr; transform: rotate(180deg);
-            font-weight: 900; letter-spacing: 4px; font-size: 0.9rem;
-            opacity: 0.9; text-transform: uppercase;
+            writing-mode: vertical-lr;
+            transform: rotate(180deg);
+            font-weight: 900;
+            letter-spacing: 4px;
+            font-size: 0.9rem;
+            opacity: 0.9;
+            text-transform: uppercase;
         }
-        .side-logo-mini { width: 45px; }
+
+        .side-logo-mini {
+            width: 45px;
+        }
 
         .ticket-perforation {
-            width: 2px; border-left: 2px dashed #e2e8f0;
-            margin: 1.5rem 0; position: relative;
+            width: 2px;
+            border-left: 2px dashed #e2e8f0;
+            margin: 1.5rem 0;
+            position: relative;
         }
-        .ticket-perforation::before, .ticket-perforation::after {
-            content: ''; position: absolute; left: -10px;
-            width: 18px; height: 18px; border-radius: 50%; background: #0f172a;
-        }
-        .ticket-perforation::before { top: -24px; }
-        .ticket-perforation::after { bottom: -24px; }
 
-        .ticket-main-content { flex-grow: 1; padding: 2.2rem; position: relative; }
+        .ticket-perforation::before,
+        .ticket-perforation::after {
+            content: '';
+            position: absolute;
+            left: -10px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #0f172a;
+        }
+
+        .ticket-perforation::before {
+            top: -24px;
+        }
+
+        .ticket-perforation::after {
+            bottom: -24px;
+        }
+
+        .ticket-main-content {
+            flex-grow: 1;
+            padding: 2.2rem;
+            position: relative;
+        }
+
         .ticket-prize-name {
-            font-size: 1.9rem; font-weight: 900; color: #1e293b;
-            line-height: 1.1; margin-bottom: 1.5rem; letter-spacing: -0.5px;
+            font-size: 1.9rem;
+            font-weight: 900;
+            color: #1e293b;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.5px;
         }
 
         .ticket-details-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.2rem;
             margin-bottom: 1.8rem;
         }
-        .t-detail-item { display: flex; flex-direction: column; }
-        .t-detail-label { font-size: 0.6rem; font-weight: 850; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 2px; }
-        .t-detail-val { font-size: 0.9rem; font-weight: 750; color: #334155; }
+
+        .t-detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .t-detail-label {
+            font-size: 0.6rem;
+            font-weight: 850;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 2px;
+        }
+
+        .t-detail-val {
+            font-size: 0.9rem;
+            font-weight: 750;
+            color: #334155;
+        }
 
         .ticket-status-row {
-            border-top: 1px solid #f1f5f9; padding-top: 1.2rem;
-            display: flex; justify-content: space-between; align-items: center;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
+
         .valid-badge {
-            color: #16a34a; font-weight: 900; font-size: 0.85rem;
-            display: flex; align-items: center; gap: 6px; border: 2px solid #dcfce7;
-            padding: 5px 14px; border-radius: 50px; background: #f0fdf4;
+            color: #16a34a;
+            font-weight: 900;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 2px solid #dcfce7;
+            padding: 5px 14px;
+            border-radius: 50px;
+            background: #f0fdf4;
         }
-        .ticket-footer-hint { font-size: 0.65rem; font-weight: 850; color: #821515; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .ticket-footer-hint {
+            font-size: 0.65rem;
+            font-weight: 850;
+            color: #821515;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
 
         @keyframes ticketPop {
-            0% { transform: scale(0.9) translateY(40px); opacity: 0; }
-            100% { transform: scale(1) translateY(0); opacity: 1; }
+            0% {
+                transform: scale(0.9) translateY(40px);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
         }
-        @keyframes fadeInOverlay { from { opacity: 0; } to { opacity: 1; } }
+
+        @keyframes fadeInOverlay {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
 
         /* Responsive Mobile Ticket Enhancements */
         @media (max-width: 520px) {
-            .ticket-container { 
-                flex-direction: column; 
-                max-width: 340px; 
+            .ticket-container {
+                flex-direction: column;
+                max-width: 340px;
                 border-radius: 28px;
-                box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+                box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6);
             }
-            .ticket-side-brand { 
-                width: 100%; height: 80px; 
-                flex-direction: row; padding: 0 1.5rem; 
-                clip-path: polygon(0 0, 100% 0, 100% 85%, 0 85%); 
-            }
-            .side-title { writing-mode: horizontal-tb; transform: none; letter-spacing: 2px; font-size: 0.8rem; }
-            .side-logo-mini { width: 35px; }
 
-            .ticket-perforation { 
-                width: 100%; height: 2px; border-left: none; 
-                border-top: 2px dashed #e2e8f0; margin: 0;
+            .ticket-side-brand {
+                width: 100%;
+                height: 80px;
+                flex-direction: row;
+                padding: 0 1.5rem;
+                clip-path: polygon(0 0, 100% 0, 100% 85%, 0 85%);
             }
-            .ticket-perforation::before, .ticket-perforation::after {
-                width: 24px; height: 24px; background: #0f172a; top: -11px;
+
+            .side-title {
+                writing-mode: horizontal-tb;
+                transform: none;
+                letter-spacing: 2px;
+                font-size: 0.8rem;
             }
-            .ticket-perforation::before { left: -14px; }
-            .ticket-perforation::after { right: -14px; }
 
-            .ticket-main-content { padding: 1.8rem 1.5rem; text-align: center; }
-            .ticket-prize-name { font-size: 1.6rem; margin-bottom: 1.2rem; }
-            .ticket-details-grid { grid-template-columns: 1fr; gap: 0.8rem; }
-            .t-detail-item { align-items: center; }
-            .t-detail-val { font-size: 1rem; }
+            .side-logo-mini {
+                width: 35px;
+            }
 
-            .ticket-status-row { flex-direction: column; gap: 1rem; border-top: 2px dashed #f1f5f9; padding-top: 1.5rem; }
-            .valid-badge { width: 100%; justify-content: center; padding: 10px; font-size: 1rem; }
+            .ticket-perforation {
+                width: 100%;
+                height: 2px;
+                border-left: none;
+                border-top: 2px dashed #e2e8f0;
+                margin: 0;
+            }
+
+            .ticket-perforation::before,
+            .ticket-perforation::after {
+                width: 24px;
+                height: 24px;
+                background: #0f172a;
+                top: -11px;
+            }
+
+            .ticket-perforation::before {
+                left: -14px;
+            }
+
+            .ticket-perforation::after {
+                right: -14px;
+            }
+
+            .ticket-main-content {
+                padding: 1.8rem 1.5rem;
+                text-align: center;
+            }
+
+            .ticket-prize-name {
+                font-size: 1.6rem;
+                margin-bottom: 1.2rem;
+            }
+
+            .ticket-details-grid {
+                grid-template-columns: 1fr;
+                gap: 0.8rem;
+            }
+
+            .t-detail-item {
+                align-items: center;
+            }
+
+            .t-detail-val {
+                font-size: 1rem;
+            }
+
+            .ticket-status-row {
+                flex-direction: column;
+                gap: 1rem;
+                border-top: 2px dashed #f1f5f9;
+                padding-top: 1.5rem;
+            }
+
+            .valid-badge {
+                width: 100%;
+                justify-content: center;
+                padding: 10px;
+                font-size: 1rem;
+            }
         }
 
         .btn-view-ticket {
-            width: 32px; height: 32px; border-radius: 10px;
-            background: #f1f5f9; color: var(--primary);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.1rem; border: none; cursor: pointer; transition: 0.3s;
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            background: #f1f5f9;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
         }
-        .btn-view-ticket:hover { background: var(--primary); color: #fff; transform: scale(1.1); }
+
+        .btn-view-ticket:hover {
+            background: var(--primary);
+            color: #fff;
+            transform: scale(1.1);
+        }
 
         /* Admin layout overrides for client profile */
-        .main-content-client { 
-            flex: 1; 
-            min-height: 100vh; 
+        .main-content-client {
+            flex: 1;
+            min-height: 100vh;
             background: #ffffff;
             position: relative;
         }
-        .sidebar { z-index: 5000; }
+
+        .sidebar {
+            z-index: 5000;
+        }
 
         @media (max-width: 991px) {
-            .admin-layout { display: block; }
-            .header-wrapper { padding-top: 5.5rem; }
-            #mobile-toggle-zone { 
-                display: block !important; 
-                position: fixed !important;
-                top: 1.5rem !important; 
-                left: 1rem !important; 
-                z-index: 2000; 
+            .admin-layout {
+                display: block;
             }
+
+            .header-wrapper {
+                padding-top: 5.5rem;
+            }
+
+            #mobile-toggle-zone {
+                display: block !important;
+                position: fixed !important;
+                top: 1.5rem !important;
+                left: 1rem !important;
+                z-index: 2000;
+            }
+
             #mobile-toggle-zone .logout-btn-client {
                 background: #000 !important;
                 color: #fff !important;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             }
         }
     </style>
 </head>
+
 <body>
 
     <?php include __DIR__ . '/../partials/sidebar_admin.php'; ?>
 
     <div class="admin-layout">
         <div class="main-content-client">
-            <?php 
-                $pageTitle = 'Mi Perfil';
-                $pageSubtitle = 'Membresía Digital';
-                include __DIR__ . '/../partials/header_admin.php'; 
+            <?php
+            $pageTitle = 'Mi Perfil';
+            $pageSubtitle = 'Membresía Digital';
+            include __DIR__ . '/../partials/header_admin.php';
             ?>
-            
-    <!-- VIEW: MI PERFIL (Por Defecto) -->
-    <div id="profile-main-view">
-        <!-- BANNER INCENTIVOS (Top de Mi Perfil) -->
-        <div style="max-width: 1000px; margin: 2rem auto -1rem; padding: 0 1.5rem;">
-            <div class="promo-banner-metas" onclick="window.location.hash='incentivos'" style="background: linear-gradient(135deg, #7c3aed, #4c1d95); border-radius: 20px; padding: 1.5rem; color: #fff; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 10px 25px rgba(124, 58, 237, 0.25); position: relative; overflow: hidden; cursor: pointer; transition: transform 0.3s;">
-            <!-- Elementos decorativos -->
-            <i class='bx bx-target-lock' style="position: absolute; right: -15px; top: -15px; font-size: 8rem; opacity: 0.1; transform: rotate(-15deg);"></i>
-            
-            <div style="position: relative; z-index: 2;">
-                <div style="font-size: 0.75rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; color: #c4b5fd; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;"><i class='bx bxs-zap' style="color: #fef08a;"></i> NUEVO PROGRAMA DE METAS</div>
-                <div style="font-size: 1.15rem; font-weight: 850; line-height: 1.2;">Cumple tus compras y gana<br><span style="color:#fef08a;">Vales de Descuento</span> automáticamente.</div>
-            </div>
-            
-            <div style="position: relative; z-index: 2; background: #fff; color: #7c3aed; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
-                <i class='bx bx-right-arrow-alt'></i>
-            </div>
-        </div>
-    </div>
-            
-    <!-- Header Section: Card + Info -->
-    <div class="profile-header-layout">
-        
-        <!-- Tarjeta VIP y Hint (Lado Izquierdo) -->
-        <div class="profile-card-column">
-            <!-- VIP CARD BLACK EDITION (3D FLIP) -->
-            <div class="vip-card-container" id="profileCard">
-                <div class="vip-card-inner">
-                    <!-- FRONT SIDE -->
-                    <div class="card-front">
-                        <div class="card-shine"></div>
-                        <div class="vip-card-header">
-                            <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" class="card-logo">
-                            <span class="membership-badge">ELITE MEMBER</span>
+
+            <!-- VIEW: MI PERFIL (Por Defecto) -->
+            <div id="profile-main-view">
+                <!-- BANNER INCENTIVOS (Top de Mi Perfil) -->
+                <div style="max-width: 1000px; margin: 2rem auto -1rem; padding: 0 1.5rem;">
+                    <div class="promo-banner-metas" onclick="window.location.hash='incentivos'"
+                        style="background: linear-gradient(135deg, #7c3aed, #4c1d95); border-radius: 20px; padding: 1.5rem; color: #fff; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 10px 25px rgba(124, 58, 237, 0.25); position: relative; overflow: hidden; cursor: pointer; transition: transform 0.3s;">
+                        <!-- Elementos decorativos -->
+                        <i class='bx bx-target-lock'
+                            style="position: absolute; right: -15px; top: -15px; font-size: 8rem; opacity: 0.1; transform: rotate(-15deg);"></i>
+
+                        <div style="position: relative; z-index: 2;">
+                            <div
+                                style="font-size: 0.75rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; color: #c4b5fd; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+                                <i class='bx bxs-zap' style="color: #fef08a;"></i> NUEVO PROGRAMA DE METAS</div>
+                            <div style="font-size: 1.15rem; font-weight: 850; line-height: 1.2;">Cumple tus compras y
+                                gana<br><span style="color:#fef08a;">Vales de Descuento</span> automáticamente.</div>
                         </div>
-                        <div class="card-middle">
-                            <div class="label-small">Titular de Cuenta</div>
-                            <div class="holder-name"><?= htmlspecialchars($cliente['nombre']) ?></div>
-                        </div>
-                        <div class="card-footer">
-                            <div class="client-code"><?= htmlspecialchars($cliente['codigo']) ?></div>
-                            <div class="points-box">
-                                <span class="label-small">Saldo Actual</span>
-                                <b class="points-val" id="points-counter">0</b>
-                                <span class="points-unit">pts surgas</span>
-                            </div>
+
+                        <div
+                            style="position: relative; z-index: 2; background: #fff; color: #7c3aed; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                            <i class='bx bx-right-arrow-alt'></i>
                         </div>
                     </div>
-
-                    <!-- BACK SIDE -->
-                    <div class="card-back">
-                        <div class="qr-container">
-                            <div id="qrcode"></div>
-                        </div>
-                        <div class="qr-help">Muestra para acumular</div>
-                    </div>
                 </div>
-            </div>
 
-            <div class="flip-hint" style="margin-top: 1rem;"><i class='bx bx-refresh'></i> Toca la tarjeta para ver tu QR</div>
-        </div>
+                <!-- Header Section: Card + Info -->
+                <div class="profile-header-layout">
 
-        <!-- Información del Cliente (Lado Derecho) -->
-        <div class="profile-info-column">
-            <h3 style="font-size: 1.1rem; font-weight: 800; color: #1e293b; margin-top: 0; margin-bottom: 1.5rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 0.8rem; display: flex; align-items: center; gap: 8px;">
-                <i class='bx bx-id-card' style="color: #7c3aed; font-size: 1.4rem;"></i> Información de Cuenta
-            </h3>
-            
-            <div style="display: grid; grid-template-columns: 1fr; gap: 1.25rem;">
-                <div style="display: flex; flex-direction: column;">
-                    <span style="font-size: 0.65rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">DNI / RUC</span>
-                    <span style="font-size: 0.95rem; font-weight: 700; color: #1e293b;"><?= htmlspecialchars($cliente['dni'] ?? $cliente['ruc'] ?? 'No registrado') ?></span>
-                </div>
-                
-                <div style="display: flex; flex-direction: column;">
-                    <span style="font-size: 0.65rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">Teléfono</span>
-                    <span style="font-size: 0.95rem; font-weight: 700; color: #1e293b;"><?= htmlspecialchars($cliente['celular'] ?? 'No registrado') ?></span>
-                </div>
-                
-                <div style="display: flex; flex-direction: column;">
-                    <span style="font-size: 0.65rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">Ubicación</span>
-                    <span style="font-size: 0.95rem; font-weight: 700; color: #1e293b;"><?= htmlspecialchars(($cliente['direccion'] ?? 'Sin dirección') . ($cliente['departamento'] ? ', ' . $cliente['departamento'] : '')) ?></span>
-                </div>
-                
-                <div style="display: flex; flex-direction: column;">
-                    <span style="font-size: 0.65rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">Tipo de Cliente</span>
-                    <span style="font-size: 0.95rem; font-weight: 700; color: #7c3aed;"><?= htmlspecialchars($cliente['tipo_cliente'] ?? 'Normal') ?></span>
-                </div>
-                
-                <div style="display: flex; flex-direction: column;">
-                    <span style="font-size: 0.65rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">Miembro Desde</span>
-                    <span style="font-size: 0.95rem; font-weight: 700; color: #1e293b;"><?= isset($cliente['fecha_creacion']) ? date('d/m/Y', strtotime($cliente['fecha_creacion'])) : 'No registrado' ?></span>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</div>
-<!-- END VIEW: MI PERFIL -->
-
-
-
-    <!-- Contenedor de Actividad y Canjes (Oculto por defecto para evitar parpadeos) -->
-    <div class="container" style="display: none;">
-        
-
-        <!-- Tab Switcher -->
-        <div class="tab-switcher">
-            <div class="tab-btn active" onclick="switchTab('actividad', this)">
-                <i class='bx bx-time-five'></i> Actividad
-            </div>
-            <div class="tab-btn" onclick="switchTab('canjes', this)">
-                <i class='bx bx-gift'></i> Canjes
-            </div>
-            <div class="tab-btn" onclick="switchTab('incentivos', this)">
-                <i class='bx bx-target-lock'></i> Metas & Vales
-            </div>
-        </div>
-
-        <!-- PANE 1: ACTIVIDAD -->
-        <div id="pane-actividad" class="tab-content-pane active">
-            
-            <div class="filter-bar" style="justify-content: flex-start; gap: 2rem;">
-                <div class="filter-group" style="flex: 0.8; min-width: 150px;">
-                    <label class="filter-label">DESDE</label>
-                    <input type="date" id="f-desde" class="filter-input" onchange="filterActivityTable()">
-                </div>
-                <div class="filter-group" style="flex: 0.8; min-width: 150px;">
-                    <label class="filter-label">HASTA</label>
-                    <input type="date" id="f-hasta" class="filter-input" onchange="filterActivityTable()">
-                </div>
-                <button class="btn-clear" onclick="clearFilters()">
-                    <i class='bx bx-eraser'></i>
-                    LIMPIAR FILTROS
-                </button>
-            </div>
-
-            <?php if (empty($ventas)): ?>
-                <div style="padding: 5rem 2rem; text-align: center; opacity: 0.3;">
-                    <i class='bx bx-file-blank' style="font-size: 3.5rem; display: block; margin-bottom: 1rem;"></i>
-                    <span style="font-size: 0.9rem; font-weight: 600;">No hay movimientos registrados.</span>
-                </div>
-            <?php else: ?>
-                <div class="elite-table-wrapper">
-                    <table class="elite-table">
-                        <thead>
-                            <tr>
-                                <th class="col-date">FECHA / HORA</th>
-                                <th class="col-type" style="text-align: center;">OPERACIÓN</th>
-                                <th class="col-detail">DETALLE / COMPROBANTE</th>
-                                <th class="col-pts" style="text-align: right;">PUNTOS</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($ventas as $v): ?>
-                            <?php 
-                                $esRecarga = strpos($v['detalle'], 'Recarga') !== false;
-                                $tipoClase = $esRecarga ? 'badge-recarga' : 'badge-compra';
-                                $tipoTexto = $esRecarga ? 'RECARGA' : 'COMPRA';
-                                $sortDate = date('Y-m-d', strtotime($v['fecha']));
-                            ?>
-                            <tr class="activity-row-data" data-tipo="<?= $tipoTexto ?>" data-fecha="<?= $sortDate ?>">
-                                <td class="col-date">
-                                    <?= date('d/m/Y', strtotime($v['fecha'])) ?>
-                                    <div style="font-size: 0.7rem; color: #94a3b8; font-weight: 600;"><?= date('H:i', strtotime($v['fecha'])) ?></div>
-                                </td>
-                                <td class="col-type">
-                                    <span class="type-badge <?= $tipoClase ?>"><?= $tipoTexto ?></span>
-                                </td>
-                                <td>
-                                    <div style="font-weight: 700; color: #1e293b; line-height: 1.4;">
-                                        <?php if (!empty($v['items'])): ?>
-                                            <ul style="list-style: none; padding: 0; margin: 0;">
-                                                <?php foreach ($v['items'] as $it): ?>
-                                                    <li style="display: flex; align-items: center; gap: 6px;">
-                                                        <i class='bx bx-chevron-right' style="color: #94a3b8;"></i>
-                                                        <?= htmlspecialchars($it['nombre_item']) ?> x<?= $it['cantidad'] ?>
-                                                    </li>
-                                                <?php endforeach; ?>
-                                            </ul>
-                                        <?php else: ?>
-                                            <?= htmlspecialchars($v['detalle']) ?>
-                                        <?php endif; ?>
+                    <!-- Tarjeta VIP y Hint (Lado Izquierdo) -->
+                    <div class="profile-card-column">
+                        <!-- VIP CARD BLACK EDITION (3D FLIP) -->
+                        <div class="vip-card-container" id="profileCard">
+                            <div class="vip-card-inner">
+                                <!-- FRONT SIDE -->
+                                <div class="card-front">
+                                    <div class="card-shine"></div>
+                                    <div class="vip-card-header">
+                                        <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" class="card-logo">
+                                        <span class="membership-badge">ELITE MEMBER</span>
                                     </div>
-                                    <div style="font-size: 0.72rem; color: #64748b; margin-top: 4px; font-weight: 500;">
-                                        <?= $esRecarga ? 'Abono directo de puntos' : 'Transacción en establecimiento' ?>
+                                    <div class="card-middle">
+                                        <div class="label-small">Titular de Cuenta</div>
+                                        <div class="holder-name"><?= htmlspecialchars($cliente['nombre']) ?></div>
                                     </div>
-                                </td>
-                                <td class="col-pts">
-                                    +<?= $v['puntos'] ?>
-                                    <span style="font-size: 0.65rem; opacity: 0.5; font-weight: 700;">PTS</span>
-                                </td>
-                            </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
-            <?php endif; ?>
-        </div>
+                                    <div class="card-footer">
+                                        <div class="client-code"><?= htmlspecialchars($cliente['codigo']) ?></div>
+                                        <div class="points-box">
+                                            <span class="label-small">Saldo Actual</span>
+                                            <b class="points-val" id="points-counter">0</b>
+                                            <span class="points-unit">pts surgas</span>
+                                        </div>
+                                    </div>
+                                </div>
 
-        <!-- PANE 2: CANJES -->
-        <div id="pane-canjes" class="tab-content-pane">
-            <?php if (empty($canjes)): ?>
-                <div style="padding: 5rem 2rem; text-align: center; opacity: 0.3;">
-                    <i class='bx bx-gift' style="font-size: 3.5rem; display: block; margin-bottom: 1rem;"></i>
-                    <span style="font-size: 0.9rem; font-weight: 600;">Aún no has canjeado premios.</span>
-                </div>
-            <?php else: ?>
-                <div style="display: flex; flex-direction: column; gap: 1rem;">
-                    <?php foreach ($canjes as $c): ?>
-                    <?php 
-                        $modStr = $c['monto'] > 0 ? (!empty($c['comprobante_url']) ? 'Puntos + Depósito' : 'Puntos + Efectivo') : 'Canje Total';
-                    ?>
-                    <div class="canje-wallet-card" style="padding: 1.5rem; border-radius: 24px; border-color: #f1f5f9; transition: transform 0.3s; display: flex; align-items: center; justify-content: space-between; background: #fff; border: 1px solid #f1f5f9; box-shadow: 0 4px 15px rgba(0,0,0,0.02); position: relative; overflow: hidden;">
-                        <div style="display: flex; align-items: center; gap: 1rem; flex: 1;">
-                            <div class="canje-icon-circle" style="width: 56px; height: 56px; border-radius: 18px; background: #fff1f2; color: #e11d48; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; flex-shrink: 0; border: 1px solid #ffe4e6;">
-                                <i class='bx bxs-gift'></i>
-                            </div>
-
-                            <div class="canje-info-main">
-                                <div class="canje-prize-title" style="font-size: 1.05rem; font-weight: 850; color: #1e293b;"><?= htmlspecialchars($c['premio_nombre']) ?></div>
-                                <div class="modality-tag-mini" style="font-size: 0.65rem; font-weight: 800; color: #821515; background: rgba(130, 21, 21, 0.05); padding: 2px 10px; border-radius: 6px; display: inline-block; margin-top: 4px; text-transform: uppercase;"><?= $modStr ?></div>
-                                <div class="canje-info-meta" style="font-size: 0.75rem; color: #94a3b8; font-weight: 600; margin-top: 8px; display: flex; align-items: center; gap: 4px;">
-                                    <i class='bx bx-time' style="font-size: 0.9rem;"></i> <?= date('d/m/Y', strtotime($c['fecha'])) ?>
+                                <!-- BACK SIDE -->
+                                <div class="card-back">
+                                    <div class="qr-container">
+                                        <div id="qrcode"></div>
+                                    </div>
+                                    <div class="qr-help">Muestra para acumular</div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="canje-metrics-side" style="text-align: right; margin-right: 3.5rem;">
-                            <div class="canje-pts-val" style="font-size: 1.25rem; font-weight: 900; color: #e11d48; line-height: 1;">-<?= $c['puntos_usados'] ?> <span style="font-size: 0.75rem; opacity: 0.5;">PTS</span></div>
-                            <div class="canje-status-pill badge-<?= $c['estado'] ?>" style="margin-top: 8px;">
-                                <?= str_replace('_', ' ', $c['estado']) ?>
+                        <div class="flip-hint" style="margin-top: 1rem;"><i class='bx bx-refresh'></i> Toca la tarjeta
+                            para ver tu QR</div>
+                    </div>
+
+                    <!-- Información del Cliente (Lado Derecho) -->
+                    <div class="profile-info-column">
+                        <h3
+                            style="font-size: 1.1rem; font-weight: 800; color: #1e293b; margin-top: 0; margin-bottom: 1.5rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 0.8rem; display: flex; align-items: center; gap: 8px;">
+                            <i class='bx bx-id-card' style="color: #7c3aed; font-size: 1.4rem;"></i> Información de
+                            Cuenta
+                        </h3>
+
+                        <div style="display: grid; grid-template-columns: 1fr; gap: 1.25rem;">
+                            <div style="display: flex; flex-direction: column;">
+                                <span
+                                    style="font-size: 0.65rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">DNI
+                                    / RUC</span>
+                                <span
+                                    style="font-size: 0.95rem; font-weight: 700; color: #1e293b;"><?= htmlspecialchars($cliente['dni'] ?? $cliente['ruc'] ?? 'No registrado') ?></span>
+                            </div>
+
+                            <div style="display: flex; flex-direction: column;">
+                                <span
+                                    style="font-size: 0.65rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">Teléfono</span>
+                                <span
+                                    style="font-size: 0.95rem; font-weight: 700; color: #1e293b;"><?= htmlspecialchars($cliente['celular'] ?? 'No registrado') ?></span>
+                            </div>
+
+                            <div style="display: flex; flex-direction: column;">
+                                <span
+                                    style="font-size: 0.65rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">Ubicación</span>
+                                <span
+                                    style="font-size: 0.95rem; font-weight: 700; color: #1e293b;"><?= htmlspecialchars(($cliente['direccion'] ?? 'Sin dirección') . ($cliente['departamento'] ? ', ' . $cliente['departamento'] : '')) ?></span>
+                            </div>
+
+                            <div style="display: flex; flex-direction: column;">
+                                <span
+                                    style="font-size: 0.65rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">Tipo
+                                    de Cliente</span>
+                                <span
+                                    style="font-size: 0.95rem; font-weight: 700; color: #7c3aed;"><?= htmlspecialchars($cliente['tipo_cliente'] ?? 'Normal') ?></span>
+                            </div>
+
+                            <div style="display: flex; flex-direction: column;">
+                                <span
+                                    style="font-size: 0.65rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">Miembro
+                                    Desde</span>
+                                <span
+                                    style="font-size: 0.95rem; font-weight: 700; color: #1e293b;"><?= isset($cliente['fecha_creacion']) ? date('d/m/Y', strtotime($cliente['fecha_creacion'])) : 'No registrado' ?></span>
                             </div>
                         </div>
-
-                        <?php if ($c['estado'] === 'pago_aprobado' || $c['estado'] === 'pendiente'): ?>
-                            <button class="btn-float-ticket" style="position: absolute; right: 1.5rem; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border-radius: 14px; background: #000; color: #fff; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s;"
-                                    onclick='showClaimTicket(<?= json_encode([
-                                        "id"     => $c["id"],
-                                        "premio" => $c["premio_nombre"],
-                                        "puntos" => $c["puntos_usados"],
-                                        "monto"  => $c["monto"],
-                                        "modalidad" => $modStr,
-                                        "fecha"  => date("d/m/Y H:i", strtotime($c["fecha"]))
-                                    ]) ?>)'>
-                                <i class="bx bx-qr" style="font-size: 1.4rem;"></i>
-                            </button>
-                        <?php endif; ?>
                     </div>
-                    <?php endforeach; ?>
+
                 </div>
-            <?php endif; ?>
-        </div>
-
-        <!-- PANE 3: INCENTIVOS -->
-        <div id="pane-incentivos" class="tab-content-pane">
-            <div id="incentivos-loader" style="padding: 5rem 2rem; text-align: center; color: #94a3b8;">
-                <i class='bx bx-loader-alt bx-spin' style="font-size: 3rem; margin-bottom: 1rem;"></i>
-                <div>Cargando tus metas...</div>
             </div>
-            <div id="incentivos-content" style="display: none;">
-                <!-- PROGRESO DE METAS -->
-                <h3 style="font-size: 1.1rem; font-weight: 850; color: #1e293b; margin-bottom: 1rem;"><i class='bx bx-target-lock' style="color:#7c3aed"></i> Progreso de Metas (<span id="inc-periodo-lbl"></span>)</h3>
-                <div id="progreso-container" style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem;"></div>
+            <!-- END VIEW: MI PERFIL -->
 
-                <!-- VALES DISPONIBLES -->
-                <h3 style="font-size: 1.1rem; font-weight: 850; color: #1e293b; margin-bottom: 1rem;"><i class='bx bx-receipt' style="color:#16a34a"></i> Mis Vales Disponibles</h3>
-                <div id="vales-container" style="display: flex; flex-direction: column; gap: 1rem;"></div>
+
+
+            <!-- Contenedor de Actividad y Canjes (Oculto por defecto para evitar parpadeos) -->
+            <div class="container" style="display: none;">
+
+
+                <!-- Tab Switcher -->
+                <div class="tab-switcher">
+                    <div class="tab-btn active" onclick="switchTab('actividad', this)">
+                        <i class='bx bx-time-five'></i> Actividad
+                    </div>
+                    <div class="tab-btn" onclick="switchTab('canjes', this)">
+                        <i class='bx bx-gift'></i> Canjes
+                    </div>
+                    <div class="tab-btn" onclick="switchTab('incentivos', this)">
+                        <i class='bx bx-target-lock'></i> Metas & Vales
+                    </div>
+                </div>
+
+                <!-- PANE 1: ACTIVIDAD -->
+                <div id="pane-actividad" class="tab-content-pane active">
+
+                    <div class="filter-bar" style="justify-content: flex-start; gap: 2rem;">
+                        <div class="filter-group" style="flex: 0.8; min-width: 150px;">
+                            <label class="filter-label">DESDE</label>
+                            <input type="date" id="f-desde" class="filter-input" onchange="filterActivityTable()">
+                        </div>
+                        <div class="filter-group" style="flex: 0.8; min-width: 150px;">
+                            <label class="filter-label">HASTA</label>
+                            <input type="date" id="f-hasta" class="filter-input" onchange="filterActivityTable()">
+                        </div>
+                        <button class="btn-clear" onclick="clearFilters()">
+                            <i class='bx bx-eraser'></i>
+                            LIMPIAR FILTROS
+                        </button>
+                    </div>
+
+                    <?php if (empty($ventas)): ?>
+                        <div style="padding: 5rem 2rem; text-align: center; opacity: 0.3;">
+                            <i class='bx bx-file-blank' style="font-size: 3.5rem; display: block; margin-bottom: 1rem;"></i>
+                            <span style="font-size: 0.9rem; font-weight: 600;">No hay movimientos registrados.</span>
+                        </div>
+                    <?php else: ?>
+                        <div class="elite-table-wrapper">
+                            <table class="elite-table">
+                                <thead>
+                                    <tr>
+                                        <th class="col-date">FECHA / HORA</th>
+                                        <th class="col-type" style="text-align: center;">OPERACIÓN</th>
+                                        <th class="col-detail">DETALLE / COMPROBANTE</th>
+                                        <th class="col-pts" style="text-align: right;">PUNTOS</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($ventas as $v): ?>
+                                        <?php
+                                        $esRecarga = strpos($v['detalle'], 'Recarga') !== false;
+                                        $tipoClase = $esRecarga ? 'badge-recarga' : 'badge-compra';
+                                        $tipoTexto = $esRecarga ? 'RECARGA' : 'COMPRA';
+                                        $sortDate = date('Y-m-d', strtotime($v['fecha']));
+                                        ?>
+                                        <tr class="activity-row-data" data-tipo="<?= $tipoTexto ?>"
+                                            data-fecha="<?= $sortDate ?>">
+                                            <td class="col-date">
+                                                <?= date('d/m/Y', strtotime($v['fecha'])) ?>
+                                                <div style="font-size: 0.7rem; color: #94a3b8; font-weight: 600;">
+                                                    <?= date('H:i', strtotime($v['fecha'])) ?></div>
+                                            </td>
+                                            <td class="col-type">
+                                                <span class="type-badge <?= $tipoClase ?>"><?= $tipoTexto ?></span>
+                                            </td>
+                                            <td>
+                                                <div style="font-weight: 700; color: #1e293b; line-height: 1.4;">
+                                                    <?php if (!empty($v['items'])): ?>
+                                                        <ul style="list-style: none; padding: 0; margin: 0;">
+                                                            <?php foreach ($v['items'] as $it): ?>
+                                                                <li style="display: flex; align-items: center; gap: 6px;">
+                                                                    <i class='bx bx-chevron-right' style="color: #94a3b8;"></i>
+                                                                    <?= htmlspecialchars($it['nombre_item']) ?> x<?= $it['cantidad'] ?>
+                                                                </li>
+                                                            <?php endforeach; ?>
+                                                        </ul>
+                                                    <?php else: ?>
+                                                        <?= htmlspecialchars($v['detalle']) ?>
+                                                    <?php endif; ?>
+                                                </div>
+                                                <div
+                                                    style="font-size: 0.72rem; color: #64748b; margin-top: 4px; font-weight: 500;">
+                                                    <?= $esRecarga ? 'Abono directo de puntos' : 'Transacción en establecimiento' ?>
+                                                </div>
+                                            </td>
+                                            <td class="col-pts">
+                                                +<?= $v['puntos'] ?>
+                                                <span style="font-size: 0.65rem; opacity: 0.5; font-weight: 700;">PTS</span>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    <?php endif; ?>
+                </div>
+
+                <!-- PANE 2: CANJES -->
+                <div id="pane-canjes" class="tab-content-pane">
+                    <?php if (empty($canjes)): ?>
+                        <div style="padding: 5rem 2rem; text-align: center; opacity: 0.3;">
+                            <i class='bx bx-gift' style="font-size: 3.5rem; display: block; margin-bottom: 1rem;"></i>
+                            <span style="font-size: 0.9rem; font-weight: 600;">Aún no has canjeado premios.</span>
+                        </div>
+                    <?php else: ?>
+                        <div style="display: flex; flex-direction: column; gap: 1rem;">
+                            <?php foreach ($canjes as $c): ?>
+                                <?php
+                                $modStr = $c['monto'] > 0 ? (!empty($c['comprobante_url']) ? 'Puntos + Depósito' : 'Puntos + Efectivo') : 'Canje Total';
+                                ?>
+                                <div class="canje-wallet-card"
+                                    style="padding: 1.25rem 1rem; border-radius: 24px; border-color: #f1f5f9; transition: transform 0.3s; display: flex; align-items: center; justify-content: space-between; background: #fff; border: 1px solid #f1f5f9; box-shadow: 0 4px 15px rgba(0,0,0,0.02); position: relative; overflow: hidden; gap: 0.5rem;">
+                                    <div style="display: flex; align-items: center; gap: 0.75rem; flex: 1; min-width: 0;">
+                                        <div class="canje-icon-circle"
+                                            style="width: 48px; height: 48px; border-radius: 16px; background: #fff1f2; color: #e11d48; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; border: 1px solid #ffe4e6;">
+                                            <i class='bx bxs-gift'></i>
+                                        </div>
+
+                                        <div class="canje-info-main" style="min-width: 0;">
+                                            <div class="canje-prize-title"
+                                                style="font-size: 0.95rem; font-weight: 850; color: #1e293b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                <?= htmlspecialchars($c['premio_nombre']) ?></div>
+                                            <div class="modality-tag-mini"
+                                                style="font-size: 0.6rem; font-weight: 800; color: #821515; background: rgba(130, 21, 21, 0.05); padding: 2px 8px; border-radius: 6px; display: inline-block; margin-top: 4px; text-transform: uppercase; white-space: nowrap;">
+                                                <?= $modStr ?></div>
+                                            <div class="canje-info-meta"
+                                                style="font-size: 0.7rem; color: #94a3b8; font-weight: 600; margin-top: 6px; display: flex; align-items: center; gap: 4px;">
+                                                <i class='bx bx-time' style="font-size: 0.85rem;"></i>
+                                                <?= date('d/m/Y', strtotime($c['fecha'])) ?>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div style="display: flex; align-items: center; gap: 0.75rem; flex-shrink: 0;">
+                                        <div class="canje-metrics-side" style="text-align: right;">
+                                            <div class="canje-pts-val"
+                                                style="font-size: 1.15rem; font-weight: 900; color: #e11d48; line-height: 1;">
+                                                -<?= $c['puntos_usados'] ?> <span
+                                                    style="font-size: 0.7rem; opacity: 0.5;">PTS</span></div>
+                                            <div class="canje-status-pill badge-<?= $c['estado'] ?>" style="margin-top: 6px; font-size: 0.5rem; padding: 2px 6px;">
+                                                <?= str_replace('_', ' ', $c['estado']) ?>
+                                            </div>
+                                        </div>
+
+                                        <?php if ($c['estado'] === 'pago_aprobado' || $c['estado'] === 'pendiente'): ?>
+                                            <button class="btn-float-ticket"
+                                                style="width: 40px; height: 40px; border-radius: 12px; background: #000; color: #fff; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; flex-shrink: 0;"
+                                                onclick='showClaimTicket(<?= json_encode([
+                                                    "id" => $c["id"],
+                                                    "premio" => $c["premio_nombre"],
+                                                    "puntos" => $c["puntos_usados"],
+                                                    "monto" => $c["monto"],
+                                                    "modalidad" => $modStr,
+                                                    "fecha" => date("d/m/Y H:i", strtotime($c["fecha"]))
+                                                ]) ?>)'>
+                                                <i class="bx bx-qr" style="font-size: 1.25rem;"></i>
+                                            </button>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+
+                <!-- PANE 3: INCENTIVOS -->
+                <div id="pane-incentivos" class="tab-content-pane">
+                    <div id="incentivos-loader" style="padding: 5rem 2rem; text-align: center; color: #94a3b8;">
+                        <i class='bx bx-loader-alt bx-spin' style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                        <div>Cargando tus metas...</div>
+                    </div>
+                    <div id="incentivos-content" style="display: none;">
+                        <!-- PROGRESO DE METAS -->
+                        <h3 style="font-size: 1.1rem; font-weight: 850; color: #1e293b; margin-bottom: 1rem;"><i
+                                class='bx bx-target-lock' style="color:#7c3aed"></i> Progreso de Metas (<span
+                                id="inc-periodo-lbl"></span>)</h3>
+                        <div id="progreso-container"
+                            style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem;"></div>
+
+                        <!-- VALES DISPONIBLES -->
+                        <h3 style="font-size: 1.1rem; font-weight: 850; color: #1e293b; margin-bottom: 1rem;"><i
+                                class='bx bx-receipt' style="color:#16a34a"></i> Mis Vales Disponibles</h3>
+                        <div id="vales-container" style="display: flex; flex-direction: column; gap: 1rem;"></div>
+                    </div>
+                </div>
+
+                <div class="footer">
+                    &copy; <?= date('Y') ?> Surgas — Premium Digital Member Card
+                </div>
             </div>
-        </div>
-        
-        <div class="footer">
-            &copy; <?= date('Y') ?> Surgas — Premium Digital Member Card
         </div>
     </div>
-</div>
-</div>
 
     <script>
         const cardContainer = document.getElementById('profileCard');
@@ -965,9 +1685,9 @@
             text: qrContent,
             width: 150,
             height: 150,
-            colorDark : "#000000",
-            colorLight : "#ffffff",
-            correctLevel : QRCode.CorrectLevel.H
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
         });
 
         // Tab Switching Logic
@@ -997,10 +1717,10 @@
 
             if (hideCard) {
                 // VIEW: ACTIVITY or REDEMPTIONS (Detail)
-                cardElements.forEach(el => { if(el) el.style.display = 'none'; });
-                if(document.querySelector('.header-wrapper')) document.querySelector('.header-wrapper').style.display = 'none';
-                
-                if(tabsContainer) {
+                cardElements.forEach(el => { if (el) el.style.display = 'none'; });
+                if (document.querySelector('.header-wrapper')) document.querySelector('.header-wrapper').style.display = 'none';
+
+                if (tabsContainer) {
                     tabsContainer.style.display = 'block';
                     tabsContainer.style.marginTop = '0';
                     tabsContainer.style.paddingTop = '2rem';
@@ -1010,10 +1730,10 @@
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             } else {
                 // VIEW: MAIN PROFILE (VIP Card Only)
-                cardElements.forEach(el => { if(el) el.style.display = ''; });
-                if(document.querySelector('.header-wrapper')) document.querySelector('.header-wrapper').style.display = '';
-                
-                if(tabsContainer) {
+                cardElements.forEach(el => { if (el) el.style.display = ''; });
+                if (document.querySelector('.header-wrapper')) document.querySelector('.header-wrapper').style.display = '';
+
+                if (tabsContainer) {
                     tabsContainer.style.display = 'none'; // Hide Activity/Canjes in Profile view
                 }
                 document.querySelector('.main-content-client').style.paddingTop = '';
@@ -1027,21 +1747,21 @@
             const subTitleEl = document.querySelector('.page-subtitle');
 
             if (hash === 'canjes') {
-                if(titleEl) titleEl.innerText = 'Mis Beneficios';
-                if(subTitleEl) subTitleEl.innerText = 'Premios y canjes realizados';
+                if (titleEl) titleEl.innerText = 'Mis Canjes';
+                if (subTitleEl) subTitleEl.innerText = 'Premios y canjes realizados';
                 switchTab('canjes', document.querySelectorAll('.tab-btn')[1], true);
             } else if (hash === 'actividad') {
-                if(titleEl) titleEl.innerText = 'Historial de Actividad';
-                if(subTitleEl) subTitleEl.innerText = 'Tus puntos acumulados';
+                if (titleEl) titleEl.innerText = 'Historial de Actividad';
+                if (subTitleEl) subTitleEl.innerText = 'Tus puntos acumulados';
                 switchTab('actividad', document.querySelectorAll('.tab-btn')[0], true);
             } else if (hash === 'incentivos') {
-                if(titleEl) titleEl.innerText = 'Metas y Vales';
-                if(subTitleEl) subTitleEl.innerText = 'Gana vales por tus compras';
+                if (titleEl) titleEl.innerText = 'Metas y Vales';
+                if (subTitleEl) subTitleEl.innerText = 'Gana vales por tus compras';
                 switchTab('incentivos', document.querySelectorAll('.tab-btn')[2], true);
             } else {
                 // Default: Profile view
-                if(titleEl) titleEl.innerText = 'Mi Perfil';
-                if(subTitleEl) subTitleEl.innerText = 'Membresía Digital';
+                if (titleEl) titleEl.innerText = 'Mi Perfil';
+                if (subTitleEl) subTitleEl.innerText = 'Membresía Digital';
                 window.location.hash = '';
                 switchTab('actividad', document.querySelectorAll('.tab-btn')[0], false);
             }
@@ -1055,8 +1775,8 @@
                 .then(data => {
                     document.getElementById('incentivos-loader').style.display = 'none';
                     document.getElementById('incentivos-content').style.display = 'block';
-                    
-                    if(data.success) {
+
+                    if (data.success) {
                         renderProgreso(data.progreso);
                         renderVales(data.vales);
                     } else {
@@ -1070,7 +1790,7 @@
 
         function renderProgreso(progreso) {
             const container = document.getElementById('progreso-container');
-            if(!progreso || progreso.length === 0) {
+            if (!progreso || progreso.length === 0) {
                 container.innerHTML = '<div style="background:#f8fafc; padding:2rem; border-radius:16px; text-align:center; color:#94a3b8; font-size:0.9rem; font-weight:600;">No hay metas activas en este momento.</div>';
                 return;
             }
@@ -1088,6 +1808,7 @@
                             <div>
                                 <div style="font-weight:850; color:#1e293b; font-size:1rem;">${p.regla_nombre}</div>
                                 <div style="font-size:0.75rem; color:#94a3b8; font-weight:600; margin-top:2px;">Premio: ${p.premio}</div>
+                                ${p.descripcion ? `<div style="font-size:0.7rem; color:#64748b; font-weight:500; margin-top:8px; background:#f8fafc; padding:8px 12px; border-radius:8px; border-left:3px solid #7c3aed; line-height:1.4;">${p.descripcion}</div>` : ''}
                             </div>
                             <div style="background:${bg}; color:${color}; padding:6px 12px; border-radius:50px; font-weight:900; font-size:0.7rem;">
                                 ${p.porcentaje}%
@@ -1109,7 +1830,7 @@
 
         function renderVales(vales) {
             const container = document.getElementById('vales-container');
-            if(!vales || vales.length === 0) {
+            if (!vales || vales.length === 0) {
                 container.innerHTML = '<div style="background:#f8fafc; padding:2rem; border-radius:16px; text-align:center; color:#94a3b8; font-size:0.9rem; font-weight:600;">No tienes vales disponibles. ¡Completa tus metas!</div>';
                 return;
             }
@@ -1119,7 +1840,7 @@
                 // Formatting date:
                 const d = new Date(v.fecha_vencimiento);
                 const dateStr = d.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
-                
+
                 const valStr = v.tipo_premio === 'vale_descuento' ? `${parseInt(v.valor)}%` : `S/ ${parseFloat(v.valor).toFixed(2)}`;
 
                 html += `
@@ -1157,7 +1878,7 @@
         function filterActivityTable() {
             const searchInput = document.getElementById('f-search');
             const opInput = document.getElementById('f-op');
-            
+
             const search = searchInput ? searchInput.value.toLowerCase() : '';
             const op = opInput ? opInput.value : 'todos';
             const desde = document.getElementById('f-desde').value;
@@ -1191,8 +1912,8 @@
             document.getElementById('f-hasta').value = '';
             const searchInput = document.getElementById('f-search');
             const opInput = document.getElementById('f-op');
-            if(searchInput) searchInput.value = '';
-            if(opInput) opInput.value = 'todos';
+            if (searchInput) searchInput.value = '';
+            if (opInput) opInput.value = 'todos';
             filterActivityTable();
         }
 
@@ -1269,7 +1990,7 @@
         const duration = 1500;
         const steps = 60;
         const interval = duration / steps;
-        
+
         const counterTimer = setInterval(() => {
             currentPoints += pointsTarget / steps;
             if (currentPoints >= pointsTarget) {
@@ -1283,4 +2004,5 @@
     <script> const BASE_URL = '<?= BASE_URL ?>'; </script>
     <script src="<?= BASE_URL ?>assets/js/session_check.js"></script>
 </body>
+
 </html>
