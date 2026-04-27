@@ -40,12 +40,18 @@ class ScanController {
                 $ventas = $ventaModel->getByCliente($cliente['id']);
 
                 // Fetch approved recharges to show in history
-                $stmtRecargas = Database::getConnection()->prepare("SELECT puntos, fecha, 'Recarga Aprobada' as detalle FROM recargas WHERE cliente_id = ? AND estado = 'aprobado' ORDER BY fecha DESC");
+                $db = Database::getConnection();
+                $stmtRecargas = $db->prepare("SELECT puntos, fecha, 'Recarga Aprobada' as detalle FROM recargas WHERE cliente_id = ? AND estado = 'aprobado' ORDER BY fecha DESC");
                 $stmtRecargas->execute([$cliente['id']]);
                 $recargasHistory = $stmtRecargas->fetchAll(PDO::FETCH_ASSOC);
 
-                // Merge and sort both arrays by date descending
-                $historial = array_merge($ventas, $recargasHistory);
+                // Fetch redeemed vouchers to show in history
+                $stmtVales = $db->prepare("SELECT 0 as puntos, usado_fecha as fecha, CONCAT('Vale Canjeado: ', descripcion) as detalle, 'VALE' as tipo_ext FROM incentivos_vales WHERE cliente_id = ? AND estado = 'usado' ORDER BY usado_fecha DESC");
+                $stmtVales->execute([$cliente['id']]);
+                $valesHistory = $stmtVales->fetchAll(PDO::FETCH_ASSOC);
+
+                // Merge and sort all arrays by date descending
+                $historial = array_merge($ventas, $recargasHistory, $valesHistory);
                 usort($historial, function($a, $b) {
                     return strtotime($b['fecha']) - strtotime($a['fecha']);
                 });
@@ -54,10 +60,16 @@ class ScanController {
                 $canjeModel = new CanjeModel();
                 $canjes = $canjeModel->getByCliente($cliente['id']);
 
+                $isDefaultPassword = (
+                    ($cliente['password'] === hash('sha256', $cliente['dni'] ?? '')) || 
+                    ($cliente['password'] === hash('sha256', $cliente['ruc'] ?? ''))
+                );
+
                 $this->render('scan/perfil_cliente', [
                     'cliente' => $cliente,
                     'ventas'  => $historial,
-                    'canjes'  => $canjes
+                    'canjes'  => $canjes,
+                    'isDefaultPassword' => $isDefaultPassword
                 ]);
                 return;
             }

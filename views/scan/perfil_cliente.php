@@ -874,6 +874,12 @@ if (empty($hpw)) {
             border: 1px solid #dbeafe;
         }
 
+        .badge-vale {
+            background: #f5f3ff;
+            color: #7c3aed;
+            border: 1px solid #ddd6fe;
+        }
+
         .col-detail {
             padding-left: 2rem !important;
         }
@@ -1543,6 +1549,15 @@ if (empty($hpw)) {
 
                     <div class="filter-bar" style="justify-content: flex-start; gap: 2rem;">
                         <div class="filter-group" style="flex: 0.8; min-width: 150px;">
+                            <label class="filter-label">TIPO OPERACIÓN</label>
+                            <select id="f-op" class="filter-input" onchange="filterActivityTable()">
+                                <option value="todos">TODOS</option>
+                                <option value="COMPRA">COMPRAS</option>
+                                <option value="RECARGA">RECARGAS</option>
+                                <option value="VALE">VALES</option>
+                            </select>
+                        </div>
+                        <div class="filter-group" style="flex: 0.8; min-width: 150px;">
                             <label class="filter-label">DESDE</label>
                             <input type="date" id="f-desde" class="filter-input" onchange="filterActivityTable()">
                         </div>
@@ -1552,7 +1567,7 @@ if (empty($hpw)) {
                         </div>
                         <button class="btn-clear" onclick="clearFilters()">
                             <i class='bx bx-eraser'></i>
-                            LIMPIAR FILTROS
+                            LIMPIAR
                         </button>
                     </div>
 
@@ -1575,9 +1590,21 @@ if (empty($hpw)) {
                                 <tbody>
                                     <?php foreach ($ventas as $v): ?>
                                         <?php
+                                        $tipoExt = $v['tipo_ext'] ?? '';
                                         $esRecarga = strpos($v['detalle'], 'Recarga') !== false;
-                                        $tipoClase = $esRecarga ? 'badge-recarga' : 'badge-compra';
-                                        $tipoTexto = $esRecarga ? 'RECARGA' : 'COMPRA';
+                                        $esVale = ($tipoExt === 'VALE');
+
+                                        $tipoClase = 'badge-compra';
+                                        $tipoTexto = 'COMPRA';
+
+                                        if ($esRecarga) {
+                                            $tipoClase = 'badge-recarga';
+                                            $tipoTexto = 'RECARGA';
+                                        } elseif ($esVale) {
+                                            $tipoClase = 'badge-vale';
+                                            $tipoTexto = 'VALE';
+                                        }
+
                                         $sortDate = date('Y-m-d', strtotime($v['fecha']));
                                         ?>
                                         <tr class="activity-row-data" data-tipo="<?= $tipoTexto ?>"
@@ -1608,11 +1635,17 @@ if (empty($hpw)) {
                                                 </div>
                                                 <div
                                                     style="font-size: 0.72rem; color: #64748b; margin-top: 4px; font-weight: 500;">
-                                                    <?= $esRecarga ? 'Abono directo de puntos' : 'Transacción en establecimiento' ?>
+                                                    <?php 
+                                                        if ($esRecarga) echo 'Abono directo de puntos';
+                                                        elseif ($esVale) echo 'Canje de beneficio acumulado';
+                                                        else echo 'Transacción en establecimiento';
+                                                    ?>
                                                 </div>
                                             </td>
                                             <td class="col-pts">
-                                                +<?= $v['puntos'] ?>
+                                                <span style="color: <?= $esVale ? '#94a3b8' : '#22c55e' ?>">
+                                                    <?= $esVale ? '' : '+' ?><?= $v['puntos'] ?>
+                                                </span>
                                                 <span style="font-size: 0.65rem; opacity: 0.5; font-weight: 700;">PTS</span>
                                             </td>
                                         </tr>
