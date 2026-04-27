@@ -24,7 +24,7 @@ class AuditoriaModel {
             $idUsuario = $_SESSION['id_usuario'];
         }
         
-        $ip = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+        $ip = $this->getClientIP();
         $fullAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'Desconocido';
         
         // Parsear dispositivo básico
@@ -76,6 +76,26 @@ class AuditoriaModel {
         if (strpos($agent, 'Edge') !== false) return 'Edge';
         if (strpos($agent, 'MSIE') !== false || strpos($agent, 'Trident') !== false) return 'IE';
         return 'Browser';
+    }
+
+    private function getClientIP(): string {
+        $keys = [
+            'HTTP_X_FORWARDED_FOR',
+            'HTTP_CLIENT_IP',
+            'HTTP_X_REAL_IP',
+            'REMOTE_ADDR'
+        ];
+
+        foreach ($keys as $key) {
+            if (!empty($_SERVER[$key])) {
+                $ip = $_SERVER[$key];
+                if (strpos($ip, ',') !== false) {
+                    $ip = explode(',', $ip)[0];
+                }
+                return trim($ip);
+            }
+        }
+        return '0.0.0.0';
     }
 
     /**
