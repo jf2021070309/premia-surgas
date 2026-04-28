@@ -35,7 +35,7 @@ if (empty($hpw)) {
     <style>
         :root {
             --primary: #400000;
-            --bg-color: #f3f4f6; /* Sophisticated Obsidian Grey */
+            --bg-color: #EBEEF2;
             --slate-900: #0f172a;
             --slate-800: #1e293b;
             --slate-700: #334155;
@@ -62,13 +62,13 @@ if (empty($hpw)) {
 
         /* Layout */
         .header-wrapper {
-            background: linear-gradient(135deg, var(--primary) 0%, #4a0b0b 100%);
+            background: linear-gradient(90deg, var(--primary) 0%, #5a0000 100%);
             padding: 3.5rem 1.5rem 7rem;
             color: white;
             position: relative;
             border-bottom-left-radius: 40px;
             border-bottom-right-radius: 40px;
-            box-shadow: 0 15px 40px rgba(130, 21, 21, 0.2);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
             margin-bottom: 0;
         }
 
@@ -88,8 +88,8 @@ if (empty($hpw)) {
         .profile-avatar {
             width: 55px;
             height: 55px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.25);
             color: #fff;
             border-radius: 50%;
             display: flex;
@@ -98,7 +98,7 @@ if (empty($hpw)) {
             font-size: 1.6rem;
             font-weight: 700;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(12px);
         }
 
         .greeting-text h1 {
@@ -1608,7 +1608,7 @@ if (empty($hpw)) {
                     </div>
 
                     <!-- Información del Cliente (Lado Derecho) -->
-                    <div class="profile-info-column" style="background: #fff; border-radius: 32px; border: 1px solid #e2e8f0; box-shadow: 0 20px 40px rgba(0,0,0,0.04); padding: 2.5rem !important;">
+                    <div class="profile-info-column" style="background: #fff; border-radius: 32px; border: 1.5px solid #e2e8f0; box-shadow: 0 20px 40px rgba(0,0,0,0.04); padding: 2.5rem !important;">
                         
                         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2.5rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 1.5rem;">
                             <div>
@@ -1846,7 +1846,7 @@ if (empty($hpw)) {
                                 $modStr = $c['monto'] > 0 ? (!empty($c['comprobante_url']) ? 'Puntos + Depósito' : 'Puntos + Efectivo') : 'Canje Total';
                                 ?>
                                 <div class="canje-wallet-card"
-                                    style="padding: 1.25rem 1rem; border-radius: 24px; border-color: #f1f5f9; transition: transform 0.3s; display: flex; align-items: center; justify-content: space-between; background: #fff; border: 1px solid #f1f5f9; box-shadow: 0 4px 15px rgba(0,0,0,0.02); position: relative; overflow: hidden; gap: 0.5rem;">
+                                    style="padding: 1.25rem 1rem; border-radius: 24px; border-color: #f1f5f9; transition: transform 0.3s; display: flex; align-items: center; justify-content: space-between; background: #fff; border: 1.5px solid #f1f5f9; box-shadow: 0 4px 15px rgba(0,0,0,0.02); position: relative; overflow: hidden; gap: 0.5rem;">
                                     <div style="display: flex; align-items: center; gap: 0.75rem; flex: 1; min-width: 0;">
                                         <div class="canje-icon-circle"
                                             style="width: 48px; height: 48px; border-radius: 16px; background: #fff1f2; color: #e11d48; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; border: 1px solid #ffe4e6;">
@@ -1927,7 +1927,7 @@ if (empty($hpw)) {
                 <!-- PANE 4: SEGURIDAD -->
                 <div id="pane-seguridad" class="tab-content-pane">
                     <div
-                        style="max-width: 500px; margin: 0 auto; background: #fff; padding: 2.5rem; border-radius: 24px; border: 1px solid #f1f5f9; box-shadow: 0 10px 30px rgba(0,0,0,0.02);">
+                        style="max-width: 500px; margin: 0 auto; background: #fff; padding: 2.5rem; border-radius: 24px; border: 1.5px solid #f1f5f9; box-shadow: 0 10px 30px rgba(0,0,0,0.02);">
                         <div style="text-align: center; margin-bottom: 2rem;">
                             <div
                                 style="background: #f8fafc; width: 64px; height: 64px; border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: #7c3aed; font-size: 2rem;">
