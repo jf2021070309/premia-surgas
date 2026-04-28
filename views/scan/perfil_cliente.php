@@ -1039,10 +1039,10 @@ if (empty($hpw)) {
         /* ── Elite Filter Bar ── */
         .filter-bar {
             background: #fff;
-            border-radius: 20px;
-            padding: 1.5rem;
-            border: 1px solid #f1f5f9;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+            border-radius: 18px;
+            padding: 1.5rem 2rem;
+            border: 1.5px solid #e2e8f0;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.05);
             display: flex;
             flex-wrap: wrap;
             gap: 1.5rem;
@@ -1059,26 +1059,27 @@ if (empty($hpw)) {
         }
 
         .filter-label {
-            font-size: 0.65rem;
-            font-weight: 800;
-            color: #8a99af;
+            font-size: 0.68rem;
+            font-weight: 850;
+            color: #64748b;
             text-transform: uppercase;
             letter-spacing: 1.2px;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
             margin-left: 2px;
         }
 
         .filter-input {
-            height: 52px;
+            height: 50px;
             background: #fff;
-            border: 1.5px solid #f1f5f9;
-            border-radius: 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
             padding: 0 1.2rem;
-            font-size: 0.95rem;
-            font-weight: 500;
+            font-size: 0.92rem;
+            font-weight: 700;
             color: #1e293b;
             outline: none;
             transition: 0.3s;
+            width: 100%;
         }
 
         .filter-input:focus {
@@ -1087,28 +1088,29 @@ if (empty($hpw)) {
         }
 
         .btn-clear {
-            height: 52px;
-            background: #111;
+            height: 50px;
+            background: #0f172a;
             color: #fff;
             border: none;
             border-radius: 12px;
-            padding: 0 2rem;
-            font-weight: 800;
+            padding: 0 1.8rem;
+            font-weight: 850;
+            font-size: 0.85rem;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 12px;
             cursor: pointer;
             transition: 0.3s;
             text-transform: uppercase;
-            font-size: 0.85rem;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
             letter-spacing: 1px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .btn-clear:hover {
             background: #000;
-            transform: translateY(-2px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
         }
 
         @media (max-width: 991px) {
@@ -1739,27 +1741,38 @@ if (empty($hpw)) {
                 <!-- PANE 1: ACTIVIDAD -->
                 <div id="pane-actividad" class="tab-content-pane active">
 
-                    <div class="filter-bar" style="justify-content: flex-start; gap: 2rem;">
-                        <div class="filter-group" style="flex: 0.8; min-width: 150px;">
+                    <div class="filter-bar">
+                        <!-- Search Field (New, like Admin) -->
+                        <div class="filter-group" style="flex: 2; min-width: 250px;">
+                            <label class="filter-label">BUSCAR ACTIVIDAD</label>
+                            <div style="position: relative; width: 100%;">
+                                <i class='bx bx-search' style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 1.2rem;"></i>
+                                <input type="text" id="f-search" class="filter-input" placeholder="Ej: Recarga, Ticket #..." onkeyup="filterActivityTable()" style="padding-left: 3.5rem;">
+                            </div>
+                        </div>
+
+                        <div class="filter-group" style="flex: 1.2; min-width: 180px;">
                             <label class="filter-label">TIPO OPERACIÓN</label>
                             <select id="f-op" class="filter-input" onchange="filterActivityTable()">
-                                <option value="todos">TODOS</option>
+                                <option value="todos">TODOS LOS TIPOS</option>
                                 <option value="COMPRA">COMPRAS</option>
                                 <option value="RECARGA">RECARGAS</option>
                                 <option value="VALE">VALES</option>
                             </select>
                         </div>
-                        <div class="filter-group" style="flex: 0.8; min-width: 150px;">
+
+                        <div class="filter-group" style="flex: 1; min-width: 150px;">
                             <label class="filter-label">DESDE</label>
                             <input type="date" id="f-desde" class="filter-input" onchange="filterActivityTable()">
                         </div>
-                        <div class="filter-group" style="flex: 0.8; min-width: 150px;">
+
+                        <div class="filter-group" style="flex: 1; min-width: 150px;">
                             <label class="filter-label">HASTA</label>
                             <input type="date" id="f-hasta" class="filter-input" onchange="filterActivityTable()">
                         </div>
+
                         <button class="btn-clear" onclick="clearFilters()">
-                            <i class='bx bx-eraser'></i>
-                            LIMPIAR
+                            <i class='bx bx-eraser'></i> LIMPIAR
                         </button>
                     </div>
 
