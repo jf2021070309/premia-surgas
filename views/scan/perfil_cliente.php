@@ -1448,9 +1448,9 @@ if (empty($hpw)) {
             }
         }
 
-        .page-title {
-            color: var(--primary) !important;
-            font-weight: 900 !important;
+        /* Header integration fix */
+        .admin-layout .top-nav .page-title {
+            color: #ffffff !important;
         }
     </style>
 </head>

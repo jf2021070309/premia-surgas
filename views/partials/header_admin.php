@@ -1,13 +1,7 @@
 <?php
-/**
- * Header Admin Component — Reutilizable
- * 
- * Variables requeridas antes del include:
- *   $pageTitle    — Título principal (ej. "Gestión Recargas")
- *   $pageSubtitle — Subtítulo descriptivo (ej. "Panel de verificación administrativa")
- */
 $pageTitle    = $pageTitle    ?? 'Panel Admin';
 $pageSubtitle = $pageSubtitle ?? '';
+$pageIcon     = $pageIcon     ?? ($pageTitle === 'Mi Perfil' ? 'bx-user-circle' : 'bx-grid-alt');
 
 // Nombre del usuario de sesión
 $adminName = $_SESSION['nombre_usuario'] ?? $_SESSION['nombre_cliente'] ?? $_SESSION['usuario'] ?? 'Usuario';
@@ -20,20 +14,28 @@ $roleMap = [
     'cliente'   => 'CLIENTE VIP'
 ];
 $displayRole = $roleMap[strtolower($rawRole)] ?? strtoupper($rawRole);
-
 $adminInitial = strtoupper(substr($adminName, 0, 1));
 ?>
 
 <header class="top-nav">
-    <div class="nav-left" style="display: flex; align-items: center; gap: 0.5rem; flex-direction: row;">
+    <div class="nav-left">
         <button class="sidebar-toggle-btn" id="sidebarToggleBtn" title="Abrir menú">
             <i class='bx bx-menu'></i>
         </button>
-        <div style="display: flex; flex-direction: column; min-width: 0;">
-        <h1 class="page-title"><?= htmlspecialchars($pageTitle) ?></h1>
-        <?php if ($pageSubtitle): ?>
-            <p class="page-subtitle"><?= htmlspecialchars($pageSubtitle) ?></p>
-        <?php endif; ?>
+        
+        <div class="header-title-group">
+            <?php if ($pageIcon): ?>
+                <div class="header-page-icon">
+                    <i class='bx <?= $pageIcon ?>'></i>
+                </div>
+            <?php endif; ?>
+            
+            <div class="header-text-column">
+                <h1 class="page-title"><?= htmlspecialchars($pageTitle) ?></h1>
+                <?php if ($pageSubtitle): ?>
+                    <p class="page-subtitle"><?= htmlspecialchars($pageSubtitle) ?></p>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
 
