@@ -1043,16 +1043,13 @@ if (empty($hpw)) {
 
         /* ── Elite Filter Bar ── */
         .filter-bar {
-            background: #fff;
-            border-radius: 18px;
-            padding: 1.5rem 2rem;
-            border: 1.5px solid #e2e8f0;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.05);
             display: flex;
+            justify-content: space-between;
+            align-items: center;
             flex-wrap: wrap;
-            gap: 1.5rem;
-            align-items: flex-end;
-            margin-bottom: 2rem;
+            gap: 1.25rem;
+            margin-bottom: 1.5rem;
+            padding: 0.5rem 0;
         }
 
         .filter-group {
@@ -1064,23 +1061,23 @@ if (empty($hpw)) {
         }
 
         .filter-label {
-            font-size: 0.68rem;
+            font-size: 0.65rem;
             font-weight: 850;
-            color: #64748b;
+            color: #94a3b8;
             text-transform: uppercase;
-            letter-spacing: 1.2px;
+            letter-spacing: 1.5px;
             margin-bottom: 4px;
             margin-left: 2px;
         }
 
         .filter-input {
-            height: 50px;
+            height: 40px;
             background: #fff;
             border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 0 1.2rem;
-            font-size: 0.92rem;
-            font-weight: 700;
+            border-radius: 8px;
+            padding: 0 1rem;
+            font-size: 0.85rem;
+            font-weight: 500;
             color: #1e293b;
             outline: none;
             transition: 0.3s;
@@ -1093,23 +1090,23 @@ if (empty($hpw)) {
         }
 
         .btn-clear {
-            height: 50px;
+            height: 40px;
             background: #0f172a;
             color: #fff;
             border: none;
-            border-radius: 12px;
-            padding: 0 1.8rem;
-            font-weight: 850;
-            font-size: 0.85rem;
+            border-radius: 8px;
+            padding: 0 1.5rem;
+            font-weight: 700;
+            font-size: 0.78rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: 8px;
             cursor: pointer;
             transition: 0.3s;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .btn-clear:hover {
@@ -1747,12 +1744,12 @@ if (empty($hpw)) {
                 <div id="pane-actividad" class="tab-content-pane active">
 
                     <div class="filter-bar">
-                        <!-- Search Field (New, like Admin) -->
-                        <div class="filter-group" style="flex: 2; min-width: 250px;">
+                        <!-- Search Field (Floating style) -->
+                        <div class="filter-group" style="flex: 1.8; min-width: 250px;">
                             <label class="filter-label">BUSCAR ACTIVIDAD</label>
                             <div style="position: relative; width: 100%;">
-                                <i class='bx bx-search' style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 1.2rem;"></i>
-                                <input type="text" id="f-search" class="filter-input" placeholder="Ej: Recarga, Ticket #..." onkeyup="filterActivityTable()" style="padding-left: 3.5rem;">
+                                <i class='bx bx-search' style="position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 1rem;"></i>
+                                <input type="text" id="f-search" class="filter-input" placeholder="Buscar movimientos..." onkeyup="filterActivityTable()" style="padding-left: 2.5rem;">
                             </div>
                         </div>
 
