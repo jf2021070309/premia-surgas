@@ -88,7 +88,8 @@ class AuthController {
 
     public function logout(): void {
         if (isset($_SESSION['id_usuario'])) {
-            $this->audit->registrar($_SESSION['id_usuario'], 'CIERRE_SESION', 'El usuario cerró su sesión', 'SEGURIDAD');
+            // Pasamos null para que el AuditoriaModel detecte automáticamente el ID y el Tipo desde la sesión
+            $this->audit->registrar(null, 'CIERRE_SESION', 'El usuario cerró su sesión', 'SEGURIDAD');
         }
         
         // Limpiar el array de sesión
