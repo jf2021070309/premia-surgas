@@ -932,13 +932,13 @@ if (empty($hpw)) {
         }
 
         .col-date {
-            font-weight: 800;
+            font-weight: 700;
             color: #1e293b;
-            width: 160px;
+            width: 200px;
         }
 
         .col-type {
-            width: 140px;
+            width: 180px;
             text-align: center;
         }
 
@@ -991,8 +991,8 @@ if (empty($hpw)) {
             font-weight: 800;
             font-size: 0.95rem;
             color: #15803d;
-            width: 150px;
-            padding-right: 2rem !important;
+            width: 130px;
+            padding-right: 1.5rem !important;
             letter-spacing: -0.2px;
         }
 
