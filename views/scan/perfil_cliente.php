@@ -390,34 +390,41 @@ if (empty($hpw)) {
 
         /* LADO TRASERO: QR & INFO */
         .card-back {
-            background: #111;
+            background: #0a0a0a;
             transform: rotateY(180deg);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 2rem;
+            padding: 1.5rem;
             background-image:
-                radial-gradient(circle at center, #1a1a1a 0%, #0a0a0a 100%);
+                radial-gradient(circle at center, #1a1a1a 0%, #050505 100%);
         }
 
         .qr-container {
             background: white;
-            padding: 12px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 14px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        #qrcode img {
+        #qrcode canvas, #qrcode img {
             display: block;
+            max-width: 100%;
+            height: auto !important;
         }
 
         .qr-help {
-            margin-top: 1.5rem;
-            font-size: 0.75rem;
+            margin-top: 1.2rem;
+            font-size: 0.65rem;
+            font-weight: 850;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            opacity: 0.6;
+            letter-spacing: 1.5px;
+            color: #fff;
+            opacity: 0.8;
         }
 
         /* Botón Tienda */
@@ -1524,25 +1531,26 @@ if (empty($hpw)) {
                             .promo-banner-metas {
                                 flex-direction: column;
                                 align-items: flex-start !important;
-                                padding: 1.8rem !important;
-                                gap: 1.5rem !important;
+                                padding: 1.2rem 1.5rem !important;
+                                gap: 1rem !important;
                                 text-align: left;
                             }
                             .promo-banner-metas > div:first-child {
-                                flex-direction: column;
-                                align-items: flex-start !important;
+                                flex-direction: row; /* Keep icon/text horizontal on mobile if possible */
+                                align-items: center !important;
                                 gap: 1rem !important;
                             }
                             .promo-banner-metas h2 {
-                                font-size: 1.25rem !important;
-                                flex-wrap: wrap;
+                                font-size: 1.15rem !important;
                             }
                             .promo-banner-metas p {
-                                font-size: 0.8rem !important;
+                                font-size: 0.75rem !important;
+                                line-height: 1.3;
                             }
                             .titanium-btn {
                                 width: 100%;
                                 justify-content: center;
+                                padding: 0.6rem 1.2rem !important;
                             }
                         }
                     </style>
@@ -2114,8 +2122,8 @@ if (empty($hpw)) {
             const qrContent = '<?= BASE_URL ?>scan?c=<?= urlencode($cliente['codigo']) ?>&t=<?= urlencode($cliente['token']) ?>';
             new QRCode(qrContainer, {
                 text: qrContent,
-                width: 150,
-                height: 150,
+                width: 125,
+                height: 125,
                 colorDark: "#000000",
                 colorLight: "#ffffff",
                 correctLevel: QRCode.CorrectLevel.H
