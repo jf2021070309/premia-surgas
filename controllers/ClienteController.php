@@ -436,6 +436,43 @@ class ClienteController
         exit;
     }
 
+    public function updateProfile(): void
+    {
+        header('Content-Type: application/json');
+        if (!isset($_SESSION['id_cliente'])) {
+            echo json_encode(['success' => false, 'message' => 'Sesión no válida.']);
+            exit;
+        }
+
+        $data = json_decode(file_get_contents('php://input'), true);
+        $celular = trim($data['celular'] ?? '');
+        $direccion = trim($data['direccion'] ?? '');
+
+        if (!$celular) {
+            echo json_encode(['success' => false, 'message' => 'El celular es obligatorio.']);
+            exit;
+        }
+
+        if (!preg_match('/^\d{9}$/', $celular)) {
+            echo json_encode(['success' => false, 'message' => 'El celular debe tener 9 dígitos.']);
+            exit;
+        }
+
+        $model = new ClienteModel();
+        $updateData = [
+            'celular' => $celular,
+            'direccion' => $direccion
+        ];
+
+        if ($model->updateBasicInfo($_SESSION['id_cliente'], $updateData)) {
+            $this->audit->registrar($_SESSION['id_cliente'], 'ACTUALIZAR_PERFIL_PROPIO', 'Cliente actualizó sus datos de contacto', 'SEGURIDAD');
+            echo json_encode(['success' => true, 'message' => 'Perfil actualizado correctamente.']);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'No se pudo actualizar el perfil.']);
+        }
+        exit;
+    }
+
     public function changePassword(): void
     {
         header('Content-Type: application/json');

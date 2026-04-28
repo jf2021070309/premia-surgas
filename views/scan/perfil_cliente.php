@@ -35,20 +35,18 @@ if (empty($hpw)) {
     <style>
         :root {
             --primary: #821515;
-            --bg-color: #f7f9fc;
-            --text-main: #1a1c1e;
+            --bg-color: #f8fafc;
+            --text-main: #1e293b;
             --silver-text: linear-gradient(135deg, #1a1a1a 0%, #444444 50%, #1a1a1a 100%);
             --silver-metal: linear-gradient(135deg, #70706F, #E9E9E7, #70706F, #E9E9E7, #70706F);
             --card-silver: linear-gradient(135deg, #a8a8a8 0%, #ffffff 50%, #a8a8a8 100%);
         }
 
         body {
-            font-family: 'Outfit', sans-serif;
-            background: var(--bg-color);
-            background: radial-gradient(circle at top right, #ffffff 0%, #eef2f7 100%);
-            background-attachment: fixed;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: #f8fafc;
             margin: 0;
-            color: var(--text-main);
+            color: #1e293b;
             min-height: 100vh;
             overflow-x: hidden;
         }
@@ -152,11 +150,85 @@ if (empty($hpw)) {
         .profile-info-column {
             flex: 1;
             background: #fff;
-            border-radius: 24px;
-            padding: 2.2rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
-            border: 1px solid #f1f5f9;
-            min-width: 300px;
+            border-radius: 32px;
+            padding: 3rem;
+            /* Multi-layered shadow for better depth and visibility */
+            box-shadow: 
+                0 10px 20px rgba(0, 0, 0, 0.02),
+                0 30px 70px rgba(0, 0, 0, 0.07);
+            border: 1px solid #e2e8f0;
+            min-width: 320px;
+            position: relative;
+        }
+
+        .info-grid-modern {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 2.5rem;
+        }
+
+        .info-item-elegant {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            transition: all 0.3s ease;
+            padding: 1rem;
+            border-radius: 16px;
+        }
+
+        .info-item-elegant:hover {
+            background: #f8fafc;
+        }
+
+        .info-item-elegant.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .info-header-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-icon-elegant {
+            font-size: 1.2rem;
+            color: #64748b; /* Slate neutral */
+            opacity: 0.8;
+        }
+
+        .info-label-elegant {
+            font-size: 0.65rem;
+            font-weight: 800;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+        }
+
+        .info-value-elegant {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #1e293b;
+            padding-left: 28px; /* Align with text after icon */
+        }
+
+        .info-value-elegant.premium-status {
+            color: var(--primary); /* Use brand red instead of purple */
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .badge-verified-minimal {
+            background: #f8fafc;
+            color: #64748b;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.6rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 1px solid #e2e8f0;
         }
 
         @media (max-width: 991px) {
@@ -1399,28 +1471,32 @@ if (empty($hpw)) {
                 </div>
             <?php endif; ?>
 
-            <!-- VIEW: MI PERFIL (Por Defecto) -->
-            <div id="profile-main-view">
+                <div id="profile-main-view">
 
-                <!-- BANNER INCENTIVOS (Top de Mi Perfil) -->
-                <div style="max-width: 1000px; margin: 2rem auto -1rem; padding: 0 1.5rem;">
+                <!-- BANNER INCENTIVOS (Top de Mi Perfil) - Elegant Slate Theme -->
+                <div style="max-width: 1000px; margin: 2rem auto 0; padding: 0 1.5rem;">
                     <div class="promo-banner-metas" onclick="window.location.hash='incentivos'"
-                        style="background: linear-gradient(135deg, #7c3aed, #4c1d95); border-radius: 20px; padding: 1.5rem; color: #fff; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 10px 25px rgba(124, 58, 237, 0.25); position: relative; overflow: hidden; cursor: pointer; transition: transform 0.3s;">
+                        style="background: linear-gradient(135deg, #1e293b, #0f172a); border-radius: 24px; padding: 1.8rem; color: #fff; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); position: relative; overflow: hidden; cursor: pointer; transition: 0.4s ease; border: 1px solid rgba(255,255,255,0.05);">
                         <!-- Elementos decorativos -->
                         <i class='bx bx-target-lock'
-                            style="position: absolute; right: -15px; top: -15px; font-size: 8rem; opacity: 0.1; transform: rotate(-15deg);"></i>
+                            style="position: absolute; right: -20px; top: -20px; font-size: 10rem; opacity: 0.05; transform: rotate(-15deg);"></i>
+                        <div style="position: absolute; left: 10%; top: -50px; width: 150px; height: 150px; background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%); border-radius: 50%;"></div>
 
-                        <div style="position: relative; z-index: 2;">
-                            <div
-                                style="font-size: 0.75rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; color: #c4b5fd; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
-                                <i class='bx bxs-zap' style="color: #fef08a;"></i> NUEVO PROGRAMA DE METAS
+                        <div style="position: relative; z-index: 2; display: flex; align-items: center; gap: 1.5rem;">
+                            <div style="background: rgba(255,255,255,0.1); width: 60px; height: 60px; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px);">
+                                <i class='bx bxs-zap' style="color: #facc15;"></i>
                             </div>
-                            <div style="font-size: 1.15rem; font-weight: 850; line-height: 1.2;">Cumple tus compras y
-                                gana<br><span style="color:#fef08a;">Vales de Descuento</span> automáticamente.</div>
+                            <div>
+                                <div style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; color: #94a3b8; margin-bottom: 6px;">
+                                    Programa de Fidelidad
+                                </div>
+                                <div style="font-size: 1.25rem; font-weight: 850; line-height: 1.2; letter-spacing: -0.5px;">
+                                    Cumple tus metas y gana <span style="color:#facc15;">Vales de Descuento</span>
+                                </div>
+                            </div>
                         </div>
 
-                        <div
-                            style="position: relative; z-index: 2; background: #fff; color: #7c3aed; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                        <div style="position: relative; z-index: 2; background: #fff; color: #000; width: 48px; height: 48px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0; box-shadow: 0 10px 20px rgba(0,0,0,0.2); transition: 0.3s;">
                             <i class='bx bx-right-arrow-alt'></i>
                         </div>
                     </div>
@@ -1471,49 +1547,72 @@ if (empty($hpw)) {
 
                     <!-- Información del Cliente (Lado Derecho) -->
                     <div class="profile-info-column">
-                        <h3
-                            style="font-size: 1.1rem; font-weight: 800; color: #1e293b; margin-top: 0; margin-bottom: 1.5rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 0.8rem; display: flex; align-items: center; gap: 8px;">
-                            <i class='bx bx-id-card' style="color: #7c3aed; font-size: 1.4rem;"></i> Información de
-                            Cuenta
-                        </h3>
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #f1f5f9; padding-bottom: 1.5rem;">
+                            <div>
+                                <h3 style="font-size: 1.2rem; font-weight: 900; color: #1e293b; margin: 0; letter-spacing: -0.2px;">
+                                    Información Detallada
+                                </h3>
+                                <p style="margin: 4px 0 0; font-size: 0.75rem; color: #94a3b8; font-weight: 500;">Datos registrados en tu cuenta</p>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <button onclick="openEditModal()" 
+                                    style="background: #f1f5f9; color: #1e293b; border: 1px solid #e2e8f0; padding: 0.6rem 1.2rem; border-radius: 12px; display: flex; align-items: center; gap: 8px; cursor: pointer; transition: 0.3s; font-weight: 800; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                                    <i class='bx bx-edit-alt' style="font-size: 1.1rem;"></i>
+                                    Editar Perfil
+                                </button>
+                            </div>
+                        </div>
 
-                        <div style="display: grid; grid-template-columns: 1fr; gap: 1.25rem;">
-                            <div style="display: flex; flex-direction: column;">
-                                <span
-                                    style="font-size: 0.65rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">DNI
-                                    / RUC</span>
-                                <span
-                                    style="font-size: 0.95rem; font-weight: 700; color: #1e293b;"><?= htmlspecialchars($cliente['dni'] ?? $cliente['ruc'] ?? 'No registrado') ?></span>
+                        <div class="info-grid-modern">
+                            <!-- DNI / RUC -->
+                            <div class="info-item-elegant">
+                                <div class="info-header-row">
+                                    <i class='bx bx-id-card info-icon-elegant'></i>
+                                    <span class="info-label-elegant">DNI / RUC</span>
+                                </div>
+                                <span class="info-value-elegant"><?= htmlspecialchars($cliente['dni'] ?? $cliente['ruc'] ?? 'No registrado') ?></span>
                             </div>
 
-                            <div style="display: flex; flex-direction: column;">
-                                <span
-                                    style="font-size: 0.65rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">Teléfono</span>
-                                <span
-                                    style="font-size: 0.95rem; font-weight: 700; color: #1e293b;"><?= htmlspecialchars($cliente['celular'] ?? 'No registrado') ?></span>
+                            <!-- Teléfono -->
+                            <div class="info-item-elegant">
+                                <div class="info-header-row">
+                                    <i class='bx bx-mobile-alt info-icon-elegant'></i>
+                                    <span class="info-label-elegant">Teléfono</span>
+                                </div>
+                                <span class="info-value-elegant"><?= htmlspecialchars($cliente['celular'] ?? 'No registrado') ?></span>
                             </div>
 
-                            <div style="display: flex; flex-direction: column;">
-                                <span
-                                    style="font-size: 0.65rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">Ubicación</span>
-                                <span
-                                    style="font-size: 0.95rem; font-weight: 700; color: #1e293b;"><?= htmlspecialchars(($cliente['direccion'] ?? 'Sin dirección') . ($cliente['departamento'] ? ', ' . $cliente['departamento'] : '')) ?></span>
+                            <!-- Tipo de Cliente -->
+                            <div class="info-item-elegant">
+                                <div class="info-header-row">
+                                    <i class='bx bx-crown info-icon-elegant'></i>
+                                    <span class="info-label-elegant">Tipo de Cliente</span>
+                                </div>
+                                <span class="info-value-elegant premium-status">
+                                    <?= htmlspecialchars($cliente['tipo_cliente'] ?? 'Normal') ?>
+                                </span>
                             </div>
 
-                            <div style="display: flex; flex-direction: column;">
-                                <span
-                                    style="font-size: 0.65rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">Tipo
-                                    de Cliente</span>
-                                <span
-                                    style="font-size: 0.95rem; font-weight: 700; color: #7c3aed;"><?= htmlspecialchars($cliente['tipo_cliente'] ?? 'Normal') ?></span>
+                            <!-- Miembro Desde -->
+                            <div class="info-item-elegant">
+                                <div class="info-header-row">
+                                    <i class='bx bx-calendar-event info-icon-elegant'></i>
+                                    <span class="info-label-elegant">Miembro Desde</span>
+                                </div>
+                                <span class="info-value-elegant">
+                                    <?= isset($cliente['fecha_creacion']) ? date('d/m/Y', strtotime($cliente['fecha_creacion'])) : 'No registrado' ?>
+                                </span>
                             </div>
 
-                            <div style="display: flex; flex-direction: column;">
-                                <span
-                                    style="font-size: 0.65rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">Miembro
-                                    Desde</span>
-                                <span
-                                    style="font-size: 0.95rem; font-weight: 700; color: #1e293b;"><?= isset($cliente['fecha_creacion']) ? date('d/m/Y', strtotime($cliente['fecha_creacion'])) : 'No registrado' ?></span>
+                            <!-- Ubicación (Full Width) -->
+                            <div class="info-item-elegant full-width" style="border-top: 1px solid #f8fafc; padding-top: 1.5rem;">
+                                <div class="info-header-row">
+                                    <i class='bx bx-map info-icon-elegant'></i>
+                                    <span class="info-label-elegant">Ubicación de Residencia</span>
+                                </div>
+                                <span class="info-value-elegant" style="line-height: 1.5;">
+                                    <?= htmlspecialchars(($cliente['direccion'] ?? 'Sin dirección') . ($cliente['departamento'] ? ', ' . $cliente['departamento'] : '')) ?>
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -1795,23 +1894,170 @@ if (empty($hpw)) {
         </div>
     </div>
 
+    </div>
+
+    <!-- Modal Editar Perfil (Estilo Aliado Premium) -->
+    <div id="modalEditProfile" class="ticket-overlay" style="display: none;">
+        <div class="ticket-container" style="max-width: 550px; flex-direction: column; padding: 0; border-radius: 28px; overflow: hidden; border: none; background: #fff;">
+            <!-- Header Modal -->
+            <div style="padding: 2rem 2.5rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9;">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div style="background: #fff1f2; width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; color: #e11d48; font-size: 1.5rem;">
+                        <i class='bx bx-user-circle'></i>
+                    </div>
+                    <div>
+                        <h3 style="margin: 0; font-size: 1.25rem; font-weight: 900; color: #1e293b; letter-spacing: -0.5px;">Editar Perfil</h3>
+                        <p style="margin: 2px 0 0; font-size: 0.75rem; color: #94a3b8; font-weight: 600;">Modifica tus datos de contacto</p>
+                    </div>
+                </div>
+                <button onclick="closeEditModal()" style="background: #f8fafc; border: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #94a3b8; cursor: pointer; transition: 0.3s;">
+                    <i class='bx bx-x' style="font-size: 1.2rem;"></i>
+                </button>
+            </div>
+            
+            <!-- Body Modal -->
+            <div style="padding: 2.5rem; display: flex; flex-direction: column; gap: 2rem;">
+                <!-- Campo Nombre (Solo Lectura) -->
+                <div class="filter-group">
+                    <label class="filter-label" style="margin-bottom: 0.8rem; display: block; font-size: 0.65rem; letter-spacing: 0.5px;">NOMBRE COMPLETO / TITULAR</label>
+                    <div style="position: relative;">
+                        <i class='bx bx-user' style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 1.2rem;"></i>
+                        <input type="text" value="<?= htmlspecialchars($cliente['nombre']) ?>" disabled 
+                            style="width: 100%; height: 52px; border-radius: 12px; border: 1px solid #e2e8f0; background: #f8fafc; padding-left: 3rem; color: #64748b; font-weight: 600; font-size: 0.9rem; cursor: not-allowed;">
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <div class="filter-group">
+                        <label class="filter-label" style="margin-bottom: 0.8rem; display: block; font-size: 0.65rem; letter-spacing: 0.5px;">CELULAR (WHATSAPP)</label>
+                        <div style="position: relative;">
+                            <i class='bx bx-phone' style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 1.2rem;"></i>
+                            <input type="text" id="edit-celular" value="<?= htmlspecialchars($cliente['celular'] ?? '') ?>" maxlength="9" placeholder="9 dígitos"
+                                style="width: 100%; height: 52px; border-radius: 12px; border: 1px solid #e2e8f0; padding-left: 3rem; color: #1e293b; font-weight: 700; font-size: 0.9rem; transition: 0.3s; outline: none;">
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <label class="filter-label" style="margin-bottom: 0.8rem; display: block; font-size: 0.65rem; letter-spacing: 0.5px;">DNI / RUC</label>
+                        <div style="position: relative;">
+                            <i class='bx bx-id-card' style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 1.2rem;"></i>
+                            <input type="text" value="<?= htmlspecialchars($cliente['dni'] ?: $cliente['ruc']) ?>" disabled
+                                style="width: 100%; height: 52px; border-radius: 12px; border: 1px solid #e2e8f0; background: #f8fafc; padding-left: 3rem; color: #64748b; font-weight: 600; font-size: 0.9rem; cursor: not-allowed;">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label" style="margin-bottom: 0.8rem; display: block; font-size: 0.65rem; letter-spacing: 0.5px;">UBICACIÓN / DIRECCIÓN</label>
+                    <div style="position: relative;">
+                        <i class='bx bx-map' style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 1.2rem;"></i>
+                        <input type="text" id="edit-direccion" value="<?= htmlspecialchars($cliente['direccion'] ?? '') ?>" placeholder="Ej: Calle Principal 123, Tacna"
+                            style="width: 100%; height: 52px; border-radius: 12px; border: 1px solid #e2e8f0; padding-left: 3rem; color: #1e293b; font-weight: 700; font-size: 0.9rem; transition: 0.3s; outline: none;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Modal -->
+            <div style="padding: 1.5rem 2.5rem; background: #fff; border-top: 1px solid #f1f5f9; display: flex; justify-content: flex-end; gap: 1rem;">
+                <button onclick="closeEditModal()" 
+                    style="height: 48px; padding: 0 1.5rem; border-radius: 12px; border: 1px solid #e2e8f0; background: #fff; color: #64748b; font-weight: 800; font-size: 0.85rem; cursor: pointer; transition: 0.3s;">
+                    Cancelar
+                </button>
+                <button onclick="saveProfileChanges()" 
+                    style="height: 48px; padding: 0 2rem; border-radius: 12px; border: none; background: #000; color: #fff; font-weight: 800; font-size: 0.85rem; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                    Guardar Cambios
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        function openEditModal() {
+            document.getElementById('modalEditProfile').style.display = 'flex';
+        }
+
+        function closeEditModal() {
+            document.getElementById('modalEditProfile').style.display = 'none';
+        }
+
+        function saveProfileChanges() {
+            const celular = document.getElementById('edit-celular').value.trim();
+            const direccion = document.getElementById('edit-direccion').value.trim();
+
+            if (!celular || celular.length !== 9 || isNaN(celular)) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Celular inválido',
+                    text: 'El celular debe tener exactamente 9 dígitos numéricos.',
+                    confirmButtonColor: '#1e293b'
+                });
+                return;
+            }
+
+            Swal.fire({
+                title: '¿Guardar cambios?',
+                text: "Se actualizará tu información de contacto en nuestro sistema.",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#1e293b',
+                cancelButtonColor: '#94a3b8',
+                confirmButtonText: 'Sí, guardar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({ title: 'Actualizando...', didOpen: () => { Swal.showLoading(); } });
+
+                    fetch(BASE_URL + 'clientes/updateProfile', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ celular, direccion })
+                    })
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: '¡Éxito!',
+                                text: 'Tus datos se han actualizado correctamente.',
+                                confirmButtonColor: '#1e293b'
+                            }).then(() => location.reload());
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: data.message,
+                                confirmButtonColor: '#1e293b'
+                            });
+                        }
+                    })
+                    .catch(err => {
+                        Swal.fire({ icon: 'error', title: 'Error', text: 'No se pudo conectar con el servidor.' });
+                    });
+                }
+            });
+        }
+
         const BASE_URL = '<?= BASE_URL ?>';
         const cardContainer = document.getElementById('profileCard');
-        cardContainer.addEventListener('click', () => {
-            cardContainer.classList.toggle('is-flipped');
-        });
+        if (cardContainer) {
+            cardContainer.addEventListener('click', () => {
+                cardContainer.classList.toggle('is-flipped');
+            });
+        }
 
         // Generar QR en el reverso
-        const qrContent = '<?= BASE_URL ?>scan?c=<?= urlencode($cliente['codigo']) ?>&t=<?= urlencode($cliente['token']) ?>';
-        new QRCode(document.getElementById("qrcode"), {
-            text: qrContent,
-            width: 150,
-            height: 150,
-            colorDark: "#000000",
-            colorLight: "#ffffff",
-            correctLevel: QRCode.CorrectLevel.H
-        });
+        const qrContainer = document.getElementById("qrcode");
+        if (qrContainer) {
+            const qrContent = '<?= BASE_URL ?>scan?c=<?= urlencode($cliente['codigo']) ?>&t=<?= urlencode($cliente['token']) ?>';
+            new QRCode(qrContainer, {
+                text: qrContent,
+                width: 150,
+                height: 150,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
 
         // Tab Switching Logic
         function switchTab(paneId, btnElement, hideCard = false) {

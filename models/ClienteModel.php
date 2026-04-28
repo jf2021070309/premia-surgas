@@ -99,7 +99,7 @@ class ClienteModel {
     }
 
     public function loginCliente(string $identificador, string $password): ?array {
-        $stmt = $this->db->prepare("SELECT * FROM clientes WHERE (dni = ? OR ruc = ?) AND password = ? LIMIT 1");
+        $stmt = $this->db->prepare("SELECT * FROM clientes WHERE (dni = ? OR ruc = ?) AND password = ? AND estado = 1 LIMIT 1");
         $stmt->execute([$identificador, $identificador, hash('sha256', $password)]);
         return $stmt->fetch() ?: null;
     }
@@ -111,6 +111,15 @@ class ClienteModel {
 
     public function sumarPuntos(int $id, int $puntos): void {
         $this->db->prepare("UPDATE clientes SET puntos = puntos + ? WHERE id = ?")->execute([$puntos, $id]);
+    }
+
+    public function updateBasicInfo(int $id, array $data): bool {
+        $stmt = $this->db->prepare("UPDATE clientes SET celular = :celular, direccion = :direccion WHERE id = :id");
+        return $stmt->execute([
+            ':id'        => $id,
+            ':celular'   => $data['celular'],
+            ':direccion' => $data['direccion']
+        ]);
     }
 
     public function updateSessionId(int $id, ?string $sessionId): bool {
