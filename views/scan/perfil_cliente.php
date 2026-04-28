@@ -34,7 +34,7 @@ if (empty($hpw)) {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         :root {
-            --primary: #821515;
+            --primary: #400000;
             --bg-color: #f3f4f6; /* Sophisticated Obsidian Grey */
             --slate-900: #0f172a;
             --slate-800: #1e293b;
@@ -243,6 +243,7 @@ if (empty($hpw)) {
             .profile-info-column {
                 width: 100%;
                 max-width: 420px;
+                padding: 1.5rem !important;
             }
         }
 
@@ -1445,6 +1446,11 @@ if (empty($hpw)) {
                 box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             }
         }
+
+        .page-title {
+            color: var(--primary) !important;
+            font-weight: 900 !important;
+        }
     </style>
 </head>
 
@@ -1606,7 +1612,7 @@ if (empty($hpw)) {
                         
                         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2.5rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 1.5rem;">
                             <div>
-                                <h3 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0; letter-spacing: -0.5px;">
+                                <h3 style="font-size: 1.25rem; font-weight: 850; color: var(--primary); margin: 0; letter-spacing: -0.5px;">
                                     Información Detallada
                                 </h3>
                                 <p style="margin: 5px 0 0; font-size: 0.8rem; color: #64748b; font-weight: 500;">Datos del perfil y membresía</p>

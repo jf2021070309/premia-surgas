@@ -1,18 +1,18 @@
-/* ══════════════════════════════════════════════════════
+/* ══════════════════════════════════════
    admin-layout.css — CSS Compartido Admin (Surgas)
    Incluye: variables, reset, sidebar, top-nav, layout
-   ══════════════════════════════════════════════════════ */
+   ══════════════════════════════════════ */
 
 /* ── Variables ── */
 :root {
-    --bg:            #F2F4F7;
+    --bg:            #EBEEF2;
     --surface:       #ffffff;
     --surface-low:   #F8F9FB;
     --surface-hi:    #ECEEF2;
     --sidebar-bg:    #400000;
 
     /* Surgas Palette */
-    --primary:       #800000;
+    --primary:       #400000;
     --accent:        #C4722A;
     --primary-glow:  rgba(128, 0, 0, 0.10);
 
@@ -65,7 +65,7 @@ body {
 
 /* ══════════════════════════════════════
    Sidebar Overlay (Mobile)
-══════════════════════════════════════ */
+ ══════════════════════════════════════ */
 .sidebar-overlay {
     position: fixed;
     inset: 0;
@@ -83,7 +83,7 @@ body {
 
 /* ══════════════════════════════════════
    Sidebar
-══════════════════════════════════════ */
+ ══════════════════════════════════════ */
 .sidebar {
     width: var(--sidebar-width);
     height: 100vh;
@@ -129,9 +129,6 @@ body {
 /* Botón cerrar dentro del sidebar (solo mobile) */
 .sidebar-close-btn {
     display: none;
-
-
-
     width: 44px; height: 44px;
     background: transparent;
     border: none;
@@ -187,7 +184,7 @@ body {
 
 /* ══════════════════════════════════════
    Main Layout Wrapper
-══════════════════════════════════════ */
+ ══════════════════════════════════════ */
 .admin-layout {
     flex: 1; margin-left: var(--sidebar-width);
     display: flex; flex-direction: column;
@@ -196,13 +193,13 @@ body {
 }
 
 /* ══════════════════════════════════════
-   Top Navigation / Header
-══════════════════════════════════════ */
+   Top Navigation / Header (REDESIGNED)
+ ══════════════════════════════════════ */
 .sidebar-toggle-btn {
     display: none;
     background: transparent;
     border: none;
-    color: var(--on-surface);
+    color: #ffffff;
     font-size: 1.8rem;
     cursor: pointer;
     width: 44px; height: 44px;
@@ -213,12 +210,12 @@ body {
     margin-right: 0.5rem;
 }
 .sidebar-toggle-btn:hover {
-    background: #f1f5f9;
+    background: rgba(255, 255, 255, 0.15);
 }
 
 .top-nav {
-    background: #FFFFFF;
-    border-bottom: 1px solid var(--outline);
+    background: linear-gradient(90deg, var(--primary) 0%, #5a0000 100%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     padding: 0 2rem;
     height: 64px;
     display: flex;
@@ -228,14 +225,15 @@ body {
     top: 0;
     z-index: 200;
     gap: 1rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .nav-left { display: flex; flex-direction: column; flex: 1; min-width: 0; padding-left: 0.5rem; }
 .nav-right { display: flex; align-items: center; gap: 1.5rem; flex-shrink: 0; }
 
 .page-title {
-    font-size: 1.2rem; font-weight: 700;
-    color: var(--on-surface);
+    font-size: 1.2rem; font-weight: 850;
+    color: #ffffff;
     letter-spacing: -0.01em;
     line-height: 1.2;
     white-space: nowrap;
@@ -244,7 +242,7 @@ body {
 }
 .page-subtitle {
     font-size: 0.78rem; 
-    color: var(--on-muted);
+    color: rgba(255, 255, 255, 0.7);
     font-weight: 400;
     white-space: nowrap;
     overflow: hidden;
@@ -255,22 +253,26 @@ body {
 .admin-pill {
     display: flex; align-items: center; gap: 10px;
     padding: 5px 8px 5px 16px;
-    background: #F8F9FB;
+    background: rgba(255, 255, 255, 0.15);
     border-radius: 100px;
-    border: 1px solid #E5E7EB;
-    box-shadow: none;
-    transition: border-color 0.2s ease;
-    color: var(--on-surface);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #ffffff;
 }
 .admin-pill:hover {
-    border-color: #D1D5DB;
+    background: rgba(255, 255, 255, 0.22);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
 }
 
 .nav-bell {
-    color: #64748b; font-size: 1.25rem; cursor: pointer;
+    color: rgba(255, 255, 255, 0.9); font-size: 1.25rem; cursor: pointer;
     transition: all 0.2s;
 }
-.nav-bell:hover { color: var(--accent); transform: rotate(15deg); }
+.nav-bell:hover { color: #ffffff; transform: rotate(15deg); }
 
 .admin-avatar {
     width: 32px; height: 32px; border-radius: 50%;
@@ -287,12 +289,12 @@ body {
 }
 .admin-pill-role {
     font-size: 0.57rem; font-weight: 600;
-    color: var(--on-light);
+    color: rgba(255, 255, 255, 0.6);
     text-transform: uppercase; letter-spacing: 0.09em;
 }
 .admin-pill-name {
-    font-size: 0.8rem; font-weight: 600;
-    color: var(--on-surface); text-transform: capitalize;
+    font-size: 0.8rem; font-weight: 700;
+    color: #ffffff; text-transform: capitalize;
 }
 
 .nav-divider {
@@ -302,31 +304,30 @@ body {
 }
 
 .header-logout-btn {
-    width: 30px; height: 30px;
+    width: 32px; height: 32px;
     display: flex; align-items: center; justify-content: center;
-    background: transparent; border: 1px solid #E5E7EB;
-    color: var(--on-muted); border-radius: 50%;
-    font-size: 0.95rem; transition: all var(--transition);
+    background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.9); border-radius: 50%;
+    font-size: 1rem; transition: all var(--transition);
     text-decoration: none;
 }
 .header-logout-btn:hover {
-    background: #FEF2F2;
-    color: #DC2626;
-    border-color: #FECACA;
+    background: #DC2626;
+    color: #ffffff;
+    border-color: #DC2626;
 }
 
 /* ══════════════════════════════════════
    Responsive — Tablet (≤ 900px)
-══════════════════════════════════════ */
+ ══════════════════════════════════════ */
 @media (max-width: 900px) {
     .sidebar {
         transform: translateX(-100%);
         width: 280px;
-        box-shadow: 2px 0 10px rgba(0,0,0,0.05); /* Pequeña sombra permanente */
-        z-index: 5000; /* Asegurar que esté por encima de todo */
+        box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+        z-index: 5000;
         overflow-x: hidden;
     }
-    /* El botón menu se muestra en mini */
     .sidebar-toggle-mini-btn {
         display: flex;
     }
@@ -334,7 +335,6 @@ body {
     .sidebar .menu-label { display: none; }
     .sidebar .sidebar-item span { display: none; }
     
-    /* Centrar los iconos en estado mini */
     .sidebar .sidebar-item {
         justify-content: center;
         padding: 0.85rem 0;
@@ -343,7 +343,6 @@ body {
         font-size: 1.5rem;
     }
 
-    /* Estado expandido (cuando se pulsa botón menú) */
     .sidebar.open {
         transform: translateX(0);
         box-shadow: 10px 0 40px rgba(0,0,0,0.4);
@@ -357,7 +356,6 @@ body {
         padding: 0.85rem 1.5rem;
     }
     
-    /* El botón de cerrar solo se muestra al expandirlo */
     .sidebar-close-btn { display: none; }
     .sidebar.open .sidebar-close-btn {
         display: flex;
@@ -365,10 +363,6 @@ body {
 
     .sidebar-toggle-btn {
         display: flex;
-    }
-
-    .sidebar-overlay {
-        display: block; /* Siempre bloque pero controlado por visibility y opacity arriba */
     }
 
     .admin-layout {
@@ -379,14 +373,13 @@ body {
         padding: 0 1rem;
     }
 
-    /* Ajustar pill en tablet */
     .admin-pill { padding: 6px 12px 6px 14px; gap: 10px; }
     .admin-pill-name { max-width: 110px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 }
 
 /* ══════════════════════════════════════
    Responsive — Mobile (≤ 600px)
-══════════════════════════════════════ */
+ ══════════════════════════════════════ */
 @media (max-width: 600px) {
     .top-nav {
         height: auto;
@@ -401,45 +394,24 @@ body {
 
     .page-title {
         font-size: 1rem;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        line-height: 1.2;
     }
     .page-subtitle {
         display: block; 
         font-size: 0.65rem;
         max-width: 100%;
         white-space: normal;
-        overflow: visible;
-        text-overflow: clip;
         margin-top: 1px;
     }
 
-    .nav-bell { font-size: 1.25rem; }
-
-    /* Pill compacto con nombre en móvil */
     .admin-pill {
         padding: 5px 10px 5px 6px;
         gap: 8px;
-        background: #ffffff;
-        border: 1px solid #e2e8f0;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        border-radius: 100px;
     }
-    /* Mostrar texto pero compacto */
     .admin-pill-text {
-        display: flex;
-        flex-direction: column;
-        line-height: 1.15;
         max-width: 90px;
     }
     .admin-pill-name {
         font-size: 0.75rem;
-        font-weight: 800;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
     }
     .admin-pill-role {
         font-size: 0.55rem;
@@ -453,34 +425,21 @@ body {
     .nav-divider { display: none; }
     .header-logout-btn { 
         width: 28px; height: 28px; font-size: 1.1rem; 
-        background: transparent; border-color: transparent; color: #94a3b8;
     }
-    .header-logout-btn:hover { background: #ffe4e6; border-color: #fecaca; }
-}
-
-/* ══════════════════════════════════════
-   Responsive — Very Small (≤ 420px)
-══════════════════════════════════════ */
-@media (max-width: 420px) {
-    /* Ocultar campana para dar espacio al pill con nombre */
-    .nav-bell { display: none; }
-    /* Limitar aún más el max-width del nombre */
-    .admin-pill-text { max-width: 72px; }
-    .page-title { font-size: 0.92rem; }
 }
 
 /* ══════════════════════════════════════
    Modal System (Elite)
-══════════════════════════════════════ */
+ ══════════════════════════════════════ */
 .modal-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(15, 23, 42, 0.7); /* Mas oscuro como solicitado */
+    background: rgba(15, 23, 42, 0.7);
     backdrop-filter: blur(8px);
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 6000; /* Por encima del sidebar que tiene 5000 en movil */
+    z-index: 6000;
     padding: 20px;
     animation: fadeIn 0.3s ease-out;
 }
@@ -527,9 +486,10 @@ body {
 /* Scrollbar para modales */
 .modal-content-wrapper::-webkit-scrollbar { width: 6px; }
 .modal-content-wrapper::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+
 /* ══════════════════════════════════════
    Form & UI Elements (Elite)
-══════════════════════════════════════ */
+ ══════════════════════════════════════ */
 .btn-premium-pill-black {
     background: #000;
     color: #fff;
@@ -552,7 +512,6 @@ body {
     transform: translateY(-2px);
     box-shadow: 0 10px 30px rgba(0,0,0,0.22);
 }
-.btn-premium-pill-black:active { transform: translateY(0); }
 
 .form-label-premium {
     display: block;
@@ -573,9 +532,9 @@ body {
     flex-shrink: 0;
 }
 .modal-header-premium h2 {
-    font-weight: 800;
+    font-weight: 850;
     font-size: 1.25rem;
-    color: #0f172a;
+    color: var(--primary);
     margin: 0;
     letter-spacing: -0.025em;
     line-height: 1.2;
@@ -601,7 +560,6 @@ body {
     margin-bottom: 2.25rem;
     position: relative;
 }
-.form-group:last-child { margin-bottom: 0; }
 
 .form-input-premium {
     width: 100%;
@@ -619,30 +577,20 @@ body {
     border-color: #000;
     box-shadow: 0 0 0 4px rgba(0,0,0,0.05);
 }
-.form-input-premium::placeholder { color: #cbd5e1; font-weight: 400; }
-
-select.form-input-premium {
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 1rem center;
-    background-size: 1rem;
-    padding-right: 2.5rem;
-}
 
 /* ══════════════════════════════════════ 
    Clean KPI Cards (Shared)
-   ══════════════════════════════════════ */
+ ══════════════════════════════════════ */
 .dash-card {
     background: #ffffff;
     border-radius: 14px;
-    border: 1px solid #E5E7EB;
+    border: 1.5px solid #E2E8F0;
     box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     position: relative;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     min-height: 120px;
 }
 
@@ -659,8 +607,6 @@ select.form-input-premium {
     z-index: 2;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
 }
 
 .dash-card-number {
