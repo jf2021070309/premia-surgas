@@ -900,22 +900,27 @@ if (empty($hpw)) {
 
         .elite-table th {
             text-align: left;
-            padding: 1rem 1.5rem;
-            font-size: 0.68rem;
-            font-weight: 850;
+            padding: 0.75rem 1.25rem;
+            font-size: 0.65rem;
+            font-weight: 600;
             text-transform: uppercase;
-            color: #64748b;
-            letter-spacing: 1.2px;
-            background: #f8fafc;
-            border-bottom: 1px solid #e2e8f0;
+            color: #6B7280;
+            letter-spacing: 0.08em;
+            background: #F9FAFB;
+            border-bottom: 1px solid #E5E7EB;
         }
 
         .elite-table td {
-            padding: 1.25rem 1.5rem;
+            padding: 0.85rem 1.25rem;
             vertical-align: middle;
-            border-bottom: 1px solid #f1f5f9;
-            font-size: 0.88rem;
-            transition: all 0.2s;
+            border-bottom: 1px solid #F3F4F6;
+            font-size: 0.84rem;
+            color: #374151;
+            transition: all 0.12s;
+        }
+
+        .elite-table tr:hover {
+            background: #F9FAFB !important;
         }
 
         .elite-table tr:last-child td {
@@ -983,12 +988,12 @@ if (empty($hpw)) {
 
         .col-pts {
             text-align: right;
-            font-weight: 900;
-            font-size: 1.15rem;
-            color: #22c55e;
+            font-weight: 800;
+            font-size: 0.95rem;
+            color: #15803d;
             width: 150px;
             padding-right: 2rem !important;
-            letter-spacing: -0.5px;
+            letter-spacing: -0.2px;
         }
 
         @media (max-width: 768px) {
@@ -1815,9 +1820,14 @@ if (empty($hpw)) {
                                         <tr class="activity-row-data" data-tipo="<?= $tipoTexto ?>"
                                             data-fecha="<?= $sortDate ?>">
                                             <td class="col-date">
-                                                <?= date('d/m/Y', strtotime($v['fecha'])) ?>
-                                                <div style="font-size: 0.7rem; color: #94a3b8; font-weight: 600;">
-                                                    <?= date('H:i', strtotime($v['fecha'])) ?>
+                                                <div style="font-weight: 700; color: #1e293b;">
+                                                    <?php
+                                                        $meses = ["January"=>"Enero", "February"=>"Febrero", "March"=>"Marzo", "April"=>"Abril", "May"=>"Mayo", "June"=>"Junio", "July"=>"Julio", "August"=>"Agosto", "September"=>"Septiembre", "October"=>"Octubre", "November"=>"Noviembre", "December"=>"Diciembre"];
+                                                        echo strtr(date('d F Y', strtotime($v['fecha'])), $meses);
+                                                    ?>
+                                                </div>
+                                                <div style="font-size: 0.72rem; color: #94a3b8; font-weight: 500;">
+                                                    <?= date('h:i A', strtotime($v['fecha'])) ?>
                                                 </div>
                                             </td>
                                             <td class="col-type">
