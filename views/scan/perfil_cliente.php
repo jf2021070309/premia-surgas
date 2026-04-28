@@ -1742,7 +1742,7 @@ if (empty($hpw)) {
                 </div>
 
                 <!-- PANE 1: ACTIVIDAD -->
-                <div id="pane-actividad" class="tab-content-pane active">
+                <div id="pane-actividad" class="tab-content-pane active" style="max-width: 1100px; margin: 0 auto;">
 
                     <div class="filter-bar">
                         <!-- Search Field (Floating style) -->
