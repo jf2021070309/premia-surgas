@@ -1491,22 +1491,19 @@ if (empty($hpw)) {
                             </div>
                             
                             <!-- Content: High-Contrast & Organized -->
-                            <div style="display: flex; flex-direction: column; gap: 6px;">
-                                <div style="display: flex; align-items: center; gap: 12px;">
-                                    <span style="font-size: 0.7rem; font-weight: 900; text-transform: uppercase; letter-spacing: 3px; color: #64748b;">Membresía Elite</span>
-                                    <span style="width: 20px; height: 1px; background: rgba(255,255,255,0.1);"></span>
-                                </div>
-                                <h2 style="font-size: 1.5rem; font-weight: 900; margin: 0; letter-spacing: -0.8px; color: #f8fafc;">
-                                    Programa de Fidelidad <span style="color: #94a3b8; font-weight: 400; font-style: italic;">Surgas</span>
+                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <h2 style="font-size: 1.5rem; font-weight: 900; margin: 0; letter-spacing: -0.8px; color: #f8fafc; display: flex; align-items: center; gap: 12px;">
+                                    Programa de Fidelidad 
+                                    <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" style="height: 24px; width: auto; filter: brightness(0) invert(1); opacity: 0.9;">
                                 </h2>
                                 <p style="margin: 0; font-size: 0.9rem; color: #94a3b8; font-weight: 500; opacity: 0.8;">Acceso exclusivo a metas y beneficios de alto rendimiento.</p>
                             </div>
                         </div>
 
-                        <!-- Action: Titanium Glass Button -->
-                        <div class="titanium-btn" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 0.9rem 1.8rem; border-radius: 14px; display: flex; align-items: center; gap: 12px; font-size: 0.8rem; font-weight: 850; text-transform: uppercase; letter-spacing: 2px; color: #f8fafc; transition: 0.4s; backdrop-filter: blur(5px);">
+                        <!-- Action: Titanium Formal Button -->
+                        <div class="titanium-btn" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 0.8rem 1.8rem; border-radius: 8px; display: flex; align-items: center; gap: 12px; font-size: 0.75rem; font-weight: 900; text-transform: uppercase; letter-spacing: 2.5px; color: #f8fafc; transition: all 0.3s ease; backdrop-filter: blur(5px); cursor: pointer;">
                             <span>Explorar</span>
-                            <i class='bx bx-right-arrow-alt' style="font-size: 1.3rem;"></i>
+                            <i class='bx bx-right-arrow-alt' style="font-size: 1.2rem;"></i>
                         </div>
                     </div>
 
@@ -1517,10 +1514,11 @@ if (empty($hpw)) {
                             transform: scale(1.01);
                         }
                         .promo-banner-metas:hover .titanium-btn {
-                            background: #f8fafc;
-                            color: #020617;
-                            border-color: #f8fafc;
-                            box-shadow: 0 10px 20px rgba(255,255,255,0.1);
+                            background: var(--primary); /* Deep Surgas Maroon */
+                            color: #fff;
+                            border-color: var(--primary);
+                            box-shadow: 0 10px 25px rgba(130, 21, 21, 0.4);
+                            transform: translateX(5px);
                         }
                     </style>
                 </div>
@@ -1564,7 +1562,7 @@ if (empty($hpw)) {
                             </div>
                         </div>
 
-                        <div class="flip-hint" style="margin-top: 1rem;"><i class='bx bx-refresh'></i> Toca la tarjeta
+                        <div class="flip-hint" style="margin-top: 2rem;"><i class='bx bx-refresh'></i> Toca la tarjeta
                             para ver tu QR</div>
                     </div>
 
