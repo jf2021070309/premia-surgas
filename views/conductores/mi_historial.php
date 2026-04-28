@@ -371,8 +371,8 @@
 
                                     <!-- Columna 2: Cliente -->
                                     <div class="col-main">
-                                        <b><?= htmlspecialchars($v['cliente_nombre']) ?></b>
-                                        <span><i class='bx bx-id-card'></i> DNI <?= htmlspecialchars($v['cliente_dni']) ?></span>
+                                        <b><?= htmlspecialchars($v['cliente_nombre'] ?? '') ?></b>
+                                        <span><i class='bx bx-id-card'></i> DNI <?= htmlspecialchars($v['cliente_dni'] ?? '') ?></span>
                                         <?php if ($v['monto'] > 0): ?>
                                             <span style="margin-top: 5px; color: #10b981; font-weight: 800;">
                                                 <i class='bx bx-check-double'></i> S/ <?= number_format($v['monto'], 2) ?>
@@ -385,7 +385,7 @@
                                         <?php if (!empty($v['items'])): ?>
                                             <?php foreach ($v['items'] as $item): ?>
                                                 <div class="col-detail-item">
-                                                    <?= htmlspecialchars($item['nombre_item']) ?> 
+                                                    <?= htmlspecialchars($item['nombre_item'] ?? '') ?> 
                                                     <span style="color: var(--gray-sub); font-weight: 500;">×<?= $item['cantidad'] ?></span>
                                                     <span style="margin-left: auto; font-weight: 700; color: var(--wine-primary);">(+<?= $item['puntos_subtotal'] ?>)</span>
                                                 </div>
