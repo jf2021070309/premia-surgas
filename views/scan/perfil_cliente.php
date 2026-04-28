@@ -1123,8 +1123,8 @@ if (empty($hpw)) {
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(10px);
+            background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(20px);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1493,7 +1493,7 @@ if (empty($hpw)) {
                             <!-- Content: High-Contrast & Organized -->
                             <div style="display: flex; flex-direction: column; gap: 8px;">
                                 <h2 style="font-size: 1.5rem; font-weight: 900; margin: 0; letter-spacing: -0.8px; color: #f8fafc; display: flex; align-items: center; gap: 12px;">
-                                    Programa de Fidelidad 
+                                    Programa de Incentivos 
                                     <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" style="height: 24px; width: auto; filter: brightness(0) invert(1); opacity: 0.9;">
                                 </h2>
                                 <p style="margin: 0; font-size: 0.9rem; color: #94a3b8; font-weight: 500; opacity: 0.8;">Acceso exclusivo a metas y beneficios de alto rendimiento.</p>
@@ -1562,8 +1562,10 @@ if (empty($hpw)) {
                             </div>
                         </div>
 
-                        <div class="flip-hint" style="margin-top: 2rem;"><i class='bx bx-refresh'></i> Toca la tarjeta
-                            para ver tu QR</div>
+                        <div class="flip-hint" style="margin-top: 2.2rem; color: #1e293b; font-weight: 850; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1.5px; display: flex; align-items: center; justify-content: center; gap: 8px; opacity: 0.9;">
+                            <i class='bx bx-refresh' style="font-size: 1.1rem; color: var(--primary);"></i> 
+                            Toca la tarjeta para ver tu QR
+                        </div>
                     </div>
 
                     <!-- Información del Cliente (Lado Derecho) -->
@@ -1934,73 +1936,73 @@ if (empty($hpw)) {
 
     <!-- Modal Editar Perfil (Estilo Aliado Premium) -->
     <div id="modalEditProfile" class="ticket-overlay" style="display: none;">
-        <div class="ticket-container" style="max-width: 550px; flex-direction: column; padding: 0; border-radius: 28px; overflow: hidden; border: none; background: #fff;">
+        <div class="ticket-container" style="max-width: 600px; flex-direction: column; padding: 0; border-radius: 32px; overflow: hidden; border: none; background: #fff; box-shadow: 0 50px 100px rgba(0,0,0,0.4);">
             <!-- Header Modal -->
-            <div style="padding: 2rem 2.5rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9;">
-                <div style="display: flex; align-items: center; gap: 1rem;">
-                    <div style="background: #fff1f2; width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; color: #e11d48; font-size: 1.5rem;">
+            <div style="padding: 2.2rem 2.5rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f8fafc;">
+                <div style="display: flex; align-items: center; gap: 1.2rem;">
+                    <div style="background: #fff1f2; width: 52px; height: 52px; border-radius: 16px; display: flex; align-items: center; justify-content: center; color: #e11d48; font-size: 1.6rem; border: 1px solid #ffe4e6;">
                         <i class='bx bx-user-circle'></i>
                     </div>
                     <div>
-                        <h3 style="margin: 0; font-size: 1.25rem; font-weight: 900; color: #1e293b; letter-spacing: -0.5px;">Editar Perfil</h3>
-                        <p style="margin: 2px 0 0; font-size: 0.75rem; color: #94a3b8; font-weight: 600;">Modifica tus datos de contacto</p>
+                        <h3 style="margin: 0; font-size: 1.35rem; font-weight: 900; color: #0f172a; letter-spacing: -0.5px;">Editar Perfil</h3>
+                        <p style="margin: 3px 0 0; font-size: 0.78rem; color: #64748b; font-weight: 600;">Actualiza tu información de contacto</p>
                     </div>
                 </div>
-                <button onclick="closeEditModal()" style="background: #f8fafc; border: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #94a3b8; cursor: pointer; transition: 0.3s;">
+                <button onclick="closeEditModal()" style="background: #f1f5f9; border: none; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #64748b; cursor: pointer; transition: 0.3s;">
                     <i class='bx bx-x' style="font-size: 1.2rem;"></i>
                 </button>
             </div>
             
             <!-- Body Modal -->
-            <div style="padding: 2.5rem; display: flex; flex-direction: column; gap: 2rem;">
+            <div style="padding: 2.5rem; display: flex; flex-direction: column; gap: 1.8rem;">
                 <!-- Campo Nombre (Solo Lectura) -->
                 <div class="filter-group">
-                    <label class="filter-label" style="margin-bottom: 0.8rem; display: block; font-size: 0.65rem; letter-spacing: 0.5px;">NOMBRE COMPLETO / TITULAR</label>
+                    <label class="filter-label" style="margin-bottom: 0.8rem; display: block; font-size: 0.68rem; font-weight: 850; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;">Nombre del Titular</label>
                     <div style="position: relative;">
-                        <i class='bx bx-user' style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 1.2rem;"></i>
+                        <i class='bx bx-user' style="position: absolute; left: 1.2rem; top: 50%; transform: translateY(-50%); color: #cbd5e1; font-size: 1.3rem;"></i>
                         <input type="text" value="<?= htmlspecialchars($cliente['nombre']) ?>" disabled 
-                            style="width: 100%; height: 52px; border-radius: 12px; border: 1px solid #e2e8f0; background: #f8fafc; padding-left: 3rem; color: #64748b; font-weight: 600; font-size: 0.9rem; cursor: not-allowed;">
+                            style="width: 100%; height: 56px; border-radius: 14px; border: 1px solid #f1f5f9; background: #f8fafc; padding-left: 3.5rem; color: #94a3b8; font-weight: 600; font-size: 0.95rem; cursor: not-allowed; outline: none;">
                     </div>
                 </div>
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
                     <div class="filter-group">
-                        <label class="filter-label" style="margin-bottom: 0.8rem; display: block; font-size: 0.65rem; letter-spacing: 0.5px;">CELULAR (WHATSAPP)</label>
+                        <label class="filter-label" style="margin-bottom: 0.8rem; display: block; font-size: 0.68rem; font-weight: 850; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;">Celular de Contacto</label>
                         <div style="position: relative;">
-                            <i class='bx bx-phone' style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 1.2rem;"></i>
+                            <i class='bx bx-phone' style="position: absolute; left: 1.2rem; top: 50%; transform: translateY(-50%); color: #cbd5e1; font-size: 1.3rem;"></i>
                             <input type="text" id="edit-celular" value="<?= htmlspecialchars($cliente['celular'] ?? '') ?>" maxlength="9" placeholder="9 dígitos"
-                                style="width: 100%; height: 52px; border-radius: 12px; border: 1px solid #e2e8f0; padding-left: 3rem; color: #1e293b; font-weight: 700; font-size: 0.9rem; transition: 0.3s; outline: none;">
+                                style="width: 100%; height: 56px; border-radius: 14px; border: 1px solid #e2e8f0; padding-left: 3.5rem; color: #0f172a; font-weight: 700; font-size: 0.95rem; transition: 0.3s; outline: none; background: #fff;">
                         </div>
                     </div>
 
                     <div class="filter-group">
-                        <label class="filter-label" style="margin-bottom: 0.8rem; display: block; font-size: 0.65rem; letter-spacing: 0.5px;">DNI / RUC</label>
+                        <label class="filter-label" style="margin-bottom: 0.8rem; display: block; font-size: 0.68rem; font-weight: 850; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;">Documento ID</label>
                         <div style="position: relative;">
-                            <i class='bx bx-id-card' style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 1.2rem;"></i>
+                            <i class='bx bx-id-card' style="position: absolute; left: 1.2rem; top: 50%; transform: translateY(-50%); color: #cbd5e1; font-size: 1.3rem;"></i>
                             <input type="text" value="<?= htmlspecialchars($cliente['dni'] ?: $cliente['ruc']) ?>" disabled
-                                style="width: 100%; height: 52px; border-radius: 12px; border: 1px solid #e2e8f0; background: #f8fafc; padding-left: 3rem; color: #64748b; font-weight: 600; font-size: 0.9rem; cursor: not-allowed;">
+                                style="width: 100%; height: 56px; border-radius: 14px; border: 1px solid #f1f5f9; background: #f8fafc; padding-left: 3.5rem; color: #94a3b8; font-weight: 600; font-size: 0.95rem; cursor: not-allowed; outline: none;">
                         </div>
                     </div>
                 </div>
 
                 <div class="filter-group">
-                    <label class="filter-label" style="margin-bottom: 0.8rem; display: block; font-size: 0.65rem; letter-spacing: 0.5px;">UBICACIÓN / DIRECCIÓN</label>
+                    <label class="filter-label" style="margin-bottom: 0.8rem; display: block; font-size: 0.68rem; font-weight: 850; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;">Dirección de Residencia</label>
                     <div style="position: relative;">
-                        <i class='bx bx-map' style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 1.2rem;"></i>
+                        <i class='bx bx-map' style="position: absolute; left: 1.2rem; top: 50%; transform: translateY(-50%); color: #cbd5e1; font-size: 1.3rem;"></i>
                         <input type="text" id="edit-direccion" value="<?= htmlspecialchars($cliente['direccion'] ?? '') ?>" placeholder="Ej: Calle Principal 123, Tacna"
-                            style="width: 100%; height: 52px; border-radius: 12px; border: 1px solid #e2e8f0; padding-left: 3rem; color: #1e293b; font-weight: 700; font-size: 0.9rem; transition: 0.3s; outline: none;">
+                            style="width: 100%; height: 56px; border-radius: 14px; border: 1px solid #e2e8f0; padding-left: 3.5rem; color: #0f172a; font-weight: 700; font-size: 0.95rem; transition: 0.3s; outline: none; background: #fff;">
                     </div>
                 </div>
             </div>
 
             <!-- Footer Modal -->
-            <div style="padding: 1.5rem 2.5rem; background: #fff; border-top: 1px solid #f1f5f9; display: flex; justify-content: flex-end; gap: 1rem;">
+            <div style="padding: 1.8rem 2.5rem; background: #fff; border-top: 1px solid #f8fafc; display: flex; justify-content: flex-end; gap: 1rem;">
                 <button onclick="closeEditModal()" 
-                    style="height: 48px; padding: 0 1.5rem; border-radius: 12px; border: 1px solid #e2e8f0; background: #fff; color: #64748b; font-weight: 800; font-size: 0.85rem; cursor: pointer; transition: 0.3s;">
+                    style="height: 52px; padding: 0 1.8rem; border-radius: 14px; border: 1px solid #e2e8f0; background: #fff; color: #64748b; font-weight: 800; font-size: 0.9rem; cursor: pointer; transition: 0.3s;">
                     Cancelar
                 </button>
                 <button onclick="saveProfileChanges()" 
-                    style="height: 48px; padding: 0 2rem; border-radius: 12px; border: none; background: #000; color: #fff; font-weight: 800; font-size: 0.85rem; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                    style="height: 52px; padding: 0 2.2rem; border-radius: 14px; border: none; background: #000; color: #fff; font-weight: 800; font-size: 0.9rem; cursor: pointer; transition: 0.3s; box-shadow: 0 10px 20px rgba(0,0,0,0.15);">
                     Guardar Cambios
                 </button>
             </div>
