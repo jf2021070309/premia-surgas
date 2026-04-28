@@ -1045,9 +1045,10 @@ if (empty($hpw)) {
         .filter-bar {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-end;
             flex-wrap: wrap;
             gap: 1.25rem;
+            margin-top: 2rem;
             margin-bottom: 1.5rem;
             padding: 0.5rem 0;
         }
