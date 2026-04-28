@@ -913,8 +913,9 @@ if (empty($hpw)) {
         .elite-table td {
             padding: 1.25rem 1.5rem;
             vertical-align: middle;
-            border-bottom: 1px solid #f8fafc;
+            border-bottom: 1px solid #f1f5f9;
             font-size: 0.88rem;
+            transition: all 0.2s;
         }
 
         .elite-table tr:last-child td {
@@ -937,12 +938,25 @@ if (empty($hpw)) {
         }
 
         .type-badge {
-            padding: 6px 14px;
-            border-radius: 8px;
-            font-size: 0.72rem;
+            padding: 6px 14px 6px 24px;
+            border-radius: 50px;
+            font-size: 0.68rem;
             font-weight: 850;
             text-transform: uppercase;
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            position: relative;
+            letter-spacing: 0.5px;
+        }
+
+        .type-badge::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
         }
 
         .badge-recarga {
@@ -970,10 +984,11 @@ if (empty($hpw)) {
         .col-pts {
             text-align: right;
             font-weight: 900;
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             color: #22c55e;
             width: 150px;
             padding-right: 2rem !important;
+            letter-spacing: -0.5px;
         }
 
         @media (max-width: 768px) {
