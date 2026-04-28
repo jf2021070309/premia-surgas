@@ -1514,10 +1514,10 @@ if (empty($hpw)) {
                             transform: scale(1.01);
                         }
                         .promo-banner-metas:hover .titanium-btn {
-                            background: var(--primary); /* Deep Surgas Maroon */
-                            color: #fff;
-                            border-color: var(--primary);
-                            box-shadow: 0 10px 25px rgba(130, 21, 21, 0.4);
+                            background: #f8fafc;
+                            color: #020617;
+                            border-color: #f8fafc;
+                            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.15);
                             transform: translateX(5px);
                         }
                     </style>
