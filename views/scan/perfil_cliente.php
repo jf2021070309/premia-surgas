@@ -1520,6 +1520,32 @@ if (empty($hpw)) {
                             box-shadow: 0 10px 25px rgba(255, 255, 255, 0.2);
                             transform: translateX(8px);
                         }
+
+                        @media (max-width: 768px) {
+                            .promo-banner-metas {
+                                flex-direction: column;
+                                align-items: flex-start !important;
+                                padding: 1.8rem !important;
+                                gap: 1.5rem !important;
+                                text-align: left;
+                            }
+                            .promo-banner-metas > div:first-child {
+                                flex-direction: column;
+                                align-items: flex-start !important;
+                                gap: 1rem !important;
+                            }
+                            .promo-banner-metas h2 {
+                                font-size: 1.25rem !important;
+                                flex-wrap: wrap;
+                            }
+                            .promo-banner-metas p {
+                                font-size: 0.8rem !important;
+                            }
+                            .titanium-btn {
+                                width: 100%;
+                                justify-content: center;
+                            }
+                        }
                     </style>
                 </div>
 
