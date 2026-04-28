@@ -887,8 +887,8 @@ if (empty($hpw)) {
             background: #fff;
             border-radius: 24px;
             padding: 1.5rem;
-            border: 1px solid #f1f5f9;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+            border: 1.5px solid #e2e8f0;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.05);
             overflow-x: auto;
         }
 
@@ -900,13 +900,14 @@ if (empty($hpw)) {
 
         .elite-table th {
             text-align: left;
-            padding: 1rem 1.5rem;
+            padding: 1.25rem 1.5rem;
             font-size: 0.65rem;
             font-weight: 850;
             text-transform: uppercase;
             color: #94a3b8;
             letter-spacing: 1px;
-            border-bottom: 1px solid #f1f5f9;
+            background: #fbfcfd;
+            border-bottom: 1.5px solid #e2e8f0;
         }
 
         .elite-table td {
@@ -996,9 +997,9 @@ if (empty($hpw)) {
                 display: block;
                 margin-bottom: 1rem;
                 background: #fff;
-                border: 1px solid #f1f5f9;
+                border: 1.5px solid #e2e8f0;
                 border-radius: 16px;
-                padding: 0.5rem;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.03);
             }
 
             .col-date {
