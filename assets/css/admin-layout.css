@@ -244,18 +244,15 @@ body {
 }
 
 .header-page-icon {
-    width: 42px;
-    height: 42px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 12px;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
-    color: #ffcc00; /* Warm golden icon as in reference */
+    font-size: 1.8rem;
+    color: #ffffff;
     flex-shrink: 0;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    opacity: 0.95;
 }
 
 .header-text-column {
