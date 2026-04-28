@@ -1514,11 +1514,11 @@ if (empty($hpw)) {
                             transform: scale(1.01);
                         }
                         .promo-banner-metas:hover .titanium-btn {
-                            background: #f8fafc;
-                            color: #020617;
-                            border-color: #f8fafc;
-                            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.15);
-                            transform: translateX(5px);
+                            background: #ffffff !important;
+                            color: #000000 !important;
+                            border-color: #ffffff !important;
+                            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.2);
+                            transform: translateX(8px);
                         }
                     </style>
                 </div>
@@ -1618,10 +1618,9 @@ if (empty($hpw)) {
                                         <span style="font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">Categoría</span>
                                     </div>
                                     <div style="display: flex; align-items: center; gap: 6px;">
-                                        <span style="font-size: 1.05rem; font-weight: 700; color: var(--primary);">
+                                        <span style="font-size: 1.05rem; font-weight: 700; color: #0f172a;">
                                             <?= htmlspecialchars($cliente['tipo_cliente'] ?? 'Normal') ?>
                                         </span>
-                                        <div style="width: 5px; height: 5px; background: #22c55e; border-radius: 50%;"></div>
                                     </div>
                                 </div>
                             </div>
@@ -1631,7 +1630,7 @@ if (empty($hpw)) {
                                 <div style="display: flex; flex-direction: column; gap: 6px;">
                                     <div style="display: flex; align-items: center; gap: 8px; color: #94a3b8;">
                                         <i class='bx bx-calendar' style="font-size: 1rem;"></i>
-                                        <span style="font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">Alta en sistema</span>
+                                        <span style="font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">Miembro desde</span>
                                     </div>
                                     <span style="font-size: 1.05rem; font-weight: 700; color: #0f172a; padding-left: 2px;">
                                         <?= isset($cliente['fecha_creacion']) ? date('d/m/Y', strtotime($cliente['fecha_creacion'])) : 'No registrado' ?>
