@@ -211,8 +211,8 @@ if (empty($hpw)) {
         .info-value-elegant {
             font-size: 1.05rem;
             font-weight: 700;
-            color: #1e293b;
-            padding-left: 28px; /* Align with text after icon */
+            color: #0f172a; /* Deeper black */
+            padding-left: 0; /* Removing fixed padding for new flex layout */
         }
 
         .info-value-elegant.premium-status {
@@ -1557,73 +1557,89 @@ if (empty($hpw)) {
                     </div>
 
                     <!-- Información del Cliente (Lado Derecho) -->
-                    <div class="profile-info-column" style="background: #fff; border-radius: 35px; border: none; box-shadow: 0 20px 50px rgba(0,0,0,0.05);">
-                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #f8fafc; padding-bottom: 1.8rem; margin-bottom: 0.5rem;">
+                    <div class="profile-info-column" style="background: #fff; border-radius: 32px; border: 1px solid #e2e8f0; box-shadow: 0 20px 40px rgba(0,0,0,0.04); padding: 2.5rem !important;">
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2.5rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 1.5rem;">
                             <div>
-                                <div style="font-size: 0.65rem; font-weight: 900; color: var(--primary); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 4px;">Expediente Digital</div>
-                                <h3 style="font-size: 1.4rem; font-weight: 950; color: #0f172a; margin: 0; letter-spacing: -0.8px;">
+                                <h3 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0; letter-spacing: -0.5px;">
                                     Información Detallada
                                 </h3>
+                                <p style="margin: 5px 0 0; font-size: 0.8rem; color: #64748b; font-weight: 500;">Datos del perfil y membresía</p>
                             </div>
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <button onclick="openEditModal()" 
-                                    style="background: #0f172a; color: #fff; border: none; padding: 0.75rem 1.4rem; border-radius: 14px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.3s ease; font-weight: 800; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 10px 20px rgba(15, 23, 42, 0.2);">
-                                    <i class='bx bx-edit-alt' style="font-size: 1.2rem;"></i>
-                                    Editar Perfil
-                                </button>
-                            </div>
+                            <button onclick="openEditModal()" 
+                                style="background: transparent; color: #0f172a; border: 1.5px solid #e2e8f0; padding: 0.6rem 1.2rem; border-radius: 12px; display: flex; align-items: center; gap: 8px; cursor: pointer; transition: all 0.2s ease; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                                <i class='bx bx-edit-alt' style="font-size: 1.1rem;"></i>
+                                Editar
+                            </button>
                         </div>
 
-                        <div class="info-grid-modern">
+                        <div class="info-grid-modern" style="gap: 2rem 1.5rem;">
                             <!-- DNI / RUC -->
-                            <div class="info-item-elegant">
-                                <div class="info-header-row">
-                                    <i class='bx bx-id-card info-icon-elegant'></i>
-                                    <span class="info-label-elegant">DNI / RUC</span>
+                            <div class="info-item-elegant" style="padding: 0;">
+                                <div style="display: flex; flex-direction: column; gap: 6px;">
+                                    <div style="display: flex; align-items: center; gap: 8px; color: #94a3b8;">
+                                        <i class='bx bx-id-card' style="font-size: 1rem;"></i>
+                                        <span style="font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">Documento</span>
+                                    </div>
+                                    <span style="font-size: 1.05rem; font-weight: 700; color: #0f172a; padding-left: 2px;">
+                                        <?= htmlspecialchars($cliente['dni'] ?? $cliente['ruc'] ?? 'No registrado') ?>
+                                    </span>
                                 </div>
-                                <span class="info-value-elegant"><?= htmlspecialchars($cliente['dni'] ?? $cliente['ruc'] ?? 'No registrado') ?></span>
                             </div>
 
                             <!-- Teléfono -->
-                            <div class="info-item-elegant">
-                                <div class="info-header-row">
-                                    <i class='bx bx-mobile-alt info-icon-elegant'></i>
-                                    <span class="info-label-elegant">Teléfono</span>
+                            <div class="info-item-elegant" style="padding: 0;">
+                                <div style="display: flex; flex-direction: column; gap: 6px;">
+                                    <div style="display: flex; align-items: center; gap: 8px; color: #94a3b8;">
+                                        <i class='bx bx-mobile-alt' style="font-size: 1rem;"></i>
+                                        <span style="font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">Teléfono</span>
+                                    </div>
+                                    <span style="font-size: 1.05rem; font-weight: 700; color: #0f172a; padding-left: 2px;">
+                                        <?= htmlspecialchars($cliente['celular'] ?? 'No registrado') ?>
+                                    </span>
                                 </div>
-                                <span class="info-value-elegant"><?= htmlspecialchars($cliente['celular'] ?? 'No registrado') ?></span>
                             </div>
 
                             <!-- Tipo de Cliente -->
-                            <div class="info-item-elegant">
-                                <div class="info-header-row">
-                                    <i class='bx bx-crown info-icon-elegant'></i>
-                                    <span class="info-label-elegant">Tipo de Cliente</span>
+                            <div class="info-item-elegant" style="padding: 0;">
+                                <div style="display: flex; flex-direction: column; gap: 6px;">
+                                    <div style="display: flex; align-items: center; gap: 8px; color: #94a3b8;">
+                                        <i class='bx bx-crown' style="font-size: 1rem;"></i>
+                                        <span style="font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">Categoría</span>
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 6px;">
+                                        <span style="font-size: 1.05rem; font-weight: 700; color: var(--primary);">
+                                            <?= htmlspecialchars($cliente['tipo_cliente'] ?? 'Normal') ?>
+                                        </span>
+                                        <div style="width: 5px; height: 5px; background: #22c55e; border-radius: 50%;"></div>
+                                    </div>
                                 </div>
-                                <span class="info-value-elegant premium-status">
-                                    <?= htmlspecialchars($cliente['tipo_cliente'] ?? 'Normal') ?>
-                                </span>
                             </div>
 
                             <!-- Miembro Desde -->
-                            <div class="info-item-elegant">
-                                <div class="info-header-row">
-                                    <i class='bx bx-calendar-event info-icon-elegant'></i>
-                                    <span class="info-label-elegant">Miembro Desde</span>
+                            <div class="info-item-elegant" style="padding: 0;">
+                                <div style="display: flex; flex-direction: column; gap: 6px;">
+                                    <div style="display: flex; align-items: center; gap: 8px; color: #94a3b8;">
+                                        <i class='bx bx-calendar' style="font-size: 1rem;"></i>
+                                        <span style="font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">Alta en sistema</span>
+                                    </div>
+                                    <span style="font-size: 1.05rem; font-weight: 700; color: #0f172a; padding-left: 2px;">
+                                        <?= isset($cliente['fecha_creacion']) ? date('d/m/Y', strtotime($cliente['fecha_creacion'])) : 'No registrado' ?>
+                                    </span>
                                 </div>
-                                <span class="info-value-elegant">
-                                    <?= isset($cliente['fecha_creacion']) ? date('d/m/Y', strtotime($cliente['fecha_creacion'])) : 'No registrado' ?>
-                                </span>
                             </div>
 
                             <!-- Ubicación (Full Width) -->
-                            <div class="info-item-elegant full-width" style="border-top: 1px solid #f8fafc; padding-top: 1.5rem;">
-                                <div class="info-header-row">
-                                    <i class='bx bx-map info-icon-elegant'></i>
-                                    <span class="info-label-elegant">Ubicación de Residencia</span>
+                            <div class="info-item-elegant full-width" style="border-top: 1px solid #f8fafc; padding: 1.5rem 0 0; margin-top: 0.5rem;">
+                                <div style="display: flex; flex-direction: column; gap: 8px;">
+                                    <div style="display: flex; align-items: center; gap: 8px; color: #94a3b8;">
+                                        <i class='bx bx-map' style="font-size: 1rem;"></i>
+                                        <span style="font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">Dirección de Residencia</span>
+                                    </div>
+                                    <span style="font-size: 0.95rem; font-weight: 600; color: #475569; line-height: 1.5; padding-left: 2px;">
+                                        <?= htmlspecialchars(($cliente['direccion'] ?? 'Sin dirección registrada') . ($cliente['departamento'] ? ', ' . $cliente['departamento'] : '')) ?>
+                                    </span>
                                 </div>
-                                <span class="info-value-elegant" style="line-height: 1.5;">
-                                    <?= htmlspecialchars(($cliente['direccion'] ?? 'Sin dirección') . ($cliente['departamento'] ? ', ' . $cliente['departamento'] : '')) ?>
-                                </span>
                             </div>
                         </div>
                     </div>

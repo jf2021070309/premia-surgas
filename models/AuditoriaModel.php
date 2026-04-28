@@ -17,12 +17,16 @@ class AuditoriaModel {
      * @return bool
      */
     public function registrar(?int $idUsuario, string $accion, string $descripcion = '', string $modulo = 'GENERAL', ?array $metadata = null, string $tipoUsuario = 'trabajador'): bool {
+        // Si no se pasa ID, lo tomamos de la sesión
         if ($idUsuario === null && isset($_SESSION['id_usuario'])) {
             $idUsuario = $_SESSION['id_usuario'];
-            // Detectar tipo de la sesión si no se provee
-            if (isset($_SESSION['rol']) && $_SESSION['rol'] === 'cliente') {
-                $tipoUsuario = 'cliente';
-            }
+        }
+        
+        // AUTO-DETECCIÓN DE TIPO: 
+        // Si el tipo es el por defecto ('trabajador') pero la sesión dice que es 'cliente', lo corregimos.
+        // Esto arregla el problema globalmente sin cambiar cada controlador.
+        if ($tipoUsuario === 'trabajador' && isset($_SESSION['rol']) && $_SESSION['rol'] === 'cliente') {
+            $tipoUsuario = 'cliente';
         }
         
         $ip = $this->getClientIP();
