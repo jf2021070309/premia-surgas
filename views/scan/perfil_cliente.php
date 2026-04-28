@@ -35,7 +35,10 @@ if (empty($hpw)) {
     <style>
         :root {
             --primary: #821515;
-            --bg-color: #f8fafc;
+            --bg-color: #f3f4f6; /* Sophisticated Obsidian Grey */
+            --slate-900: #0f172a;
+            --slate-800: #1e293b;
+            --slate-700: #334155;
             --text-main: #1e293b;
             --silver-text: linear-gradient(135deg, #1a1a1a 0%, #444444 50%, #1a1a1a 100%);
             --silver-metal: linear-gradient(135deg, #70706F, #E9E9E7, #70706F, #E9E9E7, #70706F);
@@ -44,7 +47,7 @@ if (empty($hpw)) {
 
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            background: #f8fafc;
+            background: var(--bg-color);
             margin: 0;
             color: #1e293b;
             min-height: 100vh;
@@ -1473,33 +1476,41 @@ if (empty($hpw)) {
 
                 <div id="profile-main-view">
 
-                <!-- BANNER INCENTIVOS (Top de Mi Perfil) - Elegant Slate Theme -->
-                <div style="max-width: 1000px; margin: 2rem auto 0; padding: 0 1.5rem;">
+                <!-- BANNER INCENTIVOS (Top de Mi Perfil) - Elegant Obsidian Theme -->
+                <div style="max-width: 1000px; margin: 3rem auto 0; padding: 0 1.5rem;">
                     <div class="promo-banner-metas" onclick="window.location.hash='incentivos'"
-                        style="background: linear-gradient(135deg, #1e293b, #0f172a); border-radius: 24px; padding: 1.8rem; color: #fff; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); position: relative; overflow: hidden; cursor: pointer; transition: 0.4s ease; border: 1px solid rgba(255,255,255,0.05);">
-                        <!-- Elementos decorativos -->
-                        <i class='bx bx-target-lock'
-                            style="position: absolute; right: -20px; top: -20px; font-size: 10rem; opacity: 0.05; transform: rotate(-15deg);"></i>
-                        <div style="position: absolute; left: 10%; top: -50px; width: 150px; height: 150px; background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%); border-radius: 50%;"></div>
+                        style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 30px; padding: 2.2rem; color: #fff; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4); position: relative; overflow: hidden; cursor: pointer; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); border: 1px solid rgba(255,255,255,0.08);">
+                        
+                        <!-- Elementos decorativos abstractos -->
+                        <div style="position: absolute; right: -50px; top: -50px; width: 250px; height: 250px; background: radial-gradient(circle, rgba(255, 255, 255, 0.03) 0%, transparent 70%); border-radius: 50%;"></div>
+                        <div style="position: absolute; left: -30px; bottom: -30px; width: 180px; height: 180px; background: radial-gradient(circle, rgba(24acc15, 0.05) 0%, transparent 70%); border-radius: 50%;"></div>
 
-                        <div style="position: relative; z-index: 2; display: flex; align-items: center; gap: 1.5rem;">
-                            <div style="background: rgba(255,255,255,0.1); width: 60px; height: 60px; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px);">
-                                <i class='bx bxs-zap' style="color: #facc15;"></i>
+                        <div style="position: relative; z-index: 2; display: flex; align-items: center; gap: 2rem;">
+                            <div style="background: rgba(255,255,255,0.03); width: 70px; height: 70px; border-radius: 22px; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(15px); box-shadow: 0 15px 30px rgba(0,0,0,0.2);">
+                                <i class='bx bxs-zap' style="color: #facc15; filter: drop-shadow(0 0 15px rgba(250, 204, 21, 0.4));"></i>
                             </div>
                             <div>
-                                <div style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; color: #94a3b8; margin-bottom: 6px;">
-                                    Programa de Fidelidad
+                                <div style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 3px; color: #94a3b8; margin-bottom: 8px; opacity: 0.8;">
+                                    Status de Membresía
                                 </div>
-                                <div style="font-size: 1.25rem; font-weight: 850; line-height: 1.2; letter-spacing: -0.5px;">
-                                    Cumple tus metas y gana <span style="color:#facc15;">Vales de Descuento</span>
+                                <div style="font-size: 1.5rem; font-weight: 900; line-height: 1.1; letter-spacing: -0.5px;">
+                                    Programa de Fidelidad <span style="color:#facc15; margin-left: 5px;">Surgas</span>
+                                </div>
+                                <div style="font-size: 0.9rem; color: #cbd5e1; margin-top: 8px; font-weight: 500;">
+                                    Alcanza tus objetivos mensuales y desbloquea beneficios exclusivos.
                                 </div>
                             </div>
                         </div>
 
-                        <div style="position: relative; z-index: 2; background: #fff; color: #000; width: 48px; height: 48px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0; box-shadow: 0 10px 20px rgba(0,0,0,0.2); transition: 0.3s;">
-                            <i class='bx bx-right-arrow-alt'></i>
+                        <div class="banner-action-btn" style="position: relative; z-index: 2; background: #fff; color: #0f172a; padding: 1rem 1.8rem; border-radius: 18px; display: flex; align-items: center; gap: 12px; font-size: 0.9rem; font-weight: 850; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 15px 30px rgba(0,0,0,0.3); transition: all 0.4s ease;">
+                            <span>Ver Metas</span>
+                            <i class='bx bx-right-arrow-alt' style="font-size: 1.4rem;"></i>
                         </div>
                     </div>
+                    <style>
+                        .promo-banner-metas:hover { transform: translateY(-5px); box-shadow: 0 35px 70px -15px rgba(0, 0, 0, 0.5); }
+                        .promo-banner-metas:hover .banner-action-btn { background: #facc15; transform: translateX(5px); }
+                    </style>
                 </div>
 
                 <!-- Header Section: Card + Info -->
@@ -1546,18 +1557,18 @@ if (empty($hpw)) {
                     </div>
 
                     <!-- Información del Cliente (Lado Derecho) -->
-                    <div class="profile-info-column">
-                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #f1f5f9; padding-bottom: 1.5rem;">
+                    <div class="profile-info-column" style="background: #fff; border-radius: 35px; border: none; box-shadow: 0 20px 50px rgba(0,0,0,0.05);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #f8fafc; padding-bottom: 1.8rem; margin-bottom: 0.5rem;">
                             <div>
-                                <h3 style="font-size: 1.2rem; font-weight: 900; color: #1e293b; margin: 0; letter-spacing: -0.2px;">
+                                <div style="font-size: 0.65rem; font-weight: 900; color: var(--primary); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 4px;">Expediente Digital</div>
+                                <h3 style="font-size: 1.4rem; font-weight: 950; color: #0f172a; margin: 0; letter-spacing: -0.8px;">
                                     Información Detallada
                                 </h3>
-                                <p style="margin: 4px 0 0; font-size: 0.75rem; color: #94a3b8; font-weight: 500;">Datos registrados en tu cuenta</p>
                             </div>
                             <div style="display: flex; align-items: center; gap: 10px;">
                                 <button onclick="openEditModal()" 
-                                    style="background: #f1f5f9; color: #1e293b; border: 1px solid #e2e8f0; padding: 0.6rem 1.2rem; border-radius: 12px; display: flex; align-items: center; gap: 8px; cursor: pointer; transition: 0.3s; font-weight: 800; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">
-                                    <i class='bx bx-edit-alt' style="font-size: 1.1rem;"></i>
+                                    style="background: #0f172a; color: #fff; border: none; padding: 0.75rem 1.4rem; border-radius: 14px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.3s ease; font-weight: 800; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 10px 20px rgba(15, 23, 42, 0.2);">
+                                    <i class='bx bx-edit-alt' style="font-size: 1.2rem;"></i>
                                     Editar Perfil
                                 </button>
                             </div>
