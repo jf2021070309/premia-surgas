@@ -844,20 +844,38 @@
         async function onFileChange(event) {
             if (event.target.files.length === 0) return;
             const imageFile = event.target.files[0];
+            
+            // Si ya hay un escáner de cámara corriendo, lo detenemos primero
+            if (html5QrCode && html5QrCode.getState() === 2) {
+                try { await html5QrCode.stop(); } catch(e) {}
+            }
+
             if (!html5QrCode) html5QrCode = new Html5Qrcode("reader");
-            Swal.fire({ title: 'Escaneando imagen...', didOpen: () => { Swal.showLoading(); } });
+            
+            Swal.fire({ 
+                title: 'Escaneando imagen...', 
+                html: 'Analizando el código QR de la imagen seleccionada',
+                didOpen: () => { Swal.showLoading(); } 
+            });
+
             try {
-                const decodedText = await html5QrCode.scanFile(imageFile, false);
+                const decodedText = await html5QrCode.scanFile(imageFile, true);
                 Swal.close();
                 onScanSuccess(decodedText);
             } catch (err) {
-                Swal.fire({ icon: 'error', title: 'Error', text: 'No se pudo leer el QR de la imagen.' });
+                console.error("Error al escanear archivo:", err);
+                Swal.fire({ 
+                    icon: 'error', 
+                    title: 'No se detectó QR', 
+                    text: 'Asegúrate de que la imagen sea clara y contenga un código QR de PremiaSurgas.',
+                    confirmButtonColor: '#0f172a'
+                });
             }
             event.target.value = '';
         }
 
         function stopScanner() {
-            if (html5QrCode) {
+            if (html5QrCode && html5QrCode.getState() === 2) {
                 html5QrCode.stop().then(() => {
                     document.getElementById('qr-reader-overlay').style.display = 'none';
                 }).catch(() => {
@@ -871,7 +889,6 @@
         function onScanSuccess(decodedText) {
             console.log("QR Detectado:", decodedText);
             
-            // Vibración feedback
             if (navigator.vibrate) navigator.vibrate(100);
 
             let codigo = decodedText;
@@ -882,17 +899,16 @@
                 codigo = decodedText.split('/').pop();
             }
             
-            if (html5QrCode) {
-                html5QrCode.stop().then(() => {
-                    document.getElementById('qr-reader-overlay').style.display = 'none';
-                    buscarCliente(codigo);
-                }).catch(() => {
-                    document.getElementById('qr-reader-overlay').style.display = 'none';
-                    buscarCliente(codigo);
-                });
-            } else {
+            const processAndSearch = () => {
                 document.getElementById('qr-reader-overlay').style.display = 'none';
                 buscarCliente(codigo);
+            };
+
+            // Solo intentamos detener si el escáner está realmente escaneando (cámara)
+            if (html5QrCode && html5QrCode.getState() === 2) {
+                html5QrCode.stop().then(processAndSearch).catch(processAndSearch);
+            } else {
+                processAndSearch();
             }
         }
 

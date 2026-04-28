@@ -48,7 +48,7 @@ class AuthController {
             $_SESSION['session_id']       = $sessId;
 
             // Registro de Auditoría
-            $this->audit->registrar($user['id'], 'INICIO_SESION', 'Inicio de sesión exitoso (Trabajador)', 'SEGURIDAD');
+            $this->audit->registrar($user['id'], 'INICIO_SESION', 'Inicio de sesión exitoso (Trabajador)', 'SEGURIDAD', 'trabajador');
 
             echo json_encode(['success' => true, 'redirect' => 'panel']);
             exit;
@@ -76,7 +76,7 @@ class AuthController {
             $_SESSION['token_cliente']  = $cliente['token'];
 
             // Registro de Auditoría
-            $this->audit->registrar($cliente['id'], 'INICIO_SESION', 'Inicio de sesión exitoso (Cliente)', 'SEGURIDAD');
+            $this->audit->registrar($cliente['id'], 'INICIO_SESION', 'Inicio de sesión exitoso (Cliente)', 'SEGURIDAD', 'cliente');
 
             echo json_encode(['success' => true, 'redirect' => 'scan?c=' . $cliente['codigo'] . '&t=' . $cliente['token']]);
             exit;

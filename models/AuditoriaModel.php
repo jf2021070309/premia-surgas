@@ -12,16 +12,17 @@ class AuditoriaModel {
     /**
      * Registra un evento en la auditoría con soporte para metadatos y detección de dispositivo
      * 
-     * @param int|null $idUsuario ID del usuario
-     * @param string $accion Nombre de la acción
-     * @param string $descripcion Detalle legible
-     * @param string $modulo Módulo afectado
+     * @param string $tipoUsuario Tipo de usuario ('trabajador' o 'cliente')
      * @param array|null $metadata Datos adicionales (antes/después de un cambio)
      * @return bool
      */
-    public function registrar(?int $idUsuario, string $accion, string $descripcion = '', string $modulo = 'GENERAL', ?array $metadata = null): bool {
+    public function registrar(?int $idUsuario, string $accion, string $descripcion = '', string $modulo = 'GENERAL', string $tipoUsuario = 'trabajador', ?array $metadata = null): bool {
         if ($idUsuario === null && isset($_SESSION['id_usuario'])) {
             $idUsuario = $_SESSION['id_usuario'];
+            // Detectar tipo de la sesión si no se provee
+            if (isset($_SESSION['rol']) && $_SESSION['rol'] === 'cliente') {
+                $tipoUsuario = 'cliente';
+            }
         }
         
         $ip = $this->getClientIP();
@@ -35,14 +36,15 @@ class AuditoriaModel {
         $userAgentInfo = $device . ' — ' . $this->getBrowser($fullAgent);
 
         try {
-            // Intento con la nueva estructura (metadata y user_agent)
+            // Intento con la nueva estructura (metadata, user_agent, tipo_usuario)
             $stmt = $this->db->prepare(
-                "INSERT INTO auditoria (id_usuario, accion, descripcion, modulo, ip_address, user_agent, metadata) 
-                 VALUES (:u, :a, :d, :m, :ip, :ua, :meta)"
+                "INSERT INTO auditoria (id_usuario, tipo_usuario, accion, descripcion, modulo, ip_address, user_agent, metadata) 
+                 VALUES (:u, :tu, :a, :d, :m, :ip, :ua, :meta)"
             );
 
             return $stmt->execute([
                 ':u'    => $idUsuario,
+                ':tu'   => $tipoUsuario,
                 ':a'    => strtoupper($accion),
                 ':d'    => $descripcion,
                 ':m'    => strtoupper($modulo),
@@ -106,9 +108,22 @@ class AuditoriaModel {
      */
     public function getAll(int $limit = 500): array {
         $stmt = $this->db->prepare(
-            "SELECT a.*, u.nombre as usuario_nombre, u.usuario as usuario_login, u.rol as usuario_rol
+            "SELECT a.*, 
+                    CASE 
+                        WHEN a.tipo_usuario = 'cliente' THEN c.nombre 
+                        ELSE u.nombre 
+                    END as usuario_nombre,
+                    CASE 
+                        WHEN a.tipo_usuario = 'cliente' THEN c.dni 
+                        ELSE u.usuario 
+                    END as usuario_login,
+                    CASE 
+                        WHEN a.tipo_usuario = 'cliente' THEN 'cliente' 
+                        ELSE u.rol 
+                    END as usuario_rol
              FROM auditoria a
-             LEFT JOIN usuarios u ON a.id_usuario = u.id
+             LEFT JOIN usuarios u ON a.id_usuario = u.id AND a.tipo_usuario = 'trabajador'
+             LEFT JOIN clientes c ON a.id_usuario = c.id AND a.tipo_usuario = 'cliente'
              ORDER BY a.fecha_hora DESC
              LIMIT :limit"
         );
