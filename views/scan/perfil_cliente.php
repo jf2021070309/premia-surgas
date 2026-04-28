@@ -2170,10 +2170,8 @@ if (empty($hpw)) {
                 if (tabsContainer) {
                     tabsContainer.style.display = 'block';
                     tabsContainer.style.marginTop = '0';
-                    tabsContainer.style.paddingTop = '2rem';
                 }
                 document.querySelector('.tab-switcher').style.display = 'none';
-                document.querySelector('.main-content-client').style.paddingTop = '2rem';
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             } else {
                 // VIEW: MAIN PROFILE (VIP Card Only)
