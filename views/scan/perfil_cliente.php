@@ -886,10 +886,10 @@ if (empty($hpw)) {
         .elite-table-wrapper {
             background: #fff;
             border-radius: 18px;
-            padding: 1.5rem;
+            padding: 0;
             border: 1.5px solid #e2e8f0;
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.05);
-            overflow-x: auto;
+            overflow: hidden;
         }
 
         .elite-table {
@@ -900,14 +900,14 @@ if (empty($hpw)) {
 
         .elite-table th {
             text-align: left;
-            padding: 1.25rem 1.5rem;
-            font-size: 0.65rem;
+            padding: 1rem 1.5rem;
+            font-size: 0.68rem;
             font-weight: 850;
             text-transform: uppercase;
-            color: #94a3b8;
-            letter-spacing: 1px;
-            background: #fbfcfd;
-            border-bottom: 1.5px solid #e2e8f0;
+            color: #64748b;
+            letter-spacing: 1.2px;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
         }
 
         .elite-table td {
