@@ -427,7 +427,7 @@ CREATE TABLE IF NOT EXISTS `ventas` (
   `conductor_id` int(11) DEFAULT NULL,
   `monto` decimal(10,2) DEFAULT NULL,
   `puntos` int(11) DEFAULT NULL,
-  `detalle` varchar(255) DEFAULT NULL,
+  `detalle` TEXT DEFAULT NULL,
   `fecha` timestamp NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
   KEY `cliente_id` (`cliente_id`),
