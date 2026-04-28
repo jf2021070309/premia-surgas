@@ -1416,7 +1416,7 @@ if (empty($hpw)) {
         .main-content-client {
             flex: 1;
             min-height: 100vh;
-            background: #ffffff;
+            background: var(--bg-color);
             position: relative;
         }
 
