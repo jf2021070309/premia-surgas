@@ -1476,40 +1476,52 @@ if (empty($hpw)) {
 
                 <div id="profile-main-view">
 
-                <!-- BANNER INCENTIVOS (Top de Mi Perfil) - Elegant Obsidian Theme -->
-                <div style="max-width: 1000px; margin: 3rem auto 0; padding: 0 1.5rem;">
+                <!-- BANNER INCENTIVOS (Top de Mi Perfil) - Titanium & Midnight Premium -->
+                <div style="max-width: 1000px; margin: 3.5rem auto 0; padding: 0 1.5rem;">
                     <div class="promo-banner-metas" onclick="window.location.hash='incentivos'"
-                        style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 30px; padding: 2.2rem; color: #fff; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4); position: relative; overflow: hidden; cursor: pointer; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); border: 1px solid rgba(255,255,255,0.08);">
+                        style="background: #020617; border-radius: 24px; padding: 2rem 3rem; color: #fff; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); position: relative; overflow: hidden;">
                         
-                        <!-- Elementos decorativos abstractos -->
-                        <div style="position: absolute; right: -50px; top: -50px; width: 250px; height: 250px; background: radial-gradient(circle, rgba(255, 255, 255, 0.03) 0%, transparent 70%); border-radius: 50%;"></div>
-                        <div style="position: absolute; left: -30px; bottom: -30px; width: 180px; height: 180px; background: radial-gradient(circle, rgba(24acc15, 0.05) 0%, transparent 70%); border-radius: 50%;"></div>
+                        <!-- Sutil brillo metálico de fondo -->
+                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.02) 50%, transparent 60%); pointer-events: none;"></div>
 
-                        <div style="position: relative; z-index: 2; display: flex; align-items: center; gap: 2rem;">
-                            <div style="background: rgba(255,255,255,0.03); width: 70px; height: 70px; border-radius: 22px; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(15px); box-shadow: 0 15px 30px rgba(0,0,0,0.2);">
-                                <i class='bx bxs-zap' style="color: #facc15; filter: drop-shadow(0 0 15px rgba(250, 204, 21, 0.4));"></i>
+                        <div style="display: flex; align-items: center; gap: 2.5rem; position: relative; z-index: 2;">
+                            <!-- Icon: Titanium Minimalist -->
+                            <div style="font-size: 2.2rem; color: #e2e8f0; filter: drop-shadow(0 0 10px rgba(226, 232, 240, 0.2));">
+                                <i class='bx bxs-zap'></i>
                             </div>
-                            <div>
-                                <div style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 3px; color: #94a3b8; margin-bottom: 8px; opacity: 0.8;">
-                                    Status de Membresía
+                            
+                            <!-- Content: High-Contrast & Organized -->
+                            <div style="display: flex; flex-direction: column; gap: 6px;">
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <span style="font-size: 0.7rem; font-weight: 900; text-transform: uppercase; letter-spacing: 3px; color: #64748b;">Membresía Elite</span>
+                                    <span style="width: 20px; height: 1px; background: rgba(255,255,255,0.1);"></span>
                                 </div>
-                                <div style="font-size: 1.5rem; font-weight: 900; line-height: 1.1; letter-spacing: -0.5px;">
-                                    Programa de Fidelidad <span style="color:#facc15; margin-left: 5px;">Surgas</span>
-                                </div>
-                                <div style="font-size: 0.9rem; color: #cbd5e1; margin-top: 8px; font-weight: 500;">
-                                    Alcanza tus objetivos mensuales y desbloquea beneficios exclusivos.
-                                </div>
+                                <h2 style="font-size: 1.5rem; font-weight: 900; margin: 0; letter-spacing: -0.8px; color: #f8fafc;">
+                                    Programa de Fidelidad <span style="color: #94a3b8; font-weight: 400; font-style: italic;">Surgas</span>
+                                </h2>
+                                <p style="margin: 0; font-size: 0.9rem; color: #94a3b8; font-weight: 500; opacity: 0.8;">Acceso exclusivo a metas y beneficios de alto rendimiento.</p>
                             </div>
                         </div>
 
-                        <div class="banner-action-btn" style="position: relative; z-index: 2; background: #fff; color: #0f172a; padding: 1rem 1.8rem; border-radius: 18px; display: flex; align-items: center; gap: 12px; font-size: 0.9rem; font-weight: 850; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 15px 30px rgba(0,0,0,0.3); transition: all 0.4s ease;">
-                            <span>Ver Metas</span>
-                            <i class='bx bx-right-arrow-alt' style="font-size: 1.4rem;"></i>
+                        <!-- Action: Titanium Glass Button -->
+                        <div class="titanium-btn" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 0.9rem 1.8rem; border-radius: 14px; display: flex; align-items: center; gap: 12px; font-size: 0.8rem; font-weight: 850; text-transform: uppercase; letter-spacing: 2px; color: #f8fafc; transition: 0.4s; backdrop-filter: blur(5px);">
+                            <span>Explorar</span>
+                            <i class='bx bx-right-arrow-alt' style="font-size: 1.3rem;"></i>
                         </div>
                     </div>
+
                     <style>
-                        .promo-banner-metas:hover { transform: translateY(-5px); box-shadow: 0 35px 70px -15px rgba(0, 0, 0, 0.5); }
-                        .promo-banner-metas:hover .banner-action-btn { background: #facc15; transform: translateX(5px); }
+                        .promo-banner-metas:hover {
+                            background: #0a0a0a;
+                            border-color: rgba(255,255,255,0.15);
+                            transform: scale(1.01);
+                        }
+                        .promo-banner-metas:hover .titanium-btn {
+                            background: #f8fafc;
+                            color: #020617;
+                            border-color: #f8fafc;
+                            box-shadow: 0 10px 20px rgba(255,255,255,0.1);
+                        }
                     </style>
                 </div>
 
