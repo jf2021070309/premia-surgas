@@ -12,11 +12,11 @@ class AuditoriaModel {
     /**
      * Registra un evento en la auditoría con soporte para metadatos y detección de dispositivo
      * 
-     * @param string $tipoUsuario Tipo de usuario ('trabajador' o 'cliente')
      * @param array|null $metadata Datos adicionales (antes/después de un cambio)
+     * @param string $tipoUsuario Tipo de usuario ('trabajador' o 'cliente')
      * @return bool
      */
-    public function registrar(?int $idUsuario, string $accion, string $descripcion = '', string $modulo = 'GENERAL', string $tipoUsuario = 'trabajador', ?array $metadata = null): bool {
+    public function registrar(?int $idUsuario, string $accion, string $descripcion = '', string $modulo = 'GENERAL', ?array $metadata = null, string $tipoUsuario = 'trabajador'): bool {
         if ($idUsuario === null && isset($_SESSION['id_usuario'])) {
             $idUsuario = $_SESSION['id_usuario'];
             // Detectar tipo de la sesión si no se provee
