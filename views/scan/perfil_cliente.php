@@ -124,8 +124,7 @@ if (empty($hpw)) {
             margin: 0;
             max-width: 420px;
             width: 100%;
-            height: 250px;
-            /* Base height for mobile aspect ratio */
+            aspect-ratio: 1.58 / 1;
             cursor: pointer;
             z-index: 10;
         }
@@ -267,7 +266,7 @@ if (empty($hpw)) {
             height: 100%;
             -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
-            border-radius: 24px;
+            border-radius: 32px;
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.1);
             overflow: hidden;
