@@ -17,13 +17,14 @@ $pageSubtitle = 'Configura metas y premios por volumen de compra';
     <style>
         .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
 
-        /* Botón de acción principal (Morado) */
-        .btn-purple {
-            background: linear-gradient(135deg, #7c3aed, #6d28d9) !important;
-            box-shadow: 0 8px 25px rgba(124, 58, 237, 0.25) !important;
+        /* Botón de acción principal (Vino) */
+        .btn-wine {
+            background: linear-gradient(135deg, #800000, #5a0000) !important;
+            box-shadow: 0 8px 25px rgba(128, 0, 0, 0.2) !important;
         }
-        .btn-purple:hover {
-            box-shadow: 0 12px 35px rgba(124, 58, 237, 0.35) !important;
+        .btn-wine:hover {
+            box-shadow: 0 12px 35px rgba(128, 0, 0, 0.3) !important;
+            background: linear-gradient(135deg, #991b1b, #800000) !important;
         }
 
         /* Botón Midnight */
@@ -62,18 +63,18 @@ $pageSubtitle = 'Configura metas y premios por volumen de compra';
         .rule-meta i { font-size: 1rem; color: #94a3b8; }
 
         .rule-prize-box {
-            background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+            background: linear-gradient(135deg, #fff5f5 0%, #fdf2f2 100%);
             border-radius: 20px; padding: 1.5rem; margin-bottom: 1.8rem;
-            border: 1px solid #ddd6fe; position: relative;
+            border: 1px solid #fee2e2; position: relative;
         }
         .rule-prize-label {
-            font-size: 0.65rem; font-weight: 900; color: #7c3aed;
+            font-size: 0.65rem; font-weight: 900; color: #800000;
             text-transform: uppercase; letter-spacing: 1.5px;
             margin-bottom: 10px; display: flex; align-items: center; gap: 8px;
         }
         .rule-prize-content { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; }
         .rule-prize-text { font-size: 1.05rem; font-weight: 800; color: #1e293b; line-height: 1.3; }
-        .rule-prize-val { font-size: 1.8rem; font-weight: 950; color: #7c3aed; line-height: 1; }
+        .rule-prize-val { font-size: 1.8rem; font-weight: 950; color: #800000; line-height: 1; }
 
         .rule-actions {
             display: flex; gap: 12px; border-top: 1px solid #f1f5f9;
@@ -104,7 +105,7 @@ $pageSubtitle = 'Configura metas y premios por volumen de compra';
         }
         @keyframes modalPop { from { transform: scale(0.95) translateY(20px); opacity: 0; } }
         .modal-title { font-size: 1.3rem; font-weight: 900; color: #1e293b; margin-bottom: 2rem; display: flex; align-items: center; gap: 10px; }
-        .modal-title i { font-size: 1.5rem; color: #7c3aed; }
+        .modal-title i { font-size: 1.5rem; color: #800000; }
 
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
         .form-row.full { grid-template-columns: 1fr; }
@@ -117,7 +118,7 @@ $pageSubtitle = 'Configura metas y premios por volumen de compra';
             box-sizing: border-box;
         }
         .form-input:focus, .form-select:focus, .form-textarea:focus {
-            border-color: #7c3aed; box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.08); outline: none;
+            border-color: #800000; box-shadow: 0 0 0 4px rgba(128, 0, 0, 0.08); outline: none;
         }
         .form-textarea { min-height: 80px; resize: vertical; }
 
@@ -130,9 +131,9 @@ $pageSubtitle = 'Configura metas y premios por volumen de compra';
         .btn-modal-cancel:hover { background: #f1f5f9; }
         .btn-modal-save {
             flex: 1; padding: 14px; border-radius: 14px; border: none;
-            background: linear-gradient(135deg, #7c3aed, #6d28d9); color: #fff;
+            background: linear-gradient(135deg, #800000, #5a0000); color: #fff;
             font-weight: 800; font-size: 0.85rem; cursor: pointer;
-            box-shadow: 0 8px 25px rgba(124, 58, 237, 0.3); transition: 0.3s;
+            box-shadow: 0 8px 25px rgba(128, 0, 0, 0.3); transition: 0.3s;
         }
         .btn-modal-save:hover { transform: translateY(-1px); }
 
@@ -206,7 +207,7 @@ $pageSubtitle = 'Configura metas y premios por volumen de compra';
                         <i class='bx bx-receipt'></i>
                         <span>Ver Vales</span>
                     </a>
-                    <button class="btn-primary-premium btn-purple" onclick="openModal()">
+                    <button class="btn-primary-premium btn-wine" onclick="openModal()">
                         <i class='bx bx-plus'></i>
                         <span>Nueva Regla</span>
                     </button>
@@ -236,7 +237,7 @@ $pageSubtitle = 'Configura metas y premios por volumen de compra';
                         </div>
 
                         <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 1.8rem;">
-                            <div style="font-size: 2.6rem; font-weight: 950; color: #7c3aed; line-height: 1; letter-spacing: -1px;"><?= $r['meta_cantidad'] ?></div>
+                            <div style="font-size: 2.6rem; font-weight: 950; color: #800000; line-height: 1; letter-spacing: -1px;"><?= $r['meta_cantidad'] ?></div>
                             <div style="font-size: 0.82rem; color: #64748b; font-weight: 600; line-height: 1.3;">operaciones necesarias para<br><span style="color: #0f172a; font-weight: 800;">completar la meta</span></div>
                         </div>
 

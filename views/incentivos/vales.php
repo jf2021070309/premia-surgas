@@ -49,7 +49,7 @@ $pageSubtitle = 'Gestión y verificación de vales de descuento / premios';
             font-size: 0.85rem; font-weight: 600; outline: none; transition: 0.3s;
             min-width: 250px;
         }
-        .filter-input:focus { border-color: #7c3aed; }
+        .filter-input:focus { border-color: #800000; }
         .filter-select {
             padding: 10px 16px; border: 1.5px solid #e2e8f0; border-radius: 12px;
             font-size: 0.85rem; font-weight: 600; outline: none; background: #fff;
@@ -169,7 +169,7 @@ $pageSubtitle = 'Gestión y verificación de vales de descuento / premios';
                                     <div style="font-size: 0.75rem; color: #64748b; font-weight: 600;"><?= $v['cliente_codigo'] ?> • <?= $v['tipo_cliente'] ?></div>
                                 </td>
                                 <td style="padding: 1rem;">
-                                    <div style="font-weight: 700; color: #7c3aed; font-size: 0.85rem; margin-bottom: 2px;"><?= htmlspecialchars($v['descripcion']) ?></div>
+                                    <div style="font-weight: 700; color: #800000; font-size: 0.85rem; margin-bottom: 2px;"><?= htmlspecialchars($v['descripcion']) ?></div>
                                     <div style="font-size: 0.7rem; color: #94a3b8; font-weight: 600;">Regla: <?= htmlspecialchars($v['regla_nombre']) ?></div>
                                 </td>
                                 <td style="padding: 1rem;">
