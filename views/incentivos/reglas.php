@@ -15,88 +15,78 @@ $pageSubtitle = 'Configura metas y premios por volumen de compra';
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
-        .stat-card {
-            background: #fff; border-radius: 20px; padding: 1.5rem;
-            border: 1px solid #f1f5f9; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-            display: flex; align-items: center; gap: 1rem;
-        }
-        .stat-icon {
-            width: 52px; height: 52px; border-radius: 16px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.5rem; flex-shrink: 0;
-        }
-        .stat-icon.purple { background: #f3e8ff; color: #7c3aed; }
-        .stat-icon.green  { background: #dcfce7; color: #16a34a; }
-        .stat-icon.amber  { background: #fef3c7; color: #d97706; }
-        .stat-icon.blue   { background: #dbeafe; color: #2563eb; }
-        .stat-val { font-size: 1.8rem; font-weight: 900; color: #1e293b; line-height: 1; }
-        .stat-label { font-size: 0.72rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
 
-        .btn-primary-action {
-            background: linear-gradient(135deg, #7c3aed, #6d28d9); color: #fff;
-            border: none; padding: 14px 28px; border-radius: 14px;
-            font-weight: 800; font-size: 0.9rem; cursor: pointer;
-            display: inline-flex; align-items: center; gap: 10px;
-            box-shadow: 0 8px 25px rgba(124, 58, 237, 0.3);
-            transition: all 0.3s; text-transform: uppercase; letter-spacing: 1px;
+        /* Botón de acción principal (Morado) */
+        .btn-purple {
+            background: linear-gradient(135deg, #7c3aed, #6d28d9) !important;
+            box-shadow: 0 8px 25px rgba(124, 58, 237, 0.25) !important;
         }
-        .btn-primary-action:hover { transform: translateY(-2px); box-shadow: 0 12px 35px rgba(124, 58, 237, 0.4); }
+        .btn-purple:hover {
+            box-shadow: 0 12px 35px rgba(124, 58, 237, 0.35) !important;
+        }
 
-        .rules-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 1.5rem; }
+        /* Botón Midnight */
+        .btn-midnight {
+            background: #1e293b !important;
+            box-shadow: 0 8px 25px rgba(30, 41, 59, 0.15) !important;
+        }
+
         .rule-card {
-            background: #fff; border-radius: 20px; padding: 1.8rem;
-            border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.03);
-            transition: all 0.3s; position: relative; overflow: hidden;
+            background: #fff; border-radius: 24px; padding: 2rem;
+            border: 1px solid #f1f5f9; box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            position: relative; overflow: hidden;
+            display: flex; flex-direction: column;
         }
-        .rule-card:hover { transform: translateY(-4px); box-shadow: 0 12px 35px rgba(0,0,0,0.06); }
-        .rule-card.inactive { opacity: 0.55; }
-        .rule-card.inactive::after {
-            content: 'INACTIVA'; position: absolute; top: 16px; right: -30px;
-            background: #ef4444; color: #fff; font-size: 0.6rem; font-weight: 900;
-            padding: 4px 40px; transform: rotate(45deg); letter-spacing: 1px;
-        }
-
-        .rule-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.2rem; }
-        .rule-title { font-size: 1.1rem; font-weight: 850; color: #1e293b; line-height: 1.3; }
+        .rule-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,0.06); border-color: #e2e8f0; }
+        .rule-card.inactive { opacity: 0.6; filter: grayscale(0.5); }
+        
+        .rule-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; gap: 1rem; }
+        .rule-title { font-size: 1.15rem; font-weight: 800; color: #0f172a; line-height: 1.3; margin: 0; }
+        
         .rule-badge {
-            font-size: 0.6rem; font-weight: 900; padding: 4px 12px;
-            border-radius: 50px; text-transform: uppercase; letter-spacing: 1px;
-            flex-shrink: 0;
+            font-size: 0.62rem; font-weight: 900; padding: 6px 14px;
+            border-radius: 100px; text-transform: uppercase; letter-spacing: 1.2px;
+            flex-shrink: 0; background: #f1f5f9; color: #475569;
         }
-        .badge-mensual { background: #dbeafe; color: #1d4ed8; }
-        .badge-semanal { background: #dcfce7; color: #16a34a; }
-        .badge-trimestral { background: #fef3c7; color: #d97706; }
+        .rule-badge.frecuencia-mensual { background: #eef2ff; color: #4338ca; }
+        .rule-badge.frecuencia-semanal { background: #f0fdf4; color: #15803d; }
+        .rule-badge.status-inactive { background: #fef2f2; color: #b91c1c; }
 
-        .rule-meta { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; }
-        .rule-meta-number {
-            font-size: 2rem; font-weight: 900; color: #7c3aed; line-height: 1;
+        .rule-meta-grid { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 1.8rem; }
+        .rule-meta { 
+            display: flex; align-items: center; gap: 6px; 
+            font-size: 0.78rem; font-weight: 600; color: #64748b; 
         }
-        .rule-meta-label { font-size: 0.85rem; color: #64748b; font-weight: 600; }
+        .rule-meta i { font-size: 1rem; color: #94a3b8; }
 
-        .rule-prize {
-            background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
-            border-radius: 14px; padding: 1rem 1.2rem; margin-bottom: 1.2rem;
-            border: 1px solid #e9d5ff;
+        .rule-prize-box {
+            background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+            border-radius: 20px; padding: 1.5rem; margin-bottom: 1.8rem;
+            border: 1px solid #ddd6fe; position: relative;
         }
-        .rule-prize-title { font-size: 0.65rem; font-weight: 800; color: #7c3aed; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
-        .rule-prize-desc { font-size: 0.95rem; font-weight: 700; color: #1e293b; }
-        .rule-prize-val { font-size: 1.4rem; font-weight: 900; color: #7c3aed; }
+        .rule-prize-label {
+            font-size: 0.65rem; font-weight: 900; color: #7c3aed;
+            text-transform: uppercase; letter-spacing: 1.5px;
+            margin-bottom: 10px; display: flex; align-items: center; gap: 8px;
+        }
+        .rule-prize-content { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; }
+        .rule-prize-text { font-size: 1.05rem; font-weight: 800; color: #1e293b; line-height: 1.3; }
+        .rule-prize-val { font-size: 1.8rem; font-weight: 950; color: #7c3aed; line-height: 1; }
 
-        .rule-details { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem; }
-        .rule-detail-item { font-size: 0.78rem; color: #64748b; font-weight: 600; display: flex; align-items: center; gap: 4px; }
-        .rule-detail-item i { font-size: 1rem; color: #94a3b8; }
-
-        .rule-actions { display: flex; gap: 0.5rem; border-top: 1px solid #f1f5f9; padding-top: 1rem; }
+        .rule-actions {
+            display: flex; gap: 12px; border-top: 1px solid #f1f5f9;
+            margin-top: auto; padding-top: 1.5rem;
+        }
         .btn-rule-action {
-            flex: 1; padding: 10px; border-radius: 12px;
-            border: 1px solid #f1f5f9; background: #f8fafc;
-            font-weight: 800; font-size: 0.75rem; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; gap: 6px;
-            transition: 0.3s; color: #475569; text-transform: uppercase;
+            flex: 1; height: 42px; border-radius: 12px; border: 1px solid #e2e8f0;
+            background: #fff; color: #475569; font-size: 0.75rem; font-weight: 800;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            transition: all 0.2s; cursor: pointer; letter-spacing: 0.5px;
         }
-        .btn-rule-action:hover { background: #1e293b; color: #fff; border-color: #1e293b; }
-        .btn-rule-action.danger:hover { background: #ef4444; color: #fff; border-color: #ef4444; }
+        .btn-rule-action:hover { background: #f8fafc; color: #0f172a; border-color: #cbd5e1; transform: translateY(-2px); }
+        .btn-rule-action.btn-delete:hover { background: #fef2f2; color: #dc2626; border-color: #fecaca; }
 
         /* Modal */
         .modal-overlay {
@@ -173,36 +163,52 @@ $pageSubtitle = 'Configura metas y premios por volumen de compra';
         <div class="content-body">
             <!-- Stats -->
             <div class="stats-row">
-                <div class="stat-card">
-                    <div class="stat-icon purple"><i class='bx bx-target-lock'></i></div>
-                    <div><div class="stat-val"><?= $stats['reglas_activas'] ?></div><div class="stat-label">Reglas Activas</div></div>
+                <div class="dash-card card-dark">
+                    <div class="dash-card-body">
+                        <div class="dash-card-number"><?= $stats['reglas_activas'] ?></div>
+                        <div class="dash-card-text">Reglas Activas</div>
+                        <i class='bx bx-target-lock dash-card-icon'></i>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon green"><i class='bx bx-badge-check'></i></div>
-                    <div><div class="stat-val"><?= $stats['vales_activos'] ?></div><div class="stat-label">Vales Vigentes</div></div>
+                <div class="dash-card card-orange">
+                    <div class="dash-card-body">
+                        <div class="dash-card-number"><?= $stats['vales_activos'] ?></div>
+                        <div class="dash-card-text">Vales Vigentes</div>
+                        <i class='bx bx-badge-check dash-card-icon'></i>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon amber"><i class='bx bx-check-double'></i></div>
-                    <div><div class="stat-val"><?= $stats['vales_usados'] ?></div><div class="stat-label">Vales Usados</div></div>
+                <div class="dash-card card-wine">
+                    <div class="dash-card-body">
+                        <div class="dash-card-number"><?= $stats['vales_usados'] ?></div>
+                        <div class="dash-card-text">Vales Usados</div>
+                        <i class='bx bx-check-double dash-card-icon'></i>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon blue"><i class='bx bx-receipt'></i></div>
-                    <div><div class="stat-val"><?= $stats['vales_total'] ?></div><div class="stat-label">Total Emitidos</div></div>
+                <div class="dash-card card-dark">
+                    <div class="dash-card-body">
+                        <div class="dash-card-number"><?= $stats['vales_total'] ?></div>
+                        <div class="dash-card-text">Total Emitidos</div>
+                        <i class='bx bx-receipt dash-card-icon'></i>
+                    </div>
                 </div>
             </div>
 
             <!-- Header Actions -->
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
-                <div>
-                    <h2 style="font-size: 1.3rem; font-weight: 900; color: #1e293b; margin: 0;">Reglas de Incentivos</h2>
-                    <p style="font-size: 0.85rem; color: #94a3b8; font-weight: 600; margin: 4px 0 0;">Define metas de compra y recompensas automáticas</p>
+            <div class="modern-section-header">
+                <div class="section-title-flex">
+                    <div class="section-title-text">
+                        <h3>Reglas de Incentivos</h3>
+                        <span>Define metas de compra y recompensas automáticas</span>
+                    </div>
                 </div>
-                <div style="display: flex; gap: 1rem;">
-                    <a href="<?= BASE_URL ?>incentivos/vales" style="text-decoration: none; background: #1e293b; color: #fff; padding: 14px 24px; border-radius: 14px; font-weight: 800; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; transition: 0.3s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
-                        <i class='bx bx-receipt'></i> Ver Vales
+                <div class="section-actions">
+                    <a href="<?= BASE_URL ?>incentivos/vales" class="btn-primary-premium btn-midnight">
+                        <i class='bx bx-receipt'></i>
+                        <span>Ver Vales</span>
                     </a>
-                    <button class="btn-primary-action" onclick="openModal()">
-                        <i class='bx bx-plus'></i> Nueva Regla
+                    <button class="btn-primary-premium btn-purple" onclick="openModal()">
+                        <i class='bx bx-plus'></i>
+                        <span>Nueva Regla</span>
                     </button>
                 </div>
             </div>
@@ -214,23 +220,34 @@ $pageSubtitle = 'Configura metas y premios por volumen de compra';
                     <p>No hay reglas de incentivos configuradas aún.<br>Crea tu primera regla para empezar a motivar a tus clientes.</p>
                 </div>
             <?php else: ?>
-                <div class="rules-grid">
-                    <?php foreach ($reglas as $r): ?>
-                    <div class="rule-card <?= !$r['estado'] ? 'inactive' : '' ?>">
+                <div class="rules-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 1.5rem;">
+                    <?php foreach($reglas as $r): ?>
+                    <div class="rule-card <?= $r['estado'] ? '' : 'inactive' ?>">
                         <div class="rule-header">
-                            <div class="rule-title"><?= htmlspecialchars($r['nombre']) ?></div>
-                            <span class="rule-badge badge-<?= $r['periodo'] ?>"><?= strtoupper($r['periodo']) ?></span>
-                        </div>
-                        
-                        <div class="rule-meta">
-                            <span class="rule-meta-number"><?= $r['meta_cantidad'] ?></span>
-                            <span class="rule-meta-label">operaciones para<br>cumplir la meta</span>
+                            <h3 class="rule-title"><?= htmlspecialchars($r['nombre']) ?></h3>
+                            <div style="display: flex; gap: 6px;">
+                                <?php if(!$r['estado']): ?>
+                                    <span class="rule-badge status-inactive">Inactiva</span>
+                                <?php endif; ?>
+                                <span class="rule-badge frecuencia-<?= strtolower($r['periodo']) ?>">
+                                    <?= strtoupper($r['periodo']) ?>
+                                </span>
+                            </div>
                         </div>
 
-                        <div class="rule-prize">
-                            <div class="rule-prize-title">🎁 Premio al cumplir</div>
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <div class="rule-prize-desc"><?= htmlspecialchars($r['descripcion_premio']) ?></div>
+                        <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 1.8rem;">
+                            <div style="font-size: 2.6rem; font-weight: 950; color: #7c3aed; line-height: 1; letter-spacing: -1px;"><?= $r['meta_cantidad'] ?></div>
+                            <div style="font-size: 0.82rem; color: #64748b; font-weight: 600; line-height: 1.3;">operaciones necesarias para<br><span style="color: #0f172a; font-weight: 800;">completar la meta</span></div>
+                        </div>
+
+                        <div class="rule-prize-box">
+                            <div class="rule-prize-label">
+                                <i class='bx bxs-gift'></i> PREMIO AL CUMPLIR
+                            </div>
+                            <div class="rule-prize-content">
+                                <div class="rule-prize-text">
+                                    <?= htmlspecialchars($r['descripcion_premio']) ?>
+                                </div>
                                 <div class="rule-prize-val">
                                     <?php if ($r['tipo_premio'] === 'vale_descuento'): ?>
                                         <?= (int) $r['valor_premio'] ?>%
@@ -241,18 +258,18 @@ $pageSubtitle = 'Configura metas y premios por volumen de compra';
                             </div>
                         </div>
 
-                        <div class="rule-details">
-                            <div class="rule-detail-item"><i class='bx bx-user'></i> <?= $r['tipo_cliente'] ?></div>
-                            <div class="rule-detail-item"><i class='bx bx-calendar'></i> Vigencia: <?= $r['vigencia_dias'] ?> días</div>
-                            <div class="rule-detail-item"><i class='bx bx-tag'></i> <?= str_replace('_', ' ', $r['tipo_premio']) ?></div>
+                        <div class="rule-meta-grid">
+                            <div class="rule-meta" title="Tipo de Cliente"><i class='bx bx-user-circle'></i> <?= $r['tipo_cliente'] ?></div>
+                            <div class="rule-meta" title="Días de Vigencia"><i class='bx bx-time-five'></i> <?= $r['vigencia_dias'] ?> días</div>
+                            <div class="rule-meta" title="Categoría de Premio"><i class='bx bx-purchase-tag-alt'></i> <?= str_replace('_', ' ', $r['tipo_premio']) ?></div>
                         </div>
 
                         <div class="rule-actions">
                             <button class="btn-rule-action" onclick='openModal(<?= json_encode($r) ?>)'>
-                                <i class='bx bx-edit'></i> Editar
+                                <i class='bx bx-edit-alt'></i> EDITAR
                             </button>
-                            <button class="btn-rule-action danger" onclick="confirmDelete(<?= $r['id'] ?>, '<?= htmlspecialchars(addslashes($r['nombre'])) ?>')">
-                                <i class='bx bx-trash'></i> Eliminar
+                            <button type="button" class="btn-rule-action btn-delete" onclick="confirmDelete(<?= $r['id'] ?>, '<?= htmlspecialchars(addslashes($r['nombre'])) ?>')">
+                                <i class='bx bx-trash'></i> ELIMINAR
                             </button>
                         </div>
                     </div>

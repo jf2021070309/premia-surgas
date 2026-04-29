@@ -15,23 +15,13 @@ $pageSubtitle = 'Gestión y verificación de vales de descuento / premios';
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
-        .stat-card {
-            background: #fff; border-radius: 20px; padding: 1.5rem;
-            border: 1px solid #f1f5f9; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-            display: flex; align-items: center; gap: 1rem;
+        .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
+
+        /* Botón Midnight */
+        .btn-midnight {
+            background: #1e293b !important;
+            box-shadow: 0 8px 25px rgba(30, 41, 59, 0.15) !important;
         }
-        .stat-icon {
-            width: 52px; height: 52px; border-radius: 16px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.5rem; flex-shrink: 0;
-        }
-        .stat-icon.purple { background: #f3e8ff; color: #7c3aed; }
-        .stat-icon.green  { background: #dcfce7; color: #16a34a; }
-        .stat-icon.amber  { background: #fef3c7; color: #d97706; }
-        .stat-icon.blue   { background: #dbeafe; color: #2563eb; }
-        .stat-val { font-size: 1.8rem; font-weight: 900; color: #1e293b; line-height: 1; }
-        .stat-label { font-size: 0.72rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
 
         .table-badge { padding: 4px 12px; border-radius: 50px; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
         .badge-activo { background: #dcfce7; color: #16a34a; }
@@ -82,60 +72,86 @@ $pageSubtitle = 'Gestión y verificación de vales de descuento / premios';
         <div class="content-body">
             <!-- Stats -->
             <div class="stats-row">
-                <div class="stat-card">
-                    <div class="stat-icon purple"><i class='bx bx-target-lock'></i></div>
-                    <div><div class="stat-val"><?= $stats['reglas_activas'] ?></div><div class="stat-label">Reglas Activas</div></div>
+                <div class="dash-card card-dark">
+                    <div class="dash-card-body">
+                        <div class="dash-card-number"><?= $stats['reglas_activas'] ?></div>
+                        <div class="dash-card-text">Reglas Activas</div>
+                        <i class='bx bx-target-lock dash-card-icon'></i>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon green"><i class='bx bx-badge-check'></i></div>
-                    <div><div class="stat-val"><?= $stats['vales_activos'] ?></div><div class="stat-label">Vales Vigentes</div></div>
+                <div class="dash-card card-orange">
+                    <div class="dash-card-body">
+                        <div class="dash-card-number"><?= $stats['vales_activos'] ?></div>
+                        <div class="dash-card-text">Vales Vigentes</div>
+                        <i class='bx bx-badge-check dash-card-icon'></i>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon amber"><i class='bx bx-check-double'></i></div>
-                    <div><div class="stat-val"><?= $stats['vales_usados'] ?></div><div class="stat-label">Vales Usados</div></div>
+                <div class="dash-card card-wine">
+                    <div class="dash-card-body">
+                        <div class="dash-card-number"><?= $stats['vales_usados'] ?></div>
+                        <div class="dash-card-text">Vales Usados</div>
+                        <i class='bx bx-check-double dash-card-icon'></i>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon blue"><i class='bx bx-receipt'></i></div>
-                    <div><div class="stat-val"><?= $stats['vales_total'] ?></div><div class="stat-label">Total Emitidos</div></div>
+                <div class="dash-card card-dark">
+                    <div class="dash-card-body">
+                        <div class="dash-card-number"><?= $stats['vales_total'] ?></div>
+                        <div class="dash-card-text">Total Emitidos</div>
+                        <i class='bx bx-receipt dash-card-icon'></i>
+                    </div>
                 </div>
             </div>
 
             <!-- Header Actions -->
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
-                <div>
-                    <h2 style="font-size: 1.3rem; font-weight: 900; color: #1e293b; margin: 0;">Vales Emitidos</h2>
-                    <p style="font-size: 0.85rem; color: #94a3b8; font-weight: 600; margin: 4px 0 0;">Historial y validación de vales generados</p>
+            <div class="modern-section-header">
+                <div class="section-title-flex">
+                    <div class="section-title-text">
+                        <h3>Vales Emitidos</h3>
+                        <span>Historial y validación de vales generados</span>
+                    </div>
                 </div>
-                <a href="<?= BASE_URL ?>incentivos/reglas" style="text-decoration: none; background: #f8fafc; color: #475569; padding: 12px 20px; border-radius: 12px; font-weight: 800; font-size: 0.85rem; border: 1px solid #e2e8f0; transition: 0.3s;">
-                    <i class='bx bx-cog'></i> Configurar Reglas
-                </a>
+                <div class="section-actions">
+                    <a href="<?= BASE_URL ?>incentivos/reglas" class="btn-primary-premium btn-midnight">
+                        <i class='bx bx-cog'></i>
+                        <span>Configurar Reglas</span>
+                    </a>
+                </div>
             </div>
 
             <!-- Filters -->
-            <div class="filter-bar">
-                <i class='bx bx-search' style="color: #94a3b8; font-size: 1.2rem;"></i>
-                <input type="text" id="searchInput" class="filter-input" placeholder="Buscar por código, cliente o DNI/RUC..." onkeyup="filterTable()">
-                
-                <select id="statusFilter" class="filter-select" onchange="filterTable()">
-                    <option value="all">Todos los estados</option>
-                    <option value="activo">Activos</option>
-                    <option value="usado">Usados</option>
-                    <option value="vencido">Vencidos</option>
-                    <option value="cancelado">Cancelados</option>
-                </select>
+            <div class="clientes-toolbar">
+                <div class="clientes-toolbar-filters">
+                    <div class="header-search-modern">
+                        <i class='bx bx-filter-alt'></i>
+                        <select id="statusFilter" onchange="filterTable()">
+                            <option value="all">Todos los estados</option>
+                            <option value="activo">Activos</option>
+                            <option value="usado">Usados</option>
+                            <option value="vencido">Vencidos</option>
+                            <option value="cancelado">Cancelados</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="clientes-toolbar-search">
+                    <div class="header-search-modern clientes-search-input">
+                        <i class='bx bx-search'></i>
+                        <input type="text" id="searchInput" placeholder="Buscar por código, cliente o DNI/RUC..." onkeyup="filterTable()">
+                    </div>
+                </div>
             </div>
 
             <!-- Table -->
-            <div class="table-container" style="background: #fff; border-radius: 20px; border: 1px solid #f1f5f9; padding: 1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
-                <table class="data-table" id="valesTable" style="width: 100%; border-collapse: collapse;">
+            <div class="card">
+                <div class="table-wrapper">
+                    <table class="data-table" id="valesTable">
                     <thead>
                         <tr>
-                            <th style="text-align: left; padding: 1rem; font-size: 0.75rem; color: #64748b; font-weight: 800; text-transform: uppercase; border-bottom: 1px solid #f1f5f9;">Código</th>
-                            <th style="text-align: left; padding: 1rem; font-size: 0.75rem; color: #64748b; font-weight: 800; text-transform: uppercase; border-bottom: 1px solid #f1f5f9;">Cliente</th>
-                            <th style="text-align: left; padding: 1rem; font-size: 0.75rem; color: #64748b; font-weight: 800; text-transform: uppercase; border-bottom: 1px solid #f1f5f9;">Regla / Premio</th>
-                            <th style="text-align: left; padding: 1rem; font-size: 0.75rem; color: #64748b; font-weight: 800; text-transform: uppercase; border-bottom: 1px solid #f1f5f9;">Emisión/Vence</th>
-                            <th style="text-align: center; padding: 1rem; font-size: 0.75rem; color: #64748b; font-weight: 800; text-transform: uppercase; border-bottom: 1px solid #f1f5f9;">Estado</th>
-                            <th style="text-align: right; padding: 1rem; font-size: 0.75rem; color: #64748b; font-weight: 800; text-transform: uppercase; border-bottom: 1px solid #f1f5f9;">Acciones</th>
+                            <th style="text-align: left;">Código</th>
+                            <th style="text-align: left;">Cliente</th>
+                            <th style="text-align: left;">Regla / Premio</th>
+                            <th style="text-align: left;">Emisión/Vence</th>
+                            <th class="text-center">Estado</th>
+                            <th style="text-align: right;">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -190,9 +206,9 @@ $pageSubtitle = 'Gestión y verificación de vales de descuento / premios';
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </tbody>
-                </table>
+                    </table>
+                </div>
             </div>
-        </div>
     </div>
 </div>
 
