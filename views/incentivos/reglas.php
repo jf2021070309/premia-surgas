@@ -55,39 +55,59 @@ $pageSubtitle = 'Configura metas y premios por volumen de compra';
         .rule-badge.frecuencia-semanal { background: #f0fdf4; color: #15803d; }
         .rule-badge.status-inactive { background: #fef2f2; color: #b91c1c; }
 
-        .rule-meta-grid { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 1.8rem; }
+        .rule-meta-grid { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 2rem; }
         .rule-meta { 
             display: flex; align-items: center; gap: 6px; 
             font-size: 0.78rem; font-weight: 600; color: #64748b; 
         }
         .rule-meta i { font-size: 1rem; color: #94a3b8; }
 
+        /* Estilo Elite Prize Box (Inspirado en Imagen 2 y 3) */
         .rule-prize-box {
-            background: linear-gradient(135deg, #fff5f5 0%, #fdf2f2 100%);
-            border-radius: 20px; padding: 1.5rem; margin-bottom: 1.8rem;
-            border: 1px solid #fee2e2; position: relative;
+            background: #0f172a; /* Obsidian Deep */
+            border-radius: 20px; padding: 1.6rem; margin-bottom: 1.8rem;
+            border: 1px solid rgba(255, 255, 255, 0.05); position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
         .rule-prize-label {
-            font-size: 0.65rem; font-weight: 900; color: #800000;
-            text-transform: uppercase; letter-spacing: 1.5px;
-            margin-bottom: 10px; display: flex; align-items: center; gap: 8px;
+            font-size: 0.62rem; font-weight: 900; 
+            background: linear-gradient(90deg, #94a3b8, #f8fafc, #94a3b8); /* Metallic Silver */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase; letter-spacing: 2px;
+            margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
         }
+        .rule-prize-label i { -webkit-text-fill-color: #f8fafc; font-size: 0.9rem; }
+        
         .rule-prize-content { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; }
-        .rule-prize-text { font-size: 1.05rem; font-weight: 800; color: #1e293b; line-height: 1.3; }
-        .rule-prize-val { font-size: 1.8rem; font-weight: 950; color: #800000; line-height: 1; }
+        .rule-prize-text { font-size: 1.05rem; font-weight: 700; color: #fff; line-height: 1.4; opacity: 0.95; }
+        .rule-prize-val { 
+            font-size: 2rem; font-weight: 950; 
+            color: #fff; line-height: 1;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
 
         .rule-actions {
             display: flex; gap: 12px; border-top: 1px solid #f1f5f9;
             margin-top: auto; padding-top: 1.5rem;
         }
+        
+        /* Botones Estilo Premium Explorar (Imagen 2) */
         .btn-rule-action {
-            flex: 1; height: 42px; border-radius: 12px; border: 1px solid #e2e8f0;
-            background: #fff; color: #475569; font-size: 0.75rem; font-weight: 800;
+            flex: 1; height: 46px; border-radius: 12px; border: 1px solid #e2e8f0;
+            background: #fff; color: #0f172a; font-size: 0.72rem; font-weight: 900;
             display: flex; align-items: center; justify-content: center; gap: 8px;
-            transition: all 0.2s; cursor: pointer; letter-spacing: 0.5px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
+            cursor: pointer; letter-spacing: 1px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
         }
-        .btn-rule-action:hover { background: #f8fafc; color: #0f172a; border-color: #cbd5e1; transform: translateY(-2px); }
-        .btn-rule-action.btn-delete:hover { background: #fef2f2; color: #dc2626; border-color: #fecaca; }
+        .btn-rule-action:hover { 
+            background: #0f172a; color: #fff; 
+            border-color: #0f172a; transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.2);
+        }
+        .btn-rule-action.btn-delete { color: #dc2626; border-color: #fee2e2; }
+        .btn-rule-action.btn-delete:hover { background: #dc2626; color: #fff; border-color: #dc2626; box-shadow: 0 10px 25px rgba(220, 38, 38, 0.2); }
 
         /* Modal */
         .modal-overlay {
@@ -243,7 +263,7 @@ $pageSubtitle = 'Configura metas y premios por volumen de compra';
 
                         <div class="rule-prize-box">
                             <div class="rule-prize-label">
-                                <i class='bx bxs-gift'></i> PREMIO AL CUMPLIR
+                                <i class='bx bxs-crown'></i> PREMIO ELITE
                             </div>
                             <div class="rule-prize-content">
                                 <div class="rule-prize-text">
