@@ -37,7 +37,8 @@ $pageSubtitle = 'Configura metas y premios por volumen de compra';
             box-shadow: 0 8px 25px rgba(0,0,0,0.25) !important;
             background: #111 !important;
         }
-        .btn-black-premium i { font-size: 1.15rem !important;        .rule-card {
+        .btn-black-premium i { font-size: 1.15rem !important; }
+        .rule-card {
             background: #fff; border-radius: 20px; padding: 0;
             border: 1.5px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.02);
             transition: all 0.4s ease; 
@@ -59,9 +60,10 @@ $pageSubtitle = 'Configura metas y premios por volumen de compra';
         }
         .rule-badge.frecuencia-mensual { background: #eff6ff; color: #3b82f6; border-color: #dbeafe; }
         .rule-badge.frecuencia-semanal { background: #f0fdf4; color: #16a34a; border-color: #dcfce7; }
+        .rule-badge.frecuencia-trimestral { background: #fef2f2; color: #991b1b; border-color: #fecaca; }
 
         .rule-qty-row { display: flex; align-items: center; gap: 1.5rem; }
-        .rule-qty-num { font-size: 3.5rem; font-weight: 950; color: #0f172a; line-height: 1; font-family: 'Inter', serif; }
+        .rule-qty-num { font-size: 3.5rem; font-weight: 950; color: #0f172a; line-height: 1; font-family: 'Inter', sans-serif; letter-spacing: -2px; }
         .rule-qty-text { font-size: 0.85rem; color: #64748b; font-weight: 600; line-height: 1.4; }
         .rule-qty-text strong { color: #1e293b; font-weight: 800; display: block; }
 
@@ -95,7 +97,15 @@ $pageSubtitle = 'Configura metas y premios por volumen de compra';
         }
         .btn-rule-ghost:hover { background: #f8fafc; border-color: #cbd5e1; color: #1e293b; transform: translateY(-2px); }
         .btn-rule-ghost.btn-delete:hover { background: #fff1f2; border-color: #fecaca; color: #e11d48; }
-   }
+
+        .rule-card.inactive {
+            opacity: 0.65;
+            filter: grayscale(0.4);
+            background: #f8fafc;
+        }
+        .rule-card.inactive:hover { transform: none; box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
+        .rule-card.inactive .rule-prize-box { background: #334155; }
+        .rule-card.inactive .rule-qty-num { color: #64748b; }
 
         /* Modal */
         .modal-overlay {
@@ -264,7 +274,7 @@ $pageSubtitle = 'Configura metas y premios por volumen de compra';
                             </div>
 
                             <div class="rule-meta-footer">
-                                <div class="rule-meta-item" title="Tipo de Cliente"><i class='bx bx-time-five'></i> <?= $r['tipo_cliente'] ?></div>
+                                <div class="rule-meta-item" title="Tipo de Cliente"><i class='bx bx-group'></i> <?= $r['tipo_cliente'] ?></div>
                                 <div class="rule-meta-item" title="Vigencia"><i class='bx bx-calendar'></i> <?= $r['vigencia_dias'] ?> días</div>
                                 <div class="rule-meta-item" title="Categoría"><i class='bx bx-shopping-bag'></i> <?= str_replace('_', ' ', $r['tipo_premio']) ?></div>
                             </div>
