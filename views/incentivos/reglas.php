@@ -17,21 +17,24 @@ $pageSubtitle = 'Configura metas y premios por volumen de compra';
     <style>
         .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
 
-        /* Botón de acción principal (Vino) */
-        .btn-wine {
-            background: linear-gradient(135deg, #800000, #5a0000) !important;
-            box-shadow: 0 8px 25px rgba(128, 0, 0, 0.2) !important;
+        /* Botón de acción principal (Estilo Black Pill - Imagen 2) */
+        .btn-black-pill {
+            background: #000 !important;
+            color: #fff !important;
+            border-radius: 100px !important;
+            padding: 0.7rem 1.8rem !important;
+            font-weight: 800 !important;
+            letter-spacing: 0.3px !important;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15) !important;
+            border: none !important;
+            transition: all 0.3s ease !important;
         }
-        .btn-wine:hover {
-            box-shadow: 0 12px 35px rgba(128, 0, 0, 0.3) !important;
-            background: linear-gradient(135deg, #991b1b, #800000) !important;
+        .btn-black-pill:hover {
+            transform: translateY(-2px) scale(1.02) !important;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.25) !important;
+            background: #111 !important;
         }
-
-        /* Botón Midnight */
-        .btn-midnight {
-            background: #1e293b !important;
-            box-shadow: 0 8px 25px rgba(30, 41, 59, 0.15) !important;
-        }
+        .btn-black-pill i { font-size: 1.1rem !important; }
 
         .rule-card {
             background: #fff; border-radius: 24px; padding: 2rem;
@@ -92,22 +95,28 @@ $pageSubtitle = 'Configura metas y premios por volumen de compra';
             margin-top: auto; padding-top: 1.5rem;
         }
         
-        /* Botones Estilo Premium Explorar (Imagen 2) */
+        /* Botones Estilo Premium Explorar (Inspirado en Imagen 2) */
         .btn-rule-action {
-            flex: 1; height: 46px; border-radius: 12px; border: 1px solid #e2e8f0;
-            background: #fff; color: #0f172a; font-size: 0.72rem; font-weight: 900;
+            flex: 1; height: 44px; border-radius: 14px; border: none;
+            background: #1e293b; color: #fff; font-size: 0.75rem; font-weight: 800;
             display: flex; align-items: center; justify-content: center; gap: 8px;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
-            cursor: pointer; letter-spacing: 1px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            transition: all 0.3s ease; 
+            cursor: pointer; letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(30, 41, 59, 0.2);
         }
         .btn-rule-action:hover { 
-            background: #0f172a; color: #fff; 
-            border-color: #0f172a; transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(30, 41, 59, 0.3);
+            filter: brightness(1.1);
         }
-        .btn-rule-action.btn-delete { color: #dc2626; border-color: #fee2e2; }
-        .btn-rule-action.btn-delete:hover { background: #dc2626; color: #fff; border-color: #dc2626; box-shadow: 0 10px 25px rgba(220, 38, 38, 0.2); }
+        
+        .btn-rule-action.btn-delete { 
+            background: #800000; 
+            box-shadow: 0 4px 15px rgba(128, 0, 0, 0.2);
+        }
+        .btn-rule-action.btn-delete:hover { 
+            box-shadow: 0 8px 25px rgba(128, 0, 0, 0.3);
+        }
 
         /* Modal */
         .modal-overlay {
@@ -223,11 +232,11 @@ $pageSubtitle = 'Configura metas y premios por volumen de compra';
                     </div>
                 </div>
                 <div class="section-actions">
-                    <a href="<?= BASE_URL ?>incentivos/vales" class="btn-primary-premium btn-midnight">
+                    <a href="<?= BASE_URL ?>incentivos/vales" class="btn-primary-premium btn-black-pill">
                         <i class='bx bx-receipt'></i>
                         <span>Ver Vales</span>
                     </a>
-                    <button class="btn-primary-premium btn-wine" onclick="openModal()">
+                    <button class="btn-primary-premium btn-black-pill" onclick="openModal()">
                         <i class='bx bx-plus'></i>
                         <span>Nueva Regla</span>
                     </button>
