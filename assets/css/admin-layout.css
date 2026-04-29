@@ -213,6 +213,19 @@ body {
     background: rgba(255, 255, 255, 0.15);
 }
 
+.header-mobile-logo {
+    display: none;
+    align-items: center;
+    margin-right: 0.5rem;
+}
+
+.header-mobile-logo img {
+    height: 32px;
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 0 8px rgba(0,0,0,0.2));
+}
+
 .top-nav {
     background: linear-gradient(90deg, var(--primary) 0%, #5a0000 100%);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -403,6 +416,14 @@ body {
 
     .admin-pill { padding: 6px 12px 6px 14px; gap: 10px; }
     .admin-pill-name { max-width: 110px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .header-mobile-logo {
+        display: flex;
+    }
+    
+    .header-page-icon {
+        display: none;
+    }
 }
 
 /* ══════════════════════════════════════

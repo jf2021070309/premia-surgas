@@ -22,11 +22,16 @@ $adminInitial = strtoupper(substr($adminName, 0, 1));
         <button class="sidebar-toggle-btn" id="sidebarToggleBtn" title="Abrir menú">
             <i class='bx bx-menu'></i>
         </button>
+
+        <!-- Brand logo for mobile/collapsed views -->
+        <div class="header-mobile-logo">
+            <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" alt="Surgas">
+        </div>
         
         <div class="header-title-group">
             <?php if ($pageIcon): ?>
                 <div class="header-page-icon">
-                    <i class='bx <?= $pageIcon ?>'></i>
+                    <img src="<?= BASE_URL ?>assets/premios/icono.png" alt="S" style="width: 24px; height: 24px; object-fit: contain;">
                 </div>
             <?php endif; ?>
             
