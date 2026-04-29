@@ -17,106 +17,85 @@ $pageSubtitle = 'Configura metas y premios por volumen de compra';
     <style>
         .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
 
-        /* Botón de acción principal (Estilo Black Pill - Imagen 2) */
-        .btn-black-pill {
+        /* Botón de acción principal (Estilo Black Premium - Imagen 2) */
+        .btn-black-premium {
             background: #000 !important;
             color: #fff !important;
-            border-radius: 100px !important;
-            padding: 0.7rem 1.8rem !important;
+            border-radius: 14px !important;
+            padding: 0.8rem 1.8rem !important;
             font-weight: 800 !important;
             letter-spacing: 0.3px !important;
             box-shadow: 0 4px 15px rgba(0,0,0,0.15) !important;
             border: none !important;
             transition: all 0.3s ease !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 10px !important;
         }
-        .btn-black-pill:hover {
-            transform: translateY(-2px) scale(1.02) !important;
+        .btn-black-premium:hover {
+            transform: translateY(-2px) !important;
             box-shadow: 0 8px 25px rgba(0,0,0,0.25) !important;
             background: #111 !important;
         }
-        .btn-black-pill i { font-size: 1.1rem !important; }
-
-        .rule-card {
-            background: #fff; border-radius: 24px; padding: 2rem;
-            border: 1px solid #f1f5f9; box-shadow: 0 10px 30px rgba(0,0,0,0.02);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+        .btn-black-premium i { font-size: 1.15rem !important;        .rule-card {
+            background: #fff; border-radius: 20px; padding: 0;
+            border: 1.5px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+            transition: all 0.4s ease; 
             position: relative; overflow: hidden;
             display: flex; flex-direction: column;
         }
-        .rule-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,0.06); border-color: #e2e8f0; }
-        .rule-card.inactive { opacity: 0.6; filter: grayscale(0.5); }
+        .rule-card:hover { transform: translateY(-4px); box-shadow: 0 15px 35px rgba(0,0,0,0.05); border-color: #e2e8f0; }
         
-        .rule-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; gap: 1rem; }
-        .rule-title { font-size: 1.15rem; font-weight: 800; color: #0f172a; line-height: 1.3; margin: 0; }
+        .rule-section { padding: 1.5rem 2rem; border-bottom: 1px solid #f1f5f9; }
+        .rule-section:last-child { border-bottom: none; }
+
+        .rule-header { display: flex; justify-content: space-between; align-items: center; }
+        .rule-title { font-size: 1.2rem; font-weight: 800; color: #1e293b; line-height: 1.2; }
         
         .rule-badge {
-            font-size: 0.62rem; font-weight: 900; padding: 6px 14px;
-            border-radius: 100px; text-transform: uppercase; letter-spacing: 1.2px;
-            flex-shrink: 0; background: #f1f5f9; color: #475569;
+            font-size: 0.65rem; font-weight: 800; padding: 4px 12px;
+            border-radius: 100px; text-transform: uppercase; letter-spacing: 1px;
+            background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0;
         }
-        .rule-badge.frecuencia-mensual { background: #eef2ff; color: #4338ca; }
-        .rule-badge.frecuencia-semanal { background: #f0fdf4; color: #15803d; }
-        .rule-badge.status-inactive { background: #fef2f2; color: #b91c1c; }
+        .rule-badge.frecuencia-mensual { background: #eff6ff; color: #3b82f6; border-color: #dbeafe; }
+        .rule-badge.frecuencia-semanal { background: #f0fdf4; color: #16a34a; border-color: #dcfce7; }
 
-        .rule-meta-grid { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 2rem; }
-        .rule-meta { 
-            display: flex; align-items: center; gap: 6px; 
-            font-size: 0.78rem; font-weight: 600; color: #64748b; 
-        }
-        .rule-meta i { font-size: 1rem; color: #94a3b8; }
+        .rule-qty-row { display: flex; align-items: center; gap: 1.5rem; }
+        .rule-qty-num { font-size: 3.5rem; font-weight: 950; color: #0f172a; line-height: 1; font-family: 'Inter', serif; }
+        .rule-qty-text { font-size: 0.85rem; color: #64748b; font-weight: 600; line-height: 1.4; }
+        .rule-qty-text strong { color: #1e293b; font-weight: 800; display: block; }
 
-        /* Estilo Elite Prize Box (Inspirado en Imagen 2 y 3) */
+        /* Elite Prize Box */
         .rule-prize-box {
-            background: #0f172a; /* Obsidian Deep */
-            border-radius: 20px; padding: 1.6rem; margin-bottom: 1.8rem;
+            background: #0f172a; border-radius: 20px; padding: 1.5rem 1.8rem;
             border: 1px solid rgba(255, 255, 255, 0.05); position: relative;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin: 0.5rem 0;
         }
         .rule-prize-label {
-            font-size: 0.62rem; font-weight: 900; 
-            background: linear-gradient(90deg, #94a3b8, #f8fafc, #94a3b8); /* Metallic Silver */
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 0.62rem; font-weight: 900; color: #94a3b8;
             text-transform: uppercase; letter-spacing: 2px;
             margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
         }
-        .rule-prize-label i { -webkit-text-fill-color: #f8fafc; font-size: 0.9rem; }
+        .rule-prize-label::before { content: ''; width: 6px; height: 6px; background: #3b82f6; border-radius: 50%; box-shadow: 0 0 10px #3b82f6; }
         
-        .rule-prize-content { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; }
-        .rule-prize-text { font-size: 1.05rem; font-weight: 700; color: #fff; line-height: 1.4; opacity: 0.95; }
-        .rule-prize-val { 
-            font-size: 2rem; font-weight: 950; 
-            color: #fff; line-height: 1;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-        }
+        .rule-prize-content { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+        .rule-prize-text { font-size: 1rem; font-weight: 700; color: #fff; line-height: 1.4; max-width: 65%; }
+        .rule-prize-val { font-size: 2.2rem; font-weight: 950; color: #fff; font-family: 'Inter', sans-serif; letter-spacing: -1px; }
 
-        .rule-actions {
-            display: flex; gap: 12px; border-top: 1px solid #f1f5f9;
-            margin-top: auto; padding-top: 1.5rem;
-        }
-        
-        /* Botones Estilo Premium Explorar (Inspirado en Imagen 2) */
-        .btn-rule-action {
-            flex: 1; height: 44px; border-radius: 14px; border: none;
-            background: #1e293b; color: #fff; font-size: 0.75rem; font-weight: 800;
+        .rule-meta-footer { display: flex; align-items: center; gap: 1.5rem; }
+        .rule-meta-item { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; font-weight: 600; color: #64748b; }
+        .rule-meta-item i { font-size: 1rem; color: #94a3b8; }
+
+        .rule-actions { display: flex; gap: 1rem; padding: 1.5rem 2rem; }
+        .btn-rule-ghost {
+            flex: 1; height: 42px; border-radius: 12px; border: 1.5px solid #e2e8f0;
+            background: #fff; color: #475569; font-size: 0.78rem; font-weight: 800;
             display: flex; align-items: center; justify-content: center; gap: 8px;
-            transition: all 0.3s ease; 
-            cursor: pointer; letter-spacing: 0.5px;
-            box-shadow: 0 4px 15px rgba(30, 41, 59, 0.2);
+            transition: all 0.3s; cursor: pointer;
         }
-        .btn-rule-action:hover { 
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(30, 41, 59, 0.3);
-            filter: brightness(1.1);
-        }
-        
-        .btn-rule-action.btn-delete { 
-            background: #800000; 
-            box-shadow: 0 4px 15px rgba(128, 0, 0, 0.2);
-        }
-        .btn-rule-action.btn-delete:hover { 
-            box-shadow: 0 8px 25px rgba(128, 0, 0, 0.3);
-        }
+        .btn-rule-ghost:hover { background: #f8fafc; border-color: #cbd5e1; color: #1e293b; transform: translateY(-2px); }
+        .btn-rule-ghost.btn-delete:hover { background: #fff1f2; border-color: #fecaca; color: #e11d48; }
+   }
 
         /* Modal */
         .modal-overlay {
@@ -232,11 +211,11 @@ $pageSubtitle = 'Configura metas y premios por volumen de compra';
                     </div>
                 </div>
                 <div class="section-actions">
-                    <a href="<?= BASE_URL ?>incentivos/vales" class="btn-primary-premium btn-black-pill">
+                    <a href="<?= BASE_URL ?>incentivos/vales" class="btn-primary-premium btn-black-premium">
                         <i class='bx bx-receipt'></i>
                         <span>Ver Vales</span>
                     </a>
-                    <button class="btn-primary-premium btn-black-pill" onclick="openModal()">
+                    <button class="btn-primary-premium btn-black-premium" onclick="openModal()">
                         <i class='bx bx-plus'></i>
                         <span>Nueva Regla</span>
                     </button>
@@ -253,53 +232,50 @@ $pageSubtitle = 'Configura metas y premios por volumen de compra';
                 <div class="rules-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 1.5rem;">
                     <?php foreach($reglas as $r): ?>
                     <div class="rule-card <?= $r['estado'] ? '' : 'inactive' ?>">
-                        <div class="rule-header">
+                        <div class="rule-section rule-header">
                             <h3 class="rule-title"><?= htmlspecialchars($r['nombre']) ?></h3>
-                            <div style="display: flex; gap: 6px;">
-                                <?php if(!$r['estado']): ?>
-                                    <span class="rule-badge status-inactive">Inactiva</span>
-                                <?php endif; ?>
-                                <span class="rule-badge frecuencia-<?= strtolower($r['periodo']) ?>">
-                                    <?= strtoupper($r['periodo']) ?>
-                                </span>
-                            </div>
+                            <span class="rule-badge frecuencia-<?= strtolower($r['periodo']) ?>">
+                                <?= strtoupper($r['periodo']) ?>
+                            </span>
                         </div>
 
-                        <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 1.8rem;">
-                            <div style="font-size: 2.6rem; font-weight: 950; color: #800000; line-height: 1; letter-spacing: -1px;"><?= $r['meta_cantidad'] ?></div>
-                            <div style="font-size: 0.82rem; color: #64748b; font-weight: 600; line-height: 1.3;">operaciones necesarias para<br><span style="color: #0f172a; font-weight: 800;">completar la meta</span></div>
-                        </div>
-
-                        <div class="rule-prize-box">
-                            <div class="rule-prize-label">
-                                <i class='bx bxs-crown'></i> PREMIO ELITE
-                            </div>
-                            <div class="rule-prize-content">
-                                <div class="rule-prize-text">
-                                    <?= htmlspecialchars($r['descripcion_premio']) ?>
-                                </div>
-                                <div class="rule-prize-val">
-                                    <?php if ($r['tipo_premio'] === 'vale_descuento'): ?>
-                                        <?= (int) $r['valor_premio'] ?>%
-                                    <?php else: ?>
-                                        S/ <?= number_format($r['valor_premio'], 2) ?>
-                                    <?php endif; ?>
+                        <div class="rule-section">
+                            <div class="rule-qty-row">
+                                <div class="rule-qty-num"><?= $r['meta_cantidad'] ?></div>
+                                <div class="rule-qty-text">
+                                    operaciones necesarias<br>para<br><strong>completar la meta</strong>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="rule-meta-grid">
-                            <div class="rule-meta" title="Tipo de Cliente"><i class='bx bx-user-circle'></i> <?= $r['tipo_cliente'] ?></div>
-                            <div class="rule-meta" title="Días de Vigencia"><i class='bx bx-time-five'></i> <?= $r['vigencia_dias'] ?> días</div>
-                            <div class="rule-meta" title="Categoría de Premio"><i class='bx bx-purchase-tag-alt'></i> <?= str_replace('_', ' ', $r['tipo_premio']) ?></div>
+                        <div class="rule-section">
+                            <div class="rule-prize-box">
+                                <div class="rule-prize-label">PREMIO ELITE</div>
+                                <div class="rule-prize-content">
+                                    <div class="rule-prize-text"><?= htmlspecialchars($r['descripcion_premio']) ?></div>
+                                    <div class="rule-prize-val">
+                                        <?php if ($r['tipo_premio'] === 'vale_descuento'): ?>
+                                            <?= (int) $r['valor_premio'] ?>%
+                                        <?php else: ?>
+                                            S/<?= number_format($r['valor_premio'], 0) ?>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="rule-meta-footer">
+                                <div class="rule-meta-item" title="Tipo de Cliente"><i class='bx bx-time-five'></i> <?= $r['tipo_cliente'] ?></div>
+                                <div class="rule-meta-item" title="Vigencia"><i class='bx bx-calendar'></i> <?= $r['vigencia_dias'] ?> días</div>
+                                <div class="rule-meta-item" title="Categoría"><i class='bx bx-shopping-bag'></i> <?= str_replace('_', ' ', $r['tipo_premio']) ?></div>
+                            </div>
                         </div>
 
                         <div class="rule-actions">
-                            <button class="btn-rule-action" onclick='openModal(<?= json_encode($r) ?>)'>
-                                <i class='bx bx-edit-alt'></i> EDITAR
+                            <button class="btn-rule-ghost" onclick='openModal(<?= json_encode($r) ?>)'>
+                                <i class='bx bx-edit-alt'></i> Editar
                             </button>
-                            <button type="button" class="btn-rule-action btn-delete" onclick="confirmDelete(<?= $r['id'] ?>, '<?= htmlspecialchars(addslashes($r['nombre'])) ?>')">
-                                <i class='bx bx-trash'></i> ELIMINAR
+                            <button type="button" class="btn-rule-ghost btn-delete" onclick="confirmDelete(<?= $r['id'] ?>, '<?= htmlspecialchars(addslashes($r['nombre'])) ?>')">
+                                <i class='bx bx-trash'></i> Eliminar
                             </button>
                         </div>
                     </div>
