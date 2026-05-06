@@ -443,6 +443,37 @@ body {
     .nav-left { flex: 1; min-width: 0; padding-left: 0.25rem; gap: 0.5rem; }
     .nav-right { flex-shrink: 0; }
 
+    /* Scanner Adjustments */
+    .elite-form-container {
+        padding: 1.5rem !important;
+        gap: 1rem !important;
+    }
+    .elite-abono-card {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 1.5rem !important;
+        text-align: center !important;
+    }
+    .elite-abono-card .scan-label {
+        margin-bottom: 0.5rem !important;
+    }
+    .elite-abono-card > div.elite-separator {
+        width: 100% !important;
+        height: 1px !important;
+    }
+    .elite-abono-card > div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    #main-op-type {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        padding-right: 2rem !important;
+    }
+
     .page-title {
         font-size: 1rem;
         white-space: nowrap;

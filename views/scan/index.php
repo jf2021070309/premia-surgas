@@ -680,7 +680,7 @@
                                             <select id="main-op-type" class="form-select-scan" style="width: 100%; background: #fff; height: 56px; border: 1px solid #e2e8f0; border-radius: 14px; font-weight: 700; color: #000; padding: 0 1.25rem; font-size: 0.82rem;" onchange="updateSubtotal()">
                                                 <?php foreach ($operaciones as $op): ?>
                                                     <option value="<?= $op['puntos'] ?>" data-nombre="<?= htmlspecialchars($op['nombre']) ?>" data-precio="<?= $op['precio_estandar'] ?? 0 ?>" data-descuento="<?= $op['descuento'] ?? 0 ?>">
-                                                        <?= htmlspecialchars($op['nombre']) ?> - Precio: S/<?= number_format($op['precio_estandar'] ?? 0, 2) ?> | Dcto: S/<?= number_format($op['descuento'] ?? 0, 2) ?> | Pts: <?= $op['puntos'] ?>
+                                                        <?= htmlspecialchars($op['nombre']) ?> - S/<?= number_format(($op['precio_estandar'] ?? 0) - ($op['descuento'] ?? 0), 2) ?>
                                                     </option>
                                                 <?php endforeach; ?>
                                             </select>
@@ -695,7 +695,7 @@
                                                 <span style="font-size: 1rem; font-weight: 900; color: #000; opacity: 0.2;">PTS</span>
                                             </div>
                                         </div>
-                                        <div style="width: 1px; height: 40px; background: #e2e8f0;"></div>
+                                        <div class="elite-separator" style="width: 1px; height: 40px; background: #e2e8f0;"></div>
                                         <div style="flex: 1;">
                                             <label class="scan-label" style="font-size: 0.65rem; margin-bottom: 0.4rem; color: #ef4444; font-weight: 800;">TOTAL A PAGAR</label>
                                             <div style="display: flex; align-items: baseline; gap: 0.4rem;">

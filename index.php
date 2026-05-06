@@ -155,6 +155,7 @@ $routes = [
     ['GET',    'operaciones',        'OperacionController', 'index'],
     ['POST',   'operaciones/create', 'OperacionController', 'create'],
     ['POST',   'operaciones/update', 'OperacionController', 'update'],
+    ['GET',    'operaciones/delete', 'OperacionController', 'delete'],
     ['GET',    'auth/check',          'AuthController',   'checkSession'],
 ];
 
