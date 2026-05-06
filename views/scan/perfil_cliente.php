@@ -129,6 +129,12 @@ if (empty($hpw)) {
             z-index: 10;
         }
 
+        @media (max-width: 520px) {
+            .vip-card-container {
+                aspect-ratio: 1.25 / 1;
+            }
+        }
+
         /* Layout superior del Perfil */
         .profile-header-layout {
             display: flex;
@@ -426,6 +432,30 @@ if (empty($hpw)) {
             letter-spacing: 1.5px;
             color: #fff;
             opacity: 0.8;
+        }
+
+        .btn-enlarge-qr {
+            margin-top: 12px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-transform: uppercase;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .btn-enlarge-qr:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: #fff;
+            transform: translateY(-2px);
         }
 
         /* Botón Tienda */
@@ -1842,6 +1872,9 @@ if (empty($hpw)) {
                                         <div id="qrcode"></div>
                                     </div>
                                     <div class="qr-help">Muestra para acumular</div>
+                                    <button class="btn-enlarge-qr" onclick="event.stopPropagation(); showFullQR();">
+                                        <i class='bx bx-zoom-in'></i> Ver Detallado
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -2402,11 +2435,40 @@ if (empty($hpw)) {
         // Generar QR en el reverso
         const qrContainer = document.getElementById("qrcode");
         if (qrContainer) {
-            const qrContent = '<?= BASE_URL ?>scan?c=<?= urlencode($cliente['codigo']) ?>&t=<?= urlencode($cliente['token']) ?>';
+            const qrContent = '<?= BASE_URL ?>scan?c=<?= urlencode($cliente['codigo'] ?? '') ?>&t=<?= urlencode($cliente['token'] ?? '') ?>';
             new QRCode(qrContainer, {
                 text: qrContent,
                 width: 125,
                 height: 125,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+
+        function showFullQR() {
+            const overlay = document.createElement('div');
+            overlay.className = 'ticket-overlay';
+            overlay.style.zIndex = '10000';
+            overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+
+            overlay.innerHTML = `
+                <div class="ticket-container" style="max-width: 350px; padding: 2.5rem 2rem; display: flex; flex-direction: column; align-items: center; background: #fff; border-radius: 24px; text-align: center; margin: auto; animation: ticketPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);">
+                    <h3 style="margin: 0 0 10px 0; color: #0f172a; font-weight: 850; font-size: 1.4rem;">Mi Código QR</h3>
+                    <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 2rem; font-weight: 500;">Presenta este código para acumular o canjear puntos.</p>
+                    <div id="full-qrcode" style="background: white; padding: 15px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); display: inline-block;"></div>
+                    <button onclick="this.closest('.ticket-overlay').remove()" style="margin-top: 2rem; width: 100%; background: #0f172a; color: white; border: none; padding: 1rem; border-radius: 14px; font-weight: 800; font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: 0.3s;">
+                        Cerrar
+                    </button>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+
+            // Generate full QR
+            new QRCode(document.getElementById("full-qrcode"), {
+                text: '<?= BASE_URL ?>scan?c=<?= urlencode($cliente['codigo'] ?? '') ?>&t=<?= urlencode($cliente['token'] ?? '') ?>',
+                width: 220,
+                height: 220,
                 colorDark: "#000000",
                 colorLight: "#ffffff",
                 correctLevel: QRCode.CorrectLevel.H
