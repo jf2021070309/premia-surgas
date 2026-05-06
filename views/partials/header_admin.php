@@ -25,7 +25,7 @@ $adminInitial = strtoupper(substr($adminName, 0, 1));
 
         <!-- Brand logo for mobile/collapsed views -->
         <div class="header-mobile-logo">
-            <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" alt="Surgas">
+            <img src="<?= BASE_URL ?>assets/premios/icono.png" alt="Surgas" style="width: 28px; height: 28px; object-fit: contain;">
         </div>
         
         <div class="header-title-group">
