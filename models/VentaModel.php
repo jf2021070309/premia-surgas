@@ -84,7 +84,7 @@ class VentaModel {
 
     public function getPendientes(): array {
         $stmt = $this->db->prepare(
-            "SELECT v.*, c.nombre as cliente_nombre, c.dni as cliente_dni, u.nombre as conductor_nombre
+            "SELECT v.*, c.nombre as cliente_nombre, c.dni as cliente_dni, c.celular as cliente_celular, u.nombre as conductor_nombre
              FROM ventas v
              JOIN clientes c ON v.cliente_id = c.id
              JOIN usuarios u ON v.conductor_id = u.id

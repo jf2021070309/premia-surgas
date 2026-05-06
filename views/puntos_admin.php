@@ -159,7 +159,22 @@
                                 <form action="<?= BASE_URL ?>puntos-admin/actualizar" method="POST" style="margin:0;" class="approve-form">
                                     <input type="hidden" name="id" value="<?= $r['id'] ?>">
                                     <input type="hidden" name="estado" value="aprobado">
-                                    <button type="button" class="btn btn-success btn-approve-trigger">
+                                    <?php
+                                        $resumen_items = 'hoy';
+                                        if (!empty($r['items'])) {
+                                            $partes = [];
+                                            foreach($r['items'] as $item) {
+                                                $partes[] = $item['cantidad'] . 'x ' . $item['nombre_item'];
+                                            }
+                                            $resumen_items = implode(', ', $partes);
+                                        }
+                                    ?>
+                                    <button type="button" class="btn btn-success btn-approve-trigger"
+                                        data-phone="<?= htmlspecialchars($r['cliente_celular'] ?? '') ?>"
+                                        data-name="<?= htmlspecialchars($r['cliente_nombre'] ?? '') ?>"
+                                        data-puntos="<?= $r['puntos'] ?>"
+                                        data-monto="<?= $r['monto'] ?>"
+                                        data-items="<?= htmlspecialchars($resumen_items) ?>">
                                         <i class='bx bx-check'></i> Aprobar
                                     </button>
                                 </form>
@@ -428,7 +443,20 @@
                     confirmButtonText: '<i class="bx bx-check"></i> Sí, Aprobar',
                     cancelButtonText: 'Cancelar',
                     customClass: { popup: 'swal-light' }
-                }).then(result => { if (result.isConfirmed) form.submit(); });
+                }).then(result => { 
+                    if (result.isConfirmed) {
+                        const btnData = btn.dataset;
+                        if (btnData.phone && btnData.phone.length >= 9) {
+                            const num = btnData.phone.startsWith('51') ? btnData.phone : '51' + btnData.phone;
+                            const compraTexto = btnData.items === 'hoy' ? 'tu compra de hoy' : `tu compra de: ${btnData.items}`;
+                            const msg = `Hola ${btnData.name} 👋, gracias por usar tu tarjeta Surgas. Hemos aprobado tus +${btnData.puntos} pts por ${compraTexto}. Tu total a pagar con descuento fue de S/ ${parseFloat(btnData.monto).toFixed(2)}. Si te cobraron un monto distinto, por favor respóndenos a este mensaje para ayudarte. ¡Saludos!`;
+                            window.open(`https://wa.me/${num}?text=${encodeURIComponent(msg)}`, '_blank');
+                            setTimeout(() => form.submit(), 800);
+                        } else {
+                            form.submit();
+                        }
+                    } 
+                });
             });
         });
 
