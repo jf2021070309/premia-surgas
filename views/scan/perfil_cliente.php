@@ -131,7 +131,24 @@ if (empty($hpw)) {
 
         @media (max-width: 520px) {
             .vip-card-container {
-                aspect-ratio: 1.25 / 1;
+                aspect-ratio: 1.15 / 1;
+            }
+            .card-front, .card-back {
+                padding: 1rem !important;
+            }
+            .qr-container {
+                padding: 6px !important;
+                max-width: 110px;
+                max-height: 110px;
+            }
+            .qr-help {
+                margin-top: 0.6rem !important;
+                font-size: 0.55rem !important;
+            }
+            .btn-enlarge-qr {
+                margin-top: 6px !important;
+                padding: 6px 12px !important;
+                font-size: 0.65rem !important;
             }
         }
 
