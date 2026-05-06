@@ -54,6 +54,7 @@ $routes = [
     ['GET',  'panel',                     'PanelController',   'index'],
     ['GET',  'panel/live-notifications',  'PanelController',   'liveNotifications'],
     ['GET',  'panel/conductor-history',   'PanelController',   'conductorHistory'],
+    ['POST', 'panel/validar-venta',       'PanelController',   'validarVenta'],
 
     // —— Clientes ——
     ['GET',  'registro',          'ClienteController', 'registro'],
@@ -68,6 +69,7 @@ $routes = [
     ['GET',  'clientes/estado',   'ClienteController', 'cambiarEstado'],
     ['GET',  'clientes/consultarDni', 'ClienteController', 'consultarDni'],
     ['GET',  'clientes/consultarRuc', 'ClienteController', 'consultarRuc'],
+    ['POST', 'clientes/promover-afiliado', 'ClienteController', 'promoverAfiliado'],
     ['POST', 'clientes/changePassword', 'ClienteController', 'changePassword'],
     ['POST', 'clientes/updateProfile',  'ClienteController', 'updateProfile'],
 
@@ -88,14 +90,18 @@ $routes = [
     ['GET',  'conductores/delete',   'ConductorController', 'delete'],
     ['GET',  'conductores/mi-historial', 'ConductorController', 'miHistorial'],
 
-    // —— Aliados (Admin) ——
-    ['GET',  'aliados',              'AliadoController', 'index'],
-    ['GET',  'aliados/nuevo',        'AliadoController', 'nuevo'],
-    ['POST', 'aliados/create',       'AliadoController', 'create'],
-    ['GET',  'aliados/editar',       'AliadoController', 'editar'],
-    ['POST', 'aliados/update',       'AliadoController', 'update'],
-    ['GET',  'aliados/delete',       'AliadoController', 'delete'],
-    ['GET',  'aliados/mi-historial', 'AliadoController', 'miHistorial'],
+    // —— Afiliados (Admin) ——
+    ['GET',  'afiliados',              'AfiliadoController', 'index'],
+    ['GET',  'afiliados/nuevo',        'AfiliadoController', 'nuevo'],
+    ['POST', 'afiliados/create',       'AfiliadoController', 'create'],
+    ['GET',  'afiliados/editar',       'AfiliadoController', 'editar'],
+    ['POST', 'afiliados/update',       'AfiliadoController', 'update'],
+    ['GET',  'afiliados/delete',       'AfiliadoController', 'delete'],
+    ['GET',  'afiliados/mi-historial', 'AfiliadoController', 'miHistorial'],
+    ['GET',  'afiliados/miAnuncio',    'AfiliadoController', 'miAnuncio'],
+    ['POST', 'afiliados/guardarAnuncio', 'AfiliadoController', 'guardarAnuncio'],
+    ['GET',  'afiliados/perfil',       'AfiliadoController', 'perfil'],
+    ['POST', 'afiliados/actualizarPerfil', 'AfiliadoController', 'actualizarPerfil'],
 
     // —— QR ——
     ['GET',  'qr/generate',  'QrController',     'generate'],
@@ -126,6 +132,10 @@ $routes = [
     ['GET',  'recargas-admin',              'RecargaAdminController', 'index'],
     ['POST', 'recargas-admin/actualizar',   'RecargaAdminController', 'actualizarEstado'],
     ['POST', 'recargas-admin/subir-qr',     'RecargaAdminController', 'subirQr'],
+
+    // —— Gestión de Puntos Pendientes (Admin) ——
+    ['GET',  'puntos-admin',              'PuntosAdminController', 'index'],
+    ['POST', 'puntos-admin/actualizar',   'PuntosAdminController', 'actualizarEstado'],
 
     // —— Sistema de Incentivos (Admin) ——
     ['GET',  'incentivos/reglas',           'IncentivoController', 'reglas'],

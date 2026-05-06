@@ -544,7 +544,7 @@
         .prize-desc {
             font-size: 0.85rem;
             color: #666;
-            margin-bottom: 1.2rem;
+            margin-bottom: 0.8rem;
             line-height: 1.4;
             display: -webkit-box;
             -webkit-line-clamp: 2;
@@ -556,8 +556,8 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
-            margin-bottom: 1.2rem;
-            margin-top: auto;
+            margin-bottom: 0.6rem;
+            margin-top: 0.4rem;
         }
 
         .prize-points-wrap {
@@ -580,6 +580,88 @@
             letter-spacing: 1px;
             color: #748da6;
             margin-top: 2px;
+        }
+
+        /* ── New Cost Badge System ── */
+        .prize-cost-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            margin-bottom: 0.2rem;
+            width: 100%;
+        }
+
+        .cost-badge {
+            background: #f8fafc;
+            border: 1.5px solid #f1f5f9;
+            border-radius: 12px;
+            padding: 8px 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            min-width: 0;
+            transition: all 0.3s;
+        }
+
+        .cost-badge.pts {
+            background: #fff1f2;
+            border-color: #ffe4e6;
+        }
+
+        .cost-badge-label {
+            font-size: 0.55rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: #94a3b8;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+            line-height: 1;
+        }
+
+        .cost-badge-value {
+            font-size: 1rem;
+            font-weight: 900;
+            color: #1e293b;
+            white-space: nowrap;
+            display: flex;
+            align-items: baseline;
+            gap: 2px;
+            line-height: 1.1;
+        }
+
+        .cost-badge.pts .cost-badge-value {
+            color: #821515;
+        }
+
+        .cost-badge-value small {
+            font-size: 0.6rem;
+            font-weight: 700;
+        }
+
+        .cost-plus-circle {
+            width: 24px;
+            height: 24px;
+            background: #fff;
+            border: 2px solid #f1f5f9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 900;
+            color: #cbd5e1;
+            flex-shrink: 0;
+            z-index: 2;
+            margin: 0 -8px; /* Overlay effect */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        @media (max-width: 576px) {
+            .cost-badge-value { font-size: 0.9rem; }
+            .cost-badge-label { font-size: 0.5rem; }
+            .cost-plus-circle { width: 20px; height: 20px; font-size: 0.75rem; }
         }
 
         .stock-badge {
@@ -801,12 +883,19 @@
                                 <h3 class="prize-name"><?= $item['nombre'] ?></h3>
                                 <p class="prize-desc"><?= htmlspecialchars($item['descripcion']) ?></p>
                                 
-                                <div class="prize-meta-row">
-                                    <div class="prize-points-wrap">
-                                        <span class="prize-points-val"><?= number_format($item['puntos']) ?></span>
-                                        <span class="prize-points-lbl">puntos</span>
+                                <div class="prize-cost-display">
+                                    <div class="cost-badge">
+                                        <span class="cost-badge-label">Soles</span>
+                                        <span class="cost-badge-value"><small>S/</small><?= number_format($item['precio_base'], 2) ?></span>
                                     </div>
-                                    
+                                    <div class="cost-plus-circle">+</div>
+                                    <div class="cost-badge pts">
+                                        <span class="cost-badge-label">Puntos</span>
+                                        <span class="cost-badge-value"><?= number_format($item['puntos']) ?><small>PTS</small></span>
+                                    </div>
+                                </div>
+
+                                <div class="prize-meta-row" style="margin-bottom: 0.4rem;">
                                     <div class="stock-badge <?= $item['stock'] > 0 ? 'available' : 'empty' ?>">
                                         <i class='bx <?= $item['stock'] > 0 ? 'bx-check-circle' : 'bx-x-circle' ?>'></i>
                                         <?= $item['stock'] > 0 ? "Stock: {$item['stock']}" : "Agotado" ?>
@@ -840,7 +929,17 @@
                     <div class="text-center mb-4">
                         <img :src="'<?= BASE_URL ?>assets/premios/' + selected.imagen" class="mb-3" style="height: 100px; object-fit: contain;">
                         <h4 class="fw-bold mb-1">{{ selected.nombre }}</h4>
-                        <p class="text-muted small">{{ selected.puntos }} Puntos requeridos</p>
+                        <div class="prize-cost-display mt-3" style="margin-left: auto; margin-right: auto; max-width: 280px;">
+                            <div class="cost-badge" style="background: #fff; border: 2px solid #f1f5f9;">
+                                <span class="cost-badge-label">Soles</span>
+                                <span class="cost-badge-value" style="font-size: 1.15rem;"><small>S/</small>{{ parseFloat(selected.precio_base || 0).toFixed(2) }}</span>
+                            </div>
+                            <div class="cost-plus-circle" style="background: #fff; border-color: #f1f5f9;">+</div>
+                            <div class="cost-badge pts" style="background: #fff; border: 2px solid #ffe4e6;">
+                                <span class="cost-badge-label">Puntos</span>
+                                <span class="cost-badge-value" style="font-size: 1.15rem;">{{ selected.puntos }}<small>PTS</small></span>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="p-3 mb-4 text-center" style="background: #fff9f0; border: 1px solid #ffe8cc; border-radius: 1rem;">
@@ -853,10 +952,10 @@
                          @click="canjeTotalDirecto">
                         <div class="option-badge-direct" v-if="!saldoInsuficiente">Canje Directo</div>
                         <span class="option-check">✓</span>
-                        <div class="fw-bold h6 mb-1">Canje Total</div>
-                        <p class="small text-muted mb-0">Usa todos tus puntos para obtener el premio gratis.</p>
+                        <div class="fw-bold h6 mb-1">Pagar Ganancia con Puntos</div>
+                        <p class="small text-muted mb-0">Usa tus puntos para cubrir el 100% de la ganancia. Solo pagas la base fija.</p>
                         <div class="mt-2 fw-bold text-success" v-if="!saldoInsuficiente">
-                            Costo: {{ selected.puntos }} Puntos
+                            Cubre: {{ selected.puntos }} Puntos
                         </div>
                         <div class="mt-2 fw-bold text-danger" v-else>
                             Puntos insuficientes
@@ -867,24 +966,34 @@
                     <div :class="['option-card', tipo === 'yape' ? 'active' : '']"
                          @click="tipo = 'yape'">
                         <span class="option-check">✓</span>
-                        <div class="fw-bold h6 mb-1">Puntos + Efectivo</div>
-                        <p class="small text-muted mb-0">Paga una parte con puntos y el resto en efectivo/Yape.</p>
+                        <div class="fw-bold h6 mb-1">Ganancia Ajustable</div>
+                        <p class="small text-muted mb-0">Mueve la perilla para decidir cuántos puntos usar en la ganancia.</p>
                     </div>
 
                     <!-- Detalle Efectivo (Solo si está seleccionado) -->
                     <div v-if="tipo === 'yape'" class="mt-3 mb-4 animate__animated animate__fadeIn">
                         <div class="bg-light p-3 rounded-4 mb-3">
                             <div class="d-flex justify-content-between mb-2">
-                                <span class="fw-bold small">Uso de Puntos ({{ pct }}%)</span>
+                                <span class="fw-bold small">Puntos aplicados ({{ pct }}%)</span>
                                 <b class="text-primary">{{ puntosDcto }} pts</b>
                             </div>
                             <input type="range" class="form-range" v-model="pct" min="0" :max="maxSliderPct" step="1">
-                            <div class="d-flex justify-content-between mt-3 pt-2 border-top">
-                                <span class="fw-bold">Monto a pagar:</span>
-                                <b class="text-danger h5 mb-0">S/ {{ montoEfectivo }}</b>
+                            <div class="mt-3 pt-2 border-top">
+                                <div class="d-flex justify-content-between small text-muted mb-1">
+                                    <span>Precio Base (Fijo):</span>
+                                    <span>S/ {{ parseFloat(selected.precio_base || 0).toFixed(2) }}</span>
+                                </div>
+                                <div class="d-flex justify-content-between small text-muted mb-1" v-if="selected.puntos > puntosDcto">
+                                    <span>Puntos restantes (en soles):</span>
+                                    <span>S/ {{ ((selected.puntos - puntosDcto) * montoPorPunto).toFixed(2) }}</span>
+                                </div>
+                                <div class="d-flex justify-content-between mt-1">
+                                    <span class="fw-bold text-dark">Total a pagar:</span>
+                                    <b class="text-danger h5 mb-0">S/ {{ montoEfectivo }}</b>
+                                </div>
                             </div>
-                            <p class="small text-muted mt-2 mb-0" style="font-size: 0.7rem;">
-                                Conversión: {{ (1 / montoPorPunto).toFixed(0) }} puntos restantes = S/ 1.00
+                            <p class="small text-muted mt-2 mb-0" style="font-size: 0.7rem; line-height: 1.2;">
+                                1 Punto equivale a S/ {{ montoPorPunto.toFixed(2) }}. Estás pagando el Precio Base más la diferencia de puntos no cubiertos.
                             </p>
                         </div>
                         <div class="p-3 text-center rounded-4 shadow-sm" style="background: #fff9f9; border: 1px solid #feebeb;">
@@ -897,24 +1006,24 @@
                     <div :class="['option-card', tipo === 'deposito' ? 'active' : '']"
                          @click="tipo = 'deposito'">
                         <span class="option-check">✓</span>
-                        <div class="fw-bold h6 mb-1">Puntos + Depósito</div>
-                        <p class="small text-muted mb-0">Paga una parte con puntos y el resto mediante depósito.</p>
+                        <div class="fw-bold h6 mb-1">Ganancia + Depósito</div>
+                        <p class="small text-muted mb-0">Ajusta la ganancia con puntos y paga el saldo vía depósito.</p>
                     </div>
 
                     <!-- Detalle Depósito (Solo si está seleccionado) -->
                     <div v-if="tipo === 'deposito'" class="mt-3 mb-4 animate__animated animate__fadeIn">
                         <div class="bg-light p-3 rounded-4 mb-3">
                             <div class="d-flex justify-content-between mb-2">
-                                <span class="fw-bold small">Uso de Puntos ({{ pct }}%)</span>
+                                <span class="fw-bold small">Puntos aplicados ({{ pct }}%)</span>
                                 <b class="text-primary">{{ puntosDcto }} pts</b>
                             </div>
                             <input type="range" class="form-range" v-model="pct" min="0" :max="maxSliderPct" step="1">
                             <div class="d-flex justify-content-between mt-3 pt-2 border-top">
-                                <span class="fw-bold">Monto a pagar:</span>
+                                <span class="fw-bold">Total a pagar:</span>
                                 <b class="text-danger h5 mb-0">S/ {{ montoEfectivo }}</b>
                             </div>
                             <p class="small text-muted mt-2 mb-0" style="font-size: 0.7rem;">
-                                Conversión: {{ (1 / montoPorPunto).toFixed(0) }} puntos restantes = S/ 1.00
+                                1 Punto cubre S/ {{ montoPorPunto.toFixed(2) }} de la ganancia del producto.
                             </p>
                         </div>
 

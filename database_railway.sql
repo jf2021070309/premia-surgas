@@ -104,9 +104,9 @@ INSERT INTO `auditoria` (`id`, `id_usuario`, `accion`, `descripcion`, `metadata`
 	(64, 2, 'INICIO_SESION', 'Inicio de sesión exitoso (Trabajador)', NULL, 'SEGURIDAD', '::1', 'Escritorio — Chrome', '2026-04-17 13:48:36'),
 	(65, 2, 'CIERRE_SESION', 'El usuario cerró su sesión', NULL, 'SEGURIDAD', '::1', 'Escritorio — Chrome', '2026-04-17 13:56:53'),
 	(66, 1, 'INICIO_SESION', 'Inicio de sesión exitoso (Trabajador)', NULL, 'SEGURIDAD', '::1', 'Escritorio — Chrome', '2026-04-17 13:56:58'),
-	(67, 1, 'NUEVO_ALIADO', 'Registró al aliado: RESTAURANTE CHITE', NULL, 'ALIADOS', '::1', 'Escritorio — Chrome', '2026-04-17 14:24:49'),
-	(68, 1, 'ACTUALIZAR_ALIADO', 'Actualizó datos del aliado: RESTAURANTE CHITE 2 (1 campos modificados)', '{"nombre":{"ant":"RESTAURANTE CHITE","des":"RESTAURANTE CHITE 2"}}', 'ALIADOS', '::1', 'Escritorio — Chrome', '2026-04-17 14:25:49'),
-	(69, 1, 'ACTUALIZAR_ALIADO', 'Actualizó datos del aliado: RESTAURANTE CHITE 2', NULL, 'ALIADOS', '::1', 'Escritorio — Chrome', '2026-04-17 14:25:59'),
+	(67, 1, 'NUEVO_AFILIADO', 'Registró al afiliado: RESTAURANTE CHITE', NULL, 'AFILIADOS', '::1', 'Escritorio — Chrome', '2026-04-17 14:24:49'),
+	(68, 1, 'ACTUALIZAR_AFILIADO', 'Actualizó datos del afiliado: RESTAURANTE CHITE 2 (1 campos modificados)', '{"nombre":{"ant":"RESTAURANTE CHITE","des":"RESTAURANTE CHITE 2"}}', 'AFILIADOS', '::1', 'Escritorio — Chrome', '2026-04-17 14:25:49'),
+	(69, 1, 'ACTUALIZAR_AFILIADO', 'Actualizó datos del afiliado: RESTAURANTE CHITE 2', NULL, 'AFILIADOS', '::1', 'Escritorio — Chrome', '2026-04-17 14:25:59'),
 	(70, 1, 'CIERRE_SESION', 'El usuario cerró su sesión', NULL, 'SEGURIDAD', '::1', 'Escritorio — Chrome', '2026-04-17 14:27:01'),
 	(71, 5, 'INICIO_SESION', 'Inicio de sesión exitoso (Trabajador)', NULL, 'SEGURIDAD', '::1', 'Escritorio — Chrome', '2026-04-17 14:27:07'),
 	(72, 5, 'REGISTRO_CLIENTE', 'Nuevo cliente: Ludy Marita Padilla Vasquez (CLI-000002)', NULL, 'CLIENTES', '::1', 'Escritorio — Chrome', '2026-04-17 14:28:05'),
@@ -139,6 +139,21 @@ INSERT INTO `auditoria` (`id`, `id_usuario`, `accion`, `descripcion`, `metadata`
 	(99, 1, 'SOLICITUD_CANJE', 'Cliente solicitó canje TOTAL de: Tazas (100 pts)', NULL, 'FIDELIZACION', '::1', 'Escritorio — Chrome', '2026-04-19 17:45:13'),
 	(100, 1, 'CARGA_PUNTOS', 'Cargó 1100 puntos a Jaime Elias Flores Quispe (• Recarga gas Premium x10 (+100 pts)\n• Recarga gas Premium x10 (+100 pts)\n• Recarga gas Premium x10 (+100 pts)\n• Recarga gas Premium x10 (+100 pts)\n• Recarga gas Premium x10 (+100 pts)\n• Recarga gas Premium x10 (+100 pts)\n• Recarga gas Premium x10 (+100 pts)\n• Recarga gas Premium x10 (+100 pts)\n• Recarga gas Premium x10 (+100 pts)\n• Recarga gas Premium x10 (+100 pts)\n• Recarga gas Premium x10 (+100 pts)\n──────────\nTOTAL: 1100 pts)', NULL, 'RECARGAS', '::1', 'Escritorio — Chrome', '2026-04-19 18:22:48'),
 	(101, 1, 'SOLICITUD_CANJE', 'Cliente solicitó canje TOTAL de: Set de utensilios de cocina (800 pts)', NULL, 'FIDELIZACION', '::1', 'Escritorio — Chrome', '2026-04-19 18:23:00');
+
+-- Volcando estructura para tabla surgas.afiliado_anuncios
+CREATE TABLE IF NOT EXISTS `afiliado_anuncios` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `usuario_id` int(11) NOT NULL,
+  `nombre_negocio` varchar(150) NOT NULL,
+  `imagen_negocio` varchar(255) DEFAULT NULL,
+  `carta_pdf` varchar(255) DEFAULT NULL,
+  `ubicacion` text DEFAULT NULL,
+  `estado` tinyint(1) DEFAULT 1,
+  `fecha_creacion` timestamp DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `usuario_id` (`usuario_id`),
+  CONSTRAINT `fk_anuncio_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando estructura para tabla surgas.canjes
 CREATE TABLE IF NOT EXISTS `canjes` (
@@ -342,7 +357,7 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `nombre` varchar(100) DEFAULT NULL,
   `usuario` varchar(50) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
-  `rol` enum('admin','conductor','aliado') NOT NULL,
+  `rol` enum('admin','conductor','afiliado') NOT NULL,
   `departamento` enum('Tacna','Moquegua','Arequipa','Ilo') DEFAULT NULL,
   `estado` tinyint(4) DEFAULT 1,
   `fecha_creacion` timestamp NULL DEFAULT current_timestamp(),
@@ -357,7 +372,7 @@ INSERT INTO `usuarios` (`id`, `nombre`, `usuario`, `password`, `rol`, `departame
 	(2, 'Oscar Flores', 'conductor1', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'conductor', 'Tacna', 1, '2026-03-20 13:15:09', 'uh0buig422or34fhnt6o232mca'),
 	(3, 'Jaime Flores ', 'Jaime', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'conductor', 'Tacna', 1, '2026-04-06 16:11:08', 'nuontuhhc2mmoqcal7544k27du'),
 	(4, 'Elvis Leyva Sardon', 'Elvis', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'conductor', 'Tacna', 1, '2026-04-06 17:17:54', NULL),
-	(5, 'RESTAURANTE CHITE 2', 'chite', '5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5', 'aliado', 'Tacna', 1, '2026-04-17 14:24:49', 'hcd3e4r6u0s10p6tj62bc1hgln');
+	(5, 'RESTAURANTE CHITE 2', 'chite', '5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5', 'afiliado', 'Tacna', 1, '2026-04-17 14:24:49', 'hcd3e4r6u0s10p6tj62bc1hgln');
 
 -- Volcando estructura para tabla surgas.venta_detalles
 CREATE TABLE IF NOT EXISTS `venta_detalles` (

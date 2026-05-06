@@ -6,7 +6,9 @@ require_once __DIR__ . '/../models/TipoOperacionModel.php';
 require_once __DIR__ . '/../models/CanjeModel.php';
 require_once __DIR__ . '/../models/AuditoriaModel.php';
 require_once __DIR__ . '/../models/IncentivoModel.php';
+require_once __DIR__ . '/../models/AfiliadoAnuncioModel.php';
 require_once __DIR__ . '/../config/config.php';
+
 
 class ScanController {
 
@@ -65,12 +67,18 @@ class ScanController {
                     ($cliente['password'] === hash('sha256', $cliente['ruc'] ?? ''))
                 );
 
+                // Fetch active announcements for carousel
+                $anuncioModel = new AfiliadoAnuncioModel();
+                $anuncios = $anuncioModel->getAllActive();
+
                 $this->render('scan/perfil_cliente', [
-                    'cliente' => $cliente,
-                    'ventas'  => $historial,
-                    'canjes'  => $canjes,
+                    'cliente'  => $cliente,
+                    'ventas'   => $historial,
+                    'canjes'   => $canjes,
+                    'anuncios' => $anuncios,
                     'isDefaultPassword' => $isDefaultPassword
                 ]);
+
                 return;
             }
         }
@@ -142,7 +150,7 @@ class ScanController {
         $clienteId = (int) ($data['cliente_id'] ?? 0);
         $puntos    = (int) ($data['puntos'] ?? 0);
         $detalle   = trim($data['detalle'] ?? '');
-        $items     = $data['items'] ?? []; // Nuevo: Recibir array de items
+        $items     = $data['items'] ?? []; 
 
         if (!$clienteId || !$puntos) {
             $this->json(['success' => false, 'message' => 'Datos incompletos.']);
@@ -150,24 +158,35 @@ class ScanController {
 
         $ventaModel   = new VentaModel();
         $clienteModel = new ClienteModel();
+        $rol = $_SESSION['rol'] ?? '';
 
-        // 1. Registrar "venta" con el array de items
-        $idVenta = $ventaModel->create($clienteId, $_SESSION['id_usuario'], 0, $puntos, $detalle, $items);
+        // Si es admin, se aprueba automáticamente. Si es conductor, queda pendiente.
+        $estado = ($rol === 'admin') ? 'aprobado' : 'pendiente';
+
+        // 1. Registrar "venta"
+        $idVenta = $ventaModel->create($clienteId, $_SESSION['id_usuario'], 0, $puntos, $detalle, $items, $estado);
 
         if ($idVenta) {
-            // 2. Actualizar puntos totales del cliente
-            $clienteModel->sumarPuntos($clienteId, $puntos);
+            $message = 'Puntos registrados correctamente.';
+            
+            if ($estado === 'aprobado') {
+                // 2. Actualizar puntos totales del cliente (solo si está aprobado)
+                $clienteModel->sumarPuntos($clienteId, $puntos);
 
-            // 3. Evaluar reglas de incentivos
-            $incentivoModel = new IncentivoModel();
-            $incentivoModel->evaluarMetas($clienteId);
+                // 3. Evaluar reglas de incentivos
+                $incentivoModel = new IncentivoModel();
+                $incentivoModel->evaluarMetas($clienteId);
+            } else {
+                $message = 'Puntos registrados. Pendiente de aprobación por administración.';
+            }
 
             // AUDITORIA
             $c = $clienteModel->findById($clienteId);
             $audit = new AuditoriaModel();
-            $audit->registrar($_SESSION['id_usuario'], 'CARGA_PUNTOS', "Cargó $puntos puntos a {$c['nombre']} ($detalle)", 'RECARGAS');
+            $accion = ($estado === 'aprobado') ? 'CARGA_PUNTOS' : 'SOLICITUD_PUNTOS_PENDIENTE';
+            $audit->registrar($_SESSION['id_usuario'], $accion, "Registró $puntos puntos a {$c['nombre']} ($detalle). Estado: $estado", 'RECARGAS');
             
-            $this->json(['success' => true, 'message' => 'Puntos registrados correctamente.']);
+            $this->json(['success' => true, 'message' => $message]);
         } else {
             $this->json(['success' => false, 'message' => 'Error al registrar puntos.']);
         }
@@ -199,20 +218,30 @@ class ScanController {
 
         $ventaModel   = new VentaModel();
         $clienteModel = new ClienteModel();
+        $rol = $_SESSION['rol'] ?? '';
 
-        $ventaModel->create($clienteId, $_SESSION['id_usuario'], $monto, $puntos, "Compra por monto: S/ $monto (+$puntos pts)");
-        $clienteModel->sumarPuntos($clienteId, $puntos);
+        $estado = ($rol === 'admin') ? 'aprobado' : 'pendiente';
 
-        // Evaluar reglas de incentivos
-        $incentivoModel = new IncentivoModel();
-        $incentivoModel->evaluarMetas($clienteId);
+        $ventaModel->create($clienteId, $_SESSION['id_usuario'], $monto, $puntos, "Compra por monto: S/ $monto (+$puntos pts)", [], $estado);
+        
+        $message = "Puntos registrados correctamente.";
+        if ($estado === 'aprobado') {
+            $clienteModel->sumarPuntos($clienteId, $puntos);
+
+            // Evaluar reglas de incentivos
+            $incentivoModel = new IncentivoModel();
+            $incentivoModel->evaluarMetas($clienteId);
+        } else {
+            $message = "Puntos registrados. Pendiente de aprobación.";
+        }
 
         // AUDITORIA
         $c = $clienteModel->findById($clienteId);
         $audit = new AuditoriaModel();
-        $audit->registrar($_SESSION['id_usuario'], 'VENTA_PUNTOS', "Asignó $puntos puntos por venta de S/ $monto a {$c['nombre']}", 'RECARGAS');
+        $accion = ($estado === 'aprobado') ? 'VENTA_PUNTOS' : 'SOLICITUD_VENTA_PENDIENTE';
+        $audit->registrar($_SESSION['id_usuario'], $accion, "Asignó $puntos puntos por venta de S/ $monto a {$c['nombre']}. Estado: $estado", 'RECARGAS');
 
-        echo json_encode(['success' => true, 'puntos_sumados' => $puntos]);
+        echo json_encode(['success' => true, 'puntos_sumados' => $puntos, 'message' => $message]);
         exit;
     }
 

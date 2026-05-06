@@ -217,6 +217,41 @@ createApp({
                 }
             } catch (e) { console.error(e); }
             finally { this.fetching = false; }
+        },
+        async convertirAfiliado(c) {
+            const nombre = c.razon_social || c.nombre;
+            const doc = c.ruc || c.dni;
+            
+            const { isConfirmed } = await Swal.fire({
+                title: '¿Promover a Afiliado?',
+                html: `Vas a crear una cuenta de Afiliado para:<br><b>${nombre}</b><br><br>El usuario y contraseña inicial serán su documento: <b>${doc}</b>`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#f97316',
+                confirmButtonText: 'Sí, promover',
+                cancelButtonText: 'Cancelar'
+            });
+
+            if (isConfirmed) {
+                try {
+                    Swal.fire({ title: 'Procesando...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
+                    
+                    const response = await fetch(`${BASE_URL}clientes/promover-afiliado`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id: c.id })
+                    });
+                    
+                    const res = await response.json();
+                    if (res.success) {
+                        Swal.fire('¡Éxito!', res.message, 'success');
+                    } else {
+                        Swal.fire('Atención', res.message, 'info');
+                    }
+                } catch (err) {
+                    Swal.fire('Error', 'No se pudo completar la operación.', 'error');
+                }
+            }
         }
     }
 }).mount('#app');

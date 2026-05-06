@@ -81,7 +81,7 @@ class PanelController {
             $metricas_adicionales['puntos_por_dia']      = $puntos_por_dia;
         }
 
-        if ($_SESSION['rol'] === 'conductor' || $_SESSION['rol'] === 'aliado') {
+        if ($_SESSION['rol'] === 'conductor' || $_SESSION['rol'] === 'afiliado') {
             $db = Database::getConnection();
             $id_usuario = $_SESSION['id_usuario'];
             $rol_sesion = $_SESSION['rol'];
@@ -95,7 +95,7 @@ class PanelController {
             // Total clientes atendidos por este usuario
             $total_clientes = $db->query("SELECT COUNT(DISTINCT cliente_id) as total FROM ventas WHERE conductor_id = $id_usuario")->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
             
-            // Ranking posicion (por ahora comparados con conductores si es conductor, o general si es aliado?)
+            // Ranking posicion (por ahora comparados con conductores si es conductor, o general si es afiliado?)
             // Para simplificar, los comparamos en sus respectivos grupos o general
             $ranking_all = $db->query("SELECT u.id, COALESCE(SUM(v.puntos), 0) as total FROM usuarios u LEFT JOIN ventas v ON v.conductor_id = u.id WHERE u.rol = '$rol_sesion' GROUP BY u.id ORDER BY total DESC")->fetchAll(PDO::FETCH_ASSOC);
             $mi_posicion = 0;
@@ -139,7 +139,8 @@ class PanelController {
             'totales'        => $totales,
             'notificaciones' => $notificaciones,
             'notificaciones_recargas' => $notificaciones_recargas,
-            'metricas_adicionales' => $metricas_adicionales
+            'metricas_adicionales' => $metricas_adicionales,
+            'ventas_pendientes' => (new VentaModel())->getPendientes()
         ]);
     }
 
@@ -156,7 +157,7 @@ class PanelController {
         $history = $db->prepare("
             SELECT DATE(fecha) as fecha, SUM(puntos) as total 
             FROM ventas 
-            WHERE conductor_id = ? AND fecha >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+            WHERE conductor_id = ? AND estado = 'aprobado' AND fecha >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
             GROUP BY DATE(fecha)
             ORDER BY DATE(fecha) ASC
         ");
@@ -165,6 +166,36 @@ class PanelController {
 
         echo json_encode(['success' => true, 'data' => $rows]);
         exit;
+    }
+
+    public function validarVenta(): void {
+        $this->requireAuth();
+        if ($_SESSION['rol'] !== 'admin') {
+            $this->json(['success' => false, 'message' => 'No autorizado.']);
+        }
+
+        $data = json_decode(file_get_contents('php://input'), true);
+        $id     = (int)($data['id'] ?? 0);
+        $estado = $data['estado'] ?? ''; // 'aprobado' o 'rechazado'
+
+        if (!$id || !in_array($estado, ['aprobado', 'rechazado'])) {
+            $this->json(['success' => false, 'message' => 'Datos inválidos.']);
+        }
+
+        $ventaModel = new VentaModel();
+        if ($ventaModel->validar($id, $estado, $_SESSION['id_usuario'])) {
+            
+            // AUDITORIA
+            $v = $ventaModel->getById($id);
+            $audit = new AuditoriaModel();
+            require_once __DIR__ . '/../models/AuditoriaModel.php';
+            $audit = new AuditoriaModel();
+            $audit->registrar($_SESSION['id_usuario'], 'VALIDAR_PUNTOS_CONDUCTOR', "El administrador procesó como $estado la asignación de {$v['puntos']} puntos (ID: $id)", 'ADMINISTRACION');
+
+            $this->json(['success' => true, 'message' => 'Movimiento actualizado correctamente.']);
+        } else {
+            $this->json(['success' => false, 'message' => 'Error al actualizar el movimiento.']);
+        }
     }
 
     // ── helpers ──────────────────────────────────────────────────
@@ -188,13 +219,25 @@ class PanelController {
         $stmt_canjes->execute();
         $canjes = $stmt_canjes->fetchAll(PDO::FETCH_ASSOC);
 
+        // Pendientes de ventas (Puntos de conductores)
+        $stmt_ventas = $db->prepare("SELECT v.id, v.puntos, c.nombre as cliente_nombre, u.nombre as conductor_nombre, v.fecha FROM ventas v JOIN clientes c ON v.cliente_id = c.id JOIN usuarios u ON v.conductor_id = u.id WHERE v.estado = 'pendiente' ORDER BY v.id DESC");
+        $stmt_ventas->execute();
+        $ventas = $stmt_ventas->fetchAll(PDO::FETCH_ASSOC);
+
         if (ob_get_length()) ob_clean();
         echo json_encode([
             'success'  => true,
             'recargas' => $recargas,
             'canjes'   => $canjes,
-            'total'    => count($recargas) // Solo recargas para no confundir
+            'ventas'   => $ventas,
+            'total'    => count($recargas) + count($ventas) + count($canjes)
         ]);
+        exit;
+    }
+
+    private function json(array $data): void {
+        header('Content-Type: application/json');
+        echo json_encode($data);
         exit;
     }
 

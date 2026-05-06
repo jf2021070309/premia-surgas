@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../models/ClienteModel.php';
+require_once __DIR__ . '/../models/UsuarioModel.php';
 require_once __DIR__ . '/../models/AuditoriaModel.php';
 require_once __DIR__ . '/../config/config.php';
 
@@ -469,6 +470,71 @@ class ClienteController
             echo json_encode(['success' => true, 'message' => 'Perfil actualizado correctamente.']);
         } else {
             echo json_encode(['success' => false, 'message' => 'No se pudo actualizar el perfil.']);
+        }
+        exit;
+    }
+
+    public function promoverAfiliado(): void
+    {
+        $this->requireAdmin();
+        header('Content-Type: application/json');
+
+        $data = json_decode(file_get_contents('php://input'), true);
+        $id = (int)($data['id'] ?? 0);
+        
+        if (!$id) {
+            echo json_encode(['success' => false, 'message' => 'ID de cliente no válido.']);
+            exit;
+        }
+
+        $model = new ClienteModel();
+        $cliente = $model->findById($id);
+
+        if (!$cliente) {
+            echo json_encode(['success' => false, 'message' => 'Cliente no encontrado.']);
+            exit;
+        }
+
+        if ($cliente['tipo_cliente'] === 'Normal') {
+            echo json_encode(['success' => false, 'message' => 'Solo se pueden promover negocios o restaurantes.']);
+            exit;
+        }
+
+        $usuarioModel = new UsuarioModel();
+        
+        // El usuario será su RUC (o DNI si no tiene RUC)
+        $username = $cliente['ruc'] ?: $cliente['dni'];
+        
+        if (!$username) {
+            echo json_encode(['success' => false, 'message' => 'El cliente no tiene RUC ni DNI registrado para crear el usuario.']);
+            exit;
+        }
+
+        // Verificar si ya existe un usuario con ese nombre
+        $db = Database::getConnection();
+        $stmt = $db->prepare("SELECT id FROM usuarios WHERE usuario = ?");
+        $stmt->execute([$username]);
+        if ($stmt->fetch()) {
+            echo json_encode(['success' => false, 'message' => 'Ya existe un usuario con las credenciales de este cliente (RUC/DNI: ' . $username . ').']);
+            exit;
+        }
+
+        $nuevoUsuario = [
+            'nombre' => $cliente['razon_social'] ?: $cliente['nombre'],
+            'usuario' => $username,
+            'password' => $username, // Password inicial es su RUC/DNI
+            'rol' => 'afiliado',
+            'estado' => 1,
+            'departamento' => $cliente['departamento'],
+            'direccion' => $cliente['direccion'],
+            'celular' => $cliente['celular']
+        ];
+
+        if ($usuarioModel->create($nuevoUsuario)) {
+            $this->audit->registrar($_SESSION['id_usuario'], 'PROMOVER_AFILIADO', "Promovió al cliente {$cliente['nombre']} como Afiliado Comercial", 'CLIENTES');
+            echo json_encode(['success' => true, 'message' => '¡Cliente promovido! Ahora puede entrar con su RUC/DNI como usuario y contraseña.']);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'No se pudo crear el usuario afiliado.']);
         }
         exit;
     }

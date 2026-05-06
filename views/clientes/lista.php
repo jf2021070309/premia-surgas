@@ -151,6 +151,11 @@
                                                 <button @click="abrirEditar(c)" class="btn-action indigo" title="Editar">
                                                     <i class='bx bx-edit'></i>
                                                 </button>
+                                                <!-- Promover a Afiliado (Naranja) -->
+                                                <button v-if="c.tipo_cliente !== 'Normal'" @click="convertirAfiliado(c)"
+                                                    class="btn-action orange" title="Promover a Afiliado">
+                                                    <i class='bx bx-award'></i>
+                                                </button>
                                                 <!-- Desactivar (Rojo) -->
                                                 <button v-if="c.estado == 1" @click="toggleEstado(c.id, 0)"
                                                     class="btn-action red" title="Desactivar">

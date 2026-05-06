@@ -1472,7 +1472,193 @@ if (empty($hpw)) {
         .admin-layout .top-nav .page-title {
             color: #ffffff !important;
         }
+
+        /* --- CAROUSEL ANUNCIOS PREMIUM --- */
+        .carousel-container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            position: relative;
+            overflow: hidden;
+            border-radius: 32px;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+            width: 100%;
+        }
+
+        .carousel-slide {
+            flex: 0 0 100%;
+            width: 100%;
+            padding: 0 5px;
+        }
+
+        .ad-card-solid {
+            width: 100%;
+            aspect-ratio: 2.3 / 1;
+            border-radius: 28px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 2.5rem;
+            transition: background-color 0.3s ease;
+            border: 2px solid #E5E7EB;
+        }
+
+        .ad-card-solid-left {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            z-index: 2;
+            text-align: left;
+        }
+
+        .ad-card-solid-right {
+            width: 40%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 100%;
+            z-index: 2;
+        }
+
+        .ad-title-solid {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            letter-spacing: -1px;
+            color: #1e293b;
+        }
+
+        .ad-location-solid {
+            font-size: 0.9rem;
+            color: #4b5563;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+        }
+
+        .btn-ad-solid {
+            background: #1e293b;
+            color: #fff;
+            padding: 0.8rem 1.5rem;
+            border-radius: 12px;
+            text-decoration: none !important;
+            font-weight: 800;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border: none;
+        }
+
+        .btn-ad-solid:hover {
+            transform: translateY(-3px);
+            background: #0f172a;
+            color: #fff;
+        }
+
+        .ad-badge-solid {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border: 1px solid #E5E7EB;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #1e293b;
+            margin-bottom: 1rem;
+        }
+
+        .ad-badge-solid i {
+            color: #fbbf24;
+        }
+
+        .ad-logo-wrapper {
+            width: 130px;
+            height: 130px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            border: 4px solid #fff;
+            background: #fff;
+        }
+
+        .ad-logo-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .carousel-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 1.2rem;
+        }
+
+        .indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: 0.4s;
+        }
+
+        .indicator.active {
+            width: 32px;
+            border-radius: 10px;
+            background: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .ad-card-solid { 
+                aspect-ratio: auto; 
+                flex-direction: column; 
+                text-align: center; 
+                padding: 2rem 1.5rem; 
+                gap: 1.5rem; 
+            }
+            .ad-card-solid-left { 
+                align-items: center; 
+            }
+            .ad-card-solid-right { 
+                width: 100%; 
+                align-items: center; 
+                flex-direction: column-reverse; 
+                gap: 1rem; 
+            }
+            .ad-logo-wrapper { 
+                width: 100px; 
+                height: 100px; 
+                margin: 0 auto; 
+            }
+            .ad-badge-solid { 
+                margin-bottom: 0; 
+            }
+        }
     </style>
+
 </head>
 
 <body>
@@ -1486,6 +1672,42 @@ if (empty($hpw)) {
             $pageSubtitle = 'Membresía Digital';
             include __DIR__ . '/../partials/header_admin.php';
             ?>
+
+            <!-- Carousel of Announcements (OCULTO TEMPORALMENTE) -->
+            <?php if (false && !empty($anuncios)): ?>
+                <div class="carousel-container">
+                    <div class="carousel-track" id="carouselTrack">
+                        <?php foreach ($anuncios as $anuncio): ?>
+                            <div class="carousel-slide">
+                                <div class="ad-card-solid" style="background-color: <?= htmlspecialchars($anuncio['color_fondo'] ?? '#A7D8F5') ?>;">
+                                    <div class="ad-card-solid-left">
+                                        <h3 class="ad-title-solid"><?= htmlspecialchars($anuncio['nombre_negocio']) ?></h3>
+                                        <p class="ad-location-solid"><i class='bx bx-map'></i> <?= htmlspecialchars($anuncio['ubicacion']) ?></p>
+                                        <div class="ad-actions-solid">
+                                            <?php if (!empty($anuncio['carta_pdf'])): ?>
+                                                <a href="<?= BASE_URL . $anuncio['carta_pdf'] ?>" target="_blank" class="btn-ad-solid">
+                                                    <i class='bx bxs-file-pdf'></i> Ver Carta de Productos
+                                                </a>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                    <div class="ad-card-solid-right">
+                                        <div class="ad-badge-solid">
+                                            <i class='bx bxs-star'></i> Socio Afiliado
+                                        </div>
+                                        <div class="ad-logo-wrapper">
+                                            <img src="<?= BASE_URL . ($anuncio['imagen_negocio'] ?: 'assets/img/default-negocio.jpg') ?>" alt="Logo">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <!-- Indicators -->
+                    <div class="carousel-indicators" id="carouselIndicators"></div>
+                </div>
+            <?php endif; ?>
+
 
             <?php if ($isDefaultPassword): ?>
                 <!-- ALERT BANNER: DEFAULT PASSWORD -->
@@ -1510,6 +1732,7 @@ if (empty($hpw)) {
                 <div id="profile-main-view">
 
                 <!-- BANNER INCENTIVOS (Top de Mi Perfil) - Titanium & Midnight Premium -->
+                <?php if (false): /* OCULTO TEMPORALMENTE */ ?>
                 <div style="max-width: 1000px; margin: 3.5rem auto 0; padding: 0 1.5rem;">
                     <div class="promo-banner-metas" onclick="window.location.hash='incentivos'"
                         style="background: #020617; border-radius: 18px; padding: 2rem 3rem; color: #fff; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border: 1.5px solid rgba(255,255,255,0.05); cursor: pointer; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); position: relative; overflow: hidden;">
@@ -1582,6 +1805,7 @@ if (empty($hpw)) {
                         }
                     </style>
                 </div>
+                <?php endif; ?>
 
                 <!-- Header Section: Card + Info -->
                 <div class="profile-header-layout">
@@ -1856,10 +2080,26 @@ if (empty($hpw)) {
                                                 </div>
                                             </td>
                                             <td class="col-pts">
-                                                <span style="color: <?= $esVale ? '#94a3b8' : '#22c55e' ?>">
+                                                <span style="color: <?= $esVale ? '#94a3b8' : (isset($v['estado']) && $v['estado'] === 'pendiente' ? '#f59e0b' : (isset($v['estado']) && $v['estado'] === 'rechazado' ? '#ef4444' : '#22c55e')) ?>; font-weight: 800;">
                                                     <?= $esVale ? '' : '+' ?><?= $v['puntos'] ?>
                                                 </span>
                                                 <span style="font-size: 0.65rem; opacity: 0.5; font-weight: 700;">PTS</span>
+                                                
+                                                <?php if (isset($v['estado'])): ?>
+                                                    <?php if ($v['estado'] === 'pendiente'): ?>
+                                                        <div style="font-size: 0.6rem; color: #d97706; background: #fef3c7; padding: 2px 6px; border-radius: 4px; display: inline-block; margin-top: 4px; font-weight: 700;">
+                                                            PENDIENTE
+                                                        </div>
+                                                    <?php elseif ($v['estado'] === 'rechazado'): ?>
+                                                        <div style="font-size: 0.6rem; color: #dc2626; background: #fee2e2; padding: 2px 6px; border-radius: 4px; display: inline-block; margin-top: 4px; font-weight: 700;">
+                                                            RECHAZADO
+                                                        </div>
+                                                    <?php else: ?>
+                                                        <div style="font-size: 0.6rem; color: #16a34a; background: #dcfce7; padding: 2px 6px; border-radius: 4px; display: inline-block; margin-top: 4px; font-weight: 700;">
+                                                            APROBADO
+                                                        </div>
+                                                    <?php endif; ?>
+                                                <?php endif; ?>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -2010,7 +2250,7 @@ if (empty($hpw)) {
 
     </div>
 
-    <!-- Modal Editar Perfil (Estilo Aliado Premium) -->
+    <!-- Modal Editar Perfil (Estilo Afiliado Premium) -->
     <div id="modalEditProfile" class="ticket-overlay" style="display: none;">
         <div class="ticket-container" style="max-width: 600px; flex-direction: column; padding: 0; border-radius: 32px; overflow: hidden; border: none; background: #fff; box-shadow: 0 50px 100px rgba(0,0,0,0.4);">
             <!-- Header Modal -->
@@ -2550,7 +2790,53 @@ if (empty($hpw)) {
                 pointsElement.textContent = Math.floor(currentPoints).toLocaleString();
             }
         }, interval);
+
+        // --- Carousel Logic ---
+        const track = document.getElementById('carouselTrack');
+        if (track && track.children.length > 0) {
+            const slides = Array.from(track.children);
+            const indicatorsContainer = document.getElementById('carouselIndicators');
+            let currentIndex = 0;
+            const slideCount = slides.length;
+
+            // Create indicators
+            slides.forEach((_, i) => {
+                const indicator = document.createElement('div');
+                indicator.classList.add('indicator');
+                if (i === 0) indicator.classList.add('active');
+                indicator.onclick = () => goToSlide(i);
+                indicatorsContainer.appendChild(indicator);
+            });
+
+            const indicators = Array.from(indicatorsContainer.children);
+
+            function updateCarousel() {
+                track.style.transform = `translateX(-${currentIndex * 100}%)`;
+                indicators.forEach((ind, i) => {
+                    ind.classList.toggle('active', i === currentIndex);
+                });
+            }
+
+            function nextSlide() {
+                currentIndex = (currentIndex + 1) % slideCount;
+                updateCarousel();
+            }
+
+            function goToSlide(index) {
+                currentIndex = index;
+                updateCarousel();
+                resetTimer();
+            }
+
+            let carouselTimer = setInterval(nextSlide, 3000);
+
+            function resetTimer() {
+                clearInterval(carouselTimer);
+                carouselTimer = setInterval(nextSlide, 3000);
+            }
+        }
     </script>
+
     <script src="<?= BASE_URL ?>assets/js/session_check.js"></script>
 </body>
 

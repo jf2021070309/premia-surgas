@@ -18,11 +18,13 @@ createApp({
             isDragging: false,
             previewUrl: null,
             submitting: false,
+            cargandoImagen: false,
             form: {
                 id: '',
                 nombre: '',
                 descripcion: '',
                 puntos: 0,
+                precio_base: 0,
                 stock: 0,
                 estado: 1,
                 imagen_actual: ''
@@ -47,8 +49,9 @@ createApp({
             this.editando = false;
             this.previewUrl = null;
             this.submitting = false;
+            this.cargandoImagen = false;
             this.form = {
-                id: '', nombre: '', descripcion: '', puntos: 0, stock: 0,
+                id: '', nombre: '', descripcion: '', puntos: 0, precio_base: 0, stock: 0,
                 estado: 1, imagen_actual: ''
             };
             this.showModal = true;
@@ -57,6 +60,7 @@ createApp({
         editarProducto(p) {
             this.editando = true;
             this.submitting = false;
+            this.cargandoImagen = false;
             this.previewUrl = p.imagen
                 ? (typeof BASE_URL !== 'undefined' ? BASE_URL : '/') + 'assets/uploads/productos/' + p.imagen
                 : null;
@@ -65,6 +69,7 @@ createApp({
                 nombre: p.nombre,
                 descripcion: p.descripcion || '',
                 puntos: p.puntos,
+                precio_base: p.precio_base || 0,
                 stock: p.stock,
                 estado: p.estado,
                 imagen_actual: p.imagen || ''
@@ -76,6 +81,7 @@ createApp({
             this.showModal = false;
             this.previewUrl = null;
             this.isDragging = false;
+            this.cargandoImagen = false;
             document.body.style.overflow = '';
         },
         clearImage() {
@@ -97,8 +103,14 @@ createApp({
             }
         },
         createPreview(file) {
+            this.cargandoImagen = true;
             const reader = new FileReader();
-            reader.onload = (e) => { this.previewUrl = e.target.result; };
+            reader.onload = (e) => {
+                setTimeout(() => {
+                    this.previewUrl = e.target.result;
+                    this.cargandoImagen = false;
+                }, 800);
+            };
             reader.readAsDataURL(file);
         },
         onImgError(e) {

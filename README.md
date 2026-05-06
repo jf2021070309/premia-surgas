@@ -23,7 +23,7 @@
   - [Sistema de Recargas](#7--sistema-de-recargas)
   - [Gestión de Productos/Premios](#8--gestión-de-productospremios)
   - [Gestión de Conductores](#9--gestión-de-conductores)
-  - [Gestión de Aliados Comerciales](#10--gestión-de-aliados-comerciales)
+  - [Gestión de Afiliados Comerciales](#10--gestión-de-afiliados-comerciales)
   - [Tipos de Operaciones](#11--tipos-de-operaciones)
   - [Reportes y Auditoría](#12--reportes-y-auditoría)
   - [Configuración General](#13--configuración-general)
@@ -57,7 +57,7 @@ View (PHP + Vue.js 3 + Chart.js)
 |-----|-------------|--------|
 | **Admin** | Acceso total: gestión de usuarios, premios, recargas, canjes, reportes, configuración | Panel completo |
 | **Conductor** | Registra clientes, escanea QR, asigna puntos en campo | Panel limitado + Scan |
-| **Aliado** | Punto de venta asociado. Registra clientes y asigna puntos | Panel limitado + Scan |
+| **Afiliado** | Punto de venta asociado. Registra clientes y asigna puntos | Panel limitado + Scan |
 | **Cliente** | Consulta puntos, canjea premios, recarga puntos, ve historial | Perfil + Tienda |
 
 ---
@@ -66,7 +66,7 @@ View (PHP + Vue.js 3 + Chart.js)
 
 ### 1. 🔐 Autenticación y Seguridad
 
-- **Login unificado** — Un solo formulario para admin, conductor, aliado y cliente
+- **Login unificado** — Un solo formulario para admin, conductor, afiliado y cliente
 - **Doble tabla de autenticación** — Busca primero en `usuarios` (trabajadores), luego en `clientes` (DNI + contraseña)
 - **Sesión única forzada** — Solo una sesión activa por usuario (al iniciar sesión en otro dispositivo, la anterior se invalida automáticamente)
 - **Detección de sesión expirada** — En peticiones AJAX devuelve `401 + JSON`, en navegación redirige al login
@@ -84,7 +84,7 @@ View (PHP + Vue.js 3 + Chart.js)
 - **Lista de solicitudes de recarga pendientes** con acceso directo a gestión
 - **Lista de últimos canjes** con modal de detalle (cliente, premio, puntos usados, monto)
 
-#### Vista Conductor / Aliado
+#### Vista Conductor / Afiliado
 - **Banner de bienvenida personalizado** con nombre del usuario
 - **3 KPIs animados** con efecto counter: Puntos entregados hoy, Total histórico, Clientes atendidos
 - **Historial de actividad reciente** — Últimas 5 ventas realizadas con nombre del cliente, fecha en español y puntos asignados
@@ -92,7 +92,7 @@ View (PHP + Vue.js 3 + Chart.js)
 
 ### 3. 👤 Gestión de Clientes
 
-- **Registro rápido** desde el panel del conductor/aliado (`/clientes/nuevo`)
+- **Registro rápido** desde el panel del conductor/afiliado (`/clientes/nuevo`)
 - **3 tipos de cliente**: Normal (persona natural con DNI), Restaurante (empresa con RUC), Punto de Venta (empresa con RUC)
 - **Consulta de DNI automática** — Integración con API `apis.net.pe` para autocompletar nombre al ingresar 8 dígitos
 - **Consulta de RUC automática** — Integración con API `apis.net.pe` para obtener razón social y dirección
@@ -106,7 +106,7 @@ View (PHP + Vue.js 3 + Chart.js)
 
 ### 4. ⭐ Sistema de Puntos
 
-- **Asignación manual por operaciones** — El conductor/aliado escanea o busca al cliente, selecciona operaciones (gas normal, gas premium, accesorio) y cantidad
+- **Asignación manual por operaciones** — El conductor/afiliado escanea o busca al cliente, selecciona operaciones (gas normal, gas premium, accesorio) y cantidad
 - **Búsqueda flexible** — Acepta código QR (`CLI-000001`), DNI (8 dígitos), RUC (11 dígitos) o ID numérico
 - **Tipos de operación configurables**: Recarga gas Normal (6 pts), Recarga gas Premium (10 pts), Accesorio/Otros (2 pts)
 - **Registro detallado por ítem** — Cada venta guarda un desglose en `venta_detalles` (nombre, cantidad, puntos unitarios, subtotal)
@@ -185,12 +185,12 @@ View (PHP + Vue.js 3 + Chart.js)
 - **Tracking de cambios** — Cada edición registra qué campos se modificaron (antes vs. después)
 - **Restricción de eliminación** — No se puede eliminar un conductor con ventas vinculadas
 
-### 10. 🤝 Gestión de Aliados Comerciales
+### 10. 🤝 Gestión de Afiliados Comerciales
 
-- **CRUD completo** (`/aliados`) — Misma estructura que conductores pero con rol `aliado`
-- **Los aliados pueden**: Registrar clientes nuevos, asignar puntos, ver su historial de asignaciones
+- **CRUD completo** (`/afiliados`) — Misma estructura que conductores pero con rol `afiliado`
+- **Los afiliados pueden**: Registrar clientes nuevos, asignar puntos, ver su historial de asignaciones
 - **Historial paginado** con filtros de búsqueda y fechas
-- **Se crean como usuarios con rol `aliado`** en la tabla `usuarios`
+- **Se crean como usuarios con rol `afiliado`** en la tabla `usuarios`
 
 ### 11. ⚙️ Tipos de Operaciones
 
@@ -284,7 +284,7 @@ premia-surgas/
 │   ├── TiendaController.php        # Catálogo, canjes y recargas
 │   ├── ProductoController.php      # CRUD premios
 │   ├── ConductorController.php     # CRUD conductores
-│   ├── AliadoController.php        # CRUD aliados comerciales
+│   ├── AfiliadoController.php        # CRUD afiliados comerciales
 │   ├── OperacionController.php     # CRUD tipos de operaciones
 │   ├── IncentivoController.php     # Gestión de incentivos y metas
 │   ├── CanjeAdminController.php    # Gestión de entregas de canjes
@@ -315,7 +315,7 @@ premia-surgas/
 │   ├── clientes/                   # Vistas de gestión de clientes
 │   ├── productos/                  # Vistas de gestión de premios
 │   ├── conductores/                # Vistas de gestión de conductores
-│   ├── aliados/                    # Vistas de gestión de aliados
+│   ├── afiliados/                    # Vistas de gestión de afiliados
 │   ├── incentivos/                 # Vistas del sistema de incentivos
 │   ├── operaciones/                # Vistas de tipos de operaciones
 │   ├── ajustes/                    # Vistas de configuración
@@ -358,7 +358,7 @@ premia-surgas/
 ### Tablas Principales
 | Tabla | Descripción |
 |-------|-------------|
-| `usuarios` | Administradores, conductores y aliados |
+| `usuarios` | Administradores, conductores y afiliados |
 | `clientes` | Clientes del programa de fidelización |
 | `premios` | Catálogo de premios disponibles |
 | `ventas` | Registro de asignaciones de puntos |

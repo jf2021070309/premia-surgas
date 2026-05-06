@@ -105,9 +105,9 @@ INSERT INTO `auditoria` (`id`, `id_usuario`, `accion`, `descripcion`, `metadata`
 	(64, 2, 'INICIO_SESION', 'Inicio de sesión exitoso (Trabajador)', NULL, 'SEGURIDAD', '::1', 'Escritorio — Chrome', '2026-04-17 13:48:36'),
 	(65, 2, 'CIERRE_SESION', 'El usuario cerró su sesión', NULL, 'SEGURIDAD', '::1', 'Escritorio — Chrome', '2026-04-17 13:56:53'),
 	(66, 1, 'INICIO_SESION', 'Inicio de sesión exitoso (Trabajador)', NULL, 'SEGURIDAD', '::1', 'Escritorio — Chrome', '2026-04-17 13:56:58'),
-	(67, 1, 'NUEVO_ALIADO', 'Registró al aliado: RESTAURANTE CHITE', NULL, 'ALIADOS', '::1', 'Escritorio — Chrome', '2026-04-17 14:24:49'),
-	(68, 1, 'ACTUALIZAR_ALIADO', 'Actualizó datos del aliado: RESTAURANTE CHITE 2 (1 campos modificados)', '{"nombre":{"ant":"RESTAURANTE CHITE","des":"RESTAURANTE CHITE 2"}}', 'ALIADOS', '::1', 'Escritorio — Chrome', '2026-04-17 14:25:49'),
-	(69, 1, 'ACTUALIZAR_ALIADO', 'Actualizó datos del aliado: RESTAURANTE CHITE 2', NULL, 'ALIADOS', '::1', 'Escritorio — Chrome', '2026-04-17 14:25:59'),
+	(67, 1, 'NUEVO_AFILIADO', 'Registró al afiliado: RESTAURANTE CHITE', NULL, 'AFILIADOS', '::1', 'Escritorio — Chrome', '2026-04-17 14:24:49'),
+	(68, 1, 'ACTUALIZAR_AFILIADO', 'Actualizó datos del afiliado: RESTAURANTE CHITE 2 (1 campos modificados)', '{"nombre":{"ant":"RESTAURANTE CHITE","des":"RESTAURANTE CHITE 2"}}', 'AFILIADOS', '::1', 'Escritorio — Chrome', '2026-04-17 14:25:49'),
+	(69, 1, 'ACTUALIZAR_AFILIADO', 'Actualizó datos del afiliado: RESTAURANTE CHITE 2', NULL, 'AFILIADOS', '::1', 'Escritorio — Chrome', '2026-04-17 14:25:59'),
 	(70, 1, 'CIERRE_SESION', 'El usuario cerró su sesión', NULL, 'SEGURIDAD', '::1', 'Escritorio — Chrome', '2026-04-17 14:27:01'),
 	(71, 5, 'INICIO_SESION', 'Inicio de sesión exitoso (Trabajador)', NULL, 'SEGURIDAD', '::1', 'Escritorio — Chrome', '2026-04-17 14:27:07'),
 	(72, 5, 'REGISTRO_CLIENTE', 'Nuevo cliente: Ludy Marita Padilla Vasquez (CLI-000002)', NULL, 'CLIENTES', '::1', 'Escritorio — Chrome', '2026-04-17 14:28:05'),
@@ -140,6 +140,21 @@ INSERT INTO `auditoria` (`id`, `id_usuario`, `accion`, `descripcion`, `metadata`
 	(99, 1, 'SOLICITUD_CANJE', 'Cliente solicitó canje TOTAL de: Tazas (100 pts)', NULL, 'FIDELIZACION', '::1', 'Escritorio — Chrome', '2026-04-19 17:45:13'),
 	(100, 1, 'CARGA_PUNTOS', 'Cargó 1100 puntos a Jaime Elias Flores Quispe (• Recarga gas Premium x10 (+100 pts)\n• Recarga gas Premium x10 (+100 pts)\n• Recarga gas Premium x10 (+100 pts)\n• Recarga gas Premium x10 (+100 pts)\n• Recarga gas Premium x10 (+100 pts)\n• Recarga gas Premium x10 (+100 pts)\n• Recarga gas Premium x10 (+100 pts)\n• Recarga gas Premium x10 (+100 pts)\n• Recarga gas Premium x10 (+100 pts)\n• Recarga gas Premium x10 (+100 pts)\n• Recarga gas Premium x10 (+100 pts)\n──────────\nTOTAL: 1100 pts)', NULL, 'RECARGAS', '::1', 'Escritorio — Chrome', '2026-04-19 18:22:48'),
 	(101, 1, 'SOLICITUD_CANJE', 'Cliente solicitó canje TOTAL de: Set de utensilios de cocina (800 pts)', NULL, 'FIDELIZACION', '::1', 'Escritorio — Chrome', '2026-04-19 18:23:00');
+
+-- Volcando estructura para tabla surgas.afiliado_anuncios
+CREATE TABLE IF NOT EXISTS `afiliado_anuncios` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `usuario_id` int(11) NOT NULL,
+  `nombre_negocio` varchar(150) NOT NULL,
+  `imagen_negocio` varchar(255) DEFAULT NULL,
+  `carta_pdf` varchar(255) DEFAULT NULL,
+  `ubicacion` text DEFAULT NULL,
+  `estado` tinyint(1) DEFAULT 1,
+  `fecha_creacion` timestamp DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `usuario_id` (`usuario_id`),
+  CONSTRAINT `fk_anuncio_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando estructura para tabla surgas.canjes
 CREATE TABLE IF NOT EXISTS `canjes` (
@@ -229,6 +244,7 @@ CREATE TABLE IF NOT EXISTS `premios` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) DEFAULT NULL,
   `descripcion` text DEFAULT NULL,
+  `precio_base` DECIMAL(10,2) DEFAULT 0.00,
   `puntos` int(11) DEFAULT NULL,
   `stock` int(11) DEFAULT NULL,
   `imagen` varchar(255) DEFAULT NULL,
@@ -343,7 +359,7 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `nombre` varchar(100) DEFAULT NULL,
   `usuario` varchar(50) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
-  `rol` enum('admin','conductor','aliado') NOT NULL,
+  `rol` enum('admin','conductor','afiliado') NOT NULL,
   `departamento` enum('Tacna','Moquegua','Arequipa','Ilo') DEFAULT NULL,
   `estado` tinyint(4) DEFAULT 1,
   `fecha_creacion` timestamp NULL DEFAULT current_timestamp(),
@@ -358,7 +374,7 @@ INSERT INTO `usuarios` (`id`, `nombre`, `usuario`, `password`, `rol`, `departame
 	(2, 'Oscar Flores', 'conductor1', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'conductor', 'Tacna', 1, '2026-03-20 13:15:09', 'uh0buig422or34fhnt6o232mca'),
 	(3, 'Jaime Flores ', 'Jaime', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'conductor', 'Tacna', 1, '2026-04-06 16:11:08', 'nuontuhhc2mmoqcal7544k27du'),
 	(4, 'Elvis Leyva Sardon', 'Elvis', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'conductor', 'Tacna', 1, '2026-04-06 17:17:54', NULL),
-	(5, 'RESTAURANTE CHITE 2', 'chite', '5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5', 'aliado', 'Tacna', 1, '2026-04-17 14:24:49', 'hcd3e4r6u0s10p6tj62bc1hgln');
+	(5, 'RESTAURANTE CHITE 2', 'chite', '5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5', 'afiliado', 'Tacna', 1, '2026-04-17 14:24:49', 'hcd3e4r6u0s10p6tj62bc1hgln');
 
 -- Volcando estructura para tabla surgas.venta_detalles
 CREATE TABLE IF NOT EXISTS `venta_detalles` (
@@ -428,6 +444,7 @@ CREATE TABLE IF NOT EXISTS `ventas` (
   `monto` decimal(10,2) DEFAULT NULL,
   `puntos` int(11) DEFAULT NULL,
   `detalle` TEXT DEFAULT NULL,
+  `estado` enum('pendiente','aprobado','rechazado') DEFAULT 'pendiente',
   `fecha` timestamp NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
   KEY `cliente_id` (`cliente_id`),
@@ -437,31 +454,6 @@ CREATE TABLE IF NOT EXISTS `ventas` (
 ) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla surgas.ventas: ~23 rows (aproximadamente)
-INSERT INTO `ventas` (`id`, `cliente_id`, `conductor_id`, `monto`, `puntos`, `detalle`, `fecha`) VALUES
-	(2, 1, 1, 0.00, 1000, 'PRUEBA HACK 1000', '2026-03-22 15:51:32'),
-	(3, 1, 1, 0.00, 1500, 'PRUEBA HACK 1000', '2026-03-22 15:52:06'),
-	(4, 1, 1, 0.00, 30000, 'PRUEBA HACK 1000', '2026-03-22 15:53:01'),
-	(5, 1, 1, 0.00, 65, 'Recarga gas Premium x4 (+40 pts), Recarga gas Normal x5 (+25 pts)', '2026-03-24 18:57:20'),
-	(6, 1, 1, 0.00, 114, 'Recarga gas Premium x8 (+80 pts), Recarga gas Normal x5 (+30 pts), Accesorio / Otros x2 (+4 pts)', '2026-04-07 14:43:32'),
-	(7, 1, 1, 0.00, 64, 'Recarga gas Premium x5 (+50 pts), Accesorio / Otros x7 (+14 pts)', '2026-04-07 14:47:46'),
-	(8, 1, 1, 0.00, 90, 'Recarga gas Premium x9 (+90 pts)', '2026-04-08 13:24:07'),
-	(9, 1, 3, 0.00, 300, 'Recarga gas Premium x10 (+100 pts), Recarga gas Premium x10 (+100 pts), Recarga gas Premium x10 (+100 pts)', '2026-04-08 14:26:02'),
-	(10, 1, 3, 0.00, 70, '• Recarga gas Premium x7 (+70 pts)', '2026-04-09 17:29:42'),
-	(11, 1, 3, 0.00, 64, '• Recarga gas Normal x8 (+48 pts)\n• Accesorio / Otros x8 (+16 pts)\n──────────\nTOTAL: 64 pts', '2026-04-09 17:30:36'),
-	(12, 1, 3, 0.00, 114, '• Recarga gas Normal x9 (+54 pts)\n• Recarga gas Premium x6 (+60 pts)\n──────────\nTOTAL: 114 pts', '2026-04-09 17:35:31'),
-	(13, 1, 3, 0.00, 2, '• Accesorio / Otros x1 (+2 pts)', '2026-04-09 17:40:40'),
-	(14, 1, 3, 0.00, 24, '• Accesorio / Otros x1 (+2 pts)\n• Recarga gas Normal x1 (+6 pts)\n• Recarga gas Normal x1 (+6 pts)\n• Recarga gas Premium x1 (+10 pts)\n──────────\nTOTAL: 24 pts', '2026-04-09 17:41:06'),
-	(15, 1, 3, 0.00, 18, '• Recarga gas Premium x1 (+10 pts)\n• Recarga gas Normal x1 (+6 pts)\n• Accesorio / Otros x1 (+2 pts)\n──────────\nTOTAL: 18 pts', '2026-04-09 17:42:28'),
-	(16, 1, 3, 0.00, 160, '• Recarga gas Normal x8 (+48 pts)\n• Recarga gas Premium x8 (+80 pts)\n• Accesorio / Otros x8 (+16 pts)\n• Accesorio / Otros x8 (+16 pts)\n──────────\nTOTAL: 160 pts', '2026-04-10 14:19:24'),
-	(17, 1, 3, 0.00, 10, '• Recarga gas Premium x1 (+10 pts)', '2026-04-10 14:20:04'),
-	(18, 2, 5, 0.00, 500, '• Recarga gas Premium x10 (+100 pts)\n• Recarga gas Premium x10 (+100 pts)\n• Recarga gas Premium x10 (+100 pts)\n• Recarga gas Premium x5 (+50 pts)\n• Recarga gas Premium x5 (+50 pts)\n• Accesorio / Otros x10 (+20 pts)\n• Accesorio / Otros x10 (+20 pts)\n• Acce', '2026-04-17 14:30:08'),
-	(19, 1, 5, 0.00, 250, '• Recarga gas Premium x7 (+70 pts)\n• Recarga gas Normal x10 (+60 pts)\n• Accesorio / Otros x10 (+20 pts)\n• Recarga gas Premium x10 (+100 pts)\n──────────\nTOTAL: 250 pts', '2026-04-17 14:58:31'),
-	(20, 2, 5, 0.00, 500, '• Recarga gas Premium x5 (+50 pts)\n• Recarga gas Normal x5 (+30 pts)\n• Accesorio / Otros x5 (+10 pts)\n• Recarga gas Premium x5 (+50 pts)\n• Recarga gas Normal x5 (+30 pts)\n• Accesorio / Otros x5 (+10 pts)\n• Recarga gas Normal x10 (+60 pts)\n• Accesorio / Ot', '2026-04-17 14:59:45'),
-	(21, 1, 1, 0.00, 600, '• Recarga gas Premium x10 (+100 pts)\n• Recarga gas Premium x10 (+100 pts)\n• Recarga gas Premium x10 (+100 pts)\n• Recarga gas Normal x10 (+60 pts)\n• Recarga gas Normal x10 (+60 pts)\n• Recarga gas Normal x10 (+60 pts)\n• Accesorio / Otros x10 (+20 pts)\n• Acc', '2026-04-19 12:36:02'),
-	(22, 1, 1, 0.00, 240, '• Recarga gas Normal x10 (+60 pts)\n• Recarga gas Normal x10 (+60 pts)\n• Recarga gas Normal x10 (+60 pts)\n• Recarga gas Normal x10 (+60 pts)\n──────────\nTOTAL: 240 pts', '2026-04-19 17:28:40'),
-	(23, 1, 1, 0.00, 80, '• Recarga gas Premium x8 (+80 pts)', '2026-04-19 17:39:42'),
-	(24, 1, 1, 0.00, 1100, '• Recarga gas Premium x10 (+100 pts)\n• Recarga gas Premium x10 (+100 pts)\n• Recarga gas Premium x10 (+100 pts)\n• Recarga gas Premium x10 (+100 pts)\n• Recarga gas Premium x10 (+100 pts)\n• Recarga gas Premium x10 (+100 pts)\n• Recarga gas Premium x10 (+100 p', '2026-04-19 18:22:48');
-
 -- ============================================================
 -- SISTEMA DE INCENTIVOS POR METAS DE COMPRA
 -- Tablas independientes del sistema de puntos

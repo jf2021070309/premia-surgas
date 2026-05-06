@@ -10,7 +10,7 @@ class UsuarioModel {
 
     public function findByCredentials(string $usuario, string $password): ?array {
         $stmt = $this->db->prepare(
-            "SELECT id, nombre, usuario, password, rol, estado, departamento
+            "SELECT id, nombre, usuario, password, rol, estado, departamento, direccion, celular
              FROM usuarios
              WHERE usuario = ? LIMIT 1"
         );
@@ -29,22 +29,22 @@ class UsuarioModel {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getAllAliados(): array {
-        $stmt = $this->db->prepare("SELECT id, nombre, usuario, rol, estado, departamento, fecha_creacion FROM usuarios WHERE rol = 'aliado' ORDER BY id DESC");
+    public function getAllAfiliados(): array {
+        $stmt = $this->db->prepare("SELECT id, nombre, usuario, rol, estado, departamento, direccion, celular, fecha_creacion FROM usuarios WHERE rol = 'afiliado' ORDER BY id DESC");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function findById(int $id): ?array {
-        $stmt = $this->db->prepare("SELECT id, nombre, usuario, rol, estado, departamento, fecha_creacion FROM usuarios WHERE id = ?");
+        $stmt = $this->db->prepare("SELECT id, nombre, usuario, rol, estado, departamento, direccion, celular, fecha_creacion FROM usuarios WHERE id = ?");
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
 
     public function create(array $data): bool {
         $stmt = $this->db->prepare(
-            "INSERT INTO usuarios (nombre, usuario, password, rol, estado, departamento)
-             VALUES (:nombre, :usuario, :password, :rol, :estado, :departamento)"
+            "INSERT INTO usuarios (nombre, usuario, password, rol, estado, departamento, direccion, celular)
+             VALUES (:nombre, :usuario, :password, :rol, :estado, :departamento, :direccion, :celular)"
         );
         return $stmt->execute([
             ':nombre'       => $data['nombre'],
@@ -53,17 +53,21 @@ class UsuarioModel {
             ':rol'          => $data['rol'] ?? 'conductor',
             ':estado'       => $data['estado'] ?? 1,
             ':departamento' => $data['departamento'] ?? null,
+            ':direccion'    => $data['direccion'] ?? null,
+            ':celular'      => $data['celular'] ?? null,
         ]);
     }
 
     public function update(int $id, array $data): bool {
-        $sql = "UPDATE usuarios SET nombre = :nombre, usuario = :usuario, estado = :estado, departamento = :departamento";
+        $sql = "UPDATE usuarios SET nombre = :nombre, usuario = :usuario, estado = :estado, departamento = :departamento, direccion = :direccion, celular = :celular";
         $params = [
             ':id'           => $id,
             ':nombre'       => $data['nombre'],
             ':usuario'      => $data['usuario'],
             ':estado'       => $data['estado'],
             ':departamento' => $data['departamento'] ?? null,
+            ':direccion'    => $data['direccion'] ?? null,
+            ':celular'      => $data['celular'] ?? null,
         ];
 
         if (!empty($data['password'])) {

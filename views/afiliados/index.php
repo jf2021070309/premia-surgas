@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Aliados Comercial — PremiaSurgas</title>
+    <title>Gestión de Afiliados Comercial — PremiaSurgas</title>
     <link rel="icon" type="image/png" href="<?= BASE_URL ?>assets/premios/icono.png">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -237,7 +237,7 @@
 
     <div class="admin-layout">
         <?php
-            $pageTitle    = 'Aliados Comerciales';
+            $pageTitle    = 'Afiliados Comerciales';
             $pageSubtitle = 'Establecimientos en convenio';
             include __DIR__ . '/../partials/header_admin.php';
         ?>
@@ -257,7 +257,7 @@
                 <div class="clientes-toolbar-search" style="flex: 1; justify-content: space-between;">
                     <div class="header-search-modern clientes-search-input" style="max-width: 450px;">
                         <i class='bx bx-search'></i>
-                        <input type="text" v-model="busqueda" placeholder="Buscar aliado o usuario...">
+                        <input type="text" v-model="busqueda" placeholder="Buscar afiliado o usuario...">
                     </div>
                     <button @click="openModal()" class="btn-primary-premium btn-nuevo-cliente">
                         <i class='bx bx-plus-circle'></i>
@@ -271,7 +271,7 @@
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th>Aliado Comercial</th>
+                                <th>Afiliado Comercial</th>
                                 <th class="col-hide-mobile">Departamento</th>
                                 <th class="col-hide-mobile">Usuario</th>
                                 <th class="text-center">Estado</th>
@@ -279,7 +279,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="a in aliadosFiltrados" :key="a.id">
+                            <tr v-for="a in afiliadosFiltrados" :key="a.id">
                                 <td>
                                     <div class="row-client">
                                         <div class="client-info">
@@ -308,7 +308,7 @@
                                 </td>
                                 <td>
                                     <div class="actions-flex" style="justify-content: center; gap: 8px;">
-                                        <button @click="openModal(a)" class="btn-action blue" title="Editar Aliado" style="width: 34px; height: 34px; border-radius: 10px;">
+                                        <button @click="openModal(a)" class="btn-action blue" title="Editar Afiliado" style="width: 34px; height: 34px; border-radius: 10px;">
                                             <i class='bx bx-edit-alt' style="font-size: 1.1rem;"></i>
                                         </button>
                                         <button :class="['btn-action', a.estado == 1 ? 'red' : 'green']" @click="confirmInactivar(a.id)" :title="a.estado == 1 ? 'Desactivar' : 'Reactivar'" style="width: 34px; height: 34px; border-radius: 10px;">
@@ -317,11 +317,11 @@
                                     </div>
                                 </td>
                             </tr>
-                            <tr v-if="aliadosFiltrados.length === 0">
+                            <tr v-if="afiliadosFiltrados.length === 0">
                                 <td colspan="5">
                                     <div class="empty-table" style="padding: 4rem 0;">
                                         <i class='bx bx-search-alt' style="font-size: 3rem; opacity: 0.2; margin-bottom: 1rem;"></i>
-                                        <p style="font-weight: 600; color: #94a3b8;">No se encontraron aliados comerciales que coincidan con la búsqueda.</p>
+                                        <p style="font-weight: 600; color: #94a3b8;">No se encontraron afiliados comerciales que coincidan con la búsqueda.</p>
                                     </div>
                                 </td>
                             </tr>
@@ -329,11 +329,11 @@
                     </table>
                 </div>
                 <div class="card-footer-premium">
-                    <div class="footer-info">Mostrando {{ aliadosFiltrados.length }} de {{ aliados.length }} aliados</div>
+                    <div class="footer-info">Mostrando {{ afiliadosFiltrados.length }} de {{ afiliados.length }} afiliados</div>
                 </div>
             </div>
 
-            <!-- MODAL NUEVO/EDITAR ALIADO -->
+            <!-- MODAL NUEVO/EDITAR AFILIADO -->
             <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
                 <div class="modal-card animate-slide-up">
                     <div class="modal-header">
@@ -341,7 +341,7 @@
                             <i class='bx bxs-store-alt'></i>
                         </div>
                         <div class="modal-header-text">
-                            <h3>{{ form.id ? 'Editar Aliado' : 'Nuevo Aliado Comercial' }}</h3>
+                            <h3>{{ form.id ? 'Editar Afiliado' : 'Nuevo Afiliado Comercial' }}</h3>
                             <span>{{ form.id ? 'Modifica los datos del establecimiento' : 'Registra un nuevo punto de venta asociado' }}</span>
                         </div>
                         <button class="modal-close" @click="closeModal">
@@ -349,10 +349,10 @@
                         </button>
                     </div>
 
-                    <form @submit.prevent="saveAliado" class="modal-body">
+                    <form @submit.prevent="saveAfiliado" class="modal-body">
                         <div class="form-grid">
                             <div class="form-group full-width">
-                                <label>Nombre del Establecimiento / Aliado</label>
+                                <label>Nombre del Establecimiento / Afiliado</label>
                                 <div class="input-with-icon">
                                     <i class='bx bx-building-house'></i>
                                     <input type="text" v-model="form.nombre" required placeholder="Ejem: Restaurante Chite">
@@ -404,7 +404,7 @@
                             <button type="button" class="btn-cancel" @click="closeModal">Cancelar</button>
                             <button type="submit" class="btn-save" :disabled="loading">
                                 <i v-if="loading" class='bx bx-loader-alt bx-spin'></i>
-                                {{ form.id ? 'Guardar Cambios' : 'Registrar Aliado' }}
+                                {{ form.id ? 'Guardar Cambios' : 'Registrar Afiliado' }}
                             </button>
                         </div>
                     </form>
@@ -417,10 +417,10 @@
 
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 <script>
-    var ALIADOS = <?= json_encode($aliados) ?>;
+    var AFILIADOS = <?= json_encode($afiliados) ?>;
     var BASE_URL = '<?= BASE_URL ?>';
 </script>
-<script src="<?= BASE_URL ?>views/aliados/index.js"></script>
+<script src="<?= BASE_URL ?>views/afiliados/index.js"></script>
 
 <?php if (isset($_SESSION['flash'])): ?>
 <script>

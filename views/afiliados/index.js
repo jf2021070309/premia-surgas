@@ -3,7 +3,7 @@ const { createApp } = Vue;
 createApp({
     data() {
         return {
-            aliados: typeof ALIADOS !== 'undefined' ? ALIADOS : [],
+            afiliados: typeof AFILIADOS !== 'undefined' ? AFILIADOS : [],
             busqueda: '',
             filtroEstado: 'todos',
             showModal: false,
@@ -20,8 +20,8 @@ createApp({
         };
     },
     computed: {
-        aliadosFiltrados() {
-            let list = this.aliados;
+        afiliadosFiltrados() {
+            let list = this.afiliados;
             if (this.filtroEstado !== 'todos') {
                 list = list.filter(a => a.estado == this.filtroEstado);
             }
@@ -36,10 +36,10 @@ createApp({
         }
     },
     methods: {
-        openModal(aliado = null) {
+        openModal(afiliado = null) {
             this.showPass = false;
-            if (aliado) {
-                this.form = { ...aliado, password: '' };
+            if (afiliado) {
+                this.form = { ...afiliado, password: '' };
             } else {
                 this.form = { id: null, nombre: '', usuario: '', password: '', departamento: '', estado: '1' };
             }
@@ -48,7 +48,7 @@ createApp({
         closeModal() {
             this.showModal = false;
         },
-        async saveAliado() {
+        async saveAfiliado() {
             this.loading = true;
             try {
                 const formData = new FormData();
@@ -57,7 +57,7 @@ createApp({
                 }
 
                 const action = this.form.id ? 'update' : 'create';
-                const response = await fetch(`${BASE_URL}aliados/${action}`, {
+                const response = await fetch(`${BASE_URL}afiliados/${action}`, {
                     method: 'POST',
                     body: formData
                 });
@@ -66,7 +66,7 @@ createApp({
                     Swal.fire({
                         icon: 'success',
                         title: '¡Éxito!',
-                        text: this.form.id ? 'Aliado actualizado correctamente' : 'Aliado registrado correctamente',
+                        text: this.form.id ? 'Afiliado actualizado correctamente' : 'Afiliado registrado correctamente',
                         timer: 2000,
                         showConfirmButton: false
                     }).then(() => {
@@ -83,8 +83,8 @@ createApp({
         },
         confirmInactivar(id) {
             Swal.fire({
-                title: '¿Eliminar aliado?',
-                text: "El aliado será borrado permanentemente y no podrá acceder al sistema.",
+                title: '¿Eliminar afiliado?',
+                text: "El afiliado será borrado permanentemente y no podrá acceder al sistema.",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#800000',
@@ -93,7 +93,7 @@ createApp({
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = (typeof BASE_URL !== 'undefined' ? BASE_URL : '/') + 'aliados/delete?id=' + id;
+                    window.location.href = (typeof BASE_URL !== 'undefined' ? BASE_URL : '/') + 'afiliados/delete?id=' + id;
                 }
             });
         }

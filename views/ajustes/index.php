@@ -102,6 +102,17 @@
         $pageSubtitle = 'Panel maestro de reglas, catálogo y equipo';
         include __DIR__ . '/../partials/header_admin.php';
         ?>
+        <style>
+            @keyframes spin { to { transform: rotate(360deg); } }
+            .loading-spinner {
+                width: 24px;
+                height: 24px;
+                border: 3px solid #f1f5f9;
+                border-top-color: #3b82f6;
+                border-radius: 50%;
+                animation: spin 0.8s linear infinite;
+            }
+        </style>
 
         <div class="container" style="max-width: 1200px; padding-top: 1rem;">
 
@@ -134,7 +145,8 @@
                         <thead>
                             <tr>
                                 <th class="ps-3 text-start">Premio</th>
-                                <th class="text-center">Puntos</th>
+                                <th class="text-center">Base (S/)</th>
+                                <th class="text-center">Ganancia (Pts)</th>
                                 <th class="text-center">Stock</th>
                                 <th class="text-center">Estado</th>
                                 <th class="text-center" style="width: 180px;">Acciones</th>
@@ -144,6 +156,7 @@
                             <?php foreach ($premios as $p): ?>
                                 <tr class="table-row">
                                     <td class="text-medium ps-3"><?= htmlspecialchars($p['nombre']) ?></td>
+                                    <td class="text-center"><span class="text-medium">S/ <?= number_format($p['precio_base'] ?? 0, 2) ?></span></td>
                                     <td class="text-center"><span class="text-pts-plus"><?= $p['puntos'] ?> pts</span></td>
                                     <td class="text-center"><?= $p['stock'] ?></td>
                                     <td class="text-center">
@@ -213,7 +226,7 @@
                                     <i class='bx bx-info-circle'></i>
                                 </div>
                                 <p>
-                                    <b>Guía de conversión:</b> Si ingresas <code class="code-highlight">0.001</code>, el sistema calculará <b>1000 puntos = S/ 1.00</b>.
+                                    <b>Guía de conversión:</b> Si ingresas <code class="code-highlight">0.1</code>, el sistema calculará <b>10 puntos = S/ 1.00</b> (1000 pts = S/ 100.00).
                                 </p>
                             </div>
 
@@ -480,11 +493,17 @@
                         </div>
                     </div>
 
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.4rem;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1.4rem;">
+                        <div>
+                            <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Base (S/)</label>
+                            <div style="position: relative; display: flex; align-items: center;">
+                                <i class='bx bx-money' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
+                                <input type="number" step="0.01" name="precio_base" id="premio_precio_base" required style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; outline: none;">
+                            </div>
+                        </div>
                         <div>
                             <label
-                                style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Inversión
-                                Puntos</label>
+                                style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Ganancia (Pts)</label>
                             <div style="position: relative; display: flex; align-items: center;">
                                 <i class='bx bx-star'
                                     style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
@@ -509,22 +528,17 @@
                         <label
                             style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Fotografía
                             del Premio</label>
-                        <input type="file" name="imagen_file" id="premio_file_input"
-                            style="position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;">
-                        <div onclick="document.getElementById('premio_file_input').click()"
-                            style="display: flex; align-items: center; gap: 1rem; border: 1.5px dashed #e2e8f0; border-radius: 14px; padding: 1rem; cursor: pointer; background: #fafbfc; transition: all 0.2s;">
-                            <div
-                                style="width: 42px; height: 42px; border-radius: 10px; background: #fff; border: 1.5px solid #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: #94a3b8; flex-shrink: 0;">
+                        <input type="file" name="imagen_file" id="premio_file_input" hidden accept="image/*" onchange="handleImagePreview(this)">
+                        <div onclick="document.getElementById('premio_file_input').click()" id="preview_container_premio"
+                            style="display: flex; align-items: center; gap: 1rem; border: 2.5px dashed #e2e8f0; border-radius: 16px; padding: 1.2rem; cursor: pointer; background: #fafbfc; transition: all 0.2s; min-height: 80px;">
+                            <div style="width: 48px; height: 48px; border-radius: 12px; background: #fff; border: 1.5px solid #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: #94a3b8; flex-shrink: 0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
                                 <i class='bx bx-image-add'></i>
                             </div>
                             <div style="flex: 1;">
-                                <span
-                                    style="display: block; font-size: 0.88rem; font-weight: 700; color: #1e293b;">Seleccionar
-                                    imagen</span>
-                                <span style="font-size: 0.72rem; color: #94a3b8; font-weight: 500;">PNG, JPG o
-                                    WEBP</span>
+                                <span style="display: block; font-size: 0.88rem; font-weight: 700; color: #1e293b;">Seleccionar imagen</span>
+                                <span style="font-size: 0.72rem; color: #94a3b8; font-weight: 500;">PNG, JPG o WEBP</span>
                             </div>
-                            <i class='bx bx-upload' style="color: #cbd5e1; font-size: 1.2rem;"></i>
+                            <i class='bx bx-upload' style="color: #cbd5e1; font-size: 1.4rem;"></i>
                         </div>
                     </div>
 
@@ -837,8 +851,52 @@
             document.getElementById('premio_nombre').value = p.nombre;
             document.getElementById('premio_descripcion').value = p.descripcion || '';
             document.getElementById('premio_puntos').value = p.puntos;
+            document.getElementById('premio_precio_base').value = p.precio_base || 0;
             document.getElementById('premio_stock').value = p.stock;
             document.getElementById('premio_estado').value = p.estado;
+            
+            // Reset preview
+            document.getElementById('preview_container_premio').innerHTML = `
+                <div style="width: 48px; height: 48px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+                    <i class='bx bx-image-add' style="font-size: 1.5rem; color: #94a3b8;"></i>
+                </div>
+                <div style="text-align: left;">
+                    <p style="margin: 0; font-size: 0.875rem; font-weight: 600; color: #1e293b;">Seleccionar imagen</p>
+                    <p style="margin: 0; font-size: 0.75rem; color: #64748b;">PNG, JPG o WEBP</p>
+                </div>
+                <i class='bx bx-upload' style="margin-left: auto; font-size: 1.25rem; color: #94a3b8;"></i>
+            `;
+        }
+
+        function handleImagePreview(input) {
+            const container = document.getElementById('preview_container_premio');
+            if (input.files && input.files[0]) {
+                // Show loading state
+                container.innerHTML = `
+                    <div class="loading-spinner"></div>
+                    <div style="text-align: left;">
+                        <p style="margin: 0; font-size: 0.875rem; font-weight: 700; color: #3b82f6;">Procesando...</p>
+                        <p style="margin: 0; font-size: 0.75rem; color: #64748b;">Optimizando archivo</p>
+                    </div>
+                `;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    setTimeout(() => {
+                        container.innerHTML = `
+                            <div style="width: 48px; height: 48px; border-radius: 12px; overflow: hidden; border: 2.5px solid #10b981; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);">
+                                <img src="${e.target.result}" style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+                            <div style="text-align: left;">
+                                <p style="margin: 0; font-size: 0.875rem; font-weight: 800; color: #059669;">¡Imagen Cargada!</p>
+                                <p style="margin: 0; font-size: 0.75rem; color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px;">${input.files[0].name}</p>
+                            </div>
+                            <i class='bx bxs-check-circle' style="margin-left: auto; font-size: 1.6rem; color: #10b981; animation: slideUpModal 0.3s ease;"></i>
+                        `;
+                    }, 800);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
         }
 
         function confirmDeletePremio(url) {

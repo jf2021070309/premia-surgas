@@ -553,7 +553,7 @@
                             <i class='bx bx-qr-scan'></i>
                             <div class="title-text-group">
                                 <h3>Búsqueda QR</h3>
-                                <span>Escanea o ingresa el documento manualmente</span>
+                                <span>Escanea el código QR del cliente</span>
                             </div>
                         </div>
                     </div>
@@ -572,17 +572,7 @@
 
                         <!-- Opciones de Búsqueda -->
                         <div class="search-options-group">
-                            <div>
-                                <label class="scan-label">Búsqueda rápida por DNI o RUC</label>
-                                <div class="elite-input-wrapper">
-                                    <input type="tel" id="manual-dni" class="elite-input" placeholder="DNI (8) o RUC (11 dígitos)..." maxlength="11" onkeydown="if(event.key==='Enter') buscarManual()">
-                                    <button class="btn-search-icon" onclick="buscarManual()" title="Buscar">
-                                        <i class='bx bx-search'></i>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="search-separator">o también</div>
+                            <!-- Búsqueda por DNI/RUC removida por solicitud -->
 
                             <div>
                                 <label class="scan-label">Importar desde el dispositivo</label>
@@ -765,7 +755,7 @@
                         <div style="flex: 1; text-align: left; position: relative; z-index: 1;">
                             <label style="font-size: 0.8rem; font-weight: 900; color: #be123c; text-transform: uppercase; letter-spacing: 5px; margin-bottom: 1.5rem; display: block; opacity: 0.5;">Error de Búsqueda</label>
                             <h3 style="font-size: 3.2rem; font-weight: 950; color: #0f172a; letter-spacing: -0.06em; margin-bottom: 1.5rem; line-height: 1;">Sin resultados <br> encontrados</h3>
-                            <p style="font-size: 1.15rem; color: #64748b; line-height: 1.8; font-weight: 500; margin-bottom: 3.5rem; max-width: 500px;">No hemos podido localizar al beneficiario en nuestra base de datos. Verifica el DNI/RUC o el código QR e intenta de nuevo.</p>
+                            <p style="font-size: 1.15rem; color: #64748b; line-height: 1.8; font-weight: 500; margin-bottom: 3.5rem; max-width: 500px;">No hemos podido localizar al beneficiario en nuestra base de datos. Verifica el código QR e intenta de nuevo.</p>
                             
                             <div style="display: flex; align-items: center; gap: 1.2rem;">
                                 <div style="width: 12px; height: 12px; background: #be123c; border-radius: 50%; opacity: 0.3;"></div>
@@ -912,14 +902,7 @@
             }
         }
 
-        function buscarManual() {
-            const valor = document.getElementById('manual-dni').value.trim();
-            if (!/^\d{8}$/.test(valor) && !/^\d{11}$/.test(valor)) {
-                Swal.fire({ icon: 'warning', title: 'Documento inválido', text: 'Ingresa un DNI de 8 dígitos o un RUC de 11 dígitos.' });
-                return;
-            }
-            buscarCliente(valor);
-        }
+        // Búsqueda manual removida por solicitud
 
         async function buscarCliente(codigo) {
             const rightPanel = document.getElementById('scan-right-panel');
@@ -1059,8 +1042,14 @@
                 });
                 const data = await res.json();
                 if (data.success) {
-                    Swal.fire({ icon: 'success', title: '¡Registrado!', timer: 1500, showConfirmButton: false })
-                        .then(() => window.location.href = baseUrl + 'panel');
+                    Swal.fire({ 
+                        icon: 'success', 
+                        title: '¡Operación Exitosa!', 
+                        text: data.message, 
+                        showConfirmButton: true,
+                        confirmButtonText: 'Entendido',
+                        confirmButtonColor: '#0f172a'
+                    }).then(() => window.location.href = baseUrl + 'panel');
                 } else {
                     Swal.fire({ icon: 'error', title: 'Error', text: data.message });
                     running = false;

@@ -8,15 +8,15 @@ class VentaModel {
         $this->db = Database::getConnection();
     }
 
-    public function create(int $clienteId, int $conductorId, float $monto, int $puntos, ?string $detalle = null, array $items = []): int {
+    public function create(int $clienteId, int $conductorId, float $monto, int $puntos, ?string $detalle = null, array $items = [], string $estado = 'pendiente'): int {
         try {
             $this->db->beginTransaction();
 
             $stmt = $this->db->prepare(
-                "INSERT INTO ventas (cliente_id, conductor_id, monto, puntos, detalle)
-                 VALUES (?, ?, ?, ?, ?)"
+                "INSERT INTO ventas (cliente_id, conductor_id, monto, puntos, detalle, estado)
+                 VALUES (?, ?, ?, ?, ?, ?)"
             );
-            $stmt->execute([$clienteId, $conductorId, $monto, $puntos, $detalle]);
+            $stmt->execute([$clienteId, $conductorId, $monto, $puntos, $detalle, $estado]);
             $ventaId = (int) $this->db->lastInsertId();
 
             if (!empty($items)) {
@@ -43,6 +43,79 @@ class VentaModel {
             }
             throw $e;
         }
+    }
+
+    public function validar(int $id, string $estado, int $validadorId): bool {
+        try {
+            $this->db->beginTransaction();
+            
+            // 1. Obtener datos de la venta
+            $venta = $this->getById($id);
+            if (!$venta || $venta['estado'] !== 'pendiente') {
+                throw new Exception("Movimiento no válido o ya procesada.");
+            }
+
+            // 2. Si es aprobación, sumar puntos al cliente
+            if ($estado === 'aprobado') {
+                $puntos = (int) $venta['puntos'];
+                $clienteId = $venta['cliente_id'];
+
+                $stmtUpd = $this->db->prepare("UPDATE clientes SET puntos = puntos + ? WHERE id = ?");
+                $stmtUpd->execute([$puntos, $clienteId]);
+
+                // Evaluar incentivos
+                require_once __DIR__ . '/IncentivoModel.php';
+                $incentivoModel = new IncentivoModel();
+                $incentivoModel->evaluarMetas($clienteId);
+            }
+
+            // 3. Actualizar estado de la venta
+            // Reutilizamos el campo 'detalle' para añadir quién validó o simplemente actualizamos el estado
+            $stmt = $this->db->prepare("UPDATE ventas SET estado = ? WHERE id = ?");
+            $stmt->execute([$estado, $id]);
+
+            $this->db->commit();
+            return true;
+        } catch (Exception $e) {
+            if ($this->db->inTransaction()) $this->db->rollBack();
+            return false;
+        }
+    }
+
+    public function getPendientes(): array {
+        $stmt = $this->db->prepare(
+            "SELECT v.*, c.nombre as cliente_nombre, c.dni as cliente_dni, u.nombre as conductor_nombre
+             FROM ventas v
+             JOIN clientes c ON v.cliente_id = c.id
+             JOIN usuarios u ON v.conductor_id = u.id
+             WHERE v.estado = 'pendiente'
+             ORDER BY v.fecha DESC"
+        );
+        $stmt->execute();
+        return $this->attachDetalles($stmt->fetchAll(PDO::FETCH_ASSOC));
+    }
+
+    public function getAllAdmin(): array {
+        $stmt = $this->db->prepare(
+            "SELECT v.*, c.nombre as cliente_nombre, c.dni as cliente_dni, u.nombre as conductor_nombre
+             FROM ventas v
+             JOIN clientes c ON v.cliente_id = c.id
+             LEFT JOIN usuarios u ON v.conductor_id = u.id
+             ORDER BY v.fecha DESC LIMIT 100"
+        );
+        $stmt->execute();
+        return $this->attachDetalles($stmt->fetchAll(PDO::FETCH_ASSOC));
+    }
+
+    public function getById(int $id): ?array {
+        $stmt = $this->db->prepare("SELECT * FROM ventas WHERE id = ?");
+        $stmt->execute([$id]);
+        $venta = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$venta) return null;
+        
+        $detalles = $this->getDetalles($id);
+        $venta['items'] = $detalles;
+        return $venta;
     }
 
     public function getDetalles(int $ventaId): array {

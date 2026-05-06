@@ -293,7 +293,7 @@
 
         <div class="admin-layout">
             <?php 
-                $pageTitle = 'Operaciones Aliado';
+                $pageTitle = 'Operaciones Afiliado';
                 $pageSubtitle = 'Mi historial detallado de asignaciones';
                 include __DIR__ . '/../partials/header_admin.php'; 
             ?>
@@ -313,7 +313,7 @@
                 </div>
 
                 <!-- Filters -->
-                <form method="GET" action="<?= BASE_URL ?>aliados/mi-historial" class="filter-bar">
+                <form method="GET" action="<?= BASE_URL ?>afiliados/mi-historial" class="filter-bar">
                     <div class="filter-group search-group">
                         <div class="search-input-wrapper">
                             <i class='bx bx-search'></i>
@@ -331,7 +331,7 @@
                     <div style="display: flex; gap: 0.5rem;">
                         <button type="submit" class="btn-filter"><i class='bx bx-search'></i> Filtrar</button>
                         <?php if(!empty($search) || !empty($fechaDesde) || !empty($fechaHasta)): ?>
-                            <a href="<?= BASE_URL ?>aliados/mi-historial" class="btn-reset" title="Limpiar Filtros"><i class='bx bx-x'></i></a>
+                            <a href="<?= BASE_URL ?>afiliados/mi-historial" class="btn-reset" title="Limpiar Filtros"><i class='bx bx-x'></i></a>
                         <?php endif; ?>
                     </div>
                 </form>
@@ -372,7 +372,7 @@
                                     <!-- Columna 2: Cliente -->
                                     <div class="col-main">
                                         <b><?= htmlspecialchars($v['cliente_nombre']) ?></b>
-                                        <span><i class='bx bx-id-card'></i> DNI <?= htmlspecialchars($v['cliente_dni']) ?></span>
+                                        <?php /* <span><i class='bx bx-id-card'></i> DNI <?= htmlspecialchars($v['cliente_dni']) ?></span> */ ?>
                                         <?php if ($v['monto'] > 0): ?>
                                             <span style="margin-top: 5px; color: #10b981; font-weight: 800;">
                                                 <i class='bx bx-check-double'></i> S/ <?= number_format($v['monto'], 2) ?>
@@ -411,8 +411,23 @@
 
                                     <!-- Columna 4: Puntos -->
                                     <div class="col-pts">
-                                        <div class="pts-value">+<?= $v['puntos'] ?></div>
+                                        <div class="pts-value" style="color: <?= isset($v['estado']) && $v['estado'] === 'pendiente' ? '#f59e0b' : (isset($v['estado']) && $v['estado'] === 'rechazado' ? '#ef4444' : '#1e293b') ?>;">+<?= $v['puntos'] ?></div>
                                         <div class="pts-label">Pts</div>
+                                        <?php if (isset($v['estado'])): ?>
+                                            <?php if ($v['estado'] === 'pendiente'): ?>
+                                                <div style="font-size: 0.6rem; color: #d97706; background: #fef3c7; padding: 2px 6px; border-radius: 4px; display: inline-block; margin-top: 4px; font-weight: 700; text-align: center;">
+                                                    PENDIENTE
+                                                </div>
+                                            <?php elseif ($v['estado'] === 'rechazado'): ?>
+                                                <div style="font-size: 0.6rem; color: #dc2626; background: #fee2e2; padding: 2px 6px; border-radius: 4px; display: inline-block; margin-top: 4px; font-weight: 700; text-align: center;">
+                                                    RECHAZADO
+                                                </div>
+                                            <?php else: ?>
+                                                <div style="font-size: 0.6rem; color: #16a34a; background: #dcfce7; padding: 2px 6px; border-radius: 4px; display: inline-block; margin-top: 4px; font-weight: 700; text-align: center;">
+                                                    APROBADO
+                                                </div>
+                                            <?php endif; ?>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             <?php endforeach; ?>
@@ -470,7 +485,7 @@
                             <?= (!empty($search) || !empty($fechaDesde) || !empty($fechaHasta)) ? 'No se encontraron registros con los filtros actuales.' : 'Aún no has registrado ninguna asignación de puntos a clientes.' ?>
                         </p>
                         <?php if(!empty($search) || !empty($fechaDesde) || !empty($fechaHasta)): ?>
-                            <a href="<?= BASE_URL ?>aliados/mi-historial" class="btn-primary-premium" style="display: inline-flex; margin-top: 2rem; text-decoration: none;">
+                            <a href="<?= BASE_URL ?>afiliados/mi-historial" class="btn-primary-premium" style="display: inline-flex; margin-top: 2rem; text-decoration: none;">
                                 Limpiar Filtros
                             </a>
                         <?php else: ?>

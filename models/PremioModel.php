@@ -28,12 +28,13 @@ class PremioModel {
 
     public function create(array $data): bool {
         $stmt = $this->db->prepare(
-            "INSERT INTO premios (nombre, descripcion, puntos, stock, imagen, estado)
-             VALUES (:nombre, :descripcion, :puntos, :stock, :imagen, :estado)"
+            "INSERT INTO premios (nombre, descripcion, precio_base, puntos, stock, imagen, estado)
+             VALUES (:nombre, :descripcion, :precio_base, :puntos, :stock, :imagen, :estado)"
         );
         return $stmt->execute([
             ':nombre'      => $data['nombre'],
             ':descripcion' => $data['descripcion'],
+            ':precio_base' => $data['precio_base'] ?? 0,
             ':puntos'      => $data['puntos'],
             ':stock'       => $data['stock'],
             ':imagen'      => $data['imagen'],
@@ -44,14 +45,15 @@ class PremioModel {
     public function update(int $id, array $data): bool {
         $stmt = $this->db->prepare(
             "UPDATE premios 
-             SET nombre = :nombre, descripcion = :descripcion, puntos = :puntos, 
-                 stock = :stock, imagen = :imagen, estado = :estado
+             SET nombre = :nombre, descripcion = :descripcion, precio_base = :precio_base, 
+                 puntos = :puntos, stock = :stock, imagen = :imagen, estado = :estado
              WHERE id = :id"
         );
         return $stmt->execute([
             ':id'          => $id,
             ':nombre'      => $data['nombre'],
             ':descripcion' => $data['descripcion'],
+            ':precio_base' => $data['precio_base'],
             ':puntos'      => $data['puntos'],
             ':stock'       => $data['stock'],
             ':imagen'      => $data['imagen'],

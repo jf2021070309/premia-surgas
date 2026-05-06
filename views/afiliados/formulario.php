@@ -12,7 +12,7 @@
     <div class="panel-header">
         <div class="header-top-row">
             <div class="header-logo-side">
-                <a href="<?= BASE_URL ?>aliados" style="color:#fff; font-size:1.6rem; margin-right:1.2rem; display:flex; align-items:center; transition:0.3s;" title="Volver a la Lista">
+                <a href="<?= BASE_URL ?>afiliados" style="color:#fff; font-size:1.6rem; margin-right:1.2rem; display:flex; align-items:center; transition:0.3s;" title="Volver a la Lista">
                     <i class='bx bx-left-arrow-alt'></i>
                 </a>
                 <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" alt="PremiaSurgas" class="header-main-logo">
@@ -41,23 +41,23 @@
                     <i class='bx bxs-store-alt'></i>
                 </div>
                 <div>
-                    <h3 style="font-weight: 800; font-size: 1.1rem; color: #0f172a; margin: 0;">Datos del Aliado Comercial</h3>
+                    <h3 style="font-weight: 800; font-size: 1.1rem; color: #0f172a; margin: 0;">Datos del Afiliado Comercial</h3>
                     <p style="font-size: 0.72rem; color: #64748b; margin-top: 1px; font-weight: 500;">Establecimientos autorizados para la asignación de puntos</p>
                 </div>
             </div>
 
-            <form action="<?= BASE_URL ?>aliados/<?= $aliado ? 'update' : 'create' ?>" method="POST" style="padding: 2.5rem;">
-                <?php if($aliado): ?>
-                    <input type="hidden" name="id" value="<?= $aliado['id'] ?>">
+            <form action="<?= BASE_URL ?>afiliados/<?= $afiliado ? 'update' : 'create' ?>" method="POST" style="padding: 2.5rem;">
+                <?php if($afiliado): ?>
+                    <input type="hidden" name="id" value="<?= $afiliado['id'] ?>">
                 <?php endif; ?>
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
                     
                     <div style="grid-column: span 2;">
-                        <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Nombre del Establecimiento / Aliado</label>
+                        <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Nombre del Establecimiento / Afiliado</label>
                         <div style="position: relative; display: flex; align-items: center;">
                             <i class='bx bx-building-house' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
-                            <input type="text" name="nombre" value="<?= htmlspecialchars($aliado['nombre'] ?? '') ?>" required 
+                            <input type="text" name="nombre" value="<?= htmlspecialchars($afiliado['nombre'] ?? '') ?>" required 
                                 style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none; transition: border-color 0.2s;">
                         </div>
                     </div>
@@ -66,20 +66,20 @@
                         <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Usuario (Login)</label>
                         <div style="position: relative; display: flex; align-items: center;">
                             <i class='bx bx-user-circle' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
-                            <input type="text" name="usuario" value="<?= htmlspecialchars($aliado['usuario'] ?? '') ?>" required 
+                            <input type="text" name="usuario" value="<?= htmlspecialchars($afiliado['usuario'] ?? '') ?>" required 
                                 style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none;">
                         </div>
                     </div>
 
                     <div>
-                        <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Contraseña <?= $aliado ? '(opcional)' : '' ?></label>
+                        <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Contraseña <?= $afiliado ? '(opcional)' : '' ?></label>
                         <div style="position: relative; display: flex; align-items: center;">
                             <i class='bx bx-lock-alt' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
-                            <input type="password" name="password" id="input-password" <?= $aliado ? '' : 'required' ?> 
+                            <input type="password" name="password" id="input-password" <?= $afiliado ? '' : 'required' ?> 
                                 style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 3rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none;">
                             <i class='bx bx-show' id="btn-toggle-pass" style="position: absolute; right: 1rem; color: #94a3b8; cursor: pointer; font-size: 1.2rem;"></i>
                         </div>
-                        <?php if($aliado): ?><p style="font-size: 0.65rem; color: #94a3b8; margin-top: 0.3rem;">Dejar en blanco para mantener la actual</p><?php endif; ?>
+                        <?php if($afiliado): ?><p style="font-size: 0.65rem; color: #94a3b8; margin-top: 0.3rem;">Dejar en blanco para mantener la actual</p><?php endif; ?>
                     </div>
 
                     <div>
@@ -88,10 +88,10 @@
                             <i class='bx bx-map' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem; pointer-events: none;"></i>
                             <select name="departamento" required style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none; appearance: none; cursor: pointer;">
                                 <option value="">-- Seleccionar --</option>
-                                <option value="Tacna" <?= ($aliado['departamento'] ?? '') == 'Tacna' ? 'selected' : '' ?>>Tacna</option>
-                                <option value="Moquegua" <?= ($aliado['departamento'] ?? '') == 'Moquegua' ? 'selected' : '' ?>>Moquegua</option>
-                                <option value="Arequipa" <?= ($aliado['departamento'] ?? '') == 'Arequipa' ? 'selected' : '' ?>>Arequipa</option>
-                                <option value="Ilo" <?= ($aliado['departamento'] ?? '') == 'Ilo' ? 'selected' : '' ?>>Ilo</option>
+                                <option value="Tacna" <?= ($afiliado['departamento'] ?? '') == 'Tacna' ? 'selected' : '' ?>>Tacna</option>
+                                <option value="Moquegua" <?= ($afiliado['departamento'] ?? '') == 'Moquegua' ? 'selected' : '' ?>>Moquegua</option>
+                                <option value="Arequipa" <?= ($afiliado['departamento'] ?? '') == 'Arequipa' ? 'selected' : '' ?>>Arequipa</option>
+                                <option value="Ilo" <?= ($afiliado['departamento'] ?? '') == 'Ilo' ? 'selected' : '' ?>>Ilo</option>
                             </select>
                             <i class='bx bx-chevron-down' style="position: absolute; right: 1rem; color: #94a3b8; pointer-events: none;"></i>
                         </div>
@@ -102,8 +102,8 @@
                         <div style="position: relative; display: flex; align-items: center;">
                             <i class='bx bx-toggle-right' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem; pointer-events: none;"></i>
                             <select name="estado" style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; background: #fff; outline: none; appearance: none; cursor: pointer;">
-                                <option value="1" <?= ($aliado['estado'] ?? 1) == 1 ? 'selected' : '' ?>>Activo</option>
-                                <option value="0" <?= ($aliado['estado'] ?? 1) == 0 ? 'selected' : '' ?>>Inactivo</option>
+                                <option value="1" <?= ($afiliado['estado'] ?? 1) == 1 ? 'selected' : '' ?>>Activo</option>
+                                <option value="0" <?= ($afiliado['estado'] ?? 1) == 0 ? 'selected' : '' ?>>Inactivo</option>
                             </select>
                             <i class='bx bx-chevron-down' style="position: absolute; right: 1rem; color: #94a3b8; pointer-events: none;"></i>
                         </div>
@@ -113,7 +113,7 @@
 
                 <div style="margin-top: 1.5rem; border-top: 1px solid #f1f5f9; padding-top: 2rem; display: flex; justify-content: flex-end;">
                     <button type="submit" style="background: #000; color: #fff; border: none; padding: 0.75rem 2.5rem; border-radius: 10px; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s;">
-                        <?= $aliado ? 'Actualizar Aliado' : 'Registrar Aliado' ?>
+                        <?= $afiliado ? 'Actualizar Afiliado' : 'Registrar Afiliado' ?>
                     </button>
                 </div>
             </form>

@@ -517,6 +517,38 @@
                     </div>
                 <?php endif; ?>
 
+                <?php if ($_SESSION['rol'] === 'admin' && !empty($ventas_pendientes)): ?>
+                    <div style="margin-top: 1.5rem; margin-bottom: 1.25rem;">
+                        <h3 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class='bx bx-bus' style="color: #f59e0b; font-size: 1.25rem;"></i> Puntos de Conductores Pendientes
+                        </h3>
+                    </div>
+                    <div class="notif-list">
+                        <?php foreach ($ventas_pendientes as $v): ?>
+                            <div class="notif-card" style="cursor: default; display: flex; justify-content: space-between; align-items: center;">
+                                <div style="display: flex; align-items: center; gap: 1rem; flex: 1;">
+                                    <div class="notif-icon wait">
+                                        <i class='bx bx-user'></i>
+                                    </div>
+                                    <div class="notif-content">
+                                        <div class="notif-title"><?= htmlspecialchars($v['cliente_nombre']) ?></div>
+                                        <div class="notif-sub">Conductor: <b><?= htmlspecialchars($v['conductor_nombre']) ?></b> <span class="b-dot">•</span> <b>+<?= $v['puntos'] ?> pts</b></div>
+                                        <div style="font-size: 0.75rem; color: #64748b;"><?= htmlspecialchars($v['detalle']) ?></div>
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button @click="validarVenta(<?= $v['id'] ?>, 'aprobado')" class="btn" style="background: #22c55e; color: white; border: none; padding: 0.5rem 0.8rem; border-radius: 8px; font-size: 0.8rem; cursor: pointer; font-weight: 700;">
+                                        <i class='bx bx-check'></i> Aprobar
+                                    </button>
+                                    <button @click="validarVenta(<?= $v['id'] ?>, 'rechazado')" class="btn" style="background: #ef4444; color: white; border: none; padding: 0.5rem 0.8rem; border-radius: 8px; font-size: 0.8rem; cursor: pointer; font-weight: 700;">
+                                        <i class='bx bx-x'></i>
+                                    </button>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+
                 <?php if ($_SESSION['rol'] === 'admin' && !empty($notificaciones)): ?>
                     <div style="margin-top: 2rem; margin-bottom: 1.25rem;">
                         <h3 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 0.5rem;">
@@ -548,9 +580,9 @@
                         <?php endforeach; ?>
                 <?php endif; ?>
 
-                <?php if ($_SESSION['rol'] === 'conductor' || $_SESSION['rol'] === 'aliado'): ?>
+                <?php if ($_SESSION['rol'] === 'conductor' || $_SESSION['rol'] === 'afiliado'): ?>
                     <!-- ══════════════════════════════════════ 
-                         PREMIUM CONDUCTOR DASHBOARD 
+                         PREMIUM AFILIADO DASHBOARD 
                          ══════════════════════════════════════ -->
                     <!-- Unified Banner with Image and KPIs -->
                     <div class="anim-welcome banner-container">
@@ -643,8 +675,17 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div style="text-align: right;">
-                                                    <div style="font-weight: 900; color: #1e293b; font-size: 1.1rem; letter-spacing: -0.5px;">+ <?= $v['puntos'] ?> <span style="font-weight: 700; color: #94a3b8; font-size: 0.8rem;">pts</span></div>
+                                                <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+                                                    <div style="font-weight: 900; color: <?= isset($v['estado']) && $v['estado'] === 'pendiente' ? '#f59e0b' : (isset($v['estado']) && $v['estado'] === 'rechazado' ? '#ef4444' : '#1e293b') ?>; font-size: 1.1rem; letter-spacing: -0.5px;">+ <?= $v['puntos'] ?> <span style="font-weight: 700; color: #94a3b8; font-size: 0.8rem;">pts</span></div>
+                                                    <?php if (isset($v['estado'])): ?>
+                                                        <?php if ($v['estado'] === 'pendiente'): ?>
+                                                            <div style="font-size: 0.65rem; color: #d97706; background: #fef3c7; padding: 2px 8px; border-radius: 4px; font-weight: 800; text-transform: uppercase;">Pendiente</div>
+                                                        <?php elseif ($v['estado'] === 'rechazado'): ?>
+                                                            <div style="font-size: 0.65rem; color: #dc2626; background: #fee2e2; padding: 2px 8px; border-radius: 4px; font-weight: 800; text-transform: uppercase;">Rechazado</div>
+                                                        <?php else: ?>
+                                                            <div style="font-size: 0.65rem; color: #16a34a; background: #dcfce7; padding: 2px 8px; border-radius: 4px; font-weight: 800; text-transform: uppercase;">Aprobado</div>
+                                                        <?php endif; ?>
+                                                    <?php endif; ?>
                                                 </div>
                                             </div>
                                         <?php endforeach; ?>
@@ -969,7 +1010,7 @@
         </script>
     <?php endif; ?>
 
-    <?php if ($_SESSION['rol'] === 'conductor' || $_SESSION['rol'] === 'aliado'): ?>
+    <?php if ($_SESSION['rol'] === 'conductor' || $_SESSION['rol'] === 'afiliado'): ?>
         <script>
             document.addEventListener("DOMContentLoaded", function () {
                 // Counting Animation for Cards

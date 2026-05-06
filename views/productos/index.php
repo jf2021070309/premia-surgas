@@ -245,7 +245,8 @@
                         <thead>
                             <tr>
                                 <th>Premio</th>
-                                <th class="text-center">Puntos</th>
+                                <th class="text-center">Base (S/)</th>
+                                <th class="text-center">Ganancia (Pts)</th>
                                 <th class="text-center">Ventas</th>
                                 <th>Estado</th>
                                 <th class="text-center">Acciones</th>
@@ -261,6 +262,7 @@
                                         </div>
                                     </div>
                                 </td>
+                                <td class="text-center"><span class="text-medium">S/ {{ parseFloat(p.precio_base || 0).toFixed(2) }}</span></td>
                                 <td class="text-center"><span class="pts-badge">{{ p.puntos }} pts</span></td>
                                 <td class="text-center"><span class="text-medium">{{ p.ventas || 0 }} cat.</span></td>
                                 <td>
@@ -280,7 +282,7 @@
                                 </td>
                             </tr>
                             <tr v-if="productosFiltrados.length === 0">
-                                <td colspan="5">
+                                <td colspan="6">
                                     <div class="empty-table">
                                         <i class='bx bx-package'></i>
                                         Catálogo vacío o sin resultados para la búsqueda.
@@ -344,9 +346,16 @@
                         </div>
                     </div>
 
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.4rem;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1.4rem;">
                         <div>
-                            <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Inversión Puntos</label>
+                            <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Precio Base (S/)</label>
+                            <div style="position: relative; display: flex; align-items: center;">
+                                <i class='bx bx-money' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
+                                <input type="number" step="0.01" name="precio_base" v-model="form.precio_base" min="0" required style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; outline: none;">
+                            </div>
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Ganancia (Pts)</label>
                             <div style="position: relative; display: flex; align-items: center;">
                                 <i class='bx bx-star' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
                                 <input type="number" name="puntos" v-model="form.puntos" min="0" required style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; outline: none;">
@@ -363,23 +372,41 @@
 
                     <div style="margin-bottom: 1.4rem;">
                         <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">{{ editando ? 'Cambiar Imagen' : 'Imagen del Premio' }}</label>
-                        <div @click="$refs.fileInput.click()" style="display: flex; align-items: center; gap: 1rem; border: 1.5px dashed #e2e8f0; border-radius: 14px; padding: 1rem; cursor: pointer; background: #fafbfc; transition: all 0.2s;">
-                            <template v-if="previewUrl">
-                                <img :src="previewUrl" style="width: 42px; height: 42px; border-radius: 10px; object-fit: cover;">
+                        <div @click="$refs.fileInput.click()" style="display: flex; align-items: center; gap: 1rem; border: 2.5px dashed #e2e8f0; border-radius: 16px; padding: 1.2rem; cursor: pointer; background: #fafbfc; transition: all 0.2s;" :style="cargandoImagen ? 'border-color: #3b82f6; background: #eff6ff;' : ''">
+                            <template v-if="cargandoImagen">
+                                <div style="width: 42px; height: 42px; display: flex; align-items: center; justify-content: center;">
+                                    <div class="loading-spinner-small"></div>
+                                </div>
                                 <div style="flex: 1;">
-                                    <span style="display: block; font-size: 0.88rem; font-weight: 700; color: #1e293b;">Imagen lista</span>
+                                    <span style="display: block; font-size: 0.88rem; font-weight: 700; color: #3b82f6;">Procesando...</span>
+                                    <span style="display: block; font-size: 0.72rem; color: #64748b;">Subiendo imagen al servidor</span>
                                 </div>
                             </template>
+                            <template v-else-if="previewUrl">
+                                <div style="position: relative;">
+                                    <img :src="previewUrl" style="width: 48px; height: 48px; border-radius: 12px; object-fit: cover; border: 2px solid #10b981;">
+                                    <div style="position: absolute; top: -8px; right: -8px; background: #10b981; color: white; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 0.6rem; border: 2px solid white;">
+                                        <i class='bx bx-check'></i>
+                                    </div>
+                                </div>
+                                <div style="flex: 1;">
+                                    <span style="display: block; font-size: 0.88rem; font-weight: 800; color: #059669;">¡Imagen Lista!</span>
+                                    <span style="display: block; font-size: 0.72rem; color: #64748b;">Haz clic para cambiarla</span>
+                                </div>
+                                <i class='bx bx-refresh' style="font-size: 1.4rem; color: #94a3b8;"></i>
+                            </template>
                             <template v-else>
-                                <div style="width: 42px; height: 42px; background: #fff; border: 1.5px solid #e2e8f0; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #94a3b8;">
-                                    <i class='bx bx-image-add'></i>
+                                <div style="width: 42px; height: 42px; background: #fff; border: 1.5px solid #e2e8f0; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #94a3b8; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+                                    <i class='bx bx-image-add' style="font-size: 1.4rem;"></i>
                                 </div>
                                 <div style="flex: 1;">
                                     <span style="display: block; font-size: 0.88rem; font-weight: 700; color: #1e293b;">Seleccionar imagen</span>
+                                    <span style="display: block; font-size: 0.72rem; color: #64748b;">PNG, JPG o WEBP</span>
                                 </div>
+                                <i class='bx bx-upload' style="font-size: 1.2rem; color: #94a3b8;"></i>
                             </template>
                         </div>
-                        <input type="file" name="imagen" ref="fileInput" @change="onFileChange" style="display: none;">
+                        <input type="file" name="imagen_file" ref="fileInput" @change="onFileChange" style="display: none;">
                     </div>
 
                     <div>

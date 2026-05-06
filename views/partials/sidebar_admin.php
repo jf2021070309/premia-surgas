@@ -46,6 +46,8 @@ if (!function_exists('isActiveLink')) {
                 <i class='bx bx-history'></i>
                 <span>Mi Actividad</span>
             </a>
+
+            <!-- MÓDULOS OCULTOS TEMPORALMENTE:
             <a href="<?= BASE_URL ?>tienda" class="sidebar-item <?= isActiveLink('tienda', $current_url) ?>">
                 <i class='bx bx-shopping-bag'></i>
                 <span>Tienda de Premios</span>
@@ -58,6 +60,8 @@ if (!function_exists('isActiveLink')) {
                 <i class='bx bx-target-lock'></i>
                 <span>Metas & Vales</span>
             </a>
+            -->
+
             <a href="#" class="sidebar-item" onclick="window.location.hash='seguridad'; return false;">
                 <i class='bx bx-lock-alt'></i>
                 <span>Seguridad</span>
@@ -69,17 +73,45 @@ if (!function_exists('isActiveLink')) {
                 <span>Dashboard</span>
             </a>
 
+            <?php if ($_SESSION['rol'] !== 'afiliado'): ?>
             <div class="menu-label">Gestión</div>
             <a href="<?= BASE_URL ?>clientes/nuevo" class="sidebar-item <?= isActiveLink('clientes/nuevo', $current_url) ?>">
                 <i class='bx bx-user-plus'></i>
                 <span>Nuevo Cliente</span>
             </a>
+            <?php else: ?>
+            <!-- MÓDULO OCULTO PARA AFILIADO:
+            <div class="menu-label">Gestión</div>
+            <a href="<?= BASE_URL ?>clientes/nuevo" class="sidebar-item <?= isActiveLink('clientes/nuevo', $current_url) ?>">
+                <i class='bx bx-user-plus'></i>
+                <span>Nuevo Cliente</span>
+            </a>
+            -->
+            <?php endif; ?>
+
+            <?php if (!in_array($_SESSION['rol'], ['conductor', 'afiliado'])): ?>
             <a href="<?= BASE_URL ?>clientes/lista" class="sidebar-item <?= isActiveLink('clientes/lista', $current_url) ?>">
                 <i class='bx bx-group'></i>
                 <span>Directorio</span>
             </a>
+            <?php else: ?>
+            <!-- MÓDULO OCULTO PARA CONDUCTOR Y AFILIADO:
+            <a href="<?= BASE_URL ?>clientes/lista" class="sidebar-item <?= isActiveLink('clientes/lista', $current_url) ?>">
+                <i class='bx bx-group'></i>
+                <span>Directorio</span>
+            </a>
+            -->
+            <?php endif; ?>
+
+            <!-- MÓDULO OCULTO PARA AFILIADO Y ADMIN:
+            <a href="<?= BASE_URL ?>afiliados/miAnuncio" class="sidebar-item <?= isActiveLink('afiliados/miAnuncio', $current_url) ?>">
+                <i class='bx bxs-megaphone'></i>
+                <span>Mi Anuncio</span>
+            </a>
+            -->
 
             <?php if ($_SESSION['rol'] === 'admin'): ?>
+                <!-- MÓDULOS OCULTOS TEMPORALMENTE:
                 <div class="menu-label">Incentivos</div>
                 <a href="<?= BASE_URL ?>incentivos/reglas" class="sidebar-item <?= isActiveLink('incentivos/reglas', $current_url) ?>">
                     <i class='bx bx-target-lock'></i>
@@ -89,20 +121,28 @@ if (!function_exists('isActiveLink')) {
                     <i class='bx bx-receipt'></i>
                     <span>Vales Emitidos</span>
                 </a>
+                -->
 
-                <div class="menu-label">Canjes y Recargas</div>
+                <div class="menu-label">Puntos y Recargas</div>
+                <a href="<?= BASE_URL ?>puntos-admin" class="sidebar-item <?= isActiveLink('puntos-admin', $current_url) ?>">
+                    <i class='bx bx-check-shield'></i>
+                    <span>Gestión de Puntos</span>
+                </a>
                 <a href="<?= BASE_URL ?>recargas-admin" class="sidebar-item <?= isActiveLink('recargas-admin', $current_url) ?>">
                     <i class='bx bx-wallet'></i>
                     <span>Gestión Recargas</span>
                 </a>
+                
+                <!-- MÓDULOS OCULTOS TEMPORALMENTE:
                 <a href="<?= BASE_URL ?>canjes-admin" class="sidebar-item <?= isActiveLink('canjes-admin', $current_url) ?>">
                     <i class='bx bx-check-double'></i>
                     <span>Entregas Canjes</span>
                 </a>
-                <a href="<?= BASE_URL ?>aliados" class="sidebar-item <?= isActiveLink('aliados', $current_url) ?>">
+                <a href="<?= BASE_URL ?>afiliados" class="sidebar-item <?= isActiveLink('afiliados', $current_url) ?>">
                     <i class='bx bx-store-alt'></i>
-                    <span>Gestión Aliados</span>
+                    <span>Gestión Afiliados</span>
                 </a>
+                -->
             <?php endif; ?>
 
             <div class="menu-label">Operaciones</div>
@@ -116,10 +156,14 @@ if (!function_exists('isActiveLink')) {
                     <span>Mi Historial</span>
                 </a>
             <?php endif; ?>
-            <?php if ($_SESSION['rol'] === 'aliado'): ?>
-                <a href="<?= BASE_URL ?>aliados/mi-historial" class="sidebar-item <?= isActiveLink('aliados/mi-historial', $current_url) ?>">
+            <?php if ($_SESSION['rol'] === 'afiliado'): ?>
+                <a href="<?= BASE_URL ?>afiliados/mi-historial" class="sidebar-item <?= isActiveLink('afiliados/mi-historial', $current_url) ?>">
                     <i class='bx bx-history'></i>
                     <span>Mi Historial</span>
+                </a>
+                <a href="<?= BASE_URL ?>afiliados/perfil" class="sidebar-item <?= isActiveLink('afiliados/perfil', $current_url) ?>">
+                    <i class='bx bx-user-circle'></i>
+                    <span>Mi Perfil</span>
                 </a>
             <?php endif; ?>
 

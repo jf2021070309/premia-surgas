@@ -32,6 +32,7 @@ class ProductoController {
             'nombre'      => $_POST['nombre'] ?? '',
             'descripcion' => $_POST['descripcion'] ?? '',
             'puntos'      => (int)($_POST['puntos'] ?? 0),
+            'precio_base' => (float)($_POST['precio_base'] ?? 0),
             'stock'       => (int)($_POST['stock'] ?? 0),
             'imagen'      => $imagen_final,
             'estado'      => (int)($_POST['estado'] ?? 1),
@@ -81,6 +82,7 @@ class ProductoController {
             'nombre'      => $_POST['nombre'] ?? '',
             'descripcion' => $_POST['descripcion'] ?? '',
             'puntos'      => (int)($_POST['puntos'] ?? 0),
+            'precio_base' => (float)($_POST['precio_base'] ?? 0),
             'stock'       => (int)($_POST['stock'] ?? 0),
             'imagen'      => $imagen_final,
             'estado'      => (int)($_POST['estado'] ?? 1),
@@ -88,7 +90,7 @@ class ProductoController {
 
         // Track cambios
         $changes = [];
-        $fields = ['nombre', 'descripcion', 'puntos', 'stock', 'estado'];
+        $fields = ['nombre', 'descripcion', 'puntos', 'precio_base', 'stock', 'estado'];
         foreach($fields as $f) {
             if (trim((string)$producto_actual[$f]) !== trim((string)$data[$f])) {
                 $changes[$f] = ['ant' => $producto_actual[$f], 'des' => $data[$f]];
