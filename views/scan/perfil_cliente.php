@@ -131,24 +131,27 @@ if (empty($hpw)) {
 
         @media (max-width: 520px) {
             .vip-card-container {
-                aspect-ratio: 1.15 / 1;
+                aspect-ratio: 1.58 / 1;
             }
-            .card-front, .card-back {
-                padding: 1rem !important;
+            .card-front {
+                padding: 1.2rem !important;
+            }
+            .card-back {
+                padding: 0.5rem !important;
             }
             .qr-container {
-                padding: 6px !important;
-                max-width: 110px;
-                max-height: 110px;
+                padding: 4px !important;
+                max-width: 115px;
+                max-height: 115px;
             }
             .qr-help {
-                margin-top: 0.6rem !important;
-                font-size: 0.55rem !important;
+                margin-top: 0.3rem !important;
+                font-size: 0.5rem !important;
             }
             .btn-enlarge-qr {
-                margin-top: 6px !important;
-                padding: 6px 12px !important;
-                font-size: 0.65rem !important;
+                margin-top: 3px !important;
+                padding: 3px 10px !important;
+                font-size: 0.55rem !important;
             }
         }
 
@@ -290,7 +293,7 @@ if (empty($hpw)) {
             height: 100%;
             -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
-            border-radius: 32px;
+            border-radius: 20px;
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.1);
             overflow: hidden;
@@ -402,6 +405,7 @@ if (empty($hpw)) {
             background: var(--card-silver);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
         }
 
         .points-unit {
