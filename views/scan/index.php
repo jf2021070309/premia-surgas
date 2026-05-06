@@ -674,35 +674,36 @@
                                 </div>
 
                                 <div class="elite-form-container" style="background: #f8fafc; padding: 2rem; border-radius: 28px; border: 1px solid #f1f5f9; display: flex; flex-direction: column; gap: 1.5rem;">
-                                    <div class="elite-service-grid" style="display: grid; grid-template-columns: 3fr 1fr; gap: 1rem;">
+                                    <div class="elite-service-grid" style="display: grid; grid-template-columns: 1fr; gap: 1rem;">
                                         <div>
                                             <label class="scan-label" style="margin-bottom: 0.75rem; color: #000; font-size: 0.82rem; letter-spacing: 1.5px;">SERVICIO PRESTADO</label>
                                             <select id="main-op-type" class="form-select-scan" style="width: 100%; background: #fff; height: 56px; border: 1px solid #e2e8f0; border-radius: 14px; font-weight: 700; color: #000; padding: 0 1.25rem; font-size: 0.82rem;" onchange="updateSubtotal()">
                                                 <?php foreach ($operaciones as $op): ?>
-                                                    <option value="<?= $op['puntos'] ?>"><?= htmlspecialchars($op['nombre']) ?> (+<?= $op['puntos'] ?>)</option>
+                                                    <option value="<?= $op['puntos'] ?>" data-precio="<?= $op['precio_estandar'] ?? 0 ?>" data-descuento="<?= $op['descuento'] ?? 0 ?>"><?= htmlspecialchars($op['nombre']) ?> (+<?= $op['puntos'] ?>)</option>
                                                 <?php endforeach; ?>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label class="scan-label" style="margin-bottom: 0.75rem; color: #000; font-size: 0.82rem; letter-spacing: 1.5px;">CANTIDAD</label>
-                                            <select id="main-op-qty" class="form-select-scan" style="width: 100%; background: #fff; height: 56px; border: 1px solid #e2e8f0; border-radius: 14px; font-weight: 900; color: #000; text-align: center; font-size: 0.82rem;" onchange="updateSubtotal()">
-                                                <?php for($i=1;$i<=10;$i++): ?>
-                                                    <option value="<?= $i ?>"><?= $i ?></option>
-                                                <?php endfor; ?>
                                             </select>
                                         </div>
                                     </div>
 
-                                    <div class="elite-abono-card" style="background: #fff; border: 1px solid #e2e8f0; border-radius: 20px; padding: 1rem 1.5rem; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 12px rgba(0,0,0,0.02);">
-                                        <div>
-                                            <label class="scan-label" style="font-size: 0.68rem; margin-bottom: 0.3rem; opacity: 0.5;">ABONO PROYECTADO</label>
-                                            <div style="display: flex; align-items: baseline; gap: 0.5rem;">
-                                                <span id="main-op-unit" style="font-size: 2.5rem; font-weight: 950; color: #000; line-height: 1; letter-spacing: -2px;">0</span>
-                                                <span style="font-size: 1.2rem; font-weight: 950; color: #000; line-height: 1; letter-spacing: -1px; opacity: 0.2;">PTS</span>
-                                                <span style="font-size: 0.82rem; font-weight: 900; color: #000; text-transform: uppercase; opacity: 0.3;">puntos</span>
+                                    <div class="elite-abono-card" style="background: #fff; border: 1px solid #e2e8f0; border-radius: 20px; padding: 1.5rem; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 12px rgba(0,0,0,0.02); margin-top: 0.5rem; gap: 1.5rem;">
+                                        <div style="flex: 1;">
+                                            <label class="scan-label" style="font-size: 0.65rem; margin-bottom: 0.4rem; opacity: 0.5;">ABONO PROYECTADO</label>
+                                            <div style="display: flex; align-items: baseline; gap: 0.4rem;">
+                                                <span id="main-op-unit" style="font-size: 2rem; font-weight: 950; color: #000; line-height: 1; letter-spacing: -1px;">0</span>
+                                                <span style="font-size: 1rem; font-weight: 900; color: #000; opacity: 0.2;">PTS</span>
                                             </div>
                                         </div>
-                                        <button class="elite-add-btn" onclick="addOperation()" style="background: #000; color: #fff; border: none; padding: 0 1.75rem; height: 56px; border-radius: 16px; font-size: 0.82rem; font-weight: 800; display: flex; align-items: center; gap: 0.75rem; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 10px 20px -5px rgba(0,0,0,0.3);">
+                                        <div style="width: 1px; height: 40px; background: #e2e8f0;"></div>
+                                        <div style="flex: 1;">
+                                            <label class="scan-label" style="font-size: 0.65rem; margin-bottom: 0.4rem; color: #ef4444; font-weight: 800;">TOTAL A PAGAR</label>
+                                            <div style="display: flex; align-items: baseline; gap: 0.4rem;">
+                                                <span style="font-size: 1.2rem; font-weight: 900; color: #ef4444; opacity: 0.8;">S/</span>
+                                                <span id="main-op-price" style="font-size: 2rem; font-weight: 950; color: #ef4444; line-height: 1; letter-spacing: -1px;">0.00</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <button class="elite-add-btn" onclick="addOperation()" style="background: #000; color: #fff; border: none; padding: 0 1.75rem; height: 56px; border-radius: 16px; font-size: 0.82rem; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; gap: 0.75rem; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 10px 20px -5px rgba(0,0,0,0.3); width: 100%;">
                                             <i class='bx bx-plus-circle' style="font-size: 1.2rem;"></i>
                                             <span class="btn-text">Añadir al Ticket</span>
                                         </button>
@@ -725,7 +726,10 @@
                                 </div>
 
                                 <div style="margin-top: auto; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.08);">
-                                    <div class="summary-title" style="font-size: 0.82rem; font-weight: 900; color: #fff; text-transform: uppercase; letter-spacing: 0.15em; display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">Total Acumulado</div>
+                                    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem;">
+                                        <div class="summary-title" style="font-size: 0.82rem; font-weight: 900; color: #fff; text-transform: uppercase; letter-spacing: 0.15em; display: flex; align-items: center; gap: 0.75rem;">Total Acumulado</div>
+                                        <div id="main-total-price" style="font-size: 1.2rem; font-weight: 900; color: #ef4444;">S/ 0.00</div>
+                                    </div>
                                     <div id="main-total-pts" style="font-size: 4rem; font-weight: 950; color: #fff; text-align: center; margin: 0.5rem 0; letter-spacing: -3px; line-height: 1; text-shadow: 0 10px 20px rgba(0,0,0,0.3);">
                                         0
                                     </div>
@@ -945,19 +949,32 @@
             const select = document.getElementById('main-op-type');
             if(!select) return;
             const unit = parseInt(select.value);
-            const qty = parseInt(document.getElementById('main-op-qty').value) || 1;
+            const opt = select.options[select.selectedIndex];
+            const precioEstandar = parseFloat(opt.getAttribute('data-precio') || 0);
+            const descuento = parseFloat(opt.getAttribute('data-descuento') || 0);
+            const precioFinal = precioEstandar - descuento;
+
             const subtotalBox = document.getElementById('main-op-unit');
-            if(subtotalBox) subtotalBox.innerText = (unit * qty) + ' PTS';
+            const priceBox = document.getElementById('main-op-price');
+            
+            if(subtotalBox) subtotalBox.innerText = unit;
+            if(priceBox) priceBox.innerText = precioFinal.toFixed(2);
         }
 
         function addOperation() {
             const select = document.getElementById('main-op-type');
             if(!select) return;
-            const typeName = select.options[select.selectedIndex].text.split(' (')[0];
+            const opt = select.options[select.selectedIndex];
+            const typeName = opt.text.split(' (')[0];
             const unit = parseInt(select.value);
-            const qty = parseInt(document.getElementById('main-op-qty').value) || 1;
-            const subtotal = unit * qty;
-            operations.push({ name: typeName, unit, qty, subtotal });
+            
+            const precioEstandar = parseFloat(opt.getAttribute('data-precio') || 0);
+            const descuento = parseFloat(opt.getAttribute('data-descuento') || 0);
+            const precioFinal = precioEstandar - descuento;
+
+            const qty = 1;
+            const subtotal = unit;
+            operations.push({ name: typeName, unit, qty, subtotal, precio: precioFinal });
             renderOperations();
         }
 
@@ -975,39 +992,38 @@
                         <span style="font-size: 0.8rem; font-weight: 500; letter-spacing: 1px;">Esperando servicios...</span>
                     </div>`;
                 document.getElementById('main-total-pts').innerText = '0';
+                document.getElementById('main-total-price').innerText = 'S/ 0.00';
                 document.getElementById('save-all-btn').disabled = true;
                 return;
             }
             let html = '';
             let total = 0;
+            let totalPrice = 0;
             operations.forEach((op, i) => {
                 total += op.subtotal;
+                totalPrice += (op.precio || 0);
                 html += `
                     <div style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; padding: 1.25rem; display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1rem; position: relative; transition: all 0.3s ease; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
                         <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                             <div style="flex: 1;">
                                 <div style="font-size: 0.82rem; font-weight: 900; color: #fff; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 4px; opacity: 0.4;">Servicio</div>
-                                <div style="font-size: 0.82rem; font-weight: 700; color: #fff; line-height: 1.3;">${op.name}</div>
+                                <div style="font-size: 1.15rem; font-weight: 800; color: #fff; line-height: 1.2; letter-spacing: -0.5px;">${op.name}</div>
                             </div>
+                            <div style="text-align: right;">
+                                <div style="font-size: 0.85rem; font-weight: 900; color: #ef4444; margin-bottom: 4px;">S/ ${op.precio ? op.precio.toFixed(2) : '0.00'}</div>
+                                <div style="font-size: 1.5rem; font-weight: 950; color: #fff; letter-spacing: -1px; line-height: 1;">+${op.subtotal} pts</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; justify-content: flex-end; align-items: center; padding-top: 0.8rem; border-top: 1px solid rgba(255,255,255,0.08);">
                             <button onclick="removeOperation(${i})" style="background: rgba(239, 68, 68, 0.1); border: none; width: 32px; height: 32px; border-radius: 10px; cursor: pointer; color: #ef4444; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;">
                                 <i class='bx bx-trash-alt' style="font-size: 1.1rem;"></i>
                             </button>
                         </div>
-                        
-                        <div style="display: flex; justify-content: space-between; align-items: flex-end; padding-top: 0.8rem; border-top: 1px solid rgba(255,255,255,0.08);">
-                            <div>
-                                <div style="font-size: 0.82rem; font-weight: 900; color: #fff; text-transform: uppercase; letter-spacing: 1px; opacity: 0.3;">Cant.</div>
-                                <div style="font-size: 0.82rem; font-weight: 700; color: #fff; opacity: 0.9;">x${op.qty}</div>
-                            </div>
-                            <div style="text-align: right;">
-                                <div style="font-size: 0.82rem; font-weight: 900; color: #22c55e; text-transform: uppercase; letter-spacing: 1.5px;">Abono</div>
-                                <div style="font-size: 1.2rem; font-weight: 950; color: #fff; letter-spacing: -0.02em;">+${op.subtotal} <span style="font-size: 0.82rem; opacity: 0.5;">PTS</span></div>
-                            </div>
-                        </div>
                     </div>`;
             });
-            container.innerHTML = html;
+            document.getElementById('ops-container').innerHTML = html;
             document.getElementById('main-total-pts').innerText = total;
+            document.getElementById('main-total-price').innerText = 'S/ ' + totalPrice.toFixed(2);
             document.getElementById('save-all-btn').disabled = false;
         }
 
@@ -1021,9 +1037,10 @@
             btn.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i> Guardando...";
             btn.disabled = true;
             try {
-                let detalleString = operations.map(op => `• ${op.name} x${op.qty} (+${op.subtotal} pts)`).join('\n');
+                let detalleString = operations.map(op => `• ${op.name} (S/ ${op.precio ? op.precio.toFixed(2) : '0.00'}) (+${op.subtotal} pts)`).join('\n');
                 if (operations.length > 1) {
-                    detalleString += `\n──────────\nTOTAL: ${total} pts`;
+                    const totalPrice = operations.reduce((sum, op) => sum + (op.precio || 0), 0);
+                    detalleString += `\n──────────\nTOTAL A PAGAR: S/ ${totalPrice.toFixed(2)}\nPUNTOS: ${total} pts`;
                 }
                 const res = await fetch(baseUrl + 'scan/registrar', {
                     method: 'POST',

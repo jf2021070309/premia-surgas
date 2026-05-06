@@ -275,7 +275,9 @@
                         <thead>
                             <tr>
                                 <th>Nombre Operación</th>
-                                <th class="text-center">Puntaje</th>
+                                <th class="text-center">Precio Base</th>
+                                <th class="text-center">Dcto Tarjeta</th>
+                                <th class="text-center">Puntaje Recibido</th>
                                 <th class="text-center">Estado</th>
                                 <th class="text-center" style="width: 150px;">Acciones</th>
                             </tr>
@@ -284,6 +286,8 @@
                             <?php foreach ($operaciones as $op): ?>
                                 <tr class="table-row">
                                     <td class="text-medium"><?= htmlspecialchars($op['nombre']) ?></td>
+                                    <td class="text-center"><span class="text-medium" style="font-weight: 700; color: #1e293b;">S/ <?= number_format($op['precio_estandar'] ?? 0, 2) ?></span></td>
+                                    <td class="text-center"><span class="text-medium" style="color: #ef4444; font-weight: 700;">- S/ <?= number_format($op['descuento'] ?? 0, 2) ?></span></td>
                                     <td class="text-center"><span class="text-pts-plus"><?= $op['puntos'] ?> pts</span></td>
                                     <td class="text-center">
                                         <span class="chip <?= $op['estado'] ? 'chip-approved' : 'chip-rejected' ?>">
@@ -411,17 +415,30 @@
                         </div>
                     </div>
 
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem;">
                         <div>
                             <label
-                                style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Puntos</label>
+                                style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Precio Base (S/)</label>
                             <div style="position: relative; display: flex; align-items: center;">
-                                <i class='bx bx-medal'
+                                <i class='bx bx-money'
                                     style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
-                                <input type="number" name="puntos" id="op_puntos" value="0" required
+                                <input type="number" step="0.01" name="precio_estandar" id="op_precio" value="0.00" required
                                     style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; outline: none;">
                             </div>
                         </div>
+                        <div>
+                            <label
+                                style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Descuento Tarjeta (S/)</label>
+                            <div style="position: relative; display: flex; align-items: center;">
+                                <i class='bx bxs-discount'
+                                    style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.2rem;"></i>
+                                <input type="number" step="0.01" name="descuento" id="op_descuento" value="0.00" required
+                                    style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.9rem; font-size: 0.92rem; color: #1e293b; outline: none;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 1.25rem;">
                         <div id="group_estadoOp" style="display: none;">
                             <label
                                 style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">Estado</label>
@@ -816,7 +833,8 @@
             document.getElementById('modalTitleOp').innerText = 'Editar Regla';
             document.getElementById('op_id').value = op.id;
             document.getElementById('op_nombre').value = op.nombre;
-            document.getElementById('op_puntos').value = op.puntos;
+            document.getElementById('op_precio').value = op.precio_estandar;
+            document.getElementById('op_descuento').value = op.descuento;
             document.getElementById('op_estado').value = op.estado;
             document.getElementById('group_estadoOp').style.display = 'block';
         }

@@ -20,9 +20,16 @@ class OperacionController {
         $this->requireAdmin();
         $model = new TipoOperacionModel();
         
+        $precio = (float) ($_POST['precio_estandar'] ?? 0);
+        $descuento = (float) ($_POST['descuento'] ?? 0);
+        $precio_final = $precio - $descuento;
+        $puntos = (int) ($precio_final - ($descuento * 10));
+
         $data = [
             'nombre' => $_POST['nombre'] ?? '',
-            'puntos' => (int) ($_POST['puntos'] ?? 0),
+            'puntos' => $puntos,
+            'precio_estandar' => $precio,
+            'descuento' => $descuento,
             'estado' => 1
         ];
 
@@ -44,15 +51,22 @@ class OperacionController {
         
         $original = $model->findById($id);
 
+        $precio = (float) ($_POST['precio_estandar'] ?? 0);
+        $descuento = (float) ($_POST['descuento'] ?? 0);
+        $precio_final = $precio - $descuento;
+        $puntos = (int) ($precio_final - ($descuento * 10));
+
         $data = [
             'nombre' => $_POST['nombre'] ?? '',
-            'puntos' => (int) ($_POST['puntos'] ?? 0),
+            'puntos' => $puntos,
+            'precio_estandar' => $precio,
+            'descuento' => $descuento,
             'estado' => (int) ($_POST['estado'] ?? 1)
         ];
 
         if ($model->update($id, $data)) {
             $changes = [];
-            foreach (['nombre', 'puntos', 'estado'] as $f) {
+            foreach (['nombre', 'puntos', 'precio_estandar', 'descuento', 'estado'] as $f) {
                 if ($original[$f] != $data[$f]) $changes[$f] = ['ant' => $original[$f], 'des' => $data[$f]];
             }
             $desc = "Actualizó regla de puntos: " . $data['nombre'];

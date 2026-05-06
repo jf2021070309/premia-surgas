@@ -26,20 +26,24 @@ class TipoOperacionModel {
     }
 
     public function create(array $data): bool {
-        $stmt = $this->db->prepare("INSERT INTO tipos_operaciones (nombre, puntos, estado) VALUES (?, ?, ?)");
+        $stmt = $this->db->prepare("INSERT INTO tipos_operaciones (nombre, puntos, estado, precio_estandar, descuento) VALUES (?, ?, ?, ?, ?)");
         return $stmt->execute([
             $data['nombre'],
             $data['puntos'],
-            $data['estado'] ?? 1
+            $data['estado'] ?? 1,
+            $data['precio_estandar'] ?? 0.00,
+            $data['descuento'] ?? 0.00
         ]);
     }
 
     public function update(int $id, array $data): bool {
-        $stmt = $this->db->prepare("UPDATE tipos_operaciones SET nombre = ?, puntos = ?, estado = ? WHERE id = ?");
+        $stmt = $this->db->prepare("UPDATE tipos_operaciones SET nombre = ?, puntos = ?, estado = ?, precio_estandar = ?, descuento = ? WHERE id = ?");
         return $stmt->execute([
             $data['nombre'],
             $data['puntos'],
             $data['estado'],
+            $data['precio_estandar'] ?? 0.00,
+            $data['descuento'] ?? 0.00,
             $id
         ]);
     }
