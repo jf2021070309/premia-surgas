@@ -679,7 +679,9 @@
                                             <label class="scan-label" style="margin-bottom: 0.75rem; color: #000; font-size: 0.82rem; letter-spacing: 1.5px;">SERVICIO PRESTADO</label>
                                             <select id="main-op-type" class="form-select-scan" style="width: 100%; background: #fff; height: 56px; border: 1px solid #e2e8f0; border-radius: 14px; font-weight: 700; color: #000; padding: 0 1.25rem; font-size: 0.82rem;" onchange="updateSubtotal()">
                                                 <?php foreach ($operaciones as $op): ?>
-                                                    <option value="<?= $op['puntos'] ?>" data-precio="<?= $op['precio_estandar'] ?? 0 ?>" data-descuento="<?= $op['descuento'] ?? 0 ?>"><?= htmlspecialchars($op['nombre']) ?> (+<?= $op['puntos'] ?>)</option>
+                                                    <option value="<?= $op['puntos'] ?>" data-nombre="<?= htmlspecialchars($op['nombre']) ?>" data-precio="<?= $op['precio_estandar'] ?? 0 ?>" data-descuento="<?= $op['descuento'] ?? 0 ?>">
+                                                        <?= htmlspecialchars($op['nombre']) ?> - Precio: S/<?= number_format($op['precio_estandar'] ?? 0, 2) ?> | Dcto: S/<?= number_format($op['descuento'] ?? 0, 2) ?> | Pts: <?= $op['puntos'] ?>
+                                                    </option>
                                                 <?php endforeach; ?>
                                             </select>
                                         </div>
@@ -965,7 +967,7 @@
             const select = document.getElementById('main-op-type');
             if(!select) return;
             const opt = select.options[select.selectedIndex];
-            const typeName = opt.text.split(' (')[0];
+            const typeName = opt.getAttribute('data-nombre');
             const unit = parseInt(select.value);
             
             const precioEstandar = parseFloat(opt.getAttribute('data-precio') || 0);

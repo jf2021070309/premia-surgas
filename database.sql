@@ -500,20 +500,23 @@ INSERT INTO `recargas` (`id`, `cliente_id`, `puntos`, `monto`, `comprobante`, `e
 	(42, 1, 1000, 50.00, 'recarga_1774463254_1.jpg', 'aprobado', '2026-03-25 18:27:34', '2026-03-25 18:27:46', 1),
 	(43, 1, 1000, 50.00, 'recarga_1774469676_1.jpg', 'aprobado', '2026-03-25 20:14:36', '2026-03-25 20:15:07', 1);
 
--- Volcando estructura para tabla surgas.tipos_operaciones
+-- Insertando los datos por defecto, incluyendo los 54 y 2 para Premium
 CREATE TABLE IF NOT EXISTS `tipos_operaciones` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) DEFAULT NULL,
+  `precio_estandar` decimal(10,2) DEFAULT 0.00,
+  `descuento` decimal(10,2) DEFAULT 0.00,
   `puntos` int(11) DEFAULT NULL,
   `estado` tinyint(4) DEFAULT 1,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla surgas.tipos_operaciones: ~3 rows (aproximadamente)
-INSERT INTO `tipos_operaciones` (`id`, `nombre`, `puntos`, `estado`) VALUES
-	(1, 'Recarga gas Normal', 6, 1),
-	(2, 'Recarga gas Premium', 10, 1),
-	(3, 'Accesorio / Otros', 2, 1);
+-- Insertando los datos por defecto, incluyendo los 54 y 2 para Premium
+INSERT INTO `tipos_operaciones` (`id`, `nombre`, `precio_estandar`, `descuento`, `puntos`, `estado`) VALUES
+	(1, 'Recarga gas Normal', 0.00, 0.00, 6, 1),
+	(2, 'Recarga gas Premium', 54.00, 2.00, 32, 1),
+	(3, 'Accesorio / Otros', 0.00, 0.00, 2, 1);
+
 
 -- Volcando estructura para tabla surgas.usuarios
 CREATE TABLE IF NOT EXISTS `usuarios` (
