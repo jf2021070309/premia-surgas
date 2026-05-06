@@ -1039,9 +1039,9 @@
             btn.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i> Guardando...";
             btn.disabled = true;
             try {
+                let totalPrice = operations.reduce((sum, op) => sum + (op.precio || 0), 0);
                 let detalleString = operations.map(op => `• ${op.name} (S/ ${op.precio ? op.precio.toFixed(2) : '0.00'}) (+${op.subtotal} pts)`).join('\n');
                 if (operations.length > 1) {
-                    const totalPrice = operations.reduce((sum, op) => sum + (op.precio || 0), 0);
                     detalleString += `\n──────────\nTOTAL A PAGAR: S/ ${totalPrice.toFixed(2)}\nPUNTOS: ${total} pts`;
                 }
                 const res = await fetch(baseUrl + 'scan/registrar', {
@@ -1050,12 +1050,14 @@
                     body: JSON.stringify({ 
                         cliente_id: clientId, 
                         puntos: total, 
+                        monto: totalPrice,
                         detalle: detalleString,
                         items: operations.map(op => ({
                             nombre: op.name,
                             cantidad: op.qty,
                             puntos_unitarios: op.unit,
-                            subtotal: op.subtotal
+                            subtotal: op.subtotal,
+                            precio: op.precio || 0
                         }))
                     })
                 });

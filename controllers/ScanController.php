@@ -149,6 +149,7 @@ class ScanController {
 
         $clienteId = (int) ($data['cliente_id'] ?? 0);
         $puntos    = (int) ($data['puntos'] ?? 0);
+        $monto     = (float) ($data['monto'] ?? 0);
         $detalle   = trim($data['detalle'] ?? '');
         $items     = $data['items'] ?? []; 
 
@@ -164,7 +165,7 @@ class ScanController {
         $estado = ($rol === 'admin') ? 'aprobado' : 'pendiente';
 
         // 1. Registrar "venta"
-        $idVenta = $ventaModel->create($clienteId, $_SESSION['id_usuario'], 0, $puntos, $detalle, $items, $estado);
+        $idVenta = $ventaModel->create($clienteId, $_SESSION['id_usuario'], $monto, $puntos, $detalle, $items, $estado);
 
         if ($idVenta) {
             $message = 'Puntos registrados correctamente.';
