@@ -46,6 +46,16 @@ class PuntosAdminController {
             if ($model->validar($id, $estado, $validador_id)) {
                 $statusText = strtoupper($estado);
                 $this->audit->registrar($_SESSION['id_usuario'], 'MODERAR_PUNTOS', "$statusText la suma de {$venta['puntos']} puntos para el cliente #{$venta['cliente_id']} por el operador {$venta['conductor_id']}", 'RECARGAS');
+                
+                // --- WhatsApp Meta API ---
+                if ($estado === 'aprobado' && !empty($venta['cliente_celular'])) {
+                    WhatsAppService::sendTemplate(
+                        $venta['cliente_celular'], 
+                        'puntos_aprobados', 
+                        [$venta['cliente_nombre'], $venta['puntos'], number_format($venta['monto'], 2)]
+                    );
+                }
+
                 $_SESSION['flash'] = ['type' => 'success', 'title' => 'Éxito', 'message' => "La operación ha sido marcada como $estado."];
             } else {
                 $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo procesar la asignación de puntos.'];

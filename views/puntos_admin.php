@@ -445,16 +445,7 @@
                     customClass: { popup: 'swal-light' }
                 }).then(result => { 
                     if (result.isConfirmed) {
-                        const btnData = btn.dataset;
-                        if (btnData.phone && btnData.phone.length >= 9) {
-                            const num = btnData.phone.startsWith('51') ? btnData.phone : '51' + btnData.phone;
-                            const compraTexto = btnData.items === 'hoy' ? 'tu compra de hoy' : `tu compra de: ${btnData.items}`;
-                            const msg = `Hola ${btnData.name} 👋, gracias por usar tu tarjeta Surgas. Hemos aprobado tus +${btnData.puntos} pts por ${compraTexto}. Tu total a pagar con descuento fue de S/ ${parseFloat(btnData.monto).toFixed(2)}. Si te cobraron un monto distinto, por favor respóndenos a este mensaje para ayudarte. ¡Saludos!`;
-                            window.open(`https://wa.me/${num}?text=${encodeURIComponent(msg)}`, '_blank');
-                            setTimeout(() => form.submit(), 800);
-                        } else {
-                            form.submit();
-                        }
+                        form.submit();
                     } 
                 });
             });

@@ -108,7 +108,12 @@ class VentaModel {
     }
 
     public function getById(int $id): ?array {
-        $stmt = $this->db->prepare("SELECT * FROM ventas WHERE id = ?");
+        $stmt = $this->db->prepare(
+            "SELECT v.*, c.nombre as cliente_nombre, c.celular as cliente_celular 
+             FROM ventas v 
+             JOIN clientes c ON v.cliente_id = c.id 
+             WHERE v.id = ?"
+        );
         $stmt->execute([$id]);
         $venta = $stmt->fetch(PDO::FETCH_ASSOC);
         if (!$venta) return null;

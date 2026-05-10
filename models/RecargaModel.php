@@ -29,7 +29,12 @@ class RecargaModel {
     }
 
     public function findById(int $id): ?array {
-        $stmt = $this->db->prepare("SELECT * FROM recargas WHERE id = ?");
+        $stmt = $this->db->prepare(
+            "SELECT r.*, c.nombre as cliente_nombre, c.celular as cliente_celular 
+             FROM recargas r 
+             JOIN clientes c ON r.cliente_id = c.id 
+             WHERE r.id = ?"
+        );
         $stmt->execute([$id]);
         return $stmt->fetch() ?: null;
     }

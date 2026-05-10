@@ -45,7 +45,21 @@ class CanjeAdminController {
             $result = $model->actualizarEstado($id, $estado);
             if ($result) {
                 $statusText = strtoupper(str_replace('_', ' ', $estado));
+                
+                // Recargar info completa para WhatsApp
+                $canjeData = $model->getById($id);
+
                 $this->audit->registrar($_SESSION['id_usuario'], 'ESTADO_CANJE', "Cambió a $statusText el canje de {$canje['producto_nombre']} para {$canje['cliente_nombre']}", 'CANJES');
+                
+                // --- WhatsApp Meta API ---
+                if ($estado === 'entregado' && !empty($canjeData['cliente_celular'])) {
+                    WhatsAppService::sendTemplate(
+                        $canjeData['cliente_celular'], 
+                        'canje_entregado', 
+                        [$canjeData['cliente_nombre'], $canjeData['premio_nombre']]
+                    );
+                }
+
                 $_SESSION['flash'] = ['type' => 'success', 'title' => 'Éxito', 'message' => "Estado actualizado a $statusText."];
             } else {
                 $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo actualizar el estado.'];

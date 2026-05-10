@@ -130,4 +130,16 @@ class CanjeModel {
         $stmt->execute([$clienteId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function getById(int $id): ?array {
+        $stmt = $this->db->prepare(
+            "SELECT c.*, cl.nombre as cliente_nombre, cl.celular as cliente_celular, p.nombre as premio_nombre
+             FROM canjes c
+             JOIN clientes cl ON c.cliente_id = cl.id
+             JOIN premios p ON c.premio_id = p.id
+             WHERE c.id = ?"
+        );
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+    }
 }

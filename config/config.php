@@ -52,7 +52,12 @@ define('DB_PASS', $pass);
 date_default_timezone_set('America/Lima');
 
 define('SECRET_KEY', 'Surgas_2024_$ecure_T0ken_Key!');
-define('IMGBB_API_KEY', '6ccb74b883313981378b5aadbcd22f80'); // 
+define('IMGBB_API_KEY', '6ccb74b883313981378b5aadbcd22f80');
+
+// —— WhatsApp Cloud API (Meta) ——
+define('WABA_TOKEN', 'EAANdAFMMDv8BReZPsbtZAoLq34Osdd7DwEvGC8drCqY8JVCP1W4r18zoo2jraJxvt6Wgs1wwZAeuyyZBRNRGvbOfJaZBDEH2v91nJDH3ZBZAzPJC7bJztv2xXr6mJOzQ4hqC0Dk87ZBYead3bsHOwnPcgHGOvRFFkWPZAub7xwf6NmpVIuazGTsNaDEQCOfGK1UStXXuUpNULrKEw8mSFTxHL9rzD6TXGSpYvPa7ZBJ1u462TRmkg57v81PZCAHPWByRya4B5yDLj2fWL0U2NzU1sZBSgZDZD');
+define('WABA_PHONE_ID', '1163405613517388');
+define('WABA_VERSION', 'v25.0');
 
 // BASE_URL: automática según entorno
 if (getenv('MYSQL_URL')) {
