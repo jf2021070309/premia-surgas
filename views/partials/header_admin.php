@@ -31,7 +31,7 @@ $adminInitial = strtoupper(substr($adminName, 0, 1));
         <div class="header-title-group">
             <?php if ($pageIcon): ?>
                 <div class="header-page-icon">
-                    <img src="<?= BASE_URL ?>assets/premios/icono.png" alt="S" style="width: 24px; height: 24px; object-fit: contain;">
+                    <i class='bx <?= htmlspecialchars($pageIcon) ?>'></i>
                 </div>
             <?php endif; ?>
             

@@ -100,6 +100,7 @@
         <?php
         $pageTitle = 'Configuración General';
         $pageSubtitle = 'Panel maestro de reglas, catálogo y equipo';
+        $pageIcon = 'bx-cog';
         include __DIR__ . '/../partials/header_admin.php';
         ?>
         <style>

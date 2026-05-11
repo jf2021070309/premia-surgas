@@ -34,6 +34,7 @@
             <?php
             $pageTitle = 'Directorio de Clientes';
             $pageSubtitle = 'Gestión y administración de beneficiarios';
+            $pageIcon = 'bx-group';
             include __DIR__ . '/../partials/header_admin.php';
             ?>
 

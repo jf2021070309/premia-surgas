@@ -334,6 +334,7 @@
             <?php
             $pageTitle = 'Panel de Control';
             $pageSubtitle = 'Notificaciones recientes';
+            $pageIcon = 'bx-grid-alt';
             include __DIR__ . '/partials/header_admin.php';
             ?>
 

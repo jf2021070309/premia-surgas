@@ -57,6 +57,7 @@
         <?php
             $pageTitle    = 'Nuevo Cliente';
             $pageSubtitle = 'Registrar un nuevo beneficiario en el sistema';
+            $pageIcon     = 'bx-user-plus';
             include __DIR__ . '/../partials/header_admin.php';
         ?>
 
