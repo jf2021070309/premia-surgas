@@ -27,7 +27,7 @@ if (!function_exists('isActiveLink')) {
 <aside class="sidebar" id="mainSidebar">
     <div class="sidebar-brand" style="justify-content: center; padding: 2rem 1.5rem;">
         <!-- Brand img -->
-        <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" alt="Surgas" style="width: 140px; height: auto;">
+        <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" alt="Surgas">
         
         <!-- Toggle button inside sidebar (visible when mini) -->
         <button class="sidebar-toggle-mini-btn" id="sidebarToggleMiniBtn" title="Abrir menú">
