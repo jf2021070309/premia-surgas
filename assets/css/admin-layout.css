@@ -9,7 +9,7 @@
     --surface:       #ffffff;
     --surface-low:   #F8F9FB;
     --surface-hi:    #ECEEF2;
-    --sidebar-bg:    #f8fafc;
+    --sidebar-bg:    #400000;
 
     /* Surgas Palette */
     --primary:       #400000;
@@ -105,14 +105,14 @@ body {
     position: relative;
     min-height: 80px; /* Asegurar espacio para el toggle */
 }
-.sidebar-brand img { width: 140px; height: auto; object-fit: contain; filter: brightness(0); opacity: 0.8; }
+.sidebar-brand img { width: 170px; height: auto; object-fit: contain; }
 
 /* Toggle menu dentro del sidebar (solo visible en modo mini) */
 .sidebar-toggle-mini-btn {
     display: none;
     background: transparent;
     border: none;
-    color: rgba(0,0,0,0.5);
+    color: rgba(255,255,255,0.6);
     font-size: 1.8rem;
     cursor: pointer;
     transition: all 0.2s;
@@ -122,8 +122,8 @@ body {
     border-radius: 8px;
 }
 .sidebar-toggle-mini-btn:hover {
-    color: #000;
-    background: rgba(0,0,0,0.05);
+    color: #ffffff;
+    background: rgba(255,255,255,0.1);
 }
 
 /* Botón cerrar dentro del sidebar (solo mobile) */
@@ -133,14 +133,14 @@ body {
     background: transparent;
     border: none;
     border-radius: 50%;
-    color: rgba(0,0,0,0.5);
+    color: rgba(255,255,255,0.6);
     cursor: pointer;
     font-size: 2rem;
     align-items: center;
     justify-content: center;
     transition: all 0.2s;
 }
-.sidebar-close-btn:hover { background: rgba(0,0,0,0.1); color: #000; }
+.sidebar-close-btn:hover { background: rgba(255,255,255,0.1); color: #ffffff; }
 
 .sidebar-menu {
     flex: 1; padding: 0.5rem 0.85rem; overflow-y: auto;
@@ -149,7 +149,7 @@ body {
 .sidebar-menu::-webkit-scrollbar { display: none; }
 
 .menu-label {
-    font-size: 0.65rem; font-weight: 800; color: rgba(0,0,0,0.4);
+    font-size: 0.65rem; font-weight: 800; color: rgba(255,255,255,0.3);
     text-transform: uppercase; letter-spacing: 0.12em;
     padding: 1.5rem 1rem 0.6rem;
 }
@@ -157,7 +157,7 @@ body {
 .sidebar-item {
     display: flex; align-items: center; gap: 12px;
     padding: 0.85rem 1.5rem; margin: 1px 0;
-    color: rgba(0,0,0,0.6); text-decoration: none;
+    color: rgba(255,255,255,0.7); text-decoration: none;
     font-weight: 700; font-size: 0.72rem;
     transition: all var(--transition);
     position: relative;
@@ -165,8 +165,8 @@ body {
     letter-spacing: 0.05em;
     border-radius: 6px;
 }
-.sidebar-item i { font-size: 1.35rem; opacity: 0.6; transition: all 0.3s; }
-.sidebar-item:hover { background: rgba(0,0,0,0.04); color: #000; }
+.sidebar-item i { font-size: 1.35rem; opacity: 0.7; transition: all 0.3s; }
+.sidebar-item:hover { background: rgba(255,255,255,0.08); color: #ffffff; }
 .sidebar-item:hover i { opacity: 1; transform: translateX(2px); }
 .sidebar-item.active {
     background: transparent;
@@ -679,26 +679,27 @@ body {
    Clean KPI Cards (Shared)
  ══════════════════════════════════════ */
 .dash-card {
-    background: #ffffff;
-    border-radius: 14px;
-    border: 1.5px solid #E2E8F0;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    background: #000000;
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     position: relative;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    min-height: 120px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    min-height: 140px;
 }
 
 .dash-card:hover {
-    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-    transform: translateY(-2px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+    transform: translateY(-4px);
+    border-color: rgba(255,255,255,0.2);
     cursor: pointer;
 }
 
 .dash-card-body {
-    padding: 1.4rem 1.5rem;
+    padding: 1.6rem 1.8rem;
     flex: 1;
     position: relative;
     z-index: 2;
@@ -707,36 +708,36 @@ body {
 }
 
 .dash-card-number {
-    font-size: 2.6rem;
-    font-weight: 700;
+    font-size: 3.8rem;
+    font-weight: 800;
     margin-bottom: 0;
     line-height: 1;
-    color: #111827;
-    letter-spacing: -1.5px;
+    color: #ffffff;
+    letter-spacing: -2.5px;
 }
 
 .dash-card-text {
-    font-size: 0.78rem;
-    margin-top: 6px;
-    font-weight: 500;
-    color: #6B7280;
+    font-size: 0.8rem;
+    margin-top: 10px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.5);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.1em;
 }
 
 .dash-card-icon {
     position: absolute;
-    bottom: 12px;
-    right: 14px;
-    font-size: 54px;
-    opacity: 0.07;
+    bottom: 15px;
+    right: 18px;
+    font-size: 64px;
+    opacity: 0.1;
     z-index: 1;
-    color: #111827;
+    color: #ffffff;
 }
 
-.card-orange .dash-card-number { color: #C4722A; }
-.card-wine   .dash-card-number { color: #7B1A1A; }
-.card-dark   .dash-card-number { color: #374151; }
+.card-orange .dash-card-number { color: #ffffff; }
+.card-wine   .dash-card-number { color: #ffffff; }
+.card-dark   .dash-card-number { color: #ffffff; }
 
 @media (max-width: 600px) {
     .dash-card { min-height: 100px; }
