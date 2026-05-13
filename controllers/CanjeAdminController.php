@@ -51,13 +51,10 @@ class CanjeAdminController {
 
                 $this->audit->registrar($_SESSION['id_usuario'], 'ESTADO_CANJE', "Cambió a $statusText el canje de {$canje['producto_nombre']} para {$canje['cliente_nombre']}", 'CANJES');
                 
-                // --- WhatsApp Meta API ---
+                // --- SMS Gateway ---
                 if ($estado === 'entregado' && !empty($canjeData['cliente_celular'])) {
-                    WhatsAppService::sendTemplate(
-                        $canjeData['cliente_celular'], 
-                        'canje_entregado', 
-                        [$canjeData['cliente_nombre'], $canjeData['premio_nombre']]
-                    );
+                    $msg = "Hola {$canjeData['cliente_nombre']}, tu canje de '{$canjeData['premio_nombre']}' ha sido entregado exitosamente. ¡Gracias por tu preferencia!";
+                    SmsService::send($canjeData['cliente_celular'], $msg);
                 }
 
                 $_SESSION['flash'] = ['type' => 'success', 'title' => 'Éxito', 'message' => "Estado actualizado a $statusText."];

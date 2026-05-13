@@ -98,13 +98,10 @@ class RecargaAdminController {
                 $statusText = strtoupper($estado);
                 $this->audit->registrar($_SESSION['id_usuario'], 'MODERAR_RECARGA', "$statusText la recarga de {$recarga['puntos']} puntos del cliente #{$recarga['cliente_id']}", 'RECARGAS');
                 
-                // --- WhatsApp Meta API ---
+                // --- SMS Gateway ---
                 if ($estado === 'aprobado' && !empty($recarga['cliente_celular'])) {
-                    WhatsAppService::sendTemplate(
-                        $recarga['cliente_celular'], 
-                        'recarga_aprobada', 
-                        [$recarga['cliente_nombre'], $recarga['puntos']]
-                    );
+                    $msg = "Hola {$recarga['cliente_nombre']}, tu recarga de {$recarga['puntos']} puntos ha sido aprobada. ¡Sigue ganando con Premia Surgas!";
+                    SmsService::send($recarga['cliente_celular'], $msg);
                 }
 
                 $_SESSION['flash'] = ['type' => 'success', 'title' => 'Éxito', 'message' => "La recarga ha sido marcada como $estado."];

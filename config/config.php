@@ -59,6 +59,11 @@ define('WABA_TOKEN', 'EAANdAFMMDv8BReZPsbtZAoLq34Osdd7DwEvGC8drCqY8JVCP1W4r18zoo
 define('WABA_PHONE_ID', '1163405613517388');
 define('WABA_VERSION', 'v25.0');
 
+// —— SMS Gateway (Android) ——
+define('SMS_GATEWAY_URL', 'http://192.168.1.34:8080/send-sms');
+define('SMS_GATEWAY_API_KEY', ''); // No parece requerir API Key según la captura
+define('SMS_DEVICE_ID', '1');
+
 // BASE_URL: automática según entorno
 if (getenv('MYSQL_URL')) {
     $proto = $_SERVER['HTTP_X_FORWARDED_PROTO'] ?? 'https';

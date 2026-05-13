@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../models/ClienteModel.php';
 require_once __DIR__ . '/../models/UsuarioModel.php';
 require_once __DIR__ . '/../models/AuditoriaModel.php';
+require_once __DIR__ . '/../helpers/DocumentLookupService.php';
 require_once __DIR__ . '/../config/config.php';
 
 class ClienteController
@@ -366,31 +367,12 @@ class ClienteController
             exit;
         }
 
-        $url = 'https://api.apis.net.pe/v1/dni?numero=' . $dni;
+        $documentLookup = new DocumentLookupService();
+        $data = $documentLookup->consultarDni($dni);
 
-        $ch = curl_init($url);
-        curl_setopt_array($ch, [
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => 10,
-            CURLOPT_SSL_VERIFYPEER => false,
-        ]);
-        $response = curl_exec($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-
-        if ($httpCode === 200 && $response) {
-            $data = json_decode($response, true);
-            if (isset($data['nombres'])) {
-                $nombreC = trim($data['nombres']) . ' ' . trim($data['apellidoPaterno'] ?? '') . ' ' . trim($data['apellidoMaterno'] ?? '');
-                $nombreC = mb_convert_case(mb_strtolower(trim($nombreC), 'UTF-8'), MB_CASE_TITLE, 'UTF-8');
-                echo json_encode(['success' => true, 'data' => ['nombre_completo' => $nombreC]]);
-                exit;
-            }
-            else if (isset($data['nombre'])) {
-                $nombreC = mb_convert_case(mb_strtolower(trim($data['nombre']), 'UTF-8'), MB_CASE_TITLE, 'UTF-8');
-                echo json_encode(['success' => true, 'data' => ['nombre_completo' => $nombreC]]);
-                exit;
-            }
+        if ($data) {
+            echo json_encode(['success' => true, 'data' => $data]);
+            exit;
         }
 
         echo json_encode(['success' => false, 'message' => 'No se encontraron resultados o API inactiva para el DNI ' . $dni]);
@@ -407,30 +389,12 @@ class ClienteController
             exit;
         }
 
-        $url = 'https://api.apis.net.pe/v1/ruc?numero=' . $ruc;
+        $documentLookup = new DocumentLookupService();
+        $data = $documentLookup->consultarRuc($ruc);
 
-        $ch = curl_init($url);
-        curl_setopt_array($ch, [
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => 5,
-            CURLOPT_SSL_VERIFYPEER => false,
-        ]);
-        $response = curl_exec($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-
-        if ($httpCode === 200 && $response) {
-            $data = json_decode($response, true);
-            if (isset($data['nombre']) && $data['nombre']) {
-                echo json_encode([
-                    'success' => true,
-                    'data' => [
-                        'razon_social' => trim($data['nombre']),
-                        'direccion' => trim($data['direccion'] ?? '')
-                    ]
-                ]);
-                exit;
-            }
+        if ($data) {
+            echo json_encode(['success' => true, 'data' => $data]);
+            exit;
         }
 
         echo json_encode(['success' => false, 'message' => 'RUC no encontrado o API no disponible. Digite manualmente.']);
