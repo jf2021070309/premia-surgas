@@ -50,7 +50,8 @@ class SmsService
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_TIMEOUT, 10);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Content-Type: application/json'
+            'Content-Type: application/json',
+            'X-API-Key: ' . SMS_GATEWAY_API_KEY
         ]);
 
         $response = curl_exec($ch);
