@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../models/CanjeModel.php';
 require_once __DIR__ . '/../models/AuditoriaModel.php';
+require_once __DIR__ . '/../helpers/SmsService.php';
+
 
 class CanjeAdminController {
     private AuditoriaModel $audit;
@@ -55,7 +57,11 @@ class CanjeAdminController {
                 if ($estado === 'entregado' && !empty($canjeData['cliente_celular'])) {
                     $msg = "Hola {$canjeData['cliente_nombre']}, tu canje de '{$canjeData['premio_nombre']}' ha sido entregado exitosamente. ¡Gracias por tu preferencia!";
                     SmsService::send($canjeData['cliente_celular'], $msg);
+                } else if ($estado === 'rechazado' && !empty($canjeData['cliente_celular'])) {
+                    $msg = "Hola {$canjeData['cliente_nombre']}, tu solicitud de canje de '{$canjeData['premio_nombre']}' ha sido rechazada. Por favor, contacta con administración para más detalles.";
+                    SmsService::send($canjeData['cliente_celular'], $msg);
                 }
+
 
                 $_SESSION['flash'] = ['type' => 'success', 'title' => 'Éxito', 'message' => "Estado actualizado a $statusText."];
             } else {

@@ -38,22 +38,27 @@ class WhatsAppService
             ];
         }
 
+        $templateData = [
+            'name' => $templateName,
+            'language' => [
+                'code' => $language
+            ]
+        ];
+
+        if (!empty($formattedParams)) {
+            $templateData['components'] = [
+                [
+                    'type' => 'body',
+                    'parameters' => $formattedParams
+                ]
+            ];
+        }
+
         $body = [
             'messaging_product' => 'whatsapp',
             'to' => $to,
             'type' => 'template',
-            'template' => [
-                'name' => $templateName,
-                'language' => [
-                    'code' => $language
-                ],
-                'components' => [
-                    [
-                        'type' => 'body',
-                        'parameters' => $formattedParams
-                    ]
-                ]
-            ]
+            'template' => $templateData
         ];
 
         return self::executePost($url, $body);

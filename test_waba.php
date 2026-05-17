@@ -7,10 +7,14 @@ require_once __DIR__ . '/helpers/WhatsAppService.php';
  * Ejecuta este archivo desde tu navegador: localhost/premia-surgas/test_waba.php?to=TU_NUMERO
  */
 
-$to = $_GET['to'] ?? null;
+$to = $_GET['to'] ?? ($argv[1] ?? null);
 
 if (!$to) {
-    die("Error: Debes pasar el número por URL. Ejemplo: test_waba.php?to=51987654321");
+    if (php_sapi_name() === 'cli') {
+        die("Error: Debes pasar el número como argumento. Ejemplo: php test_waba.php 51987654321\n");
+    } else {
+        die("Error: Debes pasar el número por URL. Ejemplo: test_waba.php?to=51987654321");
+    }
 }
 
 echo "<h2>Prueba de WhatsApp Cloud API</h2>";

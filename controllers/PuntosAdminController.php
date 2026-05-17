@@ -2,6 +2,8 @@
 require_once __DIR__ . '/../models/VentaModel.php';
 require_once __DIR__ . '/../models/ConfiguracionModel.php';
 require_once __DIR__ . '/../models/AuditoriaModel.php';
+require_once __DIR__ . '/../helpers/SmsService.php';
+
 
 class PuntosAdminController {
     private AuditoriaModel $audit;
@@ -47,12 +49,30 @@ class PuntosAdminController {
                 $statusText = strtoupper($estado);
                 $this->audit->registrar($_SESSION['id_usuario'], 'MODERAR_PUNTOS', "$statusText la suma de {$venta['puntos']} puntos para el cliente #{$venta['cliente_id']} por el operador {$venta['conductor_id']}", 'RECARGAS');
                 
-                // --- SMS Gateway ---
-                if ($estado === 'aprobado' && !empty($venta['cliente_celular'])) {
+                $notifyMethod = $_POST['notify'] ?? 'none';
+
+                // --- Test Notifications ---
+                if ($estado === 'aprobado') {
                     $monto = number_format($venta['monto'], 2);
-                    $msg = "Hola {$venta['cliente_nombre']}, se te han asignado {$venta['puntos']} puntos por tu compra de S/ {$monto}. ¡Sigue acumulando para grandes premios!";
+                    if ($notifyMethod === 'sms') {
+                        $msg = "Hola {$venta['cliente_nombre']}, se te han asignado {$venta['puntos']} puntos por tu compra de S/ {$monto}.";
+                        SmsService::send('972379897', $msg);
+                    } else if ($notifyMethod === 'wsp') {
+                        require_once __DIR__ . '/../helpers/WhatsAppService.php';
+                        // El usuario dijo wsp (931187102). WhatsAppService::sendTemplate agrega el 51 si tiene 9 digitos.
+                        WhatsAppService::sendTemplate('931187102', 'recepcion_completa', [], 'es_PE');
+                    } else {
+                        // Flujo normal (si quieres mantenerlo)
+                        if (!empty($venta['cliente_celular'])) {
+                            $msg = "Hola {$venta['cliente_nombre']}, se te han asignado {$venta['puntos']} puntos por tu compra de S/ {$monto}. ¡Sigue acumulando para grandes premios!";
+                            SmsService::send($venta['cliente_celular'], $msg);
+                        }
+                    }
+                } else if ($estado === 'rechazado' && !empty($venta['cliente_celular'])) {
+                    $msg = "Hola {$venta['cliente_nombre']}, tu solicitud de puntos por S/ " . number_format($venta['monto'], 2) . " fue rechazada por administración.";
                     SmsService::send($venta['cliente_celular'], $msg);
                 }
+
 
                 $_SESSION['flash'] = ['type' => 'success', 'title' => 'Éxito', 'message' => "La operación ha sido marcada como $estado."];
             } else {

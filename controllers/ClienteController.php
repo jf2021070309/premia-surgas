@@ -3,7 +3,9 @@ require_once __DIR__ . '/../models/ClienteModel.php';
 require_once __DIR__ . '/../models/UsuarioModel.php';
 require_once __DIR__ . '/../models/AuditoriaModel.php';
 require_once __DIR__ . '/../helpers/DocumentLookupService.php';
+require_once __DIR__ . '/../helpers/SmsService.php';
 require_once __DIR__ . '/../config/config.php';
+
 
 class ClienteController
 {
@@ -73,6 +75,8 @@ class ClienteController
 
         if ($id) {
             $this->audit->registrar($id, 'AUTOREGISTRO_CLIENTE', "Nuevo cliente registrado vía web: $nombre ($codigo)", 'SEGURIDAD');
+            SmsService::send($celular, "¡Hola $nombre! Bienvenido a Premia Surgas. Tu código es $codigo. Inicia sesión con tu DNI y la contraseña que elegiste.");
+
         }
 
         echo json_encode(['success' => true, 'message' => 'Registro exitoso. Ya puedes iniciar sesión.']);
@@ -201,6 +205,8 @@ class ClienteController
 
         if ($id) {
             $this->audit->registrar($_SESSION['id_usuario'], 'REGISTRO_CLIENTE', "Nuevo cliente: $nombre ($codigo)", 'CLIENTES');
+            SmsService::send($celular, "¡Bienvenido a Premia Surgas, $nombre! Tu código de cliente es $codigo. Ya puedes acumular puntos en nuestras estaciones.");
+
         }
 
         echo json_encode(['success' => true, 'id' => $id, 'codigo' => $codigo]);
@@ -522,6 +528,12 @@ class ClienteController
         $model = new ClienteModel();
         if ($model->updatePassword($_SESSION['id_cliente'], $newPass)) {
             $this->audit->registrar($_SESSION['id_cliente'], 'CAMBIO_PASSWORD', 'Cliente actualizó su contraseña', 'SEGURIDAD');
+            
+            $cliente = $model->findById($_SESSION['id_cliente']);
+            if (!empty($cliente['celular'])) {
+                SmsService::send($cliente['celular'], "Seguridad Premia Surgas: Tu contraseña ha sido actualizada correctamente.");
+            }
+
             echo json_encode(['success' => true, 'message' => 'Contraseña actualizada correctamente.']);
         } else {
             echo json_encode(['success' => false, 'message' => 'No se pudo actualizar la contraseña.']);

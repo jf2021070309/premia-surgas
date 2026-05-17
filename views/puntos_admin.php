@@ -155,10 +155,11 @@
                                 <div class="monto-val">S/ <?= number_format($r['monto'], 2) ?></div>
                             </div>
 
-                            <div class="ticket-actions">
-                                <form action="<?= BASE_URL ?>puntos-admin/actualizar" method="POST" style="margin:0;" class="approve-form">
+                            <div class="ticket-actions" style="display:flex; gap:0.5rem; align-items:center;">
+                                <form action="<?= BASE_URL ?>puntos-admin/actualizar" method="POST" style="margin:0; display:flex; gap:0.5rem;" class="approve-form">
                                     <input type="hidden" name="id" value="<?= $r['id'] ?>">
                                     <input type="hidden" name="estado" value="aprobado">
+                                    <input type="hidden" name="notify" class="notify-input" value="none">
                                     <?php
                                         $resumen_items = 'hoy';
                                         if (!empty($r['items'])) {
@@ -169,13 +170,14 @@
                                             $resumen_items = implode(', ', $partes);
                                         }
                                     ?>
-                                    <button type="button" class="btn btn-success btn-approve-trigger"
-                                        data-phone="<?= htmlspecialchars($r['cliente_celular'] ?? '') ?>"
-                                        data-name="<?= htmlspecialchars($r['cliente_nombre'] ?? '') ?>"
-                                        data-puntos="<?= $r['puntos'] ?>"
-                                        data-monto="<?= $r['monto'] ?>"
-                                        data-items="<?= htmlspecialchars($resumen_items) ?>">
+                                    <button type="button" class="btn btn-success btn-approve-trigger" data-notify="none">
                                         <i class='bx bx-check'></i> Aprobar
+                                    </button>
+                                    <button type="button" class="btn btn-info btn-approve-trigger" data-notify="sms" style="background:#0284c7; color:white; border:none; padding:0.5rem; border-radius:0.5rem; cursor:pointer;" title="Aprobar y enviar SMS (Prueba a 972379897)">
+                                        <i class='bx bx-message-rounded-dots'></i> SMS
+                                    </button>
+                                    <button type="button" class="btn btn-success btn-approve-trigger" data-notify="wsp" style="background:#25D366; color:white; border:none; padding:0.5rem; border-radius:0.5rem; cursor:pointer;" title="Aprobar y enviar WhatsApp (Prueba a 931187102)">
+                                        <i class='bx bxl-whatsapp'></i> WSP
                                     </button>
                                 </form>
 
@@ -431,9 +433,19 @@
         document.querySelectorAll('.btn-approve-trigger').forEach(btn => {
             btn.addEventListener('click', function() {
                 const form = this.closest('.approve-form');
+                const notifyMethod = this.getAttribute('data-notify') || 'none';
+                form.querySelector('.notify-input').value = notifyMethod;
+
+                let extraText = '';
+                if (notifyMethod === 'sms') {
+                    extraText = '<br><br><small style="color:#0284c7; font-weight:bold;"><i class="bx bx-message-rounded-dots"></i> Se enviará un SMS de prueba al 972379897</small>';
+                } else if (notifyMethod === 'wsp') {
+                    extraText = '<br><br><small style="color:#25D366; font-weight:bold;"><i class="bx bxl-whatsapp"></i> Se enviará un WSP (recepcion_completa) de prueba al 931187102</small>';
+                }
+
                 Swal.fire({
                     title: 'Aprobar Puntos',
-                    text: '¿Confirmas que deseas validar y acreditar estos puntos al cliente?',
+                    html: '¿Confirmas que deseas validar y acreditar estos puntos al cliente?' + extraText,
                     icon: 'question',
                     background: '#ffffff',
                     color: '#111827',

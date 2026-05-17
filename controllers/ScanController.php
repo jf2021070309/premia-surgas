@@ -7,18 +7,22 @@ require_once __DIR__ . '/../models/CanjeModel.php';
 require_once __DIR__ . '/../models/AuditoriaModel.php';
 require_once __DIR__ . '/../models/IncentivoModel.php';
 require_once __DIR__ . '/../models/AfiliadoAnuncioModel.php';
+require_once __DIR__ . '/../helpers/SmsService.php';
 require_once __DIR__ . '/../config/config.php';
 
 
-class ScanController {
+
+class ScanController
+{
 
     /**
      * GET /scan?c=CLI-000001&t=TOKEN
      * Valida QR y registra una venta / muestra perfil del cliente.
      */
-    public function index(): void {
+    public function index(): void
+    {
         $codigo = $_GET['c'] ?? '';
-        $token  = $_GET['t'] ?? '';
+        $token = $_GET['t'] ?? '';
 
         if ($codigo && $token) {
             $clienteModel = new ClienteModel();
@@ -28,15 +32,15 @@ class ScanController {
                 // Seteamos sesión completa de cliente como si fuera login
                 $sessId = session_id();
                 $clienteModel->updateSessionId($cliente['id'], $sessId);
-                
-                $_SESSION['id_usuario']     = $cliente['id'];
-                $_SESSION['rol']            = 'cliente';
-                $_SESSION['session_id']     = $sessId;
-                
-                $_SESSION['id_cliente']     = $cliente['id'];
+
+                $_SESSION['id_usuario'] = $cliente['id'];
+                $_SESSION['rol'] = 'cliente';
+                $_SESSION['session_id'] = $sessId;
+
+                $_SESSION['id_cliente'] = $cliente['id'];
                 $_SESSION['nombre_cliente'] = $cliente['nombre'];
                 $_SESSION['codigo_cliente'] = $codigo;
-                $_SESSION['token_cliente']  = $token;
+                $_SESSION['token_cliente'] = $token;
 
                 $ventaModel = new VentaModel();
                 $ventas = $ventaModel->getByCliente($cliente['id']);
@@ -54,7 +58,7 @@ class ScanController {
 
                 // Merge and sort all arrays by date descending
                 $historial = array_merge($ventas, $recargasHistory, $valesHistory);
-                usort($historial, function($a, $b) {
+                usort($historial, function ($a, $b) {
                     return strtotime($b['fecha']) - strtotime($a['fecha']);
                 });
 
@@ -63,7 +67,7 @@ class ScanController {
                 $canjes = $canjeModel->getByCliente($cliente['id']);
 
                 $isDefaultPassword = (
-                    ($cliente['password'] === hash('sha256', $cliente['dni'] ?? '')) || 
+                    ($cliente['password'] === hash('sha256', $cliente['dni'] ?? '')) ||
                     ($cliente['password'] === hash('sha256', $cliente['ruc'] ?? ''))
                 );
 
@@ -72,9 +76,9 @@ class ScanController {
                 $anuncios = $anuncioModel->getAllActive();
 
                 $this->render('scan/perfil_cliente', [
-                    'cliente'  => $cliente,
-                    'ventas'   => $historial,
-                    'canjes'   => $canjes,
+                    'cliente' => $cliente,
+                    'ventas' => $historial,
+                    'canjes' => $canjes,
                     'anuncios' => $anuncios,
                     'isDefaultPassword' => $isDefaultPassword
                 ]);
@@ -85,7 +89,7 @@ class ScanController {
 
         // Escenario 2: El conductor escanea el QR del cliente
         $this->requireAuth();
-        
+
         $opModel = new TipoOperacionModel();
         $operaciones = $opModel->getActive();
 
@@ -96,7 +100,8 @@ class ScanController {
      * API: POST /scan/buscar
      * Recibe código QR (CLI-000001) y devuelve datos del cliente.
      */
-    public function buscar(): void {
+    public function buscar(): void
+    {
         $this->requireAuth();
         $data = json_decode(file_get_contents('php://input'), true);
         $codigo = trim($data['codigo'] ?? '');
@@ -106,10 +111,10 @@ class ScanController {
         }
 
         $clienteModel = new ClienteModel();
-        
+
         // Intentar buscar por código ("CLI-...")
         $cliente = $clienteModel->findByCodigo($codigo);
-        
+
         // Si no se encuentra y es numérico de 8 dígitos, buscar por DNI
         if (!$cliente && preg_match('/^\d{8}$/', $codigo)) {
             $cliente = $clienteModel->findByDni($codigo);
@@ -122,7 +127,7 @@ class ScanController {
 
         // Si no se encuentra y es numérico general, buscar por ID antiguo
         if (!$cliente && is_numeric($codigo) && strlen($codigo) < 8) {
-            $cliente = $clienteModel->findById((int)$codigo);
+            $cliente = $clienteModel->findById((int) $codigo);
         }
 
         if (!$cliente) {
@@ -132,8 +137,8 @@ class ScanController {
         $this->json([
             'success' => true,
             'cliente' => [
-                'id'      => $cliente['id'],
-                'nombre'  => $cliente['nombre'],
+                'id' => $cliente['id'],
+                'nombre' => $cliente['nombre'],
                 'celular' => $cliente['celular']
             ]
         ]);
@@ -143,21 +148,22 @@ class ScanController {
      * API: POST /scan/registrar
      * Guarda el movimiento de puntos.
      */
-    public function registrar(): void {
+    public function registrar(): void
+    {
         $this->requireAuth();
         $data = json_decode(file_get_contents('php://input'), true);
 
         $clienteId = (int) ($data['cliente_id'] ?? 0);
-        $puntos    = (int) ($data['puntos'] ?? 0);
-        $monto     = (float) ($data['monto'] ?? 0);
-        $detalle   = trim($data['detalle'] ?? '');
-        $items     = $data['items'] ?? []; 
+        $puntos = (int) ($data['puntos'] ?? 0);
+        $monto = (float) ($data['monto'] ?? 0);
+        $detalle = trim($data['detalle'] ?? '');
+        $items = $data['items'] ?? [];
 
         if (!$clienteId || !$puntos) {
             $this->json(['success' => false, 'message' => 'Datos incompletos.']);
         }
 
-        $ventaModel   = new VentaModel();
+        $ventaModel = new VentaModel();
         $clienteModel = new ClienteModel();
         $rol = $_SESSION['rol'] ?? '';
 
@@ -169,7 +175,10 @@ class ScanController {
 
         if ($idVenta) {
             $message = 'Puntos registrados correctamente.';
-            
+
+            // Obtener datos del cliente para SMS y Auditoría
+            $c = $clienteModel->findById($clienteId);
+
             if ($estado === 'aprobado') {
                 // 2. Actualizar puntos totales del cliente (solo si está aprobado)
                 $clienteModel->sumarPuntos($clienteId, $puntos);
@@ -177,16 +186,21 @@ class ScanController {
                 // 3. Evaluar reglas de incentivos
                 $incentivoModel = new IncentivoModel();
                 $incentivoModel->evaluarMetas($clienteId);
+
+                // --- SMS Gateway ---
+                if (!empty($c['celular'])) {
+                    $msg = "Hola {$c['nombre']}, se te han asignado $puntos puntos. ¡Sigue acumulando para grandes premios en Premia Surgas!";
+                    SmsService::send($c['celular'], $msg);
+                }
             } else {
                 $message = 'Puntos registrados. Pendiente de aprobación por administración.';
             }
 
             // AUDITORIA
-            $c = $clienteModel->findById($clienteId);
             $audit = new AuditoriaModel();
             $accion = ($estado === 'aprobado') ? 'CARGA_PUNTOS' : 'SOLICITUD_PUNTOS_PENDIENTE';
             $audit->registrar($_SESSION['id_usuario'], $accion, "Registró $puntos puntos a {$c['nombre']} ($detalle). Estado: $estado", 'RECARGAS');
-            
+
             $this->json(['success' => true, 'message' => $message]);
         } else {
             $this->json(['success' => false, 'message' => 'Error al registrar puntos.']);
@@ -196,15 +210,16 @@ class ScanController {
     /**
      * POST /scan/venta  → registra venta y suma puntos (JSON)
      */
-    public function venta(): void {
+    public function venta(): void
+    {
         if (!isset($_SESSION['id_usuario'])) {
             $this->json(['success' => false, 'message' => 'No autenticado.']);
         }
 
         header('Content-Type: application/json');
-        $data       = json_decode(file_get_contents('php://input'), true);
-        $clienteId  = (int)($data['cliente_id'] ?? 0);
-        $monto      = (float)($data['monto'] ?? 0);
+        $data = json_decode(file_get_contents('php://input'), true);
+        $clienteId = (int) ($data['cliente_id'] ?? 0);
+        $monto = (float) ($data['monto'] ?? 0);
 
         if (!$clienteId || $monto <= 0) {
             echo json_encode(['success' => false, 'message' => 'Datos inválidos.']);
@@ -217,27 +232,36 @@ class ScanController {
 
         $puntos = (int) floor($monto * $factor);
 
-        $ventaModel   = new VentaModel();
+        $ventaModel = new VentaModel();
         $clienteModel = new ClienteModel();
         $rol = $_SESSION['rol'] ?? '';
 
         $estado = ($rol === 'admin') ? 'aprobado' : 'pendiente';
 
         $ventaModel->create($clienteId, $_SESSION['id_usuario'], $monto, $puntos, "Compra por monto: S/ $monto (+$puntos pts)", [], $estado);
-        
+
         $message = "Puntos registrados correctamente.";
+
+        // Obtener datos del cliente para SMS y Auditoría
+        $c = $clienteModel->findById($clienteId);
+
         if ($estado === 'aprobado') {
             $clienteModel->sumarPuntos($clienteId, $puntos);
 
             // Evaluar reglas de incentivos
             $incentivoModel = new IncentivoModel();
             $incentivoModel->evaluarMetas($clienteId);
+
+            // --- SMS Gateway ---
+            if (!empty($c['celular'])) {
+                $msg = "Hola {$c['nombre']}, ganaste $puntos puntos por tu compra de S/ " . number_format($monto, 2) . ". ¡Gracias por preferir Premia Surgas!";
+                SmsService::send($c['celular'], $msg);
+            }
         } else {
             $message = "Puntos registrados. Pendiente de aprobación.";
         }
 
         // AUDITORIA
-        $c = $clienteModel->findById($clienteId);
         $audit = new AuditoriaModel();
         $accion = ($estado === 'aprobado') ? 'VENTA_PUNTOS' : 'SOLICITUD_VENTA_PENDIENTE';
         $audit->registrar($_SESSION['id_usuario'], $accion, "Asignó $puntos puntos por venta de S/ $monto a {$c['nombre']}. Estado: $estado", 'RECARGAS');
@@ -248,7 +272,8 @@ class ScanController {
 
     // ── helpers ──────────────────────────────────────────────────
 
-    private function requireAuth(): void {
+    private function requireAuth(): void
+    {
         if (!isset($_SESSION['id_usuario'])) {
             if ($this->isAjax()) {
                 $this->json(['success' => false, 'message' => 'Sesión expirada.']);
@@ -258,16 +283,19 @@ class ScanController {
         }
     }
 
-    private function isAjax(): bool {
+    private function isAjax(): bool
+    {
         return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest';
     }
 
-    private function render(string $view, array $data = []): void {
+    private function render(string $view, array $data = []): void
+    {
         extract($data);
         require __DIR__ . "/../views/{$view}.php";
     }
 
-    private function json(array $data): void {
+    private function json(array $data): void
+    {
         header('Content-Type: application/json');
         echo json_encode($data);
         exit;

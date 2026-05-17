@@ -2,6 +2,8 @@
 require_once __DIR__ . '/../models/RecargaModel.php';
 require_once __DIR__ . '/../models/ConfiguracionModel.php';
 require_once __DIR__ . '/../models/AuditoriaModel.php';
+require_once __DIR__ . '/../helpers/SmsService.php';
+
 
 class RecargaAdminController {
     private AuditoriaModel $audit;
@@ -102,7 +104,11 @@ class RecargaAdminController {
                 if ($estado === 'aprobado' && !empty($recarga['cliente_celular'])) {
                     $msg = "Hola {$recarga['cliente_nombre']}, tu recarga de {$recarga['puntos']} puntos ha sido aprobada. ¡Sigue ganando con Premia Surgas!";
                     SmsService::send($recarga['cliente_celular'], $msg);
+                } else if ($estado === 'rechazado' && !empty($recarga['cliente_celular'])) {
+                    $msg = "Hola {$recarga['cliente_nombre']}, tu recarga de puntos fue rechazada. Por favor, verifica el comprobante e intenta nuevamente.";
+                    SmsService::send($recarga['cliente_celular'], $msg);
                 }
+
 
                 $_SESSION['flash'] = ['type' => 'success', 'title' => 'Éxito', 'message' => "La recarga ha sido marcada como $estado."];
             } else {

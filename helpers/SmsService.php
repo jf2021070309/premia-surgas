@@ -7,75 +7,40 @@
 class SmsService
 {
     /**
-     * Envía un mensaje SMS a un número específico.
+     * Encola un mensaje SMS para ser enviado por la App Android.
      * 
-     * @param string $to Número de teléfono (ej: 987654321)
+     * @param string $to Número de teléfono
      * @param string $message Texto del mensaje
-     * @return array [success => bool, response => mixed, error => string]
+     * @return array [success => bool, message => string]
      */
     public static function send(string $to, string $message)
     {
         // Limpiar el número (solo dígitos)
         $to = preg_replace('/\D/', '', $to);
         
-        // Ajustar formato según sea necesario (ej: prefijo del país)
+        // Ajustar formato según sea necesario (Perú por defecto)
         if (strlen($to) === 9) {
-            $to = '51' . $to; // Perú por defecto
+            $to = '51' . $to;
         }
 
-        $url = SMS_GATEWAY_URL;
+        try {
+            require_once __DIR__ . '/../config/Database.php';
+            $db = Database::getConnection();
+            
+            $sql = "INSERT INTO sms_queue (celular, mensaje, estado) VALUES (?, ?, 'pendiente')";
+            $stmt = $db->prepare($sql);
+            $success = $stmt->execute([$to, $message]);
 
-        // Estructura común para Apps de SMS Gateway
-        $body = [
-            'phone'   => $to,
-            'message' => $message
-        ];
-
-        return self::executePost($url, $body);
-    }
-
-    /**
-     * Ejecuta la petición cURL enviando JSON
-     */
-    private static function executePost($url, $body)
-    {
-        $ch = curl_init();
-        
-        $jsonBody = json_encode($body);
-
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonBody);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Content-Type: application/json',
-            'X-API-Key: ' . SMS_GATEWAY_API_KEY
-        ]);
-
-        $response = curl_exec($ch);
-        $error    = curl_error($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        
-        curl_close($ch);
-
-        if ($error) {
+            return [
+                'success' => $success,
+                'message' => $success ? 'SMS encolado correctamente' : 'Error al encolar SMS'
+            ];
+        } catch (Exception $e) {
             return [
                 'success' => false,
-                'error'   => $error,
-                'response' => null
+                'error'   => $e->getMessage()
             ];
         }
-
-        // Intentar decodificar si la respuesta es JSON
-        $resDecoded = json_decode($response, true) ?: $response;
-
-        return [
-            'success'  => ($httpCode >= 200 && $httpCode < 300),
-            'code'     => $httpCode,
-            'response' => $resDecoded,
-            'error'    => ($httpCode >= 400) ? 'Error del servidor gateway' : null
-        ];
     }
 }
+

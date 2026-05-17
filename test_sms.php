@@ -17,7 +17,7 @@ echo "<h2>Prueba de SMS Gateway (Android)</h2>";
 echo "Enviando mensaje de prueba a: <b>$to</b><br>";
 echo "URL del Gateway: <b>" . SMS_GATEWAY_URL . "</b><br>";
 
-$msg = "Prueba de Premia Surgas: Tu tricitracatelas es " . rand(1000, 9999);
+$msg = "Prueba de Premia Surgas: FULLL FULLL BRRR es " . rand(1000, 9999);
 $result = SmsService::send($to, $msg);
 
 echo "<pre>";
