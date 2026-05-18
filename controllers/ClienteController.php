@@ -11,13 +11,17 @@ class ClienteController
 {
     private AuditoriaModel $audit;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->audit = new AuditoriaModel();
     }
 
     public function nuevo(): void
     {
         $this->requireAuth();
+        if (in_array($_SESSION['rol'] ?? '', ['conductor', 'afiliado'])) {
+            $this->redirect('panel');
+        }
         $this->render('clientes/nuevo');
     }
 
@@ -88,6 +92,11 @@ class ClienteController
         $this->requireAuth();
         header('Content-Type: application/json');
 
+        if (in_array($_SESSION['rol'] ?? '', ['conductor', 'afiliado'])) {
+            echo json_encode(['success' => false, 'message' => 'No tienes permisos para registrar clientes.']);
+            exit;
+        }
+
         $data = json_decode(file_get_contents('php://input'), true);
         $tipo_cliente = trim($data['tipo_cliente'] ?? 'Normal');
 
@@ -116,8 +125,7 @@ class ClienteController
             }
             $ruc = null; // Clean ruc for Normal
             $razon_social = null;
-        }
-        else {
+        } else {
             if (!$ruc || !preg_match('/^\d{11}$/', $ruc)) {
                 echo json_encode(['success' => false, 'message' => 'El RUC debe tener exactamente 11 dígitos.']);
                 exit;
@@ -155,8 +163,7 @@ class ClienteController
                 ]);
                 exit;
             }
-        }
-        else {
+        } else {
             $existenteRuc = $model->findByRuc($ruc);
             if ($existenteRuc) {
                 echo json_encode([
@@ -216,7 +223,7 @@ class ClienteController
     public function exito(): void
     {
         $this->requireAuth();
-        $id = (int)($_GET['id'] ?? 0);
+        $id = (int) ($_GET['id'] ?? 0);
         $model = new ClienteModel();
         $cliente = $model->findById($id);
         if (!$cliente) {
@@ -228,7 +235,7 @@ class ClienteController
     public function imprimir(): void
     {
         $this->requireAuth();
-        $id = (int)($_GET['id'] ?? 0);
+        $id = (int) ($_GET['id'] ?? 0);
         $model = new ClienteModel();
         $cliente = $model->findById($id);
         if (!$cliente) {
@@ -248,7 +255,7 @@ class ClienteController
     public function editar(): void
     {
         $this->requireAdmin();
-        $id = (int)($_GET['id'] ?? 0);
+        $id = (int) ($_GET['id'] ?? 0);
         $model = new ClienteModel();
         $cliente = $model->findById($id);
 
@@ -262,7 +269,7 @@ class ClienteController
     public function update(): void
     {
         $this->requireAdmin();
-        $id = (int)($_POST['id'] ?? 0);
+        $id = (int) ($_POST['id'] ?? 0);
         $model = new ClienteModel();
 
         $clienteOriginal = $model->findById($id);
@@ -279,7 +286,7 @@ class ClienteController
             'celular' => trim($_POST['celular'] ?? ''),
             'direccion' => trim($_POST['direccion'] ?? ''),
             'departamento' => $clienteOriginal['departamento'], // Keep orginal department
-            'estado' => (int)($_POST['estado'] ?? 1),
+            'estado' => (int) ($_POST['estado'] ?? 1),
         ];
 
         if (!$data['nombre'] || !$data['celular']) {
@@ -294,8 +301,7 @@ class ClienteController
             }
             $data['ruc'] = null;
             $data['razon_social'] = null;
-        }
-        else {
+        } else {
             if (!$data['ruc'] || !preg_match('/^\d{11}$/', $data['ruc'])) {
                 echo json_encode(['success' => false, 'message' => 'El RUC debe tener exactamente 11 dígitos.']);
                 exit;
@@ -323,18 +329,18 @@ class ClienteController
         foreach ($fieldsToTrack as $f) {
             $valAnt = $clienteOriginal[$f] ?? null;
             $valDev = $data[$f] ?? null;
-            if (trim((string)$valAnt) !== trim((string)$valDev)) {
+            if (trim((string) $valAnt) !== trim((string) $valDev)) {
                 $changes[$f] = ['ant' => $valAnt, 'des' => $valDev];
             }
         }
 
         if ($model->update($id, $data)) {
             $desc = "Editó datos del cliente: " . $data['nombre'];
-            if (!empty($changes)) $desc .= " (" . count($changes) . " campos modificados)";
+            if (!empty($changes))
+                $desc .= " (" . count($changes) . " campos modificados)";
             $this->audit->registrar($_SESSION['id_usuario'], 'ACTUALIZAR_CLIENTE', $desc, 'CLIENTES', $changes);
             echo json_encode(['success' => true, 'message' => 'Cliente actualizado correctamente.']);
-        }
-        else {
+        } else {
             echo json_encode(['success' => false, 'message' => 'No se pudo actualizar el cliente.']);
         }
         exit;
@@ -343,20 +349,19 @@ class ClienteController
     public function cambiarEstado(): void
     {
         $this->requireAdmin();
-        $id = (int)($_GET['id'] ?? 0);
-        $estado = (int)($_GET['v'] ?? 1);
+        $id = (int) ($_GET['id'] ?? 0);
+        $estado = (int) ($_GET['v'] ?? 1);
         $model = new ClienteModel();
-        
+
         $c = $model->findById($id);
 
         if ($model->setEstado($id, $estado)) {
             $accion = $estado ? 'ALTA_CLIENTE' : 'BAJA_CLIENTE';
             $msgStatus = $estado ? 'Activó' : 'Inactivó';
-            $this->audit->registrar($_SESSION['id_usuario'], $accion, "$msgStatus al cliente: " . ($c['nombre'] ?? 'ID '.$id), 'CLIENTES');
-            
+            $this->audit->registrar($_SESSION['id_usuario'], $accion, "$msgStatus al cliente: " . ($c['nombre'] ?? 'ID ' . $id), 'CLIENTES');
+
             $_SESSION['flash'] = ['type' => 'success', 'title' => '¡Hecho!', 'message' => ($estado ? 'Cliente activado.' : 'Cliente inactivado.')];
-        }
-        else {
+        } else {
             $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo cambiar el estado.'];
         }
         $this->redirect('clientes/lista');
@@ -450,8 +455,8 @@ class ClienteController
         header('Content-Type: application/json');
 
         $data = json_decode(file_get_contents('php://input'), true);
-        $id = (int)($data['id'] ?? 0);
-        
+        $id = (int) ($data['id'] ?? 0);
+
         if (!$id) {
             echo json_encode(['success' => false, 'message' => 'ID de cliente no válido.']);
             exit;
@@ -471,10 +476,10 @@ class ClienteController
         }
 
         $usuarioModel = new UsuarioModel();
-        
+
         // El usuario será su RUC (o DNI si no tiene RUC)
         $username = $cliente['ruc'] ?: $cliente['dni'];
-        
+
         if (!$username) {
             echo json_encode(['success' => false, 'message' => 'El cliente no tiene RUC ni DNI registrado para crear el usuario.']);
             exit;
@@ -528,7 +533,7 @@ class ClienteController
         $model = new ClienteModel();
         if ($model->updatePassword($_SESSION['id_cliente'], $newPass)) {
             $this->audit->registrar($_SESSION['id_cliente'], 'CAMBIO_PASSWORD', 'Cliente actualizó su contraseña', 'SEGURIDAD');
-            
+
             $cliente = $model->findById($_SESSION['id_cliente']);
             if (!empty($cliente['celular'])) {
                 SmsService::send($cliente['celular'], "Seguridad Premia Surgas: Tu contraseña ha sido actualizada correctamente.");

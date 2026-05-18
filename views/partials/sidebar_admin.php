@@ -6,7 +6,8 @@
 $current_url = trim($_GET['url'] ?? '', '/');
 
 if (!function_exists('isActiveLink')) {
-    function isActiveLink($targetPath, $currentUrl) {
+    function isActiveLink($targetPath, $currentUrl)
+    {
         $targetPath = trim($targetPath, '/');
         // Caso especial para el panel/home
         if ($targetPath === 'panel' && (empty($currentUrl) || $currentUrl === 'panel')) {
@@ -28,7 +29,7 @@ if (!function_exists('isActiveLink')) {
     <div class="sidebar-brand" style="justify-content: center; padding: 2rem 1.5rem;">
         <!-- Brand img -->
         <img src="<?= BASE_URL ?>assets/premios/PREMIASURGASLOGO.png" alt="Surgas">
-        
+
         <!-- Toggle button inside sidebar (visible when mini) -->
         <button class="sidebar-toggle-mini-btn" id="sidebarToggleMiniBtn" title="Abrir menú">
             <i class='bx bx-menu'></i>
@@ -38,7 +39,9 @@ if (!function_exists('isActiveLink')) {
     <nav class="sidebar-menu">
         <?php if ($_SESSION['rol'] === 'cliente'): ?>
             <div class="menu-label">Mi Cuenta</div>
-            <a href="<?= BASE_URL ?>scan?c=<?= $_SESSION['codigo_cliente'] ?>&t=<?= $_SESSION['token_cliente'] ?>" class="sidebar-item <?= isActiveLink('scan', $current_url) ?>" onclick="window.location.hash=''; return true;">
+            <a href="<?= BASE_URL ?>scan?c=<?= $_SESSION['codigo_cliente'] ?>&t=<?= $_SESSION['token_cliente'] ?>"
+                class="sidebar-item <?= isActiveLink('scan', $current_url) ?>"
+                onclick="window.location.hash=''; return true;">
                 <i class='bx bx-user-circle'></i>
                 <span>Mi Perfil</span>
             </a>
@@ -73,29 +76,31 @@ if (!function_exists('isActiveLink')) {
                 <span>Dashboard</span>
             </a>
 
-            <?php if ($_SESSION['rol'] !== 'afiliado'): ?>
-            <div class="menu-label">Gestión</div>
-            <a href="<?= BASE_URL ?>clientes/nuevo" class="sidebar-item <?= isActiveLink('clientes/nuevo', $current_url) ?>">
-                <i class='bx bx-user-plus'></i>
-                <span>Nuevo Cliente</span>
-            </a>
+            <?php if (!in_array($_SESSION['rol'], ['conductor', 'afiliado'])): ?>
+                <div class="menu-label">Gestión</div>
+                <a href="<?= BASE_URL ?>clientes/nuevo"
+                    class="sidebar-item <?= isActiveLink('clientes/nuevo', $current_url) ?>">
+                    <i class='bx bx-user-plus'></i>
+                    <span>Nuevo Cliente</span>
+                </a>
             <?php else: ?>
-            <!-- MÓDULO OCULTO PARA AFILIADO:
-            <div class="menu-label">Gestión</div>
-            <a href="<?= BASE_URL ?>clientes/nuevo" class="sidebar-item <?= isActiveLink('clientes/nuevo', $current_url) ?>">
-                <i class='bx bx-user-plus'></i>
-                <span>Nuevo Cliente</span>
-            </a>
-            -->
+                <!-- MÓDULO OCULTO PARA CONDUCTOR Y AFILIADO:
+                <div class="menu-label">Gestión</div>
+                <a href="<?= BASE_URL ?>clientes/nuevo" class="sidebar-item <?= isActiveLink('clientes/nuevo', $current_url) ?>">
+                    <i class='bx bx-user-plus'></i>
+                    <span>Nuevo Cliente</span>
+                </a>
+                -->
             <?php endif; ?>
 
             <?php if (!in_array($_SESSION['rol'], ['conductor', 'afiliado'])): ?>
-            <a href="<?= BASE_URL ?>clientes/lista" class="sidebar-item <?= isActiveLink('clientes/lista', $current_url) ?>">
-                <i class='bx bx-group'></i>
-                <span>Directorio</span>
-            </a>
+                <a href="<?= BASE_URL ?>clientes/lista"
+                    class="sidebar-item <?= isActiveLink('clientes/lista', $current_url) ?>">
+                    <i class='bx bx-group'></i>
+                    <span>Directorio</span>
+                </a>
             <?php else: ?>
-            <!-- MÓDULO OCULTO PARA CONDUCTOR Y AFILIADO:
+                <!-- MÓDULO OCULTO PARA CONDUCTOR Y AFILIADO:
             <a href="<?= BASE_URL ?>clientes/lista" class="sidebar-item <?= isActiveLink('clientes/lista', $current_url) ?>">
                 <i class='bx bx-group'></i>
                 <span>Directorio</span>
@@ -128,11 +133,12 @@ if (!function_exists('isActiveLink')) {
                     <i class='bx bx-check-shield'></i>
                     <span>Gestión de Puntos</span>
                 </a>
-                <a href="<?= BASE_URL ?>recargas-admin" class="sidebar-item <?= isActiveLink('recargas-admin', $current_url) ?>">
+                <a href="<?= BASE_URL ?>recargas-admin"
+                    class="sidebar-item <?= isActiveLink('recargas-admin', $current_url) ?>">
                     <i class='bx bx-wallet'></i>
                     <span>Gestión Recargas</span>
                 </a>
-                
+
                 <!-- MÓDULOS OCULTOS TEMPORALMENTE:
                 <a href="<?= BASE_URL ?>canjes-admin" class="sidebar-item <?= isActiveLink('canjes-admin', $current_url) ?>">
                     <i class='bx bx-check-double'></i>
@@ -151,17 +157,20 @@ if (!function_exists('isActiveLink')) {
                 <span>Suma Puntos</span>
             </a>
             <?php if ($_SESSION['rol'] === 'conductor' || $_SESSION['rol'] === 'admin'): ?>
-                <a href="<?= BASE_URL ?>conductores/mi-historial" class="sidebar-item <?= isActiveLink('conductores/mi-historial', $current_url) ?>">
+                <a href="<?= BASE_URL ?>conductores/mi-historial"
+                    class="sidebar-item <?= isActiveLink('conductores/mi-historial', $current_url) ?>">
                     <i class='bx bx-history'></i>
                     <span>Mi Historial</span>
                 </a>
             <?php endif; ?>
             <?php if ($_SESSION['rol'] === 'afiliado'): ?>
-                <a href="<?= BASE_URL ?>afiliados/mi-historial" class="sidebar-item <?= isActiveLink('afiliados/mi-historial', $current_url) ?>">
+                <a href="<?= BASE_URL ?>afiliados/mi-historial"
+                    class="sidebar-item <?= isActiveLink('afiliados/mi-historial', $current_url) ?>">
                     <i class='bx bx-history'></i>
                     <span>Mi Historial</span>
                 </a>
-                <a href="<?= BASE_URL ?>afiliados/perfil" class="sidebar-item <?= isActiveLink('afiliados/perfil', $current_url) ?>">
+                <a href="<?= BASE_URL ?>afiliados/perfil"
+                    class="sidebar-item <?= isActiveLink('afiliados/perfil', $current_url) ?>">
                     <i class='bx bx-user-circle'></i>
                     <span>Mi Perfil</span>
                 </a>
@@ -173,7 +182,8 @@ if (!function_exists('isActiveLink')) {
                     <i class='bx bx-cog'></i>
                     <span>Configuración General</span>
                 </a>
-                <a href="<?= BASE_URL ?>reporte/auditoria" class="sidebar-item <?= isActiveLink('reporte/auditoria', $current_url) ?>">
+                <a href="<?= BASE_URL ?>reporte/auditoria"
+                    class="sidebar-item <?= isActiveLink('reporte/auditoria', $current_url) ?>">
                     <i class='bx bx-history'></i>
                     <span>Auditoría de Sistema</span>
                 </a>
@@ -183,81 +193,81 @@ if (!function_exists('isActiveLink')) {
 </aside>
 
 <script>
-// Evitar reinicializaciones si el script se carga múltiples veces
-if (!window._sidebarInitialized) {
-    window._sidebarInitialized = true;
+    // Evitar reinicializaciones si el script se carga múltiples veces
+    if (!window._sidebarInitialized) {
+        window._sidebarInitialized = true;
 
-    // Funciones globales de apertura y cierre
-    window.openAdminSidebar = function() {
-        const sidebar = document.getElementById('mainSidebar');
-        const overlay = document.getElementById('sidebarOverlay');
-        if (sidebar && overlay) {
-            sidebar.classList.add('open');
-            overlay.classList.add('active');
-            document.body.style.overflow = 'hidden'; // Evita scroll
-        }
-    };
+        // Funciones globales de apertura y cierre
+        window.openAdminSidebar = function () {
+            const sidebar = document.getElementById('mainSidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            if (sidebar && overlay) {
+                sidebar.classList.add('open');
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden'; // Evita scroll
+            }
+        };
 
-    window.closeAdminSidebar = function() {
-        const sidebar = document.getElementById('mainSidebar');
-        const overlay = document.getElementById('sidebarOverlay');
-        if (sidebar && overlay) {
-            sidebar.classList.remove('open');
-            overlay.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-    };
+        window.closeAdminSidebar = function () {
+            const sidebar = document.getElementById('mainSidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            if (sidebar && overlay) {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        };
 
-    // Usar event delegation a nivel de document para sobrevivir reacondicionamiento del DOM (ej. Vue)
-    document.addEventListener('click', function(e) {
-        // Cierre al hacer click en el overlay
-        if (e.target && e.target.id === 'sidebarOverlay') {
-            window.closeAdminSidebar();
-        }
-        
-        // Cierre al hacer click en el botón "X" o dentro de él
-        if (e.target && e.target.closest('#sidebarCloseBtn')) {
-            window.closeAdminSidebar();
-        }
+        // Usar event delegation a nivel de document para sobrevivir reacondicionamiento del DOM (ej. Vue)
+        document.addEventListener('click', function (e) {
+            // Cierre al hacer click en el overlay
+            if (e.target && e.target.id === 'sidebarOverlay') {
+                window.closeAdminSidebar();
+            }
 
-        // Apertura al hacer click en el toggle del sidebar mini
-        if (e.target && (e.target.closest('#sidebarToggleBtn') || e.target.closest('#sidebarToggleMiniBtn'))) {
-            // Evitar comportamiento por defecto
-            e.preventDefault();
-            window.openAdminSidebar();
-        }
-    });
+            // Cierre al hacer click en el botón "X" o dentro de él
+            if (e.target && e.target.closest('#sidebarCloseBtn')) {
+                window.closeAdminSidebar();
+            }
 
-    // --- Dynamic Sidebar Highlighting for Hashes ---
-    function updateSidebarActive() {
-        // Solo aplicar la lógica de hash si estamos en la vista de cliente (que tiene hashes en los onclick)
-        const isClientView = document.querySelector('.sidebar-item[onclick*="actividad"]');
-        if (!isClientView) return; // Si somos admin, dejamos que PHP maneje el .active
-
-        const hash = window.location.hash;
-        const sidebarItems = document.querySelectorAll('.sidebar-item');
-        
-        sidebarItems.forEach(item => {
-            const onclick = item.getAttribute('onclick') || '';
-            const href = item.getAttribute('href') || '';
-            
-            // Default: remove active
-            item.classList.remove('active');
-
-            if (hash === '#actividad') {
-                if (onclick.includes('actividad')) item.classList.add('active');
-            } else if (hash === '#canjes') {
-                if (onclick.includes('canjes')) item.classList.add('active');
-            } else if (!hash || hash === '') {
-                // If we are in the main scan page without hash
-                if (href.includes('scan') && !onclick.includes('actividad') && !onclick.includes('canjes')) {
-                    item.classList.add('active');
-                }
+            // Apertura al hacer click en el toggle del sidebar mini
+            if (e.target && (e.target.closest('#sidebarToggleBtn') || e.target.closest('#sidebarToggleMiniBtn'))) {
+                // Evitar comportamiento por defecto
+                e.preventDefault();
+                window.openAdminSidebar();
             }
         });
-    }
 
-    window.addEventListener('hashchange', updateSidebarActive);
-    window.addEventListener('load', updateSidebarActive);
-}
+        // --- Dynamic Sidebar Highlighting for Hashes ---
+        function updateSidebarActive() {
+            // Solo aplicar la lógica de hash si estamos en la vista de cliente (que tiene hashes en los onclick)
+            const isClientView = document.querySelector('.sidebar-item[onclick*="actividad"]');
+            if (!isClientView) return; // Si somos admin, dejamos que PHP maneje el .active
+
+            const hash = window.location.hash;
+            const sidebarItems = document.querySelectorAll('.sidebar-item');
+
+            sidebarItems.forEach(item => {
+                const onclick = item.getAttribute('onclick') || '';
+                const href = item.getAttribute('href') || '';
+
+                // Default: remove active
+                item.classList.remove('active');
+
+                if (hash === '#actividad') {
+                    if (onclick.includes('actividad')) item.classList.add('active');
+                } else if (hash === '#canjes') {
+                    if (onclick.includes('canjes')) item.classList.add('active');
+                } else if (!hash || hash === '') {
+                    // If we are in the main scan page without hash
+                    if (href.includes('scan') && !onclick.includes('actividad') && !onclick.includes('canjes')) {
+                        item.classList.add('active');
+                    }
+                }
+            });
+        }
+
+        window.addEventListener('hashchange', updateSidebarActive);
+        window.addEventListener('load', updateSidebarActive);
+    }
 </script>
