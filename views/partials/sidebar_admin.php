@@ -69,6 +69,11 @@ if (!function_exists('isActiveLink')) {
                 <i class='bx bx-lock-alt'></i>
                 <span>Seguridad</span>
             </a>
+
+            <a href="<?= BASE_URL ?>mapa" class="sidebar-item <?= isActiveLink('mapa', $current_url) ?>">
+                <i class='bx bx-map-alt'></i>
+                <span>Puntos de Venta</span>
+            </a>
         <?php else: ?>
             <div class="menu-label">Principal</div>
             <a href="<?= BASE_URL ?>panel" class="sidebar-item <?= isActiveLink('panel', $current_url) ?>">
@@ -137,6 +142,12 @@ if (!function_exists('isActiveLink')) {
                     class="sidebar-item <?= isActiveLink('recargas-admin', $current_url) ?>">
                     <i class='bx bx-wallet'></i>
                     <span>Gestión Recargas</span>
+                </a>
+
+                <div class="menu-label">Mapa</div>
+                <a href="<?= BASE_URL ?>mapa/admin" class="sidebar-item <?= isActiveLink('mapa/admin', $current_url) ?>">
+                    <i class='bx bx-map-pin'></i>
+                    <span>Puntos de Venta</span>
                 </a>
 
                 <!-- MÓDULOS OCULTOS TEMPORALMENTE:

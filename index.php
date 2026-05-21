@@ -150,6 +150,12 @@ $routes = [
     ['POST', 'incentivos/vales/cancelar',   'IncentivoController', 'cancelarVale'],
     ['GET',  'incentivos/progresoJson',     'IncentivoController', 'progresoJson'],
 
+    // —— Mapa / Puntos de Venta ——
+    ['GET',  'mapa',                'MapaController', 'cliente'],
+    ['GET',  'mapa/admin',          'MapaController', 'admin'],
+    ['POST', 'mapa/create',         'MapaController', 'create'],
+    ['GET',  'mapa/delete',         'MapaController', 'delete'],
+
     // —— Configuración General (Unificada) ——
     ['GET',  'ajustes',               'AjustesController', 'index'],
     ['POST', 'ajustes/update-puntos', 'AjustesController', 'updatePuntos'],
