@@ -21,35 +21,82 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Outfit','Inter',sans-serif; background: var(--bg); min-height: 100vh; overflow: hidden; }
 
-        /* Sleek glassmorphic back button */
-        .header-back { 
-            position: fixed; 
-            top: 1.2rem; 
-            left: 1.2rem; 
-            width: 44px; 
-            height: 44px; 
-            background: rgba(255, 255, 255, 0.9); 
-            backdrop-filter: blur(10px);
-            border-radius: 50%; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            color: var(--primary); 
-            font-size: 1.35rem; 
-            text-decoration: none; 
-            box-shadow: 0 8px 32px rgba(0,0,0,0.12); 
-            border: 1px solid rgba(255, 255, 255, 0.5); 
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-            z-index: 1000; 
+        /* Premium Floating Glassmorphic Header */
+        .map-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 72px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+            display: flex;
+            align-items: center;
+            padding: 0 1.2rem;
+            z-index: 1000;
+            box-shadow: 0 8px 32px rgba(15, 23, 42, 0.05);
         }
-        .header-back:hover { 
-            background: var(--primary); 
-            color: #fff; 
-            transform: scale(1.08) rotate(-10deg); 
-            box-shadow: 0 12px 36px rgba(128, 0, 0, 0.3);
+        .map-header-back {
+            width: 42px;
+            height: 42px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.3rem;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            border: 1px solid rgba(0,0,0,0.04);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .map-header-back:hover {
+            background: var(--primary);
+            color: #fff;
+            transform: scale(1.06) rotate(-8deg);
+            box-shadow: 0 8px 20px rgba(128, 0, 0, 0.25);
+        }
+        .map-header-title-container {
+            flex: 1;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-right: 42px; /* Balance perfect alignment with the left back button */
+        }
+        .map-header-title {
+            font-size: 1.05rem;
+            font-weight: 950;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            letter-spacing: -0.3px;
+        }
+        .map-header-title i {
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+        .map-header-subtitle {
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-top: 1px;
         }
 
         #map-cliente { height: 100vh; width: 100vw; position: absolute; top: 0; left: 0; z-index: 1; }
+
+        /* Align Zoom Control to fit nicely under Header */
+        .leaflet-top.leaflet-right {
+            top: 88px !important;
+            right: 14px !important;
+        }
 
         /* Pulsing floating main button */
         #btnVerCercanos { 
@@ -196,8 +243,8 @@
         .punto-item-dist i { color: #ef4444; }
         .punto-item-pin { width: 36px; height: 36px; background: #fee2e2; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #ef4444; font-size: 1.15rem; flex-shrink: 0; }
 
-        /* Floating location status bar */
-        .location-status { display: flex; align-items: center; gap: 0.6rem; padding: 0.65rem 1.3rem; border-radius: 30px; font-size: 0.8rem; font-weight: 800; position: fixed; top: 1.2rem; left: 50%; transform: translateX(-50%); z-index: 1000; box-shadow: 0 8px 30px rgba(0,0,0,0.15); white-space: nowrap; }
+        /* Floating location status bar - fitted beautifully under header */
+        .location-status { display: flex; align-items: center; gap: 0.6rem; padding: 0.65rem 1.3rem; border-radius: 30px; font-size: 0.8rem; font-weight: 800; position: fixed; top: 84px; left: 50%; transform: translateX(-50%); z-index: 1000; box-shadow: 0 8px 30px rgba(0,0,0,0.15); white-space: nowrap; }
         .loc-finding { background: #fffbeb; color: #d97706; border: 1px solid #fde68a; }
         .loc-found   { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
         .loc-error   { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
@@ -214,7 +261,7 @@
         .radar-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(15, 23, 42, 0.9);
+            background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(12px);
             z-index: 9999;
             display: flex;
@@ -403,10 +450,18 @@
 </head>
 <body>
 
-<!-- Botón flotante para regresar -->
-<a href="<?= BASE_URL ?>scan?c=<?= $_SESSION['codigo_cliente'] ?>&t=<?= $_SESSION['token_cliente'] ?>" class="header-back">
-    <i class='bx bx-arrow-back'></i>
-</a>
+<!-- Cabecera Glassmorphic Premium -->
+<header class="map-header">
+    <a href="<?= BASE_URL ?>scan?c=<?= $_SESSION['codigo_cliente'] ?>&t=<?= $_SESSION['token_cliente'] ?>" class="map-header-back" title="Volver al inicio">
+        <i class='bx bx-arrow-back'></i>
+    </a>
+    <div class="map-header-title-container">
+        <div class="map-header-title">
+            <i class='bx bxs-map-pin'></i> PremiaSurgas
+        </div>
+        <div class="map-header-subtitle">Puntos de Venta</div>
+    </div>
+</header>
 
 <!-- Indicador de estado de ubicación flotante -->
 <div class="location-status loc-finding" id="locStatus">
@@ -479,7 +534,7 @@ function initMap() {
         zoomControl: false // Disable default zoom controls for cleaner look
     }).setView([SURGAS_LAT, SURGAS_LNG], 15);
 
-    // Reposition zoom controls to top-right
+    // Reposition zoom controls to top-right (positioned beautifully under the floating header)
     L.control.zoom({
         position: 'topright'
     }).addTo(map);
@@ -601,7 +656,7 @@ function actualizarUbicacion(lat, lng) {
     ].concat(puntosMarkers);
     
     var group = new L.featureGroup(markers);
-    map.fitBounds(group.getBounds(), { padding: [50, 50] });
+    map.fitBounds(group.getBounds(), { padding: [55, 55] });
 }
 
 function errorUbicacion() {
