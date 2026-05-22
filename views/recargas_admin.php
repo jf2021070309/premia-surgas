@@ -120,7 +120,7 @@
                         <img src="<?= BASE_URL ?>assets/premios/yape.png" alt="Yape" class="yape-logo-img">
                         <div class="qr-frame">
                             <?php if ($qrActual): ?>
-                                <img src="<?= BASE_URL ?>assets/uploads/qr/<?= htmlspecialchars($qrActual) ?>" alt="QR Yape">
+                                <img src="<?= (strpos($qrActual, 'http') === 0) ? htmlspecialchars($qrActual) : BASE_URL . 'assets/uploads/qr/' . htmlspecialchars($qrActual) ?>" alt="QR Yape">
                             <?php else: ?>
                                 <div class="qr-empty-frame">
                                     <i class='bx bx-image-add' style="font-size:2rem;"></i>
@@ -231,7 +231,7 @@
                             </div>
 
                             <div class="ticket-actions">
-                                <button class="btn btn-outline" onclick="openModal('<?= BASE_URL ?>assets/uploads/comprobantes/<?= $r['comprobante'] ?>')">
+                                <button class="btn btn-outline" onclick="openModal('<?= (strpos($r['comprobante'], 'http') === 0) ? htmlspecialchars($r['comprobante']) : BASE_URL . 'assets/uploads/comprobantes/' . htmlspecialchars($r['comprobante']) ?>')">
                                     <i class='bx bx-image'></i> Evidencia
                                 </button>
 
@@ -345,7 +345,7 @@
                                 <td style="text-align: center !important;"><span class="chip <?= $chipClass ?>" ><i class='bx bxs-circle'></i> <?= ucfirst($h['estado'] ?? 'pendiente') ?></span></td>
                                 <td class="text-center">
                                     <?php if (!empty($h['comprobante'])): ?>
-                                        <button class="btn-action indigo" onclick="openModal('<?= BASE_URL ?>assets/uploads/comprobantes/<?= $h['comprobante'] ?>')" title="Ver Comprobante">
+                                        <button class="btn-action indigo" onclick="openModal('<?= (strpos($h['comprobante'], 'http') === 0) ? htmlspecialchars($h['comprobante']) : BASE_URL . 'assets/uploads/comprobantes/' . htmlspecialchars($h['comprobante']) ?>')" title="Ver Comprobante">
                                             <i class='bx bx-show'></i>
                                         </button>
                                     <?php else: ?>

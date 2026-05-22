@@ -1747,7 +1747,11 @@ if (empty($hpw)) {
                                             <i class='bx bxs-star'></i> Socio Afiliado
                                         </div>
                                         <div class="ad-logo-wrapper">
-                                            <img src="<?= BASE_URL . ($anuncio['imagen_negocio'] ?: 'assets/img/default-negocio.jpg') ?>" alt="Logo">
+                                            <?php 
+                                            $logoPath = $anuncio['imagen_negocio'] ?: 'assets/img/default-negocio.jpg';
+                                            $fullLogoPath = (strpos($logoPath, 'http') === 0) ? $logoPath : BASE_URL . $logoPath;
+                                            ?>
+                                            <img src="<?= $fullLogoPath ?>" alt="Logo">
                                         </div>
                                     </div>
                                 </div>

@@ -115,21 +115,21 @@ class ProductoController {
             return $imagen_anterior;
         }
 
-        $upload_dir = __DIR__ . '/../assets/premios/';
-        if (!is_dir($upload_dir)) mkdir($upload_dir, 0755, true);
-
-        // Limpiar nombre y forzar .png
-        $nombre_base = preg_replace('/[^a-z0-9_\-]/i', '_', $nombre_base);
-        $filename = $nombre_base . '.png';
-        $target_path = $upload_dir . $filename;
-
-        // Si hay una imagen anterior y tiene nombre diferente, o si queremos borrar el archivo físico antes de reemplazarlo
-        if ($imagen_anterior && file_exists($upload_dir . $imagen_anterior)) {
-            @unlink($upload_dir . $imagen_anterior);
+        if ($imagen_anterior && strpos($imagen_anterior, 'http') !== 0) {
+            $upload_dir = __DIR__ . '/../assets/premios/';
+            if (file_exists($upload_dir . $imagen_anterior)) {
+                @unlink($upload_dir . $imagen_anterior);
+            }
+            $upload_dir_alt = __DIR__ . '/../assets/uploads/productos/';
+            if (file_exists($upload_dir_alt . $imagen_anterior)) {
+                @unlink($upload_dir_alt . $imagen_anterior);
+            }
         }
 
-        if (move_uploaded_file($_FILES['imagen_file']['tmp_name'], $target_path)) {
-            return $filename;
+        require_once __DIR__ . '/../helpers/UploadHelper.php';
+        $imgUrl = UploadHelper::uploadToImgBB($_FILES['imagen_file']['tmp_name']);
+        if ($imgUrl) {
+            return $imgUrl;
         }
 
         return $imagen_anterior;
@@ -150,10 +150,14 @@ class ProductoController {
         try {
             if ($model->delete($id)) {
                 // Borrar imagen física si existe
-                if ($p['imagen']) {
+                if ($p['imagen'] && strpos($p['imagen'], 'http') !== 0) {
                     $img_path = __DIR__ . '/../assets/uploads/productos/' . $p['imagen'];
                     if (file_exists($img_path)) {
                         @unlink($img_path);
+                    }
+                    $img_path_alt = __DIR__ . '/../assets/premios/' . $p['imagen'];
+                    if (file_exists($img_path_alt)) {
+                        @unlink($img_path_alt);
                     }
                 }
 

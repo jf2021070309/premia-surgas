@@ -62,7 +62,7 @@ createApp({
             this.submitting = false;
             this.cargandoImagen = false;
             this.previewUrl = p.imagen
-                ? (typeof BASE_URL !== 'undefined' ? BASE_URL : '/') + 'assets/uploads/productos/' + p.imagen
+                ? (p.imagen.startsWith('http') ? p.imagen : (typeof BASE_URL !== 'undefined' ? BASE_URL : '/') + 'assets/uploads/productos/' + p.imagen)
                 : null;
             this.form = {
                 id: p.id,

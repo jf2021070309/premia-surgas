@@ -256,7 +256,7 @@
                             <tr v-for="p in productosFiltrados" :key="p.id">
                                 <td>
                                     <div class="row-client">
-                                        <img :src="p.imagen ? '<?= BASE_URL ?>assets/uploads/productos/' + p.imagen : '<?= BASE_URL ?>assets/premios/no-image.png'" class="product-img-box" @error="onImgError">
+                                        <img :src="p.imagen ? (p.imagen.startsWith('http') ? p.imagen : '<?= BASE_URL ?>assets/uploads/productos/' + p.imagen) : '<?= BASE_URL ?>assets/premios/no-image.png'" class="product-img-box" @error="onImgError">
                                         <div class="title-text-group">
                                             <span class="text-medium">{{ p.nombre }}</span>
                                         </div>

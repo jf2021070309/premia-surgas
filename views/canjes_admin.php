@@ -149,7 +149,11 @@
                                 <td style="text-align: center;">
                                     <div class="actions-flex" style="justify-content: center;">
                                         <!-- Ver Imagen Premio -->
-                                        <button class="btn-action indigo" onclick="viewPrize('<?= htmlspecialchars($c['premio_nombre']) ?>', '<?= BASE_URL ?>assets/premios/<?= $c['premio_imagen'] ?>')" title="Ver Premio">
+                                        <?php 
+                                        $prizeImg = $c['premio_imagen'] ?: '';
+                                        $fullPrizeImg = (strpos($prizeImg, 'http') === 0) ? $prizeImg : BASE_URL . 'assets/premios/' . $prizeImg;
+                                        ?>
+                                        <button class="btn-action indigo" onclick="viewPrize('<?= htmlspecialchars($c['premio_nombre']) ?>', '<?= $fullPrizeImg ?>')" title="Ver Premio">
                                             <i class='bx bx-gift'></i>
                                         </button>
 

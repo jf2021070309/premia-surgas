@@ -194,7 +194,7 @@ function initMap() {
         var marker = L.marker([lat, lng], { icon: ventaIcon }).addTo(map);
         
         var fotoHtml = p.foto
-            ? '<img src="' + BASE_URL + p.foto + '" style="width:160px;height:70px;object-fit:cover;border-radius:8px;margin-bottom:6px;display:block;">'
+            ? '<img src="' + (p.foto.startsWith('http') ? p.foto : BASE_URL + p.foto) + '" style="width:160px;height:70px;object-fit:cover;border-radius:8px;margin-bottom:6px;display:block;">'
             : '';
         marker.bindPopup('<div style="font-family:Outfit,sans-serif;min-width:150px;">' + fotoHtml +
                          '<b style="color:#1e293b;font-size:0.9rem;">' + p.nombre + '</b></div>');
@@ -322,7 +322,7 @@ function renderizarPuntos() {
             distText = item.dist < 1 ? Math.round(item.dist*1000) + ' m de ti' : item.dist.toFixed(1) + ' km de ti';
         }
         var fotoHtml = p.foto
-            ? '<div class="punto-item-img"><img src="' + BASE_URL + p.foto + '"></div>'
+            ? '<div class="punto-item-img"><img src="' + (p.foto.startsWith('http') ? p.foto : BASE_URL + p.foto) + '"></div>'
             : '<div class="punto-item-img"><i class=\'bx bx-store-alt\'></i></div>';
 
         html += '<div class="punto-item" onclick="centrarEnPunto(' + p.latitud + ',' + p.longitud + ')">'

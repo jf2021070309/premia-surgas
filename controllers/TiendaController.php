@@ -224,22 +224,13 @@ class TiendaController {
             return;
         }
 
-        $uploadDir = __DIR__ . '/../assets/uploads/comprobantes/';
-        if (!is_dir($uploadDir)) {
-            if (!@mkdir($uploadDir, 0777, true)) {
-                echo json_encode(['success' => false, 'message' => 'Error de permisos al crear directorio de subida']);
-                return;
-            }
-        }
+        require_once __DIR__ . '/../helpers/UploadHelper.php';
+        $comprobanteUrl = UploadHelper::uploadToImgBB($_FILES['comprobante']['tmp_name']);
 
-        $fileExtension = pathinfo($_FILES['comprobante']['name'], PATHINFO_EXTENSION);
-        $fileName = 'recarga_' . time() . '_' . $id_cliente . '.' . $fileExtension;
-        $targetFile = $uploadDir . $fileName;
-
-        if (@move_uploaded_file($_FILES['comprobante']['tmp_name'], $targetFile)) {
+        if ($comprobanteUrl) {
             try {
                 $stmt = $db->prepare("INSERT INTO recargas (cliente_id, puntos, monto, comprobante) VALUES (?, ?, ?, ?)");
-                $stmt->execute([$id_cliente, $puntos, $monto, $fileName]);
+                $stmt->execute([$id_cliente, $puntos, $monto, $comprobanteUrl]);
                 
                 // AUDITORIA
                 $this->audit->registrar($_SESSION['id_usuario'], 'ENVIO_COMPROBANTE', "Cliente envió comprobante por $puntos puntos (S/ $monto)", 'RECARGAS');
@@ -250,7 +241,7 @@ class TiendaController {
             }
         } else {
             $errCode = $_FILES['comprobante']['error'] ?? 'unknown';
-            $msg = 'No se pudo guardar el archivo en el servidor.';
+            $msg = 'No se pudo subir el comprobante a ImgBB.';
             if ($errCode === 1) $msg .= ' El archivo es demasiado grande (limite PHP).';
             if ($errCode === 3) $msg .= ' La subida fue parcial.';
             if ($errCode === 4) $msg .= ' No se recibió ningún archivo.';

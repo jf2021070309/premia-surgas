@@ -59,21 +59,10 @@ class RecargaAdminController {
                 redirigir(BASE_URL . 'recargas-admin');
             }
 
-            $dir = __DIR__ . '/../assets/uploads/qr/';
-            if (!is_dir($dir)) mkdir($dir, 0755, true);
-
-            // Borrar anterior
-            $oldFile = $configModel->getValor('yape_qr_imagen');
-            if ($oldFile && file_exists($dir . $oldFile)) {
-                @unlink($dir . $oldFile);
-            }
-
-            $ext      = pathinfo($file['name'], PATHINFO_EXTENSION);
-            $filename = 'yape_qr_' . time() . '.' . $ext;
-            $dest     = $dir . $filename;
-
-            if (move_uploaded_file($file['tmp_name'], $dest)) {
-                $configModel->upsert('yape_qr_imagen', $filename, 'Imagen QR de Yape para pagos');
+            require_once __DIR__ . '/../helpers/UploadHelper.php';
+            $url = UploadHelper::uploadToImgBB($file['tmp_name']);
+            if ($url) {
+                $configModel->upsert('yape_qr_imagen', $url, 'Imagen QR de Yape para pagos');
                 $this->audit->registrar($_SESSION['id_usuario'], 'ACTUALIZAR_QR_PAGO', "Actualizó el código QR de Yape y nombre titular ($nombre)", 'RECARGAS');
             }
         }

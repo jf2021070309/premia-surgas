@@ -877,7 +877,7 @@
                     <?php foreach ($nivel['items'] as $item): ?>
                         <div class="prize-card shadow-sm">
                             <div class="prize-image-container">
-                                <img src="<?= BASE_URL ?>assets/premios/<?= $item['imagen'] ?>" alt="<?= htmlspecialchars($item['nombre']) ?>" class="prize-image">
+                                <img src="<?= (strpos($item['imagen'], 'http') === 0) ? htmlspecialchars($item['imagen']) : BASE_URL . 'assets/premios/' . $item['imagen'] ?>" alt="<?= htmlspecialchars($item['nombre']) ?>" class="prize-image">
                             </div>
                             <div class="prize-info">
                                 <h3 class="prize-name"><?= $item['nombre'] ?></h3>
@@ -927,7 +927,7 @@
                 </div>
                 <div class="modal-body p-4">
                     <div class="text-center mb-4">
-                        <img :src="'<?= BASE_URL ?>assets/premios/' + selected.imagen" class="mb-3" style="height: 100px; object-fit: contain;">
+                        <img :src="selected.imagen ? (selected.imagen.startsWith('http') ? selected.imagen : '<?= BASE_URL ?>assets/premios/' + selected.imagen) : ''" class="mb-3" style="height: 100px; object-fit: contain;">
                         <h4 class="fw-bold mb-1">{{ selected.nombre }}</h4>
                         <div class="prize-cost-display mt-3" style="margin-left: auto; margin-right: auto; max-width: 280px;">
                             <div class="cost-badge" style="background: #fff; border: 2px solid #f1f5f9;">
@@ -1034,7 +1034,7 @@
                                 <span class="h4 fw-bold text-primary">S/ {{ montoEfectivo }}</span>
                             </div>
                             <?php if (!empty($yapeQrImagen)): ?>
-                                <img src="<?= BASE_URL ?>assets/uploads/qr/<?= htmlspecialchars($yapeQrImagen) ?>" 
+                                <img src="<?= (strpos($yapeQrImagen, 'http') === 0) ? htmlspecialchars($yapeQrImagen) : BASE_URL . 'assets/uploads/qr/' . htmlspecialchars($yapeQrImagen) ?>" 
                                      class="img-fluid rounded shadow-sm mx-auto d-block" 
                                      style="max-width: 150px;">
                             <?php else: ?>
@@ -1119,7 +1119,7 @@
                     <div class="prize-showcase">
                         <div class="prize-glow"></div>
                         <?php if (!empty($_SESSION['flash']['prize_image'])): ?>
-                            <img src="<?= BASE_URL ?>assets/premios/<?= $_SESSION['flash']['prize_image'] ?>" class="prize-hero-img">
+                            <img src="<?= (strpos($_SESSION['flash']['prize_image'], 'http') === 0) ? htmlspecialchars($_SESSION['flash']['prize_image']) : BASE_URL . 'assets/premios/' . $_SESSION['flash']['prize_image'] ?>" class="prize-hero-img">
                         <?php endif; ?>
                         <h3 class="prize-hero-name"><?= $_SESSION['flash']['prize_name'] ?></h3>
                     </div>

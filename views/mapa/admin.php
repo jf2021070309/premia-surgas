@@ -176,7 +176,7 @@
                         <div class="punto-card">
                             <div class="punto-card-img">
                                 <?php if ($p['foto']): ?>
-                                    <img src="<?= BASE_URL . htmlspecialchars($p['foto']) ?>" alt="<?= htmlspecialchars($p['nombre']) ?>">
+                                    <img src="<?= (strpos($p['foto'], 'http') === 0) ? htmlspecialchars($p['foto']) : BASE_URL . htmlspecialchars($p['foto']) ?>" alt="<?= htmlspecialchars($p['nombre']) ?>">
                                 <?php else: ?>
                                     <i class='bx bx-store-alt'></i>
                                 <?php endif; ?>
@@ -247,7 +247,7 @@ function initMap() {
         var marker = L.marker([lat, lng], { icon: ventaIcon }).addTo(map);
         
         var fotoHtml = p.foto
-            ? '<img src="' + BASE_URL + p.foto + '" style="width:160px;height:80px;object-fit:cover;border-radius:8px;margin-bottom:6px;display:block;">'
+            ? '<img src="' + (p.foto.startsWith('http') ? p.foto : BASE_URL + p.foto) + '" style="width:160px;height:80px;object-fit:cover;border-radius:8px;margin-bottom:6px;display:block;">'
             : '';
         marker.bindPopup('<div style="font-family:Inter,sans-serif;min-width:160px;">' + fotoHtml +
                          '<b style="color:#1e293b;font-size:0.9rem;">' + p.nombre + '</b>' +

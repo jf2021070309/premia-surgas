@@ -101,7 +101,11 @@
                     ?>
                     <div class="col-12 col-lg-6">
                         <div class="history-card">
-                            <img src="<?= BASE_URL ?>assets/premios/<?= $c['premio_imagen'] ?>" alt="<?= $c['premio_nombre'] ?>" class="prize-thumb">
+                            <?php 
+                            $prizeImg = $c['premio_imagen'] ?: '';
+                            $fullPrizeImg = (strpos($prizeImg, 'http') === 0) ? $prizeImg : BASE_URL . 'assets/premios/' . $prizeImg;
+                            ?>
+                            <img src="<?= $fullPrizeImg ?>" alt="<?= $c['premio_nombre'] ?>" class="prize-thumb">
                             
                             <div class="flex-grow-1">
                                 <h6 class="fw-bold mb-1 text-dark"><?= $c['premio_nombre'] ?></h6>

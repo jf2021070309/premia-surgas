@@ -37,13 +37,10 @@ class MapaController {
         $foto = null;
 
         if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = __DIR__ . '/../assets/uploads/puntos/';
-            if (!is_dir($uploadDir)) {
-                mkdir($uploadDir, 0777, true);
-            }
-            $filename = uniqid('punto_') . '.' . pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION);
-            if (move_uploaded_file($_FILES['foto']['tmp_name'], $uploadDir . $filename)) {
-                $foto = 'assets/uploads/puntos/' . $filename;
+            require_once __DIR__ . '/../helpers/UploadHelper.php';
+            $imgUrl = UploadHelper::uploadToImgBB($_FILES['foto']['tmp_name']);
+            if ($imgUrl) {
+                $foto = $imgUrl;
             }
         }
 
@@ -66,7 +63,7 @@ class MapaController {
         if ($id) {
             $modelo = new PuntoVentaModel();
             $punto = $modelo->getById($id);
-            if ($punto && $punto['foto'] && file_exists(__DIR__ . '/../' . $punto['foto'])) {
+            if ($punto && $punto['foto'] && strpos($punto['foto'], 'http') !== 0 && file_exists(__DIR__ . '/../' . $punto['foto'])) {
                 unlink(__DIR__ . '/../' . $punto['foto']);
             }
             $modelo->delete($id);
