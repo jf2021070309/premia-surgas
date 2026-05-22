@@ -55,29 +55,44 @@
         .marker-preview { display: inline-flex; align-items: center; gap: 0.5rem; background: #fee2e2; color: #dc2626; padding: 0.3rem 0.75rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; margin-top: 0.4rem; }
 
         /* Leaflet custom styles */
-        .leaflet-marker-surgas {
-            width: 20px !important;
-            height: 20px !important;
-            background: #800000;
-            border: 3px solid #ffffff;
-            border-radius: 50%;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+        .leaflet-marker-surgas, .leaflet-marker-venta, .leaflet-marker-temp {
+            background: transparent !important;
+            border: none !important;
         }
-        .leaflet-marker-venta {
-            width: 16px !important;
-            height: 16px !important;
-            background: #ef4444;
-            border: 2px solid #ffffff;
-            border-radius: 50%;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+        .pin-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            filter: drop-shadow(0 3px 6px rgba(0,0,0,0.3));
+            animation: bounceInMarker 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
         }
-        .leaflet-marker-temp {
-            width: 18px !important;
-            height: 18px !important;
-            background: #3b82f6;
-            border: 3px solid #ffffff;
+        @keyframes bounceInMarker {
+            from { opacity: 0; transform: scale(0.3) translateY(-20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .pin-svg {
+            transition: all 0.2s ease;
+        }
+        .pin-inner-circle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #fff;
             border-radius: 50%;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.25);
+        }
+        .pin-inner-icon {
+            position: absolute;
+            top: 9px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .leaflet-tooltip-custom {
             background: transparent !important;
@@ -226,8 +241,9 @@ function initMap() {
     // Marcador Planta Surgas
     var surgasIcon = L.divIcon({
         className: 'leaflet-marker-surgas',
-        iconSize: [20, 20],
-        iconAnchor: [10, 10]
+        html: '<div class="pin-wrapper surgas-pin" style="width:38px;height:44px;"><svg viewBox="0 0 24 30" style="width:100%;height:100%;"><path d="M12,2 C6.48,2 2,6.48 2,12 C2,18.5 12,28 12,28 C12,28 22,18.5 22,12 C22,6.48 17.52,2 12,2 Z" fill="#800000"></path></svg><div class="pin-inner-icon"><i class="bx bxs-factory" style="color:#fff;font-size:12px;"></i></div></div>',
+        iconSize: [38, 44],
+        iconAnchor: [19, 44]
     });
     var surgasMarker = L.marker([SURGAS_LAT, SURGAS_LNG], { icon: surgasIcon }).addTo(map);
     surgasMarker.bindPopup('<div style="font-family:Inter,sans-serif;padding:4px;"><b style="color:#800000;">🏭 Planta Surgas</b><br><small>Ubicación principal</small></div>').openPopup();
@@ -240,8 +256,9 @@ function initMap() {
         
         var ventaIcon = L.divIcon({
             className: 'leaflet-marker-venta',
-            iconSize: [16, 16],
-            iconAnchor: [8, 8]
+            html: '<div class="pin-wrapper" style="width:32px;height:38px;"><svg viewBox="0 0 24 30" style="width:100%;height:100%;"><path class="pin-svg" d="M12,2 C6.48,2 2,6.48 2,12 C2,18.5 12,28 12,28 C12,28 22,18.5 22,12 C22,6.48 17.52,2 12,2 Z" fill="#ef4444"></path></svg><div class="pin-inner-circle"></div></div>',
+            iconSize: [32, 38],
+            iconAnchor: [16, 38]
         });
         
         var marker = L.marker([lat, lng], { icon: ventaIcon }).addTo(map);
@@ -270,8 +287,9 @@ function initMap() {
         
         var tempIcon = L.divIcon({
             className: 'leaflet-marker-temp',
-            iconSize: [18, 18],
-            iconAnchor: [9, 9]
+            html: '<div class="pin-wrapper" style="width:32px;height:38px;"><svg viewBox="0 0 24 30" style="width:100%;height:100%;"><path class="pin-svg" d="M12,2 C6.48,2 2,6.48 2,12 C2,18.5 12,28 12,28 C12,28 22,18.5 22,12 C22,6.48 17.52,2 12,2 Z" fill="#3b82f6"></path></svg><div class="pin-inner-circle"></div></div>',
+            iconSize: [32, 38],
+            iconAnchor: [16, 38]
         });
         
         tempMarker = L.marker(e.latlng, { icon: tempIcon }).addTo(map);

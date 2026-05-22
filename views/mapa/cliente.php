@@ -12,90 +12,377 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <style>
-        :root { --primary: #800000; --primary-dark: #5a0000; --bg: #EBEEF2; }
+        :root { 
+            --primary: #800000; 
+            --primary-dark: #5a0000; 
+            --primary-light: rgba(128, 0, 0, 0.08);
+            --bg: #EBEEF2; 
+        }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Outfit','Inter',sans-serif; background: var(--bg); min-height: 100vh; overflow: hidden; }
 
-        .header-back { position: fixed; top: 1.2rem; left: 1.2rem; width: 44px; height: 44px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.3rem; text-decoration: none; box-shadow: 0 4px 15px rgba(128,0,0,0.3); border: 2px solid #fff; transition: all 0.2s; z-index: 1000; }
-        .header-back:hover { background: var(--primary-dark); transform: scale(1.05); }
+        /* Sleek glassmorphic back button */
+        .header-back { 
+            position: fixed; 
+            top: 1.2rem; 
+            left: 1.2rem; 
+            width: 44px; 
+            height: 44px; 
+            background: rgba(255, 255, 255, 0.9); 
+            backdrop-filter: blur(10px);
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: var(--primary); 
+            font-size: 1.35rem; 
+            text-decoration: none; 
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12); 
+            border: 1px solid rgba(255, 255, 255, 0.5); 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            z-index: 1000; 
+        }
+        .header-back:hover { 
+            background: var(--primary); 
+            color: #fff; 
+            transform: scale(1.08) rotate(-10deg); 
+            box-shadow: 0 12px 36px rgba(128, 0, 0, 0.3);
+        }
 
         #map-cliente { height: 100vh; width: 100vw; position: absolute; top: 0; left: 0; z-index: 1; }
 
-        #btnVerCercanos { position: fixed; bottom: 1.8rem; left: 50%; transform: translateX(-50%); z-index: 999; background: var(--primary); color: #fff; border: none; border-radius: 60px; padding: 1rem 2rem; font-family: 'Outfit',sans-serif; font-size: 0.95rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 0.6rem; box-shadow: 0 8px 30px rgba(128,0,0,0.45); transition: all 0.3s cubic-bezier(0.4,0,0.2,1); white-space: nowrap; animation: floatPulse 2.5s ease-in-out infinite; }
-        #btnVerCercanos:hover { background: var(--primary-dark); transform: translateX(-50%) translateY(-3px); box-shadow: 0 14px 36px rgba(128,0,0,0.5); animation: none; }
-        #btnVerCercanos i { font-size: 1.25rem; }
-        @keyframes floatPulse { 0%,100% { box-shadow: 0 8px 30px rgba(128,0,0,0.45); } 50% { box-shadow: 0 12px 40px rgba(128,0,0,0.65); } }
+        /* Pulsing floating main button */
+        #btnVerCercanos { 
+            position: fixed; 
+            bottom: 1.8rem; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            z-index: 999; 
+            background: var(--primary); 
+            color: #fff; 
+            border: none; 
+            border-radius: 60px; 
+            padding: 1.1rem 2.4rem; 
+            font-family: 'Outfit',sans-serif; 
+            font-size: 0.95rem; 
+            font-weight: 800; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            gap: 0.7rem; 
+            box-shadow: 0 10px 35px rgba(128,0,0,0.45); 
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
+            white-space: nowrap; 
+            animation: floatPulse 2.5s ease-in-out infinite; 
+        }
+        #btnVerCercanos:hover { 
+            background: var(--primary-dark); 
+            transform: translateX(-50%) translateY(-4px); 
+            box-shadow: 0 16px 40px rgba(128,0,0,0.55); 
+            animation: none; 
+        }
+        #btnVerCercanos i { font-size: 1.35rem; }
+        @keyframes floatPulse { 
+            0%,100% { box-shadow: 0 10px 30px rgba(128,0,0,0.45); transform: translateX(-50%) translateY(0); } 
+            50% { box-shadow: 0 16px 40px rgba(128,0,0,0.65); transform: translateX(-50%) translateY(-6px); } 
+        }
 
-        .sheet-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 2000; opacity: 0; pointer-events: none; transition: opacity 0.3s; backdrop-filter: blur(2px); }
+        /* Floating Recenter button */
+        .btn-recenter {
+            position: fixed;
+            bottom: 7.5rem;
+            right: 1.2rem;
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #334155;
+            font-size: 1.45rem;
+            cursor: pointer;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 998;
+        }
+        .btn-recenter:hover {
+            color: var(--primary);
+            background: #fff;
+            transform: scale(1.08) translateY(-2px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.18);
+        }
+
+        .sheet-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.4); z-index: 2000; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; backdrop-filter: blur(4px); }
         .sheet-overlay.open { opacity: 1; pointer-events: all; }
         
-        .bottom-sheet { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-radius: 28px 28px 0 0; z-index: 2001; padding: 0 1.2rem 2rem; max-height: 75vh; overflow-y: auto; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.16,1,0.3,1); box-shadow: 0 -10px 40px rgba(0,0,0,0.2); }
+        .bottom-sheet { 
+            position: fixed; 
+            bottom: 0; 
+            left: 0; 
+            right: 0; 
+            background: #fff; 
+            border-radius: 32px 32px 0 0; 
+            z-index: 2001; 
+            padding: 0 1.5rem 2rem; 
+            max-height: 80vh; 
+            overflow-y: auto; 
+            transform: translateY(100%); 
+            transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1); 
+            box-shadow: 0 -12px 50px rgba(15, 23, 42, 0.18); 
+        }
         .bottom-sheet.open { transform: translateY(0); }
         
         @media (min-width: 600px) {
-            .bottom-sheet { max-width: 500px; margin: 0 auto; left: 50%; transform: translate(-50%, 100%); border-radius: 28px; bottom: 1.5rem; }
+            .bottom-sheet { max-width: 500px; margin: 0 auto; left: 50%; transform: translate(-50%, 100%); border-radius: 32px; bottom: 1.5rem; }
             .bottom-sheet.open { transform: translate(-50%, 0); }
         }
 
-        .sheet-handle { width: 44px; height: 5px; background: #e2e8f0; border-radius: 10px; margin: 1rem auto 1.25rem; }
-        .sheet-title { font-size: 1.1rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.3rem; }
+        .sheet-handle { width: 50px; height: 5px; background: #e2e8f0; border-radius: 10px; margin: 1.1rem auto 1.3rem; }
+        .sheet-title { font-size: 1.25rem; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.3rem; }
         .sheet-title i { color: var(--primary); }
-        .sheet-subtitle { font-size: 0.8rem; color: #94a3b8; font-weight: 600; margin-bottom: 1.2rem; }
+        .sheet-subtitle { font-size: 0.82rem; color: #64748b; font-weight: 600; margin-bottom: 1.2rem; }
 
-        .map-legend-sheet { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.2rem; padding-bottom: 0.8rem; border-bottom: 1px solid #f1f5f9; flex-wrap: wrap; }
+        /* Sleek Search bar */
+        .search-container {
+            position: relative;
+            margin-bottom: 1.2rem;
+            width: 100%;
+        }
+        .search-input {
+            width: 100%;
+            padding: 0.8rem 1rem 0.8rem 2.6rem;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 16px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #0f172a;
+            background: #f8fafc;
+            transition: all 0.25s ease;
+            box-sizing: border-box;
+        }
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(128, 0, 0, 0.08);
+        }
+        .search-icon {
+            position: absolute;
+            left: 0.95rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            color: #94a3b8;
+            pointer-events: none;
+        }
+
+        .map-legend-sheet { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.2rem; padding-bottom: 0.9rem; border-bottom: 1px solid #f1f5f9; flex-wrap: wrap; }
         .legend-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.76rem; font-weight: 700; color: #64748b; }
         .dot-surgas { width: 12px; height: 12px; border-radius: 50%; background: var(--primary); border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.3); flex-shrink: 0; }
         .dot-venta  { width: 12px; height: 12px; border-radius: 50%; background: #ef4444; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.3); flex-shrink: 0; }
         .dot-user   { width: 12px; height: 12px; border-radius: 50%; background: #3b82f6; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.3); flex-shrink: 0; }
 
-        .punto-item { display: flex; align-items: center; gap: 1rem; padding: 0.9rem; background: #f8fafc; border-radius: 14px; margin-bottom: 0.75rem; border: 1px solid #f1f5f9; transition: all 0.2s; cursor: pointer; }
-        .punto-item:hover { background: #fff; border-color: #fecaca; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0,0,0,0.07); }
-        .punto-item-img { width: 54px; height: 54px; border-radius: 12px; object-fit: cover; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: #cbd5e1; font-size: 1.5rem; flex-shrink: 0; overflow: hidden; }
+        .punto-item { display: flex; align-items: center; gap: 1rem; padding: 1rem; background: #f8fafc; border-radius: 18px; margin-bottom: 0.8rem; border: 1px solid #f1f5f9; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
+        .punto-item:hover { background: #fff; border-color: #fca5a5; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(128, 0, 0, 0.05); }
+        .punto-item-img { width: 58px; height: 58px; border-radius: 14px; object-fit: cover; background: #e2e8f0; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 1.6rem; flex-shrink: 0; overflow: hidden; }
         .punto-item-img img { width: 100%; height: 100%; object-fit: cover; }
         .punto-item-info { flex: 1; min-width: 0; }
-        .punto-item-name { font-weight: 800; font-size: 0.92rem; color: #1e293b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .punto-item-dist { font-size: 0.75rem; font-weight: 700; color: #64748b; margin-top: 2px; display: flex; align-items: center; gap: 0.3rem; }
+        .punto-item-name { font-weight: 800; font-size: 0.94rem; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .punto-item-dist { font-size: 0.75rem; font-weight: 700; color: #64748b; margin-top: 3px; display: flex; align-items: center; gap: 0.3rem; }
         .punto-item-dist i { color: #ef4444; }
-        .punto-item-pin { width: 36px; height: 36px; background: #fee2e2; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #ef4444; font-size: 1.1rem; flex-shrink: 0; }
+        .punto-item-pin { width: 36px; height: 36px; background: #fee2e2; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #ef4444; font-size: 1.15rem; flex-shrink: 0; }
 
-        .location-status { display: flex; align-items: center; gap: 0.6rem; padding: 0.6rem 1.2rem; border-radius: 30px; font-size: 0.8rem; font-weight: 700; position: fixed; top: 1.2rem; left: 50%; transform: translateX(-50%); z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.15); white-space: nowrap; }
+        /* Floating location status bar */
+        .location-status { display: flex; align-items: center; gap: 0.6rem; padding: 0.65rem 1.3rem; border-radius: 30px; font-size: 0.8rem; font-weight: 800; position: fixed; top: 1.2rem; left: 50%; transform: translateX(-50%); z-index: 1000; box-shadow: 0 8px 30px rgba(0,0,0,0.15); white-space: nowrap; }
         .loc-finding { background: #fffbeb; color: #d97706; border: 1px solid #fde68a; }
         .loc-found   { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
         .loc-error   { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
 
-        .empty-sheet { text-align: center; padding: 2rem 1rem; color: #94a3b8; }
-        .empty-sheet i { font-size: 2.5rem; display: block; margin-bottom: 0.5rem; opacity: 0.4; }
-        .empty-sheet p { font-size: 0.85rem; font-weight: 600; }
+        .empty-sheet { text-align: center; padding: 2.5rem 1.5rem; color: #94a3b8; }
+        .empty-sheet i { font-size: 3rem; display: block; margin-bottom: 0.6rem; opacity: 0.4; }
+        .empty-sheet p { font-size: 0.88rem; font-weight: 600; }
 
         .bottom-sheet::-webkit-scrollbar { width: 4px; }
         .bottom-sheet::-webkit-scrollbar-track { background: transparent; }
-        .bottom-sheet::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        .bottom-sheet::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
 
-        /* Leaflet custom styles */
-        .leaflet-marker-surgas {
-            width: 20px !important;
-            height: 20px !important;
-            background: #800000;
-            border: 3px solid #ffffff;
-            border-radius: 50%;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+        /* Premium Radar Scanning Overlay */
+        .radar-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(12px);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.45s ease;
         }
-        .leaflet-marker-venta {
-            width: 16px !important;
-            height: 16px !important;
-            background: #ef4444;
+        .radar-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .radar-container {
+            position: relative;
+            width: 250px;
+            height: 250px;
+            margin-bottom: 2rem;
+        }
+        .radar-circle {
+            position: absolute;
+            inset: 0;
+            border: 2px solid rgba(128, 0, 0, 0.35);
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(128, 0, 0, 0.08) 0%, rgba(15, 23, 42, 0) 75%);
+            box-shadow: 0 0 35px rgba(128, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        .radar-circle::before {
+            content: '';
+            position: absolute;
+            inset: 25px;
+            border: 1px dashed rgba(128, 0, 0, 0.25);
+            border-radius: 50%;
+        }
+        .radar-circle::after {
+            content: '';
+            position: absolute;
+            inset: 65px;
+            border: 1px solid rgba(128, 0, 0, 0.15);
+            border-radius: 50%;
+        }
+        .radar-crosshair-h {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: rgba(128, 0, 0, 0.25);
+            z-index: 2;
+        }
+        .radar-crosshair-v {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: rgba(128, 0, 0, 0.25);
+            z-index: 2;
+        }
+        .radar-sweep {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 50%;
+            height: 50%;
+            background: linear-gradient(45deg, rgba(128, 0, 0, 0.45) 0%, rgba(128, 0, 0, 0) 70%);
+            transform-origin: top left;
+            border-top-left-radius: 100%;
+            animation: radar-sweep-anim 2s linear infinite;
+            z-index: 1;
+        }
+        @keyframes radar-sweep-anim {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .radar-blip {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ff4444;
+            border-radius: 50%;
+            box-shadow: 0 0 12px #ff4444;
+            animation: blip-pulse 2s infinite ease-in-out;
+            z-index: 3;
+        }
+        @keyframes blip-pulse {
+            0%, 100% { opacity: 0.15; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.4); }
+        }
+        .radar-text {
+            color: #fff;
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin-bottom: 0.6rem;
+            text-align: center;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+        .radar-subtext {
+            color: #94a3b8;
+            font-size: 0.88rem;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        /* Leaflet custom map markers styling */
+        .leaflet-marker-surgas, .leaflet-marker-venta {
+            background: transparent !important;
+            border: none !important;
+        }
+        .pin-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
+            animation: bounceInMarker 0.65s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+        }
+        @keyframes bounceInMarker {
+            from { opacity: 0; transform: scale(0.3) translateY(-20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .pin-svg {
+            transition: all 0.25s ease;
+        }
+        .pin-wrapper:hover .pin-svg {
+            transform: scale(1.08);
+            fill: #dc2626 !important;
+        }
+        .pin-inner-circle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #fff;
+            border-radius: 50%;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.3);
+        }
+        .pin-inner-icon {
+            position: absolute;
+            top: 9px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Live user blue dot glowing effect */
+        .leaflet-marker-user {
+            width: 14px !important;
+            height: 14px !important;
+            background: #3b82f6;
             border: 2px solid #ffffff;
             border-radius: 50%;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.4);
+            animation: pulse-user 1.8s infinite;
         }
-        .leaflet-marker-user {
-            width: 18px !important;
-            height: 18px !important;
-            background: #3b82f6;
-            border: 3px solid #ffffff;
-            border-radius: 50%;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+        @keyframes pulse-user {
+            0% { box-shadow: 0 0 0 0px rgba(59, 130, 246, 0.7); }
+            70% { box-shadow: 0 0 0 12px rgba(59, 130, 246, 0); }
+            100% { box-shadow: 0 0 0 0px rgba(59, 130, 246, 0); }
         }
+
         .leaflet-tooltip-custom {
             background: transparent !important;
             border: none !important;
@@ -105,8 +392,9 @@
             font-weight: 800 !important;
             color: #dc2626 !important;
             padding: 0 !important;
-            margin-top: -20px !important;
+            margin-top: -24px !important;
             white-space: nowrap;
+            text-shadow: 0 1px 4px #fff, 0 -1px 4px #fff, 1px 0px 4px #fff, -1px 0px 4px #fff;
         }
         .leaflet-tooltip-custom::before {
             display: none !important;
@@ -128,17 +416,41 @@
 <!-- Contenedor del mapa a pantalla completa -->
 <div id="map-cliente"></div>
 
+<!-- Botón flotante para recentrar en mi ubicación -->
+<button id="btnRecenter" class="btn-recenter" onclick="recentrarMapa()" style="display: none;" title="Centrar en mi ubicación">
+    <i class='bx bx-target-lock'></i>
+</button>
+
 <!-- Botón flotante para abrir panel de locales -->
 <button id="btnVerCercanos" onclick="abrirSheet()">
     <i class='bx bx-store-alt'></i> Ver puntos de venta cercanos
 </button>
 
+<!-- Pantalla de Carga de Radar Premium -->
+<div class="radar-overlay" id="radarOverlay">
+    <div class="radar-container">
+        <div class="radar-circle">
+            <div class="radar-crosshair-h"></div>
+            <div class="radar-crosshair-v"></div>
+            <div class="radar-sweep"></div>
+        </div>
+    </div>
+    <div class="radar-text" id="radarStatusText">Escaneando área…</div>
+    <div class="radar-subtext" id="radarSubText">Conectando con el receptor de satélites GPS</div>
+</div>
+
 <!-- Overlay y Bottom Sheet de locales -->
 <div class="sheet-overlay" id="sheetOverlay" onclick="cerrarSheet()"></div>
 <div class="bottom-sheet" id="bottomSheet">
     <div class="sheet-handle"></div>
-    <div class="sheet-title"><i class='bx bxs-map-pin'></i> Puntos Cercanos</div>
+    <div class="sheet-title"><i class='bx bxs-map-pin'></i> Puntos de Venta</div>
     <div class="sheet-subtitle" id="sheetSubtitle">Calculando distancias…</div>
+
+    <!-- Barra de Búsqueda Dinámica -->
+    <div class="search-container">
+        <i class='bx bx-search search-icon'></i>
+        <input type="text" id="searchBox" class="search-input" placeholder="Buscar distribuidor o local..." oninput="filterPuntosList()">
+    </div>
     
     <!-- Leyenda integrada en la cabecera del panel de locales -->
     <div class="map-legend-sheet">
@@ -148,7 +460,7 @@
     </div>
     
     <div id="sheetContent">
-        <div class="empty-sheet"><i class='bx bx-loader-alt bx-spin'></i><p>Obteniendo tu ubicación…</p></div>
+        <div class="empty-sheet"><i class='bx bx-loader-alt bx-spin'></i><p>Cargando información…</p></div>
     </div>
 </div>
 
@@ -163,7 +475,14 @@ var puntosMarkers = [];
 
 function initMap() {
     // Initialize map
-    map = L.map('map-cliente').setView([SURGAS_LAT, SURGAS_LNG], 15);
+    map = L.map('map-cliente', {
+        zoomControl: false // Disable default zoom controls for cleaner look
+    }).setView([SURGAS_LAT, SURGAS_LNG], 15);
+
+    // Reposition zoom controls to top-right
+    L.control.zoom({
+        position: 'topright'
+    }).addTo(map);
 
     // Beautiful premium tiles (CartoDB Voyager)
     L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
@@ -171,39 +490,52 @@ function initMap() {
         maxZoom: 20
     }).addTo(map);
 
-    // Planta Surgas marker
+    // Planta Surgas marker (Premium custom SVG pin)
     var surgasIcon = L.divIcon({
         className: 'leaflet-marker-surgas',
-        iconSize: [20, 20],
-        iconAnchor: [10, 10]
+        html: '<div class="pin-wrapper surgas-pin" style="width:38px;height:44px;"><svg viewBox="0 0 24 30" style="width:100%;height:100%;"><path d="M12,2 C6.48,2 2,6.48 2,12 C2,18.5 12,28 12,28 C12,28 22,18.5 22,12 C22,6.48 17.52,2 12,2 Z" fill="#800000"></path></svg><div class="pin-inner-icon"><i class="bx bxs-factory" style="color:#fff;font-size:12px;"></i></div></div>',
+        iconSize: [38, 44],
+        iconAnchor: [19, 44]
     });
     var surgasMarker = L.marker([SURGAS_LAT, SURGAS_LNG], { icon: surgasIcon }).addTo(map);
-    surgasMarker.bindPopup('<div style="font-family:Outfit,sans-serif;padding:4px;"><b style="color:#800000;">🏭 Planta Surgas</b><br><small>Ubicación principal</small></div>').openPopup();
+    surgasMarker.bindPopup('<div style="font-family:Outfit,sans-serif;padding:4px;"><b style="color:#800000;font-size:0.95rem;">🏭 Planta Surgas</b><br><small style="color:#64748b;font-weight:600;">Ubicación principal de operaciones</small></div>').openPopup();
 
-    // Pintar puntos de venta
+    // Pintar puntos de venta (Custom premium red pins)
     puntosData.forEach(function(p) {
         var lat = parseFloat(p.latitud);
         var lng = parseFloat(p.longitud);
         
         var ventaIcon = L.divIcon({
             className: 'leaflet-marker-venta',
-            iconSize: [16, 16],
-            iconAnchor: [8, 8]
+            html: '<div class="pin-wrapper" style="width:32px;height:38px;"><svg viewBox="0 0 24 30" style="width:100%;height:100%;"><path class="pin-svg" d="M12,2 C6.48,2 2,6.48 2,12 C2,18.5 12,28 12,28 C12,28 22,18.5 22,12 C22,6.48 17.52,2 12,2 Z" fill="#ef4444"></path></svg><div class="pin-inner-circle"></div></div>',
+            iconSize: [32, 38],
+            iconAnchor: [16, 38]
         });
 
         var marker = L.marker([lat, lng], { icon: ventaIcon }).addTo(map);
         
         var fotoHtml = p.foto
-            ? '<img src="' + (p.foto.startsWith('http') ? p.foto : BASE_URL + p.foto) + '" style="width:160px;height:70px;object-fit:cover;border-radius:8px;margin-bottom:6px;display:block;">'
+            ? '<img src="' + (p.foto.startsWith('http') ? p.foto : BASE_URL + p.foto) + '" style="width:180px;height:90px;object-fit:cover;border-radius:10px;margin-bottom:8px;display:block;">'
             : '';
-        marker.bindPopup('<div style="font-family:Outfit,sans-serif;min-width:150px;">' + fotoHtml +
-                         '<b style="color:#1e293b;font-size:0.9rem;">' + p.nombre + '</b></div>');
+            
+        var googleMapsUrl = 'https://www.google.com/maps/dir/?api=1&destination=' + lat + ',' + lng;
+        var wazeUrl = 'https://waze.com/ul?ll=' + lat + ',' + lng + '&navigate=yes';
+
+        var popupHtml = '<div style="font-family:Outfit,sans-serif;min-width:180px;padding:4px;">' + fotoHtml +
+                         '<b style="color:#0f172a;font-size:0.95rem;display:block;margin-bottom:6px;">' + p.nombre + '</b>' +
+                         '<div style="display:flex;gap:6px;margin-top:10px;">' +
+                         '  <a href="' + googleMapsUrl + '" target="_blank" style="flex:1;display:flex;align-items:center;justify-content:center;gap:4px;background:#ea4335;color:#fff;text-decoration:none;padding:6px 5px;border-radius:8px;font-size:0.75rem;font-weight:700;"><i class=\'bx bxl-google\'></i> Maps</a>' +
+                         '  <a href="' + wazeUrl + '" target="_blank" style="flex:1;display:flex;align-items:center;justify-content:center;gap:4px;background:#33ccff;color:#fff;text-decoration:none;padding:6px 5px;border-radius:8px;font-size:0.75rem;font-weight:700;"><i class=\'bx bx-car\'></i> Waze</a>' +
+                         '</div>' +
+                         '</div>';
+                         
+        marker.bindPopup(popupHtml);
         
         // Permanent label
         marker.bindTooltip(p.nombre, {
             permanent: true,
             direction: 'top',
-            offset: [0, -10],
+            offset: [0, -12],
             className: 'leaflet-tooltip-custom'
         });
 
@@ -211,7 +543,7 @@ function initMap() {
         puntosMarkers.push(marker);
     });
 
-    // Obtener ubicación
+    // Obtener ubicación GPS
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             function(pos) { actualizarUbicacion(pos.coords.latitude, pos.coords.longitude); },
@@ -238,6 +570,9 @@ function actualizarUbicacion(lat, lng) {
     st.className = 'location-status loc-found';
     st.innerHTML = "<i class='bx bx-check-circle'></i> Ubicación obtenida";
 
+    // Show recenter button
+    document.getElementById('btnRecenter').style.display = 'flex';
+
     // Auto-hide status badge after 3 seconds
     setTimeout(function() {
         st.style.transition = 'opacity 0.6s ease';
@@ -249,23 +584,24 @@ function actualizarUbicacion(lat, lng) {
         map.removeLayer(userMarker);
     }
     
+    // Sleek user marker (glowing pulse dot)
     var userIcon = L.divIcon({
         className: 'leaflet-marker-user',
-        iconSize: [18, 18],
-        iconAnchor: [9, 9]
+        iconSize: [14, 14],
+        iconAnchor: [7, 7]
     });
     
     userMarker = L.marker([lat, lng], { icon: userIcon }).addTo(map);
-    userMarker.bindPopup('<div style="font-family:Outfit,sans-serif;padding:4px;"><b>Mi ubicación</b></div>');
+    userMarker.bindPopup('<div style="font-family:Outfit,sans-serif;padding:4px;font-weight:700;color:#0f172a;"><i class=\'bx bx-navigation\' style="color:#3b82f6;"></i> Mi posición actual</div>');
 
-    // Ajustar bounds
+    // Ajustar vista inicial para englobar Planta y Posición
     var markers = [
         L.marker([SURGAS_LAT, SURGAS_LNG]),
         userMarker
     ].concat(puntosMarkers);
     
     var group = new L.featureGroup(markers);
-    map.fitBounds(group.getBounds(), { padding: [40, 40] });
+    map.fitBounds(group.getBounds(), { padding: [50, 50] });
 }
 
 function errorUbicacion() {
@@ -281,10 +617,62 @@ function errorUbicacion() {
     }, 4000);
 }
 
+function recentrarMapa() {
+    if (userLat && userLng) {
+        map.setView([userLat, userLng], 17);
+        if (userMarker) {
+            userMarker.openPopup();
+        }
+    }
+}
+
 function abrirSheet() {
-    document.getElementById('sheetOverlay').classList.add('open');
-    document.getElementById('bottomSheet').classList.add('open');
-    renderizarPuntos();
+    // 1. Show premium Radar scanning screen
+    var overlay = document.getElementById('radarOverlay');
+    overlay.classList.add('active');
+    
+    var statusText = document.getElementById('radarStatusText');
+    var subText = document.getElementById('radarSubText');
+    
+    statusText.textContent = "Iniciando escaneo…";
+    subText.textContent = "Obteniendo datos GPS de satélite";
+    
+    // Generate beautiful random blips in the radar circle
+    var radarContainer = document.querySelector('.radar-container');
+    document.querySelectorAll('.radar-blip').forEach(b => b.remove());
+
+    setTimeout(function() {
+        statusText.textContent = "Buscando puntos cercanos…";
+        subText.textContent = "Calculando distancias métricas";
+        
+        // Spawn 3 blinking blips in radar circle for high fidelity graphics
+        for (var i = 0; i < 4; i++) {
+            var blip = document.createElement('div');
+            blip.className = 'radar-blip';
+            blip.style.top = Math.floor(Math.random() * 150 + 50) + 'px';
+            blip.style.left = Math.floor(Math.random() * 150 + 50) + 'px';
+            blip.style.animationDelay = (i * 0.45) + 's';
+            radarContainer.appendChild(blip);
+        }
+    }, 900);
+
+    setTimeout(function() {
+        var numPuntos = puntosData.length;
+        statusText.textContent = "¡Escaneo completado!";
+        subText.textContent = numPuntos + " distribuidores identificados";
+    }, 2000);
+
+    // 2. Transition smoothly to the bottom sheet view
+    setTimeout(function() {
+        overlay.classList.remove('active');
+        
+        document.getElementById('sheetOverlay').classList.add('open');
+        document.getElementById('bottomSheet').classList.add('open');
+        renderizarPuntos();
+        
+        // Clear search box on open
+        document.getElementById('searchBox').value = '';
+    }, 2700);
 }
 
 function cerrarSheet() {
@@ -311,15 +699,15 @@ function renderizarPuntos() {
     lista.sort(function(a,b) { if (a.dist===null) return 1; if (b.dist===null) return -1; return a.dist-b.dist; });
 
     subtitle.textContent = (userLat && userLng)
-        ? lista.length + ' puntos • ordenados por distancia'
-        : lista.length + ' puntos registrados';
+        ? lista.length + ' locales • ordenados por distancia'
+        : lista.length + ' locales registrados';
 
     var html = '';
     lista.forEach(function(item) {
         var p = item.p;
         var distText = '';
         if (item.dist !== null) {
-            distText = item.dist < 1 ? Math.round(item.dist*1000) + ' m de ti' : item.dist.toFixed(1) + ' km de ti';
+            distText = item.dist < 1 ? Math.round(item.dist*1000) + ' m de ti' : item.dist.toFixed(2) + ' km de ti';
         }
         var fotoHtml = p.foto
             ? '<div class="punto-item-img"><img src="' + (p.foto.startsWith('http') ? p.foto : BASE_URL + p.foto) + '"></div>'
@@ -335,6 +723,37 @@ function renderizarPuntos() {
             + '</div>';
     });
     content.innerHTML = html;
+}
+
+function filterPuntosList() {
+    var query = document.getElementById('searchBox').value.toLowerCase().trim();
+    var items = document.querySelectorAll('.punto-item');
+    var visibleCount = 0;
+    
+    items.forEach(function(item) {
+        var name = item.querySelector('.punto-item-name').textContent.toLowerCase();
+        if (name.includes(query)) {
+            item.style.display = 'flex';
+            visibleCount++;
+        } else {
+            item.style.display = 'none';
+        }
+    });
+
+    var emptySearch = document.getElementById('emptySearch');
+    if (visibleCount === 0) {
+        if (!emptySearch) {
+            var empty = document.createElement('div');
+            empty.id = 'emptySearch';
+            empty.className = 'empty-sheet';
+            empty.innerHTML = '<i class=\'bx bx-search-alt\'></i><p style="font-size:0.85rem;margin-top:6px;font-weight:700;color:#64748b;">No se encontraron resultados</p>';
+            document.getElementById('sheetContent').appendChild(empty);
+        }
+    } else {
+        if (emptySearch) {
+            emptySearch.remove();
+        }
+    }
 }
 
 function centrarEnPunto(lat, lng) {
