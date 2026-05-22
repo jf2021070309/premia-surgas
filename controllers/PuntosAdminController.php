@@ -72,16 +72,76 @@ class PuntosAdminController
                     $statusText = strtoupper($estado);
                     $this->audit->registrar($_SESSION['id_usuario'], 'MODERAR_PUNTOS', "$statusText la suma de {$venta['puntos']} puntos para el cliente #{$venta['cliente_id']} por el operador {$venta['conductor_id']}", 'RECARGAS');
 
-                    if ($estado === 'aprobado' && !empty($venta['cliente_celular'])) {
-                        $monto = number_format($venta['monto'], 2);
-                        $msg = "Hola {$venta['cliente_nombre']}, se te han asignado {$venta['puntos']} puntos por tu compra de S/ {$monto}. ¡Sigue acumulando para grandes premios!";
-                        SmsService::send($venta['cliente_celular'], $msg);
-                    } else if ($estado === 'rechazado' && !empty($venta['cliente_celular'])) {
-                        $msg = "Hola {$venta['cliente_nombre']}, tu solicitud de puntos por S/ " . number_format($venta['monto'], 2) . " fue rechazada por administración.";
-                        SmsService::send($venta['cliente_celular'], $msg);
+                    $celular = trim($_POST['celular'] ?? '');
+                    if (empty($celular)) {
+                        $celular = $venta['cliente_celular'] ?? '';
                     }
 
-                    $_SESSION['flash'] = ['type' => 'success', 'title' => 'Éxito', 'message' => "La operación ha sido marcada como $estado."];
+                    if ($estado === 'aprobado' && !empty($celular)) {
+                        $mensaje = trim($_POST['custom_message'] ?? '');
+                        if (empty($mensaje)) {
+                            $monto = number_format($venta['monto'], 2);
+                            $resumen_items = '';
+                            if (!empty($venta['items'])) {
+                                $partes = [];
+                                foreach ($venta['items'] as $item) {
+                                    $partes[] = $item['cantidad'] . 'x ' . $item['nombre_item'];
+                                }
+                                $resumen_items = implode(', ', $partes);
+                            } else {
+                                $resumen_items = 'compra';
+                            }
+                            $mensaje = "🎉 *¡Pedido Aprobado!* \n\nHola *{$venta['cliente_nombre']}*, se te han asignado *{$venta['puntos']} puntos* por tu compra de *{$resumen_items}* (Total: S/ {$monto}). \n\n¡Sigue acumulando para grandes premios con *SURGAS*! 🛵💨";
+                        }
+
+                        $sendSms = isset($_POST['send_sms']) ? (int)$_POST['send_sms'] : 1;
+                        $sendWsp = isset($_POST['send_wsp']) ? (int)$_POST['send_wsp'] : 1;
+
+                        $notifSent = [];
+                        if ($sendSms === 1) {
+                            SmsService::send($celular, $mensaje);
+                            $notifSent[] = 'SMS';
+                        }
+                        if ($sendWsp === 1) {
+                            require_once __DIR__ . '/../helpers/WhatsAppService.php';
+                            WhatsAppService::sendText($celular, $mensaje);
+                            $notifSent[] = 'WhatsApp';
+                        }
+
+                        $msgExt = !empty($notifSent) ? " y notificado por " . implode(' y ', $notifSent) : " sin notificaciones";
+                        $_SESSION['flash'] = ['type' => 'success', 'title' => '¡Pedido Aprobado!', 'message' => "El pedido ha sido aprobado con éxito{$msgExt}."];
+                    } else if ($estado === 'rechazado') {
+                        $mensaje = trim($_POST['custom_message'] ?? '');
+                        if (empty($mensaje)) {
+                            $monto = number_format($venta['monto'], 2);
+                            $resumen_items = '';
+                            if (!empty($venta['items'])) {
+                                $partes = [];
+                                foreach ($venta['items'] as $item) {
+                                    $partes[] = $item['cantidad'] . 'x ' . $item['nombre_item'];
+                                }
+                                $resumen_items = implode(', ', $partes);
+                            } else {
+                                $resumen_items = 'compra';
+                            }
+                            $mensaje = "❌ *Pedido Rechazado* \n\nHola *{$venta['cliente_nombre']}*, tu solicitud de puntos por tu compra de *{$resumen_items}* (Total: S/ {$monto}) fue rechazada por administración.";
+                        }
+
+                        if (!empty($celular)) {
+                            $sendSms = isset($_POST['send_sms']) ? (int)$_POST['send_sms'] : 1;
+                            $sendWsp = isset($_POST['send_wsp']) ? (int)$_POST['send_wsp'] : 1;
+
+                            if ($sendSms === 1) {
+                                SmsService::send($celular, $mensaje);
+                            }
+                            if ($sendWsp === 1) {
+                                require_once __DIR__ . '/../helpers/WhatsAppService.php';
+                                WhatsAppService::sendText($celular, $mensaje);
+                            }
+                        }
+
+                        $_SESSION['flash'] = ['type' => 'success', 'title' => 'Pedido Rechazado', 'message' => "El pedido ha sido rechazado."];
+                    }
                 } else {
                     $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'No se pudo procesar la asignación de puntos.'];
                 }

@@ -173,9 +173,12 @@
                                             style="margin:0; display:flex; gap:0.5rem;" class="approve-form">
                                             <input type="hidden" name="id" value="<?= $r['id'] ?>">
                                             <input type="hidden" name="estado" class="estado-input" value="aprobado">
-                                            <input type="hidden" name="notify" class="notify-input" value="none">
+                                            <input type="hidden" name="celular" class="celular-input" value="">
+                                            <input type="hidden" name="send_sms" class="send-sms-input" value="1">
+                                            <input type="hidden" name="send_wsp" class="send-wsp-input" value="1">
+                                            <input type="hidden" name="custom_message" class="mensaje-input" value="">
                                             <?php
-                                            $resumen_items = 'hoy';
+                                            $resumen_items = 'compra';
                                             if (!empty($r['items'])) {
                                                 $partes = [];
                                                 foreach ($r['items'] as $item) {
@@ -185,18 +188,15 @@
                                             }
                                             ?>
                                             <button type="button" class="btn btn-success btn-approve-trigger"
-                                                data-notify="none">
-                                                <i class='bx bx-check'></i> Aprobar
-                                            </button>
-                                            <button type="button" class="btn btn-info btn-approve-trigger" data-notify="sms"
-                                                style="background:#0284c7; color:white; border:none; padding:0.5rem; border-radius:0.5rem; cursor:pointer;"
-                                                title="Enviar SMS de Prueba (Sin aprobar, al 957084267)">
-                                                <i class='bx bx-message-rounded-dots'></i> SMS
-                                            </button>
-                                            <button type="button" class="btn btn-success btn-approve-trigger" data-notify="wsp"
-                                                style="background:#25D366; color:white; border:none; padding:0.5rem; border-radius:0.5rem; cursor:pointer;"
-                                                title="Enviar WhatsApp de Prueba (Sin aprobar, al 957084267)">
-                                                <i class='bx bxl-whatsapp'></i> WSP
+                                                data-id="<?= $r['id'] ?>"
+                                                data-nombre="<?= htmlspecialchars($r['cliente_nombre']) ?>"
+                                                data-celular="<?= htmlspecialchars($r['cliente_celular'] ?? '') ?>"
+                                                data-monto="<?= number_format($r['monto'], 2) ?>"
+                                                data-puntos="<?= number_format($r['puntos']) ?>"
+                                                data-items="<?= htmlspecialchars($resumen_items) ?>"
+                                                style="background: linear-gradient(135deg, #10b981, #059669); border: none; padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: 700; color: white; display: flex; align-items: center; gap: 0.4rem; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2);"
+                                                title="Validar compra, asignar puntos y notificar al cliente">
+                                                <i class='bx bx-check-shield' style="font-size: 1.1rem;"></i> Aprobar
                                             </button>
                                         </form>
 
@@ -465,41 +465,78 @@
                 document.querySelectorAll('.btn-approve-trigger').forEach(btn => {
                     btn.addEventListener('click', function () {
                         const form = this.closest('.approve-form');
-                        const notifyMethod = this.getAttribute('data-notify') || 'none';
-                        form.querySelector('.notify-input').value = notifyMethod;
+                        const nombre = this.getAttribute('data-nombre') || '';
+                        const celular = this.getAttribute('data-celular') || '';
+                        const monto = this.getAttribute('data-monto') || '0.00';
+                        const puntos = this.getAttribute('data-puntos') || '0';
+                        const items = this.getAttribute('data-items') || '';
 
-                        let titleText = 'Aprobar Puntos';
-                        let htmlText = '¿Confirmas que deseas validar y acreditar estos puntos al cliente?';
-                        let confirmText = '<i class="bx bx-check"></i> Sí, Aprobar';
-
-                        if (notifyMethod === 'sms') {
-                            form.querySelector('.estado-input').value = 'notificar';
-                            titleText = 'Enviar SMS de Prueba';
-                            htmlText = '¿Deseas enviar un SMS de prueba al 957084267 sin aprobar los puntos?';
-                            confirmText = '<i class="bx bx-message-rounded-dots"></i> Sí, Enviar SMS';
-                        } else if (notifyMethod === 'wsp') {
-                            form.querySelector('.estado-input').value = 'notificar';
-                            titleText = 'Enviar WSP de Prueba';
-                            htmlText = '¿Deseas enviar un WSP de prueba al 957084267 sin aprobar los puntos?';
-                            confirmText = '<i class="bx bxl-whatsapp"></i> Sí, Enviar WSP';
-                        } else {
-                            form.querySelector('.estado-input').value = 'aprobado';
-                        }
+                        // Crear plantilla de texto con saltos de línea correctos
+                        const defaultMessage = `🎉 *¡Pedido Aprobado!* \n\nHola *${nombre}*, se te han asignado *${puntos} puntos* por tu compra de *${items}* (Total: S/ ${monto}). \n\n¡Sigue acumulando para grandes premios con *SURGAS*! 🛵💨`;
 
                         Swal.fire({
-                            title: titleText,
-                            html: htmlText,
+                            title: 'Validar y Aprobar Pedido',
+                            html: `
+                                <div class="swal-form-modern" style="text-align: left; font-family: 'Inter', sans-serif;">
+                                    <p style="font-size: 0.88rem; color: #475569; margin-bottom: 1rem; line-height: 1.5;">Confirmas que deseas validar esta compra y acreditar los puntos al cliente. Configura los canales de notificación:</p>
+                                    
+                                    <div style="margin-bottom: 1rem;">
+                                        <label style="font-weight: 700; font-size: 0.85rem; color: #1e293b; display: block; margin-bottom: 0.4rem;">Número de Celular:</label>
+                                        <div style="position: relative; display: flex; align-items: center;">
+                                            <i class='bx bx-phone' style="position: absolute; left: 12px; color: #94a3b8; font-size: 1.1rem; z-index: 10;"></i>
+                                            <input type="text" id="swal-celular" class="swal2-input" value="${celular}" placeholder="Ej: 957084267" style="margin: 0; width: 100%; padding-left: 2.5rem; font-size: 0.9rem; border-radius: 0.5rem; border: 1px solid #cbd5e1; box-sizing: border-box; height: 42px; font-family: inherit;">
+                                        </div>
+                                    </div>
+                                    
+                                    <div style="margin-bottom: 1.2rem; display: flex; gap: 1.5rem; background: #f8fafc; padding: 0.75rem; border-radius: 0.5rem; border: 1px solid #e2e8f0;">
+                                        <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; font-weight: 600; color: #334155; cursor: pointer; margin: 0; user-select: none;">
+                                            <input type="checkbox" id="swal-send-wsp" checked style="width: 16px; height: 16px; accent-color: #25D366;">
+                                            <i class='bx bxl-whatsapp' style="color: #25D366; font-size: 1.2rem;"></i> WhatsApp (WSP)
+                                        </label>
+                                        <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; font-weight: 600; color: #334155; cursor: pointer; margin: 0; user-select: none;">
+                                            <input type="checkbox" id="swal-send-sms" checked style="width: 16px; height: 16px; accent-color: #0284c7;">
+                                            <i class='bx bx-message-rounded-dots' style="color: #0284c7; font-size: 1.2rem;"></i> SMS Gateway
+                                        </label>
+                                    </div>
+                                    
+                                    <div style="margin-bottom: 0.5rem;">
+                                        <label style="font-weight: 700; font-size: 0.85rem; color: #1e293b; display: block; margin-bottom: 0.4rem;">Editar / Personalizar Mensaje:</label>
+                                        <textarea id="swal-mensaje" class="swal2-textarea" style="margin: 0; width: 100%; height: 130px; font-size: 0.85rem; padding: 0.6rem; border-radius: 0.5rem; border: 1px solid #cbd5e1; box-sizing: border-box; resize: vertical; font-family: inherit; line-height: 1.4;">${defaultMessage}</textarea>
+                                    </div>
+                                </div>
+                            `,
                             icon: 'question',
                             background: '#ffffff',
                             color: '#111827',
                             showCancelButton: true,
-                            confirmButtonColor: notifyMethod === 'none' ? '#059669' : '#0284c7',
-                            cancelButtonColor: '#d1d5db',
-                            confirmButtonText: confirmText,
+                            confirmButtonColor: '#10b981',
+                            cancelButtonColor: '#cbd5e1',
+                            confirmButtonText: '<i class="bx bx-check-shield"></i> Validar y Notificar',
                             cancelButtonText: 'Cancelar',
-                            customClass: { popup: 'swal-light' }
+                            customClass: { popup: 'swal-light' },
+                            preConfirm: () => {
+                                const celularInput = document.getElementById('swal-celular').value.trim();
+                                const sendWspVal = document.getElementById('swal-send-wsp').checked ? 1 : 0;
+                                const sendSmsVal = document.getElementById('swal-send-sms').checked ? 1 : 0;
+                                const mensajeInput = document.getElementById('swal-mensaje').value.trim();
+
+                                if (!celularInput) {
+                                    Swal.showValidationMessage('Por favor ingresa un número de celular');
+                                    return false;
+                                }
+                                if (sendWspVal === 0 && sendSmsVal === 0) {
+                                    Swal.showValidationMessage('Debes seleccionar al menos un canal de notificación');
+                                    return false;
+                                }
+
+                                return { celular: celularInput, sendWsp: sendWspVal, sendSms: sendSmsVal, mensaje: mensajeInput };
+                            }
                         }).then(result => {
-                            if (result.isConfirmed) {
+                            if (result && result.isConfirmed) {
+                                form.querySelector('.celular-input').value = result.value.celular;
+                                form.querySelector('.send-wsp-input').value = result.value.sendWsp;
+                                form.querySelector('.send-sms-input').value = result.value.sendSms;
+                                form.querySelector('.mensaje-input').value = result.value.mensaje;
                                 form.submit();
                             }
                         });
