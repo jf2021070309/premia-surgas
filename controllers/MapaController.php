@@ -32,22 +32,89 @@ class MapaController {
         $this->requireAdmin();
         
         $nombre = $_POST['nombre'] ?? '';
+        $propietario = $_POST['propietario'] ?? '';
         $latitud = $_POST['latitud'] ?? '';
         $longitud = $_POST['longitud'] ?? '';
         $foto = null;
 
         if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
             require_once __DIR__ . '/../helpers/UploadHelper.php';
+            
+            // Backup local y metadata EXIF
+            $localFotoPath = UploadHelper::saveLocalAndEmbedMetadata(
+                $_FILES['foto']['tmp_name'], 
+                $_FILES['foto']['name'], 
+                $nombre, 
+                $propietario, 
+                $latitud, 
+                $longitud
+            );
+
+            // Subir a ImgBB para la app
             $imgUrl = UploadHelper::uploadToImgBB($_FILES['foto']['tmp_name']);
             if ($imgUrl) {
                 $foto = $imgUrl;
+            } elseif ($localFotoPath) {
+                // Fallback a la foto local si falla ImgBB
+                $foto = $localFotoPath;
             }
         }
 
-        if ($nombre && $latitud && $longitud) {
+        if ($nombre && $propietario && $latitud && $longitud) {
             $modelo = new PuntoVentaModel();
-            $modelo->create($nombre, $latitud, $longitud, $foto);
+            $modelo->create($nombre, $propietario, $latitud, $longitud, $foto);
             $_SESSION['flash'] = ['type' => 'success', 'title' => 'Éxito', 'message' => 'Punto de venta registrado.'];
+        } else {
+            $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'Faltan datos requeridos.'];
+        }
+        
+        header('Location: ' . BASE_URL . 'mapa/admin');
+        exit;
+    }
+
+    public function update(): void {
+        $this->requireAdmin();
+        
+        $id = $_POST['id'] ?? '';
+        $nombre = $_POST['nombre'] ?? '';
+        $propietario = $_POST['propietario'] ?? '';
+        $latitud = $_POST['latitud'] ?? '';
+        $longitud = $_POST['longitud'] ?? '';
+        $foto = null;
+
+        if (!$id) {
+            $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'ID de punto de venta no proporcionado.'];
+            header('Location: ' . BASE_URL . 'mapa/admin');
+            exit;
+        }
+
+        if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+            require_once __DIR__ . '/../helpers/UploadHelper.php';
+            
+            // Backup local y metadata EXIF
+            $localFotoPath = UploadHelper::saveLocalAndEmbedMetadata(
+                $_FILES['foto']['tmp_name'], 
+                $_FILES['foto']['name'], 
+                $nombre, 
+                $propietario, 
+                $latitud, 
+                $longitud
+            );
+
+            // Subir a ImgBB para la app
+            $imgUrl = UploadHelper::uploadToImgBB($_FILES['foto']['tmp_name']);
+            if ($imgUrl) {
+                $foto = $imgUrl;
+            } elseif ($localFotoPath) {
+                // Fallback a la foto local si falla ImgBB
+                $foto = $localFotoPath;
+            }
+        }
+
+        if ($nombre && $propietario && $latitud && $longitud) {
+            $modelo = new PuntoVentaModel();
+            $modelo->update($id, $nombre, $propietario, $latitud, $longitud, $foto);
+            $_SESSION['flash'] = ['type' => 'success', 'title' => 'Éxito', 'message' => 'Punto de venta actualizado.'];
         } else {
             $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'Faltan datos requeridos.'];
         }

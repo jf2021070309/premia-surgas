@@ -59,6 +59,10 @@ define('WABA_TOKEN', 'EAANdAFMMDv8BRTYrjWcpkOnfeurRGfLNwZC7HtRAhm6j7yNyShceZAqpL
 define('WABA_PHONE_ID', '1179268258592188');
 define('WABA_VERSION', 'v25.0');
 
+// —— API de Puntos de Venta (Node.js Microservice) ——
+define('PUNTOS_API_URL', 'http://localhost:3050/api/puntos');
+define('PUNTOS_API_KEY', 'surgas_puntos_api_2024_secret');
+
 // —— SMS Gateway (Android - Flutter App) ——
 define('SMS_GATEWAY_URL', 'http://192.168.1.34:8080/send-sms');
 define('SMS_GATEWAY_API_KEY', 'MY_SECRET_KEY_2024');

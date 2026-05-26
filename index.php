@@ -154,6 +154,7 @@ $routes = [
     ['GET',  'mapa',                'MapaController', 'cliente'],
     ['GET',  'mapa/admin',          'MapaController', 'admin'],
     ['POST', 'mapa/create',         'MapaController', 'create'],
+    ['POST', 'mapa/update',         'MapaController', 'update'],
     ['GET',  'mapa/delete',         'MapaController', 'delete'],
 
     // —— Configuración General (Unificada) ——

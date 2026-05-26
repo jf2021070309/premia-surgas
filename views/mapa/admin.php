@@ -71,6 +71,18 @@
             from { opacity: 0; transform: scale(0.3) translateY(-20px); }
             to { opacity: 1; transform: scale(1) translateY(0); }
         }
+        @keyframes floatMarker {
+            0%, 100% { transform: translateY(0); filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3)); }
+            50% { transform: translateY(-8px); filter: drop-shadow(0 12px 10px rgba(0,0,0,0.15)); }
+        }
+        .floating-marker {
+            animation: bounceInMarker 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) both, floatMarker 3s ease-in-out infinite 0.6s;
+        }
+        .floating-marker img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
         .pin-svg {
             transition: all 0.2s ease;
         }
@@ -143,21 +155,35 @@
                 </div>
 
                 <div class="form-panel">
-                    <h3><i class='bx bx-plus-circle'></i> Nuevo Punto de Venta</h3>
-                    <form action="<?= BASE_URL ?>mapa/create" method="POST" enctype="multipart/form-data">
+                    <h3 id="formTitle"><i class='bx bx-plus-circle'></i> Nuevo Punto de Venta</h3>
+                    <form id="puntoForm" action="<?= BASE_URL ?>mapa/create" method="POST" enctype="multipart/form-data">
+                        <input type="hidden" name="id" id="puntoId" value="">
                         <div class="form-group">
                             <label>Nombre del Punto *</label>
                             <input type="text" name="nombre" id="nombrePunto" class="form-control"
                                    placeholder="Ej: Distribuidora Norte" required autocomplete="off">
                         </div>
+                        <div class="form-group">
+                            <label>Propietario *</label>
+                            <input type="text" name="propietario" id="propietarioPunto" class="form-control"
+                                   placeholder="Ej: Juan Pérez" required autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label>Pegar URL de Google Maps (Opcional)</label>
+                            <div style="display:flex; gap:0.5rem;">
+                                <input type="text" id="mapsUrlInput" class="form-control" placeholder="https://www.google.com/maps?q=..." autocomplete="off">
+                                <button type="button" class="btn-submit" style="width:auto; padding:0 1rem; margin-top:0;" onclick="parseMapsUrl()">Extraer</button>
+                            </div>
+                            <small style="color:#64748b; font-size:0.75rem;">O puedes hacer clic directamente en el mapa</small>
+                        </div>
                         <div class="coords-row">
                             <div class="form-group">
                                 <label>Latitud *</label>
-                                <input type="text" name="latitud" id="latInput" class="form-control" placeholder="—" readonly required>
+                                <input type="text" name="latitud" id="latInput" class="form-control" placeholder="Ej: -18.0123" required readonly autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label>Longitud *</label>
-                                <input type="text" name="longitud" id="lngInput" class="form-control" placeholder="—" readonly required>
+                                <input type="text" name="longitud" id="lngInput" class="form-control" placeholder="Ej: -70.2522" required readonly autocomplete="off">
                             </div>
                         </div>
                         <div id="coordPreview" style="display:none; margin-top:-0.5rem; margin-bottom:1rem;">
@@ -173,10 +199,16 @@
                                 <span id="fileLabelText">Subir imagen (opcional)</span>
                             </label>
                             <input type="file" name="foto" id="fotoInput" accept="image/*">
+                            <small id="fotoHelp" style="display:none; color:#64748b; font-size:0.75rem; margin-top:0.3rem;">Dejar vacío para conservar la foto actual.</small>
                         </div>
-                        <button type="submit" class="btn-submit">
-                            <i class='bx bx-save'></i> Guardar Punto
-                        </button>
+                        <div style="display:flex; gap:0.5rem; margin-top:1rem;">
+                            <button type="submit" class="btn-submit" id="btnSubmit">
+                                <i class='bx bx-save'></i> <span id="btnSubmitText">Guardar Punto</span>
+                            </button>
+                            <button type="button" class="btn-submit" id="btnCancelEdit" style="display:none; background:#94a3b8; color:#fff;" onclick="cancelEdit()">
+                                <i class='bx bx-x'></i> Cancelar
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -198,15 +230,24 @@
                             </div>
                             <div class="punto-card-body">
                                 <div class="punto-card-name"><?= htmlspecialchars($p['nombre']) ?></div>
+                                <div style="font-size: 0.8rem; color: #475569; margin-bottom: 0.5rem; font-weight: 600;"><i class='bx bx-user'></i> <?= htmlspecialchars($p['propietario']) ?></div>
                                 <div class="punto-card-coords">
                                     <i class='bx bx-map'></i>
                                     <?= number_format($p['latitud'], 6) ?>, <?= number_format($p['longitud'], 6) ?>
                                 </div>
-                                <a href="<?= BASE_URL ?>mapa/delete?id=<?= $p['id'] ?>"
-                                   class="btn-delete-punto"
-                                   onclick="return confirm('¿Eliminar este punto de venta?')">
-                                    <i class='bx bx-trash'></i> Eliminar
-                                </a>
+                                <div style="display:flex; gap:0.5rem; margin-top:1rem;">
+                                    <button type="button" 
+                                            class="btn-delete-punto" 
+                                            style="background: #e0f2fe; color: #0284c7;"
+                                            onclick="editPunto(<?= $p['id'] ?>, '<?= htmlspecialchars(addslashes($p['nombre'])) ?>', '<?= htmlspecialchars(addslashes($p['propietario'])) ?>', <?= $p['latitud'] ?>, <?= $p['longitud'] ?>)">
+                                        <i class='bx bx-edit'></i> Editar
+                                    </button>
+                                    <a href="<?= BASE_URL ?>mapa/delete?id=<?= $p['id'] ?>"
+                                       class="btn-delete-punto"
+                                       onclick="return confirm('¿Eliminar este punto de venta?')">
+                                        <i class='bx bx-trash'></i> Eliminar
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -256,9 +297,9 @@ function initMap() {
         
         var ventaIcon = L.divIcon({
             className: 'leaflet-marker-venta',
-            html: '<div class="pin-wrapper" style="width:32px;height:38px;"><svg viewBox="0 0 24 30" style="width:100%;height:100%;"><path class="pin-svg" d="M12,2 C6.48,2 2,6.48 2,12 C2,18.5 12,28 12,28 C12,28 22,18.5 22,12 C22,6.48 17.52,2 12,2 Z" fill="#ef4444"></path></svg><div class="pin-inner-circle"></div></div>',
-            iconSize: [32, 38],
-            iconAnchor: [16, 38]
+            html: '<div class="pin-wrapper floating-marker" style="width:48px;height:48px;"><img src="' + BASE_URL + 'assets/puntos%20de%20venta/icon.png" alt="Punto de Venta"></div>',
+            iconSize: [48, 48],
+            iconAnchor: [24, 48]
         });
         
         var marker = L.marker([lat, lng], { icon: ventaIcon }).addTo(map);
@@ -268,6 +309,7 @@ function initMap() {
             : '';
         marker.bindPopup('<div style="font-family:Inter,sans-serif;min-width:160px;">' + fotoHtml +
                          '<b style="color:#1e293b;font-size:0.9rem;">' + p.nombre + '</b>' +
+                         '<br><span style="font-size:0.8rem;color:#475569;"><i class="bx bx-user"></i> ' + p.propietario + '</span>' +
                          '<br><small style="color:#94a3b8;">' + lat.toFixed(6) + ', ' + lng.toFixed(6) + '</small></div>');
     });
 
@@ -295,6 +337,108 @@ function initMap() {
         tempMarker = L.marker(e.latlng, { icon: tempIcon }).addTo(map);
         tempMarker.bindPopup('📍 Nuevo punto seleccionado').openPopup();
     });
+
+    // Permitir ingreso manual de coordenadas
+    function updateMarkerFromInput() {
+        var lat = parseFloat(document.getElementById('latInput').value);
+        var lng = parseFloat(document.getElementById('lngInput').value);
+        
+        if (!isNaN(lat) && !isNaN(lng)) {
+            document.getElementById('coordText').textContent = lat + ', ' + lng;
+            document.getElementById('coordPreview').style.display = 'block';
+
+            if (tempMarker) {
+                map.removeLayer(tempMarker);
+            }
+            
+            var tempIcon = L.divIcon({
+                className: 'leaflet-marker-temp',
+                html: '<div class="pin-wrapper" style="width:32px;height:38px;"><svg viewBox="0 0 24 30" style="width:100%;height:100%;"><path class="pin-svg" d="M12,2 C6.48,2 2,6.48 2,12 C2,18.5 12,28 12,28 C12,28 22,18.5 22,12 C22,6.48 17.52,2 12,2 Z" fill="#3b82f6"></path></svg><div class="pin-inner-circle"></div></div>',
+                iconSize: [32, 38],
+                iconAnchor: [16, 38]
+            });
+            
+            var newLatLng = L.latLng(lat, lng);
+            tempMarker = L.marker(newLatLng, { icon: tempIcon }).addTo(map);
+            tempMarker.bindPopup('📍 Coordenada manual').openPopup();
+        }
+    }
+
+    document.getElementById('latInput').addEventListener('input', updateMarkerFromInput);
+    document.getElementById('lngInput').addEventListener('input', updateMarkerFromInput);
+}
+
+// Extraer coordenadas de la URL
+function parseMapsUrl() {
+    var url = document.getElementById('mapsUrlInput').value;
+    if (!url) return;
+
+    var lat = null, lng = null;
+
+    // Buscar formato ?q=lat,lng
+    var qMatch = url.match(/[?&]q=(-?\d+\.\d+),(-?\d+\.\d+)/);
+    if (qMatch) {
+        lat = parseFloat(qMatch[1]);
+        lng = parseFloat(qMatch[2]);
+    } else {
+        // Buscar formato @lat,lng
+        var atMatch = url.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+        if (atMatch) {
+            lat = parseFloat(atMatch[1]);
+            lng = parseFloat(atMatch[2]);
+        }
+    }
+
+    if (lat !== null && lng !== null) {
+        document.getElementById('latInput').value = lat;
+        document.getElementById('lngInput').value = lng;
+        if (typeof updateMarkerFromInput === 'function') {
+            updateMarkerFromInput();
+            map.setView([lat, lng], 17); // Hacer zoom a la nueva coordenada
+        }
+    } else {
+        alert("No se pudieron extraer coordenadas de esta URL. Usa el formato con '?q=lat,lng' o '@lat,lng'");
+    }
+}
+
+// Lógica de Edición
+function editPunto(id, nombre, propietario, lat, lng) {
+    document.getElementById('puntoId').value = id;
+    document.getElementById('nombrePunto').value = nombre;
+    document.getElementById('propietarioPunto').value = propietario;
+    document.getElementById('latInput').value = lat;
+    document.getElementById('lngInput').value = lng;
+    
+    document.getElementById('puntoForm').action = BASE_URL + 'mapa/update';
+    document.getElementById('formTitle').innerHTML = "<i class='bx bx-edit'></i> Editar Punto de Venta";
+    document.getElementById('btnSubmitText').innerText = "Actualizar Punto";
+    document.getElementById('btnCancelEdit').style.display = 'block';
+    document.getElementById('fotoHelp').style.display = 'block';
+    
+    updateMarkerFromInput();
+    map.setView([lat, lng], 17);
+    
+    // Scroll al form
+    window.scrollTo({ top: document.querySelector('.form-panel').offsetTop - 20, behavior: 'smooth' });
+}
+
+function cancelEdit() {
+    document.getElementById('puntoId').value = "";
+    document.getElementById('puntoForm').reset();
+    document.getElementById('puntoForm').action = BASE_URL + 'mapa/create';
+    
+    document.getElementById('formTitle').innerHTML = "<i class='bx bx-plus-circle'></i> Nuevo Punto de Venta";
+    document.getElementById('btnSubmitText').innerText = "Guardar Punto";
+    document.getElementById('btnCancelEdit').style.display = 'none';
+    document.getElementById('fotoHelp').style.display = 'none';
+    
+    document.getElementById('coordPreview').style.display = 'none';
+    if (tempMarker) {
+        map.removeLayer(tempMarker);
+        tempMarker = null;
+    }
+    
+    document.getElementById('fileLabelText').innerText = "Subir imagen (opcional)";
 }
 
 // File input and init

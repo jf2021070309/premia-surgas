@@ -386,6 +386,18 @@
             from { opacity: 0; transform: scale(0.3) translateY(-20px); }
             to { opacity: 1; transform: scale(1) translateY(0); }
         }
+        @keyframes floatMarker {
+            0%, 100% { transform: translateY(0); filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3)); }
+            50% { transform: translateY(-8px); filter: drop-shadow(0 12px 14px rgba(0,0,0,0.2)); }
+        }
+        .floating-marker {
+            animation: bounceInMarker 0.65s cubic-bezier(0.175, 0.885, 0.32, 1.275) both, floatMarker 3s ease-in-out infinite 0.65s;
+        }
+        .floating-marker img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
         .pin-svg {
             transition: all 0.25s ease;
         }
@@ -562,9 +574,9 @@ function initMap() {
         
         var ventaIcon = L.divIcon({
             className: 'leaflet-marker-venta',
-            html: '<div class="pin-wrapper" style="width:32px;height:38px;"><svg viewBox="0 0 24 30" style="width:100%;height:100%;"><path class="pin-svg" d="M12,2 C6.48,2 2,6.48 2,12 C2,18.5 12,28 12,28 C12,28 22,18.5 22,12 C22,6.48 17.52,2 12,2 Z" fill="#ef4444"></path></svg><div class="pin-inner-circle"></div></div>',
-            iconSize: [32, 38],
-            iconAnchor: [16, 38]
+            html: '<div class="pin-wrapper floating-marker" style="width:48px;height:48px;"><img src="' + BASE_URL + 'assets/puntos%20de%20venta/icon.png" alt="Punto"></div>',
+            iconSize: [48, 48],
+            iconAnchor: [24, 48]
         });
 
         var marker = L.marker([lat, lng], { icon: ventaIcon }).addTo(map);
@@ -577,7 +589,8 @@ function initMap() {
         var wazeUrl = 'https://waze.com/ul?ll=' + lat + ',' + lng + '&navigate=yes';
 
         var popupHtml = '<div style="font-family:Outfit,sans-serif;min-width:180px;padding:4px;">' + fotoHtml +
-                         '<b style="color:#0f172a;font-size:0.95rem;display:block;margin-bottom:6px;">' + p.nombre + '</b>' +
+                         '<b style="color:#0f172a;font-size:0.95rem;display:block;margin-bottom:2px;">' + p.nombre + '</b>' +
+                         '<div style="font-size:0.8rem;color:#475569;margin-bottom:6px;font-weight:600;"><i class="bx bx-user"></i> ' + p.propietario + '</div>' +
                          '<div style="display:flex;gap:6px;margin-top:10px;">' +
                          '  <a href="' + googleMapsUrl + '" target="_blank" style="flex:1;display:flex;align-items:center;justify-content:center;gap:4px;background:#ea4335;color:#fff;text-decoration:none;padding:6px 5px;border-radius:8px;font-size:0.75rem;font-weight:700;"><i class=\'bx bxl-google\'></i> Maps</a>' +
                          '  <a href="' + wazeUrl + '" target="_blank" style="flex:1;display:flex;align-items:center;justify-content:center;gap:4px;background:#33ccff;color:#fff;text-decoration:none;padding:6px 5px;border-radius:8px;font-size:0.75rem;font-weight:700;"><i class=\'bx bx-car\'></i> Waze</a>' +
@@ -772,6 +785,7 @@ function renderizarPuntos() {
             + fotoHtml
             + '<div class="punto-item-info">'
             +   '<div class="punto-item-name">' + p.nombre + '</div>'
+            +   '<div style="font-size:0.75rem; color:#64748b; font-weight: 600;"><i class="bx bx-user"></i> ' + p.propietario + '</div>'
             +   (distText ? '<div class="punto-item-dist"><i class=\'bx bx-map-pin\'></i>' + distText + '</div>' : '')
             + '</div>'
             + '<div class="punto-item-pin"><i class=\'bx bx-chevron-right\'></i></div>'

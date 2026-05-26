@@ -7,6 +7,7 @@ $sql = "
 CREATE TABLE IF NOT EXISTS puntos_venta (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(255) NOT NULL,
+    propietario VARCHAR(255) NOT NULL,
     latitud DECIMAL(10, 8) NOT NULL,
     longitud DECIMAL(11, 8) NOT NULL,
     foto VARCHAR(255) DEFAULT NULL,

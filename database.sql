@@ -585,18 +585,19 @@ INSERT INTO `ventas` (`id`, `cliente_id`, `conductor_id`, `monto`, `puntos`, `de
 CREATE TABLE IF NOT EXISTS puntos_venta (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(255) NOT NULL,
+    propietario VARCHAR(255) NOT NULL,
     latitud DECIMAL(10, 8) NOT NULL,
     longitud DECIMAL(11, 8) NOT NULL,
     foto VARCHAR(255) DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO puntos_venta (nombre, latitud, longitud, foto) VALUES
-('Punto Villa Maria', -18.020206, -70.238576, NULL),
-('Punto Villa San Carlos', -18.027837, -70.250163, NULL),
-('Punto Exodo', -18.045948, -70.240785, NULL),
-('Punto Santa Rosa', -18.045788, -70.256823, NULL),
-('Punto Simon Bolivar', -18.047783, -70.251025, NULL);
+INSERT INTO puntos_venta (nombre,propietario, latitud, longitud, foto) VALUES
+('Punto Villa Maria', 'GRUPOSURGAS', -18.020206, -70.238576, NULL),
+('Punto Villa San Carlos', 'GRUPOSURGAS', -18.027837, -70.250163, NULL),
+('Punto Exodo', 'GRUPOSURGAS', -18.045948, -70.240785, NULL),
+('Punto Santa Rosa', 'GRUPOSURGAS', -18.045788, -70.256823, NULL),
+('Punto Simon Bolivar', 'GRUPOSURGAS', -18.047783, -70.251025, NULL);
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
