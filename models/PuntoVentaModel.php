@@ -9,6 +9,7 @@ class PuntoVentaModel {
         curl_setopt($ch, CURLOPT_URL, PUNTOS_API_URL);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -30,6 +31,7 @@ class PuntoVentaModel {
         curl_setopt($ch, CURLOPT_URL, PUNTOS_API_URL . '/' . $id);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -70,6 +72,7 @@ class PuntoVentaModel {
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         
         // Headers de Autenticación
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
@@ -110,6 +113,7 @@ class PuntoVentaModel {
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'x-api-key: ' . PUNTOS_API_KEY
@@ -149,6 +153,7 @@ class PuntoVentaModel {
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'x-api-key: ' . PUNTOS_API_KEY
