@@ -168,10 +168,16 @@
         <div class="page-wrap">
 
             <?php if (isset($_SESSION['flash'])): $f = $_SESSION['flash']; unset($_SESSION['flash']); ?>
-                <div class="flash-alert flash-<?= $f['type'] ?>">
-                    <i class='bx <?= $f['type'] === 'success' ? 'bx-check-circle' : 'bx-error-circle' ?>'></i>
-                    <?= htmlspecialchars($f['message']) ?>
-                </div>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        Swal.fire({
+                            icon: '<?= $f['type'] === 'success' ? 'success' : 'error' ?>',
+                            title: '<?= htmlspecialchars($f['title'] ?? ($f['type'] === 'success' ? '¡Éxito!' : 'Error')) ?>',
+                            text: '<?= htmlspecialchars($f['message']) ?>',
+                            confirmButtonColor: '#800000'
+                        });
+                    });
+                </script>
             <?php endif; ?>
 
             <div class="map-instructions">
@@ -316,7 +322,7 @@
                                     </button>
                                     <a href="<?= BASE_URL ?>mapa/delete?id=<?= $p['id'] ?>"
                                        class="btn-delete-punto"
-                                       onclick="return confirm('¿Eliminar este punto de venta?')">
+                                       onclick="confirmarEliminar(event, this.href);">
                                         <i class='bx bx-trash'></i> Eliminar
                                     </a>
                                 </div>
@@ -529,6 +535,24 @@ function cancelEdit() {
     }
     
     document.getElementById('fileLabelText').innerText = "Subir imagen (opcional)";
+}
+
+function confirmarEliminar(event, url) {
+    event.preventDefault();
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "Esta acción no se puede deshacer.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#800000',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = url;
+        }
+    });
 }
 
 // File input and init
