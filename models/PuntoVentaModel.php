@@ -48,7 +48,7 @@ class PuntoVentaModel {
         return null;
     }
 
-    public function create($nombre, $propietario, $latitud, $longitud, $foto): bool {
+    public function create($nombre, $propietario, $latitud, $longitud, $horario_atencion, $foto): bool {
         // En PremiaSurgas, MapaController ya se encargaba de subir la foto y pasaba la URL o ruta local.
         // Mandamos los campos a la API Node.js de forma simple.
         $postData = [
@@ -56,6 +56,7 @@ class PuntoVentaModel {
             'propietario' => $propietario,
             'latitud' => $latitud,
             'longitud' => $longitud,
+            'horario_atencion' => $horario_atencion,
         ];
 
         // Si tenemos un archivo local subido (ruta temporal de $_FILES o ruta local en disco)
@@ -102,7 +103,7 @@ class PuntoVentaModel {
         return false;
     }
 
-    public function update($id, $nombre, $propietario, $latitud, $longitud, $foto = null): bool {
+    public function update($id, $nombre, $propietario, $latitud, $longitud, $horario_atencion, $foto = null): bool {
         // En Express, el endpoint PUT /api/puntos/:id recibe multipart/form-data o urlencoded.
         // cURL en PHP permite simular PUT con campos enviando POST y agregando un header personalizado o un campo '_method', 
         // pero la forma más limpia y compatible con Express (que usa multer/body-parser) es enviar un POST a un endpoint o 
@@ -123,7 +124,8 @@ class PuntoVentaModel {
             'nombre' => $nombre,
             'propietario' => $propietario,
             'latitud' => $latitud,
-            'longitud' => $longitud
+            'longitud' => $longitud,
+            'horario_atencion' => $horario_atencion
         ];
 
         if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {

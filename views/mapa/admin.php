@@ -75,8 +75,38 @@
             0%, 100% { transform: translateY(0); filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3)); }
             50% { transform: translateY(-8px); filter: drop-shadow(0 12px 10px rgba(0,0,0,0.15)); }
         }
+        @keyframes pulseGlow {
+            0% { transform: scale(0.85); opacity: 0.45; }
+            100% { transform: scale(1.2); opacity: 0.9; }
+        }
         .floating-marker {
             animation: bounceInMarker 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) both, floatMarker 3s ease-in-out infinite 0.6s;
+        }
+        .plant-glow {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: rgba(128, 0, 0, 0.15);
+            box-shadow: 0 0 14px 4px rgba(128, 0, 0, 0.4);
+            animation: pulseGlow 1.5s ease-in-out infinite alternate;
+            z-index: -1;
+        }
+        .plant-badge {
+            position: absolute;
+            bottom: 0px;
+            right: 0px;
+            background: #800000;
+            color: #fff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            z-index: 10;
         }
         .floating-marker img {
             width: 100%;
@@ -169,6 +199,43 @@
                                    placeholder="Ej: Juan Pérez" required autocomplete="off">
                         </div>
                         <div class="form-group">
+                            <label>Horario de Atención (Opcional)</label>
+                            <div style="display:flex; gap:0.5rem; align-items:center;">
+                                <select id="horaApertura" class="form-control" onchange="actualizarHorario()">
+                                    <option value="">Apertura</option>
+                                    <option value="01:00">01:00</option>
+                                    <option value="02:00">02:00</option>
+                                    <option value="03:00">03:00</option>
+                                    <option value="04:00">04:00</option>
+                                    <option value="05:00">05:00</option>
+                                    <option value="06:00">06:00</option>
+                                    <option value="07:00">07:00</option>
+                                    <option value="08:00">08:00</option>
+                                    <option value="09:00">09:00</option>
+                                    <option value="10:00">10:00</option>
+                                    <option value="11:00">11:00</option>
+                                    <option value="12:00">12:00</option>
+                                </select>
+                                <span style="color:#64748b;font-weight:600;">-</span>
+                                <select id="horaCierre" class="form-control" onchange="actualizarHorario()">
+                                    <option value="">Cierre</option>
+                                    <option value="13:00">13:00</option>
+                                    <option value="14:00">14:00</option>
+                                    <option value="15:00">15:00</option>
+                                    <option value="16:00">16:00</option>
+                                    <option value="17:00">17:00</option>
+                                    <option value="18:00">18:00</option>
+                                    <option value="19:00">19:00</option>
+                                    <option value="20:00">20:00</option>
+                                    <option value="21:00">21:00</option>
+                                    <option value="22:00">22:00</option>
+                                    <option value="23:00">23:00</option>
+                                    <option value="24:00">24:00</option>
+                                </select>
+                            </div>
+                            <input type="hidden" name="horario_atencion" id="horarioPunto" value="">
+                        </div>
+                        <div class="form-group">
                             <label>Pegar URL de Google Maps (Opcional)</label>
                             <div style="display:flex; gap:0.5rem;">
                                 <input type="text" id="mapsUrlInput" class="form-control" placeholder="https://www.google.com/maps?q=..." autocomplete="off">
@@ -231,6 +298,11 @@
                             <div class="punto-card-body">
                                 <div class="punto-card-name"><?= htmlspecialchars($p['nombre']) ?></div>
                                 <div style="font-size: 0.8rem; color: #475569; margin-bottom: 0.5rem; font-weight: 600;"><i class='bx bx-user'></i> <?= htmlspecialchars($p['propietario']) ?></div>
+                                <?php if (!empty($p['horario_atencion'])): ?>
+                                    <div style="font-size: 0.8rem; color: #475569; margin-bottom: 0.5rem; font-weight: 600;"><i class='bx bx-time'></i> <?= htmlspecialchars($p['horario_atencion']) ?></div>
+                                <?php else: ?>
+                                    <div style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 0.5rem; font-weight: 600;"><i class='bx bx-time'></i> Sin horario registrado</div>
+                                <?php endif; ?>
                                 <div class="punto-card-coords">
                                     <i class='bx bx-map'></i>
                                     <?= number_format($p['latitud'], 6) ?>, <?= number_format($p['longitud'], 6) ?>
@@ -239,7 +311,7 @@
                                     <button type="button" 
                                             class="btn-delete-punto" 
                                             style="background: #e0f2fe; color: #0284c7;"
-                                            onclick="editPunto(<?= $p['id'] ?>, '<?= htmlspecialchars(addslashes($p['nombre'])) ?>', '<?= htmlspecialchars(addslashes($p['propietario'])) ?>', <?= $p['latitud'] ?>, <?= $p['longitud'] ?>)">
+                                            onclick="editPunto(<?= $p['id'] ?>, '<?= htmlspecialchars(addslashes($p['nombre'])) ?>', '<?= htmlspecialchars(addslashes($p['propietario'])) ?>', '<?= htmlspecialchars(addslashes($p['horario_atencion'] ?? '')) ?>', <?= $p['latitud'] ?>, <?= $p['longitud'] ?>)">
                                         <i class='bx bx-edit'></i> Editar
                                     </button>
                                     <a href="<?= BASE_URL ?>mapa/delete?id=<?= $p['id'] ?>"
@@ -279,15 +351,6 @@ function initMap() {
         maxZoom: 20
     }).addTo(map);
 
-    // Marcador Planta Surgas
-    var surgasIcon = L.divIcon({
-        className: 'leaflet-marker-surgas',
-        html: '<div class="pin-wrapper surgas-pin" style="width:38px;height:44px;"><svg viewBox="0 0 24 30" style="width:100%;height:100%;"><path d="M12,2 C6.48,2 2,6.48 2,12 C2,18.5 12,28 12,28 C12,28 22,18.5 22,12 C22,6.48 17.52,2 12,2 Z" fill="#800000"></path></svg><div class="pin-inner-icon"><i class="bx bxs-factory" style="color:#fff;font-size:12px;"></i></div></div>',
-        iconSize: [38, 44],
-        iconAnchor: [19, 44]
-    });
-    var surgasMarker = L.marker([SURGAS_LAT, SURGAS_LNG], { icon: surgasIcon }).addTo(map);
-    surgasMarker.bindPopup('<div style="font-family:Inter,sans-serif;padding:4px;"><b style="color:#800000;">🏭 Planta Surgas</b><br><small>Ubicación principal</small></div>').openPopup();
 
     // Pintar puntos existentes
     var puntosData = <?= $puntosJson ?? '[]' ?>;
@@ -307,9 +370,11 @@ function initMap() {
         var fotoHtml = p.foto
             ? '<img src="' + (p.foto.startsWith('http') ? p.foto : BASE_URL + p.foto) + '" style="width:160px;height:80px;object-fit:cover;border-radius:8px;margin-bottom:6px;display:block;">'
             : '';
+        var horarioHtml = p.horario_atencion ? '<br><span style="font-size:0.8rem;color:#475569;"><i class="bx bx-time"></i> ' + p.horario_atencion + '</span>' : '<br><span style="font-size:0.8rem;color:#94a3b8;"><i class="bx bx-time"></i> Sin horario registrado</span>';
         marker.bindPopup('<div style="font-family:Inter,sans-serif;min-width:160px;">' + fotoHtml +
                          '<b style="color:#1e293b;font-size:0.9rem;">' + p.nombre + '</b>' +
                          '<br><span style="font-size:0.8rem;color:#475569;"><i class="bx bx-user"></i> ' + p.propietario + '</span>' +
+                         horarioHtml +
                          '<br><small style="color:#94a3b8;">' + lat.toFixed(6) + ', ' + lng.toFixed(6) + '</small></div>');
     });
 
@@ -402,10 +467,31 @@ function parseMapsUrl() {
 }
 
 // Lógica de Edición
-function editPunto(id, nombre, propietario, lat, lng) {
+function actualizarHorario() {
+    var a = document.getElementById('horaApertura').value;
+    var c = document.getElementById('horaCierre').value;
+    if (a && c) {
+        document.getElementById('horarioPunto').value = a + ' - ' + c;
+    } else {
+        document.getElementById('horarioPunto').value = '';
+    }
+}
+
+function editPunto(id, nombre, propietario, horario, lat, lng) {
     document.getElementById('puntoId').value = id;
     document.getElementById('nombrePunto').value = nombre;
     document.getElementById('propietarioPunto').value = propietario;
+    document.getElementById('horarioPunto').value = horario;
+    
+    if (horario && horario.includes(' - ')) {
+        var partes = horario.split(' - ');
+        document.getElementById('horaApertura').value = partes[0];
+        document.getElementById('horaCierre').value = partes[1];
+    } else {
+        document.getElementById('horaApertura').value = '';
+        document.getElementById('horaCierre').value = '';
+    }
+
     document.getElementById('latInput').value = lat;
     document.getElementById('lngInput').value = lng;
     
@@ -426,6 +512,10 @@ function cancelEdit() {
     document.getElementById('puntoId').value = "";
     document.getElementById('puntoForm').reset();
     document.getElementById('puntoForm').action = BASE_URL + 'mapa/create';
+    
+    document.getElementById('horaApertura').value = "";
+    document.getElementById('horaCierre').value = "";
+    document.getElementById('horarioPunto').value = "";
     
     document.getElementById('formTitle').innerHTML = "<i class='bx bx-plus-circle'></i> Nuevo Punto de Venta";
     document.getElementById('btnSubmitText').innerText = "Guardar Punto";

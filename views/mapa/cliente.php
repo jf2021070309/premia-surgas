@@ -390,8 +390,38 @@
             0%, 100% { transform: translateY(0); filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3)); }
             50% { transform: translateY(-8px); filter: drop-shadow(0 12px 14px rgba(0,0,0,0.2)); }
         }
+        @keyframes pulseGlow {
+            0% { transform: scale(0.85); opacity: 0.45; }
+            100% { transform: scale(1.2); opacity: 0.9; }
+        }
         .floating-marker {
             animation: bounceInMarker 0.65s cubic-bezier(0.175, 0.885, 0.32, 1.275) both, floatMarker 3s ease-in-out infinite 0.65s;
+        }
+        .plant-glow {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: rgba(128, 0, 0, 0.15);
+            box-shadow: 0 0 14px 4px rgba(128, 0, 0, 0.4);
+            animation: pulseGlow 1.5s ease-in-out infinite alternate;
+            z-index: -1;
+        }
+        .plant-badge {
+            position: absolute;
+            bottom: 0px;
+            right: 0px;
+            background: #800000;
+            color: #fff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            z-index: 10;
         }
         .floating-marker img {
             width: 100%;
@@ -521,7 +551,6 @@
     
     <!-- Leyenda integrada en la cabecera del panel de locales -->
     <div class="map-legend-sheet">
-        <div class="legend-item"><div class="dot-surgas"></div>Planta Surgas</div>
         <div class="legend-item"><div class="dot-venta"></div>Punto de Venta</div>
         <div class="legend-item"><div class="dot-user"></div>Mi ubicación</div>
     </div>
@@ -557,15 +586,6 @@ function initMap() {
         maxZoom: 20
     }).addTo(map);
 
-    // Planta Surgas marker (Premium custom SVG pin)
-    var surgasIcon = L.divIcon({
-        className: 'leaflet-marker-surgas',
-        html: '<div class="pin-wrapper surgas-pin" style="width:38px;height:44px;"><svg viewBox="0 0 24 30" style="width:100%;height:100%;"><path d="M12,2 C6.48,2 2,6.48 2,12 C2,18.5 12,28 12,28 C12,28 22,18.5 22,12 C22,6.48 17.52,2 12,2 Z" fill="#800000"></path></svg><div class="pin-inner-icon"><i class="bx bxs-factory" style="color:#fff;font-size:12px;"></i></div></div>',
-        iconSize: [38, 44],
-        iconAnchor: [19, 44]
-    });
-    var surgasMarker = L.marker([SURGAS_LAT, SURGAS_LNG], { icon: surgasIcon }).addTo(map);
-    surgasMarker.bindPopup('<div style="font-family:Outfit,sans-serif;padding:4px;"><b style="color:#800000;font-size:0.95rem;">🏭 Planta Surgas</b><br><small style="color:#64748b;font-weight:600;">Ubicación principal de operaciones</small></div>').openPopup();
 
     // Pintar puntos de venta (Custom premium red pins)
     puntosData.forEach(function(p) {
@@ -587,10 +607,12 @@ function initMap() {
             
         var googleMapsUrl = 'https://www.google.com/maps/dir/?api=1&destination=' + lat + ',' + lng;
         var wazeUrl = 'https://waze.com/ul?ll=' + lat + ',' + lng + '&navigate=yes';
+        var horarioHtml = p.horario_atencion ? '<div style="font-size:0.8rem;color:#475569;margin-bottom:6px;font-weight:600;"><i class="bx bx-time"></i> ' + p.horario_atencion + '</div>' : '<div style="font-size:0.8rem;color:#94a3b8;margin-bottom:6px;font-weight:600;"><i class="bx bx-time"></i> Sin horario registrado</div>';
 
         var popupHtml = '<div style="font-family:Outfit,sans-serif;min-width:180px;padding:4px;">' + fotoHtml +
                          '<b style="color:#0f172a;font-size:0.95rem;display:block;margin-bottom:2px;">' + p.nombre + '</b>' +
                          '<div style="font-size:0.8rem;color:#475569;margin-bottom:6px;font-weight:600;"><i class="bx bx-user"></i> ' + p.propietario + '</div>' +
+                         horarioHtml +
                          '<div style="display:flex;gap:6px;margin-top:10px;">' +
                          '  <a href="' + googleMapsUrl + '" target="_blank" style="flex:1;display:flex;align-items:center;justify-content:center;gap:4px;background:#ea4335;color:#fff;text-decoration:none;padding:6px 5px;border-radius:8px;font-size:0.75rem;font-weight:700;"><i class=\'bx bxl-google\'></i> Maps</a>' +
                          '  <a href="' + wazeUrl + '" target="_blank" style="flex:1;display:flex;align-items:center;justify-content:center;gap:4px;background:#33ccff;color:#fff;text-decoration:none;padding:6px 5px;border-radius:8px;font-size:0.75rem;font-weight:700;"><i class=\'bx bx-car\'></i> Waze</a>' +
@@ -662,9 +684,8 @@ function actualizarUbicacion(lat, lng) {
     userMarker = L.marker([lat, lng], { icon: userIcon }).addTo(map);
     userMarker.bindPopup('<div style="font-family:Outfit,sans-serif;padding:4px;font-weight:700;color:#0f172a;"><i class=\'bx bx-navigation\' style="color:#3b82f6;"></i> Mi posición actual</div>');
 
-    // Ajustar vista inicial para englobar Planta y Posición
+    // Ajustar vista inicial para englobar Posición y puntos de venta
     var markers = [
-        L.marker([SURGAS_LAT, SURGAS_LNG]),
         userMarker
     ].concat(puntosMarkers);
     
@@ -781,11 +802,14 @@ function renderizarPuntos() {
             ? '<div class="punto-item-img"><img src="' + (p.foto.startsWith('http') ? p.foto : BASE_URL + p.foto) + '"></div>'
             : '<div class="punto-item-img"><i class=\'bx bx-store-alt\'></i></div>';
 
+        var horarioHtmlList = p.horario_atencion ? '<div style="font-size:0.75rem; color:#64748b; font-weight: 600;"><i class="bx bx-time"></i> ' + p.horario_atencion + '</div>' : '<div style="font-size:0.75rem; color:#94a3b8; font-weight: 600;"><i class="bx bx-time"></i> Sin horario registrado</div>';
+
         html += '<div class="punto-item" onclick="centrarEnPunto(' + p.latitud + ',' + p.longitud + ')">'
             + fotoHtml
             + '<div class="punto-item-info">'
             +   '<div class="punto-item-name">' + p.nombre + '</div>'
             +   '<div style="font-size:0.75rem; color:#64748b; font-weight: 600;"><i class="bx bx-user"></i> ' + p.propietario + '</div>'
+            +   horarioHtmlList
             +   (distText ? '<div class="punto-item-dist"><i class=\'bx bx-map-pin\'></i>' + distText + '</div>' : '')
             + '</div>'
             + '<div class="punto-item-pin"><i class=\'bx bx-chevron-right\'></i></div>'

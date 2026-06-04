@@ -154,7 +154,7 @@ router.get('/:id', async (req, res) => {
  */
 router.post('/', requireApiKey, upload.single('foto'), async (req, res) => {
     try {
-        const { nombre, propietario, latitud, longitud } = req.body;
+        const { nombre, propietario, latitud, longitud, horario_atencion } = req.body;
 
         if (!nombre || !propietario || !latitud || !longitud) {
             return res.status(400).json({
@@ -173,8 +173,8 @@ router.post('/', requireApiKey, upload.single('foto'), async (req, res) => {
         }
 
         const { rows } = await pool.query(
-            'INSERT INTO puntos_venta (nombre, propietario, latitud, longitud, foto) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-            [nombre, propietario, parseFloat(latitud), parseFloat(longitud), fotoUrl]
+            'INSERT INTO puntos_venta (nombre, propietario, latitud, longitud, foto, horario_atencion) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+            [nombre, propietario, parseFloat(latitud), parseFloat(longitud), fotoUrl, horario_atencion || null]
         );
 
         return res.status(201).json({
@@ -248,7 +248,7 @@ router.post('/', requireApiKey, upload.single('foto'), async (req, res) => {
 router.put('/:id', requireApiKey, upload.single('foto'), async (req, res) => {
     try {
         const { id } = req.params;
-        const { nombre, propietario, latitud, longitud } = req.body;
+        const { nombre, propietario, latitud, longitud, horario_atencion } = req.body;
 
         if (!nombre || !propietario || !latitud || !longitud) {
             return res.status(400).json({
@@ -280,8 +280,8 @@ router.put('/:id', requireApiKey, upload.single('foto'), async (req, res) => {
         }
 
         const { rows } = await pool.query(
-            'UPDATE puntos_venta SET nombre = $1, propietario = $2, latitud = $3, longitud = $4, foto = $5 WHERE id = $6 RETURNING *',
-            [nombre, propietario, parseFloat(latitud), parseFloat(longitud), fotoUrl, id]
+            'UPDATE puntos_venta SET nombre = $1, propietario = $2, latitud = $3, longitud = $4, foto = $5, horario_atencion = $6 WHERE id = $7 RETURNING *',
+            [nombre, propietario, parseFloat(latitud), parseFloat(longitud), fotoUrl, horario_atencion || null, id]
         );
 
         return res.json({

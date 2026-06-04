@@ -33,6 +33,7 @@ class MapaController {
         
         $nombre = $_POST['nombre'] ?? '';
         $propietario = $_POST['propietario'] ?? '';
+        $horario_atencion = $_POST['horario_atencion'] ?? '';
         $latitud = $_POST['latitud'] ?? '';
         $longitud = $_POST['longitud'] ?? '';
         $foto = null;
@@ -62,7 +63,7 @@ class MapaController {
 
         if ($nombre && $propietario && $latitud && $longitud) {
             $modelo = new PuntoVentaModel();
-            $modelo->create($nombre, $propietario, $latitud, $longitud, $foto);
+            $modelo->create($nombre, $propietario, $latitud, $longitud, $horario_atencion, $foto);
             $_SESSION['flash'] = ['type' => 'success', 'title' => 'Éxito', 'message' => 'Punto de venta registrado.'];
         } else {
             $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'Faltan datos requeridos.'];
@@ -78,6 +79,7 @@ class MapaController {
         $id = $_POST['id'] ?? '';
         $nombre = $_POST['nombre'] ?? '';
         $propietario = $_POST['propietario'] ?? '';
+        $horario_atencion = $_POST['horario_atencion'] ?? '';
         $latitud = $_POST['latitud'] ?? '';
         $longitud = $_POST['longitud'] ?? '';
         $foto = null;
@@ -113,7 +115,7 @@ class MapaController {
 
         if ($nombre && $propietario && $latitud && $longitud) {
             $modelo = new PuntoVentaModel();
-            $modelo->update($id, $nombre, $propietario, $latitud, $longitud, $foto);
+            $modelo->update($id, $nombre, $propietario, $latitud, $longitud, $horario_atencion, $foto);
             $_SESSION['flash'] = ['type' => 'success', 'title' => 'Éxito', 'message' => 'Punto de venta actualizado.'];
         } else {
             $_SESSION['flash'] = ['type' => 'error', 'title' => 'Error', 'message' => 'Faltan datos requeridos.'];

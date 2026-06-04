@@ -43,6 +43,7 @@ Las rutas de **escritura** (POST, PUT, DELETE) requieren el header \`x-api-key\`
                         propietario: { type: 'string',  example: 'Juan Pérez' },
                         latitud:     { type: 'number',  format: 'double', example: -18.025613 },
                         longitud:    { type: 'number',  format: 'double', example: -70.241629 },
+                        horario_atencion: { type: 'string', nullable: true, example: '08:00 - 18:00' },
                         foto:        { type: 'string',  nullable: true, example: 'https://i.ibb.co/abc123/foto.jpg' },
                         created_at:  { type: 'string',  format: 'date-time', example: '2026-05-26T12:00:00.000Z' }
                     }
@@ -55,6 +56,7 @@ Las rutas de **escritura** (POST, PUT, DELETE) requieren el header \`x-api-key\`
                         propietario: { type: 'string',  example: 'Juan Pérez' },
                         latitud:     { type: 'number',  format: 'double', example: -18.025613 },
                         longitud:    { type: 'number',  format: 'double', example: -70.241629 },
+                        horario_atencion: { type: 'string', example: '08:00 - 18:00', description: 'Rango de horas de atención del punto (opcional)' },
                         foto:        { type: 'string',  format: 'binary', description: 'Imagen del punto (opcional)' }
                     }
                 },
