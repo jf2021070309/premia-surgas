@@ -203,34 +203,34 @@
                             <div style="display:flex; gap:0.5rem; align-items:center;">
                                 <select id="horaApertura" class="form-control" onchange="actualizarHorario()">
                                     <option value="">Apertura</option>
-                                    <option value="01:00">01:00</option>
-                                    <option value="02:00">02:00</option>
-                                    <option value="03:00">03:00</option>
-                                    <option value="04:00">04:00</option>
-                                    <option value="05:00">05:00</option>
-                                    <option value="06:00">06:00</option>
-                                    <option value="07:00">07:00</option>
-                                    <option value="08:00">08:00</option>
-                                    <option value="09:00">09:00</option>
-                                    <option value="10:00">10:00</option>
-                                    <option value="11:00">11:00</option>
-                                    <option value="12:00">12:00</option>
+                                    <option value="01:00 am">01:00 am</option>
+                                    <option value="02:00 am">02:00 am</option>
+                                    <option value="03:00 am">03:00 am</option>
+                                    <option value="04:00 am">04:00 am</option>
+                                    <option value="05:00 am">05:00 am</option>
+                                    <option value="06:00 am">06:00 am</option>
+                                    <option value="07:00 am">07:00 am</option>
+                                    <option value="08:00 am">08:00 am</option>
+                                    <option value="09:00 am">09:00 am</option>
+                                    <option value="10:00 am">10:00 am</option>
+                                    <option value="11:00 am">11:00 am</option>
+                                    <option value="12:00 am">12:00 am</option>
                                 </select>
                                 <span style="color:#64748b;font-weight:600;">-</span>
                                 <select id="horaCierre" class="form-control" onchange="actualizarHorario()">
                                     <option value="">Cierre</option>
-                                    <option value="13:00">13:00</option>
-                                    <option value="14:00">14:00</option>
-                                    <option value="15:00">15:00</option>
-                                    <option value="16:00">16:00</option>
-                                    <option value="17:00">17:00</option>
-                                    <option value="18:00">18:00</option>
-                                    <option value="19:00">19:00</option>
-                                    <option value="20:00">20:00</option>
-                                    <option value="21:00">21:00</option>
-                                    <option value="22:00">22:00</option>
-                                    <option value="23:00">23:00</option>
-                                    <option value="24:00">24:00</option>
+                                    <option value="13:00 pm">13:00 pm</option>
+                                    <option value="14:00 pm">14:00 pm</option>
+                                    <option value="15:00 pm">15:00 pm</option>
+                                    <option value="16:00 pm">16:00 pm</option>
+                                    <option value="17:00 pm">17:00 pm</option>
+                                    <option value="18:00 pm">18:00 pm</option>
+                                    <option value="19:00 pm">19:00 pm</option>
+                                    <option value="20:00 pm">20:00 pm</option>
+                                    <option value="21:00 pm">21:00 pm</option>
+                                    <option value="22:00 pm">22:00 pm</option>
+                                    <option value="23:00 pm">23:00 pm</option>
+                                    <option value="24:00 pm">24:00 pm</option>
                                 </select>
                             </div>
                             <input type="hidden" name="horario_atencion" id="horarioPunto" value="">
