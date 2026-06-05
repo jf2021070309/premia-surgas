@@ -92,13 +92,55 @@
     /* Pulsating microphone border for Modo Voz button */
     @keyframes pulse-border {
         0% {
-            box-shadow: 0 0 0 0 rgba(130, 21, 21, 0.7);
+            box-shadow: 0 8px 25px rgba(130, 21, 21, 0.4), 0 0 0 0 rgba(130, 21, 21, 0.7);
         }
         70% {
-            box-shadow: 0 0 0 8px rgba(130, 21, 21, 0);
+            box-shadow: 0 8px 25px rgba(130, 21, 21, 0.4), 0 0 0 10px rgba(130, 21, 21, 0);
         }
         100% {
-            box-shadow: 0 0 0 0 rgba(130, 21, 21, 0);
+            box-shadow: 0 8px 25px rgba(130, 21, 21, 0.4), 0 0 0 0 rgba(130, 21, 21, 0);
+        }
+    }
+    
+    /* Floating Action Button (FAB) for Voice Mode */
+    #voice-agent-toggle-btn {
+        position: fixed !important;
+        bottom: 30px !important;
+        right: 30px !important;
+        width: 62px !important;
+        height: 62px !important;
+        border-radius: 50% !important;
+        background: linear-gradient(135deg, #821515 0%, #a81c1c 100%) !important;
+        border: 2px solid #f87171 !important;
+        color: #fff !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        box-shadow: 0 8px 25px rgba(130, 21, 21, 0.4) !important;
+        cursor: pointer !important;
+        z-index: 9999 !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        animation: pulse-border 2s infinite !important;
+        padding: 0 !important;
+    }
+    #voice-agent-toggle-btn:hover {
+        transform: scale(1.1) !important;
+        background: linear-gradient(135deg, #991b1b 0%, #c22525 100%) !important;
+        box-shadow: 0 12px 30px rgba(130, 21, 21, 0.6) !important;
+    }
+    #voice-agent-toggle-btn i {
+        font-size: 1.85rem !important;
+    }
+    
+    @media (max-width: 768px) {
+        #voice-agent-toggle-btn {
+            bottom: 24px !important;
+            right: 24px !important;
+            width: 56px !important;
+            height: 56px !important;
+        }
+        #voice-agent-toggle-btn i {
+            font-size: 1.6rem !important;
         }
     }
     
@@ -135,8 +177,8 @@
                     </div>
                 </div>
                 <div class="chat-header-bar-controls" style="display: flex; gap: 8px; align-items: center;">
-                    <button id="voice-agent-toggle-btn" onclick="enterVoiceMode()" style="background: #821515; border: 1px solid #991b1b; color: #fff; padding: 6px 12px; border-radius: 8px; font-size: 0.7rem; font-weight: 800; cursor: pointer; transition: 0.3s; text-transform: uppercase; display: flex; align-items: center; gap: 4px; box-shadow: 0 0 10px rgba(130, 21, 21, 0.4); animation: pulse-border 2s infinite;">
-                        <i class='bx bx-microphone' style="font-size: 0.95rem; vertical-align: middle;"></i> Modo Voz
+                    <button id="voice-agent-toggle-btn" onclick="enterVoiceMode()" title="Modo Voz (Asistente)">
+                        <i class='bx bx-microphone'></i>
                     </button>
                     <select id="tts-voice-select" onchange="changeTTSVoice()" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #cbd5e1; height: 36px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; padding: 0 10px; cursor: pointer; outline: none; transition: 0.3s; appearance: none; -webkit-appearance: none; background-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 fill=%22%23cbd5e1%22><path d=%22M6 8L2 4h8z%22/></svg>'); background-repeat: no-repeat; background-position: right 8px center; padding-right: 24px;">
                         <option value="es-es" style="background: #0f172a; color: #fff;">Voz España (Joven)</option>
@@ -181,14 +223,14 @@
             </div>
 
             <!-- Voice Agent Overlay (Siri Mode) -->
-            <div id="voice-agent-overlay" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, #1e0505 0%, #090202 100%); z-index: 100; flex-direction: column; align-items: center; justify-content: space-between; padding: 2.5rem 2rem; box-sizing: border-box; text-align: center; animation: fadeInOverlay 0.4s ease;">
+            <div id="voice-agent-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: radial-gradient(circle at center, rgba(30, 5, 5, 0.98) 0%, rgba(9, 2, 2, 0.99) 100%); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 99999; flex-direction: column; align-items: center; justify-content: space-between; padding: 3rem 2rem; box-sizing: border-box; text-align: center; animation: fadeInOverlay 0.4s ease;">
                 <!-- Top Header -->
-                <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
+                <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; max-width: 1080px; margin: 0 auto;">
                     <div style="display: flex; align-items: center; gap: 8px;">
                         <span style="width: 8px; height: 8px; border-radius: 50%; background: #22c55e; display: inline-block; animation: pulse 1.5s infinite;"></span>
                         <span id="voice-status-badge" style="font-size: 0.72rem; color: #22c55e; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">Surgas Voz</span>
                     </div>
-                    <button onclick="exitVoiceMode()" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #fff; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; font-size: 1.1rem; border: none;" title="Cerrar modo voz">
+                    <button onclick="exitVoiceMode()" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #fff; width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; font-size: 1.5rem; border: none; outline: none; margin-left: auto;" title="Cerrar modo voz" onmouseover="this.style.background='rgba(255,255,255,0.18)'; this.style.transform='scale(1.08)'" onmouseout="this.style.background='rgba(255,255,255,0.08)'; this.style.transform='scale(1)'">
                         <i class='bx bx-x'></i>
                     </button>
                 </div>
@@ -1151,6 +1193,15 @@
     window.isVoiceModeActive = false;
     let siriWaveAnimationId = null;
 
+    function resizeSiriCanvas() {
+        const canvas = document.getElementById('siri-wave-canvas');
+        if (canvas && window.isVoiceModeActive) {
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * (window.devicePixelRatio || 1);
+            canvas.height = rect.height * (window.devicePixelRatio || 1);
+        }
+    }
+
     function enterVoiceMode() {
         window.isVoiceModeActive = true;
         
@@ -1176,12 +1227,8 @@
         }
 
         // Setup Siri Wave Canvas sizing
-        const canvas = document.getElementById('siri-wave-canvas');
-        if (canvas) {
-            const rect = canvas.getBoundingClientRect();
-            canvas.width = rect.width * (window.devicePixelRatio || 1);
-            canvas.height = rect.height * (window.devicePixelRatio || 1);
-        }
+        resizeSiriCanvas();
+        window.addEventListener('resize', resizeSiriCanvas);
 
         // Start animation loop
         if (!siriWaveAnimationId) {
@@ -1202,6 +1249,8 @@
         // Hide overlay
         const overlay = document.getElementById('voice-agent-overlay');
         if (overlay) overlay.style.display = 'none';
+
+        window.removeEventListener('resize', resizeSiriCanvas);
 
         // Cancel siri wave animation
         if (siriWaveAnimationId) {
