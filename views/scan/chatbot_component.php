@@ -112,8 +112,8 @@
                 </div>
                 <div class="chat-header-bar-controls" style="display: flex; gap: 8px; align-items: center;">
                     <select id="tts-voice-select" onchange="changeTTSVoice()" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #cbd5e1; height: 36px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; padding: 0 10px; cursor: pointer; outline: none; transition: 0.3s; appearance: none; -webkit-appearance: none; background-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 fill=%22%23cbd5e1%22><path d=%22M6 8L2 4h8z%22/></svg>'); background-repeat: no-repeat; background-position: right 8px center; padding-right: 24px;">
-                        <option value="es-es" style="background: #0f172a; color: #fff;" selected>Voz España (Joven)</option>
-                        <option value="es" style="background: #0f172a; color: #fff;">Voz Latinoamericana</option>
+                        <option value="es-es" style="background: #0f172a; color: #fff;">Voz España (Joven)</option>
+                        <option value="es" style="background: #0f172a; color: #fff;" selected>Voz Latinoamericana</option>
                     </select>
                     <button id="tts-toggle-btn" onclick="toggleTTS()" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #cbd5e1; width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s;" title="Activar/Desactivar lectura por voz">
                         <i id="tts-icon" class='bx bx-volume-full' style="font-size: 1.2rem;"></i>
@@ -342,12 +342,25 @@
             
             // Auto-select the best premium voice if the user hasn't chosen yet
             if (!window.userHasSelectedVoice) {
-                let preferredVoice = spanishVoices.find(v => v.name.toLowerCase().includes('camila'));
+                let preferredVoice = null;
+                // Keywords for high-quality/natural Spanish voices across Windows, iOS/macOS, Android, and Linux/ChromeOS
+                const preferredKeywords = ['camila', 'dalia', 'monica', 'paulina', 'siri', 'google', 'ana', 'helena'];
+                
+                for (const keyword of preferredKeywords) {
+                    preferredVoice = spanishVoices.find(v => v.name.toLowerCase().includes(keyword));
+                    if (preferredVoice) break;
+                }
+                
                 if (!preferredVoice) {
                     preferredVoice = spanishVoices.find(v => v.name.toLowerCase().includes('natural') || v.name.toLowerCase().includes('online') || v.name.toLowerCase().includes('neural'));
                 }
+                
                 if (preferredVoice) {
                     select.value = 'local_' + preferredVoice.name;
+                } else {
+                    // If no high quality local voice is found (e.g. mobile Safari/Android with basic engines),
+                    // default to Voz Latinoamericana (Google TTS proxy backend)
+                    select.value = 'es';
                 }
             }
         }
