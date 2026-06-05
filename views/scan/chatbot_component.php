@@ -186,6 +186,47 @@
             z-index: 99999999 !important; /* Above sidebar (5000) and headers */
         }
     }
+
+    /* Custom CSS styles for the Gas Cylinder Mascot */
+    .gas-cylinder-svg {
+        transition: all 0.5s ease-in-out;
+        filter: drop-shadow(0 8px 16px rgba(0,0,0,0.4));
+        transform-origin: bottom center;
+    }
+
+    /* 1. IDLE STATE: Gentle floating */
+    @keyframes cylinderFloat {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-6px); }
+    }
+    .gas-cylinder-svg.state-idle {
+        animation: cylinderFloat 3s infinite ease-in-out;
+    }
+
+    /* 2. LISTENING STATE: Gentle vibration/pulse */
+    @keyframes cylinderVibrate {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        20% { transform: translate(-1.5px, 1.5px) scale(1.01); }
+        40% { transform: translate(1.5px, -1.5px) scale(1); }
+        60% { transform: translate(-1.5px, -1.5px) scale(1.01); }
+        80% { transform: translate(1.5px, 1.5px) scale(1); }
+    }
+    .gas-cylinder-svg.state-listening {
+        animation: cylinderVibrate 0.8s infinite linear;
+        border-color: rgba(239, 68, 68, 0.6) !important;
+        box-shadow: 0 0 25px rgba(239, 68, 68, 0.4) !important;
+    }
+
+    /* 3. RESPONDING STATE: Bouncing matching voice */
+    @keyframes cylinderBounce {
+        0%, 100% { transform: translateY(0) scaleY(1); }
+        40% { transform: translateY(-12px) scaleY(1.06) scaleX(0.95); }
+        75% { transform: translateY(3px) scaleY(0.94) scaleX(1.04); }
+    }
+    .gas-cylinder-svg.state-responding {
+        animation: cylinderBounce 0.75s infinite ease-in-out;
+        border-color: rgba(239, 68, 68, 0.4) !important;
+    }
 </style>
 
 <!-- PANE 5: CHATBOT -->
@@ -321,9 +362,21 @@
         canvas.height = rect.height * (window.devicePixelRatio || 1);
     }
 
+    // Update SVG Class based on current visual state
+    function updateCylinderState() {
+        const cylinder = document.getElementById('voice-gas-cylinder');
+        if (cylinder) {
+            const desiredClass = 'gas-cylinder-svg state-' + currentVisualState;
+            if (cylinder.className.baseVal !== desiredClass) {
+                cylinder.className.baseVal = desiredClass;
+            }
+        }
+    }
+
     // Visualizer animation loop
     function drawVisualizer() {
         visualizerAnimationId = requestAnimationFrame(drawVisualizer);
+        updateCylinderState();
         
         const canvas = document.getElementById('waveform-canvas');
         if (!canvas) return;
@@ -1274,6 +1327,7 @@
 
     function drawSiriWave() {
         siriWaveAnimationId = requestAnimationFrame(drawSiriWave);
+        updateCylinderState();
         const canvas = document.getElementById('siri-wave-canvas');
         if (!canvas) return;
         const ctx = canvas.getContext('2d');

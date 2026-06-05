@@ -2993,11 +2993,11 @@ if (empty($hpw)) {
 
         <!-- Center UI (Siri style) -->
         <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; gap: 1.5rem; margin-top: -1rem;">
-            <!-- Glowing Avatar / Logo -->
-            <div style="position: relative; width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; border-radius: 50%;">
-                <div id="voice-glowing-ring" style="position: absolute; width: 100%; height: 100%; border-radius: 50%; background: radial-gradient(circle, rgba(130, 21, 21, 0.4) 0%, rgba(130, 21, 21, 0) 70%); animation: scaleUpGlow 3s infinite ease-in-out;"></div>
-                <div style="z-index: 2; width: 70px; height: 70px; border-radius: 50%; background: #821515; border: 2px solid #ef4444; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 25px rgba(239, 68, 68, 0.5);">
-                    <i class='bx bx-bot' style="font-size: 2.2rem; color: #fff;"></i>
+            <!-- Glowing Interactive Mascot Image -->
+            <div style="position: relative; width: 160px; height: 160px; display: flex; align-items: center; justify-content: center; margin: 10px 0;">
+                <div id="voice-glowing-ring" style="position: absolute; width: 140px; height: 140px; border-radius: 50%; background: radial-gradient(circle, rgba(239, 68, 68, 0.45) 0%, rgba(130, 21, 21, 0) 70%); animation: scaleUpGlow 3s infinite ease-in-out; pointer-events: none;"></div>
+                <div style="z-index: 2; width: 150px; height: 150px; display: flex; align-items: center; justify-content: center; overflow: visible;">
+                    <img id="voice-gas-cylinder" class="gas-cylinder-svg state-idle" src="<?= BASE_URL ?>gas.png" alt="Mascota Surgas" style="width: 100%; height: 100%; object-fit: contain;">
                 </div>
             </div>
 
