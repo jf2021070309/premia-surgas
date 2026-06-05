@@ -828,7 +828,8 @@
 
     function speakBotResponse(text) {
         window.lastBotReply = text;
-        if (!isTTSEnabled) return;
+        // Solo hablar si el modal de voz flotante está abierto
+        if (!isTTSEnabled || !window.isVoiceModeActive) return;
         
         if (currentAudio) {
             currentAudio.pause();
