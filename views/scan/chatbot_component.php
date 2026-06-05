@@ -342,9 +342,12 @@
             
             // Auto-select the best premium voice if the user hasn't chosen yet
             if (!window.userHasSelectedVoice) {
-                const bestVoice = spanishVoices.find(v => v.name.toLowerCase().includes('natural') || v.name.toLowerCase().includes('online') || v.name.toLowerCase().includes('neural'));
-                if (bestVoice) {
-                    select.value = 'local_' + bestVoice.name;
+                let preferredVoice = spanishVoices.find(v => v.name.toLowerCase().includes('camila'));
+                if (!preferredVoice) {
+                    preferredVoice = spanishVoices.find(v => v.name.toLowerCase().includes('natural') || v.name.toLowerCase().includes('online') || v.name.toLowerCase().includes('neural'));
+                }
+                if (preferredVoice) {
+                    select.value = 'local_' + preferredVoice.name;
                 }
             }
         }
