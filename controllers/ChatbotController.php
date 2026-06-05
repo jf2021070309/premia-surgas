@@ -65,12 +65,13 @@ class ChatbotController {
                 break;
 
             case 'esperando_modalidad':
-                if (strtolower($message) === 'a domicilio') {
+                $modalidad = $this->inferModalidad($message);
+                if ($modalidad === 'domicilio') {
                     $data['modalidad'] = 'A Domicilio';
                     $reply = "Valor a domicilio S/. 62 x 10 kg\n\nTipo de Balon que usa?";
                     $buttons = ['Normal', 'Premium'];
                     $nextState = 'esperando_producto';
-                } elseif (strtolower($message) === 'en depósito') {
+                } elseif ($modalidad === 'deposito') {
                     $data['modalidad'] = 'En Depósito';
                     $reply = "Por favor comparte tu ubicación GPS o escribe tu dirección actual para buscar el depósito más cercano:";
                     $buttons = ['Compartir Ubicación'];
@@ -82,8 +83,9 @@ class ChatbotController {
                 break;
 
             case 'esperando_producto':
-                if (in_array(strtolower($message), ['normal', 'premium'])) {
-                    $data['producto'] = ucfirst(strtolower($message));
+                $producto = $this->inferProducto($message);
+                if ($producto) {
+                    $data['producto'] = $producto;
                     $reply = "cuantos balones desea? (digite)";
                     $buttons = ['1', '2', '3'];
                     $nextState = 'esperando_cantidad';
@@ -246,6 +248,64 @@ class ChatbotController {
             'buttons' => $buttons
         ]);
         exit;
+    }
+
+    /**
+     * Infers the delivery modality from a free-form message.
+     * Returns 'domicilio', 'deposito', or null.
+     */
+    private function inferModalidad(string $message): ?string {
+        $msg = mb_strtolower(trim($message), 'UTF-8');
+        // Normalize accents
+        $msg = strtr($msg, [
+            'á'=>'a','é'=>'e','í'=>'i','ó'=>'o','ú'=>'u',
+            'à'=>'a','è'=>'e','ì'=>'i','ò'=>'o','ù'=>'u',
+        ]);
+
+        // Keywords that indicate home delivery
+        $domicilioKeys = [
+            'domicilio','a domicilio','delivery','despacho','envio','enviar',
+            'traer','llevar','casa','hogar','direccion','dirección',
+            'quiero que me lleven','me lo traigan','que venga'
+        ];
+        foreach ($domicilioKeys as $kw) {
+            if (str_contains($msg, $kw)) return 'domicilio';
+        }
+
+        // Keywords that indicate depot pickup
+        $depositoKeys = [
+            'deposito','depósito','en deposito','tienda','almacen','almacén',
+            'punto','local','recoger','recojo','voy','ir a recoger','buscar',
+            'punto de venta','sucursal','ir a buscar'
+        ];
+        foreach ($depositoKeys as $kw) {
+            if (str_contains($msg, $kw)) return 'deposito';
+        }
+
+        return null;
+    }
+
+    /**
+     * Infers the gas cylinder type from a free-form message.
+     * Returns 'Normal', 'Premium', or null.
+     */
+    private function inferProducto(string $message): ?string {
+        $msg = mb_strtolower(trim($message), 'UTF-8');
+        $msg = strtr($msg, [
+            'á'=>'a','é'=>'e','í'=>'i','ó'=>'o','ú'=>'u',
+        ]);
+
+        $premiumKeys = ['premium','premiun','premiún','de lujo','especial','gold'];
+        foreach ($premiumKeys as $kw) {
+            if (str_contains($msg, $kw)) return 'Premium';
+        }
+
+        $normalKeys = ['normal','regular','comun','común','estandar','estándar','basico','básico'];
+        foreach ($normalKeys as $kw) {
+            if (str_contains($msg, $kw)) return 'Normal';
+        }
+
+        return null;
     }
 
     /**

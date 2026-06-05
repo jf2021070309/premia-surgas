@@ -326,6 +326,8 @@
     let recognition = null;
     let isListening = false;
     let interimBubble = null;
+    let isBotProcessing = false; // Mutex: prevents double-send while bot is responding or audio is playing
+    let finalSent = false;       // Guard: prevents duplicate final transcripts from same recognition session
     
     let synth = window.speechSynthesis;
     let isTTSEnabled = false; // Off by default — activates automatically only when voice mode is opened
@@ -605,6 +607,9 @@
             
             if (finalTranscript.trim()) {
                 removeInterimMessage();
+                // Guard against duplicate final results from the same utterance
+                if (finalSent) return;
+                finalSent = true;
                 if (window.isVoiceModeActive) {
                     const voiceTxt = document.getElementById('voice-transcription-text');
                     if (voiceTxt) {
@@ -669,6 +674,8 @@
             recognition.stop();
             stopSpeechRecognition();
         } else {
+            // Don't start mic while bot is still processing or playing audio
+            if (isBotProcessing) return;
             if (currentAudio) {
                 currentAudio.pause();
                 currentAudio = null;
@@ -676,8 +683,14 @@
             if (synth && synth.speaking) {
                 synth.cancel();
             }
+            finalSent = false; // Reset guard for new session
             isListening = true;
-            recognition.start();
+            try {
+                recognition.start();
+            } catch(e) {
+                isListening = false;
+                console.warn('Recognition start failed:', e);
+            }
         }
     }
 
@@ -879,12 +892,12 @@
                 statusText.innerText = 'Asistente';
                 statusText.style.color = '#64748b';
             }
-            // Wait longer (1s) before re-enabling mic to let browser fully release the audio pipeline
+            // Wait 1.2s before re-enabling mic — lets the browser fully release the audio pipeline
             setTimeout(() => {
+                isBotProcessing = false; // Unlock: bot is done, mic can open again
+                finalSent = false;       // Reset duplicate guard
                 if (window.isVoiceModeActive && !isListening) {
-                    if (!recognition) {
-                        initSpeechRecognition();
-                    }
+                    if (!recognition) initSpeechRecognition();
                     if (recognition) {
                         try {
                             isListening = true;
@@ -895,17 +908,19 @@
                         }
                     }
                 }
-            }, 1000);
+            }, 1200);
         };
         
         currentAudio.onerror = (e) => {
             console.error("Error playing audio via backend TTS, falling back to Web Speech API", e);
+            currentAudio = null;
             currentVisualState = 'idle';
             const statusText = document.getElementById('waveform-status-text');
             if (statusText) {
                 statusText.innerText = 'Asistente';
                 statusText.style.color = '#64748b';
             }
+            // Don't release mutex here — fallbackSpeak will handle it via utterance.onended
             fallbackSpeak(cleanText);
         };
         
@@ -976,12 +991,12 @@
                     statusText.innerText = 'Asistente';
                     statusText.style.color = '#64748b';
                 }
-                // Wait longer (1s) before re-enabling mic to let browser fully release the audio pipeline
+                // Wait 1.2s before re-enabling mic
                 setTimeout(() => {
+                    isBotProcessing = false; // Unlock mutex
+                    finalSent = false;       // Reset duplicate guard
                     if (window.isVoiceModeActive && !isListening) {
-                        if (!recognition) {
-                            initSpeechRecognition();
-                        }
+                        if (!recognition) initSpeechRecognition();
                         if (recognition) {
                             try {
                                 isListening = true;
@@ -992,12 +1007,14 @@
                             }
                         }
                     }
-                }, 1000);
+                }, 1200);
             };
             
             utterance.onerror = (e) => {
                 console.error("SpeechSynthesisUtterance error:", e);
                 currentVisualState = 'idle';
+                isBotProcessing = false; // Unlock mutex on error
+                finalSent = false;
                 const statusText = document.getElementById('waveform-status-text');
                 if (statusText) {
                     statusText.innerText = 'Asistente';
@@ -1213,6 +1230,11 @@
         const inputEl = document.getElementById('chat-user-input');
         const msg = text || (inputEl ? inputEl.value.trim() : '');
         if (!msg) return;
+        // Prevent double-send while bot is already processing a response
+        if (isBotProcessing) {
+            console.warn('Bot is already processing, ignoring duplicate message:', msg);
+            return;
+        }
 
         if (inputEl && !text) {
             inputEl.value = '';
@@ -1224,6 +1246,7 @@
 
     function sendChatRequest(msg, lat = null, lng = null) {
         const chatMessages = document.getElementById('chat-messages');
+        isBotProcessing = true; // Lock: prevent new messages until this one is fully handled
         
         // Add loader
         const loader = document.createElement('div');
@@ -1253,9 +1276,10 @@
                 appendMessage(data.reply, true);
                 renderQuickActions(data.buttons);
                 loadClientePedidos();
-                speakBotResponse(data.reply);
 
                 if (window.isVoiceModeActive) {
+                    // Voice mode: TTS will release the mutex via onended
+                    speakBotResponse(data.reply);
                     const voiceTxt = document.getElementById('voice-transcription-text');
                     if (voiceTxt) {
                         voiceTxt.innerHTML = "<strong>Surgas:</strong> " + data.reply.replace(/\n/g, '<br>');
@@ -1264,12 +1288,19 @@
                     if (voiceSubtitle) {
                         voiceSubtitle.innerText = "Respondiendo...";
                     }
+                } else {
+                    // Text-only chat: no audio, release mutex immediately
+                    isBotProcessing = false;
+                    finalSent = false;
                 }
             } else {
                 const errMsg = "Hubo un error al procesar el mensaje. Por favor intenta de nuevo.";
                 appendMessage(errMsg, true);
-                speakBotResponse(errMsg);
+                isBotProcessing = false; // Release mutex — no audio plays in text mode on error
+                finalSent = false;
                 if (window.isVoiceModeActive) {
+                    speakBotResponse(errMsg); // voice mode: TTS will release mutex via onended
+                    isBotProcessing = true;   // Re-lock since audio is now playing
                     const voiceTxt = document.getElementById('voice-transcription-text');
                     if (voiceTxt) {
                         voiceTxt.innerHTML = "<strong>Error:</strong> " + errMsg;
@@ -1280,10 +1311,13 @@
         .catch(err => {
             const l = document.getElementById('chat-loader-bubble');
             if (l) l.remove();
+            isBotProcessing = false; // Release mutex on network error
+            finalSent = false;
             const connErrorMsg = "Error de conexión. Intente de nuevo.";
             appendMessage(connErrorMsg, true);
-            speakBotResponse(connErrorMsg);
             if (window.isVoiceModeActive) {
+                speakBotResponse(connErrorMsg);
+                isBotProcessing = true; // Re-lock — audio will release it via onended
                 const voiceTxt = document.getElementById('voice-transcription-text');
                 if (voiceTxt) {
                     voiceTxt.innerHTML = "<strong>Error:</strong> " + connErrorMsg;
