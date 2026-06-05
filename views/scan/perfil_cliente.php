@@ -3011,6 +3011,9 @@ if (empty($hpw)) {
             <div style="min-height: 50px; max-width: 90%; text-align: center; display: flex; align-items: center; justify-content: center;">
                 <p id="voice-transcription-text" style="color: #cbd5e1; font-size: 0.95rem; font-weight: 700; font-style: italic; line-height: 1.4; margin: 0; padding: 0 10px; text-shadow: 0 2px 8px rgba(0,0,0,0.4);"></p>
             </div>
+
+            <!-- Voice Options (buttons shown as tappable chips) -->
+            <div id="voice-options-container" style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; max-width: 92%; min-height: 36px; padding: 0 8px;"></div>
         </div>
 
         <!-- Wave Visualizer (Siri Wave) -->

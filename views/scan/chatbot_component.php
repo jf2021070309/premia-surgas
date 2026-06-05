@@ -1153,9 +1153,14 @@
         if (!container) return;
         container.innerHTML = '';
 
+        // Also clear voice overlay options
+        const voiceContainer = document.getElementById('voice-options-container');
+        if (voiceContainer) voiceContainer.innerHTML = '';
+
         if (!buttons || buttons.length === 0) return;
 
         buttons.forEach(btnText => {
+            // --- Chat panel button ---
             const btn = document.createElement('button');
             
             if (btnText === 'Compartir Ubicación') {
@@ -1195,6 +1200,53 @@
             };
 
             container.appendChild(btn);
+
+            // --- Voice overlay chip ---
+            if (!voiceContainer) return;
+            const chip = document.createElement('button');
+
+            if (btnText === 'Compartir Ubicación') {
+                chip.innerHTML = "<i class='bx bx-map' style='font-size: 1rem; vertical-align: middle; margin-right: 4px;'></i>Ubicación GPS";
+                chip.style.background = 'linear-gradient(135deg, #821515, #b91c1c)';
+                chip.style.color = '#fff';
+                chip.style.border = '1.5px solid rgba(239,68,68,0.6)';
+                chip.style.boxShadow = '0 0 12px rgba(239,68,68,0.35)';
+                chip.onclick = () => shareLocation();
+            } else {
+                chip.innerText = btnText;
+                chip.style.background = 'rgba(255,255,255,0.08)';
+                chip.style.color = '#f1f5f9';
+                chip.style.border = '1.5px solid rgba(255,255,255,0.2)';
+                chip.style.boxShadow = '0 2px 8px rgba(0,0,0,0.3)';
+                chip.onclick = () => sendChatMessage(btnText);
+            }
+
+            chip.style.padding = '8px 18px';
+            chip.style.borderRadius = '100px';
+            chip.style.fontSize = '0.82rem';
+            chip.style.fontWeight = '800';
+            chip.style.cursor = 'pointer';
+            chip.style.letterSpacing = '0.3px';
+            chip.style.backdropFilter = 'blur(8px)';
+            chip.style.transition = 'all 0.2s ease';
+            chip.style.fontFamily = 'inherit';
+
+            chip.onmouseover = () => {
+                chip.style.transform = 'translateY(-2px) scale(1.04)';
+                if (btnText !== 'Compartir Ubicación') {
+                    chip.style.background = 'rgba(255,255,255,0.16)';
+                    chip.style.borderColor = 'rgba(239,68,68,0.5)';
+                }
+            };
+            chip.onmouseout = () => {
+                chip.style.transform = 'translateY(0) scale(1)';
+                if (btnText !== 'Compartir Ubicación') {
+                    chip.style.background = 'rgba(255,255,255,0.08)';
+                    chip.style.borderColor = 'rgba(255,255,255,0.2)';
+                }
+            };
+
+            voiceContainer.appendChild(chip);
         });
     }
 
