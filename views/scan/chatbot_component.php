@@ -328,7 +328,7 @@
     let interimBubble = null;
     
     let synth = window.speechSynthesis;
-    let isTTSEnabled = true;
+    let isTTSEnabled = false; // Off by default — activates automatically only when voice mode is opened
     window.userHasSelectedVoice = false;
     window.lastBotReply = "Somos SURGAS\nDeseas tu recarga a :";
 
@@ -871,23 +871,30 @@
         };
         
         currentAudio.onended = () => {
+            currentAudio = null; // Clear reference so next call doesn't conflict
             currentVisualState = 'idle';
             const statusText = document.getElementById('waveform-status-text');
             if (statusText) {
                 statusText.innerText = 'Asistente';
                 statusText.style.color = '#64748b';
             }
+            // Wait longer (1s) before re-enabling mic to let browser fully release the audio pipeline
             setTimeout(() => {
                 if (window.isVoiceModeActive && !isListening) {
                     if (!recognition) {
                         initSpeechRecognition();
                     }
                     if (recognition) {
-                        isListening = true;
-                        recognition.start();
+                        try {
+                            isListening = true;
+                            recognition.start();
+                        } catch(e) {
+                            isListening = false;
+                            console.warn('Could not restart recognition after audio ended:', e);
+                        }
                     }
                 }
-            }, 300);
+            }, 1000);
         };
         
         currentAudio.onerror = (e) => {
@@ -968,17 +975,23 @@
                     statusText.innerText = 'Asistente';
                     statusText.style.color = '#64748b';
                 }
+                // Wait longer (1s) before re-enabling mic to let browser fully release the audio pipeline
                 setTimeout(() => {
                     if (window.isVoiceModeActive && !isListening) {
                         if (!recognition) {
                             initSpeechRecognition();
                         }
                         if (recognition) {
-                            isListening = true;
-                            recognition.start();
+                            try {
+                                isListening = true;
+                                recognition.start();
+                            } catch(e) {
+                                isListening = false;
+                                console.warn('Could not restart recognition after utterance ended:', e);
+                            }
                         }
                     }
-                }, 300);
+                }, 1000);
             };
             
             utterance.onerror = (e) => {

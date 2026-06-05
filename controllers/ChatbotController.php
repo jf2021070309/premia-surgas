@@ -94,7 +94,7 @@ class ChatbotController {
                 break;
 
             case 'esperando_cantidad':
-                $qty = (int)$message;
+                $qty = $this->parseNumberInput($message);
                 if ($qty > 0) {
                     $data['cantidad'] = $qty;
                     $price = $qty * 62;
@@ -102,7 +102,7 @@ class ChatbotController {
                     $buttons = ['Compartir Ubicación'];
                     $nextState = 'esperando_ubicacion';
                 } else {
-                    $reply = "Por favor, ingresa una cantidad válida de balones (un número entero mayor a cero).";
+                    $reply = "Por favor, ingresa una cantidad válida de balones (un número mayor a cero).";
                 }
                 break;
 
@@ -246,6 +246,50 @@ class ChatbotController {
             'buttons' => $buttons
         ]);
         exit;
+    }
+
+    /**
+     * Converts a user message to an integer.
+     * Supports spoken Spanish number words (uno, dos, tres...) and plain digits.
+     */
+    private function parseNumberInput(string $input): int {
+        $input = trim(strtolower($input));
+
+        // First try plain numeric cast
+        if (is_numeric($input)) {
+            return (int)$input;
+        }
+
+        // Map Spanish number words → int
+        $map = [
+            'un'       => 1, 'uno'      => 1, 'una'      => 1,
+            'dos'      => 2,
+            'tres'     => 3,
+            'cuatro'   => 4,
+            'cinco'    => 5,
+            'seis'     => 6,
+            'siete'    => 7,
+            'ocho'     => 8,
+            'nueve'    => 9,
+            'diez'     => 10,
+            'once'     => 11,
+            'doce'     => 12,
+            'trece'    => 13,
+            'catorce'  => 14,
+            'quince'   => 15,
+            'veinte'   => 20,
+        ];
+
+        if (array_key_exists($input, $map)) {
+            return $map[$input];
+        }
+
+        // Try to extract the first number found in the string (e.g. "quiero 2 balones")
+        if (preg_match('/\d+/', $input, $m)) {
+            return (int)$m[0];
+        }
+
+        return 0;
     }
 
     private function getDistance(float $lat1, float $lon1, float $lat2, float $lon2): float {
