@@ -386,29 +386,50 @@
         
         ctx.clearRect(0, 0, width, height);
         
-        if (currentVisualState === 'listening' && analyser) {
-            // Mode 2: Listening (Real frequencies)
-            const bufferLength = analyser.frequencyBinCount;
-            analyser.getByteFrequencyData(dataArray);
-            
-            const barWidth = (width / bufferLength) * 2.5;
-            let barHeight;
-            let x = 0;
-            
-            for (let i = 0; i < bufferLength; i++) {
-                barHeight = (dataArray[i] / 255) * height * 0.8;
-                if (barHeight < 2) barHeight = 2; // Minimum height
+        if (currentVisualState === 'listening') {
+            if (analyser) {
+                // Mode 2: Listening (Real frequencies)
+                const bufferLength = analyser.frequencyBinCount;
+                analyser.getByteFrequencyData(dataArray);
                 
-                const gradient = ctx.createLinearGradient(0, height, 0, 0);
-                gradient.addColorStop(0, '#821515');
-                gradient.addColorStop(1, '#ef4444');
+                const barWidth = (width / bufferLength) * 2.5;
+                let barHeight;
+                let x = 0;
                 
-                ctx.fillStyle = gradient;
+                for (let i = 0; i < bufferLength; i++) {
+                    barHeight = (dataArray[i] / 255) * height * 0.8;
+                    if (barHeight < 2) barHeight = 2; // Minimum height
+                    
+                    const gradient = ctx.createLinearGradient(0, height, 0, 0);
+                    gradient.addColorStop(0, '#821515');
+                    gradient.addColorStop(1, '#ef4444');
+                    
+                    ctx.fillStyle = gradient;
+                    
+                    const centerHeight = (height - barHeight) / 2;
+                    ctx.fillRect(x, centerHeight > 0 ? centerHeight : 0, barWidth - 2, barHeight);
+                    
+                    x += barWidth;
+                }
+            } else {
+                // Mode 2b: Listening (High-fidelity simulated frequencies to avoid mic conflicts)
+                const barCount = 24;
+                const barWidth = width / barCount;
+                const time = Date.now() * 0.006;
                 
-                const centerHeight = (height - barHeight) / 2;
-                ctx.fillRect(x, centerHeight > 0 ? centerHeight : 0, barWidth - 2, barHeight);
-                
-                x += barWidth;
+                for (let i = 0; i < barCount; i++) {
+                    const noise = Math.sin(i * 0.35 + time) * Math.cos(i * 0.08 - time * 0.4);
+                    const baseHeight = Math.abs(noise) * height * 0.65;
+                    const barHeight = Math.max(2, baseHeight + Math.sin(time * 6 + i) * 2.5);
+                    
+                    const gradient = ctx.createLinearGradient(0, height, 0, 0);
+                    gradient.addColorStop(0, '#821515');
+                    gradient.addColorStop(1, '#ef4444');
+                    ctx.fillStyle = gradient;
+                    
+                    const centerHeight = (height - barHeight) / 2;
+                    ctx.fillRect(i * barWidth, centerHeight > 0 ? centerHeight : 0, barWidth - 2, barHeight);
+                }
             }
         } else if (currentVisualState === 'responding') {
             // Mode 3: Responding (Simulated voice wave)
@@ -505,7 +526,9 @@
         recognition = new SpeechRecognition();
         recognition.continuous = true;
         recognition.interimResults = true;
-        recognition.lang = 'es-PE';
+        
+        // Use universal Latin American Spanish (es-419) which has high compatibility
+        recognition.lang = 'es-419';
         
         recognition.onstart = () => {
             isListening = true;
@@ -548,9 +571,14 @@
                     const voiceIcon = voiceMicBtn.querySelector('i');
                     if (voiceIcon) voiceIcon.className = 'bx bx-microphone bx-flashing';
                 }
+                const voiceTxt = document.getElementById('voice-transcription-text');
+                if (voiceTxt) {
+                    voiceTxt.innerHTML = "<span style='color: #a3a3a3; font-style: normal;'>Di algo... el sistema te escuchará</span>";
+                }
             }
             
-            startAudioSource();
+            // Bypass startAudioSource() to prevent Web Audio mic lock-conflict with Speech Recognition.
+            // This guarantees the browser captures clear microphone input for SpeechRecognition.
         };
         
         recognition.onresult = (event) => {
@@ -570,7 +598,7 @@
                 if (window.isVoiceModeActive) {
                     const voiceTxt = document.getElementById('voice-transcription-text');
                     if (voiceTxt) {
-                        voiceTxt.innerHTML = "<strong>Tú:</strong> " + interimTranscript + "...";
+                        voiceTxt.innerHTML = "<span style='color: #22c55e; font-size: 1.1rem; font-weight: 800; font-style: normal;'>Escuchado:</span> <span style='color: #fff; font-size: 1.1rem; font-weight: 700; font-style: normal; text-shadow: 0 0 10px rgba(239,68,68,0.5);'>" + interimTranscript + "</span>";
                     }
                 }
             }
@@ -580,7 +608,7 @@
                 if (window.isVoiceModeActive) {
                     const voiceTxt = document.getElementById('voice-transcription-text');
                     if (voiceTxt) {
-                        voiceTxt.innerHTML = "<strong>Tú:</strong> " + finalTranscript.trim();
+                        voiceTxt.innerHTML = "<span style='color: #ef4444; font-size: 1.1rem; font-weight: 800; font-style: normal;'>Enviado:</span> <span style='color: #f8fafc; font-size: 1.1rem; font-weight: 700; font-style: normal;'>" + finalTranscript.trim() + "</span>";
                     }
                     const voiceSubtitle = document.getElementById('voice-agent-subtitle');
                     if (voiceSubtitle) {
@@ -594,14 +622,35 @@
         
         recognition.onerror = (event) => {
             console.error("Speech Recognition error", event.error);
-            if (event.error !== 'no-speech') {
+            const voiceTxt = document.getElementById('voice-transcription-text');
+            if (voiceTxt && window.isVoiceModeActive) {
+                if (event.error === 'not-allowed') {
+                    voiceTxt.innerHTML = "<span style='color: #f87171; font-size: 1rem; font-weight: 700; font-style: normal;'>⚠️ Permiso de micrófono denegado. Por favor permítelo en el navegador.</span>";
+                } else if (event.error === 'no-speech') {
+                    voiceTxt.innerHTML = "<span style='color: #94a3b8; font-size: 1rem; font-style: normal;'>No se detectó voz. Intenta hablar más fuerte o acércate.</span>";
+                } else if (event.error === 'network') {
+                    voiceTxt.innerHTML = "<span style='color: #f87171; font-size: 1rem; font-weight: 700; font-style: normal;'>⚠️ Error de conexión de red para dictado de voz.</span>";
+                } else {
+                    voiceTxt.innerHTML = "<span style='color: #f87171; font-size: 1rem; font-style: normal;'>Error de dictado: " + event.error + "</span>";
+                }
+            }
+            if (event.error !== 'no-speech' && event.error !== 'aborted') {
                 stopSpeechRecognition();
             }
         };
         
         recognition.onend = () => {
             if (isListening) {
-                recognition.start();
+                // Wrap in setTimeout to prevent chrome double-start InvalidStateError crashes
+                setTimeout(() => {
+                    if (isListening) {
+                        try {
+                            recognition.start();
+                        } catch (e) {
+                            console.error("Failed to restart speech recognition:", e);
+                        }
+                    }
+                }, 300);
             } else {
                 stopSpeechRecognition();
             }
@@ -1341,17 +1390,23 @@
         let baseAmplitude = height / 4;
         let count = 4; // Number of waves
         
-        if (currentVisualState === 'listening' && analyser) {
-            // Modulate amplitude based on real microphone volume
-            const bufferLength = analyser.frequencyBinCount;
-            analyser.getByteFrequencyData(dataArray);
-            let sum = 0;
-            for (let i = 0; i < bufferLength; i++) {
-                sum += dataArray[i];
+        if (currentVisualState === 'listening') {
+            if (analyser) {
+                // Modulate amplitude based on real microphone volume
+                const bufferLength = analyser.frequencyBinCount;
+                analyser.getByteFrequencyData(dataArray);
+                let sum = 0;
+                for (let i = 0; i < bufferLength; i++) {
+                    sum += dataArray[i];
+                }
+                let avg = sum / bufferLength;
+                baseAmplitude = (height / 3.5) * (avg / 128 + 0.1);
+                speed = 0.15;
+            } else {
+                // High-fidelity simulated active listening wave
+                baseAmplitude = (height / 4.5) * (Math.sin(Date.now() * 0.006) * 0.3 + 0.7);
+                speed = 0.14;
             }
-            let avg = sum / bufferLength;
-            baseAmplitude = (height / 3.5) * (avg / 128 + 0.1);
-            speed = 0.15;
         } else if (currentVisualState === 'responding') {
             // Responding simulated speech wave
             baseAmplitude = (height / 3) * (Math.sin(Date.now() * 0.005) * 0.3 + 0.7);
