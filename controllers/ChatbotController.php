@@ -50,7 +50,7 @@ class ChatbotController {
             $_SESSION['chat_data'] = [];
             echo json_encode([
                 'success' => true,
-                'reply' => "Somos SURGAS\n¿Deseas tu recarga a:",
+                'reply' => "Somos SURGAS\nDeseas tu recarga a :",
                 'buttons' => ['A Domicilio', 'En Depósito']
             ]);
             $_SESSION['chat_state'] = 'esperando_modalidad';
@@ -59,14 +59,9 @@ class ChatbotController {
 
         switch ($state) {
             case 'esperando_saludo':
-                if (in_array(strtolower($message), ['hola', 'buenos dias', 'buenas tardes', 'pedir', 'gas', 'menu'])) {
-                    $reply = "Somos SURGAS\n¿Deseas tu recarga a:";
-                    $buttons = ['A Domicilio', 'En Depósito'];
-                    $nextState = 'esperando_modalidad';
-                } else {
-                    $reply = "Hola, soy el asistente virtual de SURGAS. Escribe 'hola', 'pedir' o 'menu' para iniciar tu pedido de gas.";
-                    $buttons = ['Pedir Gas'];
-                }
+                $reply = "Somos SURGAS\nDeseas tu recarga a :";
+                $buttons = ['A Domicilio', 'En Depósito'];
+                $nextState = 'esperando_modalidad';
                 break;
 
             case 'esperando_modalidad':
@@ -103,7 +98,7 @@ class ChatbotController {
                 if ($qty > 0) {
                     $data['cantidad'] = $qty;
                     $price = $qty * 62;
-                    $reply = "{$qty} Balón de 10 kg precio S/.{$price}.\n\nCompártenos tu ubicación y la unidad estará llevando tu pedido.";
+                    $reply = "{$qty} Balón de 10 kg precio S/.{$price}\n\nCompartenos tu ubicacion y la unidad estará llevando tu pedido.";
                     $buttons = ['Compartir Ubicación'];
                     $nextState = 'esperando_ubicacion';
                 } else {
@@ -139,7 +134,7 @@ class ChatbotController {
                 $audit = new AuditoriaModel();
                 $audit->registrar($_SESSION['id_usuario'], 'NUEVO_PEDIDO_CHATBOT', "Se creó el pedido chatbot ID #$pedidoId a domicilio", 'CLIENTES', null, 'cliente');
 
-                $reply = "Tenemos métodos de pago efectivo y yape, coordine con el conductor asignado. Gracias por su pedido.";
+                $reply = "Tenemos metodos de pago efectivo y yape, coordine con el conductor asignado. Gracias por su pedido.";
                 $buttons = ['Nuevo Pedido'];
                 $nextState = 'esperando_saludo';
                 $data = []; // Reset state data
@@ -344,19 +339,13 @@ class ChatbotController {
             @mkdir($cacheDir, 0777, true);
         }
 
+        $edgeTts = new \Afaya\EdgeTTS\Service\EdgeTTS();
+
         foreach ($chunks as $chunk) {
             $chunk = trim($chunk);
             if ($chunk === '') continue;
 
-            // Use the corresponding regional google translate domain to get the correct accent
-            $domain = 'translate.google.com';
-            if ($tl === 'es') {
-                $domain = 'translate.google.com.pe'; // Peruvian accent
-            } elseif ($tl === 'es-es') {
-                $domain = 'translate.google.es'; // Spanish (Spain) accent
-            }
-
-            $chunkHash = md5($tl . '_v2_' . $chunk);
+            $chunkHash = md5($tl . '_v3_edge_' . $chunk);
             $cacheFile = $cacheDir . '/' . $chunkHash . '.mp3';
 
             if (file_exists($cacheFile) && filesize($cacheFile) > 0) {
@@ -367,11 +356,19 @@ class ChatbotController {
                 }
             }
 
-            // If not cached, download it from Google Translate TTS using the regional domain
-            $encodedText = urlencode($chunk);
-            $url = "https://" . $domain . "/translate_tts?ie=UTF-8&tl=es&client=tw-ob&q=" . $encodedText;
+            $chunkAudio = null;
+            try {
+                $voiceName = ($tl === 'es') ? 'es-PE-CamilaNeural' : 'es-ES-ElviraNeural';
+                $edgeTts->synthesize($chunk, $voiceName);
+                $chunkAudio = $edgeTts->toRaw();
+            } catch (\Exception $e) {
+                // If Microsoft Edge TTS fails, fallback to Google Translate TTS
+                $domain = ($tl === 'es') ? 'translate.google.com.pe' : 'translate.google.es';
+                $encodedText = urlencode($chunk);
+                $url = "https://" . $domain . "/translate_tts?ie=UTF-8&tl=es&client=tw-ob&q=" . $encodedText;
+                $chunkAudio = $this->fetchUrlContent($url);
+            }
 
-            $chunkAudio = $this->fetchUrlContent($url);
             if ($chunkAudio) {
                 $finalAudioData .= $chunkAudio;
                 @file_put_contents($cacheFile, $chunkAudio);

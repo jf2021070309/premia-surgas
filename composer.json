@@ -1,6 +1,7 @@
 {
     "require": {
         "phpmailer/phpmailer": "^7.0",
-        "lsolesen/pel": "^0.9.12"
+        "lsolesen/pel": "^0.9.12",
+        "afaya/edge-tts": "^1.7"
     }
 }

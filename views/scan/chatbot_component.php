@@ -88,13 +88,37 @@
             flex-grow: 1;
         }
     }
+
+    /* Pulsating microphone border for Modo Voz button */
+    @keyframes pulse-border {
+        0% {
+            box-shadow: 0 0 0 0 rgba(130, 21, 21, 0.7);
+        }
+        70% {
+            box-shadow: 0 0 0 8px rgba(130, 21, 21, 0);
+        }
+        100% {
+            box-shadow: 0 0 0 0 rgba(130, 21, 21, 0);
+        }
+    }
+    
+    /* Fade-in animation for overlay */
+    @keyframes fadeInOverlay {
+        from { opacity: 0; transform: scale(1.02); }
+        to { opacity: 1; transform: scale(1); }
+    }
+    
+    @keyframes scaleUpGlow {
+        0%, 100% { transform: scale(0.92); opacity: 0.4; }
+        50% { transform: scale(1.15); opacity: 0.7; }
+    }
 </style>
 
 <!-- PANE 5: CHATBOT -->
 <div id="pane-chat" class="tab-content-pane" style="max-width: 1080px; margin: 0 auto;">
     <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
         <!-- Chatbot Box -->
-        <div class="chat-container-card" style="flex: 1.6; min-width: 320px; background: #fff; border-radius: 24px; border: 1.5px solid #e2e8f0; box-shadow: 0 20px 40px rgba(0,0,0,0.05); overflow: hidden; display: flex; flex-direction: column; height: 600px;">
+        <div class="chat-container-card" style="flex: 1.6; min-width: 320px; background: #fff; border-radius: 24px; border: 1.5px solid #e2e8f0; box-shadow: 0 20px 40px rgba(0,0,0,0.05); overflow: hidden; display: flex; flex-direction: column; height: 600px; position: relative;">
             
             <!-- Chat Header -->
             <div class="chat-header-bar" style="background: #0f172a; padding: 1.25rem 2rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #1e293b;">
@@ -111,6 +135,9 @@
                     </div>
                 </div>
                 <div class="chat-header-bar-controls" style="display: flex; gap: 8px; align-items: center;">
+                    <button id="voice-agent-toggle-btn" onclick="enterVoiceMode()" style="background: #821515; border: 1px solid #991b1b; color: #fff; padding: 6px 12px; border-radius: 8px; font-size: 0.7rem; font-weight: 800; cursor: pointer; transition: 0.3s; text-transform: uppercase; display: flex; align-items: center; gap: 4px; box-shadow: 0 0 10px rgba(130, 21, 21, 0.4); animation: pulse-border 2s infinite;">
+                        <i class='bx bx-microphone' style="font-size: 0.95rem; vertical-align: middle;"></i> Modo Voz
+                    </button>
                     <select id="tts-voice-select" onchange="changeTTSVoice()" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #cbd5e1; height: 36px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; padding: 0 10px; cursor: pointer; outline: none; transition: 0.3s; appearance: none; -webkit-appearance: none; background-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 fill=%22%23cbd5e1%22><path d=%22M6 8L2 4h8z%22/></svg>'); background-repeat: no-repeat; background-position: right 8px center; padding-right: 24px;">
                         <option value="es-es" style="background: #0f172a; color: #fff;">Voz España (Joven)</option>
                         <option value="es" style="background: #0f172a; color: #fff;" selected>Voz Latinoamericana</option>
@@ -126,10 +153,6 @@
 
             <!-- Chat Messages Window -->
             <div id="chat-messages" style="flex: 1; padding: 2rem; overflow-y: auto; display: flex; flex-direction: column; gap: 1rem; background: #f8fafc;">
-                <!-- Welcome message -->
-                <div class="chat-bubble bot-bubble" style="align-self: flex-start; max-width: 80%; background: #fff; border: 1px solid #e2e8f0; border-radius: 20px 20px 20px 4px; padding: 1rem 1.25rem; font-size: 0.88rem; color: #1e293b; line-height: 1.5; box-shadow: 0 4px 10px rgba(0,0,0,0.02); animation: chatFadeIn 0.3s ease;">
-                    <strong>¡Hola!</strong> Bienvenido a la Central de Pedidos Surgas. ¿Cómo podemos ayudarte hoy?
-                </div>
             </div>
 
             <!-- Chat Quick Action Buttons -->
@@ -155,6 +178,57 @@
                 <button onclick="sendChatMessage()" style="width: 48px; height: 48px; border-radius: 12px; background: #0f172a; color: white; border: none; display: flex; align-items: center; justify-content: center; font-size: 1.35rem; cursor: pointer; transition: 0.3s;">
                     <i class='bx bx-send'></i>
                 </button>
+            </div>
+
+            <!-- Voice Agent Overlay (Siri Mode) -->
+            <div id="voice-agent-overlay" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, #1e0505 0%, #090202 100%); z-index: 100; flex-direction: column; align-items: center; justify-content: space-between; padding: 2.5rem 2rem; box-sizing: border-box; text-align: center; animation: fadeInOverlay 0.4s ease;">
+                <!-- Top Header -->
+                <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: #22c55e; display: inline-block; animation: pulse 1.5s infinite;"></span>
+                        <span id="voice-status-badge" style="font-size: 0.72rem; color: #22c55e; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">Surgas Voz</span>
+                    </div>
+                    <button onclick="exitVoiceMode()" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #fff; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; font-size: 1.1rem; border: none;" title="Cerrar modo voz">
+                        <i class='bx bx-x'></i>
+                    </button>
+                </div>
+
+                <!-- Center UI (Siri style) -->
+                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; gap: 1.5rem; margin-top: -1rem;">
+                    <!-- Glowing Avatar / Logo -->
+                    <div style="position: relative; width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; border-radius: 50%;">
+                        <div id="voice-glowing-ring" style="position: absolute; width: 100%; height: 100%; border-radius: 50%; background: radial-gradient(circle, rgba(130, 21, 21, 0.4) 0%, rgba(130, 21, 21, 0) 70%); animation: scaleUpGlow 3s infinite ease-in-out;"></div>
+                        <div style="z-index: 2; width: 70px; height: 70px; border-radius: 50%; background: #821515; border: 2px solid #ef4444; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 25px rgba(239, 68, 68, 0.5);">
+                            <i class='bx bx-bot' style="font-size: 2.2rem; color: #fff;"></i>
+                        </div>
+                    </div>
+
+                    <!-- Title / Status Text -->
+                    <div>
+                        <h2 style="color: #fff; margin: 0; font-size: 1.75rem; font-weight: 900; letter-spacing: -0.5px; text-shadow: 0 2px 10px rgba(0,0,0,0.5);">SURGAS</h2>
+                        <p id="voice-agent-subtitle" style="color: #94a3b8; font-size: 0.85rem; font-weight: 700; margin: 4px 0 0 0;">Asistente de Voz Activo</p>
+                    </div>
+
+                    <!-- Realtime Transcriptions / Subtitles -->
+                    <div style="min-height: 50px; max-width: 90%; text-align: center; display: flex; align-items: center; justify-content: center;">
+                        <p id="voice-transcription-text" style="color: #cbd5e1; font-size: 0.95rem; font-weight: 700; font-style: italic; line-height: 1.4; margin: 0; padding: 0 10px; text-shadow: 0 2px 8px rgba(0,0,0,0.4);"></p>
+                    </div>
+                </div>
+
+                <!-- Wave Visualizer (Siri Wave) -->
+                <div style="width: 100%; height: 80px; display: flex; align-items: center; justify-content: center; position: relative;">
+                    <canvas id="siri-wave-canvas" style="width: 100%; height: 100%; filter: drop-shadow(0 0 15px rgba(239,68,68,0.5));"></canvas>
+                </div>
+
+                <!-- Footer hints / control -->
+                <div style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                    <div id="voice-mic-status-hint" style="font-size: 0.72rem; color: #94a3b8; font-weight: 750; text-transform: uppercase; letter-spacing: 0.5px;">Presiona para hablar</div>
+                    
+                    <!-- Large mic tap button -->
+                    <button id="voice-mic-tap-btn" onclick="toggleVoiceMic()" style="width: 56px; height: 56px; border-radius: 50%; background: #821515; border: 2px solid #ef4444; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; cursor: pointer; transition: 0.3s; box-shadow: 0 0 20px rgba(130, 21, 21, 0.4);">
+                        <i id="voice-mic-tap-icon" class='bx bx-microphone'></i>
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -192,7 +266,7 @@
     let synth = window.speechSynthesis;
     let isTTSEnabled = true;
     window.userHasSelectedVoice = false;
-    window.lastBotReply = "¡Hola! Bienvenido a la Central de Pedidos Surgas. ¿Cómo podemos ayudarte hoy?";
+    window.lastBotReply = "Somos SURGAS\nDeseas tu recarga a :";
 
     // Listen to voiceschanged event
     if (synth) {
@@ -397,6 +471,32 @@
                 micBtn.style.borderColor = '#fca5a5';
                 micBtn.innerHTML = "<i class='bx bx-microphone bx-flashing'></i>";
             }
+
+            // Sync with voice overlay
+            if (window.isVoiceModeActive) {
+                const voiceBadge = document.getElementById('voice-status-badge');
+                if (voiceBadge) {
+                    voiceBadge.innerText = 'Escuchando';
+                    voiceBadge.style.color = '#22c55e';
+                }
+                const voiceSubtitle = document.getElementById('voice-agent-subtitle');
+                if (voiceSubtitle) {
+                    voiceSubtitle.innerText = 'Habla ahora...';
+                }
+                const voiceMicHint = document.getElementById('voice-mic-status-hint');
+                if (voiceMicHint) {
+                    voiceMicHint.innerText = 'Escuchando...';
+                    voiceMicHint.style.color = '#ef4444';
+                }
+                const voiceMicBtn = document.getElementById('voice-mic-tap-btn');
+                if (voiceMicBtn) {
+                    voiceMicBtn.style.background = '#fee2e2';
+                    voiceMicBtn.style.color = '#ef4444';
+                    voiceMicBtn.style.borderColor = '#fca5a5';
+                    const voiceIcon = voiceMicBtn.querySelector('i');
+                    if (voiceIcon) voiceIcon.className = 'bx bx-microphone bx-flashing';
+                }
+            }
             
             startAudioSource();
         };
@@ -415,10 +515,26 @@
             
             if (interimTranscript) {
                 showInterimMessage(interimTranscript);
+                if (window.isVoiceModeActive) {
+                    const voiceTxt = document.getElementById('voice-transcription-text');
+                    if (voiceTxt) {
+                        voiceTxt.innerHTML = "<strong>Tú:</strong> " + interimTranscript + "...";
+                    }
+                }
             }
             
             if (finalTranscript.trim()) {
                 removeInterimMessage();
+                if (window.isVoiceModeActive) {
+                    const voiceTxt = document.getElementById('voice-transcription-text');
+                    if (voiceTxt) {
+                        voiceTxt.innerHTML = "<strong>Tú:</strong> " + finalTranscript.trim();
+                    }
+                    const voiceSubtitle = document.getElementById('voice-agent-subtitle');
+                    if (voiceSubtitle) {
+                        voiceSubtitle.innerText = "Pensando...";
+                    }
+                }
                 sendChatMessage(finalTranscript.trim());
                 stopSpeechRecognition();
             }
@@ -439,7 +555,7 @@
             }
         };
     }
-
+    
     function toggleSpeechRecognition() {
         if (!recognition) {
             initSpeechRecognition();
@@ -476,6 +592,32 @@
         if (statusText) {
             statusText.innerText = 'Asistente';
             statusText.style.color = '#64748b';
+        }
+
+        // Sync with voice overlay on stop
+        if (window.isVoiceModeActive) {
+            const voiceBadge = document.getElementById('voice-status-badge');
+            if (voiceBadge) {
+                voiceBadge.innerText = 'Silenciado';
+                voiceBadge.style.color = '#94a3b8';
+            }
+            const voiceSubtitle = document.getElementById('voice-agent-subtitle');
+            if (voiceSubtitle && currentVisualState !== 'responding') {
+                voiceSubtitle.innerText = 'Conversación pausada';
+            }
+            const voiceMicHint = document.getElementById('voice-mic-status-hint');
+            if (voiceMicHint) {
+                voiceMicHint.innerText = 'Presiona para hablar';
+                voiceMicHint.style.color = '#94a3b8';
+            }
+            const voiceMicBtn = document.getElementById('voice-mic-tap-btn');
+            if (voiceMicBtn) {
+                voiceMicBtn.style.background = '#821515';
+                voiceMicBtn.style.color = '#fff';
+                voiceMicBtn.style.borderColor = '#ef4444';
+                const voiceIcon = voiceMicBtn.querySelector('i');
+                if (voiceIcon) voiceIcon.className = 'bx bx-microphone';
+            }
         }
         
         removeInterimMessage();
@@ -963,10 +1105,27 @@
                 renderQuickActions(data.buttons);
                 loadClientePedidos();
                 speakBotResponse(data.reply);
+
+                if (window.isVoiceModeActive) {
+                    const voiceTxt = document.getElementById('voice-transcription-text');
+                    if (voiceTxt) {
+                        voiceTxt.innerHTML = "<strong>Surgas:</strong> " + data.reply.replace(/\n/g, '<br>');
+                    }
+                    const voiceSubtitle = document.getElementById('voice-agent-subtitle');
+                    if (voiceSubtitle) {
+                        voiceSubtitle.innerText = "Respondiendo...";
+                    }
+                }
             } else {
                 const errMsg = "Hubo un error al procesar el mensaje. Por favor intenta de nuevo.";
                 appendMessage(errMsg, true);
                 speakBotResponse(errMsg);
+                if (window.isVoiceModeActive) {
+                    const voiceTxt = document.getElementById('voice-transcription-text');
+                    if (voiceTxt) {
+                        voiceTxt.innerHTML = "<strong>Error:</strong> " + errMsg;
+                    }
+                }
             }
         })
         .catch(err => {
@@ -975,10 +1134,165 @@
             const connErrorMsg = "Error de conexión. Intente de nuevo.";
             appendMessage(connErrorMsg, true);
             speakBotResponse(connErrorMsg);
+            if (window.isVoiceModeActive) {
+                const voiceTxt = document.getElementById('voice-transcription-text');
+                if (voiceTxt) {
+                    voiceTxt.innerHTML = "<strong>Error:</strong> " + connErrorMsg;
+                }
+            }
         });
     }
 
     function resetChat() {
         sendChatRequest('reset');
+    }
+
+    // Voice Mode Control logic
+    window.isVoiceModeActive = false;
+    let siriWaveAnimationId = null;
+
+    function enterVoiceMode() {
+        window.isVoiceModeActive = true;
+        
+        // Show overlay
+        const overlay = document.getElementById('voice-agent-overlay');
+        if (overlay) overlay.style.display = 'flex';
+        
+        // Enable TTS readout automatically for voice mode
+        isTTSEnabled = true;
+        const btn = document.getElementById('tts-toggle-btn');
+        const icon = document.getElementById('tts-icon');
+        if (btn && icon) {
+            btn.style.color = '#cbd5e1';
+            btn.style.background = 'rgba(255,255,255,0.05)';
+            btn.style.borderColor = 'rgba(255,255,255,0.1)';
+            icon.className = 'bx bx-volume-full';
+        }
+
+        // Initialize voice transcription text
+        const voiceTxt = document.getElementById('voice-transcription-text');
+        if (voiceTxt) {
+            voiceTxt.innerHTML = "<strong>Surgas:</strong> " + window.lastBotReply.replace(/\n/g, '<br>');
+        }
+
+        // Setup Siri Wave Canvas sizing
+        const canvas = document.getElementById('siri-wave-canvas');
+        if (canvas) {
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * (window.devicePixelRatio || 1);
+            canvas.height = rect.height * (window.devicePixelRatio || 1);
+        }
+
+        // Start animation loop
+        if (!siriWaveAnimationId) {
+            drawSiriWave();
+        }
+
+        // Auto start microphone listening
+        setTimeout(() => {
+            if (!isListening) {
+                toggleSpeechRecognition();
+            }
+        }, 300);
+    }
+
+    function exitVoiceMode() {
+        window.isVoiceModeActive = false;
+        
+        // Hide overlay
+        const overlay = document.getElementById('voice-agent-overlay');
+        if (overlay) overlay.style.display = 'none';
+
+        // Cancel siri wave animation
+        if (siriWaveAnimationId) {
+            cancelAnimationFrame(siriWaveAnimationId);
+            siriWaveAnimationId = null;
+        }
+
+        // Stop microphone listening
+        if (isListening) {
+            toggleSpeechRecognition();
+        }
+
+        // Stop active TTS audio if speaking
+        if (currentAudio) {
+            currentAudio.pause();
+            currentAudio = null;
+        }
+        if (synth && synth.speaking) {
+            synth.cancel();
+        }
+    }
+
+    function toggleVoiceMic() {
+        toggleSpeechRecognition();
+    }
+
+    function drawSiriWave() {
+        siriWaveAnimationId = requestAnimationFrame(drawSiriWave);
+        const canvas = document.getElementById('siri-wave-canvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        const width = canvas.width;
+        const height = canvas.height;
+        
+        ctx.clearRect(0, 0, width, height);
+        
+        // Define wave parameters based on visual state
+        let speed = 0.08;
+        let baseAmplitude = height / 4;
+        let count = 4; // Number of waves
+        
+        if (currentVisualState === 'listening' && analyser) {
+            // Modulate amplitude based on real microphone volume
+            const bufferLength = analyser.frequencyBinCount;
+            analyser.getByteFrequencyData(dataArray);
+            let sum = 0;
+            for (let i = 0; i < bufferLength; i++) {
+                sum += dataArray[i];
+            }
+            let avg = sum / bufferLength;
+            baseAmplitude = (height / 3.5) * (avg / 128 + 0.1);
+            speed = 0.15;
+        } else if (currentVisualState === 'responding') {
+            // Responding simulated speech wave
+            baseAmplitude = (height / 3) * (Math.sin(Date.now() * 0.005) * 0.3 + 0.7);
+            speed = 0.12;
+        } else {
+            // Idle breathing wave
+            baseAmplitude = 4;
+            speed = 0.03;
+        }
+        
+        const time = Date.now() * speed * 0.1;
+        
+        for (let i = 0; i < count; i++) {
+            ctx.beginPath();
+            
+            // Adjust wave parameters for different overlapping lines
+            const phase = time + i * Math.PI / 2;
+            const frequency = 0.015 + i * 0.005;
+            const alpha = 1.0 - (i / count) * 0.7;
+            
+            // Use different warm/Surgas colors for each wave
+            let color = '';
+            if (i === 0) color = `rgba(239, 68, 68, ${alpha})`; // Red
+            else if (i === 1) color = `rgba(249, 115, 22, ${alpha})`; // Orange
+            else if (i === 2) color = `rgba(236, 72, 153, ${alpha})`; // Pinkish
+            else color = `rgba(130, 21, 21, ${alpha})`; // Dark Red
+            
+            ctx.strokeStyle = color;
+            ctx.lineWidth = i === 0 ? 3 : 1.5;
+            
+            ctx.moveTo(0, height / 2);
+            
+            for (let x = 0; x < width; x++) {
+                // Envelope function to pinch the wave at the edges (Siri style)
+                const envelope = Math.sin((x / width) * Math.PI);
+                const y = height / 2 + Math.sin(x * frequency + phase) * baseAmplitude * envelope;
+                ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+        }
     }
 </script>
