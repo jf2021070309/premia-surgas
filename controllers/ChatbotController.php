@@ -348,7 +348,15 @@ class ChatbotController {
             $chunk = trim($chunk);
             if ($chunk === '') continue;
 
-            $chunkHash = md5($tl . '_' . $chunk);
+            // Use the corresponding regional google translate domain to get the correct accent
+            $domain = 'translate.google.com';
+            if ($tl === 'es') {
+                $domain = 'translate.google.com.pe'; // Peruvian accent
+            } elseif ($tl === 'es-es') {
+                $domain = 'translate.google.es'; // Spanish (Spain) accent
+            }
+
+            $chunkHash = md5($tl . '_v2_' . $chunk);
             $cacheFile = $cacheDir . '/' . $chunkHash . '.mp3';
 
             if (file_exists($cacheFile) && filesize($cacheFile) > 0) {
@@ -359,9 +367,9 @@ class ChatbotController {
                 }
             }
 
-            // If not cached, download it from Google Translate TTS
+            // If not cached, download it from Google Translate TTS using the regional domain
             $encodedText = urlencode($chunk);
-            $url = "https://translate.google.com/translate_tts?ie=UTF-8&tl=" . $tl . "&client=tw-ob&q=" . $encodedText;
+            $url = "https://" . $domain . "/translate_tts?ie=UTF-8&tl=es&client=tw-ob&q=" . $encodedText;
 
             $chunkAudio = $this->fetchUrlContent($url);
             if ($chunkAudio) {
