@@ -166,6 +166,14 @@ $routes = [
     ['POST',   'operaciones/create', 'OperacionController', 'create'],
     ['POST',   'operaciones/update', 'OperacionController', 'update'],
     ['GET',    'operaciones/delete', 'OperacionController', 'delete'],
+    
+    // —— Chatbot ——
+    ['POST', 'api/chatbot/message',       'ChatbotController', 'message'],
+    ['GET',  'pedidos-admin',             'ChatbotController', 'adminIndex'],
+    ['POST', 'api/chatbot/update-estado', 'ChatbotController', 'updateEstado'],
+    ['GET',  'api/chatbot/pedidos-cliente', 'ChatbotController', 'clientePedidos'],
+    ['GET',  'api/chatbot/tts',             'ChatbotController', 'tts'],
+    
     ['GET',    'auth/check',          'AuthController',   'checkSession'],
 ];
 

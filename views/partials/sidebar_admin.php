@@ -45,6 +45,10 @@ if (!function_exists('isActiveLink')) {
                 <i class='bx bx-user-circle'></i>
                 <span>Mi Perfil</span>
             </a>
+            <a href="#" id="sidebar-chat-btn" class="sidebar-item" onclick="window.location.hash='chat'; return false;">
+                <i class='bx bx-chat'></i>
+                <span>Chatbot / Pedir</span>
+            </a>
             <a href="#" class="sidebar-item" onclick="window.location.hash='actividad'; return false;">
                 <i class='bx bx-history'></i>
                 <span>Mi Actividad</span>
@@ -142,6 +146,10 @@ if (!function_exists('isActiveLink')) {
                     class="sidebar-item <?= isActiveLink('recargas-admin', $current_url) ?>">
                     <i class='bx bx-wallet'></i>
                     <span>Gestión Recargas</span>
+                </a>
+                <a href="<?= BASE_URL ?>pedidos-admin" class="sidebar-item <?= isActiveLink('pedidos-admin', $current_url) ?>">
+                    <i class='bx bx-shopping-bag'></i>
+                    <span>Pedidos Chatbot</span>
                 </a>
 
                 <div class="menu-label">Mapa</div>
@@ -269,9 +277,13 @@ if (!function_exists('isActiveLink')) {
                     if (onclick.includes('actividad')) item.classList.add('active');
                 } else if (hash === '#canjes') {
                     if (onclick.includes('canjes')) item.classList.add('active');
+                } else if (hash === '#chat') {
+                    if (onclick.includes('chat') || item.id === 'sidebar-chat-btn') item.classList.add('active');
+                } else if (hash === '#seguridad') {
+                    if (onclick.includes('seguridad')) item.classList.add('active');
                 } else if (!hash || hash === '') {
                     // If we are in the main scan page without hash
-                    if (href.includes('scan') && !onclick.includes('actividad') && !onclick.includes('canjes')) {
+                    if (href.includes('scan') && !onclick.includes('actividad') && !onclick.includes('canjes') && !onclick.includes('chat') && !onclick.includes('seguridad')) {
                         item.classList.add('active');
                     }
                 }

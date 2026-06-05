@@ -32,6 +32,9 @@ if (empty($hpw)) {
 
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        const BASE_URL = '<?= BASE_URL ?>';
+    </script>
     <style>
         :root {
             --primary: #400000;
@@ -1708,6 +1711,32 @@ if (empty($hpw)) {
                 margin-bottom: 0; 
             }
         }
+
+        /* Chatbot Animations & Styles */
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
+        @keyframes chatFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .chat-bubble {
+            margin-bottom: 0.5rem;
+        }
+        .user-bubble {
+            border-radius: 20px 20px 4px 20px !important;
+        }
+        .bot-bubble {
+            border-radius: 20px 20px 20px 4px !important;
+        }
+        .chat-action-btn:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        .chat-action-btn.gps-btn:hover {
+            background: #600f0f !important;
+        }
     </style>
 
 </head>
@@ -2021,6 +2050,9 @@ if (empty($hpw)) {
                     <div class="tab-btn" onclick="switchTab('seguridad', this)">
                         <i class='bx bx-lock-alt'></i> Seguridad
                     </div>
+                    <div class="tab-btn" id="tab-btn-chat" onclick="switchTab('chat', this)">
+                        <i class='bx bx-chat'></i> Chatbot
+                    </div>
                 </div>
 
                 <!-- PANE 1: ACTIVIDAD -->
@@ -2259,6 +2291,9 @@ if (empty($hpw)) {
                     </div>
                 </div>
 
+                <!-- PANE 5: CHATBOT -->
+                <?php include __DIR__ . '/chatbot_component.php'; ?>
+
                 <!-- PANE 4: SEGURIDAD -->
                 <div id="pane-seguridad" class="tab-content-pane">
                     <div
@@ -2449,7 +2484,6 @@ if (empty($hpw)) {
             });
         }
 
-        const BASE_URL = '<?= BASE_URL ?>';
         const cardContainer = document.getElementById('profileCard');
         if (cardContainer) {
             cardContainer.addEventListener('click', () => {
@@ -2502,6 +2536,15 @@ if (empty($hpw)) {
 
         // Tab Switching Logic
         function switchTab(paneId, btnElement, hideCard = false) {
+            if (paneId !== 'chat') {
+                if (typeof isListening !== 'undefined' && isListening) {
+                    toggleSpeechRecognition();
+                }
+                if (window.speechSynthesis && window.speechSynthesis.speaking) {
+                    window.speechSynthesis.cancel();
+                }
+            }
+
             // Remove active from all buttons
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             // Add active to current button
@@ -2515,6 +2558,10 @@ if (empty($hpw)) {
 
             if (paneId === 'incentivos' && !window.incentivosLoaded) {
                 loadIncentivos();
+            }
+
+            if (paneId === 'chat' && !window.chatInitialized) {
+                initChatbot();
             }
 
             // Toggle visibility of profile card elements
@@ -2570,6 +2617,11 @@ if (empty($hpw)) {
                 if (titleEl) titleEl.innerText = 'Seguridad de Cuenta';
                 if (subTitleEl) subTitleEl.innerText = 'Protege tu acceso';
                 switchTab('seguridad', document.querySelectorAll('.tab-btn')[3], true);
+            } else if (hash === 'chat') {
+                if (titleEl) titleEl.innerText = 'Asistente Chatbot';
+                if (subTitleEl) subTitleEl.innerText = 'Pide tu gas de manera interactiva';
+                const chatBtn = document.getElementById('tab-btn-chat') || document.querySelectorAll('.tab-btn')[4];
+                switchTab('chat', chatBtn, true);
             } else {
                 // Default: Profile view
                 if (titleEl) titleEl.innerText = 'Mi Perfil';
@@ -2922,6 +2974,8 @@ if (empty($hpw)) {
                 carouselTimer = setInterval(nextSlide, 3000);
             }
         }
+
+        
     </script>
 
     <script src="<?= BASE_URL ?>assets/js/session_check.js"></script>

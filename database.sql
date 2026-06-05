@@ -14,12 +14,10 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-
--- Volcando estructura de base de datos para surgas
+-- Volcando estructura para tabla surgas.afiliado_anuncios
 CREATE DATABASE IF NOT EXISTS `surgas` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */;
 USE `surgas`;
 
--- Volcando estructura para tabla surgas.afiliado_anuncios
 CREATE TABLE IF NOT EXISTS `afiliado_anuncios` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `usuario_id` int(11) NOT NULL,
@@ -56,9 +54,9 @@ CREATE TABLE IF NOT EXISTS `auditoria` (
   KEY `id_usuario` (`id_usuario`),
   KEY `modulo` (`modulo`),
   KEY `fecha_hora` (`fecha_hora`)
-) ENGINE=InnoDB AUTO_INCREMENT=194 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=206 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Volcando datos para la tabla surgas.auditoria: ~190 rows (aproximadamente)
+-- Volcando datos para la tabla surgas.auditoria: ~193 rows (aproximadamente)
 INSERT INTO `auditoria` (`id`, `tipo_usuario`, `id_usuario`, `accion`, `descripcion`, `metadata`, `modulo`, `ip_address`, `user_agent`, `fecha_hora`) VALUES
 	(1, 'trabajador', 1, 'CIERRE_SESION', 'El usuario cerró su sesión', NULL, 'SEGURIDAD', '::1', NULL, '2026-04-06 16:14:58'),
 	(2, 'trabajador', 1, 'INICIO_SESION', 'Inicio de sesión exitoso (Trabajador)', NULL, 'SEGURIDAD', '::1', NULL, '2026-04-06 16:15:03'),
@@ -252,7 +250,19 @@ INSERT INTO `auditoria` (`id`, `tipo_usuario`, `id_usuario`, `accion`, `descripc
 	(190, 'trabajador', 2, 'SOLICITUD_PUNTOS_PENDIENTE', 'Registró 50 puntos a Jaime Elias Flores Quispe (• Recarga gas Premium x5 (+50 pts)). Estado: pendiente', NULL, 'RECARGAS', '::1', 'Escritorio — Chrome', '2026-05-06 13:28:39'),
 	(191, 'trabajador', 1, 'MODERAR_PUNTOS', 'APROBADO la suma de 50 puntos para el cliente #1 por el operador 2', NULL, 'RECARGAS', '::1', 'Escritorio — Chrome', '2026-05-06 13:29:10'),
 	(192, 'trabajador', 2, 'SOLICITUD_PUNTOS_PENDIENTE', 'Registró 100 puntos a Jaime Elias Flores Quispe (• Recarga gas Premium x10 (+100 pts)). Estado: pendiente', NULL, 'RECARGAS', '::1', 'Escritorio — Chrome', '2026-05-06 13:48:40'),
-	(193, 'trabajador', 1, 'MODERAR_PUNTOS', 'APROBADO la suma de 100 puntos para el cliente #1 por el operador 2', NULL, 'RECARGAS', '::1', 'Escritorio — Chrome', '2026-05-06 13:49:44');
+	(193, 'trabajador', 1, 'MODERAR_PUNTOS', 'APROBADO la suma de 100 puntos para el cliente #1 por el operador 2', NULL, 'RECARGAS', '::1', 'Escritorio — Chrome', '2026-05-06 13:49:44'),
+	(194, 'cliente', 1, 'INICIO_SESION', 'Inicio de sesión exitoso (Cliente)', NULL, 'SEGURIDAD', '::1', 'Escritorio — Chrome', '2026-05-25 16:27:52'),
+	(195, 'cliente', 1, 'INICIO_SESION', 'Inicio de sesión exitoso (Cliente)', NULL, 'SEGURIDAD', '::1', 'Escritorio — Chrome', '2026-05-25 17:57:06'),
+	(196, 'trabajador', 1, 'INICIO_SESION', 'Inicio de sesión exitoso (Trabajador)', NULL, 'SEGURIDAD', '::1', 'Escritorio — Chrome', '2026-05-25 17:58:30'),
+	(197, 'cliente', 1, 'INICIO_SESION', 'Inicio de sesión exitoso (Cliente)', NULL, 'SEGURIDAD', '::1', 'Escritorio — Chrome', '2026-05-26 19:09:28'),
+	(198, 'trabajador', 1, 'INICIO_SESION', 'Inicio de sesión exitoso (Trabajador)', NULL, 'SEGURIDAD', '::1', 'Escritorio — Chrome', '2026-05-27 16:09:21'),
+	(199, 'cliente', 1, 'INICIO_SESION', 'Inicio de sesión exitoso (Cliente)', NULL, 'SEGURIDAD', '::1', 'Escritorio — Chrome', '2026-05-27 16:27:49'),
+	(200, 'trabajador', 1, 'INICIO_SESION', 'Inicio de sesión exitoso (Trabajador)', NULL, 'SEGURIDAD', '::1', 'Escritorio — Chrome', '2026-05-29 15:19:36'),
+	(201, 'trabajador', 1, 'INICIO_SESION', 'Inicio de sesión exitoso (Trabajador)', NULL, 'SEGURIDAD', '::1', 'Escritorio — Chrome', '2026-06-03 16:30:16'),
+	(202, 'cliente', 1, 'INICIO_SESION', 'Inicio de sesión exitoso (Cliente)', NULL, 'SEGURIDAD', '::1', 'Escritorio — Chrome', '2026-06-05 13:27:28'),
+	(203, 'cliente', 1, 'NUEVO_PEDIDO_CHATBOT', 'Se creó el pedido chatbot ID #2 a domicilio', NULL, 'CLIENTES', '::1', 'Escritorio — Chrome', '2026-06-05 13:29:29'),
+	(204, 'cliente', 1, 'INICIO_SESION', 'Inicio de sesión exitoso (Cliente)', NULL, 'SEGURIDAD', '::1', 'Escritorio — Chrome', '2026-06-05 13:29:48'),
+	(205, 'cliente', 1, 'NUEVO_PEDIDO_CHATBOT', 'Se creó el pedido chatbot ID #3 a domicilio', NULL, 'CLIENTES', '::1', 'Escritorio — Chrome', '2026-06-05 13:41:57');
 
 -- Volcando estructura para tabla surgas.canjes
 CREATE TABLE IF NOT EXISTS `canjes` (
@@ -319,7 +329,7 @@ CREATE TABLE IF NOT EXISTS `clientes` (
 
 -- Volcando datos para la tabla surgas.clientes: ~5 rows (aproximadamente)
 INSERT INTO `clientes` (`id`, `codigo`, `dni`, `nombre`, `razon_social`, `tipo_cliente`, `ruc`, `celular`, `direccion`, `departamento`, `token`, `password`, `puntos`, `estado`, `creado_por`, `fecha_creacion`, `session_id`) VALUES
-	(1, 'CLI-000001', '72883481', 'Jaime Elias Flores Quispe', NULL, 'Normal', NULL, '957084266', 'Calle San Roman 914', 'Tacna', '32286cdc9c72fe3529894442608a162ad51018ef6a1fa8c0ac3c567af767c6da', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 100, 1, NULL, '2026-03-20 17:56:01', 'da4sepvchrov2tmlggqperpi8o'),
+	(1, 'CLI-000001', '72883481', 'Jaime Elias Flores Quispe', NULL, 'Normal', NULL, '957084266', 'Calle San Roman 914', 'Tacna', '32286cdc9c72fe3529894442608a162ad51018ef6a1fa8c0ac3c567af767c6da', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 100, 1, NULL, '2026-03-20 17:56:01', '7745oa0lj1qrkupg0a5npfrjvc'),
 	(2, 'CLI-000002', '78459612', 'Jose y Maria', NULL, 'Normal', NULL, '951486985', 'AV HUMBOLTD', 'Tacna', '55018eeb8cf1f4ad3c0828927b6bd6902c436e4faf665a467e1d634de22e8b5f', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 0, 1, 5, '2026-04-17 14:28:05', 'jifffnvs6vcpn9b0dcuonm0icl'),
 	(3, 'CLI-000003', NULL, 'Surgas', 'FUTURE STORE E.I.R.L.', 'Restaurante', '20605771981', '984984898', 'AV. CERRO CAMACHO NRO 980 INT. 301B', 'Tacna', 'f6d51c3e9382bc947d119bee02072b587aa880ddb2952c3e04d8b9e3b9e5a4b6', NULL, 0, 1, 1, '2026-04-27 15:01:15', NULL),
 	(4, 'CLI-000004', NULL, 'Moradito', 'GRUPO EL MORADITO SOCIEDAD ANONIMA CERRADA - GRUPO EL MORADITO S.A.C.', 'Punto de Venta', '20533141553', '981489541', 'AV. CERRO CAMACHO NRO 980 INT. 03 DEP. 301B', 'Tacna', 'cf29247cae02f16a5f3601a6f6517a1f4e093179b0cd7ba8f9ff439620620ef7', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 0, 1, 1, '2026-04-27 15:01:43', 'msv5lfu7ll9sai5la8c3cn1c0d'),
@@ -392,12 +402,36 @@ CREATE TABLE IF NOT EXISTS `incentivos_vales` (
   CONSTRAINT `incentivos_vales_ibfk_2` FOREIGN KEY (`regla_id`) REFERENCES `incentivos_reglas` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Volcando datos para la tabla surgas.incentivos_vales: ~3 rows (aproximadamente)
+-- Volcando datos para la tabla surgas.incentivos_vales: ~4 rows (aproximadamente)
 INSERT INTO `incentivos_vales` (`id`, `codigo`, `cliente_id`, `regla_id`, `periodo_evaluado`, `cantidad_lograda`, `tipo_premio`, `valor`, `descripcion`, `fecha_emision`, `fecha_vencimiento`, `estado`, `usado_fecha`, `usado_por`) VALUES
 	(1, 'VALE-20260427-3494', 2, 3, '2026-W18', 3, 'vale_producto', 15.00, 'Vale por 1 Balón de Gas Premium', '2026-04-27 14:56:58', '2026-05-12', 'activo', NULL, NULL),
 	(2, 'VALE-20260427-2290', 4, 3, '2026-W18', 3, 'vale_producto', 15.00, 'Vale por 1 Balón de Gas Premium', '2026-04-27 16:35:18', '2026-05-12', 'usado', '2026-04-27 16:35:43', 1),
 	(3, 'VALE-20260428-6556', 1, 3, '2026-W18', 3, 'vale_producto', 15.00, 'Vale por 1 Balón de Gas Premium', '2026-04-28 15:28:46', '2026-05-13', 'activo', NULL, NULL),
 	(4, 'VALE-20260506-5503', 1, 3, '2026-W19', 3, 'vale_producto', 15.00, 'Vale por 1 Balón de Gas Premium', '2026-05-06 13:29:10', '2026-05-21', 'activo', NULL, NULL);
+
+-- Volcando estructura para tabla surgas.pedidos
+CREATE TABLE IF NOT EXISTS `pedidos` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `cliente_id` int(11) NOT NULL,
+  `modalidad` varchar(50) NOT NULL,
+  `producto` varchar(50) DEFAULT NULL,
+  `cantidad` int(11) DEFAULT NULL,
+  `direccion` text DEFAULT NULL,
+  `latitud` decimal(10,8) DEFAULT NULL,
+  `longitud` decimal(11,8) DEFAULT NULL,
+  `punto_venta_id` int(11) DEFAULT NULL,
+  `estado` enum('pendiente','entregado','cancelado') NOT NULL DEFAULT 'pendiente',
+  `fecha_creacion` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `fk_pedidos_cliente` (`cliente_id`),
+  CONSTRAINT `fk_pedidos_cliente` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Volcando datos para la tabla surgas.pedidos: ~0 rows (aproximadamente)
+INSERT INTO `pedidos` (`id`, `cliente_id`, `modalidad`, `producto`, `cantidad`, `direccion`, `latitud`, `longitud`, `punto_venta_id`, `estado`, `fecha_creacion`) VALUES
+	(1, 1, 'A Domicilio', 'Normal', 2, 'Los delfines Mz', NULL, NULL, NULL, 'pendiente', '2026-06-05 13:28:29'),
+	(2, 1, 'A Domicilio', 'Normal', 2, 'Los delfines Mz', NULL, NULL, NULL, 'pendiente', '2026-06-05 13:29:29'),
+	(3, 1, 'A Domicilio', 'Premium', 3, 'Promuvi', NULL, NULL, NULL, 'pendiente', '2026-06-05 13:41:57');
 
 -- Volcando estructura para tabla surgas.premios
 CREATE TABLE IF NOT EXISTS `premios` (
@@ -435,6 +469,29 @@ INSERT INTO `premios` (`id`, `nombre`, `descripcion`, `precio_base`, `puntos`, `
 	(20, 'iPhone', 'nuevo de ultima generacion', NULL, 35000, 0, 'iPhone.png', 1),
 	(21, 'Mouse G502', 'Mouse inalambrico', 300.00, 500, 7, '69f9f2a29bb3c.png', 1),
 	(23, 'Iphone 14 PRO MAX', 'Nuevo', 2000.00, 5000, 2, '69f9f537a5099.png', 1);
+
+-- Volcando estructura para tabla surgas.puntos_venta
+CREATE TABLE IF NOT EXISTS `puntos_venta` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(255) NOT NULL,
+  `latitud` decimal(10,8) NOT NULL,
+  `longitud` decimal(11,8) NOT NULL,
+  `foto` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `propietario` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Volcando datos para la tabla surgas.puntos_venta: ~8 rows (aproximadamente)
+INSERT INTO `puntos_venta` (`id`, `nombre`, `latitud`, `longitud`, `foto`, `created_at`, `propietario`) VALUES
+	(6, 'Comercial Diaz', -18.01197870, -70.23414350, 'https://i.ibb.co/mr3mZrf9/1203b567f280.jpg', '2026-05-25 18:04:21', 'Gianella Paredes'),
+	(7, 'Tienda Mathias', -18.05393450, -70.23512950, 'https://i.ibb.co/BH1hKjmw/1c202b18b6d4.jpg', '2026-05-25 18:07:15', 'Deysi vargas huanacuni'),
+	(8, 'Abarrotes Lidia', -18.04655700, -70.24170500, 'https://i.ibb.co/8L86Mdhx/8a3218ec8df1.jpg', '2026-05-25 18:17:59', 'Lidia Cama Polloqueri'),
+	(9, 'Negocio BruBen', -18.06270780, -70.29698770, 'https://i.ibb.co/QtqsX9v/223d99458b34.jpg', '2026-05-25 18:18:50', 'Jaime Uruchi Perca'),
+	(10, 'Comercial Ruth', -18.07190670, -70.25151500, 'https://i.ibb.co/gb7c1Lcq/4ea45b37ed16.jpg', '2026-05-25 18:19:41', 'Ruth Calizaya Huayhua'),
+	(11, 'Minimarket "La esquina del barrio"', -18.01372266, -70.23498958, 'https://i.ibb.co/2YSGdqX4/be8cda0df339.jpg', '2026-05-25 18:22:26', 'Barrio (Pendiente)'),
+	(12, 'CALLE CHORILLOS 278 POCOLLAY', -17.99770430, -70.23009720, 'https://i.ibb.co/zhLqzjkL/58d993701794.jpg', '2026-05-25 18:24:16', 'Chorrillos (Pendiente)'),
+	(13, 'Tienda virgen copacabana', -17.99499870, -70.25741600, NULL, '2026-05-25 18:24:50', 'Virgen (Pendiente)');
 
 -- Volcando estructura para tabla surgas.recargas
 CREATE TABLE IF NOT EXISTS `recargas` (
@@ -500,7 +557,7 @@ INSERT INTO `recargas` (`id`, `cliente_id`, `puntos`, `monto`, `comprobante`, `e
 	(42, 1, 1000, 50.00, 'recarga_1774463254_1.jpg', 'aprobado', '2026-03-25 18:27:34', '2026-03-25 18:27:46', 1),
 	(43, 1, 1000, 50.00, 'recarga_1774469676_1.jpg', 'aprobado', '2026-03-25 20:14:36', '2026-03-25 20:15:07', 1);
 
--- Insertando los datos por defecto, incluyendo los 54 y 2 para Premium
+-- Volcando estructura para tabla surgas.tipos_operaciones
 CREATE TABLE IF NOT EXISTS `tipos_operaciones` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) DEFAULT NULL,
@@ -511,12 +568,11 @@ CREATE TABLE IF NOT EXISTS `tipos_operaciones` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Insertando los datos por defecto, incluyendo los 54 y 2 para Premium
+-- Volcando datos para la tabla surgas.tipos_operaciones: ~3 rows (aproximadamente)
 INSERT INTO `tipos_operaciones` (`id`, `nombre`, `precio_estandar`, `descuento`, `puntos`, `estado`) VALUES
 	(1, 'Recarga gas Normal', 0.00, 0.00, 6, 1),
 	(2, 'Recarga gas Premium', 54.00, 2.00, 32, 1),
 	(3, 'Accesorio / Otros', 0.00, 0.00, 2, 1);
-
 
 -- Volcando estructura para tabla surgas.usuarios
 CREATE TABLE IF NOT EXISTS `usuarios` (
@@ -535,9 +591,9 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   UNIQUE KEY `usuario` (`usuario`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla surgas.usuarios: ~5 rows (aproximadamente)
+-- Volcando datos para la tabla surgas.usuarios: ~6 rows (aproximadamente)
 INSERT INTO `usuarios` (`id`, `nombre`, `usuario`, `password`, `rol`, `departamento`, `direccion`, `celular`, `estado`, `fecha_creacion`, `session_id`) VALUES
-	(1, 'Administrador', 'admin', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'admin', 'Tacna', NULL, NULL, 1, '2026-03-20 13:15:09', 'ft1fhdkdfpebi6i0ki9ufm476e'),
+	(1, 'Administrador', 'admin', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'admin', 'Tacna', NULL, NULL, 1, '2026-03-20 13:15:09', '1sogub2p0v7vmrqjcihhaqog9v'),
 	(2, 'Oscar Flores', 'conductor1', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'conductor', 'Tacna', NULL, NULL, 1, '2026-03-20 13:15:09', '314qpo511sf0nph6ngpp3dqkcs'),
 	(3, 'Jaime Flores ', 'Jaime', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'conductor', 'Tacna', NULL, NULL, 1, '2026-04-06 16:11:08', 'nuontuhhc2mmoqcal7544k27du'),
 	(4, 'Elvis Leyva Sardon', 'Elvis', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'conductor', 'Tacna', NULL, NULL, 1, '2026-04-06 17:17:54', NULL),
@@ -557,7 +613,7 @@ CREATE TABLE IF NOT EXISTS `venta_detalles` (
   CONSTRAINT `fk_venta_detalles_venta` FOREIGN KEY (`venta_id`) REFERENCES `ventas` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=104 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Volcando datos para la tabla surgas.venta_detalles: ~1 rows (aproximadamente)
+-- Volcando datos para la tabla surgas.venta_detalles: ~0 rows (aproximadamente)
 INSERT INTO `venta_detalles` (`id`, `venta_id`, `nombre_item`, `cantidad`, `puntos_unitarios`, `puntos_subtotal`) VALUES
 	(103, 39, 'Recarga gas Premium', 10, 10, 100);
 
@@ -578,26 +634,10 @@ CREATE TABLE IF NOT EXISTS `ventas` (
   CONSTRAINT `ventas_ibfk_2` FOREIGN KEY (`conductor_id`) REFERENCES `usuarios` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla surgas.ventas: ~1 rows (aproximadamente)
+-- Volcando datos para la tabla surgas.ventas: ~0 rows (aproximadamente)
 INSERT INTO `ventas` (`id`, `cliente_id`, `conductor_id`, `monto`, `puntos`, `detalle`, `estado`, `fecha`) VALUES
 	(39, 1, 2, 0.00, 100, '• Recarga gas Premium x10 (+100 pts)', 'aprobado', '2026-05-06 13:48:40');
 
-CREATE TABLE IF NOT EXISTS puntos_venta (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(255) NOT NULL,
-    propietario VARCHAR(255) NOT NULL,
-    latitud DECIMAL(10, 8) NOT NULL,
-    longitud DECIMAL(11, 8) NOT NULL,
-    foto VARCHAR(255) DEFAULT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-INSERT INTO puntos_venta (nombre,propietario, latitud, longitud, foto) VALUES
-('Punto Villa Maria', 'GRUPOSURGAS', -18.020206, -70.238576, NULL),
-('Punto Villa San Carlos', 'GRUPOSURGAS', -18.027837, -70.250163, NULL),
-('Punto Exodo', 'GRUPOSURGAS', -18.045948, -70.240785, NULL),
-('Punto Santa Rosa', 'GRUPOSURGAS', -18.045788, -70.256823, NULL),
-('Punto Simon Bolivar', 'GRUPOSURGAS', -18.047783, -70.251025, NULL);
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;

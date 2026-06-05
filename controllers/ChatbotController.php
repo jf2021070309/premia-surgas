@@ -1,0 +1,449 @@
+<?php
+// controllers/ChatbotController.php
+require_once __DIR__ . '/../models/PedidoModel.php';
+require_once __DIR__ . '/../models/PuntoVentaModel.php';
+require_once __DIR__ . '/../models/ClienteModel.php';
+require_once __DIR__ . '/../models/AuditoriaModel.php';
+
+class ChatbotController {
+    
+    public function __construct() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        $this->requireAuth();
+    }
+
+    private function requireAuth(): void {
+        if (!isset($_SESSION['id_usuario'])) {
+            header('Content-Type: application/json');
+            http_response_code(401);
+            echo json_encode(['success' => false, 'error' => 'No autorizado']);
+            exit;
+        }
+    }
+
+    public function message(): void {
+        header('Content-Type: application/json');
+        
+        $inputData = json_decode(file_get_contents('php://input'), true);
+        $message = trim($inputData['message'] ?? '');
+        $lat = isset($inputData['latitud']) ? (float)$inputData['latitud'] : null;
+        $lng = isset($inputData['longitud']) ? (float)$inputData['longitud'] : null;
+
+        // Initialize state if not exists
+        if (!isset($_SESSION['chat_state'])) {
+            $_SESSION['chat_state'] = 'esperando_saludo';
+            $_SESSION['chat_data'] = [];
+        }
+
+        $state = $_SESSION['chat_state'];
+        $data = $_SESSION['chat_data'];
+
+        $reply = "";
+        $buttons = [];
+        $nextState = $state;
+
+        // Command to reset chatbot at any time
+        if (strtolower($message) === 'reset' || strtolower($message) === 'cancelar' || strtolower($message) === 'menu' || strtolower($message) === 'nuevo pedido') {
+            $_SESSION['chat_state'] = 'esperando_saludo';
+            $_SESSION['chat_data'] = [];
+            echo json_encode([
+                'success' => true,
+                'reply' => "Somos SURGAS\n¿Deseas tu recarga a:",
+                'buttons' => ['A Domicilio', 'En Depósito']
+            ]);
+            $_SESSION['chat_state'] = 'esperando_modalidad';
+            exit;
+        }
+
+        switch ($state) {
+            case 'esperando_saludo':
+                if (in_array(strtolower($message), ['hola', 'buenos dias', 'buenas tardes', 'pedir', 'gas', 'menu'])) {
+                    $reply = "Somos SURGAS\n¿Deseas tu recarga a:";
+                    $buttons = ['A Domicilio', 'En Depósito'];
+                    $nextState = 'esperando_modalidad';
+                } else {
+                    $reply = "Hola, soy el asistente virtual de SURGAS. Escribe 'hola', 'pedir' o 'menu' para iniciar tu pedido de gas.";
+                    $buttons = ['Pedir Gas'];
+                }
+                break;
+
+            case 'esperando_modalidad':
+                if (strtolower($message) === 'a domicilio') {
+                    $data['modalidad'] = 'A Domicilio';
+                    $reply = "Valor a domicilio S/. 62 x 10 kg\n\n¿Tipo de Balón que usa?";
+                    $buttons = ['Normal', 'Premium'];
+                    $nextState = 'esperando_producto';
+                } elseif (strtolower($message) === 'en depósito') {
+                    $data['modalidad'] = 'En Depósito';
+                    $reply = "Por favor comparte tu ubicación GPS o escribe tu dirección actual para buscar el depósito más cercano:";
+                    $buttons = ['Compartir Ubicación'];
+                    $nextState = 'esperando_ubicacion_punto';
+                } else {
+                    $reply = "Por favor selecciona una opción válida de modalidad:";
+                    $buttons = ['A Domicilio', 'En Depósito'];
+                }
+                break;
+
+            case 'esperando_producto':
+                if (in_array(strtolower($message), ['normal', 'premium'])) {
+                    $data['producto'] = ucfirst(strtolower($message));
+                    $reply = "¿Cuántos balones desea? (digite)";
+                    $buttons = ['1', '2', '3'];
+                    $nextState = 'esperando_cantidad';
+                } else {
+                    $reply = "Tipo de balón no válido. Elige una opción:";
+                    $buttons = ['Normal', 'Premium'];
+                }
+                break;
+
+            case 'esperando_cantidad':
+                $qty = (int)$message;
+                if ($qty > 0) {
+                    $data['cantidad'] = $qty;
+                    $price = $qty * 62;
+                    $reply = "{$qty} Balón de 10 kg precio S/.{$price}.\n\nCompártenos tu ubicación y la unidad estará llevando tu pedido.";
+                    $buttons = ['Compartir Ubicación'];
+                    $nextState = 'esperando_ubicacion';
+                } else {
+                    $reply = "Por favor, ingresa una cantidad válida de balones (un número entero mayor a cero).";
+                }
+                break;
+
+            case 'esperando_ubicacion':
+                if ($lat !== null && $lng !== null) {
+                    $data['latitud'] = $lat;
+                    $data['longitud'] = $lng;
+                    $data['direccion'] = "Ubicación GPS compartida ({$lat}, {$lng})";
+                } else {
+                    $data['direccion'] = $message;
+                }
+
+                // Save the order directly
+                $pedidoModel = new PedidoModel();
+                $orderData = [
+                    'cliente_id' => $_SESSION['id_usuario'],
+                    'modalidad' => $data['modalidad'],
+                    'producto' => $data['producto'] ?? 'Normal',
+                    'cantidad' => $data['cantidad'] ?? 1,
+                    'direccion' => $data['direccion'],
+                    'latitud' => $data['latitud'] ?? null,
+                    'longitud' => $data['longitud'] ?? null,
+                    'punto_venta_id' => null
+                ];
+                
+                $pedidoId = $pedidoModel->create($orderData);
+                
+                // Audit logs
+                $audit = new AuditoriaModel();
+                $audit->registrar($_SESSION['id_usuario'], 'NUEVO_PEDIDO_CHATBOT', "Se creó el pedido chatbot ID #$pedidoId a domicilio", 'CLIENTES', null, 'cliente');
+
+                $reply = "Tenemos métodos de pago efectivo y yape, coordine con el conductor asignado. Gracias por su pedido.";
+                $buttons = ['Nuevo Pedido'];
+                $nextState = 'esperando_saludo';
+                $data = []; // Reset state data
+                break;
+
+            case 'esperando_ubicacion_punto':
+                // Fetch points of sale
+                $puntosModel = new PuntoVentaModel();
+                $puntos = $puntosModel->getAll();
+
+                if (empty($puntos)) {
+                    $reply = "Lo sentimos, no pudimos encontrar puntos de venta disponibles en este momento. Escribe 'menu' para volver a empezar.";
+                    $buttons = ['Volver al inicio'];
+                    $nextState = 'esperando_saludo';
+                    break;
+                }
+
+                // Filter out closed or empty schedules if they have no defined horario
+                // If GPS coordinates are available, sort by distance
+                if ($lat !== null && $lng !== null) {
+                    usort($puntos, function($a, $b) use ($lat, $lng) {
+                        $distA = $this->getDistance($lat, $lng, (float)$a['latitud'], (float)$a['longitud']);
+                        $distB = $this->getDistance($lat, $lng, (float)$b['latitud'], (float)$b['longitud']);
+                        return $distA <=> $distB;
+                    });
+                }
+
+                $data['puntos_cercanos'] = $puntos;
+                $data['punto_index'] = 0;
+
+                $punto = $puntos[0];
+                $data['punto_venta_id'] = $punto['id'];
+                $data['direccion'] = $punto['nombre'] . " - " . ($punto['propietario'] ?? '');
+
+                $reply = "📍 Hemos encontrado este depósito de gas cercano para ti:\n\n" .
+                         "• **Depósito**: " . $punto['nombre'] . "\n" .
+                         "• **Propietario/Dirección**: " . ($punto['propietario'] ?? 'Sin dirección') . "\n" .
+                         "• **Horario**: " . ($punto['horario_atencion'] ?? 'No especificado') . "\n\n" .
+                         "¿Deseas confirmar tu pedido para recoger en este depósito?";
+                
+                $buttons = ['✅ Confirmar Depósito', 'Buscar Otro', '❌ Cancelar'];
+                $nextState = 'viendo_puntos';
+                break;
+
+            case 'viendo_puntos':
+                if (strpos($message, 'Confirmar') !== false) {
+                    // Save order in deposit
+                    $pedidoModel = new PedidoModel();
+                    $orderData = [
+                        'cliente_id' => $_SESSION['id_usuario'],
+                        'modalidad' => $data['modalidad'],
+                        'producto' => null,
+                        'cantidad' => 1,
+                        'direccion' => $data['direccion'],
+                        'latitud' => null,
+                        'longitud' => null,
+                        'punto_venta_id' => $data['punto_venta_id']
+                    ];
+                    
+                    $pedidoId = $pedidoModel->create($orderData);
+
+                    // Audit logs
+                    $audit = new AuditoriaModel();
+                    $audit->registrar($_SESSION['id_usuario'], 'NUEVO_PEDIDO_CHATBOT', "Se creó el pedido chatbot ID #$pedidoId en depósito", 'CLIENTES', null, 'cliente');
+
+                    $reply = "🎉 ¡Pedido #{$pedidoId} registrado! Puedes acercarte a recoger tu balón en el depósito seleccionado. ¡Gracias por tu preferencia!";
+                    $buttons = ['Nuevo Pedido'];
+                    $nextState = 'esperando_saludo';
+                    $data = [];
+                } elseif (strtolower($message) === 'buscar otro') {
+                    $puntos = $data['puntos_cercanos'] ?? [];
+                    $nextIndex = ($data['punto_index'] ?? 0) + 1;
+
+                    if ($nextIndex >= count($puntos)) {
+                        $reply = "No hay más depósitos de gas en nuestra lista en este momento. ¿Deseas seleccionar el primer depósito sugerido?";
+                        $buttons = ['✅ Confirmar Depósito', '❌ Cancelar'];
+                        $data['punto_index'] = 0;
+                        $punto = $puntos[0];
+                        $data['punto_venta_id'] = $punto['id'];
+                        $data['direccion'] = $punto['nombre'] . " - " . ($punto['propietario'] ?? '');
+                    } else {
+                        $data['punto_index'] = $nextIndex;
+                        $punto = $puntos[$nextIndex];
+                        $data['punto_venta_id'] = $punto['id'];
+                        $data['direccion'] = $punto['nombre'] . " - " . ($punto['propietario'] ?? '');
+
+                        $reply = "📍 Siguiente depósito cercano:\n\n" .
+                                 "• **Depósito**: " . $punto['nombre'] . "\n" .
+                                 "• **Propietario/Dirección**: " . ($punto['propietario'] ?? 'Sin dirección') . "\n" .
+                                 "• **Horario**: " . ($punto['horario_atencion'] ?? 'No especificado') . "\n\n" .
+                                 "¿Deseas confirmar tu pedido para recoger en este depósito?";
+                        $buttons = ['✅ Confirmar Depósito', 'Buscar Otro', '❌ Cancelar'];
+                    }
+                } else {
+                    $reply = "Pedido cancelado. Escribe 'hola' o 'menu' para iniciar un nuevo pedido.";
+                    $buttons = ['Nuevo Pedido'];
+                    $nextState = 'esperando_saludo';
+                    $data = [];
+                }
+                break;
+        }
+
+        $_SESSION['chat_state'] = $nextState;
+        $_SESSION['chat_data'] = $data;
+
+        echo json_encode([
+            'success' => true,
+            'reply' => $reply,
+            'buttons' => $buttons
+        ]);
+        exit;
+    }
+
+    private function getDistance(float $lat1, float $lon1, float $lat2, float $lon2): float {
+        $earthRadius = 6371; // km
+        $dLat = deg2rad($lat2 - $lat1);
+        $dLon = deg2rad($lon2 - $lon1);
+        $a = sin($dLat/2) * sin($dLat/2) + cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * sin($dLon/2) * sin($dLon/2);
+        $c = 2 * atan2(sqrt($a), sqrt(1-$a));
+        return $earthRadius * $c;
+    }
+
+    // ====== ADMIN VIEWS ======
+    
+    public function adminIndex(): void {
+        $this->requireAdmin();
+        $pedidoModel = new PedidoModel();
+        $pedidos = $pedidoModel->getAll();
+
+        $this->render('pedidos_admin', [
+            'pedidos' => $pedidos
+        ]);
+    }
+
+    public function updateEstado(): void {
+        $this->requireAdmin();
+        header('Content-Type: application/json');
+
+        $inputData = json_decode(file_get_contents('php://input'), true);
+        $id = (int)($inputData['id'] ?? 0);
+        $estado = $inputData['estado'] ?? '';
+
+        if ($id > 0 && in_array($estado, ['pendiente', 'entregado', 'cancelado'])) {
+            $pedidoModel = new PedidoModel();
+            $result = $pedidoModel->updateEstado($id, $estado);
+            if ($result) {
+                // Audit log
+                $audit = new AuditoriaModel();
+                $audit->registrar($_SESSION['id_usuario'], 'MODERAR_PEDIDO', "Actualizó estado del pedido chatbot #$id a $estado", 'ADMINISTRACION');
+
+                echo json_encode(['success' => true, 'message' => 'Estado actualizado correctamente.']);
+                exit;
+            }
+        }
+
+        echo json_encode(['success' => false, 'message' => 'No se pudo actualizar el estado.']);
+        exit;
+    }
+
+    private function requireAdmin(): void {
+        if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'admin') {
+            header('Location: ' . BASE_URL . 'panel');
+            exit;
+        }
+    }
+
+    public function clientePedidos(): void {
+        header('Content-Type: application/json');
+        $clienteId = $_SESSION['id_usuario'] ?? 0;
+        if (!$clienteId) {
+            echo json_encode(['success' => false, 'message' => 'No autorizado']);
+            exit;
+        }
+
+        $pedidoModel = new PedidoModel();
+        $pedidos = $pedidoModel->getByCliente($clienteId);
+
+        echo json_encode(['success' => true, 'pedidos' => $pedidos]);
+        exit;
+    }
+
+    public function tts(): void {
+        $text = trim($_GET['text'] ?? '');
+        if ($text === '') {
+            http_response_code(400);
+            echo "Falta el parámetro 'text'.";
+            exit;
+        }
+
+        $tl = trim($_GET['tl'] ?? 'es');
+        // Whitelist of supported locales
+        if (!in_array($tl, ['es', 'es-es'])) {
+            $tl = 'es';
+        }
+
+        // Split text into small chunks to avoid Google's limits (approx 150 characters per request)
+        $chunks = $this->splitTextForTTS($text, 150);
+        $finalAudioData = '';
+        
+        $cacheDir = __DIR__ . '/../tmp/tts_cache';
+        if (!is_dir($cacheDir)) {
+            @mkdir($cacheDir, 0777, true);
+        }
+
+        foreach ($chunks as $chunk) {
+            $chunk = trim($chunk);
+            if ($chunk === '') continue;
+
+            $chunkHash = md5($tl . '_' . $chunk);
+            $cacheFile = $cacheDir . '/' . $chunkHash . '.mp3';
+
+            if (file_exists($cacheFile) && filesize($cacheFile) > 0) {
+                $chunkAudio = @file_get_contents($cacheFile);
+                if ($chunkAudio) {
+                    $finalAudioData .= $chunkAudio;
+                    continue;
+                }
+            }
+
+            // If not cached, download it from Google Translate TTS
+            $encodedText = urlencode($chunk);
+            $url = "https://translate.google.com/translate_tts?ie=UTF-8&tl=" . $tl . "&client=tw-ob&q=" . $encodedText;
+
+            $chunkAudio = $this->fetchUrlContent($url);
+            if ($chunkAudio) {
+                $finalAudioData .= $chunkAudio;
+                @file_put_contents($cacheFile, $chunkAudio);
+            }
+        }
+
+        if ($finalAudioData === '') {
+            http_response_code(500);
+            echo "Error al generar el audio";
+            exit;
+        }
+
+        header('Content-Type: audio/mpeg');
+        header('Content-Length: ' . strlen($finalAudioData));
+        header('Cache-Control: public, max-age=86400');
+        echo $finalAudioData;
+        exit;
+    }
+
+    private function fetchUrlContent(string $url): ?string {
+        if (function_exists('curl_init')) {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HEADER, false);
+            curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+            $data = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+            if ($httpCode === 200) {
+                return $data;
+            }
+        }
+
+        // Fallback to file_get_contents with stream context
+        $options = [
+            'http' => [
+                'method' => 'GET',
+                'header' => "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\r\n"
+            ]
+        ];
+        $context = stream_context_create($options);
+        $data = @file_get_contents($url, false, $context);
+        return $data ?: null;
+    }
+
+    private function splitTextForTTS(string $text, int $maxLength = 150): array {
+        if (mb_strlen($text, 'UTF-8') <= $maxLength) {
+            return [$text];
+        }
+
+        $chunks = [];
+        // Regex to split on spaces but keep them in the resulting array
+        $words = preg_split('/(\s+)/u', $text, -1, PREG_SPLIT_DELIM_CAPTURE);
+        $currentChunk = '';
+
+        foreach ($words as $word) {
+            if (mb_strlen($currentChunk . $word, 'UTF-8') > $maxLength) {
+                $trimmed = trim($currentChunk);
+                if ($trimmed !== '') {
+                    $chunks[] = $trimmed;
+                }
+                $currentChunk = $word;
+            } else {
+                $currentChunk .= $word;
+            }
+        }
+
+        $trimmed = trim($currentChunk);
+        if ($trimmed !== '') {
+            $chunks[] = $trimmed;
+        }
+
+        return $chunks;
+    }
+
+    private function render(string $view, array $data = []): void {
+        extract($data);
+        require __DIR__ . "/../views/{$view}.php";
+    }
+}
