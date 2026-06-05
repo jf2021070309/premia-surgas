@@ -2978,6 +2978,57 @@ if (empty($hpw)) {
         
     </script>
 
+    <!-- Voice Agent Overlay (Siri Mode) -->
+    <div id="voice-agent-overlay" style="display: none;">
+        <!-- Top Header -->
+        <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; max-width: 1080px; margin: 0 auto;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="width: 8px; height: 8px; border-radius: 50%; background: #22c55e; display: inline-block; animation: pulse 1.5s infinite;"></span>
+                <span id="voice-status-badge" style="font-size: 0.72rem; color: #22c55e; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">Surgas Voz</span>
+            </div>
+            <button onclick="exitVoiceMode()" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #fff; width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; font-size: 1.5rem; border: none; outline: none; margin-left: auto;" title="Cerrar modo voz" onmouseover="this.style.background='rgba(255,255,255,0.18)'; this.style.transform='scale(1.08)'" onmouseout="this.style.background='rgba(255,255,255,0.08)'; this.style.transform='scale(1)'">
+                <i class='bx bx-x'></i>
+            </button>
+        </div>
+
+        <!-- Center UI (Siri style) -->
+        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; gap: 1.5rem; margin-top: -1rem;">
+            <!-- Glowing Avatar / Logo -->
+            <div style="position: relative; width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; border-radius: 50%;">
+                <div id="voice-glowing-ring" style="position: absolute; width: 100%; height: 100%; border-radius: 50%; background: radial-gradient(circle, rgba(130, 21, 21, 0.4) 0%, rgba(130, 21, 21, 0) 70%); animation: scaleUpGlow 3s infinite ease-in-out;"></div>
+                <div style="z-index: 2; width: 70px; height: 70px; border-radius: 50%; background: #821515; border: 2px solid #ef4444; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 25px rgba(239, 68, 68, 0.5);">
+                    <i class='bx bx-bot' style="font-size: 2.2rem; color: #fff;"></i>
+                </div>
+            </div>
+
+            <!-- Title / Status Text -->
+            <div>
+                <h2 style="color: #fff; margin: 0; font-size: 1.75rem; font-weight: 900; letter-spacing: -0.5px; text-shadow: 0 2px 10px rgba(0,0,0,0.5);">SURGAS</h2>
+                <p id="voice-agent-subtitle" style="color: #94a3b8; font-size: 0.85rem; font-weight: 700; margin: 4px 0 0 0;">Asistente de Voz Activo</p>
+            </div>
+
+            <!-- Realtime Transcriptions / Subtitles -->
+            <div style="min-height: 50px; max-width: 90%; text-align: center; display: flex; align-items: center; justify-content: center;">
+                <p id="voice-transcription-text" style="color: #cbd5e1; font-size: 0.95rem; font-weight: 700; font-style: italic; line-height: 1.4; margin: 0; padding: 0 10px; text-shadow: 0 2px 8px rgba(0,0,0,0.4);"></p>
+            </div>
+        </div>
+
+        <!-- Wave Visualizer (Siri Wave) -->
+        <div style="width: 100%; height: 80px; display: flex; align-items: center; justify-content: center; position: relative;">
+            <canvas id="siri-wave-canvas" style="width: 100%; height: 100%; filter: drop-shadow(0 0 15px rgba(239,68,68,0.5));"></canvas>
+        </div>
+
+        <!-- Footer hints / control -->
+        <div style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 8px;">
+            <div id="voice-mic-status-hint" style="font-size: 0.72rem; color: #94a3b8; font-weight: 750; text-transform: uppercase; letter-spacing: 0.5px;">Presiona para hablar</div>
+            
+            <!-- Large mic tap button -->
+            <button id="voice-mic-tap-btn" onclick="toggleVoiceMic()" style="width: 56px; height: 56px; border-radius: 50%; background: #821515; border: 2px solid #ef4444; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; cursor: pointer; transition: 0.3s; box-shadow: 0 0 20px rgba(130, 21, 21, 0.4);">
+                <i id="voice-mic-tap-icon" class='bx bx-microphone'></i>
+            </button>
+        </div>
+    </div>
+
     <script src="<?= BASE_URL ?>assets/js/session_check.js"></script>
 </body>
 

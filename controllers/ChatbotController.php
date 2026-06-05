@@ -67,7 +67,7 @@ class ChatbotController {
             case 'esperando_modalidad':
                 if (strtolower($message) === 'a domicilio') {
                     $data['modalidad'] = 'A Domicilio';
-                    $reply = "Valor a domicilio S/. 62 x 10 kg\n\n¿Tipo de Balón que usa?";
+                    $reply = "Valor a domicilio S/. 62 x 10 kg\n\nTipo de Balon que usa?";
                     $buttons = ['Normal', 'Premium'];
                     $nextState = 'esperando_producto';
                 } elseif (strtolower($message) === 'en depósito') {
@@ -84,7 +84,7 @@ class ChatbotController {
             case 'esperando_producto':
                 if (in_array(strtolower($message), ['normal', 'premium'])) {
                     $data['producto'] = ucfirst(strtolower($message));
-                    $reply = "¿Cuántos balones desea? (digite)";
+                    $reply = "cuantos balones desea? (digite)";
                     $buttons = ['1', '2', '3'];
                     $nextState = 'esperando_cantidad';
                 } else {
@@ -98,7 +98,7 @@ class ChatbotController {
                 if ($qty > 0) {
                     $data['cantidad'] = $qty;
                     $price = $qty * 62;
-                    $reply = "{$qty} Balón de 10 kg precio S/.{$price}\n\nCompartenos tu ubicacion y la unidad estará llevando tu pedido.";
+                    $reply = "{$qty} Balon de 10 kg precio S/.{$price}\n\nCompartenos tu ubicacion y la unidad estará llevando tu pedido.";
                     $buttons = ['Compartir Ubicación'];
                     $nextState = 'esperando_ubicacion';
                 } else {
