@@ -23,10 +23,18 @@ if ($mysql_url) {
     $pass = $parts['pass'];
     $db = ltrim($parts['path'], '/');
 
+} elseif (strpos($http_host, 'surgascard.com') !== false) {
+
+    // ✅ VPS PRODUCCIÓN (Tu nuevo servidor Nginx)
+    $host = '127.0.0.1';
+    $port = 3306;
+    $user = 'root'; // Tu usuario de MySQL en el VPS
+    $pass = 'TU_CONTRASEÑA_REAL_DE_MYSQL'; // Tu clave del VPS
+    $db = 'surgas';
+
 } else {
 
-    // ✅ LOCAL (XAMPP / Hosting normal)
-
+    // ✅ LOCAL (XAMPP / Tu PC)
     $host = 'localhost';
     $port = 3306;
     $user = 'root';
@@ -34,7 +42,6 @@ if ($mysql_url) {
     $db = 'surgas';
 
 }
-
 // ============================================================
 // CONSTANTES DE BD (compatibilidad con Database.php / PDO)
 // ============================================================
