@@ -78,11 +78,19 @@ define('SMS_GATEWAY_URL', 'http://192.168.1.34:8080/send-sms');
 define('SMS_GATEWAY_API_KEY', 'MY_SECRET_KEY_2024');
 
 // BASE_URL: automática según entorno
+// BASE_URL: automática según entorno
 if (getenv('MYSQL_URL')) {
+    // ✅ PRODUCCIÓN (Railway)
     $proto = $_SERVER['HTTP_X_FORWARDED_PROTO'] ?? 'https';
     $httpHost = $_SERVER['HTTP_X_FORWARDED_HOST'] ?? ($_SERVER['HTTP_HOST'] ?? 'localhost');
     define('BASE_URL', $proto . '://' . $httpHost . '/');
+} elseif (strpos(__DIR__, '/var/www/surgascard') !== false) {
+    // ✅ VPS PRODUCCIÓN (Nginx) - Directo a la raíz
+    $proto = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? "https" : "http";
+    $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    define('BASE_URL', $proto . '://' . $host . '/');
 } else {
+    // ✅ LOCAL (XAMPP) - Mantiene la subcarpeta
     $proto = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? "https" : "http";
     $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
     define('BASE_URL', $proto . '://' . $host . '/premia-surgas/');
