@@ -69,7 +69,7 @@ define('WABA_VERSION', 'v25.0');
 // —— API de Puntos de Venta (Node.js Microservice) ——
 // Por defecto usamos la API de producción en Railway para que funcione directamente local y producción.
 // Si deseas realizar pruebas con el microservicio corriendo localmente, descomenta la línea de localhost.
-define('PUNTOS_API_URL', 'https://api-puntos-venta-production-4a78.up.railway.app/api/puntos');
+define('PUNTOS_API_URL', 'https://api.surgascard.com/api/puntos');
 // define('PUNTOS_API_URL', 'http://localhost:3050/api/puntos');
 define('PUNTOS_API_KEY', 'surgas_puntos_api_2024_secret');
 
