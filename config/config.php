@@ -23,13 +23,13 @@ if ($mysql_url) {
     $pass = $parts['pass'];
     $db = ltrim($parts['path'], '/');
 
-} elseif (strpos($http_host, 'surgascard.com') !== false) {
+} elseif (strpos(__DIR__, '/var/www/surgascard') !== false) {
 
     // ✅ VPS PRODUCCIÓN (Tu nuevo servidor Nginx)
     $host = '127.0.0.1';
     $port = 3306;
-    $user = 'root'; // Tu usuario de MySQL en el VPS
-    $pass = 'TU_CONTRASEÑA_REAL_DE_MYSQL'; // Tu clave del VPS
+    $user = 'surgas_user'; // Tu usuario de MySQL en el VPS
+    $pass = 'SurgasPass2026#'; // Tu clave del VPS
     $db = 'surgas';
 
 } else {
