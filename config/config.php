@@ -26,7 +26,7 @@ if ($mysql_url) {
 } elseif (strpos(__DIR__, '/var/www/surgascard') !== false) {
 
     // ✅ VPS PRODUCCIÓN (Tu nuevo servidor Nginx)
-    $host = '127.0.0.1';
+    $host = 'localhost';
     $port = 3306;
     $user = 'surgas_user'; // Tu usuario de MySQL en el VPS
     $pass = 'SurgasPass2026#'; // Tu clave del VPS
