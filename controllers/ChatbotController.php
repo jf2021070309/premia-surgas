@@ -105,7 +105,7 @@ class ChatbotController {
 
             case 'esperando_cantidad':
                 $qty = $this->parseNumberInput($message);
-                if ($qty > 0) {
+                if ($qty > 0 && $qty <= 10) {
                     $data['cantidad'] = $qty;
                     $price = $qty * 62;
                     $reply = "{$qty} Balon de 10 kg precio S/.{$price}\n\nCompartenos tu ubicacion y la unidad estará llevando tu pedido.";
@@ -113,8 +113,8 @@ class ChatbotController {
                     $buttons = ['Compartir Ubicación'];
                     $nextState = 'esperando_ubicacion';
                 } else {
-                    $reply = "Por favor, ingresa una cantidad válida de balones (un número mayor a cero).";
-                    $speech = "Por favor, ingresa una cantidad válida de balones.";
+                    $reply = "Por favor, ingresa una cantidad válida de balones (un número entre 1 y 10).";
+                    $speech = "Por favor, ingresa una cantidad válida de balones, entre uno y diez.";
                 }
                 break;
 
@@ -331,7 +331,7 @@ class ChatbotController {
      * Supports spoken Spanish number words (uno, dos, tres...) and plain digits.
      */
     private function parseNumberInput(string $input): int {
-        $input = trim(strtolower($input));
+        $input = trim(mb_strtolower($input, 'UTF-8'));
 
         // First try plain numeric cast
         if (is_numeric($input)) {
@@ -358,8 +358,14 @@ class ChatbotController {
             'veinte'   => 20,
         ];
 
-        if (array_key_exists($input, $map)) {
-            return $map[$input];
+        // Split input into words and check each word
+        $words = preg_split('/[\s,.]+/', $input, -1, PREG_SPLIT_NO_EMPTY);
+        if ($words) {
+            foreach ($words as $word) {
+                if (array_key_exists($word, $map)) {
+                    return $map[$word];
+                }
+            }
         }
 
         // Try to extract the first number found in the string (e.g. "quiero 2 balones")

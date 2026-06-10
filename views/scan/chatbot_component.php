@@ -543,7 +543,7 @@
         }
         
         recognition = new SpeechRecognition();
-        recognition.continuous = true;
+        recognition.continuous = false;
         recognition.interimResults = true;
         
         // Use universal Latin American Spanish (es-419) which has high compatibility
