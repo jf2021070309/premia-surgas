@@ -60,24 +60,46 @@ class ClienteModel {
 
     public function create(array $data): int {
         $stmt = $this->db->prepare(
-            "INSERT INTO clientes (codigo, dni, nombre, razon_social, tipo_cliente, ruc, celular, direccion, departamento, token, password, creado_por)
-             VALUES (:codigo, :dni, :nombre, :razon_social, :tipo_cliente, :ruc, :celular, :direccion, :departamento, :token, :password, :creado_por)"
+            "INSERT INTO clientes (codigo, dni, nombre, razon_social, tipo_cliente, ruc, celular, direccion, departamento, token, password, creado_por, referido_por_id)
+             VALUES (:codigo, :dni, :nombre, :razon_social, :tipo_cliente, :ruc, :celular, :direccion, :departamento, :token, :password, :creado_por, :referido_por_id)"
         );
         $stmt->execute([
-            ':codigo'       => $data['codigo'],
-            ':dni'          => $data['dni'] ?? null,
-            ':nombre'       => $data['nombre'],
-            ':razon_social' => $data['razon_social'] ?? null,
-            ':tipo_cliente' => $data['tipo_cliente'],
-            ':ruc'          => $data['ruc'] ?? null,
-            ':celular'      => $data['celular'],
-            ':direccion'    => $data['direccion'],
-            ':departamento' => $data['departamento'],
-            ':token'        => $data['token'],
-            ':password'     => $data['password'] ?? null,
-            ':creado_por'   => $data['creado_por'],
+            ':codigo'          => $data['codigo'],
+            ':dni'             => $data['dni'] ?? null,
+            ':nombre'          => $data['nombre'],
+            ':razon_social'    => $data['razon_social'] ?? null,
+            ':tipo_cliente'    => $data['tipo_cliente'],
+            ':ruc'             => $data['ruc'] ?? null,
+            ':celular'         => $data['celular'],
+            ':direccion'       => $data['direccion'],
+            ':departamento'    => $data['departamento'],
+            ':token'           => $data['token'],
+            ':password'        => $data['password'] ?? null,
+            ':creado_por'      => $data['creado_por'],
+            ':referido_por_id' => $data['referido_por_id'] ?? null,
         ]);
         return (int) $this->db->lastInsertId();
+    }
+
+    /**
+     * Devuelve la lista de clientes referidos por un cliente específico.
+     */
+    public function getByReferidor(int $referidorId): array {
+        $stmt = $this->db->prepare(
+            "SELECT id, codigo, nombre, tipo_cliente, puntos, fecha_creacion
+             FROM clientes WHERE referido_por_id = ? ORDER BY fecha_creacion DESC"
+        );
+        $stmt->execute([$referidorId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Cuenta cuántos clientes ha referido un cliente.
+     */
+    public function getReferidosCount(int $referidorId): int {
+        $stmt = $this->db->prepare("SELECT COUNT(*) FROM clientes WHERE referido_por_id = ?");
+        $stmt->execute([$referidorId]);
+        return (int) $stmt->fetchColumn();
     }
 
     public function update(int $id, array $data): bool {

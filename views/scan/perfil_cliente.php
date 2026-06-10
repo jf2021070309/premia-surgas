@@ -2110,6 +2110,9 @@ if (!($readonly ?? false)) {
                     <div class="tab-btn" onclick="switchTab('seguridad', this)">
                         <i class='bx bx-lock-alt'></i> Seguridad
                     </div>
+                    <div class="tab-btn" id="tab-btn-red" onclick="switchTab('red', this); loadMiRed();">
+                        <i class='bx bx-network-chart'></i> Mi Red
+                    </div>
                     <div class="tab-btn" id="tab-btn-chat" onclick="switchTab('chat', this)">
                         <i class='bx bx-chat'></i> Chatbot
                     </div>
@@ -2351,6 +2354,84 @@ if (!($readonly ?? false)) {
                         <div id="vales-container" style="display: flex; flex-direction: column; gap: 1rem;"></div>
                     </div>
                 </div>
+
+
+                <!-- PANE 6: MI RED DE REFERIDOS -->
+                <?php if (!($readonly ?? false)): ?>
+                <div id="pane-red" class="tab-content-pane">
+                    <div style="max-width: 700px; margin: 0 auto;">
+
+                        <!-- Header Card -->
+                        <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 20px; padding: 2rem; color: white; margin-bottom: 1.5rem; position: relative; overflow: hidden;">
+                            <div style="position: absolute; right: -20px; top: -20px; width: 120px; height: 120px; background: rgba(255,255,255,0.04); border-radius: 50%;"></div>
+                            <div style="position: absolute; right: 30px; bottom: -30px; width: 80px; height: 80px; background: rgba(255,255,255,0.03); border-radius: 50%;"></div>
+                            <div style="position: relative;">
+                                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                                    <div style="background: rgba(255,255,255,0.1); width: 52px; height: 52px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.6rem;">
+                                        <i class='bx bx-network-chart'></i>
+                                    </div>
+                                    <div>
+                                        <div style="font-size: 1.25rem; font-weight: 800; letter-spacing: -0.5px;">Mi Red de Referidos</div>
+                                        <div style="font-size: 0.8rem; opacity: 0.65; margin-top: 2px;">Invita a personas y gana 2,000 puntos por cada registro</div>
+                                    </div>
+                                </div>
+
+                                <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; opacity: 0.6; margin-bottom: 0.5rem;">Tu link de referido</div>
+                                <div style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; padding: 0.9rem 1rem; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;">
+                                    <span id="ref-link-text" style="font-size: 0.8rem; font-weight: 600; opacity: 0.9; word-break: break-all; flex: 1;">Cargando...</span>
+                                    <button onclick="copyRefLink()" id="btn-copy-ref" style="background: white; color: #1e293b; border: none; border-radius: 8px; padding: 0.5rem 0.9rem; font-size: 0.75rem; font-weight: 800; cursor: pointer; white-space: nowrap; flex-shrink: 0; transition: all 0.2s;">
+                                        <i class='bx bx-copy'></i> Copiar
+                                    </button>
+                                </div>
+
+                                <div style="display: flex; gap: 0.75rem; margin-top: 1rem;">
+                                    <button onclick="shareRefLink('whatsapp')" style="flex: 1; background: rgba(37,211,102,0.2); color: #4ade80; border: 1px solid rgba(37,211,102,0.3); border-radius: 10px; padding: 0.65rem; font-size: 0.75rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                                        <i class='bx bxl-whatsapp' style="font-size: 1.1rem;"></i> WhatsApp
+                                    </button>
+                                    <button onclick="shareRefLink('share')" style="flex: 1; background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; padding: 0.65rem; font-size: 0.75rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                                        <i class='bx bx-share-alt' style="font-size: 1.1rem;"></i> Compartir
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Stats -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                            <div style="background: #fff; border-radius: 16px; padding: 1.25rem; border: 1.5px solid #f1f5f9; text-align: center;">
+                                <div id="ref-total" style="font-size: 2rem; font-weight: 900; color: #1e293b;">—</div>
+                                <div style="font-size: 0.7rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">Clientes Referidos</div>
+                            </div>
+                            <div style="background: #fff; border-radius: 16px; padding: 1.25rem; border: 1.5px solid #f1f5f9; text-align: center;">
+                                <div id="ref-pts" style="font-size: 2rem; font-weight: 900; color: #7c3aed;">—</div>
+                                <div style="font-size: 0.7rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">Puntos Ganados x Ref.</div>
+                            </div>
+                        </div>
+
+                        <!-- Lista de referidos -->
+                        <div style="background: #fff; border-radius: 16px; border: 1.5px solid #f1f5f9; overflow: hidden;">
+                            <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #f8fafc; display: flex; align-items: center; gap: 8px;">
+                                <i class='bx bx-group' style="color: #7c3aed;"></i>
+                                <span style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: #475569;">Clientes que referiste</span>
+                            </div>
+                            <div id="ref-lista">
+                                <div style="padding: 3rem; text-align: center; opacity: 0.35;">
+                                    <i class='bx bx-loader-alt bx-spin' style="font-size: 2rem; display: block; margin-bottom: 0.5rem;"></i>
+                                    <span style="font-size: 0.85rem; font-weight: 600;">Cargando red...</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Info box -->
+                        <div style="background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: 14px; padding: 1.25rem; margin-top: 1.25rem; display: flex; gap: 0.75rem; align-items: flex-start;">
+                            <i class='bx bx-info-circle' style="color: #16a34a; font-size: 1.3rem; flex-shrink: 0; margin-top: 1px;"></i>
+                            <div style="font-size: 0.82rem; color: #15803d; font-weight: 600; line-height: 1.6;">
+                                <strong>¿Cómo funciona?</strong> Comparte tu link único con amigos o familiares. Cuando se registren usando tu link y completen su perfil, <strong>recibirás automáticamente 2,000 puntos</strong> en tu cuenta. ¡No hay límite de referidos!
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <?php endif; ?>
 
                 <!-- PANE 5: CHATBOT -->
                 <?php include __DIR__ . '/chatbot_component.php'; ?>
@@ -3053,7 +3134,97 @@ if (!($readonly ?? false)) {
             }
         }
 
-        
+        // --- Logic for Mi Red ---
+        window.loadMiRed = function() {
+            const container = document.getElementById('ref-lista');
+            if(!container) return;
+            
+            fetch(BASE_URL + 'clientes/miRed')
+                .then(r => r.json())
+                .then(data => {
+                    if(data.success) {
+                        document.getElementById('ref-total').textContent = data.total;
+                        // Each referral gives 2000 pts
+                        document.getElementById('ref-pts').textContent = (data.total * 2000).toLocaleString();
+                        
+                        document.getElementById('ref-link-text').textContent = data.link_referido;
+                        
+                        let html = '';
+                        if(data.total === 0) {
+                            html = `<div style="padding: 3rem; text-align: center; opacity: 0.4;">
+                                <i class='bx bx-user-plus' style="font-size: 2.5rem; display: block; margin-bottom: 0.5rem;"></i>
+                                <span style="font-size: 0.85rem; font-weight: 600;">Aún no has referido a nadie.</span>
+                            </div>`;
+                        } else {
+                            data.referidos.forEach(r => {
+                                const d = new Date(r.fecha_creacion);
+                                const dateStr = d.toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
+                                html += `
+                                <div style="padding: 1rem 1.5rem; border-bottom: 1px solid #f8fafc; display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                        <div style="width: 38px; height: 38px; background: #f1f5f9; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #475569; font-size: 1.2rem;">
+                                            <i class='bx bx-user'></i>
+                                        </div>
+                                        <div>
+                                            <div style="font-size: 0.9rem; font-weight: 800; color: #1e293b;">${r.nombre}</div>
+                                            <div style="font-size: 0.7rem; color: #94a3b8; font-weight: 600;">Registrado el ${dateStr}</div>
+                                        </div>
+                                    </div>
+                                    <div style="background: #ecfdf5; color: #10b981; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 800;">
+                                        +2,000 pts
+                                    </div>
+                                </div>`;
+                            });
+                        }
+                        container.innerHTML = html;
+                    } else {
+                        container.innerHTML = `<div style="padding: 2rem; text-align: center; color: #e11d48; font-weight: 600;">Error al cargar red</div>`;
+                    }
+                })
+                .catch(e => {
+                    container.innerHTML = `<div style="padding: 2rem; text-align: center; color: #e11d48; font-weight: 600;">Error de conexión</div>`;
+                });
+        };
+
+        window.copyRefLink = function() {
+            const link = document.getElementById('ref-link-text').textContent;
+            if(!link || link === 'Cargando...') return;
+            
+            navigator.clipboard.writeText(link).then(() => {
+                const btn = document.getElementById('btn-copy-ref');
+                btn.innerHTML = "<i class='bx bx-check'></i> Copiado";
+                btn.style.background = "#10b981";
+                btn.style.color = "white";
+                setTimeout(() => {
+                    btn.innerHTML = "<i class='bx bx-copy'></i> Copiar";
+                    btn.style.background = "white";
+                    btn.style.color = "#1e293b";
+                }, 2000);
+            });
+        };
+
+        window.shareRefLink = function(method) {
+            const link = document.getElementById('ref-link-text').textContent;
+            if(!link || link === 'Cargando...') return;
+            
+            const text = "¡Hola! Regístrate en Premia Surgas con mi enlace y empieza a acumular puntos por tu gas: " + link;
+            
+            if (method === 'whatsapp') {
+                window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+            } else if (method === 'share') {
+                if (navigator.share) {
+                    navigator.share({
+                        title: 'Premia Surgas - Link de Referido',
+                        text: text,
+                        url: link
+                    }).catch(console.error);
+                } else {
+                    window.copyRefLink();
+                    Swal.fire('Enlace copiado', 'No se pudo abrir el menú de compartir, pero el enlace fue copiado.', 'success');
+                }
+            }
+        };
+
     </script>
 
     <!-- Voice Agent Overlay (Siri Mode) -->

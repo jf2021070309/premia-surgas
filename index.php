@@ -75,6 +75,8 @@ $routes = [
     ['POST', 'clientes/promover-afiliado', 'ClienteController', 'promoverAfiliado'],
     ['POST', 'clientes/changePassword', 'ClienteController', 'changePassword'],
     ['POST', 'clientes/updateProfile',  'ClienteController', 'updateProfile'],
+    ['GET',  'clientes/buscarPorCodigo','ClienteController', 'buscarPorCodigo'],
+    ['GET',  'clientes/miRed',          'ClienteController', 'miRed'],
 
     // —— Productos (Admin) ——
     ['GET',  'productos',          'ProductoController', 'index'],

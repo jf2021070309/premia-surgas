@@ -40,6 +40,7 @@ class ClienteController
         $celular = trim($data['celular'] ?? '');
         $password = trim($data['password'] ?? '');
         $dep = trim($data['departamento'] ?? 'Tacna');
+        $codigoRef = trim($data['codigo_referido'] ?? '');
 
         if (!$dni || !$nombre || !$celular || !$password) {
             echo json_encode(['success' => false, 'message' => 'Todos los campos son obligatorios.']);
@@ -59,28 +60,45 @@ class ClienteController
             exit;
         }
 
+        // Validar referidor
+        $referidorId = null;
+        $referidor = null;
+        if ($codigoRef) {
+            $referidor = $model->findByCodigo($codigoRef);
+            if ($referidor) {
+                $referidorId = $referidor['id'];
+            }
+        }
+
         $codigo = $model->generarCodigo();
         $token = ClienteModel::generarToken();
 
         $id = $model->create([
-            'codigo' => $codigo,
-            'dni' => $dni,
-            'nombre' => $nombre,
-            'razon_social' => null,
-            'tipo_cliente' => 'Normal',
-            'ruc' => null,
-            'celular' => $celular,
-            'direccion' => '',
-            'departamento' => $dep,
-            'token' => $token,
-            'password' => password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]),
-            'creado_por' => null,
+            'codigo'          => $codigo,
+            'dni'             => $dni,
+            'nombre'          => $nombre,
+            'razon_social'    => null,
+            'tipo_cliente'    => 'Normal',
+            'ruc'             => null,
+            'celular'         => $celular,
+            'direccion'       => '',
+            'departamento'    => $dep,
+            'token'           => $token,
+            'password'        => password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]),
+            'creado_por'      => null,
+            'referido_por_id' => $referidorId,
         ]);
 
         if ($id) {
             $this->audit->registrar($id, 'AUTOREGISTRO_CLIENTE', "Nuevo cliente registrado vía web: $nombre ($codigo)", 'SEGURIDAD');
             SmsService::send($celular, "¡Hola $nombre! Bienvenido a Premia Surgas. Tu código es $codigo. Inicia sesión con tu DNI y la contraseña que elegiste.");
 
+            // Premiar referidor con 2000 puntos
+            if ($referidorId && $referidor) {
+                $model->sumarPuntos($referidorId, 2000);
+                $this->audit->registrar($referidorId, 'BONO_REFERIDO', "Ganó 2000 pts por referir a $nombre ($codigo)", 'REFERIDOS');
+                SmsService::send($referidor['celular'] ?? '', "¡Felicidades {$referidor['nombre']}! Ganaste 2000 puntos por referir a $nombre a Premia Surgas.");
+            }
         }
 
         echo json_encode(['success' => true, 'message' => 'Registro exitoso. Ya puedes iniciar sesión.']);
@@ -190,33 +208,103 @@ class ClienteController
             exit;
         }
 
+        // Referidor: conductor activo puede referir un cliente a otro cliente que ya existe
+        $codigoRef = trim($data['codigo_referido'] ?? '');
+        $referidorId = null;
+        $referidor = null;
+        if ($codigoRef) {
+            $referidor = $model->findByCodigo($codigoRef);
+            if ($referidor) {
+                $referidorId = $referidor['id'];
+            }
+        }
+
         $codigo = $model->generarCodigo();
         $token = ClienteModel::generarToken();
 
         $defaultPassword = ($tipo_cliente === 'Normal') ? $dni : $ruc;
 
         $id = $model->create([
-            'codigo' => $codigo,
-            'dni' => $dni,
-            'nombre' => $nombre,
-            'razon_social' => $razon_social,
-            'tipo_cliente' => $tipo_cliente,
-            'ruc' => $ruc,
-            'celular' => $celular,
-            'direccion' => $dir,
-            'departamento' => $dep,
-            'token' => $token,
-            'password' => password_hash($defaultPassword, PASSWORD_BCRYPT, ['cost' => 12]),
-            'creado_por' => $_SESSION['id_usuario'],
+            'codigo'          => $codigo,
+            'dni'             => $dni,
+            'nombre'          => $nombre,
+            'razon_social'    => $razon_social,
+            'tipo_cliente'    => $tipo_cliente,
+            'ruc'             => $ruc,
+            'celular'         => $celular,
+            'direccion'       => $dir,
+            'departamento'    => $dep,
+            'token'           => $token,
+            'password'        => password_hash($defaultPassword, PASSWORD_BCRYPT, ['cost' => 12]),
+            'creado_por'      => $_SESSION['id_usuario'],
+            'referido_por_id' => $referidorId,
         ]);
 
         if ($id) {
             $this->audit->registrar($_SESSION['id_usuario'], 'REGISTRO_CLIENTE', "Nuevo cliente: $nombre ($codigo)", 'CLIENTES');
             SmsService::send($celular, "¡Bienvenido a Premia Surgas, $nombre! Tu código de cliente es $codigo. Ya puedes acumular puntos en nuestras estaciones.");
 
+            // Premiar referidor con 2000 puntos
+            if ($referidorId && $referidor) {
+                $model->sumarPuntos($referidorId, 2000);
+                $this->audit->registrar($referidorId, 'BONO_REFERIDO', "Ganó 2000 pts por referir a $nombre ($codigo)", 'REFERIDOS');
+                SmsService::send($referidor['celular'] ?? '', "¡Felicidades {$referidor['nombre']}! Ganaste 2000 puntos por referir a $nombre a Premia Surgas.");
+            }
         }
 
         echo json_encode(['success' => true, 'id' => $id, 'codigo' => $codigo]);
+        exit;
+    }
+
+    /**
+     * API pública: GET /clientes/buscarPorCodigo?codigo=CLI-000001
+     * Verifica si un código de referido es válido y devuelve el nombre del referidor.
+     */
+    public function buscarPorCodigo(): void
+    {
+        header('Content-Type: application/json');
+        $codigo = trim($_GET['codigo'] ?? '');
+        if (!$codigo) {
+            echo json_encode(['success' => false]);
+            exit;
+        }
+        $model = new ClienteModel();
+        $cliente = $model->findByCodigo($codigo);
+        if ($cliente && $cliente['estado'] == 1) {
+            echo json_encode(['success' => true, 'nombre' => $cliente['nombre']]);
+        } else {
+            echo json_encode(['success' => false]);
+        }
+        exit;
+    }
+
+    /**
+     * API: GET /clientes/miRed
+     * Devuelve la lista de referidos y el enlace de referido del cliente autenticado (rol=cliente).
+     */
+    public function miRed(): void
+    {
+        header('Content-Type: application/json');
+        if (($_SESSION['rol'] ?? '') !== 'cliente') {
+            echo json_encode(['success' => false, 'message' => 'No autorizado.']);
+            exit;
+        }
+        $id = $_SESSION['id_cliente'] ?? $_SESSION['id_usuario'] ?? 0;
+        $model = new ClienteModel();
+        $cliente = $model->findById((int)$id);
+        if (!$cliente) {
+            echo json_encode(['success' => false, 'message' => 'Cliente no encontrado.']);
+            exit;
+        }
+        $referidos = $model->getByReferidor((int)$id);
+        $linkReferido = BASE_URL . 'registro?ref=' . $cliente['codigo'];
+        echo json_encode([
+            'success'      => true,
+            'total'        => count($referidos),
+            'referidos'    => $referidos,
+            'link_referido'=> $linkReferido,
+            'codigo'       => $cliente['codigo'],
+        ]);
         exit;
     }
 

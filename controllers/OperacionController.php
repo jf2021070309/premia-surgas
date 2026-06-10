@@ -22,11 +22,18 @@ class OperacionController {
         
         $precio = (float) ($_POST['precio_estandar'] ?? 0);
         $descuento = (float) ($_POST['descuento'] ?? 0);
-        $precio_final = $precio - $descuento;
-        $puntos = (int) ($precio_final - ($descuento * 10));
+        $nombre = $_POST['nombre'] ?? '';
+
+        if (stripos($nombre, 'Recarga') !== false && stripos($nombre, 'gas') !== false) {
+            $descuento = 2.00;
+            $puntos = 2000;
+        } else {
+            $precio_final = $precio - $descuento;
+            $puntos = (int) ($precio_final - ($descuento * 10));
+        }
 
         $data = [
-            'nombre' => $_POST['nombre'] ?? '',
+            'nombre' => $nombre,
             'puntos' => $puntos,
             'precio_estandar' => $precio,
             'descuento' => $descuento,
@@ -53,11 +60,18 @@ class OperacionController {
 
         $precio = (float) ($_POST['precio_estandar'] ?? 0);
         $descuento = (float) ($_POST['descuento'] ?? 0);
-        $precio_final = $precio - $descuento;
-        $puntos = (int) ($precio_final - ($descuento * 10));
+        $nombre = $_POST['nombre'] ?? '';
+
+        if (stripos($nombre, 'Recarga') !== false && stripos($nombre, 'gas') !== false) {
+            $descuento = 2.00;
+            $puntos = 2000;
+        } else {
+            $precio_final = $precio - $descuento;
+            $puntos = (int) ($precio_final - ($descuento * 10));
+        }
 
         $data = [
-            'nombre' => $_POST['nombre'] ?? '',
+            'nombre' => $nombre,
             'puntos' => $puntos,
             'precio_estandar' => $precio,
             'descuento' => $descuento,

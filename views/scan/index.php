@@ -687,6 +687,15 @@
                                         </div>
                                     </div>
 
+                                    <div>
+                                        <label class="scan-label" style="margin-bottom: 0.75rem; color: #000; font-size: 0.82rem; letter-spacing: 1.5px;">¿ALGUIEN LE RECOMENDÓ? (OPCIONAL)</label>
+                                        <div style="display: flex; gap: 10px;">
+                                            <input type="text" id="recomendador-input" class="elite-input" placeholder="DNI, Celular o Código" style="height: 50px;">
+                                            <button onclick="verificarRecomendador()" type="button" id="btn-verificar-rec" style="background: #e2e8f0; color: #1e293b; border: none; border-radius: 12px; padding: 0 1rem; font-weight: 800; font-size: 0.8rem; cursor: pointer; transition: 0.3s; flex-shrink: 0;">Verificar</button>
+                                        </div>
+                                        <div id="recomendador-status" style="font-size: 0.75rem; font-weight: 700; margin-top: 8px;"></div>
+                                    </div>
+
                                     <div class="elite-abono-card" style="background: #fff; border: 1px solid #e2e8f0; border-radius: 20px; padding: 1.5rem; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 12px rgba(0,0,0,0.02); margin-top: 0.5rem; gap: 1.5rem;">
                                         <div style="flex: 1;">
                                             <label class="scan-label" style="font-size: 0.65rem; margin-bottom: 0.4rem; opacity: 0.5;">ABONO PROYECTADO</label>
@@ -952,6 +961,42 @@
             }
         }
 
+        async function verificarRecomendador() {
+            const input = document.getElementById('recomendador-input');
+            const statusBox = document.getElementById('recomendador-status');
+            const codigo = input.value.trim();
+            const btn = document.getElementById('btn-verificar-rec');
+
+            if (!codigo) {
+                statusBox.innerHTML = '';
+                return;
+            }
+
+            btn.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i>";
+            btn.disabled = true;
+
+            try {
+                const res = await fetch(baseUrl + 'clientes/buscarPorCodigo?codigo=' + encodeURIComponent(codigo));
+                const data = await res.json();
+
+                if (data.success) {
+                    // Check if they are trying to refer themselves
+                    const currentClientName = document.getElementById('res-name').innerText;
+                    if (data.nombre === currentClientName) {
+                        statusBox.innerHTML = '<span style="color:#ef4444;"><i class="bx bx-error"></i> No puede recomendarse a sí mismo</span>';
+                    } else {
+                        statusBox.innerHTML = '<span style="color:#10b981;"><i class="bx bx-check-circle"></i> Válido: ' + data.nombre + '</span>';
+                    }
+                } else {
+                    statusBox.innerHTML = '<span style="color:#ef4444;"><i class="bx bx-error"></i> Código no válido</span>';
+                }
+            } catch (e) {
+                statusBox.innerHTML = '<span style="color:#ef4444;">Error de red</span>';
+            }
+            btn.innerHTML = "Verificar";
+            btn.disabled = false;
+        }
+
         function updateSubtotal() {
             const select = document.getElementById('main-op-type');
             if(!select) return;
@@ -1049,6 +1094,8 @@
                 if (operations.length > 1) {
                     detalleString += `\n──────────\nTOTAL A PAGAR: S/ ${totalPrice.toFixed(2)}\nPUNTOS: ${total} pts`;
                 }
+                const recomendadorCodigo = document.getElementById('recomendador-input') ? document.getElementById('recomendador-input').value.trim() : '';
+
                 const res = await fetch(baseUrl + 'scan/registrar', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -1057,6 +1104,7 @@
                         puntos: total, 
                         monto: totalPrice,
                         detalle: detalleString,
+                        recomendador_codigo: recomendadorCodigo,
                         items: operations.map(op => ({
                             nombre: op.name,
                             cantidad: op.qty,

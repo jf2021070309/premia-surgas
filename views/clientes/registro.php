@@ -92,6 +92,15 @@
         <div class="card">
             <form @submit.prevent="handleRegistro">
                 
+                <!-- Banner de referido -->
+                <div v-if="referidorValido" style="background: linear-gradient(135deg, #000 0%, #333 100%); color: white; border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.8rem; font-size: 0.88rem;">
+                    <i class='bx bx-gift' style="font-size: 1.5rem; flex-shrink:0;"></i>
+                    <div>
+                        <div style="font-weight: 700; margin-bottom: 2px;">¡Te han referido!</div>
+                        <div style="opacity: 0.85;">Estás siendo registrado por <strong>{{ referidorNombre }}</strong>. Al completar tu registro, tu referidor ganará <strong>2,000 puntos</strong>.</div>
+                    </div>
+                </div>
+                
                 <div class="form-row">
                     <div class="input-group">
                         <label class="form-label">DNI</label>
@@ -157,6 +166,9 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
     const { createApp } = Vue;
+    const urlParams = new URLSearchParams(window.location.search);
+    const codigoReferido = urlParams.get('ref') || '';
+
     createApp({
         data() {
             return {
@@ -165,11 +177,28 @@
                     nombre: '',
                     celular: '',
                     departamento: 'Tacna',
-                    password: ''
+                    password: '',
+                    codigo_referido: codigoReferido
                 },
                 showPassword: false,
                 loading: false,
-                buscandoDni: false
+                buscandoDni: false,
+                referidorNombre: '',
+                referidorValido: false,
+                buscandoRef: false
+            }
+        },
+        async created() {
+            if (codigoReferido) {
+                this.buscandoRef = true;
+                try {
+                    const res = await axios.get('<?= BASE_URL ?>clientes/buscarPorCodigo?codigo=' + codigoReferido);
+                    if (res.data.success) {
+                        this.referidorNombre = res.data.nombre;
+                        this.referidorValido = true;
+                    }
+                } catch(e) {}
+                finally { this.buscandoRef = false; }
             }
         },
         methods: {

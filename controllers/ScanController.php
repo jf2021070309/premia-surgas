@@ -227,6 +227,7 @@ class ScanController
         $monto = (float) ($data['monto'] ?? 0);
         $detalle = trim($data['detalle'] ?? '');
         $items = $data['items'] ?? [];
+        $recomendadorCodigo = trim($data['recomendador_codigo'] ?? '');
 
         if (!$clienteId || !$puntos) {
             $this->json(['success' => false, 'message' => 'Datos incompletos.']);
@@ -239,8 +240,33 @@ class ScanController
         // Si es admin, se aprueba automáticamente. Si es conductor, queda pendiente.
         $estado = ($rol === 'admin') ? 'aprobado' : 'pendiente';
 
-        // 1. Registrar "venta"
-        $idVenta = $ventaModel->create($clienteId, $_SESSION['id_usuario'], $monto, $puntos, $detalle, $items, $estado);
+        // Determinar puntos para Comprador y Recomendador
+        $puntosComprador = $puntos;
+        $puntosRecomendador = 0;
+        $recomendador = null;
+
+        if (!empty($recomendadorCodigo)) {
+            if (strlen($recomendadorCodigo) === 64 && ctype_xdigit($recomendadorCodigo)) {
+                $recomendador = $clienteModel->buscarPorToken($recomendadorCodigo);
+            }
+            if (!$recomendador) {
+                $recomendador = $clienteModel->findByCodigo($recomendadorCodigo);
+            }
+            if (!$recomendador && preg_match('/^\d{8}$/', $recomendadorCodigo)) {
+                $recomendador = $clienteModel->findByDni($recomendadorCodigo);
+            }
+            if (!$recomendador && preg_match('/^\d{11}$/', $recomendadorCodigo)) {
+                $recomendador = $clienteModel->findByRuc($recomendadorCodigo);
+            }
+
+            if ($recomendador && $recomendador['id'] !== $clienteId) {
+                $puntosComprador = 0;
+                $puntosRecomendador = $puntos;
+            }
+        }
+
+        // 1. Registrar "venta" para el comprador
+        $idVenta = $ventaModel->create($clienteId, $_SESSION['id_usuario'], $monto, $puntosComprador, $detalle, $items, $estado);
 
         if ($idVenta) {
             $message = 'Puntos registrados correctamente.';
@@ -250,16 +276,31 @@ class ScanController
 
             if ($estado === 'aprobado') {
                 // 2. Actualizar puntos totales del cliente (solo si está aprobado)
-                $clienteModel->sumarPuntos($clienteId, $puntos);
+                $clienteModel->sumarPuntos($clienteId, $puntosComprador);
 
                 // 3. Evaluar reglas de incentivos
                 $incentivoModel = new IncentivoModel();
                 $incentivoModel->evaluarMetas($clienteId);
 
                 // --- SMS Gateway ---
-                if (!empty($c['celular'])) {
-                    $msg = "Hola {$c['nombre']}, se te han asignado $puntos puntos. ¡Sigue acumulando para grandes premios en Premia Surgas!";
+                if ($puntosComprador > 0 && !empty($c['celular'])) {
+                    $msg = "Hola {$c['nombre']}, se te han asignado $puntosComprador puntos. ¡Sigue acumulando para grandes premios en Premia Surgas!";
                     SmsService::send($c['celular'], $msg);
+                }
+
+                // 4. Bono a Recomendador si existe
+                if ($puntosRecomendador > 0 && $recomendador) {
+                    $clienteModel->sumarPuntos($recomendador['id'], $puntosRecomendador);
+                    
+                    // Registrar el movimiento en el historial de ventas para que se refleje en su Actividad
+                    $ventaModel->create($recomendador['id'], $_SESSION['id_usuario'], 0, $puntosRecomendador, "Bono por Recomendar venta a {$c['nombre']}", [], 'aprobado');
+
+                    if (!empty($recomendador['celular'])) {
+                        $msgReco = "¡Felicidades {$recomendador['nombre']}! Ganaste $puntosRecomendador puntos porque un vecino que recomendaste hizo un pedido.";
+                        SmsService::send($recomendador['celular'], $msgReco);
+                    }
+                    $audit = new AuditoriaModel();
+                    $audit->registrar($_SESSION['id_usuario'], 'BONO_RECOMENDACION', "Otorgó $puntosRecomendador pts a {$recomendador['nombre']} por recomendar venta a {$c['nombre']}", 'RECARGAS');
                 }
             } else {
                 $message = 'Puntos registrados. Pendiente de aprobación por administración.';
