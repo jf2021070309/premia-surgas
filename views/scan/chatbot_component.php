@@ -1273,6 +1273,15 @@
     }
 
     function shareLocation() {
+        // Stop microphone immediately to prevent capturing ambient sounds during GPS prompts
+        if (isListening) {
+            isListening = false;
+            if (recognition) {
+                try { recognition.stop(); } catch(e) {}
+            }
+            stopSpeechRecognition();
+        }
+
         if (!navigator.geolocation) {
             Swal.fire('Error', 'Tu navegador no soporta geolocalización', 'error');
             return;
@@ -1312,6 +1321,15 @@
 
         if (inputEl && !text) {
             inputEl.value = '';
+        }
+
+        // Stop microphone if listening to avoid capture conflicts
+        if (isListening) {
+            isListening = false;
+            if (recognition) {
+                try { recognition.stop(); } catch(e) {}
+            }
+            stopSpeechRecognition();
         }
 
         appendMessage(msg, false);

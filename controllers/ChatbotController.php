@@ -313,8 +313,11 @@ class ChatbotController {
             
             foreach ($words as $word) {
                 foreach ($keywordsToCheck as $kw) {
+                    $len = strlen($kw);
+                    // Do not allow edit distance tolerance for very short keywords (2 or fewer chars)
+                    $umbral = ($len <= 2) ? 0 : max(1, (int)floor($len * 0.4));
+                    
                     $dist = levenshtein($word, $kw);
-                    $umbral = max(1, (int)floor(strlen($kw) * 0.4)); // 40% tolerance, at least 1 edit
                     if ($dist < $menorDistancia && $dist <= $umbral) {
                         $menorDistancia = $dist;
                         $mejorOpcion = $opcion;
