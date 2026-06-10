@@ -1988,7 +1988,17 @@ if (!($readonly ?? false)) {
                                         <span style="font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">Documento</span>
                                     </div>
                                     <span style="font-size: 1.05rem; font-weight: 700; color: #0f172a; padding-left: 2px;">
-                                        <?= htmlspecialchars($cliente['dni'] ?? $cliente['ruc'] ?? 'No registrado') ?>
+                                        <?php 
+                                            $docVal = trim($cliente['dni'] ?? $cliente['ruc'] ?? '');
+                                            if (empty($docVal)) {
+                                                echo 'No registrado';
+                                            } elseif ($readonly) {
+                                                $len = strlen($docVal);
+                                                echo htmlspecialchars(substr($docVal, 0, 2) . str_repeat('*', max(1, $len - 4)) . substr($docVal, -2));
+                                            } else {
+                                                echo htmlspecialchars($docVal);
+                                            }
+                                        ?>
                                     </span>
                                 </div>
                             </div>
@@ -2001,7 +2011,17 @@ if (!($readonly ?? false)) {
                                         <span style="font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">Teléfono</span>
                                     </div>
                                     <span style="font-size: 1.05rem; font-weight: 700; color: #0f172a; padding-left: 2px;">
-                                        <?= htmlspecialchars($cliente['celular'] ?? 'No registrado') ?>
+                                        <?php 
+                                            $telVal = trim($cliente['celular'] ?? '');
+                                            if (empty($telVal)) {
+                                                echo 'No registrado';
+                                            } elseif ($readonly) {
+                                                $len = strlen($telVal);
+                                                echo htmlspecialchars(substr($telVal, 0, 3) . str_repeat('*', max(1, $len - 5)) . substr($telVal, -2));
+                                            } else {
+                                                echo htmlspecialchars($telVal);
+                                            }
+                                        ?>
                                     </span>
                                 </div>
                             </div>
@@ -2042,7 +2062,23 @@ if (!($readonly ?? false)) {
                                         <span style="font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">Dirección de Residencia</span>
                                     </div>
                                     <span style="font-size: 0.95rem; font-weight: 600; color: #475569; line-height: 1.5; padding-left: 2px;">
-                                        <?= htmlspecialchars(($cliente['direccion'] ?? 'Sin dirección registrada') . ($cliente['departamento'] ? ', ' . $cliente['departamento'] : '')) ?>
+                                        <?php 
+                                            $dirVal = trim($cliente['direccion'] ?? '');
+                                            $depVal = trim($cliente['departamento'] ?? '');
+                                            if (empty($dirVal)) {
+                                                $dirDisplay = 'Sin dirección registrada';
+                                            } elseif ($readonly) {
+                                                $len = strlen($dirVal);
+                                                if ($len <= 7) {
+                                                    $dirDisplay = str_repeat('*', $len);
+                                                } else {
+                                                    $dirDisplay = htmlspecialchars(substr($dirVal, 0, 4) . str_repeat('*', $len - 7) . substr($dirVal, -3));
+                                                }
+                                            } else {
+                                                $dirDisplay = htmlspecialchars($dirVal);
+                                            }
+                                            echo $dirDisplay . ($depVal ? ', ' . htmlspecialchars($depVal) : '');
+                                        ?>
                                     </span>
                                 </div>
                             </div>
