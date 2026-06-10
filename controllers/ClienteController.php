@@ -269,7 +269,20 @@ class ClienteController
             exit;
         }
         $model = new ClienteModel();
-        $cliente = $model->findByCodigo($codigo);
+        $cliente = null;
+        if (strlen($codigo) === 64 && ctype_xdigit($codigo)) {
+            $cliente = $model->buscarPorToken($codigo);
+        }
+        if (!$cliente) {
+            $cliente = $model->findByCodigo($codigo);
+        }
+        if (!$cliente && preg_match('/^\d{8}$/', $codigo)) {
+            $cliente = $model->findByDni($codigo);
+        }
+        if (!$cliente && preg_match('/^\d{11}$/', $codigo)) {
+            $cliente = $model->findByRuc($codigo);
+        }
+
         if ($cliente && $cliente['estado'] == 1) {
             echo json_encode(['success' => true, 'nombre' => $cliente['nombre']]);
         } else {
