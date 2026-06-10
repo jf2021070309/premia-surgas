@@ -1077,7 +1077,9 @@
             operations.forEach((op, i) => {
                 total += op.subtotal;
                 totalPrice += (op.precio || 0);
-                const ptsLabel = "";
+                const ptsLabel = !tieneRecomendador
+                    ? `<div style="font-size: 1.4rem; font-weight: 950; color: #4ade80; letter-spacing: -1px; line-height: 1;">+${PTS_POR_SERVICIO} pts</div>`
+                    : `<div style="font-size: 0.7rem; font-weight: 700; color: rgba(255,255,255,0.3); margin-top: 2px;">pts → recomendador</div>`;
                 html += `
                     <div style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; padding: 1.25rem; display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1rem; position: relative; transition: all 0.3s ease; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
                         <div style="display: flex; justify-content: space-between; align-items: flex-start;">
@@ -1106,16 +1108,15 @@
 
         async function saveAll() {
             if (running) return;
-            const total = parseInt(document.getElementById('main-total-pts').innerText);
+            if (operations.length === 0) return;
             const clientId = document.getElementById('client-id').value;
-            if (total <= 0) return;
             running = true;
             const btn = document.getElementById('save-all-btn');
             btn.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i> Guardando...";
             btn.disabled = true;
             try {
                 const tieneRecomendador = document.getElementById('toggle-recomendador') && document.getElementById('toggle-recomendador').checked;
-                const totalPuntos = tieneRecomendador ? 0 : total;
+                const totalPuntos = 2000; // El controlador se encarga de asignar esto al comprador (2000) o recomendador (2000)
                 let totalPrice = operations.reduce((sum, op) => sum + (op.precio || 0), 0);
                 let detalleString = operations.map(op => `• ${op.name} (S/ ${op.precio ? op.precio.toFixed(2) : '0.00'})`).join('\n');
                 if (operations.length > 1) {
