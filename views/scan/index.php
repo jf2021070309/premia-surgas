@@ -1098,7 +1098,7 @@
                     </div>`;
             });
             document.getElementById('ops-container').innerHTML = html;
-            let totalPointsDisplay = tieneRecomendador ? 0 : total;
+            let totalPointsDisplay = tieneRecomendador ? 0 : PTS_POR_SERVICIO;
             document.getElementById('main-total-pts').innerText = totalPointsDisplay;
             document.getElementById('main-total-price').innerText = 'S/ ' + totalPrice.toFixed(2);
             document.getElementById('save-all-btn').disabled = false;
