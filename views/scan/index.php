@@ -1087,6 +1087,7 @@
                 running = false;
                 btn.innerHTML = "<i class='bx bx-check-circle'></i> Registrar Puntos";
                 btn.disabled = false;
+            }
         }
 
         document.addEventListener('DOMContentLoaded', () => {

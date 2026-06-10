@@ -5,8 +5,8 @@
  */
 $current_url = trim($_GET['url'] ?? '', '/');
 
-$sidebarRole = $sidebarRole ?? 'cliente';
-$isGuest = !isset($sidebarRole);
+$sidebarRole = $_SESSION['rol'] ?? $sidebarRole ?? 'cliente';
+$isGuest = !isset($_SESSION['rol']);
 
 if (!function_exists('isActiveLink')) {
     function isActiveLink($targetPath, $currentUrl)

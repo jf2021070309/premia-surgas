@@ -4,14 +4,16 @@ $pageSubtitle = $pageSubtitle ?? '';
 $pageIcon     = $pageIcon     ?? ($pageTitle === 'Mi Perfil' ? 'bx-user-circle' : 'bx-grid-alt');
 
 // Nombre del usuario de sesión
-$adminName = $_SESSION['nombre_usuario'] ?? $_SESSION['nombre_cliente'] ?? $_SESSION['usuario'] ?? 'Usuario';
-$rawRole   = $_SESSION['rol'] ?? 'admin';
+$isGuestHeader = !isset($_SESSION['rol']);
+$adminName = $_SESSION['nombre_usuario'] ?? $_SESSION['nombre_cliente'] ?? $_SESSION['usuario'] ?? ($isGuestHeader ? 'Invitado' : 'Usuario');
+$rawRole   = $_SESSION['rol'] ?? ($isGuestHeader ? 'invitado' : 'admin');
 
 // Mapeo de roles para visualización elegante
 $roleMap = [
     'admin'     => 'ADMINISTRADOR',
     'conductor' => 'CONDUCTOR',
-    'cliente'   => 'CLIENTE VIP'
+    'cliente'   => 'CLIENTE VIP',
+    'invitado'  => 'INVITADO'
 ];
 $displayRole = $roleMap[strtolower($rawRole)] ?? strtoupper($rawRole);
 $adminInitial = strtoupper(substr($adminName, 0, 1));
