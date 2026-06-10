@@ -785,6 +785,8 @@
         let html5QrCode;
         let operations = [];
         let running = false;
+        const autoScanToken = <?= isset($autoScanToken) ? json_encode($autoScanToken) : 'null' ?>;
+
 
         function initLayout() {
             const content = document.getElementById('right-panel-content');
@@ -1085,8 +1087,13 @@
                 running = false;
                 btn.innerHTML = "<i class='bx bx-check-circle'></i> Registrar Puntos";
                 btn.disabled = false;
-            }
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (autoScanToken) {
+                buscarCliente(autoScanToken);
+            }
+        });
     </script>
     <script src="<?= BASE_URL ?>assets/js/session_check.js"></script>
 </body>

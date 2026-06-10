@@ -24,6 +24,32 @@ class ScanController
         $codigo = $_GET['c'] ?? '';
         $token = $_GET['t'] ?? '';
 
+        $sessUserId = $_SESSION['id_usuario'] ?? null;
+        $sessRol = $_SESSION['rol'] ?? '';
+
+        // Escenario 1: Conductor/Admin escaneó un QR y tiene un token
+        if (($sessRol === 'conductor' || $sessRol === 'admin') && $token) {
+            $opModel = new TipoOperacionModel();
+            $operaciones = $opModel->getActive();
+            $this->render('scan/index', [
+                'operaciones' => $operaciones,
+                'autoScanToken' => $token
+            ]);
+            return;
+        }
+
+        // Escenario 2: Es un cliente autenticado por formulario/sesión
+        if ($sessRol === 'cliente') {
+            $clienteModel = new ClienteModel();
+            $id_cliente = $_SESSION['id_cliente'] ?? $sessUserId;
+            $cliente = $clienteModel->findById($id_cliente);
+            if ($cliente) {
+                $this->renderFullProfile($cliente, false); // Acceso total
+                return;
+            }
+        }
+
+        // Escenario 3: Invitado abre un link de QR/Token directo (?t=...)
         if ($token) {
             $clienteModel = new ClienteModel();
             if ($codigo) {
@@ -33,71 +59,89 @@ class ScanController
             }
 
             if ($cliente && $cliente['token'] === $token) {
-                // Seteamos sesión completa de cliente como si fuera login
-                $sessId = session_id();
-                $clienteModel->updateSessionId($cliente['id'], $sessId);
-
-                $_SESSION['id_usuario'] = $cliente['id'];
-                $_SESSION['rol'] = 'cliente';
-                $_SESSION['session_id'] = $sessId;
-
-                $_SESSION['id_cliente'] = $cliente['id'];
-                $_SESSION['nombre_cliente'] = $cliente['nombre'];
-                $_SESSION['codigo_cliente'] = $cliente['codigo'];
-                $_SESSION['token_cliente'] = $token;
-
-                $ventaModel = new VentaModel();
-                $ventas = $ventaModel->getByCliente($cliente['id']);
-
-                // Fetch approved recharges to show in history
-                $db = Database::getConnection();
-                $stmtRecargas = $db->prepare("SELECT puntos, fecha, 'Recarga Aprobada' as detalle FROM recargas WHERE cliente_id = ? AND estado = 'aprobado' ORDER BY fecha DESC");
-                $stmtRecargas->execute([$cliente['id']]);
-                $recargasHistory = $stmtRecargas->fetchAll(PDO::FETCH_ASSOC);
-
-                // Fetch redeemed vouchers to show in history
-                $stmtVales = $db->prepare("SELECT 0 as puntos, usado_fecha as fecha, CONCAT('Vale Canjeado: ', descripcion) as detalle, 'VALE' as tipo_ext FROM incentivos_vales WHERE cliente_id = ? AND estado = 'usado' ORDER BY usado_fecha DESC");
-                $stmtVales->execute([$cliente['id']]);
-                $valesHistory = $stmtVales->fetchAll(PDO::FETCH_ASSOC);
-
-                // Merge and sort all arrays by date descending
-                $historial = array_merge($ventas, $recargasHistory, $valesHistory);
-                usort($historial, function ($a, $b) {
-                    return strtotime($b['fecha']) - strtotime($a['fecha']);
-                });
-
-                // Fetch redemption history
-                $canjeModel = new CanjeModel();
-                $canjes = $canjeModel->getByCliente($cliente['id']);
-
-                $isDefaultPassword = (
-                    ($cliente['password'] === hash('sha256', $cliente['dni'] ?? '')) ||
-                    ($cliente['password'] === hash('sha256', $cliente['ruc'] ?? ''))
-                );
-
-                // Fetch active announcements for carousel
-                $anuncioModel = new AfiliadoAnuncioModel();
-                $anuncios = $anuncioModel->getAllActive();
-
-                $this->render('scan/perfil_cliente', [
-                    'cliente' => $cliente,
-                    'ventas' => $historial,
-                    'canjes' => $canjes,
-                    'anuncios' => $anuncios,
-                    'isDefaultPassword' => $isDefaultPassword
-                ]);
-
+                // Se renderiza en modo SOLO LECTURA, sin iniciar sesión.
+                $this->renderFullProfile($cliente, true); // Acceso restringido (read-only)
                 return;
             }
         }
 
-        // Escenario 2: El conductor escanea el QR del cliente
-        $this->requireAuth();
+        // Escenario 4: Si no hay sesión válida
+        if (!isset($_SESSION['id_usuario'])) {
+            header('Location: ' . BASE_URL . 'login');
+            exit;
+        }
 
-        $opModel = new TipoOperacionModel();
-        $operaciones = $opModel->getActive();
+        // Si es conductor/admin y entra normal
+        if ($sessRol === 'conductor' || $sessRol === 'admin') {
+            $opModel = new TipoOperacionModel();
+            $operaciones = $opModel->getActive();
+            $this->render('scan/index', ['operaciones' => $operaciones]);
+            return;
+        }
 
-        $this->render('scan/index', ['operaciones' => $operaciones]);
+        // Si es cliente y entra normal a /scan sin token, mostrar su perfil
+        if ($sessRol === 'cliente') {
+            $clienteModel = new ClienteModel();
+            $cliente = $clienteModel->findById($_SESSION['id_cliente'] ?? $_SESSION['id_usuario']);
+            if ($cliente) {
+                $this->renderFullProfile($cliente, false);
+                return;
+            }
+        }
+
+        header('Location: ' . BASE_URL . 'login');
+        exit;
+    }
+
+    /**
+     * Renderiza el perfil completo del cliente.
+     */
+    private function renderFullProfile(array $cliente, bool $readonly): void
+    {
+        $ventaModel = new VentaModel();
+        $ventas = $ventaModel->getByCliente($cliente['id']);
+
+        // Fetch approved recharges to show in history
+        $db = Database::getConnection();
+        $stmtRecargas = $db->prepare("SELECT puntos, fecha, 'Recarga Aprobada' as detalle FROM recargas WHERE cliente_id = ? AND estado = 'aprobado' ORDER BY fecha DESC");
+        $stmtRecargas->execute([$cliente['id']]);
+        $recargasHistory = $stmtRecargas->fetchAll(PDO::FETCH_ASSOC);
+
+        // Fetch redeemed vouchers to show in history
+        $stmtVales = $db->prepare("SELECT 0 as puntos, usado_fecha as fecha, CONCAT('Vale Canjeado: ', descripcion) as detalle, 'VALE' as tipo_ext FROM incentivos_vales WHERE cliente_id = ? AND estado = 'usado' ORDER BY usado_fecha DESC");
+        $stmtVales->execute([$cliente['id']]);
+        $valesHistory = $stmtVales->fetchAll(PDO::FETCH_ASSOC);
+
+        // Merge and sort all arrays by date descending
+        $historial = array_merge($ventas, $recargasHistory, $valesHistory);
+        usort($historial, function ($a, $b) {
+            return strtotime($b['fecha']) - strtotime($a['fecha']);
+        });
+
+        // Fetch redemption history
+        $canjeModel = new CanjeModel();
+        $canjes = $canjeModel->getByCliente($cliente['id']);
+
+        $isDefaultPassword = false;
+        if (!$readonly) {
+            $isDefaultPassword = (
+                ($cliente['password'] === hash('sha256', $cliente['dni'] ?? '')) ||
+                ($cliente['password'] === hash('sha256', $cliente['ruc'] ?? ''))
+            );
+        }
+
+        // Fetch active announcements for carousel
+        $anuncioModel = new AfiliadoAnuncioModel();
+        $anuncios = $anuncioModel->getAllActive();
+
+        $this->render('scan/perfil_cliente', [
+            'cliente' => $cliente,
+            'ventas' => $historial,
+            'canjes' => $canjes,
+            'anuncios' => $anuncios,
+            'isDefaultPassword' => $isDefaultPassword,
+            'readonly' => $readonly
+        ]);
     }
 
     /**
@@ -146,12 +190,25 @@ class ScanController
             $this->json(['success' => false, 'message' => 'Cliente o Empresa no reconocido. Ingrese el DNI (8) o RUC (11 dígitos) o escanee un QR válido.']);
         }
 
+        $rawCelular = $cliente['celular'] ?? '';
+        $maskedCelular = '';
+        if (!empty($rawCelular)) {
+            $len = strlen($rawCelular);
+            if ($len >= 9) {
+                $maskedCelular = substr($rawCelular, 0, 3) . '***' . substr($rawCelular, -3);
+            } elseif ($len > 4) {
+                $maskedCelular = substr($rawCelular, 0, 2) . str_repeat('*', $len - 4) . substr($rawCelular, -2);
+            } else {
+                $maskedCelular = str_repeat('*', $len);
+            }
+        }
+
         $this->json([
             'success' => true,
             'cliente' => [
                 'id' => $cliente['id'],
                 'nombre' => $cliente['nombre'],
-                'celular' => $cliente['celular']
+                'celular' => $maskedCelular
             ]
         ]);
     }

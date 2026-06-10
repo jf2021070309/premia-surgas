@@ -5,6 +5,9 @@
  */
 $current_url = trim($_GET['url'] ?? '', '/');
 
+$sidebarRole = $sidebarRole ?? 'cliente';
+$isGuest = !isset($sidebarRole);
+
 if (!function_exists('isActiveLink')) {
     function isActiveLink($targetPath, $currentUrl)
     {
@@ -37,14 +40,15 @@ if (!function_exists('isActiveLink')) {
     </div>
 
     <nav class="sidebar-menu">
-        <?php if ($_SESSION['rol'] === 'cliente'): ?>
+        <?php if ($sidebarRole === 'cliente'): ?>
             <div class="menu-label">Mi Cuenta</div>
-            <a href="<?= BASE_URL ?>scan?t=<?= $_SESSION['token_cliente'] ?>"
+            <a href="<?= BASE_URL ?>scan?t=<?= $_SESSION['token_cliente'] ?? ($cliente['token'] ?? '') ?>"
                 class="sidebar-item <?= isActiveLink('scan', $current_url) ?>"
                 onclick="window.location.hash=''; return true;">
                 <i class='bx bx-user-circle'></i>
                 <span>Mi Perfil</span>
             </a>
+            <?php if (!$isGuest): ?>
             <a href="#" id="sidebar-chat-btn" class="sidebar-item" onclick="window.location.hash='chat'; return false;">
                 <i class='bx bx-chat'></i>
                 <span>Chatbot / Pedir</span>
@@ -53,26 +57,16 @@ if (!function_exists('isActiveLink')) {
                 <i class='bx bx-history'></i>
                 <span>Mi Actividad</span>
             </a>
-
-            <!-- MÓDULOS OCULTOS TEMPORALMENTE:
-            <a href="<?= BASE_URL ?>tienda" class="sidebar-item <?= isActiveLink('tienda', $current_url) ?>">
-                <i class='bx bx-shopping-bag'></i>
-                <span>Tienda de Premios</span>
-            </a>
-            <a href="#" class="sidebar-item" onclick="window.location.hash='canjes'; return false;">
-                <i class='bx bx-gift'></i>
-                <span>Mis Canjes</span>
-            </a>
-            <a href="#" class="sidebar-item" onclick="window.location.hash='incentivos'; return false;">
-                <i class='bx bx-target-lock'></i>
-                <span>Metas & Vales</span>
-            </a>
-            -->
-
             <a href="#" class="sidebar-item" onclick="window.location.hash='seguridad'; return false;">
                 <i class='bx bx-lock-alt'></i>
                 <span>Seguridad</span>
             </a>
+            <?php else: ?>
+            <a href="<?= BASE_URL ?>login" class="sidebar-item">
+                <i class='bx bx-log-in'></i>
+                <span>Iniciar Sesión</span>
+            </a>
+            <?php endif; ?>
 
             <a href="<?= BASE_URL ?>mapa" class="sidebar-item <?= isActiveLink('mapa', $current_url) ?>">
                 <i class='bx bx-map-alt'></i>
@@ -85,7 +79,7 @@ if (!function_exists('isActiveLink')) {
                 <span>Dashboard</span>
             </a>
 
-            <?php if (!in_array($_SESSION['rol'], ['conductor', 'afiliado'])): ?>
+            <?php if (!in_array($sidebarRole, ['conductor', 'afiliado'])): ?>
                 <div class="menu-label">Gestión</div>
                 <a href="<?= BASE_URL ?>clientes/nuevo"
                     class="sidebar-item <?= isActiveLink('clientes/nuevo', $current_url) ?>">
@@ -102,7 +96,7 @@ if (!function_exists('isActiveLink')) {
                 -->
             <?php endif; ?>
 
-            <?php if (!in_array($_SESSION['rol'], ['conductor', 'afiliado'])): ?>
+            <?php if (!in_array($sidebarRole, ['conductor', 'afiliado'])): ?>
                 <a href="<?= BASE_URL ?>clientes/lista"
                     class="sidebar-item <?= isActiveLink('clientes/lista', $current_url) ?>">
                     <i class='bx bx-group'></i>
@@ -124,7 +118,7 @@ if (!function_exists('isActiveLink')) {
             </a>
             -->
 
-            <?php if ($_SESSION['rol'] === 'admin'): ?>
+            <?php if ($sidebarRole === 'admin'): ?>
                 <!-- MÓDULOS OCULTOS TEMPORALMENTE:
                 <div class="menu-label">Incentivos</div>
                 <a href="<?= BASE_URL ?>incentivos/reglas" class="sidebar-item <?= isActiveLink('incentivos/reglas', $current_url) ?>">
@@ -175,14 +169,14 @@ if (!function_exists('isActiveLink')) {
                 <i class='bx bx-qr-scan'></i>
                 <span>Suma Puntos</span>
             </a>
-            <?php if ($_SESSION['rol'] === 'conductor' || $_SESSION['rol'] === 'admin'): ?>
+            <?php if ($sidebarRole === 'conductor' || $sidebarRole === 'admin'): ?>
                 <a href="<?= BASE_URL ?>conductores/mi-historial"
                     class="sidebar-item <?= isActiveLink('conductores/mi-historial', $current_url) ?>">
                     <i class='bx bx-history'></i>
                     <span>Mi Historial</span>
                 </a>
             <?php endif; ?>
-            <?php if ($_SESSION['rol'] === 'afiliado'): ?>
+            <?php if ($sidebarRole === 'afiliado'): ?>
                 <a href="<?= BASE_URL ?>afiliados/mi-historial"
                     class="sidebar-item <?= isActiveLink('afiliados/mi-historial', $current_url) ?>">
                     <i class='bx bx-history'></i>
@@ -195,7 +189,7 @@ if (!function_exists('isActiveLink')) {
                 </a>
             <?php endif; ?>
 
-            <?php if ($_SESSION['rol'] === 'admin'): ?>
+            <?php if ($sidebarRole === 'admin'): ?>
                 <div class="menu-label">Mantenimiento</div>
                 <a href="<?= BASE_URL ?>ajustes" class="sidebar-item <?= isActiveLink('ajustes', $current_url) ?>">
                     <i class='bx bx-cog'></i>

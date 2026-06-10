@@ -2,19 +2,21 @@
 <html lang="es">
 <?php
 $isDefaultPassword = false;
-$hpw = $cliente['password'] ?? '';
-if (empty($hpw)) {
-    // Si no tiene contraseña, es inseguro y se considera "default" para forzar cambio
-    $isDefaultPassword = true;
-} else {
-    $dni = trim($cliente['dni'] ?? '');
-    $ruc = trim($cliente['ruc'] ?? '');
-
-    $checkDni = $dni ? hash('sha256', $dni) : '---no-dni---';
-    $checkRuc = $ruc ? hash('sha256', $ruc) : '---no-ruc---';
-
-    if ($hpw === $checkDni || $hpw === $checkRuc) {
+if (!($readonly ?? false)) {
+    $hpw = $cliente['password'] ?? '';
+    if (empty($hpw)) {
+        // Si no tiene contraseña, es inseguro y se considera "default" para forzar cambio
         $isDefaultPassword = true;
+    } else {
+        $dni = trim($cliente['dni'] ?? '');
+        $ruc = trim($cliente['ruc'] ?? '');
+
+        $checkDni = $dni ? hash('sha256', $dni) : '---no-dni---';
+        $checkRuc = $ruc ? hash('sha256', $ruc) : '---no-ruc---';
+
+        if ($hpw === $checkDni || $hpw === $checkRuc) {
+            $isDefaultPassword = true;
+        }
     }
 }
 ?>
@@ -34,6 +36,7 @@ if (empty($hpw)) {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         const BASE_URL = '<?= BASE_URL ?>';
+        const IS_READONLY = <?= ($readonly ?? false) ? 'true' : 'false' ?>;
     </script>
     <style>
         :root {
@@ -1753,6 +1756,24 @@ if (empty($hpw)) {
             include __DIR__ . '/../partials/header_admin.php';
             ?>
 
+            <?php if ($readonly ?? false): ?>
+                <!-- ALERT BANNER: READ ONLY / GUEST MODE -->
+                <div style="max-width: 1100px; margin: 2rem auto 0; padding: 0 1.5rem; position: relative; z-index: 10;">
+                    <div onclick="window.location.href='<?= BASE_URL ?>login'"
+                        style="background: linear-gradient(135deg, #2563eb, #1d4ed8); border-radius: 20px; padding: 1.25rem; color: #fff; display: flex; align-items: center; gap: 1rem; box-shadow: 0 10px 25px rgba(37, 99, 235, 0.15); cursor: pointer; transition: 0.3s; border-left: 5px solid #fff;">
+                        <div
+                            style="background: rgba(255,255,255,0.2); width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0;">
+                            <i class='bx bx-info-circle'></i>
+                        </div>
+                        <div style="flex: 1;">
+                            <div style="font-size: 0.9rem; font-weight: 850; line-height: 1.2;">Modo consulta rápida activa</div>
+                            <div style="font-size: 0.75rem; opacity: 0.9; font-weight: 500; margin-top: 2px;">Estás en la vista de consulta. Inicia sesión con tu contraseña para canjear premios o editar tus datos.</div>
+                        </div>
+                        <span style="font-size: 0.75rem; font-weight: 800; background: rgba(255,255,255,0.2); padding: 0.4rem 0.8rem; border-radius: 8px; text-transform: uppercase; white-space: nowrap;">Iniciar Sesión</span>
+                    </div>
+                </div>
+            <?php endif; ?>
+
             <!-- Carousel of Announcements (OCULTO TEMPORALMENTE) -->
             <?php if (false && !empty($anuncios)): ?>
                 <div class="carousel-container">
@@ -1949,11 +1970,13 @@ if (empty($hpw)) {
                                 </h3>
                                 <p style="margin: 5px 0 0; font-size: 0.8rem; color: #64748b; font-weight: 500;">Datos del perfil y membresía</p>
                             </div>
+                            <?php if (!($readonly ?? false)): ?>
                             <button onclick="openEditModal()" 
                                 style="background: transparent; color: #0f172a; border: 1.5px solid #e2e8f0; padding: 0.6rem 1.2rem; border-radius: 12px; display: flex; align-items: center; gap: 8px; cursor: pointer; transition: all 0.2s ease; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">
                                 <i class='bx bx-edit-alt' style="font-size: 1.1rem;"></i>
                                 Editar
                             </button>
+                            <?php endif; ?>
                         </div>
 
                         <div class="info-grid-modern" style="gap: 2rem 1.5rem;">
@@ -2047,12 +2070,14 @@ if (empty($hpw)) {
                     <div class="tab-btn" onclick="switchTab('incentivos', this)">
                         <i class='bx bx-target-lock'></i> Metas & Vales
                     </div>
+                    <?php if (!($readonly ?? false)): ?>
                     <div class="tab-btn" onclick="switchTab('seguridad', this)">
                         <i class='bx bx-lock-alt'></i> Seguridad
                     </div>
                     <div class="tab-btn" id="tab-btn-chat" onclick="switchTab('chat', this)">
                         <i class='bx bx-chat'></i> Chatbot
                     </div>
+                    <?php endif; ?>
                 </div>
 
                 <!-- PANE 1: ACTIVIDAD -->
@@ -2536,6 +2561,23 @@ if (empty($hpw)) {
 
         // Tab Switching Logic
         function switchTab(paneId, btnElement, hideCard = false) {
+            if (IS_READONLY && (paneId === 'seguridad' || paneId === 'chat')) {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Acceso Restringido',
+                    text: 'Debes iniciar sesión con tu contraseña para acceder a esta sección.',
+                    showCancelButton: true,
+                    confirmButtonText: 'Iniciar Sesión',
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonColor: '#0f172a'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = BASE_URL + 'login';
+                    }
+                });
+                return;
+            }
+
             if (paneId !== 'chat') {
                 if (typeof isListening !== 'undefined' && isListening) {
                     toggleSpeechRecognition();
