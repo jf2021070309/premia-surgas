@@ -68,7 +68,7 @@ class ChatbotController {
                 break;
 
             case 'esperando_modalidad':
-                $modalidad = $this->inferModalidad($message);
+                $modalidad = $this->matchOption($message, ['domicilio', 'deposito']);
                 if ($modalidad === 'domicilio') {
                     $data['modalidad'] = 'A Domicilio';
                     $reply = "Valor a domicilio S/. 62 x 10 kg\n\nTipo de Balon que usa?";
@@ -89,9 +89,9 @@ class ChatbotController {
                 break;
 
             case 'esperando_producto':
-                $producto = $this->inferProducto($message);
-                if ($producto) {
-                    $data['producto'] = $producto;
+                $productoOpt = $this->matchOption($message, ['normal', 'premium']);
+                if ($productoOpt) {
+                    $data['producto'] = ($productoOpt === 'premium') ? 'Premium' : 'Normal';
                     $reply = "cuantos balones desea? (digite)";
                     $speech = "Perfecto. ¿Cuántos balones de gas deseas solicitar?";
                     $buttons = ['1', '2', '3'];
@@ -195,7 +195,10 @@ class ChatbotController {
                 break;
 
             case 'viendo_puntos':
-                if (strpos($message, 'Confirmar') !== false) {
+                $decision = $this->matchOption($message, ['si', 'no']);
+                $isBuscarOtro = (str_contains(strtolower($message), 'otro') || str_contains(strtolower($message), 'buscar'));
+
+                if ($decision === 'si') {
                     // Save order in deposit
                     $pedidoModel = new PedidoModel();
                     $orderData = [
@@ -220,7 +223,7 @@ class ChatbotController {
                     $buttons = ['Nuevo Pedido'];
                     $nextState = 'esperando_saludo';
                     $data = [];
-                } elseif (strtolower($message) === 'buscar otro') {
+                } elseif ($decision === 'no' || $isBuscarOtro) {
                     $puntos = $data['puntos_cercanos'] ?? [];
                     $nextIndex = ($data['punto_index'] ?? 0) + 1;
 
@@ -269,61 +272,58 @@ class ChatbotController {
     }
 
     /**
-     * Infers the delivery modality from a free-form message.
-     * Returns 'domicilio', 'deposito', or null.
+     * Matches a user message against valid options using keywords and Levenshtein distance.
+     * Returns the matched option string or null.
      */
-    private function inferModalidad(string $message): ?string {
-        $msg = mb_strtolower(trim($message), 'UTF-8');
+    private function matchOption(string $message, array $optionsValidas): ?string {
+        $text = mb_strtolower(trim($message), 'UTF-8');
         // Normalize accents
-        $msg = strtr($msg, [
+        $text = strtr($text, [
             'á'=>'a','é'=>'e','í'=>'i','ó'=>'o','ú'=>'u',
             'à'=>'a','è'=>'e','ì'=>'i','ò'=>'o','ù'=>'u',
         ]);
 
-        // Keywords that indicate home delivery
-        $domicilioKeys = [
-            'domicilio','a domicilio','delivery','despacho','envio','enviar',
-            'traer','llevar','casa','hogar','direccion','dirección',
-            'quiero que me lleven','me lo traigan','que venga'
+        $mapeoKeywords = [
+            'domicilio' => ['domicilio', 'casa', 'delivery', 'llevar', 'traer', 'hogar', 'envio', 'despacho'],
+            'deposito'  => ['deposito', 'depósito', 'tienda', 'recoger', 'ir', 'local', 'punto', 'almacen', 'sucursal'],
+            'normal'    => ['normal', 'corriente', 'regular', 'básico', 'basico', 'estandar', 'comun'],
+            'premium'   => ['premium', 'premiun', 'mejor', 'calidad', 'plus', 'lujo', 'gold'],
+            'si'        => ['si', 'sí', 'claro', 'dale', 'ok', 'bueno', 'correcto', 'exacto', 'afirmativo', 'confirmar', 'confirmo'],
+            'no'        => ['no', 'nope', 'negativo', 'cancelar', 'incorrecto', 'rechazar', 'anular']
         ];
-        foreach ($domicilioKeys as $kw) {
-            if (str_contains($msg, $kw)) return 'domicilio';
+
+        // 1. Keyword matching
+        foreach ($mapeoKeywords as $opcion => $keywords) {
+            if (in_array($opcion, $optionsValidas)) {
+                foreach ($keywords as $keyword) {
+                    if (str_contains($text, $keyword)) {
+                        return $opcion;
+                    }
+                }
+            }
         }
 
-        // Keywords that indicate depot pickup
-        $depositoKeys = [
-            'deposito','depósito','en deposito','tienda','almacen','almacén',
-            'punto','local','recoger','recojo','voy','ir a recoger','buscar',
-            'punto de venta','sucursal','ir a buscar'
-        ];
-        foreach ($depositoKeys as $kw) {
-            if (str_contains($msg, $kw)) return 'deposito';
+        // 2. Levenshtein matching (for typos or speech transcription errors)
+        $mejorOpcion = null;
+        $menorDistancia = 9999;
+        
+        foreach ($optionsValidas as $opcion) {
+            $words = preg_split('/[\s,.]+/', $text, -1, PREG_SPLIT_NO_EMPTY);
+            $keywordsToCheck = isset($mapeoKeywords[$opcion]) ? $mapeoKeywords[$opcion] : [$opcion];
+            
+            foreach ($words as $word) {
+                foreach ($keywordsToCheck as $kw) {
+                    $dist = levenshtein($word, $kw);
+                    $umbral = max(1, (int)floor(strlen($kw) * 0.4)); // 40% tolerance, at least 1 edit
+                    if ($dist < $menorDistancia && $dist <= $umbral) {
+                        $menorDistancia = $dist;
+                        $mejorOpcion = $opcion;
+                    }
+                }
+            }
         }
 
-        return null;
-    }
-
-    /**
-     * Infers the gas cylinder type from a free-form message.
-     * Returns 'Normal', 'Premium', or null.
-     */
-    private function inferProducto(string $message): ?string {
-        $msg = mb_strtolower(trim($message), 'UTF-8');
-        $msg = strtr($msg, [
-            'á'=>'a','é'=>'e','í'=>'i','ó'=>'o','ú'=>'u',
-        ]);
-
-        $premiumKeys = ['premium','premiun','premiún','de lujo','especial','gold'];
-        foreach ($premiumKeys as $kw) {
-            if (str_contains($msg, $kw)) return 'Premium';
-        }
-
-        $normalKeys = ['normal','regular','comun','común','estandar','estándar','basico','básico'];
-        foreach ($normalKeys as $kw) {
-            if (str_contains($msg, $kw)) return 'Normal';
-        }
-
-        return null;
+        return $mejorOpcion;
     }
 
     /**
