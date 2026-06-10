@@ -69,7 +69,7 @@ createApp({
                 const qrContainer = document.getElementById('qrcode-modal');
                 qrContainer.innerHTML = '';
                 new QRCode(qrContainer, {
-                    text: `${BASE_URL}scan?c=${encodeURIComponent(c.codigo)}&t=${encodeURIComponent(c.token)}`,
+                    text: `${BASE_URL}scan?t=${encodeURIComponent(c.token)}`,
                     width: 200,
                     height: 200,
                     colorDark: "#0f172a",
@@ -86,7 +86,7 @@ createApp({
             const qrCapture = document.getElementById('qrcode-capture');
             qrCapture.innerHTML = '';
             new QRCode(qrCapture, {
-                text: `${BASE_URL}scan?c=${encodeURIComponent(c.codigo)}&t=${encodeURIComponent(c.token)}`,
+                text: `${BASE_URL}scan?t=${encodeURIComponent(c.token)}`,
                 width: 280,
                 height: 280,
                 colorDark: "#0f172a",

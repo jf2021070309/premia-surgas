@@ -39,7 +39,7 @@ if (!function_exists('isActiveLink')) {
     <nav class="sidebar-menu">
         <?php if ($_SESSION['rol'] === 'cliente'): ?>
             <div class="menu-label">Mi Cuenta</div>
-            <a href="<?= BASE_URL ?>scan?c=<?= $_SESSION['codigo_cliente'] ?>&t=<?= $_SESSION['token_cliente'] ?>"
+            <a href="<?= BASE_URL ?>scan?t=<?= $_SESSION['token_cliente'] ?>"
                 class="sidebar-item <?= isActiveLink('scan', $current_url) ?>"
                 onclick="window.location.hash=''; return true;">
                 <i class='bx bx-user-circle'></i>

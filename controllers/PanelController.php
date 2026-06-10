@@ -8,8 +8,8 @@ class PanelController {
     public function index(): void {
         $this->requireAuth();
         
-        if ($_SESSION['rol'] === 'cliente' && isset($_SESSION['codigo_cliente'])) {
-            header('Location: ' . BASE_URL . 'scan?c=' . $_SESSION['codigo_cliente'] . '&t=' . $_SESSION['token_cliente']);
+        if ($_SESSION['rol'] === 'cliente' && isset($_SESSION['token_cliente'])) {
+            header('Location: ' . BASE_URL . 'scan?t=' . $_SESSION['token_cliente']);
             exit;
         }
         $model   = new ClienteModel();

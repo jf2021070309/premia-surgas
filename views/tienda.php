@@ -780,8 +780,8 @@
             <div class="header-logo-side">
                 <?php 
                 $urlVolver = BASE_URL . 'panel';
-                if (isset($_SESSION['id_cliente']) && isset($_SESSION['codigo_cliente'])) {
-                    $urlVolver = BASE_URL . 'scan?c=' . $_SESSION['codigo_cliente'] . '&t=' . $_SESSION['token_cliente'];
+                if (isset($_SESSION['id_cliente']) && isset($_SESSION['token_cliente'])) {
+                    $urlVolver = BASE_URL . 'scan?t=' . $_SESSION['token_cliente'];
                 }
                 ?>
                 <a href="<?= $urlVolver ?>" class="back-nav-pill" title="Volver">

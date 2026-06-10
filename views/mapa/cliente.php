@@ -494,7 +494,7 @@
 
 <!-- Cabecera Glassmorphic Premium -->
 <header class="map-header">
-    <a href="<?= BASE_URL ?>scan?c=<?= $_SESSION['codigo_cliente'] ?>&t=<?= $_SESSION['token_cliente'] ?>" class="map-header-back" title="Volver al inicio">
+    <a href="<?= BASE_URL ?>scan?t=<?= $_SESSION['token_cliente'] ?>" class="map-header-back" title="Volver al inicio">
         <i class='bx bx-arrow-back'></i>
     </a>
     <div class="map-header-title-container">

@@ -2494,7 +2494,7 @@ if (empty($hpw)) {
         // Generar QR en el reverso
         const qrContainer = document.getElementById("qrcode");
         if (qrContainer) {
-            const qrContent = '<?= BASE_URL ?>scan?c=<?= urlencode($cliente['codigo'] ?? '') ?>&t=<?= urlencode($cliente['token'] ?? '') ?>';
+            const qrContent = '<?= BASE_URL ?>scan?t=<?= urlencode($cliente['token'] ?? '') ?>';
             new QRCode(qrContainer, {
                 text: qrContent,
                 width: 125,
@@ -2525,7 +2525,7 @@ if (empty($hpw)) {
 
             // Generate full QR
             new QRCode(document.getElementById("full-qrcode"), {
-                text: '<?= BASE_URL ?>scan?c=<?= urlencode($cliente['codigo'] ?? '') ?>&t=<?= urlencode($cliente['token'] ?? '') ?>',
+                text: '<?= BASE_URL ?>scan?t=<?= urlencode($cliente['token'] ?? '') ?>',
                 width: 220,
                 height: 220,
                 colorDark: "#000000",
