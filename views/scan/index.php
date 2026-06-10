@@ -1029,15 +1029,14 @@
             if(!select) return;
             const opt = select.options[select.selectedIndex];
             const typeName = opt.getAttribute('data-nombre');
-            const unit = parseInt(select.value);
-            
+
             const precioEstandar = parseFloat(opt.getAttribute('data-precio') || 0);
             const descuento = parseFloat(opt.getAttribute('data-descuento') || 0);
             const precioFinal = precioEstandar - descuento;
 
+            const PTS_POR_SERVICIO = 2000;
             const qty = 1;
-            const subtotal = unit;
-            operations.push({ name: typeName, unit, qty, subtotal, precio: precioFinal });
+            operations.push({ name: typeName, unit: PTS_POR_SERVICIO, qty, subtotal: PTS_POR_SERVICIO, precio: precioFinal });
             renderOperations();
         }
 
@@ -1078,9 +1077,7 @@
             operations.forEach((op, i) => {
                 total += op.subtotal;
                 totalPrice += (op.precio || 0);
-                const ptsLabel = !tieneRecomendador
-                    ? `<div style="font-size: 1.4rem; font-weight: 950; color: #4ade80; letter-spacing: -1px; line-height: 1;">+${PTS_POR_SERVICIO} pts</div>`
-                    : `<div style="font-size: 0.7rem; font-weight: 700; color: rgba(255,255,255,0.3); margin-top: 2px;">pts → recomendador</div>`;
+                const ptsLabel = "";
                 html += `
                     <div style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; padding: 1.25rem; display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1rem; position: relative; transition: all 0.3s ease; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
                         <div style="display: flex; justify-content: space-between; align-items: flex-start;">
@@ -1101,7 +1098,8 @@
                     </div>`;
             });
             document.getElementById('ops-container').innerHTML = html;
-            document.getElementById('main-total-pts').innerText = total;
+            let totalPointsDisplay = tieneRecomendador ? 0 : total;
+            document.getElementById('main-total-pts').innerText = totalPointsDisplay;
             document.getElementById('main-total-price').innerText = 'S/ ' + totalPrice.toFixed(2);
             document.getElementById('save-all-btn').disabled = false;
         }
