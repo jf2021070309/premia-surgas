@@ -62,7 +62,7 @@
     const clienteCodigo = "<?= addslashes($cliente['codigo']) ?>";
 
     <?php
-        $scanUrl = BASE_URL . 'scan?c=' . urlencode($cliente['codigo']) . '&t=' . urlencode($cliente['token']);
+        $scanUrl = BASE_URL . 'scan?t=' . urlencode($cliente['token']);
     ?>
     // Generar QR
     const qr = new QRCode(document.getElementById('qrcode'), {

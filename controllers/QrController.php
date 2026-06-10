@@ -18,7 +18,7 @@ class QrController {
             exit('Cliente no encontrado');
         }
 
-        $scanUrl = BASE_URL . 'scan?c=' . urlencode($c['codigo']) . '&t=' . urlencode($c['token']);
+        $scanUrl = BASE_URL . 'scan?t=' . urlencode($c['token']);
 
         // Usar Google Charts API (funcional sin dependencias PECL)
         $qrApi = 'https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl='

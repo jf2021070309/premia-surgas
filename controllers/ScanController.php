@@ -24,9 +24,13 @@ class ScanController
         $codigo = $_GET['c'] ?? '';
         $token = $_GET['t'] ?? '';
 
-        if ($codigo && $token) {
+        if ($token) {
             $clienteModel = new ClienteModel();
-            $cliente = $clienteModel->findByCodigo($codigo);
+            if ($codigo) {
+                $cliente = $clienteModel->findByCodigo($codigo);
+            } else {
+                $cliente = $clienteModel->buscarPorToken($token);
+            }
 
             if ($cliente && $cliente['token'] === $token) {
                 // Seteamos sesión completa de cliente como si fuera login
@@ -39,7 +43,7 @@ class ScanController
 
                 $_SESSION['id_cliente'] = $cliente['id'];
                 $_SESSION['nombre_cliente'] = $cliente['nombre'];
-                $_SESSION['codigo_cliente'] = $codigo;
+                $_SESSION['codigo_cliente'] = $cliente['codigo'];
                 $_SESSION['token_cliente'] = $token;
 
                 $ventaModel = new VentaModel();
@@ -111,9 +115,17 @@ class ScanController
         }
 
         $clienteModel = new ClienteModel();
+        $cliente = null;
+
+        // Intentar buscar por token primero (si tiene 64 hex chars)
+        if (strlen($codigo) === 64 && ctype_xdigit($codigo)) {
+            $cliente = $clienteModel->buscarPorToken($codigo);
+        }
 
         // Intentar buscar por código ("CLI-...")
-        $cliente = $clienteModel->findByCodigo($codigo);
+        if (!$cliente) {
+            $cliente = $clienteModel->findByCodigo($codigo);
+        }
 
         // Si no se encuentra y es numérico de 8 dígitos, buscar por DNI
         if (!$cliente && preg_match('/^\d{8}$/', $codigo)) {

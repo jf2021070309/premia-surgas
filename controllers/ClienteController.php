@@ -60,7 +60,7 @@ class ClienteController
         }
 
         $codigo = $model->generarCodigo();
-        $token = hash_hmac('sha256', $codigo, SECRET_KEY);
+        $token = ClienteModel::generarToken();
 
         $id = $model->create([
             'codigo' => $codigo,
@@ -73,7 +73,7 @@ class ClienteController
             'direccion' => '',
             'departamento' => $dep,
             'token' => $token,
-            'password' => hash('sha256', $password),
+            'password' => password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]),
             'creado_por' => null,
         ]);
 
@@ -191,7 +191,7 @@ class ClienteController
         }
 
         $codigo = $model->generarCodigo();
-        $token = hash_hmac('sha256', $codigo, SECRET_KEY);
+        $token = ClienteModel::generarToken();
 
         $defaultPassword = ($tipo_cliente === 'Normal') ? $dni : $ruc;
 
@@ -206,7 +206,7 @@ class ClienteController
             'direccion' => $dir,
             'departamento' => $dep,
             'token' => $token,
-            'password' => hash('sha256', $defaultPassword),
+            'password' => password_hash($defaultPassword, PASSWORD_BCRYPT, ['cost' => 12]),
             'creado_por' => $_SESSION['id_usuario'],
         ]);
 

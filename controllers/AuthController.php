@@ -12,8 +12,8 @@ class AuthController {
 
     public function login(): void {
         if (isset($_SESSION['id_usuario'])) {
-            if ($_SESSION['rol'] === 'cliente' && isset($_SESSION['codigo_cliente'])) {
-                $this->redirect('scan?c=' . $_SESSION['codigo_cliente'] . '&t=' . $_SESSION['token_cliente']);
+            if ($_SESSION['rol'] === 'cliente' && isset($_SESSION['token_cliente'])) {
+                $this->redirect('scan?t=' . $_SESSION['token_cliente']);
             }
             $this->redirect('panel');
         }
@@ -78,7 +78,7 @@ class AuthController {
             // Registro de Auditoría
             $this->audit->registrar($cliente['id'], 'INICIO_SESION', 'Inicio de sesión exitoso (Cliente)', 'SEGURIDAD', null, 'cliente');
 
-            echo json_encode(['success' => true, 'redirect' => 'scan?c=' . $cliente['codigo'] . '&t=' . $cliente['token']]);
+            echo json_encode(['success' => true, 'redirect' => 'scan?t=' . $cliente['token']]);
             exit;
         }
 

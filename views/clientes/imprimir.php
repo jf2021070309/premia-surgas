@@ -99,7 +99,7 @@
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script>
-    const scanUrl = '<?= BASE_URL . "scan?c=" . urlencode($cliente['codigo']) . "&t=" . urlencode($cliente['token']) ?>';
+    const scanUrl = '<?= BASE_URL . "scan?t=" . urlencode($cliente['token']) ?>';
     
     new QRCode(document.getElementById('qrcode-print'), {
         text: scanUrl,

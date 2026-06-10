@@ -9,6 +9,18 @@ class ClienteModel {
         $this->db = Database::getConnection();
     }
 
+    public static function generarToken(): string {
+        $aleatorio = bin2hex(random_bytes(32));
+        $timestamp = microtime(true);
+        return hash_hmac('sha256', $aleatorio . $timestamp, SECRET_KEY);
+    }
+
+    public function buscarPorToken(string $token): ?array {
+        $stmt = $this->db->prepare("SELECT * FROM clientes WHERE token = ? LIMIT 1");
+        $stmt->execute([$token]);
+        return $stmt->fetch() ?: null;
+    }
+
     public function findByCelular(string $celular): ?array {
         $stmt = $this->db->prepare("SELECT * FROM clientes WHERE celular = ? LIMIT 1");
         $stmt->execute([$celular]);
@@ -99,14 +111,48 @@ class ClienteModel {
     }
 
     public function loginCliente(string $identificador, string $password): ?array {
-        $stmt = $this->db->prepare("SELECT * FROM clientes WHERE (dni = ? OR ruc = ?) AND password = ? AND estado = 1 LIMIT 1");
-        $stmt->execute([$identificador, $identificador, hash('sha256', $password)]);
-        return $stmt->fetch() ?: null;
+        $stmt = $this->db->prepare("SELECT * FROM clientes WHERE (dni = ? OR ruc = ?) AND estado = 1 LIMIT 1");
+        $stmt->execute([$identificador, $identificador]);
+        $cliente = $stmt->fetch() ?: null;
+        
+        if ($cliente) {
+            if ($this->verificarLogin($password, $cliente)) {
+                return $this->findById($cliente['id']);
+            }
+        }
+        return null;
+    }
+
+    public function verificarLogin(string $input, array $cliente): bool {
+        $hash = $cliente['password'] ?? '';
+
+        // Detectar hash SHA256 viejo (64 hex chars, sin $2y$)
+        $es_sha256_viejo = (strlen($hash) === 64 && ctype_xdigit($hash));
+
+        if ($es_sha256_viejo) {
+            $sha_viejo = hash('sha256', $input);
+            if (hash_equals($sha_viejo, $hash)) {
+                // Correcto — migrar a bcrypt ahora mismo
+                $nuevo_hash = password_hash($input, PASSWORD_BCRYPT, ['cost' => 12]);
+                $this->actualizarPassword($cliente['id'], $nuevo_hash);
+                return true;
+            }
+            return false;
+        }
+
+        // Ya es bcrypt
+        return password_verify($input, $hash);
+    }
+
+    public function actualizarPassword(int $id, string $hash): void {
+        $stmt = $this->db->prepare("UPDATE clientes SET password = ? WHERE id = ?");
+        $stmt->execute([$hash, $id]);
     }
 
     public function updatePassword(int $id, string $newPassword): bool {
+        $hash = password_hash($newPassword, PASSWORD_BCRYPT, ['cost' => 12]);
         $stmt = $this->db->prepare("UPDATE clientes SET password = ? WHERE id = ?");
-        return $stmt->execute([hash('sha256', $newPassword), $id]);
+        return $stmt->execute([$hash, $id]);
     }
 
     public function sumarPuntos(int $id, int $puntos): void {

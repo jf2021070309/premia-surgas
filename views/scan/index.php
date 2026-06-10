@@ -888,7 +888,10 @@
             if (navigator.vibrate) navigator.vibrate(100);
 
             let codigo = decodedText;
-            if (decodedText.includes('c=')) {
+            if (decodedText.includes('t=')) {
+                const urlParams = new URLSearchParams(decodedText.split('?')[1]);
+                codigo = urlParams.get('t');
+            } else if (decodedText.includes('c=')) {
                 const urlParams = new URLSearchParams(decodedText.split('?')[1]);
                 codigo = urlParams.get('c');
             } else if (decodedText.includes('/')) {
