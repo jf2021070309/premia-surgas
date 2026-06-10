@@ -268,6 +268,12 @@ class ScanController
         // 1. Registrar "venta" para el comprador
         $idVenta = $ventaModel->create($clienteId, $_SESSION['id_usuario'], $monto, $puntosComprador, $detalle, $items, $estado);
 
+        // 2. Registrar el movimiento en el historial de ventas para el Recomendador (pendiente o aprobado según rol)
+        $idVentaRecomendador = null;
+        if ($puntosRecomendador > 0 && $recomendador) {
+            $idVentaRecomendador = $ventaModel->create($recomendador['id'], $_SESSION['id_usuario'], 0, $puntosRecomendador, "Bono por Recomendar venta a {$clienteModel->findById($clienteId)['nombre']}", [], $estado);
+        }
+
         if ($idVenta) {
             $message = 'Puntos registrados correctamente.';
 
@@ -291,9 +297,6 @@ class ScanController
                 // 4. Bono a Recomendador si existe
                 if ($puntosRecomendador > 0 && $recomendador) {
                     $clienteModel->sumarPuntos($recomendador['id'], $puntosRecomendador);
-                    
-                    // Registrar el movimiento en el historial de ventas para que se refleje en su Actividad
-                    $ventaModel->create($recomendador['id'], $_SESSION['id_usuario'], 0, $puntosRecomendador, "Bono por Recomendar venta a {$c['nombre']}", [], 'aprobado');
 
                     if (!empty($recomendador['celular'])) {
                         $msgReco = "¡Felicidades {$recomendador['nombre']}! Ganaste $puntosRecomendador puntos porque un vecino que recomendaste hizo un pedido.";
