@@ -77,13 +77,13 @@ class ChatbotController {
                     $nextState = 'esperando_producto';
                 } elseif ($modalidad === 'deposito') {
                     $data['modalidad'] = 'En Depósito';
-                    $reply = "Por favor comparte tu ubicación GPS o escribe tu dirección actual para buscar el depósito más cercano:";
-                    $speech = "Por favor comparte tu ubicación de G P S o escribe tu dirección actual para buscar el depósito más cercano.";
+                    $reply = "Por favor comparte tu ubicación GPS o dinos tu dirección actual para buscar el depósito más cercano:";
+                    $speech = "Por favor comparte tu ubicación de G P S o dinos tu dirección actual para buscar el depósito más cercano.";
                     $buttons = ['Compartir Ubicación'];
                     $nextState = 'esperando_ubicacion_punto';
                 } else {
-                    $reply = "Por favor selecciona una opción válida de modalidad:";
-                    $speech = "Por favor selecciona una opción válida. ¿Deseas tu recarga a domicilio o recoger en depósito?";
+                    $reply = "Por favor elige una opción de modalidad:";
+                    $speech = "Por favor elige una opción. ¿Deseas tu recarga a domicilio o recoger en depósito?";
                     $buttons = ['A Domicilio', 'En Depósito'];
                 }
                 break;
@@ -92,7 +92,7 @@ class ChatbotController {
                 $productoOpt = $this->matchOption($message, ['normal', 'premium']);
                 if ($productoOpt) {
                     $data['producto'] = ($productoOpt === 'premium') ? 'Premium' : 'Normal';
-                    $reply = "cuantos balones desea? (digite)";
+                    $reply = "¿Cuántos balones de gas deseas?";
                     $speech = "Perfecto. ¿Cuántos balones de gas deseas solicitar?";
                     $buttons = ['1', '2', '3'];
                     $nextState = 'esperando_cantidad';
@@ -108,13 +108,13 @@ class ChatbotController {
                 if ($qty > 0 && $qty <= 10) {
                     $data['cantidad'] = $qty;
                     $price = $qty * 62;
-                    $reply = "{$qty} Balon de 10 kg precio S/.{$price}\n\nCompartenos tu ubicacion y la unidad estará llevando tu pedido.";
+                    $reply = "{$qty} Balón" . ($qty > 1 ? "es" : "") . " de 10 kg. Precio: S/. {$price}.\n\nPor favor comparte tu ubicación para poder enviar tu pedido.";
                     $speech = "Entendido, " . $qty . " " . ($qty == 1 ? "balón" : "balones") . ". El precio total es de " . $price . " soles. Ahora, por favor compártenos tu ubicación para que la unidad lleve tu pedido.";
                     $buttons = ['Compartir Ubicación'];
                     $nextState = 'esperando_ubicacion';
                 } else {
-                    $reply = "Por favor, ingresa una cantidad válida de balones (un número entre 1 y 10).";
-                    $speech = "Por favor, ingresa una cantidad válida de balones, entre uno y diez.";
+                    $reply = "Por favor, dinos una cantidad válida de balones (entre 1 y 10).";
+                    $speech = "Por favor, dinos una cantidad válida de balones, entre uno y diez.";
                 }
                 break;
 
@@ -159,7 +159,7 @@ class ChatbotController {
                 $puntos = $puntosModel->getAll();
 
                 if (empty($puntos)) {
-                    $reply = "Lo sentimos, no pudimos encontrar puntos de venta disponibles en este momento. Escribe 'menu' para volver a empezar.";
+                    $reply = "Lo sentimos, no pudimos encontrar puntos de venta disponibles en este momento. Di 'menu' para volver a empezar.";
                     $speech = "Lo sentimos, no pudimos encontrar depósitos disponibles en este momento. Por favor reintenta más tarde.";
                     $buttons = ['Volver al inicio'];
                     $nextState = 'esperando_saludo';
@@ -188,7 +188,7 @@ class ChatbotController {
                          "• **Propietario/Dirección**: " . ($punto['propietario'] ?? 'Sin dirección') . "\n" .
                          "• **Horario**: " . ($punto['horario_atencion'] ?? 'No especificado') . "\n\n" .
                          "¿Deseas confirmar tu pedido para recoger en este depósito?";
-                $speech = "Hemos encontrado el depósito cercano " . $punto['nombre'] . " en " . ($punto['propietario'] ?? 'su dirección registrada') . ". ¿Deseas confirmar tu pedido para recoger en este depósito?";
+                $speech = "Hemos encontrado el depósito cercano " . $punto['nombre'] . ". Repito, " . $punto['nombre'] . ", en " . ($punto['propietario'] ?? 'su dirección registrada') . ". ¿Deseas confirmar tu pedido para recoger en este depósito?";
                 
                 $buttons = ['✅ Confirmar Depósito', 'Buscar Otro', '❌ Cancelar'];
                 $nextState = 'viendo_puntos';
@@ -246,11 +246,11 @@ class ChatbotController {
                                  "• **Propietario/Dirección**: " . ($punto['propietario'] ?? 'Sin dirección') . "\n" .
                                  "• **Horario**: " . ($punto['horario_atencion'] ?? 'No especificado') . "\n\n" .
                                  "¿Deseas confirmar tu pedido para recoger en este depósito?";
-                        $speech = "Aquí tienes el siguiente depósito cercano, " . $punto['nombre'] . " en " . ($punto['propietario'] ?? 'su dirección registrada') . ". ¿Deseas confirmar tu pedido para recoger en este local?";
+                        $speech = "Aquí tienes el siguiente depósito cercano, " . $punto['nombre'] . ". Repito, " . $punto['nombre'] . ", en " . ($punto['propietario'] ?? 'su dirección registrada') . ". ¿Deseas confirmar tu pedido para recoger en este local?";
                         $buttons = ['✅ Confirmar Depósito', 'Buscar Otro', '❌ Cancelar'];
                     }
                 } else {
-                    $reply = "Pedido cancelado. Escribe 'hola' o 'menu' para iniciar un nuevo pedido.";
+                    $reply = "Pedido cancelado. Di 'hola' o 'menu' para iniciar un nuevo pedido.";
                     $speech = "Pedido cancelado. ¿Deseas iniciar un nuevo pedido?";
                     $buttons = ['Nuevo Pedido'];
                     $nextState = 'esperando_saludo';

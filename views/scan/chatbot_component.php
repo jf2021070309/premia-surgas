@@ -335,6 +335,7 @@
     window.lastBotReply = "Somos SURGAS\nDeseas tu recarga a :";
 
     let silenceTimer = null;
+    let noSpeechStopTimer = null;
     function resetSilenceTimer() {
         if (silenceTimer) {
             clearTimeout(silenceTimer);
@@ -597,13 +598,27 @@
             }
             startSilenceTimer();
             
-            // Bypass startAudioSource() to prevent Web Audio mic lock-conflict with Speech Recognition.
-            // This guarantees the browser captures clear microphone input for SpeechRecognition.
+            // Automatic microphone timeout: stop listening if user doesn't speak within 3 seconds
+            if (noSpeechStopTimer) clearTimeout(noSpeechStopTimer);
+            noSpeechStopTimer = setTimeout(() => {
+                if (isListening && !isBotProcessing) {
+                    console.log("No speech detected for 3 seconds. Turning off mic to prevent annoying beep loop.");
+                    isListening = false;
+                    if (recognition) {
+                        try { recognition.stop(); } catch(e) {}
+                    }
+                    stopSpeechRecognition();
+                }
+            }, 3000);
         };
         
         recognition.onresult = (event) => {
             resetSilenceTimer();
             startSilenceTimer();
+            if (noSpeechStopTimer) {
+                clearTimeout(noSpeechStopTimer);
+                noSpeechStopTimer = null;
+            }
             let interimTranscript = '';
             let finalTranscript = '';
             
@@ -659,9 +674,8 @@
                     voiceTxt.innerHTML = "<span style='color: #f87171; font-size: 1rem; font-style: normal;'>Error de dictado: " + event.error + "</span>";
                 }
             }
-            if (event.error !== 'no-speech' && event.error !== 'aborted') {
-                stopSpeechRecognition();
-            }
+            // Always stop on any error including no-speech to prevent beep loops
+            stopSpeechRecognition();
         };
         
         recognition.onend = () => {
@@ -718,6 +732,10 @@
         isListening = false;
         currentVisualState = 'idle';
         resetSilenceTimer();
+        if (noSpeechStopTimer) {
+            clearTimeout(noSpeechStopTimer);
+            noSpeechStopTimer = null;
+        }
         
         const micBtn = document.getElementById('chat-mic-btn');
         if (micBtn) {
@@ -914,7 +932,7 @@
                 statusText.innerText = 'Asistente';
                 statusText.style.color = '#64748b';
             }
-            // Wait 1.2s before re-enabling mic — lets the browser fully release the audio pipeline
+            // Wait 150ms before re-enabling mic — almost instant activation
             setTimeout(() => {
                 isBotProcessing = false; // Unlock: bot is done, mic can open again
                 finalSent = false;       // Reset duplicate guard
@@ -930,7 +948,7 @@
                         }
                     }
                 }
-            }, 1200);
+            }, 150);
         };
         
         currentAudio.onerror = (e) => {
@@ -1013,7 +1031,7 @@
                     statusText.innerText = 'Asistente';
                     statusText.style.color = '#64748b';
                 }
-                // Wait 1.2s before re-enabling mic
+                // Wait 150ms before re-enabling mic — almost instant activation
                 setTimeout(() => {
                     isBotProcessing = false; // Unlock mutex
                     finalSent = false;       // Reset duplicate guard
@@ -1029,7 +1047,7 @@
                             }
                         }
                     }
-                }, 1200);
+                }, 150);
             };
             
             utterance.onerror = (e) => {
@@ -1142,6 +1160,13 @@
         });
     }
 
+    function formatChatText(text) {
+        if (!text) return '';
+        let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        formattedText = formattedText.replace(/• /g, '<i class="bx bx-check" style="color: #22c55e;"></i> ');
+        return formattedText;
+    }
+
     function appendMessage(text, isBot) {
         const chatMessages = document.getElementById('chat-messages');
         if (!chatMessages) return;
@@ -1162,8 +1187,7 @@
         bubble.style.animation = 'chatFadeIn 0.3s ease';
         bubble.style.whiteSpace = 'pre-line';
 
-        let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-        formattedText = formattedText.replace(/• /g, '<i class="bx bx-check" style="color: #22c55e;"></i> ');
+        let formattedText = formatChatText(text);
 
         bubble.innerHTML = formattedText;
         chatMessages.appendChild(bubble);
@@ -1374,7 +1398,7 @@
                     speakBotResponse(data.speech || data.reply);
                     const voiceTxt = document.getElementById('voice-transcription-text');
                     if (voiceTxt) {
-                        voiceTxt.innerHTML = "<strong>Surgas:</strong> " + data.reply.replace(/\n/g, '<br>');
+                        voiceTxt.innerHTML = "<strong>Surgas:</strong> " + formatChatText(data.reply).replace(/\n/g, '<br>');
                     }
                     const voiceSubtitle = document.getElementById('voice-agent-subtitle');
                     if (voiceSubtitle) {
@@ -1456,7 +1480,7 @@
         // Initialize voice transcription text
         const voiceTxt = document.getElementById('voice-transcription-text');
         if (voiceTxt) {
-            voiceTxt.innerHTML = "<strong>Surgas:</strong> " + window.lastBotReply.replace(/\n/g, '<br>');
+            voiceTxt.innerHTML = "<strong>Surgas:</strong> " + formatChatText(window.lastBotReply).replace(/\n/g, '<br>');
         }
 
         // Setup Siri Wave Canvas sizing
