@@ -689,7 +689,7 @@
 
                                     <div>
                                         <label class="scan-label" style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.75rem; color: #000; font-size: 0.82rem; letter-spacing: 1.5px; cursor: pointer;">
-                                            <input type="checkbox" id="toggle-recomendador" onchange="document.getElementById('recomendador-container').style.display = this.checked ? 'block' : 'none'; if(!this.checked) { document.getElementById('recomendador-input').value = ''; document.getElementById('recomendador-status').innerHTML = ''; }">
+                                            <input type="checkbox" id="toggle-recomendador" onchange="toggleRecomendador(this)">
                                             ¿ALGUIEN LE RECOMENDÓ? (OPCIONAL)
                                         </label>
                                         <div id="recomendador-container" style="display: none;">
@@ -1046,8 +1046,20 @@
             renderOperations();
         }
 
+        function toggleRecomendador(checkbox) {
+            document.getElementById('recomendador-container').style.display = checkbox.checked ? 'block' : 'none';
+            if (!checkbox.checked) {
+                document.getElementById('recomendador-input').value = '';
+                document.getElementById('recomendador-status').innerHTML = '';
+            }
+            // Re-renderizar para mostrar/ocultar los puntos en el ticket
+            renderOperations();
+        }
+
         function renderOperations() {
             const container = document.getElementById('ops-container');
+            const tieneRecomendador = document.getElementById('toggle-recomendador') && document.getElementById('toggle-recomendador').checked;
+
             if (operations.length === 0) {
                 container.innerHTML = `
                     <div style="text-align: center; color: rgba(255,255,255,0.15); padding: 4rem 1rem;">
@@ -1062,9 +1074,13 @@
             let html = '';
             let total = 0;
             let totalPrice = 0;
+            const PTS_POR_SERVICIO = 2000;
             operations.forEach((op, i) => {
                 total += op.subtotal;
                 totalPrice += (op.precio || 0);
+                const ptsLabel = !tieneRecomendador
+                    ? `<div style="font-size: 1.4rem; font-weight: 950; color: #4ade80; letter-spacing: -1px; line-height: 1;">+${PTS_POR_SERVICIO} pts</div>`
+                    : `<div style="font-size: 0.7rem; font-weight: 700; color: rgba(255,255,255,0.3); margin-top: 2px;">pts → recomendador</div>`;
                 html += `
                     <div style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; padding: 1.25rem; display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1rem; position: relative; transition: all 0.3s ease; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
                         <div style="display: flex; justify-content: space-between; align-items: flex-start;">
@@ -1074,6 +1090,7 @@
                             </div>
                             <div style="text-align: right;">
                                 <div style="font-size: 1.15rem; font-weight: 900; color: #ef4444; margin-bottom: 4px;">S/ ${op.precio ? op.precio.toFixed(2) : '0.00'}</div>
+                                ${ptsLabel}
                             </div>
                         </div>
                         <div style="display: flex; justify-content: flex-end; align-items: center; padding-top: 0.8rem; border-top: 1px solid rgba(255,255,255,0.08);">
@@ -1099,10 +1116,12 @@
             btn.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i> Guardando...";
             btn.disabled = true;
             try {
+                const tieneRecomendador = document.getElementById('toggle-recomendador') && document.getElementById('toggle-recomendador').checked;
+                const totalPuntos = tieneRecomendador ? 0 : total;
                 let totalPrice = operations.reduce((sum, op) => sum + (op.precio || 0), 0);
-                let detalleString = operations.map(op => `• ${op.name} (S/ ${op.precio ? op.precio.toFixed(2) : '0.00'}) (+${op.subtotal} pts)`).join('\n');
+                let detalleString = operations.map(op => `• ${op.name} (S/ ${op.precio ? op.precio.toFixed(2) : '0.00'})`).join('\n');
                 if (operations.length > 1) {
-                    detalleString += `\n──────────\nTOTAL A PAGAR: S/ ${totalPrice.toFixed(2)}\nPUNTOS: ${total} pts`;
+                    detalleString += `\n──────────\nTOTAL A PAGAR: S/ ${totalPrice.toFixed(2)}`;
                 }
                 const recomendadorCodigo = document.getElementById('recomendador-input') ? document.getElementById('recomendador-input').value.trim() : '';
 
@@ -1111,7 +1130,7 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
                         cliente_id: clientId, 
-                        puntos: total, 
+                        puntos: totalPuntos, 
                         monto: totalPrice,
                         detalle: detalleString,
                         recomendador_codigo: recomendadorCodigo,
