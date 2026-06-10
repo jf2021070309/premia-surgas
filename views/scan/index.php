@@ -1124,6 +1124,14 @@
                 }
                 const recomendadorCodigo = document.getElementById('recomendador-input') ? document.getElementById('recomendador-input').value.trim() : '';
 
+                if (tieneRecomendador && !recomendadorCodigo) {
+                    Swal.fire({ icon: 'warning', title: 'Recomendador', text: 'Debe escanear el QR del recomendador.' });
+                    running = false;
+                    btn.innerHTML = "<i class='bx bx-check-circle'></i> Registrar Puntos";
+                    btn.disabled = false;
+                    return;
+                }
+
                 const res = await fetch(baseUrl + 'scan/registrar', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
