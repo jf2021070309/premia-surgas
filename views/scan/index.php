@@ -688,14 +688,19 @@
                                     </div>
 
                                     <div>
-                                        <label class="scan-label" style="margin-bottom: 0.75rem; color: #000; font-size: 0.82rem; letter-spacing: 1.5px;">¿ALGUIEN LE RECOMENDÓ? (OPCIONAL)</label>
-                                        <div style="display: flex; gap: 10px;">
-                                            <input type="hidden" id="recomendador-input" value="">
-                                            <button onclick="initScanner(true)" type="button" style="width: 100%; background: #f8fafc; color: #1e293b; border: 2px dashed #cbd5e1; border-radius: 14px; padding: 1rem; font-weight: 800; font-size: 0.85rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                                                <i class='bx bx-qr-scan' style="font-size: 1.2rem;"></i> Escanear QR del Recomendador
-                                            </button>
+                                        <label class="scan-label" style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.75rem; color: #000; font-size: 0.82rem; letter-spacing: 1.5px; cursor: pointer;">
+                                            <input type="checkbox" id="toggle-recomendador" onchange="document.getElementById('recomendador-container').style.display = this.checked ? 'block' : 'none'; if(!this.checked) { document.getElementById('recomendador-input').value = ''; document.getElementById('recomendador-status').innerHTML = ''; }">
+                                            ¿ALGUIEN LE RECOMENDÓ? (OPCIONAL)
+                                        </label>
+                                        <div id="recomendador-container" style="display: none;">
+                                            <div style="display: flex; gap: 10px;">
+                                                <input type="hidden" id="recomendador-input" value="">
+                                                <button onclick="initScanner(true)" type="button" style="width: 100%; background: #f8fafc; color: #1e293b; border: 2px dashed #cbd5e1; border-radius: 14px; padding: 1rem; font-weight: 800; font-size: 0.85rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                                                    <i class='bx bx-qr-scan' style="font-size: 1.2rem;"></i> Escanear QR del Recomendador
+                                                </button>
+                                            </div>
+                                            <div id="recomendador-status" style="font-size: 0.75rem; font-weight: 700; margin-top: 8px;"></div>
                                         </div>
-                                        <div id="recomendador-status" style="font-size: 0.75rem; font-weight: 700; margin-top: 8px;"></div>
                                     </div>
 
                                     <div class="elite-abono-card" style="background: #fff; border: 1px solid #e2e8f0; border-radius: 20px; padding: 1.5rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.02); margin-top: 0.5rem; text-align: center;">
@@ -735,10 +740,7 @@
                                         <div class="summary-title" style="font-size: 0.82rem; font-weight: 900; color: #fff; text-transform: uppercase; letter-spacing: 0.15em; display: flex; align-items: center; gap: 0.75rem;">Total Acumulado</div>
                                         <div id="main-total-price" style="font-size: 1.2rem; font-weight: 900; color: #ef4444;">S/ 0.00</div>
                                     </div>
-                                    <div id="main-total-pts" style="font-size: 4rem; font-weight: 950; color: #fff; text-align: center; margin: 0.5rem 0; letter-spacing: -3px; line-height: 1; text-shadow: 0 10px 20px rgba(0,0,0,0.3);">
-                                        0
-                                    </div>
-                                    <div style="text-align: center; font-size: 0.82rem; font-weight: 900; color: #fff; text-transform: uppercase; letter-spacing: 0.4em; margin-bottom: 1.8rem; opacity: 0.4;">Puntos</div>
+                                    <div id="main-total-pts" style="display: none;">0</div>
 
                                     <button id="save-all-btn" class="btn-final-sum" onclick="saveAll()">
                                         <i class='bx bx-check-shield'></i> Confirmar Todo
@@ -1071,8 +1073,7 @@
                                 <div style="font-size: 1.15rem; font-weight: 800; color: #fff; line-height: 1.2; letter-spacing: -0.5px;">${op.name}</div>
                             </div>
                             <div style="text-align: right;">
-                                <div style="font-size: 0.85rem; font-weight: 900; color: #ef4444; margin-bottom: 4px;">S/ ${op.precio ? op.precio.toFixed(2) : '0.00'}</div>
-                                <div style="font-size: 1.5rem; font-weight: 950; color: #fff; letter-spacing: -1px; line-height: 1;">+${op.subtotal} pts</div>
+                                <div style="font-size: 1.15rem; font-weight: 900; color: #ef4444; margin-bottom: 4px;">S/ ${op.precio ? op.precio.toFixed(2) : '0.00'}</div>
                             </div>
                         </div>
                         <div style="display: flex; justify-content: flex-end; align-items: center; padding-top: 0.8rem; border-top: 1px solid rgba(255,255,255,0.08);">
