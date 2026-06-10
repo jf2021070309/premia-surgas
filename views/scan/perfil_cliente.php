@@ -2997,7 +2997,7 @@ if (empty($hpw)) {
             <div style="position: relative; width: 160px; height: 160px; display: flex; align-items: center; justify-content: center; margin: 10px 0;">
                 <div id="voice-glowing-ring" style="position: absolute; width: 140px; height: 140px; border-radius: 50%; background: radial-gradient(circle, rgba(239, 68, 68, 0.45) 0%, rgba(130, 21, 21, 0) 70%); animation: scaleUpGlow 3s infinite ease-in-out; pointer-events: none;"></div>
                 <div style="z-index: 2; width: 150px; height: 150px; display: flex; align-items: center; justify-content: center; overflow: visible;">
-                    <img id="voice-gas-cylinder" class="gas-cylinder-svg state-idle" src="<?= BASE_URL ?>gas.png" alt="Mascota Surgas" style="width: 100%; height: 100%; object-fit: contain;">
+                    <img id="voice-gas-cylinder" class="gas-cylinder-svg state-idle" src="<?= BASE_URL ?>gas.png" alt="Mascota Surgas" style="width: 100%; height: 100%; object-fit: contain; cursor: pointer;" onclick="toggleVoiceMic()">
                 </div>
             </div>
 

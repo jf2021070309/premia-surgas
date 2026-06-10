@@ -334,6 +334,23 @@
     window.userHasSelectedVoice = false;
     window.lastBotReply = "Somos SURGAS\nDeseas tu recarga a :";
 
+    let silenceTimer = null;
+    function resetSilenceTimer() {
+        if (silenceTimer) {
+            clearTimeout(silenceTimer);
+            silenceTimer = null;
+        }
+    }
+    function startSilenceTimer() {
+        resetSilenceTimer();
+        if (!window.isVoiceModeActive) return;
+        silenceTimer = setTimeout(() => {
+            if (isListening && !isBotProcessing && window.isVoiceModeActive) {
+                speakBotResponse("¿Sigues ahí? Por favor dime qué opción deseas.");
+            }
+        }, 8000); // 8 seconds of silence
+    }
+
     // Listen to voiceschanged event
     if (synth) {
         if (synth.onvoiceschanged !== undefined) {
@@ -578,12 +595,15 @@
                     voiceTxt.innerHTML = "<span style='color: #a3a3a3; font-style: normal;'>Di algo... el sistema te escuchará</span>";
                 }
             }
+            startSilenceTimer();
             
             // Bypass startAudioSource() to prevent Web Audio mic lock-conflict with Speech Recognition.
             // This guarantees the browser captures clear microphone input for SpeechRecognition.
         };
         
         recognition.onresult = (event) => {
+            resetSilenceTimer();
+            startSilenceTimer();
             let interimTranscript = '';
             let finalTranscript = '';
             
@@ -697,6 +717,7 @@
     function stopSpeechRecognition() {
         isListening = false;
         currentVisualState = 'idle';
+        resetSilenceTimer();
         
         const micBtn = document.getElementById('chat-mic-btn');
         if (micBtn) {
@@ -841,6 +862,7 @@
 
     function speakBotResponse(text) {
         window.lastBotReply = text;
+        resetSilenceTimer();
         // Solo hablar si el modal de voz flotante está abierto
         if (!isTTSEnabled || !window.isVoiceModeActive) return;
         
@@ -1331,7 +1353,7 @@
 
                 if (window.isVoiceModeActive) {
                     // Voice mode: TTS will release the mutex via onended
-                    speakBotResponse(data.reply);
+                    speakBotResponse(data.speech || data.reply);
                     const voiceTxt = document.getElementById('voice-transcription-text');
                     if (voiceTxt) {
                         voiceTxt.innerHTML = "<strong>Surgas:</strong> " + data.reply.replace(/\n/g, '<br>');
@@ -1470,8 +1492,37 @@
         }
     }
 
+    function interruptSpeaking() {
+        if (currentAudio) {
+            currentAudio.pause();
+            currentAudio = null;
+        }
+        if (synth && synth.speaking) {
+            synth.cancel();
+        }
+        isBotProcessing = false;
+        finalSent = false;
+        currentVisualState = 'idle';
+        
+        // Start listening immediately
+        if (!recognition) initSpeechRecognition();
+        if (recognition) {
+            isListening = true;
+            try {
+                recognition.start();
+            } catch(e) {
+                isListening = false;
+                console.warn('Could not start recognition on interrupt:', e);
+            }
+        }
+    }
+
     function toggleVoiceMic() {
-        toggleSpeechRecognition();
+        if (window.isVoiceModeActive && currentVisualState === 'responding') {
+            interruptSpeaking();
+        } else {
+            toggleSpeechRecognition();
+        }
     }
 
     function drawSiriWave() {

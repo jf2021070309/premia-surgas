@@ -51,15 +51,18 @@ class ChatbotController {
             echo json_encode([
                 'success' => true,
                 'reply' => "Somos SURGAS\nDeseas tu recarga a :",
+                'speech' => "Hola, somos Surgas. ¿Deseas tu recarga a domicilio o recoger en depósito?",
                 'buttons' => ['A Domicilio', 'En Depósito']
             ]);
             $_SESSION['chat_state'] = 'esperando_modalidad';
             exit;
         }
 
+        $speech = null;
         switch ($state) {
             case 'esperando_saludo':
                 $reply = "Somos SURGAS\nDeseas tu recarga a :";
+                $speech = "Hola, somos Surgas. ¿Deseas tu recarga a domicilio o recoger en depósito?";
                 $buttons = ['A Domicilio', 'En Depósito'];
                 $nextState = 'esperando_modalidad';
                 break;
@@ -69,15 +72,18 @@ class ChatbotController {
                 if ($modalidad === 'domicilio') {
                     $data['modalidad'] = 'A Domicilio';
                     $reply = "Valor a domicilio S/. 62 x 10 kg\n\nTipo de Balon que usa?";
+                    $speech = "El valor a domicilio es de sesenta y dos soles por el balón de diez kilogramos. ¿Qué tipo de balón usas, normal o premium?";
                     $buttons = ['Normal', 'Premium'];
                     $nextState = 'esperando_producto';
                 } elseif ($modalidad === 'deposito') {
                     $data['modalidad'] = 'En Depósito';
                     $reply = "Por favor comparte tu ubicación GPS o escribe tu dirección actual para buscar el depósito más cercano:";
+                    $speech = "Por favor comparte tu ubicación de G P S o escribe tu dirección actual para buscar el depósito más cercano.";
                     $buttons = ['Compartir Ubicación'];
                     $nextState = 'esperando_ubicacion_punto';
                 } else {
                     $reply = "Por favor selecciona una opción válida de modalidad:";
+                    $speech = "Por favor selecciona una opción válida. ¿Deseas tu recarga a domicilio o recoger en depósito?";
                     $buttons = ['A Domicilio', 'En Depósito'];
                 }
                 break;
@@ -87,10 +93,12 @@ class ChatbotController {
                 if ($producto) {
                     $data['producto'] = $producto;
                     $reply = "cuantos balones desea? (digite)";
+                    $speech = "Perfecto. ¿Cuántos balones de gas deseas solicitar?";
                     $buttons = ['1', '2', '3'];
                     $nextState = 'esperando_cantidad';
                 } else {
                     $reply = "Tipo de balón no válido. Elige una opción:";
+                    $speech = "El tipo de balón seleccionado no es válido. Por favor elige entre normal o premium.";
                     $buttons = ['Normal', 'Premium'];
                 }
                 break;
@@ -101,10 +109,12 @@ class ChatbotController {
                     $data['cantidad'] = $qty;
                     $price = $qty * 62;
                     $reply = "{$qty} Balon de 10 kg precio S/.{$price}\n\nCompartenos tu ubicacion y la unidad estará llevando tu pedido.";
+                    $speech = "Entendido, " . $qty . " " . ($qty == 1 ? "balón" : "balones") . ". El precio total es de " . $price . " soles. Ahora, por favor compártenos tu ubicación para que la unidad lleve tu pedido.";
                     $buttons = ['Compartir Ubicación'];
                     $nextState = 'esperando_ubicacion';
                 } else {
                     $reply = "Por favor, ingresa una cantidad válida de balones (un número mayor a cero).";
+                    $speech = "Por favor, ingresa una cantidad válida de balones.";
                 }
                 break;
 
@@ -137,6 +147,7 @@ class ChatbotController {
                 $audit->registrar($_SESSION['id_usuario'], 'NUEVO_PEDIDO_CHATBOT', "Se creó el pedido chatbot ID #$pedidoId a domicilio", 'CLIENTES', null, 'cliente');
 
                 $reply = "Tenemos metodos de pago efectivo y yape, coordine con el conductor asignado. Gracias por su pedido.";
+                $speech = "Tu pedido ha sido registrado correctamente. Contamos con métodos de pago en efectivo y Yape, puedes coordinar directamente con el conductor asignado. Gracias por tu pedido.";
                 $buttons = ['Nuevo Pedido'];
                 $nextState = 'esperando_saludo';
                 $data = []; // Reset state data
@@ -149,6 +160,7 @@ class ChatbotController {
 
                 if (empty($puntos)) {
                     $reply = "Lo sentimos, no pudimos encontrar puntos de venta disponibles en este momento. Escribe 'menu' para volver a empezar.";
+                    $speech = "Lo sentimos, no pudimos encontrar depósitos disponibles en este momento. Por favor reintenta más tarde.";
                     $buttons = ['Volver al inicio'];
                     $nextState = 'esperando_saludo';
                     break;
@@ -176,6 +188,7 @@ class ChatbotController {
                          "• **Propietario/Dirección**: " . ($punto['propietario'] ?? 'Sin dirección') . "\n" .
                          "• **Horario**: " . ($punto['horario_atencion'] ?? 'No especificado') . "\n\n" .
                          "¿Deseas confirmar tu pedido para recoger en este depósito?";
+                $speech = "Hemos encontrado el depósito cercano " . $punto['nombre'] . " en " . ($punto['propietario'] ?? 'su dirección registrada') . ". ¿Deseas confirmar tu pedido para recoger en este depósito?";
                 
                 $buttons = ['✅ Confirmar Depósito', 'Buscar Otro', '❌ Cancelar'];
                 $nextState = 'viendo_puntos';
@@ -203,6 +216,7 @@ class ChatbotController {
                     $audit->registrar($_SESSION['id_usuario'], 'NUEVO_PEDIDO_CHATBOT', "Se creó el pedido chatbot ID #$pedidoId en depósito", 'CLIENTES', null, 'cliente');
 
                     $reply = "🎉 ¡Pedido #{$pedidoId} registrado! Puedes acercarte a recoger tu balón en el depósito seleccionado. ¡Gracias por tu preferencia!";
+                    $speech = "Excelente, tu pedido número " . $pedidoId . " ha sido registrado. Puedes acercarte a recoger tu balón de gas en el depósito seleccionado. Gracias por tu preferencia.";
                     $buttons = ['Nuevo Pedido'];
                     $nextState = 'esperando_saludo';
                     $data = [];
@@ -212,6 +226,7 @@ class ChatbotController {
 
                     if ($nextIndex >= count($puntos)) {
                         $reply = "No hay más depósitos de gas en nuestra lista en este momento. ¿Deseas seleccionar el primer depósito sugerido?";
+                        $speech = "No tenemos más depósitos cercanos en nuestra lista por ahora. ¿Deseas seleccionar el primer depósito sugerido?";
                         $buttons = ['✅ Confirmar Depósito', '❌ Cancelar'];
                         $data['punto_index'] = 0;
                         $punto = $puntos[0];
@@ -228,10 +243,12 @@ class ChatbotController {
                                  "• **Propietario/Dirección**: " . ($punto['propietario'] ?? 'Sin dirección') . "\n" .
                                  "• **Horario**: " . ($punto['horario_atencion'] ?? 'No especificado') . "\n\n" .
                                  "¿Deseas confirmar tu pedido para recoger en este depósito?";
+                        $speech = "Aquí tienes el siguiente depósito cercano, " . $punto['nombre'] . " en " . ($punto['propietario'] ?? 'su dirección registrada') . ". ¿Deseas confirmar tu pedido para recoger en este local?";
                         $buttons = ['✅ Confirmar Depósito', 'Buscar Otro', '❌ Cancelar'];
                     }
                 } else {
                     $reply = "Pedido cancelado. Escribe 'hola' o 'menu' para iniciar un nuevo pedido.";
+                    $speech = "Pedido cancelado. ¿Deseas iniciar un nuevo pedido?";
                     $buttons = ['Nuevo Pedido'];
                     $nextState = 'esperando_saludo';
                     $data = [];
@@ -245,6 +262,7 @@ class ChatbotController {
         echo json_encode([
             'success' => true,
             'reply' => $reply,
+            'speech' => $speech ?? $reply,
             'buttons' => $buttons
         ]);
         exit;
