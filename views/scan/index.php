@@ -594,8 +594,8 @@
                                     <i class='bx bx-camera'></i>
                                 </div>
                                 <div style="display: flex; flex-direction: column;">
-                                    <h3 style="font-size: 0.95rem; font-weight: 850; color: #1e293b; margin: 0;">Escaneando QR</h3>
-                                    <span style="font-size: 0.7rem; color: #94a3b8; font-weight: 600;">Apunta al código del cliente</span>
+                                    <h3 id="scanner-title" style="font-size: 0.95rem; font-weight: 850; color: #1e293b; margin: 0;">Escaneando QR</h3>
+                                    <span id="scanner-subtitle" style="font-size: 0.7rem; color: #94a3b8; font-weight: 600;">Apunta al código del cliente</span>
                                 </div>
                             </div>
                             <button onclick="stopScanner()" style="background: #f1f5f9; border: none; width: 32px; height: 32px; border-radius: 50%; color: #64748b; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
@@ -690,26 +690,20 @@
                                     <div>
                                         <label class="scan-label" style="margin-bottom: 0.75rem; color: #000; font-size: 0.82rem; letter-spacing: 1.5px;">¿ALGUIEN LE RECOMENDÓ? (OPCIONAL)</label>
                                         <div style="display: flex; gap: 10px;">
-                                            <input type="text" id="recomendador-input" class="elite-input" placeholder="DNI, Celular o Código" style="height: 50px;">
-                                            <button onclick="verificarRecomendador()" type="button" id="btn-verificar-rec" style="background: #e2e8f0; color: #1e293b; border: none; border-radius: 12px; padding: 0 1rem; font-weight: 800; font-size: 0.8rem; cursor: pointer; transition: 0.3s; flex-shrink: 0;">Verificar</button>
+                                            <input type="hidden" id="recomendador-input" value="">
+                                            <button onclick="initScanner(true)" type="button" style="width: 100%; background: #f8fafc; color: #1e293b; border: 2px dashed #cbd5e1; border-radius: 14px; padding: 1rem; font-weight: 800; font-size: 0.85rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                                                <i class='bx bx-qr-scan' style="font-size: 1.2rem;"></i> Escanear QR del Recomendador
+                                            </button>
                                         </div>
                                         <div id="recomendador-status" style="font-size: 0.75rem; font-weight: 700; margin-top: 8px;"></div>
                                     </div>
 
-                                    <div class="elite-abono-card" style="background: #fff; border: 1px solid #e2e8f0; border-radius: 20px; padding: 1.5rem; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 12px rgba(0,0,0,0.02); margin-top: 0.5rem; gap: 1.5rem;">
-                                        <div style="flex: 1;">
-                                            <label class="scan-label" style="font-size: 0.65rem; margin-bottom: 0.4rem; opacity: 0.5;">ABONO PROYECTADO</label>
-                                            <div style="display: flex; align-items: baseline; gap: 0.4rem;">
-                                                <span id="main-op-unit" style="font-size: 2rem; font-weight: 950; color: #000; line-height: 1; letter-spacing: -1px;">0</span>
-                                                <span style="font-size: 1rem; font-weight: 900; color: #000; opacity: 0.2;">PTS</span>
-                                            </div>
-                                        </div>
-                                        <div class="elite-separator" style="width: 1px; height: 40px; background: #e2e8f0;"></div>
-                                        <div style="flex: 1;">
+                                    <div class="elite-abono-card" style="background: #fff; border: 1px solid #e2e8f0; border-radius: 20px; padding: 1.5rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.02); margin-top: 0.5rem; text-align: center;">
+                                        <div>
                                             <label class="scan-label" style="font-size: 0.65rem; margin-bottom: 0.4rem; color: #ef4444; font-weight: 800;">TOTAL A PAGAR</label>
-                                            <div style="display: flex; align-items: baseline; gap: 0.4rem;">
+                                            <div style="display: flex; align-items: baseline; gap: 0.4rem; justify-content: center;">
                                                 <span style="font-size: 1.2rem; font-weight: 900; color: #ef4444; opacity: 0.8;">S/</span>
-                                                <span id="main-op-price" style="font-size: 2rem; font-weight: 950; color: #ef4444; line-height: 1; letter-spacing: -1px;">0.00</span>
+                                                <span id="main-op-price" style="font-size: 2.5rem; font-weight: 950; color: #ef4444; line-height: 1; letter-spacing: -1px;">0.00</span>
                                             </div>
                                         </div>
                                     </div>
@@ -805,7 +799,13 @@
             document.getElementById('scan-right-panel').classList.remove('active');
         }
 
-        async function initScanner() {
+        let scanningRecommenderMode = false;
+
+        async function initScanner(isRecommender = false) {
+            scanningRecommenderMode = isRecommender;
+            document.getElementById('scanner-title').innerText = isRecommender ? 'QR Recomendador' : 'Escaneando QR';
+            document.getElementById('scanner-subtitle').innerText = isRecommender ? 'Escanea el código de quien recomienda' : 'Apunta al código del cliente';
+
             const overlay = document.getElementById('qr-reader-overlay');
             overlay.style.display = 'flex';
             
@@ -852,6 +852,9 @@
             if (event.target.files.length === 0) return;
             const imageFile = event.target.files[0];
             
+            // Si importan imagen desde la barra superior, asumimos que es para el cliente principal
+            scanningRecommenderMode = false;
+            
             // Si ya hay un escáner de cámara corriendo, lo detenemos primero
             if (html5QrCode && html5QrCode.getState() === 2) {
                 try { await html5QrCode.stop(); } catch(e) {}
@@ -885,11 +888,14 @@
             if (html5QrCode && html5QrCode.getState() === 2) {
                 html5QrCode.stop().then(() => {
                     document.getElementById('qr-reader-overlay').style.display = 'none';
+                    scanningRecommenderMode = false;
                 }).catch(() => {
                     document.getElementById('qr-reader-overlay').style.display = 'none';
+                    scanningRecommenderMode = false;
                 });
             } else {
                 document.getElementById('qr-reader-overlay').style.display = 'none';
+                scanningRecommenderMode = false;
             }
         }
 
@@ -911,7 +917,11 @@
             
             const processAndSearch = () => {
                 document.getElementById('qr-reader-overlay').style.display = 'none';
-                buscarCliente(codigo);
+                if (scanningRecommenderMode) {
+                    verificarRecomendador(codigo);
+                } else {
+                    buscarCliente(codigo);
+                }
             };
 
             // Solo intentamos detener si el escáner está realmente escaneando (cámara)
@@ -961,19 +971,16 @@
             }
         }
 
-        async function verificarRecomendador() {
-            const input = document.getElementById('recomendador-input');
+        async function verificarRecomendador(codigo) {
             const statusBox = document.getElementById('recomendador-status');
-            const codigo = input.value.trim();
-            const btn = document.getElementById('btn-verificar-rec');
+            const input = document.getElementById('recomendador-input');
 
             if (!codigo) {
                 statusBox.innerHTML = '';
                 return;
             }
 
-            btn.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i>";
-            btn.disabled = true;
+            statusBox.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i> Verificando...";
 
             try {
                 const res = await fetch(baseUrl + 'clientes/buscarPorCodigo?codigo=' + encodeURIComponent(codigo));
@@ -984,17 +991,19 @@
                     const currentClientName = document.getElementById('res-name').innerText;
                     if (data.nombre === currentClientName) {
                         statusBox.innerHTML = '<span style="color:#ef4444;"><i class="bx bx-error"></i> No puede recomendarse a sí mismo</span>';
+                        input.value = '';
                     } else {
                         statusBox.innerHTML = '<span style="color:#10b981;"><i class="bx bx-check-circle"></i> Válido: ' + data.nombre + '</span>';
+                        input.value = codigo;
                     }
                 } else {
-                    statusBox.innerHTML = '<span style="color:#ef4444;"><i class="bx bx-error"></i> Código no válido</span>';
+                    statusBox.innerHTML = '<span style="color:#ef4444;"><i class="bx bx-error"></i> QR no válido</span>';
+                    input.value = '';
                 }
             } catch (e) {
                 statusBox.innerHTML = '<span style="color:#ef4444;">Error de red</span>';
+                input.value = '';
             }
-            btn.innerHTML = "Verificar";
-            btn.disabled = false;
         }
 
         function updateSubtotal() {
