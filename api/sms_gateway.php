@@ -11,7 +11,7 @@ header('Content-Type: application/json; charset=utf-8');
 
 // --- Seguridad: Validar API KEY ---
 $headers = getallheaders();
-$apiKey = $headers['X-API-Key'] ?? $headers['x-api-key'] ?? '';
+$apiKey = $headers['X-API-Key'] ?? $headers['x-api-key'] ?? $_SERVER['HTTP_X_API_KEY'] ?? '';
 
 if ($apiKey !== SMS_GATEWAY_API_KEY) {
     http_response_code(401);
