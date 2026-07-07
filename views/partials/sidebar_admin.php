@@ -132,6 +132,10 @@ if (!function_exists('isActiveLink')) {
                 -->
 
                 <div class="menu-label">Puntos y Recargas</div>
+                <a href="<?= BASE_URL ?>fise" class="sidebar-item <?= isActiveLink('fise', $current_url) ?>">
+                    <i class='bx bx-barcode'></i>
+                    <span>Gestión FISE</span>
+                </a>
                 <a href="<?= BASE_URL ?>puntos-admin" class="sidebar-item <?= isActiveLink('puntos-admin', $current_url) ?>">
                     <i class='bx bx-check-shield'></i>
                     <span>Gestión de Puntos</span>

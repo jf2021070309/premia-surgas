@@ -142,6 +142,14 @@ $routes = [
     ['GET',  'puntos-admin',              'PuntosAdminController', 'index'],
     ['POST', 'puntos-admin/actualizar',   'PuntosAdminController', 'actualizarEstado'],
 
+    // —— Gestión FISE (Admin) ——
+    ['GET',  'fise',              'FiseController', 'index'],
+    ['GET',  'fise/nuevo',        'FiseController', 'nuevo'],
+    ['POST', 'fise/create',       'FiseController', 'create'],
+    ['GET',  'fise/editar',       'FiseController', 'editar'],
+    ['POST', 'fise/update',       'FiseController', 'update'],
+    ['GET',  'fise/delete',       'FiseController', 'delete'],
+
     // —— Sistema de Incentivos (Admin) ——
     ['GET',  'incentivos/reglas',           'IncentivoController', 'reglas'],
     ['POST', 'incentivos/reglas/create',    'IncentivoController', 'createRegla'],

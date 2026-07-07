@@ -497,7 +497,7 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
         const { createApp } = Vue;
-        axios.defaults.baseURL = 'https://surgascard.com/';
+        axios.defaults.baseURL = '<?= BASE_URL ?>';
         createApp({
             data() {
                 return {
@@ -524,8 +524,12 @@
                         Swal.fire({ icon: 'error', title: 'Error', text: 'Conexión fallida.' });
                     } finally { this.loading = false; }
                 },
-                onDniInput() {
-                    if (this.regForm.dni.length === 8) this.buscarDni();
+                onDniInput(e) {
+                    let val = e.target.value.replace(/\D/g, '').slice(0, 8);
+                    this.regForm.dni = val;
+                    if (val.length === 8) {
+                        this.buscarDni();
+                    }
                 },
                 async buscarDni() {
                     this.buscandoDni = true;

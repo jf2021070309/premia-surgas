@@ -202,8 +202,10 @@
             }
         },
         methods: {
-            onDniInput() {
-                if(this.form.dni.length === 8) {
+            onDniInput(e) {
+                let val = e.target.value.replace(/\D/g, '').slice(0, 8);
+                this.form.dni = val;
+                if(val.length === 8) {
                     this.buscarDni();
                 }
             },
