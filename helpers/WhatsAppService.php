@@ -19,6 +19,13 @@ class WhatsAppService
      */
     public static function sendTemplate(string $to, string $templateName, array $params = [], string $language = 'es')
     {
+        // WhatsApp Desactivado a petición
+        return [
+            'success' => true,
+            'response' => 'WhatsApp simulado (desactivado)'
+        ];
+
+        /*
         // Limpiar el número (solo dígitos)
         $to = preg_replace('/\D/', '', $to);
         
@@ -62,6 +69,7 @@ class WhatsAppService
         ];
 
         return self::executePost($url, $body);
+        */
     }
 
     /**
@@ -73,6 +81,13 @@ class WhatsAppService
      */
     public static function sendText(string $to, string $message)
     {
+        // WhatsApp Desactivado a petición
+        return [
+            'success' => true,
+            'response' => 'WhatsApp simulado (desactivado)'
+        ];
+
+        /*
         $to = preg_replace('/\D/', '', $to);
         if (strlen($to) === 9) $to = '51' . $to;
 
@@ -88,6 +103,7 @@ class WhatsAppService
         ];
 
         return self::executePost($url, $body);
+        */
     }
 
     /**

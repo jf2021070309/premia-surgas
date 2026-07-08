@@ -15,6 +15,13 @@ class SmsService
      */
     public static function send(string $to, string $message)
     {
+        // SMS Desactivado a petición
+        return [
+            'success' => true,
+            'message' => 'SMS simulado (desactivado)'
+        ];
+        
+        /*
         // Limpiar el número (solo dígitos)
         $to = preg_replace('/\D/', '', $to);
         
@@ -41,6 +48,7 @@ class SmsService
                 'error'   => $e->getMessage()
             ];
         }
+        */
     }
 }
 
