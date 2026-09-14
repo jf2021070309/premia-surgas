@@ -77,6 +77,13 @@ define('PUNTOS_API_KEY', 'surgas_puntos_api_2024_secret');
 define('SMS_GATEWAY_URL', 'http://192.168.1.34:8080/send-sms');
 define('SMS_GATEWAY_API_KEY', 'MY_SECRET_KEY_2024');
 
+// —— Configuración de Correo SMTP (Gmail) ——
+define('SMTP_HOST', 'smtp.gmail.com');
+define('SMTP_USER', 'surgas.tacna.26@gmail.com');
+define('SMTP_PASS', 'Surgas654321');
+define('SMTP_PORT', 587);
+define('SMTP_SECURE', 'tls');
+
 // BASE_URL: automática según entorno
 // BASE_URL: automática según entorno
 if (getenv('MYSQL_URL')) {
