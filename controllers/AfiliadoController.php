@@ -295,6 +295,76 @@ class AfiliadoController
         $this->redirect('afiliados/miAnuncio');
     }
 
+    /**
+     * GET /afiliados/solicitar-puntos
+     * Vista dedicada para que el Punto de Venta solicite puntos por balones de 10kg
+     * y muestre su Código QR al Conductor para la verificación fotográfica.
+     */
+    public function solicitarPuntos(): void
+    {
+        $this->requireAfiliado();
+        require_once __DIR__ . '/../models/ClienteModel.php';
+        require_once __DIR__ . '/../models/VentaModel.php';
+        require_once __DIR__ . '/../models/ConfiguracionModel.php';
+
+        $db = Database::getConnection();
+        $identificador = $_SESSION['usuario'] ?? '';
+        $nombreSesion = $_SESSION['nombre_usuario'] ?? '';
+
+        // Buscar el cliente correspondiente a este Punto de Venta
+        $stmtCli = $db->prepare("SELECT * FROM clientes WHERE ruc = ? OR dni = ? OR nombre LIKE ? OR razon_social LIKE ? LIMIT 1");
+        $stmtCli->execute([$identificador, $identificador, "%$nombreSesion%", "%$nombreSesion%"]);
+        $cliente = $stmtCli->fetch(PDO::FETCH_ASSOC);
+
+        // Si no tiene token, generar uno
+        if ($cliente && empty($cliente['token'])) {
+            $newToken = bin2hex(random_bytes(32));
+            $db->prepare("UPDATE clientes SET token = ? WHERE id = ?")->execute([$newToken, $cliente['id']]);
+            $cliente['token'] = $newToken;
+        }
+
+        $ventaModel = new VentaModel();
+        $solicitudes = $cliente ? $ventaModel->getByCliente($cliente['id']) : [];
+        $pendientes = array_values(array_filter($solicitudes, fn($v) => ($v['estado'] ?? '') === 'pendiente' && !empty($v['balones_cantidad'])));
+        $historial = array_values(array_filter($solicitudes, fn($v) => !empty($v['balones_cantidad'])));
+
+        $configModel = new ConfiguracionModel();
+        $puntosPorBalon = (int) ($configModel->getValor('puntos_por_balon_10kg') ?? 10);
+
+        $this->render('afiliados/solicitar_puntos', [
+            'cliente' => $cliente,
+            'pendientes' => $pendientes,
+            'historial' => $historial,
+            'puntosPorBalon' => $puntosPorBalon,
+            'titulo' => 'Solicitar Puntos — Balones 10kg'
+        ]);
+    }
+
+    /**
+     * GET /afiliados/estado-solicitud?id=XX
+     * Verifica en tiempo real si el conductor ya aprobó la entrega
+     */
+    public function estadoSolicitud(): void
+    {
+        $this->requireAfiliado();
+        header('Content-Type: application/json');
+        $id = (int)($_GET['id'] ?? 0);
+        require_once __DIR__ . '/../models/VentaModel.php';
+        $v = (new VentaModel())->getById($id);
+        if (!$v) {
+            echo json_encode(['success' => false]);
+            exit;
+        }
+        echo json_encode([
+            'success' => true,
+            'estado' => $v['estado'],
+            'balones_verificados' => $v['balones_verificados'],
+            'puntos' => $v['puntos'],
+            'conductor_nombre' => $v['conductor_nombre']
+        ]);
+        exit;
+    }
+
 
     // ── helpers ──────────────────────────────────────────────────
 

@@ -169,19 +169,9 @@ if (!function_exists('isActiveLink')) {
             <?php endif; ?>
 
             <div class="menu-label">Operaciones</div>
-            <a href="<?= BASE_URL ?>scan" class="sidebar-item <?= isActiveLink('scan', $current_url) ?>">
-                <i class='bx bx-qr-scan'></i>
-                <span>Suma Puntos</span>
-            </a>
-            <?php if ($sidebarRole === 'conductor' || $sidebarRole === 'admin'): ?>
-                <a href="<?= BASE_URL ?>conductores/mi-historial"
-                    class="sidebar-item <?= isActiveLink('conductores/mi-historial', $current_url) ?>">
-                    <i class='bx bx-history'></i>
-                    <span>Mi Historial</span>
-                </a>
-            <?php endif; ?>
             <?php if ($sidebarRole === 'afiliado'): ?>
-                <a href="<?= BASE_URL ?>panel#solicitar" onclick="if(typeof abrirModalSolicitarPV === 'function'){ abrirModalSolicitarPV(); return false; }" class="sidebar-item">
+                <a href="<?= BASE_URL ?>afiliados/solicitar-puntos"
+                    class="sidebar-item <?= isActiveLink('afiliados/solicitar-puntos', $current_url) ?>">
                     <i class='bx bx-cube-alt'></i>
                     <span>Solicitar Puntos</span>
                 </a>
@@ -195,6 +185,18 @@ if (!function_exists('isActiveLink')) {
                     <i class='bx bx-user-circle'></i>
                     <span>Mi Perfil</span>
                 </a>
+            <?php else: ?>
+                <a href="<?= BASE_URL ?>scan" class="sidebar-item <?= isActiveLink('scan', $current_url) ?>">
+                    <i class='bx bx-qr-scan'></i>
+                    <span>Suma Puntos</span>
+                </a>
+                <?php if ($sidebarRole === 'conductor' || $sidebarRole === 'admin'): ?>
+                    <a href="<?= BASE_URL ?>conductores/mi-historial"
+                        class="sidebar-item <?= isActiveLink('conductores/mi-historial', $current_url) ?>">
+                        <i class='bx bx-history'></i>
+                        <span>Mi Historial</span>
+                    </a>
+                <?php endif; ?>
             <?php endif; ?>
 
             <?php if ($sidebarRole === 'admin'): ?>

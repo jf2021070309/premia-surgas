@@ -81,12 +81,12 @@ class PanelController {
             $metricas_adicionales['puntos_por_dia']      = $puntos_por_dia;
         }
 
-        if ($_SESSION['rol'] === 'conductor' || $_SESSION['rol'] === 'afiliado') {
+        if ($_SESSION['rol'] === 'conductor') {
             $db = Database::getConnection();
             $id_usuario = $_SESSION['id_usuario'];
             $rol_sesion = $_SESSION['rol'];
 
-            // Puntos dados por este usuario HOY
+            // Puntos dados por este conductor HOY
             $puntos_hoy = $db->query("SELECT SUM(puntos) as total FROM ventas WHERE conductor_id = $id_usuario AND DATE(fecha) = CURDATE()")->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
             
             // Total puntos HISTORICO
@@ -95,8 +95,7 @@ class PanelController {
             // Total clientes atendidos por este usuario
             $total_clientes = $db->query("SELECT COUNT(DISTINCT cliente_id) as total FROM ventas WHERE conductor_id = $id_usuario")->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
             
-            // Ranking posicion (por ahora comparados con conductores si es conductor, o general si es afiliado?)
-            // Para simplificar, los comparamos en sus respectivos grupos o general
+            // Ranking posicion
             $ranking_all = $db->query("SELECT u.id, COALESCE(SUM(v.puntos), 0) as total FROM usuarios u LEFT JOIN ventas v ON v.conductor_id = u.id WHERE u.rol = '$rol_sesion' GROUP BY u.id ORDER BY total DESC")->fetchAll(PDO::FETCH_ASSOC);
             $mi_posicion = 0;
             $distancia_siguiente = 0;
@@ -150,7 +149,41 @@ class PanelController {
             $clientePV = $stmtCli->fetch(PDO::FETCH_ASSOC);
 
             if ($clientePV) {
+                // Generar token si aún no tiene
+                if (empty($clientePV['token'])) {
+                    $newToken = bin2hex(random_bytes(32));
+                    $db->prepare("UPDATE clientes SET token = ? WHERE id = ?")->execute([$newToken, $clientePV['id']]);
+                    $clientePV['token'] = $newToken;
+                }
+
                 $solicitudesPV = (new VentaModel())->getPendientesPV($clientePV['id']);
+
+                // Balones totales verificados y aprobados
+                $stmtBalones = $db->prepare("SELECT COALESCE(SUM(COALESCE(balones_verificados, balones_cantidad)), 0) as total FROM ventas WHERE cliente_id = ? AND estado = 'aprobado' AND balones_cantidad IS NOT NULL");
+                $stmtBalones->execute([$clientePV['id']]);
+                $balonesTotal = (int) ($stmtBalones->fetch(PDO::FETCH_ASSOC)['total'] ?? 0);
+
+                // Total de entregas aprobadas
+                $stmtEntregas = $db->prepare("SELECT COUNT(*) as total FROM ventas WHERE cliente_id = ? AND estado = 'aprobado' AND balones_cantidad IS NOT NULL");
+                $stmtEntregas->execute([$clientePV['id']]);
+                $entregasTotal = (int) ($stmtEntregas->fetch(PDO::FETCH_ASSOC)['total'] ?? 0);
+
+                // Últimas entregas de balones recibidas
+                $stmtUltimas = $db->prepare("
+                    SELECT v.*, u.nombre as conductor_nombre 
+                    FROM ventas v 
+                    LEFT JOIN usuarios u ON v.conductor_id = u.id 
+                    WHERE v.cliente_id = ? AND v.balones_cantidad IS NOT NULL
+                    ORDER BY v.fecha DESC 
+                    LIMIT 5
+                ");
+                $stmtUltimas->execute([$clientePV['id']]);
+                $ultimasEntregas = $stmtUltimas->fetchAll(PDO::FETCH_ASSOC);
+
+                $metricas_adicionales['puntos_saldo'] = (int) ($clientePV['puntos'] ?? 0);
+                $metricas_adicionales['balones_recibidos'] = $balonesTotal;
+                $metricas_adicionales['entregas_validadas'] = $entregasTotal;
+                $metricas_adicionales['ultimas_entregas_pv'] = $ultimasEntregas;
             }
         }
 

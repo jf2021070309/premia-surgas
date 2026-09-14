@@ -323,6 +323,48 @@
             color: white;
             box-shadow: 0 4px 10px rgba(249, 115, 22, 0.2);
         }
+
+        /* Punto de Venta Dashboard Styles */
+        .quick-chip-dash {
+            background: #f8fafc;
+            border: 1.5px solid #cbd5e1;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #334155;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quick-chip-dash:hover, .quick-chip-dash.active {
+            background: #800000;
+            color: #fff;
+            border-color: #800000;
+        }
+        .btn-qr-action {
+            background: #f8fafc;
+            border: 1.5px solid #cbd5e1;
+            padding: 0.65rem 1.1rem;
+            border-radius: 12px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #0f172a;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .btn-qr-action:hover {
+            background: #e2e8f0;
+            color: #0f172a;
+        }
+        @media (max-width: 900px) {
+            .pv-grid-responsive {
+                grid-template-columns: 1fr !important;
+            }
+        }
     </style>
 </head>
 
@@ -581,9 +623,9 @@
                         <?php endforeach; ?>
                 <?php endif; ?>
 
-                <?php if ($_SESSION['rol'] === 'conductor' || $_SESSION['rol'] === 'afiliado'): ?>
+                <?php if ($_SESSION['rol'] === 'conductor'): ?>
                     <!-- ══════════════════════════════════════ 
-                         PREMIUM AFILIADO DASHBOARD 
+                         CONDUCTOR DASHBOARD 
                          ══════════════════════════════════════ -->
                     <!-- Unified Banner with Image and KPIs -->
                     <div class="anim-welcome banner-container">
@@ -634,74 +676,9 @@
                         </div>
                     </div>
 
-                    <?php if ($_SESSION['rol'] === 'afiliado'): ?>
-                        <!-- CARD DESTACADO: SOLICITUD DE PUNTOS PARA PUNTO DE VENTA -->
-                        <div style="background: linear-gradient(135deg, #800000 0%, #4a0000 100%); border-radius: 20px; padding: 2rem 2.5rem; color: #fff; margin-bottom: 2rem; box-shadow: 0 15px 35px rgba(128,0,0,0.25); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem;">
-                            <div style="flex: 1; min-width: 280px;">
-                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.6rem;">
-                                    <span style="background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">
-                                        Punto de Venta Autorizado
-                                    </span>
-                                    <span style="background: #10b981; color: #fff; padding: 4px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 800;">
-                                        1 Balón 10kg = <?= $puntosPorBalon ?? 10 ?> pts
-                                    </span>
-                                </div>
-                                <h2 style="margin: 0 0 0.5rem 0; font-size: 1.8rem; font-weight: 900; letter-spacing: -0.5px;">
-                                    ¿Recibiste balones de gas? Solicita tus puntos
-                                </h2>
-                                <p style="margin: 0; font-size: 0.88rem; opacity: 0.9; max-width: 650px; line-height: 1.5;">
-                                    Indica cuántos balones de 10kg te fueron entregados. El conductor asignado validará la entrega con evidencia fotográfica y recuento automático para sumar tus puntos al instante.
-                                </p>
-                            </div>
-                            <div>
-                                <button type="button" onclick="abrirModalSolicitarPV()" style="background: #fff; color: #800000; border: none; padding: 1.1rem 2.2rem; border-radius: 14px; font-size: 1.05rem; font-weight: 900; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); transition: all 0.2s;">
-                                    <i class='bx bx-cube-alt' style="font-size: 1.4rem;"></i> Solicitar Puntos
-                                </button>
-                            </div>
-                        </div>
-
-                        <?php if (!empty($solicitudesPV)): ?>
-                            <!-- Solicitudes Pendientes -->
-                            <div style="background: #fff; border: 1.5px solid #fef3c7; border-radius: 16px; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 4px 15px rgba(245,158,11,0.06);">
-                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 1rem;">
-                                    <div style="width: 38px; height: 38px; border-radius: 10px; background: #fffbeb; color: #d97706; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
-                                        <i class='bx bx-time-five'></i>
-                                    </div>
-                                    <div>
-                                        <h3 style="margin: 0; font-size: 1.05rem; font-weight: 800; color: #92400e;">Solicitudes Pendientes de Validación</h3>
-                                        <span style="font-size: 0.75rem; color: #b45309; font-weight: 500;">Esperando que el conductor capture la evidencia fotográfica y apruebe</span>
-                                    </div>
-                                </div>
-                                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                                    <?php foreach ($solicitudesPV as $sol): ?>
-                                        <div style="display: flex; justify-content: space-between; align-items: center; background: #fffdf5; border: 1px solid #fef08a; padding: 1rem 1.25rem; border-radius: 12px; flex-wrap: wrap; gap: 0.5rem;">
-                                            <div style="display: flex; align-items: center; gap: 12px;">
-                                                <span style="background: #f59e0b; color: #fff; font-weight: 900; font-size: 1.1rem; padding: 6px 14px; border-radius: 8px;">
-                                                    <?= $sol['balones_cantidad'] ?> Balones (10kg)
-                                                </span>
-                                                <div>
-                                                    <strong style="color: #1e293b; font-size: 0.95rem; display: block;">+<?= $sol['puntos'] ?> Puntos calculados</strong>
-                                                    <span style="font-size: 0.75rem; color: #64748b;">Solicitado: <?= date('d/m/Y H:i', strtotime($sol['fecha'])) ?></span>
-                                                </div>
-                                            </div>
-                                            <span style="background: #fef3c7; color: #b45309; font-weight: 800; font-size: 0.75rem; padding: 5px 12px; border-radius: 8px; text-transform: uppercase;">
-                                                ⏳ Esperando Conductor
-                                            </span>
-                                        </div>
-                                    <?php endforeach; ?>
-                                </div>
-                            </div>
-                        <?php endif; ?>
-                    <?php endif; ?>
-
-                    <!-- Main Grid -->
+                    <!-- Main Grid Conductor -->
                     <div style="display: grid; grid-template-columns: 1fr; gap: 2rem; align-items: start;">
-                        
-                        <!-- LEFT COLUMN: Charts & Activity -->
                         <div style="display: flex; flex-direction: column; gap: 2rem;">
-                            
-
-
                             <!-- Recent Transaction List -->
                             <div style="background: white; border-radius: 12px; border: 1px solid #e5e7eb; box-shadow: none; overflow: hidden;">
                                 <div style="background: #f4f6f8; padding: 1.25rem 1.5rem; display: flex; align-items: center; gap: 1rem;">
@@ -719,8 +696,6 @@
                                         <?php foreach ($metricas_adicionales['ultimas_ventas'] as $i => $v): 
                                             $delay = 0.5 + ($i * 0.1);    
                                             $initials = strtoupper(substr($v['cliente_nombre'], 0, 1));
-                                            
-                                            // Spanish Month Formatting
                                             $meses = ["January"=>"Enero", "February"=>"Febrero", "March"=>"Marzo", "April"=>"Abril", "May"=>"Mayo", "June"=>"Junio", "July"=>"Julio", "August"=>"Agosto", "September"=>"Septiembre", "October"=>"Octubre", "November"=>"Noviembre", "December"=>"Diciembre"];
                                             $fecha_esp = strtr(date('d F, H:i', strtotime($v['fecha'])), $meses);
                                         ?>
@@ -759,9 +734,258 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- RIGHT COLUMN REMOVED -->
                     </div>
+
+                <?php elseif ($_SESSION['rol'] === 'afiliado'): ?>
+                    <?php 
+                        $codigoQR = !empty($clientePV['token']) ? $clientePV['token'] : ($clientePV['ruc'] ?? $clientePV['dni'] ?? 'CLI-'.($clientePV['id'] ?? ''));
+                        $qrUrlData = BASE_URL . 'scan?t=' . urlencode($codigoQR);
+                        $qrImgSrc = 'https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=' . urlencode($qrUrlData);
+                        $ultimaPendiente = !empty($solicitudesPV) ? $solicitudesPV[0] : null;
+                    ?>
+                    <!-- ══════════════════════════════════════ 
+                         PUNTO DE VENTA (AFILIADO) DASHBOARD 
+                         ══════════════════════════════════════ -->
+                    <!-- Banner de Resumen y KPIs -->
+                    <div class="anim-welcome banner-container" style="margin-bottom: 2rem;">
+                        <div class="banner-img-col" style="width: 280px; background: transparent; display: flex; align-items: flex-end; justify-content: center; position: relative; flex-shrink: 0; padding-bottom: 15px;">
+                            <img src="<?= BASE_URL ?>assets/premios/panelgas.png" style="width: 85%; height: auto; object-fit: contain; object-position: bottom; transform-origin: bottom center; margin-bottom: -15px;">
+                        </div>
+
+                        <div class="banner-content-col" style="flex: 1; padding: 2rem 2.5rem 2rem 0; display: flex; flex-direction: column; justify-content: center; gap: 1.5rem;">
+                            <div>
+                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.5rem; flex-wrap: wrap;">
+                                    <span style="background: rgba(128,0,0,0.1); color: #800000; padding: 4px 12px; border-radius: 20px; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">
+                                        Punto de Venta Autorizado
+                                    </span>
+                                    <span style="background: #10b981; color: #fff; padding: 4px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 800;">
+                                        1 Balón 10kg = <?= $puntosPorBalon ?? 10 ?> pts
+                                    </span>
+                                </div>
+                                <h2 style="margin: 0; font-size: 1.8rem; font-weight: 950; color: #1e293b; line-height: 1.2;">
+                                    <?= htmlspecialchars($clientePV['razon_social'] ?? $clientePV['nombre'] ?? $_SESSION['nombre_usuario']) ?>
+                                </h2>
+                                <p style="margin: 0.3rem 0 0 0; font-size: 0.85rem; color: #64748b;">
+                                    RUC / Identificador: <strong style="color: #0f172a;"><?= htmlspecialchars($clientePV['ruc'] ?? $clientePV['dni'] ?? $_SESSION['usuario']) ?></strong>
+                                </p>
+                            </div>
+
+                            <!-- KPIs Punto de Venta -->
+                            <div class="conductor-kpi-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                                <!-- Puntos Disponibles -->
+                                <div class="anim-card" style="border-radius: 16px; padding: 1.4rem; color: white; display: flex; flex-direction: column; justify-content: space-between; min-height: 125px; background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);">
+                                    <div style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9;">Puntos Disponibles</div>
+                                    <div style="font-size: 2.8rem; font-weight: 950; line-height: 1; margin: 0.3rem 0;">
+                                        <?= number_format($clientePV['puntos'] ?? 0) ?>
+                                    </div>
+                                    <div style="font-size: 0.78rem; font-weight: 600; display: flex; align-items: center; gap: 0.3rem;">
+                                        <i class='bx bx-star'></i> Saldo activo acumulado
+                                    </div>
+                                </div>
+
+                                <!-- Balones Recibidos -->
+                                <div class="anim-card" style="border-radius: 16px; padding: 1.4rem; color: white; display: flex; flex-direction: column; justify-content: space-between; min-height: 125px; background: linear-gradient(135deg, #800000 0%, #500000 100%);">
+                                    <div style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9;">Balones 10kg Recibidos</div>
+                                    <div style="font-size: 2.8rem; font-weight: 950; line-height: 1; margin: 0.3rem 0;">
+                                        <?= number_format($metricas_adicionales['balones_recibidos'] ?? 0) ?>
+                                    </div>
+                                    <div style="font-size: 0.78rem; font-weight: 600; opacity: 0.85;">Total balones verificados</div>
+                                </div>
+
+                                <!-- Entregas Validadas -->
+                                <div class="anim-card" style="border-radius: 16px; padding: 1.4rem; color: white; display: flex; flex-direction: column; justify-content: space-between; min-height: 125px; background: linear-gradient(135deg, #334155 0%, #1e293b 100%);">
+                                    <div style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9;">Entregas Validadas</div>
+                                    <div style="font-size: 2.8rem; font-weight: 950; line-height: 1; margin: 0.3rem 0;">
+                                        <?= number_format($metricas_adicionales['entregas_validadas'] ?? 0) ?>
+                                    </div>
+                                    <div style="font-size: 0.78rem; font-weight: 600; opacity: 0.85;">Despachos con foto y conteo</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ══════════════════════════════════════════════════════════════ 
+                         SECCIÓN CENTRAL: MI CÓDIGO QR Y SOLICITAR PUNTOS
+                         ══════════════════════════════════════════════════════════════ -->
+                    <div style="display: grid; grid-template-columns: 1.1fr 1fr; gap: 2rem; margin-bottom: 2.5rem;" class="pv-grid-responsive">
+                        
+                        <!-- CARD 1: CÓDIGO QR OFICIAL DEL PUNTO DE VENTA -->
+                        <div style="background: #fff; border: 2.5px solid #800000; border-radius: 20px; padding: 2rem; box-shadow: 0 10px 30px rgba(128,0,0,0.06); display: flex; flex-direction: column; justify-content: space-between; text-align: center;">
+                            <div>
+                                <div style="display: inline-flex; align-items: center; gap: 8px; background: #fdf2f2; color: #800000; padding: 6px 16px; border-radius: 30px; font-weight: 800; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.8rem;">
+                                    <i class='bx bx-qr-scan'></i> Mi Código QR Oficial
+                                </div>
+                                <h3 style="margin: 0 0 0.4rem 0; font-size: 1.4rem; font-weight: 950; color: #0f172a;">
+                                    Código QR para el Conductor
+                                </h3>
+                                <p style="margin: 0 auto 1.2rem auto; font-size: 0.85rem; color: #64748b; max-width: 420px; line-height: 1.5;">
+                                    Muestra este código QR al Conductor cuando te entregue los balones. El conductor lo escaneará con su teléfono para tomar la foto de evidencia y acreditar tus puntos al instante.
+                                </p>
+
+                                <!-- Status de solicitud si existe -->
+                                <div id="pv-status-banner-box" style="margin-bottom: 1.2rem;">
+                                    <?php if ($ultimaPendiente): ?>
+                                        <div style="background: #fffbeb; border: 1.5px solid #f59e0b; color: #b45309; padding: 10px 18px; border-radius: 14px; font-weight: 800; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 8px;">
+                                            <i class='bx bx-loader-alt bx-spin' style="font-size: 1.2rem;"></i>
+                                            <span>Esperando al Conductor: <?= $ultimaPendiente['balones_cantidad'] ?> Balones (+<?= $ultimaPendiente['puntos'] ?> pts)</span>
+                                        </div>
+                                    <?php else: ?>
+                                        <div style="background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; padding: 8px 16px; border-radius: 14px; font-weight: 700; font-size: 0.82rem; display: inline-flex; align-items: center; gap: 6px;">
+                                            <i class='bx bx-check-circle'></i> Listo para que el conductor escanee
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+
+                                <!-- QR CODE EN GRANDE -->
+                                <div style="display: inline-block; padding: 14px; background: #fff; border-radius: 18px; border: 2.5px dashed #cbd5e1; box-shadow: 0 8px 25px rgba(0,0,0,0.08); margin-bottom: 0.8rem;">
+                                    <img src="<?= $qrImgSrc ?>" alt="QR Punto de Venta" style="width: 220px; height: 220px; display: block; border-radius: 8px;">
+                                </div>
+
+                                <div style="font-size: 0.82rem; color: #64748b; font-weight: 600;">
+                                    <?= htmlspecialchars($clientePV['razon_social'] ?? $clientePV['nombre'] ?? '') ?>
+                                    <div style="margin-top: 2px;">RUC / DNI: <strong style="color: #800000;"><?= htmlspecialchars($clientePV['ruc'] ?? $clientePV['dni'] ?? $_SESSION['usuario']) ?></strong></div>
+                                </div>
+                            </div>
+
+                            <!-- Botones de Acción para el QR -->
+                            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 1.4rem; flex-wrap: wrap;">
+                                <a href="<?= $qrImgSrc ?>" download="QR_PuntoVenta_<?= $clientePV['ruc'] ?? $clientePV['id'] ?>.png" target="_blank" class="btn-qr-action">
+                                    <i class='bx bx-download'></i> Descargar QR
+                                </a>
+                                <button type="button" onclick="imprimirQRPV('<?= $qrImgSrc ?>', '<?= htmlspecialchars(addslashes($clientePV['razon_social'] ?? $clientePV['nombre'] ?? 'Punto de Venta')) ?>', '<?= htmlspecialchars($clientePV['ruc'] ?? $clientePV['dni'] ?? '') ?>')" class="btn-qr-action">
+                                    <i class='bx bx-printer'></i> Imprimir QR
+                                </button>
+                                <a href="<?= BASE_URL ?>afiliados/solicitar-puntos" class="btn-qr-action" style="background: #800000; color: #fff; border-color: #800000;">
+                                    <i class='bx bx-fullscreen'></i> Pantalla Completa
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- CARD 2: FORMULARIO RÁPIDO DE SOLICITAR PUNTOS -->
+                        <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 20px; padding: 2rem; box-shadow: 0 10px 30px rgba(0,0,0,0.03); display: flex; flex-direction: column; justify-content: space-between;">
+                            <div>
+                                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1.2rem; padding-bottom: 1rem; border-bottom: 1px solid #e2e8f0;">
+                                    <div style="width: 44px; height: 44px; border-radius: 12px; background: #fdf2f2; color: #800000; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                                        <i class='bx bx-cube-alt'></i>
+                                    </div>
+                                    <div>
+                                        <h3 style="margin: 0; font-size: 1.25rem; font-weight: 950; color: #0f172a;">¿Recibiste balones de gas?</h3>
+                                        <span style="font-size: 0.8rem; color: #64748b; font-weight: 600;">Solicita la acreditación de puntos por balones de 10kg</span>
+                                    </div>
+                                </div>
+
+                                <div style="text-align: center; margin: 1.2rem 0;">
+                                    <label style="display: block; font-size: 0.82rem; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.8rem;">
+                                        Cantidad de balones de 10kg recibidos:
+                                    </label>
+                                    <div style="display: inline-flex; align-items: center; background: #f8fafc; border-radius: 20px; padding: 8px; border: 2.5px solid #cbd5e1;">
+                                        <button type="button" onclick="modificarBalonesDash(-1)" style="background: #fff; border: 1.5px solid #cbd5e1; width: 46px; height: 46px; border-radius: 12px; font-size: 1.4rem; font-weight: 900; color: #0f172a; cursor: pointer;">-</button>
+                                        <input type="number" id="num-balones-dash" value="5" min="1" max="500" oninput="recalcularPuntosDash()" style="width: 90px; text-align: center; border: none; background: transparent; font-size: 2.2rem; font-weight: 950; color: #800000; outline: none;">
+                                        <button type="button" onclick="modificarBalonesDash(1)" style="background: #fff; border: 1.5px solid #cbd5e1; width: 46px; height: 46px; border-radius: 12px; font-size: 1.4rem; font-weight: 900; color: #0f172a; cursor: pointer;">+</button>
+                                    </div>
+                                </div>
+
+                                <!-- Chips rápidos -->
+                                <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-bottom: 1.2rem;">
+                                    <button type="button" class="quick-chip-dash" onclick="fijarBalonesDash(5)">5 balones</button>
+                                    <button type="button" class="quick-chip-dash" onclick="fijarBalonesDash(10)">10 balones</button>
+                                    <button type="button" class="quick-chip-dash" onclick="fijarBalonesDash(20)">20 balones</button>
+                                    <button type="button" class="quick-chip-dash" onclick="fijarBalonesDash(30)">30 balones</button>
+                                    <button type="button" class="quick-chip-dash" onclick="fijarBalonesDash(50)">50 balones</button>
+                                </div>
+
+                                <!-- Cálculo de Puntos Box -->
+                                <div style="background: #ecfdf5; border: 2px dashed #10b981; border-radius: 16px; padding: 1.25rem; text-align: center; margin-bottom: 1.2rem;">
+                                    <span style="font-size: 0.75rem; font-weight: 800; color: #065f46; text-transform: uppercase; letter-spacing: 1.5px;">
+                                        Puntos a recibir al validar
+                                    </span>
+                                    <div style="font-size: 2.5rem; font-weight: 950; color: #065f46; line-height: 1; margin: 6px 0;">
+                                        +<span id="pts-preview-dash">50</span>
+                                    </div>
+                                    <span style="font-size: 0.78rem; font-weight: 700; color: #047857;">
+                                        (Tasa: 1 Balón 10kg = <?= $puntosPorBalon ?? 10 ?> Puntos)
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <button type="button" id="btn-solicitar-dash" onclick="enviarSolicitudRapidaDash()" style="width: 100%; background: #800000; color: #fff; border: none; padding: 1.1rem; border-radius: 14px; font-size: 1.05rem; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 10px 25px rgba(128,0,0,0.3); transition: all 0.2s;">
+                                    <i class='bx bx-send' style="font-size: 1.3rem;"></i> Solicitar Puntos Ahora
+                                </button>
+                                <div style="text-align: center; margin-top: 0.8rem;">
+                                    <a href="<?= BASE_URL ?>afiliados/solicitar-puntos" style="font-size: 0.82rem; color: #64748b; text-decoration: underline; font-weight: 600;">
+                                        Ir al panel dedicado de solicitud y escaneo
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- TABLA: HISTORIAL DE ENTREGAS DE BALONES (PUNTO DE VENTA) -->
+                    <div style="background: white; border-radius: 16px; border: 1px solid #e5e7eb; box-shadow: 0 4px 20px rgba(0,0,0,0.02); overflow: hidden; margin-bottom: 2rem;">
+                        <div style="background: #f8fafc; padding: 1.25rem 1.5rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e2e8f0; flex-wrap: wrap; gap: 1rem;">
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <div style="width: 44px; height: 44px; border-radius: 12px; background: #fdf2f2; border: 1px solid #fee2e2; display: flex; align-items: center; justify-content: center; color: #800000; font-size: 1.4rem; flex-shrink: 0;">
+                                    <i class='bx bx-history'></i>
+                                </div>
+                                <div>
+                                    <h3 style="margin: 0; font-size: 1.15rem; font-weight: 900; color: #0f172a; line-height: 1.2;">Historial de Entregas de Balones</h3>
+                                    <p style="margin: 0.15rem 0 0; font-size: 0.8rem; color: #64748b; font-weight: 500;">Entregas de balones de 10kg verificadas por los conductores</p>
+                                </div>
+                            </div>
+                            <a href="<?= BASE_URL ?>afiliados/solicitar-puntos" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 6px 14px; border-radius: 8px; font-size: 0.8rem; font-weight: 700; color: #0f172a; text-decoration: none;">
+                                Ver Historial Completo
+                            </a>
+                        </div>
+                        
+                        <div style="display: flex; flex-direction: column; padding: 0.5rem 1.5rem 1.5rem;">
+                            <?php if (!empty($metricas_adicionales['ultimas_entregas_pv'])): ?>
+                                <?php foreach ($metricas_adicionales['ultimas_entregas_pv'] as $v): 
+                                    $meses = ["January"=>"Enero", "February"=>"Febrero", "March"=>"Marzo", "April"=>"Abril", "May"=>"Mayo", "June"=>"Junio", "July"=>"Julio", "August"=>"Agosto", "September"=>"Septiembre", "October"=>"Octubre", "November"=>"Noviembre", "December"=>"Diciembre"];
+                                    $fecha_esp = strtr(date('d F, H:i', strtotime($v['fecha'])), $meses);
+                                ?>
+                                    <div class="activity-row">
+                                        <div style="display: flex; align-items: center; gap: 1rem;">
+                                            <div class="activity-avatar" style="background: #fdf2f2; color: #800000;">
+                                                <i class='bx bx-cube-alt'></i>
+                                            </div>
+                                            <div>
+                                                <div style="font-weight: 800; color: #1e293b; font-size: 0.95rem; margin-bottom: 2px;">
+                                                    <?= $v['balones_verificados'] ?? $v['balones_cantidad'] ?> Balones de 10kg
+                                                </div>
+                                                <div style="font-size: 0.78rem; color: #64748b; font-weight: 500;">
+                                                    Conductor: <b><?= htmlspecialchars($v['conductor_nombre'] ?? 'Sin asignar') ?></b> • <?= $fecha_esp ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+                                            <div style="font-weight: 950; color: #065f46; font-size: 1.15rem;">+<?= $v['puntos'] ?> <span style="font-size: 0.8rem; font-weight: 700;">pts</span></div>
+                                            <?php if (($v['estado'] ?? '') === 'aprobado'): ?>
+                                                <span style="font-size: 0.7rem; color: #16a34a; background: #dcfce7; padding: 3px 8px; border-radius: 6px; font-weight: 800; text-transform: uppercase;">
+                                                    ✓ Aprobado
+                                                </span>
+                                            <?php elseif (($v['estado'] ?? '') === 'pendiente'): ?>
+                                                <span style="font-size: 0.7rem; color: #d97706; background: #fef3c7; padding: 3px 8px; border-radius: 6px; font-weight: 800; text-transform: uppercase;">
+                                                    ⏳ Pendiente
+                                                </span>
+                                            <?php else: ?>
+                                                <span style="font-size: 0.7rem; color: #dc2626; background: #fee2e2; padding: 3px 8px; border-radius: 6px; font-weight: 800; text-transform: uppercase;">
+                                                    Rechazado
+                                                </span>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <div style="text-align: center; padding: 2.5rem; color: #94a3b8; font-size: 0.9rem;">
+                                    <i class='bx bx-cube-alt' style="font-size: 2.5rem; display: block; margin-bottom: 0.5rem; opacity: 0.4;"></i>
+                                    No tienes entregas registradas aún. ¡Solicita tus puntos cada vez que recibas balones de gas!
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+
                 <?php endif; ?>
             </div>
         </div>
@@ -1251,6 +1475,151 @@
                     });
                 }
             }
+
+            // Funciones para el Widget Rápido del Dashboard de Afiliado
+            function modificarBalonesDash(delta) {
+                const inp = document.getElementById('num-balones-dash');
+                if (!inp) return;
+                let val = parseInt(inp.value) || 1;
+                val = Math.max(1, Math.min(500, val + delta));
+                inp.value = val;
+                recalcularPuntosDash();
+            }
+
+            function fijarBalonesDash(cant) {
+                const inp = document.getElementById('num-balones-dash');
+                if (!inp) return;
+                inp.value = cant;
+                recalcularPuntosDash();
+                document.querySelectorAll('.quick-chip-dash').forEach(ch => {
+                    ch.classList.toggle('active', parseInt(ch.textContent) === cant);
+                });
+            }
+
+            function recalcularPuntosDash() {
+                const inp = document.getElementById('num-balones-dash');
+                const out = document.getElementById('pts-preview-dash');
+                if (!inp || !out) return;
+                let val = parseInt(inp.value) || 1;
+                if (val < 1) { val = 1; inp.value = 1; }
+                const pts = val * PTS_POR_BALON_PV;
+                out.textContent = pts;
+            }
+
+            async function enviarSolicitudRapidaDash() {
+                const inp = document.getElementById('num-balones-dash');
+                const balones = parseInt(inp ? inp.value : 5) || 1;
+                const btn = document.getElementById('btn-solicitar-dash');
+                const origHtml = btn ? btn.innerHTML : '';
+
+                if (!CLIENTE_PV_ID) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Cuenta no vinculada',
+                        text: 'No se encontró un cliente Punto de Venta vinculado a tu usuario.',
+                        confirmButtonColor: '#800000'
+                    });
+                    return;
+                }
+
+                if (btn) {
+                    btn.disabled = true;
+                    btn.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i> Registrando...";
+                }
+
+                try {
+                    const formData = new FormData();
+                    formData.append('cliente_id', CLIENTE_PV_ID);
+                    formData.append('balones', balones);
+
+                    const res = await fetch('<?= BASE_URL ?>scan/solicitar-puntos-pv', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const data = await res.json();
+
+                    if (data.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Solicitud Registrada con Éxito!',
+                            html: `Has solicitado <b>${data.puntos} puntos</b> por <b>${balones} balones de 10kg</b>.<br><br>Muestra tu <b>Código QR en pantalla</b> al Conductor para que valide la entrega.`,
+                            confirmButtonColor: '#800000'
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    } else {
+                        if (btn) { btn.disabled = false; btn.innerHTML = origHtml; }
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Atención',
+                            text: data.message || 'No se pudo registrar la solicitud.',
+                            confirmButtonColor: '#800000'
+                        });
+                    }
+                } catch(e) {
+                    if (btn) { btn.disabled = false; btn.innerHTML = origHtml; }
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error de Red',
+                        text: 'Ocurrió un error al contactar el servidor.',
+                        confirmButtonColor: '#800000'
+                    });
+                }
+            }
+
+            function imprimirQRPV(qrUrl, nombre, ruc) {
+                const ventana = window.open('', '_blank', 'width=650,height=750');
+                ventana.document.write(`
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <meta charset="UTF-8">
+                        <title>Código QR - Punto de Venta PremiaSurgas</title>
+                        <style>
+                            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; padding: 40px; margin: 0; color: #1e293b; background: #fff; }
+                            .card { border: 4px solid #800000; border-radius: 24px; padding: 35px 25px; max-width: 440px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+                            h1 { color: #800000; font-size: 26px; margin: 0 0 4px 0; font-weight: 900; letter-spacing: 1px; }
+                            .sub { font-size: 13px; color: #64748b; margin-bottom: 20px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+                            img { width: 280px; height: 280px; margin: 15px auto; display: block; border-radius: 12px; }
+                            .name { font-size: 18px; font-weight: 800; color: #0f172a; margin-top: 15px; }
+                            .ruc { font-size: 14px; color: #475569; font-weight: 700; margin-top: 4px; }
+                            .footer { margin-top: 25px; font-size: 12px; color: #800000; font-weight: 800; border-top: 1px dashed #cbd5e1; padding-top: 15px; text-transform: uppercase; }
+                        </style>
+                    </head>
+                    <body onload="window.print(); window.close();">
+                        <div class="card">
+                            <h1>PREMIASURGAS</h1>
+                            <div class="sub">Punto de Venta Autorizado</div>
+                            <img src="${qrUrl}" alt="QR Code">
+                            <div class="name">${nombre}</div>
+                            <div class="ruc">RUC / DNI: ${ruc}</div>
+                            <div class="footer">Muestra este código al conductor para validar tu entrega de balones</div>
+                        </div>
+                    </body>
+                    </html>
+                `);
+                ventana.document.close();
+            }
+
+            // Polling en tiempo real para detectar aprobación del conductor
+            <?php if (!empty($ultimaPendiente)): ?>
+            setInterval(async () => {
+                try {
+                    const res = await fetch('<?= BASE_URL ?>afiliados/estado-solicitud?id=<?= $ultimaPendiente['id'] ?>');
+                    const data = await res.json();
+                    if (data.success && data.estado === 'aprobado') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Entrega Aprobada por el Conductor!',
+                            html: `El conductor <b>${data.conductor_nombre || 'asignado'}</b> validó la entrega de <b>${data.balones_verificados} balones</b>.<br><br><span style="font-size: 1.5rem; color: #16a34a; font-weight: 900;">+${data.puntos} PUNTOS SUMADOS</span>`,
+                            confirmButtonColor: '#800000'
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    }
+                } catch(e) {}
+            }, 3000);
+            <?php endif; ?>
         </script>
     <?php endif; ?>
 

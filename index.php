@@ -107,6 +107,8 @@ $routes = [
     ['POST', 'afiliados/guardarAnuncio', 'AfiliadoController', 'guardarAnuncio'],
     ['GET',  'afiliados/perfil',       'AfiliadoController', 'perfil'],
     ['POST', 'afiliados/actualizarPerfil', 'AfiliadoController', 'actualizarPerfil'],
+    ['GET',  'afiliados/solicitar-puntos', 'AfiliadoController', 'solicitarPuntos'],
+    ['GET',  'afiliados/estado-solicitud',  'AfiliadoController', 'estadoSolicitud'],
 
     // —— QR ——
     ['GET',  'qr/generate',  'QrController',     'generate'],

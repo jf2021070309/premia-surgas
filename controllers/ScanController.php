@@ -27,6 +27,12 @@ class ScanController
         $sessUserId = $_SESSION['id_usuario'] ?? null;
         $sessRol = $_SESSION['rol'] ?? '';
 
+        // El Punto de Venta (afiliado) no debe tener acceso a Suma Puntos ni al escáner
+        if ($sessRol === 'afiliado') {
+            header('Location: ' . BASE_URL . 'afiliados/solicitar-puntos');
+            exit;
+        }
+
         // Escenario 1: Conductor/Admin escaneó un QR y tiene un token
         if (($sessRol === 'conductor' || $sessRol === 'admin') && $token) {
             $opModel = new TipoOperacionModel();
