@@ -135,12 +135,34 @@ class PanelController {
             $metricas_adicionales['total_lider'] = $total_lider;
         }
 
+        // Datos específicos si es Afiliado / Punto de Venta
+        $clientePV = null;
+        $solicitudesPV = [];
+        require_once __DIR__ . '/../models/ConfiguracionModel.php';
+        $puntosPorBalon = (int) ((new ConfiguracionModel())->getValor('puntos_por_balon_10kg') ?? 10);
+
+        if ($_SESSION['rol'] === 'afiliado') {
+            $db = Database::getConnection();
+            $identificador = $_SESSION['usuario'] ?? '';
+            $nombreSesion = $_SESSION['nombre_usuario'] ?? '';
+            $stmtCli = $db->prepare("SELECT * FROM clientes WHERE ruc = ? OR dni = ? OR nombre LIKE ? OR razon_social LIKE ? LIMIT 1");
+            $stmtCli->execute([$identificador, $identificador, "%$nombreSesion%", "%$nombreSesion%"]);
+            $clientePV = $stmtCli->fetch(PDO::FETCH_ASSOC);
+
+            if ($clientePV) {
+                $solicitudesPV = (new VentaModel())->getPendientesPV($clientePV['id']);
+            }
+        }
+
         $this->render('panel', [
             'totales'        => $totales,
             'notificaciones' => $notificaciones,
             'notificaciones_recargas' => $notificaciones_recargas,
             'metricas_adicionales' => $metricas_adicionales,
-            'ventas_pendientes' => (new VentaModel())->getPendientes()
+            'ventas_pendientes' => (new VentaModel())->getPendientes(),
+            'clientePV'      => $clientePV,
+            'solicitudesPV'  => $solicitudesPV,
+            'puntosPorBalon' => $puntosPorBalon
         ]);
     }
 

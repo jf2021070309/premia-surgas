@@ -634,6 +634,66 @@
                         </div>
                     </div>
 
+                    <?php if ($_SESSION['rol'] === 'afiliado'): ?>
+                        <!-- CARD DESTACADO: SOLICITUD DE PUNTOS PARA PUNTO DE VENTA -->
+                        <div style="background: linear-gradient(135deg, #800000 0%, #4a0000 100%); border-radius: 20px; padding: 2rem 2.5rem; color: #fff; margin-bottom: 2rem; box-shadow: 0 15px 35px rgba(128,0,0,0.25); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem;">
+                            <div style="flex: 1; min-width: 280px;">
+                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.6rem;">
+                                    <span style="background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">
+                                        Punto de Venta Autorizado
+                                    </span>
+                                    <span style="background: #10b981; color: #fff; padding: 4px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 800;">
+                                        1 Balón 10kg = <?= $puntosPorBalon ?? 10 ?> pts
+                                    </span>
+                                </div>
+                                <h2 style="margin: 0 0 0.5rem 0; font-size: 1.8rem; font-weight: 900; letter-spacing: -0.5px;">
+                                    ¿Recibiste balones de gas? Solicita tus puntos
+                                </h2>
+                                <p style="margin: 0; font-size: 0.88rem; opacity: 0.9; max-width: 650px; line-height: 1.5;">
+                                    Indica cuántos balones de 10kg te fueron entregados. El conductor asignado validará la entrega con evidencia fotográfica y recuento automático para sumar tus puntos al instante.
+                                </p>
+                            </div>
+                            <div>
+                                <button type="button" onclick="abrirModalSolicitarPV()" style="background: #fff; color: #800000; border: none; padding: 1.1rem 2.2rem; border-radius: 14px; font-size: 1.05rem; font-weight: 900; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); transition: all 0.2s;">
+                                    <i class='bx bx-cube-alt' style="font-size: 1.4rem;"></i> Solicitar Puntos
+                                </button>
+                            </div>
+                        </div>
+
+                        <?php if (!empty($solicitudesPV)): ?>
+                            <!-- Solicitudes Pendientes -->
+                            <div style="background: #fff; border: 1.5px solid #fef3c7; border-radius: 16px; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 4px 15px rgba(245,158,11,0.06);">
+                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 1rem;">
+                                    <div style="width: 38px; height: 38px; border-radius: 10px; background: #fffbeb; color: #d97706; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
+                                        <i class='bx bx-time-five'></i>
+                                    </div>
+                                    <div>
+                                        <h3 style="margin: 0; font-size: 1.05rem; font-weight: 800; color: #92400e;">Solicitudes Pendientes de Validación</h3>
+                                        <span style="font-size: 0.75rem; color: #b45309; font-weight: 500;">Esperando que el conductor capture la evidencia fotográfica y apruebe</span>
+                                    </div>
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                    <?php foreach ($solicitudesPV as $sol): ?>
+                                        <div style="display: flex; justify-content: space-between; align-items: center; background: #fffdf5; border: 1px solid #fef08a; padding: 1rem 1.25rem; border-radius: 12px; flex-wrap: wrap; gap: 0.5rem;">
+                                            <div style="display: flex; align-items: center; gap: 12px;">
+                                                <span style="background: #f59e0b; color: #fff; font-weight: 900; font-size: 1.1rem; padding: 6px 14px; border-radius: 8px;">
+                                                    <?= $sol['balones_cantidad'] ?> Balones (10kg)
+                                                </span>
+                                                <div>
+                                                    <strong style="color: #1e293b; font-size: 0.95rem; display: block;">+<?= $sol['puntos'] ?> Puntos calculados</strong>
+                                                    <span style="font-size: 0.75rem; color: #64748b;">Solicitado: <?= date('d/m/Y H:i', strtotime($sol['fecha'])) ?></span>
+                                                </div>
+                                            </div>
+                                            <span style="background: #fef3c7; color: #b45309; font-weight: 800; font-size: 0.75rem; padding: 5px 12px; border-radius: 8px; text-transform: uppercase;">
+                                                ⏳ Esperando Conductor
+                                            </span>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                    <?php endif; ?>
+
                     <!-- Main Grid -->
                     <div style="display: grid; grid-template-columns: 1fr; gap: 2rem; align-items: start;">
                         
@@ -1037,6 +1097,160 @@
 
 
             });
+        </script>
+    <?php endif; ?>
+
+    <?php if ($_SESSION['rol'] === 'afiliado'): ?>
+        <!-- MODAL: SOLICITAR PUNTOS PV -->
+        <div id="modal-pv-solicitar" style="display: none; position: fixed; inset: 0; z-index: 999999; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); align-items: center; justify-content: center; padding: 1rem;">
+            <div style="background: #fff; border-radius: 24px; max-width: 480px; width: 100%; box-shadow: 0 30px 80px rgba(0,0,0,0.4); overflow: hidden;">
+                <!-- Header -->
+                <div style="background: #800000; padding: 1.5rem 1.75rem; color: #fff; display: flex; justify-content: space-between; align-items: center;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div style="background: rgba(255,255,255,0.2); width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
+                            <i class='bx bx-cube-alt'></i>
+                        </div>
+                        <div>
+                            <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800;">Solicitud de Puntos</h3>
+                            <span style="font-size: 0.75rem; opacity: 0.85;">Punto de Venta — Balones de 10kg</span>
+                        </div>
+                    </div>
+                    <button type="button" onclick="cerrarModalSolicitarPV()" style="background: rgba(255,255,255,0.2); border: none; width: 32px; height: 32px; border-radius: 50%; color: #fff; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center;">
+                        <i class='bx bx-x'></i>
+                    </button>
+                </div>
+
+                <!-- Body -->
+                <div style="padding: 1.75rem;">
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 1rem 1.25rem; margin-bottom: 1.5rem;">
+                        <div style="font-size: 0.75rem; color: #64748b; font-weight: 700; text-transform: uppercase;">Punto de Venta</div>
+                        <div style="font-size: 1rem; font-weight: 800; color: #0f172a; margin-top: 2px;">
+                            <?= htmlspecialchars($_SESSION['nombre_usuario'] ?? 'Mi Negocio') ?>
+                        </div>
+                        <div style="font-size: 0.75rem; color: #10b981; font-weight: 700; margin-top: 4px;">
+                            <i class='bx bx-check-shield'></i> Tasa activa: 1 balón de 10kg = <b><?= $puntosPorBalon ?? 10 ?> puntos</b>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-bottom: 1.5rem;">
+                        <label style="display: block; font-size: 0.85rem; font-weight: 800; color: #475569; text-transform: uppercase; margin-bottom: 0.75rem;">
+                            Cantidad de Balones de 10kg
+                        </label>
+                        <div style="display: inline-flex; align-items: center; background: #f1f5f9; border-radius: 16px; padding: 6px; border: 2px solid #e2e8f0;">
+                            <button type="button" onclick="cambiarBalonesPV(-1)" style="background: #fff; border: 1px solid #cbd5e1; width: 44px; height: 44px; border-radius: 12px; font-size: 1.3rem; font-weight: 900; color: #0f172a; cursor: pointer;">
+                                -
+                            </button>
+                            <input type="number" id="input-pv-balones" value="1" min="1" max="500" oninput="calcularPuntosPVModal()" style="width: 80px; text-align: center; border: none; background: transparent; font-size: 1.8rem; font-weight: 950; color: #800000; outline: none;">
+                            <button type="button" onclick="cambiarBalonesPV(1)" style="background: #fff; border: 1px solid #cbd5e1; width: 44px; height: 44px; border-radius: 12px; font-size: 1.3rem; font-weight: 900; color: #0f172a; cursor: pointer;">
+                                +
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Total points box -->
+                    <div style="background: #ecfdf5; border: 2px dashed #10b981; border-radius: 16px; padding: 1.25rem; text-align: center; margin-bottom: 1.5rem;">
+                        <span style="font-size: 0.75rem; font-weight: 800; color: #065f46; text-transform: uppercase; letter-spacing: 1px;">TOTAL DE PUNTOS A RECIBIR</span>
+                        <div style="font-size: 2.2rem; font-weight: 950; color: #047857; line-height: 1.1; margin-top: 4px;">
+                            +<span id="txt-pv-puntos-calc"><?= $puntosPorBalon ?? 10 ?></span> <span style="font-size: 1rem; font-weight: 700;">PTS</span>
+                        </div>
+                        <span style="font-size: 0.72rem; color: #065f46; opacity: 0.85;">Acreditación inmediata al verificar con el conductor</span>
+                    </div>
+
+                    <button type="button" id="btn-submit-solicitar-pv" onclick="solicitarPuntosPVConfirmar()" style="width: 100%; background: #800000; color: #fff; border: none; padding: 1rem; border-radius: 14px; font-weight: 800; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 8px 25px rgba(128,0,0,0.3);">
+                        <i class='bx bx-send'></i> Enviar Solicitud de Puntos
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            const PTS_POR_BALON_PV = <?= (int)($puntosPorBalon ?? 10) ?>;
+            const CLIENTE_PV_ID = <?= (int)($clientePV['id'] ?? 0) ?>;
+
+            function abrirModalSolicitarPV() {
+                document.getElementById('modal-pv-solicitar').style.display = 'flex';
+                calcularPuntosPVModal();
+            }
+
+            function cerrarModalSolicitarPV() {
+                document.getElementById('modal-pv-solicitar').style.display = 'none';
+            }
+
+            function cambiarBalonesPV(delta) {
+                const inp = document.getElementById('input-pv-balones');
+                let val = parseInt(inp.value) || 1;
+                val = Math.max(1, val + delta);
+                inp.value = val;
+                calcularPuntosPVModal();
+            }
+
+            function calcularPuntosPVModal() {
+                const inp = document.getElementById('input-pv-balones');
+                let val = parseInt(inp.value) || 1;
+                if (val < 1) { val = 1; inp.value = 1; }
+                const total = val * PTS_POR_BALON_PV;
+                document.getElementById('txt-pv-puntos-calc').textContent = total;
+            }
+
+            async function solicitarPuntosPVConfirmar() {
+                const balones = parseInt(document.getElementById('input-pv-balones').value) || 1;
+                const btn = document.getElementById('btn-submit-solicitar-pv');
+                const origHtml = btn.innerHTML;
+
+                if (!CLIENTE_PV_ID) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Cuenta no vinculada',
+                        text: 'No se encontró un cliente Punto de Venta vinculado a tu RUC/Usuario. Contacta con el Administrador.'
+                    });
+                    return;
+                }
+
+                btn.disabled = true;
+                btn.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i> Enviando solicitud...";
+
+                try {
+                    const formData = new FormData();
+                    formData.append('cliente_id', CLIENTE_PV_ID);
+                    formData.append('balones', balones);
+
+                    const res = await fetch('<?= BASE_URL ?>scan/solicitar-puntos-pv', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const data = await res.json();
+
+                    if (data.success) {
+                        cerrarModalSolicitarPV();
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Solicitud Registrada!',
+                            html: `Has solicitado <b>${data.puntos} puntos</b> por <b>${balones} balones</b> de 10kg.<br><br>El conductor asignado capturará la foto de evidencia y aprobará la asignación de tus puntos.`,
+                            confirmButtonColor: '#800000'
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    } else {
+                        btn.disabled = false;
+                        btn.innerHTML = origHtml;
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: data.message || 'No se pudo registrar la solicitud.',
+                            confirmButtonColor: '#800000'
+                        });
+                    }
+                } catch (e) {
+                    btn.disabled = false;
+                    btn.innerHTML = origHtml;
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error de Red',
+                        text: 'Ocurrió un error al enviar la solicitud.',
+                        confirmButtonColor: '#800000'
+                    });
+                }
+            }
         </script>
     <?php endif; ?>
 
