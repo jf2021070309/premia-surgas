@@ -7,7 +7,7 @@
     <link rel="icon" type="image/png" href="<?= BASE_URL ?>assets/premios/icono.png">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="<?= BASE_URL ?>assets/js/balloon-detector.js"></script>
+    <script src="<?= BASE_URL ?>assets/js/balloon-detector.js?v=<?= file_exists(__DIR__ . '/../../assets/js/balloon-detector.js') ? filemtime(__DIR__ . '/../../assets/js/balloon-detector.js') : time() ?>"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-layout.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-tables.css">

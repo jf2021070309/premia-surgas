@@ -64,16 +64,20 @@ window.BalloonDetector = class BalloonDetector {
                 this.markers.splice(removeIndex, 1);
             } else {
                 // Agregar nuevo marcador centrado en el clic
-                const defaultW = Math.max(30, this.canvas.width * 0.12);
-                const defaultH = defaultW * 1.7;
+                const defaultW = Math.max(35, Math.round(this.canvas.width * 0.15));
+                const defaultH = Math.round(defaultW * 1.65);
                 this.markers.push({
-                    x: Math.max(0, clickX - defaultW / 2),
-                    y: Math.max(0, clickY - defaultH / 2),
+                    x: Math.max(5, Math.round(clickX - defaultW / 2)),
+                    y: Math.max(10, Math.round(clickY - defaultH / 2)),
                     w: defaultW,
                     h: defaultH,
                     id: Date.now()
                 });
             }
+
+            // Ordenar de izquierda a derecha y re-numerar
+            this.markers.sort((a, b) => a.x - b.x);
+            this.markers.forEach((m, idx) => { m.id = idx + 1; });
 
             this.redraw();
             this.emitCount();
@@ -84,8 +88,8 @@ window.BalloonDetector = class BalloonDetector {
         if (!this.image) return;
         this.isProcessing = true;
 
-        // Ajustar resolución del canvas
-        const maxWidth = 900;
+        // Ajustar resolución de trabajo
+        const maxWidth = 800;
         let w = this.image.naturalWidth || this.image.width;
         let h = this.image.naturalHeight || this.image.height;
 
@@ -97,7 +101,7 @@ window.BalloonDetector = class BalloonDetector {
         this.canvas.width = w;
         this.canvas.height = h;
 
-        // Dibujar imagen base en canvas temporal para extraer datos de píxeles
+        // Extraer mapa de píxeles
         const tempCanvas = document.createElement('canvas');
         tempCanvas.width = w;
         tempCanvas.height = h;
@@ -107,136 +111,161 @@ window.BalloonDetector = class BalloonDetector {
         const imgData = tempCtx.getImageData(0, 0, w, h);
         const data = imgData.data;
 
-        // Algoritmo de Visión: Segmentación por densidad de contornos y gradientes cilíndricos
-        const gridX = 14;
-        const gridY = 8;
-        const cellW = w / gridX;
-        const cellH = h / gridY;
-        const candidates = [];
+        // ══════════════════════════════════════════════════════════════
+        // ALGORITMO DE DETECCIÓN REAL DE BALONES DE GAS (10KG)
+        // ══════════════════════════════════════════════════════════════
+        // Zona vertical donde se asientan los balones (excluyendo el techo/pared alta)
+        const yTopSearch = Math.floor(h * 0.20);
+        const yBottomSearch = Math.floor(h * 0.92);
+        const searchHeight = yBottomSearch - yTopSearch;
 
-        for (let gy = 0; gy < gridY; gy++) {
-            for (let gx = 0; gx < gridX; gx++) {
-                const cx = Math.floor(gx * cellW);
-                const cy = Math.floor(gy * cellH);
-                let edgeScore = 0;
-                let colorVariance = 0;
-                let samples = 0;
+        // Helper para evaluar si un píxel corresponde a pintura de balón de gas
+        function isCylinderPixel(r, g, b) {
+            const maxC = Math.max(r, g, b);
+            const minC = Math.min(r, g, b);
+            const chroma = maxC - minC;
 
-                for (let y = cy; y < cy + cellH; y += 4) {
-                    for (let x = cx; x < cx + cellW; x += 4) {
-                        const idx = (y * w + x) * 4;
-                        const r = data[idx];
-                        const g = data[idx + 1];
-                        const b = data[idx + 2];
+            // 1. Balón Morado / Violeta (Surgas / Solgas): R y B dominan sobre G
+            const isPurple = (r > g + 10) && (b > g + 6) && (r > 35 || b > 35);
+            // 2. Balón Rojo / Vino (Lima Gas): R dominante
+            const isRed = (r > g + 20) && (r > b + 20) && (r > 55);
+            // 3. Balón Celeste / Turquesa (Zeta Gas): B y G dominan sobre R
+            const isCyan = (b > r + 10) && (g > r + 5) && (b > 60);
+            // 4. Balón Amarillo / Naranja:
+            const isYellow = (r > b + 25) && (g > b + 15);
+            // 5. Saturación general de pintura vs pared gris o cal
+            const isSaturated = chroma > 22 && maxC > 45;
 
-                        // Gradiente horizontal
-                        if (x + 4 < w) {
-                            const nextIdx = (y * w + (x + 4)) * 4;
-                            const diff = Math.abs(r - data[nextIdx]) + Math.abs(g - data[nextIdx + 1]) + Math.abs(b - data[nextIdx + 2]);
-                            if (diff > 45) edgeScore++;
-                        }
-                        samples++;
-                    }
-                }
-
-                const density = edgeScore / Math.max(1, samples);
-                if (density > 0.18) {
-                    candidates.push({
-                        gx, gy,
-                        x: cx,
-                        y: cy,
-                        density
-                    });
-                }
-            }
+            return (isPurple || isRed || isCyan || isYellow || isSaturated);
         }
 
-        // Agrupar celdas adyacentes verticales formando la silueta cilíndrica de balones
-        const clusters = [];
-        const visited = new Set();
+        // Analizar densidad de presencia cilíndrica por columna horizontal X
+        const stepX = 2; // muestreo cada 2px
+        const numCols = Math.floor(w / stepX);
+        const colScores = new Float32Array(numCols);
+        const colBrightness = new Float32Array(numCols);
+        const colTops = new Int32Array(numCols);
+        const colBottoms = new Int32Array(numCols);
 
-        candidates.forEach((c, idx) => {
-            if (visited.has(idx)) return;
-            const cluster = [c];
-            visited.add(idx);
+        for (let c = 0; c < numCols; c++) {
+            const x = c * stepX;
+            let matchCount = 0;
+            let sumLum = 0;
+            let firstY = -1;
+            let lastY = -1;
 
-            for (let j = idx + 1; j < candidates.length; j++) {
-                if (visited.has(j)) continue;
-                const other = candidates[j];
-                const distGx = Math.abs(c.gx - other.gx);
-                const distGy = Math.abs(c.gy - other.gy);
+            for (let y = yTopSearch; y < yBottomSearch; y += 3) {
+                const idx = (y * w + x) * 4;
+                const r = data[idx];
+                const g = data[idx + 1];
+                const b = data[idx + 2];
+                const lum = 0.299 * r + 0.587 * g + 0.114 * b;
+                sumLum += lum;
 
-                if (distGx <= 1 && distGy <= 2) {
-                    cluster.push(other);
-                    visited.add(j);
+                if (isCylinderPixel(r, g, b)) {
+                    matchCount++;
+                    if (firstY === -1) firstY = y;
+                    lastY = y;
                 }
             }
 
-            if (cluster.length >= 1) {
-                clusters.push(cluster);
+            const totalSamples = Math.floor(searchHeight / 3);
+            colScores[c] = matchCount / Math.max(1, totalSamples);
+            colBrightness[c] = sumLum / totalSamples;
+            colTops[c] = firstY > -1 ? firstY : Math.floor(h * 0.32);
+            colBottoms[c] = lastY > -1 ? lastY : Math.floor(h * 0.88);
+        }
+
+        // Segmentar regiones continuas con presencia de balones
+        const THRESHOLD = 0.20;
+        const rawSegments = [];
+        let inSeg = false;
+        let startCol = 0;
+
+        for (let c = 0; c < numCols; c++) {
+            const hasBalon = colScores[c] >= THRESHOLD;
+            if (hasBalon && !inSeg) {
+                inSeg = true;
+                startCol = c;
+            } else if (!hasBalon && inSeg) {
+                inSeg = false;
+                rawSegments.push({ start: startCol, end: c });
+            }
+        }
+        if (inSeg) {
+            rawSegments.push({ start: startCol, end: numCols - 1 });
+        }
+
+        // Ancho típico de un balón de 10kg en el encuadre (en columnas)
+        const minCylCols = Math.floor((w * 0.08) / stepX);
+        const typicalCylCols = Math.floor((w * 0.16) / stepX);
+        const maxSingleCylCols = Math.floor((w * 0.24) / stepX);
+
+        const cylinderSegments = [];
+
+        rawSegments.forEach(seg => {
+            const segCols = seg.end - seg.start;
+            if (segCols < minCylCols) {
+                // Demasiado angosto para ser un balón completo (ruido o reflejo)
+                return;
+            }
+
+            // Si el bloque es ancho (> maxSingleCylCols), contiene balones contiguos pegados
+            if (segCols > maxSingleCylCols) {
+                // Determinar cuántos balones caben físicamente en este bloque
+                const numBalones = Math.max(2, Math.round(segCols / typicalCylCols));
+                const partWidth = Math.floor(segCols / numBalones);
+
+                for (let k = 0; k < numBalones; k++) {
+                    const sStart = seg.start + k * partWidth;
+                    const sEnd = (k === numBalones - 1) ? seg.end : (sStart + partWidth);
+                    cylinderSegments.push({ start: sStart, end: sEnd });
+                }
+            } else {
+                cylinderSegments.push(seg);
             }
         });
 
-        // Ordenar clusters por prominencia
-        clusters.sort((a, b) => b.length - a.length);
-
-        // Convertir clusters en cajas delimitadoras de balones
+        // Crear cajas delimitadoras reales (SIN inventar ni forzar)
         this.markers = [];
-        const targetCount = this.expectedCount > 0 ? this.expectedCount : Math.min(clusters.length, 6);
 
-        // Si tenemos cantidad esperada, adaptamos el umbral para detectar de forma guiada
-        const selectedClusters = clusters.slice(0, targetCount);
+        cylinderSegments.forEach((seg, i) => {
+            const x1 = seg.start * stepX;
+            const x2 = seg.end * stepX;
+            const boxW = Math.max(30, x2 - x1);
 
-        selectedClusters.forEach((cl, i) => {
-            let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
-            cl.forEach(pt => {
-                minX = Math.min(minX, pt.x);
-                maxX = Math.max(maxX, pt.x + cellW);
-                minY = Math.min(minY, pt.y);
-                maxY = Math.max(maxY, pt.y + cellH);
-            });
+            let sumT = 0, sumB = 0, cnt = 0;
+            for (let c = seg.start; c <= seg.end; c++) {
+                sumT += colTops[c];
+                sumB += colBottoms[c];
+                cnt++;
+            }
+            const avgT = Math.floor(sumT / Math.max(1, cnt));
+            const avgB = Math.floor(sumB / Math.max(1, cnt));
 
-            // Normalizar a proporción cilíndrica de balón (aprox 1:1.6)
-            let boxW = maxX - minX;
-            let boxH = maxY - minY;
-            const minSize = Math.max(35, w * 0.08);
+            // Proporción cilíndrica de balón (altura aprox 1.5 a 1.9 veces el ancho)
+            let boxH = avgB - avgT;
+            const targetH = Math.round(boxW * 1.65);
+            if (boxH < targetH * 0.8) boxH = targetH;
 
-            boxW = Math.max(boxW, minSize);
-            boxH = Math.max(boxH, boxW * 1.5);
-
-            // Evitar desbordes del canvas
-            minX = Math.max(10, Math.min(w - boxW - 10, minX));
-            minY = Math.max(10, Math.min(h - boxH - 10, minY));
+            let finalY = Math.max(10, avgT - Math.round(boxH * 0.1));
+            let finalH = Math.min(h - finalY - 8, boxH);
 
             this.markers.push({
-                x: minX,
-                y: minY,
+                x: Math.max(5, x1),
+                y: finalY,
                 w: boxW,
-                h: boxH,
+                h: finalH,
                 id: i + 1
             });
         });
 
-        // Si la foto no arrojó clusters suficientes pero hay cantidad esperada, 
-        // distribuir estimaciones razonables sobre la imagen para facilitar validación al conductor
-        if (this.markers.length < this.expectedCount && this.expectedCount > 0) {
-            const needed = this.expectedCount - this.markers.length;
-            const stepW = (w * 0.8) / (this.expectedCount + 1);
-            const defaultH = Math.min(h * 0.55, 180);
-            const defaultW = defaultH / 1.7;
+        // Ordenar de izquierda a derecha
+        this.markers.sort((a, b) => a.x - b.x);
+        this.markers.forEach((m, idx) => { m.id = idx + 1; });
 
-            for (let k = 0; k < needed; k++) {
-                const posX = (w * 0.1) + ((this.markers.length + 1) * stepW) - (defaultW / 2);
-                const posY = (h / 2) - (defaultH / 2);
-                this.markers.push({
-                    x: Math.max(10, Math.min(w - defaultW - 10, posX)),
-                    y: Math.max(10, Math.min(h - defaultH - 10, posY)),
-                    w: defaultW,
-                    h: defaultH,
-                    id: Date.now() + k
-                });
-            }
-        }
+        // NOTA: No se fuerza this.expectedCount. Si la foto tiene 4 balones,
+        // se reportan exactamente 4 balones, alertando la discrepancia.
 
         this.isProcessing = false;
         this.redraw();
@@ -256,8 +285,8 @@ window.BalloonDetector = class BalloonDetector {
         this.markers.forEach((m, idx) => {
             const num = idx + 1;
             const isMatch = this.expectedCount > 0 && this.markers.length === this.expectedCount;
-            const strokeColor = isMatch ? '#10b981' : '#06b6d4'; // Verde esmeralda si coincide, cyan si no
-            const fillColor = isMatch ? 'rgba(16, 185, 129, 0.18)' : 'rgba(6, 182, 212, 0.18)';
+            const strokeColor = isMatch ? '#10b981' : '#f59e0b'; // Verde si coincide, ámbar de advertencia si no
+            const fillColor = isMatch ? 'rgba(16, 185, 129, 0.18)' : 'rgba(245, 158, 11, 0.18)';
 
             // Caja delimitadora con bordes redondeados
             this.ctx.save();
