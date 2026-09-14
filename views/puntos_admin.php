@@ -159,6 +159,18 @@
                                                 echo strtr(date('d F, g:i a', strtotime($r['fecha'])), $meses);
                                                 ?>
                                             </span>
+                                            <?php if (!empty($r['balones_cantidad'])): ?>
+                                                <span class="detail-sep">•</span>
+                                                <span class="ticket-detail-item" style="color: #1e40af; font-weight: 700;">
+                                                    <i class='bx bx-cube-alt'></i> <?= $r['balones_cantidad'] ?> Balones (10kg)
+                                                </span>
+                                            <?php endif; ?>
+                                            <?php if (!empty($r['evidencia_foto'])): ?>
+                                                <span class="detail-sep">•</span>
+                                                <button type="button" onclick="verEvidenciaAdmin('<?= BASE_URL . $r['evidencia_foto'] ?>', '<?= htmlspecialchars(addslashes($r['cliente_nombre'] ?? '')) ?>', '<?= $r['balones_cantidad'] ?? '' ?>')" style="background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; border-radius: 6px; font-size: 0.72rem; font-weight: 700; padding: 2px 7px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+                                                    <i class='bx bx-image'></i> Ver Evidencia
+                                                </button>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
 
@@ -276,6 +288,7 @@
                                         <th>Puntos</th>
                                         <th>Monto</th>
                                         <th>Operador</th>
+                                        <th style="text-align: center;">Evidencia</th>
                                         <th style="text-align: center !important;">Estado</th>
                                     </tr>
                                 </thead>
@@ -308,6 +321,17 @@
                                             <td style="color: var(--on-muted);">S/ <?= number_format($h['monto'], 2) ?></td>
                                             <td><span
                                                     style="color: var(--on-surface); font-size: 0.85rem;"><?= htmlspecialchars($h['conductor_nombre'] ?? 'Admin') ?></span>
+                                            </td>
+                                            <td style="text-align: center;">
+                                                <?php if (!empty($h['evidencia_foto'])): ?>
+                                                    <button type="button" onclick="verEvidenciaAdmin('<?= BASE_URL . $h['evidencia_foto'] ?>', '<?= htmlspecialchars(addslashes($h['cliente_nombre'] ?? '')) ?>', '<?= $h['balones_cantidad'] ?? '' ?>')" style="background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; border-radius: 6px; font-size: 0.72rem; font-weight: 700; padding: 3px 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+                                                        <i class='bx bx-image'></i> <?= !empty($h['balones_cantidad']) ? $h['balones_cantidad'].' balones' : 'Foto' ?>
+                                                    </button>
+                                                <?php elseif (!empty($h['balones_cantidad'])): ?>
+                                                    <span style="font-size: 0.72rem; color: #64748b; font-weight: 600;"><i class='bx bx-cube-alt'></i> <?= $h['balones_cantidad'] ?> balones</span>
+                                                <?php else: ?>
+                                                    <span style="color: #cbd5e1;">-</span>
+                                                <?php endif; ?>
                                             </td>
                                             <td style="text-align: center !important;"><span class="chip <?= $chipClass ?>"><i
                                                         class='bx bxs-circle'></i>
@@ -593,6 +617,20 @@
                 }
 
                 setInterval(checkLiveAdmin, 4000);
+
+                function verEvidenciaAdmin(imgUrl, cliente, balones) {
+                    Swal.fire({
+                        title: cliente || 'Evidencia Fotográfica',
+                        text: balones ? (balones + ' balones de 10kg verificados') : 'Evidencia de entrega adjuntada',
+                        imageUrl: imgUrl,
+                        imageAlt: 'Foto de Evidencia',
+                        imageWidth: 500,
+                        imageHeight: 380,
+                        confirmButtonText: 'Cerrar',
+                        confirmButtonColor: '#800000',
+                        showCloseButton: true
+                    });
+                }
             </script>
         </div> <!-- .container -->
     </div> <!-- .admin-layout -->

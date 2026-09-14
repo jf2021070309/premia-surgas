@@ -8,6 +8,7 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-layout.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         :root {
             --wine-primary: #800000;
@@ -59,7 +60,7 @@
         /* Transaction Item */
         .timeline-header {
             display: grid;
-            grid-template-columns: 80px 1.5fr 1.5fr 100px;
+            grid-template-columns: 80px 1.4fr 1.4fr 140px;
             gap: 2rem;
             padding: 0 2rem 0.5rem 2rem;
             font-size: 0.68rem;
@@ -77,7 +78,7 @@
             border-radius: 12px;
             padding: 1.25rem 2rem;
             display: grid;
-            grid-template-columns: 80px 1.5fr 1.5fr 100px;
+            grid-template-columns: 80px 1.4fr 1.4fr 140px;
             align-items: center;
             gap: 2rem;
             margin-bottom: 1rem;
@@ -407,9 +408,24 @@
                                                 }
                                             ?>
                                         <?php endif; ?>
+
+                                        <?php if (!empty($v['balones_cantidad']) || !empty($v['evidencia_foto'])): ?>
+                                            <div style="margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">
+                                                <?php if (!empty($v['balones_cantidad'])): ?>
+                                                    <span style="background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; border-radius: 6px; font-size: 0.72rem; font-weight: 700; padding: 2px 7px; display: inline-flex; align-items: center; gap: 4px;">
+                                                        <i class='bx bx-cube-alt'></i> <?= $v['balones_cantidad'] ?> Balones (10kg)
+                                                    </span>
+                                                <?php endif; ?>
+                                                <?php if (!empty($v['evidencia_foto'])): ?>
+                                                    <button type="button" onclick="verEvidenciaModal('<?= BASE_URL . $v['evidencia_foto'] ?>', '<?= htmlspecialchars(addslashes($v['cliente_nombre'] ?? '')) ?>', '<?= $v['balones_cantidad'] ?? '' ?>')" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.72rem; font-weight: 700; padding: 2px 8px; color: #0f172a; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s;">
+                                                        <i class='bx bx-image-alt' style="color: #800000; font-size: 0.95rem;"></i> Ver Foto
+                                                    </button>
+                                                <?php endif; ?>
+                                            </div>
+                                        <?php endif; ?>
                                     </div>
 
-                                    <!-- Columna 4: Puntos -->
+                                    <!-- Columna 4: Puntos y Acciones -->
                                     <div class="col-pts">
                                         <div class="pts-value" style="color: <?= isset($v['estado']) && $v['estado'] === 'pendiente' ? '#f59e0b' : (isset($v['estado']) && $v['estado'] === 'rechazado' ? '#ef4444' : '#1e293b') ?>;">+<?= $v['puntos'] ?></div>
                                         <div class="pts-label">Pts</div>
@@ -427,6 +443,20 @@
                                                     APROBADO
                                                 </div>
                                             <?php endif; ?>
+                                        <?php endif; ?>
+
+                                        <?php if (isset($v['estado']) && $v['estado'] === 'aprobado'): ?>
+                                            <div id="btn-notificar-box-<?= $v['id'] ?>" style="margin-top: 8px;">
+                                                <?php if (!empty($v['notificado_admin'])): ?>
+                                                    <button type="button" onclick="notificarAdmin(<?= $v['id'] ?>, this)" title="Reenviar notificación por correo al Administrador" style="background: #ecfdf5; border: 1px solid #10b981; color: #065f46; font-size: 0.68rem; font-weight: 800; padding: 4px 8px; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s;">
+                                                        <i class='bx bx-check-double'></i> Notificado
+                                                    </button>
+                                                <?php else: ?>
+                                                    <button type="button" onclick="notificarAdmin(<?= $v['id'] ?>, this)" style="background: #800000; color: #fff; border: none; font-size: 0.68rem; font-weight: 800; padding: 5px 10px; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 4px 10px rgba(128,0,0,0.2); transition: all 0.2s;">
+                                                        <i class='bx bx-envelope'></i> Notificar Admin
+                                                    </button>
+                                                <?php endif; ?>
+                                            </div>
                                         <?php endif; ?>
                                     </div>
                                 </div>
@@ -499,6 +529,94 @@
             </div>
         </div>
     </div>
+
+    <!-- MODAL: PREVISUALIZAR EVIDENCIA -->
+    <div id="modal-preview-evidencia" style="display: none; position: fixed; inset: 0; z-index: 999999; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); align-items: center; justify-content: center; padding: 1.5rem;">
+        <div style="background: #fff; border-radius: 24px; max-width: 600px; width: 100%; max-height: 90vh; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 30px 80px rgba(0,0,0,0.5);">
+            <div style="padding: 1.25rem 1.75rem; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; background: #f8fafc;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="background: #800000; color: #fff; width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                        <i class='bx bx-image'></i>
+                    </div>
+                    <div>
+                        <h4 id="modal-evidencia-cliente" style="margin: 0; font-size: 1rem; font-weight: 900; color: #0f172a;">Foto de Evidencia</h4>
+                        <span id="modal-evidencia-balones" style="font-size: 0.75rem; color: #64748b; font-weight: 600;">Recuento de Balones</span>
+                    </div>
+                </div>
+                <button onclick="cerrarModalEvidencia()" style="background: #e2e8f0; border: none; width: 32px; height: 32px; border-radius: 50%; color: #475569; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center;">
+                    <i class='bx bx-x'></i>
+                </button>
+            </div>
+            <div style="padding: 1.5rem; text-align: center; overflow-y: auto; background: #0f172a; display: flex; align-items: center; justify-content: center; min-height: 300px;">
+                <img id="modal-evidencia-img" src="" alt="Evidencia de balones" style="max-width: 100%; max-height: 60vh; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); object-fit: contain;">
+            </div>
+            <div style="padding: 1rem 1.75rem; border-top: 1px solid #e2e8f0; background: #f8fafc; text-align: right;">
+                <button type="button" onclick="cerrarModalEvidencia()" style="background: #800000; color: #fff; border: none; padding: 0.6rem 1.5rem; border-radius: 10px; font-weight: 700; font-size: 0.85rem; cursor: pointer;">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function verEvidenciaModal(imgUrl, cliente, balones) {
+            document.getElementById('modal-evidencia-img').src = imgUrl;
+            document.getElementById('modal-evidencia-cliente').textContent = cliente || 'Foto de Evidencia';
+            document.getElementById('modal-evidencia-balones').textContent = balones ? (balones + ' balones de 10kg verificados') : 'Evidencia de entrega';
+            document.getElementById('modal-preview-evidencia').style.display = 'flex';
+        }
+
+        function cerrarModalEvidencia() {
+            document.getElementById('modal-preview-evidencia').style.display = 'none';
+        }
+
+        async function notificarAdmin(ventaId, btn) {
+            const originalHtml = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i> Enviando...";
+
+            try {
+                const res = await fetch('<?= BASE_URL ?>conductores/notificar-admin', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ venta_id: ventaId })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Notificación Enviada!',
+                        html: 'Se envió un correo con los detalles de la operación y la evidencia adjunta a: <br><b>jaimeelias.tacna.2016@gmail.com</b>',
+                        confirmButtonColor: '#800000'
+                    });
+
+                    const box = document.getElementById('btn-notificar-box-' + ventaId);
+                    if (box) {
+                        box.innerHTML = `<button type="button" onclick="notificarAdmin(${ventaId}, this)" title="Reenviar notificación por correo al Administrador" style="background: #ecfdf5; border: 1px solid #10b981; color: #065f46; font-size: 0.68rem; font-weight: 800; padding: 4px 8px; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s;"><i class='bx bx-check-double'></i> Notificado</button>`;
+                    }
+                } else {
+                    btn.disabled = false;
+                    btn.innerHTML = originalHtml;
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error al Notificar',
+                        text: data.message || 'No se pudo enviar la notificación por correo.',
+                        confirmButtonColor: '#800000'
+                    });
+                }
+            } catch (err) {
+                btn.disabled = false;
+                btn.innerHTML = originalHtml;
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error de Red',
+                    text: 'Ocurrió un error de conexión al enviar el correo.',
+                    confirmButtonColor: '#800000'
+                });
+            }
+        }
+    </script>
 </body>
 
 </html>

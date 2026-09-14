@@ -247,6 +247,64 @@
                 </div>
             </div>
 
+            <!-- SECTION: PUNTOS POR BALÓN 10KG (PUNTOS DE VENTA) -->
+            <div class="clientes-toolbar" style="margin-top: 3.5rem; margin-bottom: 1.5rem;">
+                <div class="clientes-toolbar-filters">
+                    <div class="section-title-flex">
+                        <i class='bx bx-cylinder' style="color: #800000; font-size: 1.6rem;"></i>
+                        <div class="section-title-text">
+                            <h3 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: #0f172a;">Puntos de Venta — Balones de 10kg</h3>
+                            <span style="font-size: 0.75rem; color: #64748b; font-weight: 500;">Puntos otorgados al Punto de Venta por cada balón de 10kg entregado</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-5" style="border-radius: 24px; border: none; overflow: hidden; background: #fff;">
+                <div style="padding: 2.5rem;">
+                    <form action="<?= BASE_URL ?>ajustes/update-puntos-balon" method="POST">
+                        <div class="hybrid-rules-grid">
+                            
+                            <!-- Input Group -->
+                            <div class="form-group">
+                                <label style="display: block; font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.8rem;">
+                                    Puntos por cada Balón de 10kg
+                                </label>
+                                <div style="position: relative; display: flex; align-items: center;">
+                                    <i class='bx bx-award' style="position: absolute; left: 1.1rem; color: #94a3b8; font-size: 1.25rem;"></i>
+                                    <input type="number" name="puntos_por_balon_10kg" min="1" step="1"
+                                           value="<?= htmlspecialchars($puntosPorBalon ?? 10) ?>" 
+                                           required
+                                           style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 14px; padding: 0.9rem 1rem 0.9rem 2.8rem; font-size: 1rem; color: #1e293b; background: #fff; outline: none; transition: all 0.2s;">
+                                </div>
+                            </div>
+
+                            <!-- Info Box -->
+                            <div class="info-box-premium">
+                                <div class="info-icon">
+                                    <i class='bx bx-info-circle'></i>
+                                </div>
+                                <p>
+                                    <b>Regla activa:</b> Por cada balón de 10kg verificado con foto y entregado por el conductor, el Punto de Venta sumará <b><?= htmlspecialchars($puntosPorBalon ?? 10) ?> puntos</b> automáticamente.
+                                </p>
+                            </div>
+
+                            <!-- Action -->
+                            <div class="action-container">
+                                <button type="submit" class="btn-premium-pill-black" style="width: 100%; background: #800000; color: #fff; border: none; padding: 1rem; border-radius: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                                    <i class='bx bx-save' style="font-size: 1.1rem;"></i>
+                                    Guardar Regla de Balones
+                                </button>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+                <div style="background: #fafbfc; padding: 0.8rem 2.5rem; border-top: 1px solid #f1f5f9;">
+                    <p style="margin: 0; font-size: 0.7rem; color: #94a3b8; font-weight: 500;">Afecta a las nuevas solicitudes y entregas verificadas para clientes categoría "Punto de Venta".</p>
+                </div>
+            </div>
+
             <!-- SECTION 2: OPERACIONES -->
             <div class="clientes-toolbar" style="margin-top: 3.5rem; margin-bottom: 1.5rem;">
                 <div class="clientes-toolbar-filters">

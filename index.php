@@ -112,10 +112,14 @@ $routes = [
     ['GET',  'qr/generate',  'QrController',     'generate'],
 
     // —— Scan (escaneo de QR) ——
-    ['GET',  'scan',           'ScanController',   'index'],
-    ['POST', 'scan/buscar',    'ScanController',   'buscar'],
-    ['POST', 'scan/registrar', 'ScanController',   'registrar'],
-    ['POST', 'scan/venta',     'ScanController',   'venta'],
+    ['GET',  'scan',                      'ScanController',   'index'],
+    ['POST', 'scan/buscar',               'ScanController',   'buscar'],
+    ['POST', 'scan/registrar',            'ScanController',   'registrar'],
+    ['POST', 'scan/venta',                'ScanController',   'venta'],
+    ['POST', 'scan/solicitar-puntos-pv',  'ScanController',   'solicitarPuntosPV'],
+    ['POST', 'scan/aprobar-entrega-pv',   'ScanController',   'aprobarEntregaPV'],
+    ['GET',  'scan/pendientes-pv',        'ScanController',   'getPendientesPV'],
+    ['POST', 'conductores/notificar-admin','ConductorController', 'notificarAdmin'],
 
     // —— Tienda ——
     ['GET',  'tienda',       'TiendaController', 'index'],
@@ -168,8 +172,9 @@ $routes = [
     ['GET',  'mapa/delete',         'MapaController', 'delete'],
 
     // —— Configuración General (Unificada) ——
-    ['GET',  'ajustes',               'AjustesController', 'index'],
-    ['POST', 'ajustes/update-puntos', 'AjustesController', 'updatePuntos'],
+    ['GET',  'ajustes',                     'AjustesController', 'index'],
+    ['POST', 'ajustes/update-puntos',       'AjustesController', 'updatePuntos'],
+    ['POST', 'ajustes/update-puntos-balon', 'AjustesController', 'updatePuntosBalon'],
 
     // —— Tipos de Operaciones ——
     ['GET',    'operaciones',        'OperacionController', 'index'],

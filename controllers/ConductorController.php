@@ -172,6 +172,69 @@ class ConductorController
         ]);
     }
 
+    /**
+     * POST /conductores/notificar-admin
+     * Envía correo con la evidencia fotográfica y detalles de la operación al administrador
+     */
+    public function notificarAdmin(): void
+    {
+        $this->requireConductor();
+        header('Content-Type: application/json');
+
+        require_once __DIR__ . '/../models/VentaModel.php';
+        require_once __DIR__ . '/../helpers/EmailService.php';
+
+        $data = json_decode(file_get_contents('php://input'), true) ?? $_POST;
+        $ventaId = (int) ($data['venta_id'] ?? 0);
+
+        if (!$ventaId) {
+            echo json_encode(['success' => false, 'message' => 'ID de operación no especificado.']);
+            exit;
+        }
+
+        $ventaModel = new VentaModel();
+        $venta = $ventaModel->getById($ventaId);
+
+        if (!$venta) {
+            echo json_encode(['success' => false, 'message' => 'No se encontró la operación solicitada.']);
+            exit;
+        }
+
+        $fotoRutaFisica = '';
+        if (!empty($venta['evidencia_foto'])) {
+            $fotoRutaFisica = __DIR__ . '/../' . ltrim($venta['evidencia_foto'], '/\\');
+        }
+
+        $datosNotificacion = [
+            'id'                  => $venta['id'],
+            'cliente_nombre'      => $venta['razon_social'] ?: $venta['cliente_nombre'],
+            'cliente_doc'         => $venta['ruc'] ?: ($venta['dni'] ?: '—'),
+            'cliente_direccion'   => $venta['direccion'] ?? '—',
+            'cliente_celular'     => $venta['celular'] ?? '—',
+            'conductor_nombre'    => $venta['conductor_nombre'] ?: ($_SESSION['nombre_usuario'] ?? 'Conductor'),
+            'balones_cantidad'    => $venta['balones_cantidad'] ?? $venta['balones_verificados'] ?? 1,
+            'balones_verificados' => $venta['balones_verificados'] ?? $venta['balones_cantidad'] ?? 1,
+            'puntos'              => $venta['puntos'],
+            'fecha'               => $venta['fecha_aprobacion'] ?: $venta['fecha'],
+            'evidencia_ruta'      => $fotoRutaFisica
+        ];
+
+        $res = EmailService::notificarAdminEvidencia($datosNotificacion, 'jaimeelias.tacna.2016@gmail.com');
+
+        if ($res['success']) {
+            $ventaModel->marcarNotificadoAdmin($ventaId);
+            $this->audit->registrar(
+                $_SESSION['id_usuario'],
+                'NOTIFICAR_ADMIN_EMAIL',
+                "Envió reporte por correo con evidencia al admin por la operación #$ventaId a {$datosNotificacion['cliente_nombre']}",
+                'CORREO'
+            );
+        }
+
+        echo json_encode($res);
+        exit;
+    }
+
     // ── helpers ──────────────────────────────────────────────────
 
     private function render(string $view, array $data = []): void

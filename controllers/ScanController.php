@@ -208,6 +208,10 @@ class ScanController
             'cliente' => [
                 'id' => $cliente['id'],
                 'nombre' => $cliente['nombre'],
+                'razon_social' => $cliente['razon_social'] ?? '',
+                'tipo_cliente' => $cliente['tipo_cliente'] ?? 'Normal',
+                'ruc' => $cliente['ruc'] ?? '',
+                'dni' => $cliente['dni'] ?? '',
                 'celular' => $maskedCelular
             ]
         ]);
@@ -380,6 +384,194 @@ class ScanController
         $audit->registrar($_SESSION['id_usuario'], $accion, "Asignó $puntos puntos por venta de S/ $monto a {$c['nombre']}. Estado: $estado", 'RECARGAS');
 
         echo json_encode(['success' => true, 'puntos_sumados' => $puntos, 'message' => $message]);
+        exit;
+    }
+
+    /**
+     * POST /scan/solicitar-puntos-pv
+     * Permite a un cliente Punto de Venta solicitar puntos por balones de 10kg entregados
+     */
+    public function solicitarPuntosPV(): void
+    {
+        $this->requireAuth();
+        header('Content-Type: application/json');
+
+        $data = json_decode(file_get_contents('php://input'), true) ?? $_POST;
+        $clienteId = (int) ($data['cliente_id'] ?? ($_SESSION['id_cliente'] ?? $_SESSION['id_usuario']));
+        $balones = (int) ($data['balones'] ?? 0);
+        $detalle = trim($data['detalle'] ?? '');
+
+        if (!$clienteId || $balones <= 0) {
+            echo json_encode(['success' => false, 'message' => 'Indica una cantidad válida de balones (mínimo 1).']);
+            exit;
+        }
+
+        // Obtener factor configurado para balones de 10kg
+        $configModel = new ConfiguracionModel();
+        $puntosPorBalon = (int) ($configModel->getValor('puntos_por_balon_10kg') ?? 10);
+        $puntos = $balones * $puntosPorBalon;
+
+        $clienteModel = new ClienteModel();
+        $cliente = $clienteModel->findById($clienteId);
+
+        if (!$cliente) {
+            echo json_encode(['success' => false, 'message' => 'Cliente no encontrado.']);
+            exit;
+        }
+
+        $ventaModel = new VentaModel();
+        $id = $ventaModel->solicitarPuntosPV($clienteId, $balones, $puntos, $detalle);
+
+        if ($id) {
+            $audit = new AuditoriaModel();
+            $audit->registrar(
+                $_SESSION['id_usuario'],
+                'SOLICITUD_PUNTOS_PV',
+                "Punto de Venta {$cliente['nombre']} solicitó $puntos pts por $balones balones de 10kg",
+                'CLIENTES'
+            );
+
+            echo json_encode([
+                'success' => true,
+                'message' => "¡Solicitud enviada con éxito! Esperando validación del conductor por $balones balones ($puntos pts).",
+                'venta_id' => $id,
+                'balones' => $balones,
+                'puntos' => $puntos
+            ]);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'No se pudo registrar la solicitud.']);
+        }
+        exit;
+    }
+
+    /**
+     * GET /scan/pendientes-pv
+     * Lista solicitudes pendientes de balones de Puntos de Venta
+     */
+    public function getPendientesPV(): void
+    {
+        header('Content-Type: application/json');
+        $clienteId = isset($_GET['cliente_id']) ? (int) $_GET['cliente_id'] : null;
+
+        $ventaModel = new VentaModel();
+        $pendientes = $ventaModel->getPendientesPV($clienteId);
+
+        echo json_encode(['success' => true, 'data' => $pendientes]);
+        exit;
+    }
+
+    /**
+     * POST /scan/aprobar-entrega-pv
+     * El conductor valida la evidencia fotográfica, el recuento y aprueba los puntos
+     */
+    public function aprobarEntregaPV(): void
+    {
+        $this->requireAuth();
+        header('Content-Type: application/json');
+
+        $rol = $_SESSION['rol'] ?? '';
+        if ($rol !== 'conductor' && $rol !== 'admin') {
+            echo json_encode(['success' => false, 'message' => 'Acceso denegado: solo conductores o administradores pueden aprobar entregas.']);
+            exit;
+        }
+
+        $ventaId = (int) ($_POST['venta_id'] ?? 0);
+        $balonesVerificados = (int) ($_POST['balones_verificados'] ?? 0);
+        $clienteId = (int) ($_POST['cliente_id'] ?? 0);
+        $balonesCantidad = (int) ($_POST['balones_cantidad'] ?? $balonesVerificados);
+
+        if ($balonesVerificados <= 0) {
+            echo json_encode(['success' => false, 'message' => 'La cantidad de balones verificados debe ser mayor a cero.']);
+            exit;
+        }
+
+        // Manejar subida de foto de evidencia
+        $fotoRelPath = null;
+        $uploadDir = __DIR__ . '/../assets/uploads/evidencias/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+
+        if (!empty($_FILES['foto']['tmp_name']) && is_uploaded_file($_FILES['foto']['tmp_name'])) {
+            $ext = strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION)) ?: 'jpg';
+            $filename = 'evidencia_' . time() . '_' . rand(1000, 9999) . '.' . $ext;
+            if (move_uploaded_file($_FILES['foto']['tmp_name'], $uploadDir . $filename)) {
+                $fotoRelPath = 'assets/uploads/evidencias/' . $filename;
+            }
+        } elseif (!empty($_POST['foto_base64'])) {
+            $base64 = $_POST['foto_base64'];
+            if (preg_match('/^data:image\/(\w+);base64,/', $base64, $type)) {
+                $base64 = substr($base64, strpos($base64, ',') + 1);
+                $ext = strtolower($type[1]);
+            } else {
+                $ext = 'jpg';
+            }
+            $dataImg = base64_decode($base64);
+            if ($dataImg !== false) {
+                $filename = 'evidencia_' . time() . '_' . rand(1000, 9999) . '.' . $ext;
+                file_put_contents($uploadDir . $filename, $dataImg);
+                $fotoRelPath = 'assets/uploads/evidencias/' . $filename;
+            }
+        }
+
+        if (!$fotoRelPath) {
+            echo json_encode(['success' => false, 'message' => 'Es obligatorio adjuntar la foto de evidencia de los balones.']);
+            exit;
+        }
+
+        $ventaModel = new VentaModel();
+
+        // Si no hay ventaId, pero el conductor está registrando la entrega directamente desde /scan
+        if (!$ventaId && $clienteId) {
+            $configModel = new ConfiguracionModel();
+            $puntosPorBalon = (int) ($configModel->getValor('puntos_por_balon_10kg') ?? 10);
+            $puntos = $balonesVerificados * $puntosPorBalon;
+
+            $ventaId = $ventaModel->create(
+                $clienteId,
+                $_SESSION['id_usuario'],
+                0,
+                $puntos,
+                "Entrega Verificada de $balonesVerificados Balones de 10kg (+$puntos pts)",
+                [],
+                'pendiente',
+                $balonesCantidad,
+                $balonesVerificados,
+                $fotoRelPath
+            );
+        }
+
+        if (!$ventaId) {
+            echo json_encode(['success' => false, 'message' => 'No se encontró la operación para aprobar.']);
+            exit;
+        }
+
+        $aprobado = $ventaModel->aprobarEntregaPV($ventaId, $_SESSION['id_usuario'], $balonesVerificados, $fotoRelPath);
+
+        if ($aprobado) {
+            $venta = $ventaModel->getById($ventaId);
+            $clienteNombre = $venta['cliente_nombre'] ?? 'Cliente';
+            $puntos = $venta['puntos'] ?? 0;
+
+            $audit = new AuditoriaModel();
+            $audit->registrar(
+                $_SESSION['id_usuario'],
+                'APROBAR_ENTREGA_PV',
+                "Conductor {$_SESSION['nombre_usuario']} aprobó entrega de $balonesVerificados balones (+$puntos pts) a $clienteNombre con evidencia fotográfica",
+                'RECARGAS'
+            );
+
+            echo json_encode([
+                'success' => true,
+                'message' => "¡Entrega aprobada! Se han sumado $puntos puntos a $clienteNombre.",
+                'venta_id' => $ventaId,
+                'puntos' => $puntos,
+                'balones_verificados' => $balonesVerificados,
+                'evidencia_foto' => $fotoRelPath
+            ]);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'No se pudo completar la aprobación de los puntos.']);
+        }
         exit;
     }
 

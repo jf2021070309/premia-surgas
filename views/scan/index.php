@@ -7,6 +7,7 @@
     <link rel="icon" type="image/png" href="<?= BASE_URL ?>assets/premios/icono.png">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="<?= BASE_URL ?>assets/js/balloon-detector.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-layout.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-tables.css">
@@ -671,9 +672,75 @@
                                     </div>
 
                                     <input type="hidden" id="client-id">
+                                    <input type="hidden" id="client-tipo">
                                 </div>
 
-                                <div class="elite-form-container" style="background: #f8fafc; padding: 2rem; border-radius: 28px; border: 1px solid #f1f5f9; display: flex; flex-direction: column; gap: 1.5rem;">
+                                <!-- SECCIÓN ESPECIAL: PUNTO DE VENTA Y VALIDACIÓN CON EVIDENCIA -->
+                                <div id="pv-special-section" style="display: none; background: #fff5f5; border: 2.5px solid #fecaca; border-radius: 24px; padding: 2rem; margin-bottom: 0.5rem;">
+                                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 10px;">
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <span style="background: #800000; color: #fff; padding: 5px 12px; border-radius: 10px; font-size: 0.75rem; font-weight: 900; letter-spacing: 1px;">PUNTO DE VENTA</span>
+                                            <span style="font-size: 1.05rem; font-weight: 850; color: #800000;">Entrega de Balones de 10kg</span>
+                                        </div>
+                                        <span id="pv-factor-info" style="font-size: 0.8rem; font-weight: 700; color: #475569; background: #fff; padding: 4px 10px; border-radius: 8px; border: 1px solid #fed7d7;">
+                                            10 pts / balón
+                                        </span>
+                                    </div>
+
+                                    <!-- Solicitud pendiente del cliente si existe -->
+                                    <div id="pv-solicitud-box" style="display: none; background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 16px; padding: 1rem 1.25rem; margin-bottom: 1.25rem;">
+                                        <div style="display: flex; align-items: center; gap: 8px; color: #1e40af; font-size: 0.88rem; font-weight: 800;">
+                                            <i class='bx bx-bell' style="font-size: 1.2rem;"></i> Solicitud Pendiente Registrada
+                                        </div>
+                                        <p id="pv-solicitud-texto" style="margin: 4px 0 0; color: #1d4ed8; font-size: 0.84rem; font-weight: 600;">
+                                            El cliente solicitó puntos por balones.
+                                        </p>
+                                    </div>
+
+                                    <!-- Input de Balones y Puntos Calculados -->
+                                    <div style="background: #fff; border: 1.5px solid #fed7d7; border-radius: 18px; padding: 1.25rem 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
+                                        <div>
+                                            <label style="display: block; font-size: 0.72rem; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;">
+                                                Balones de 10kg Entregados
+                                            </label>
+                                            <input type="number" id="pv-balones-cant" min="1" max="500" value="5" oninput="actualizarCalculoPV()" style="width: 120px; height: 50px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1.3rem; font-weight: 900; text-align: center; color: #0f172a; outline: none;">
+                                        </div>
+                                        <div style="text-align: right;">
+                                            <span style="font-size: 0.7rem; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 1px;">PUNTOS A ASIGNAR</span>
+                                            <div style="font-size: 1.9rem; font-weight: 950; color: #16a34a; line-height: 1.1;">
+                                                +<span id="pv-puntos-calc">50</span> PTS
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Botón Adjuntar Evidencia -->
+                                    <div style="margin-bottom: 1.25rem;">
+                                        <button type="button" onclick="abrirDetectorBalones()" style="width: 100%; background: #800000; color: #fff; border: none; padding: 1.1rem 1.5rem; border-radius: 16px; font-weight: 850; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 10px 25px rgba(128,0,0,0.25); transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                                            <i class='bx bx-camera' style="font-size: 1.4rem;"></i>
+                                            <span id="txt-btn-evidencia">ADJUNTAR EVIDENCIA Y VERIFICAR BALONES</span>
+                                        </button>
+                                    </div>
+
+                                    <!-- Resultado de Validación / Alerta -->
+                                    <div id="pv-status-verificacion" style="display: none; background: #ecfdf5; border: 2px solid #10b981; border-radius: 16px; padding: 1.2rem; text-align: center; margin-bottom: 1.25rem;">
+                                        <div style="font-size: 1.2rem; font-weight: 950; color: #065f46;">
+                                            ✅ # DE BALONES VERIFICADO (CHECK)
+                                        </div>
+                                        <div style="font-size: 0.82rem; font-weight: 600; color: #047857; margin-top: 4px;">
+                                            Evidencia analizada: <b id="pv-badge-count">0</b> balones detectados y verificados.
+                                        </div>
+                                    </div>
+
+                                    <!-- Botón de Aprobación Final -->
+                                    <div>
+                                        <button type="button" id="pv-btn-aprobar-entrega" disabled onclick="aprobarEntregaConductor()" style="width: 100%; background: #10b981; color: #fff; border: none; padding: 1.2rem; border-radius: 16px; font-weight: 900; font-size: 1rem; cursor: not-allowed; opacity: 0.45; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 10px 25px rgba(16,185,129,0.3); transition: all 0.2s;">
+                                            <i class='bx bx-check-shield' style="font-size: 1.4rem;"></i>
+                                            <span>APROBAR PUNTOS DE ENTREGA</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="elite-form-container" id="normal-services-section" style="background: #f8fafc; padding: 2rem; border-radius: 28px; border: 1px solid #f1f5f9; display: flex; flex-direction: column; gap: 1.5rem;">
                                     <div class="elite-service-grid" style="display: grid; grid-template-columns: 1fr; gap: 1rem;">
                                         <div>
                                             <label class="scan-label" style="margin-bottom: 0.75rem; color: #000; font-size: 0.82rem; letter-spacing: 1.5px;">SERVICIO PRESTADO</label>
@@ -950,11 +1017,27 @@
                 if (data.success) {
                     content.innerHTML = '';
                     content.appendChild(document.getElementById('tpl-main-form').content.cloneNode(true));
-                    document.getElementById('res-name').innerText = data.cliente.nombre;
-                    document.getElementById('res-phone').innerText = data.cliente.celular;
+
+                    const clientName = data.cliente.razon_social ? (data.cliente.razon_social + ' (' + data.cliente.nombre + ')') : data.cliente.nombre;
+                    document.getElementById('res-name').innerText = clientName;
+                    document.getElementById('res-phone').innerText = (data.cliente.ruc || data.cliente.dni || '') + (data.cliente.celular ? ' • ' + data.cliente.celular : '');
                     document.getElementById('client-id').value = data.cliente.id;
+                    if (document.getElementById('client-tipo')) {
+                        document.getElementById('client-tipo').value = data.cliente.tipo_cliente || 'Normal';
+                    }
+
+                    currentClient = data.cliente;
+
+                    if (data.cliente.tipo_cliente === 'Punto de Venta') {
+                        setupPuntoDeVentaFlow(data.cliente);
+                    } else {
+                        const normalSec = document.getElementById('normal-services-section');
+                        if (normalSec) normalSec.style.display = 'flex';
+                        const pvSec = document.getElementById('pv-special-section');
+                        if (pvSec) pvSec.style.display = 'none';
+                        updateSubtotal();
+                    }
                     rightPanel.classList.add('active');
-                    updateSubtotal();
                 } else {
                     rightPanel.classList.remove('active');
                     content.innerHTML = '';
@@ -1174,12 +1257,390 @@
             }
         }
 
+        // ============================================================
+        // MÓDULO PUNTO DE VENTA Y RECUENTO DE BALONES (CONDUCTOR)
+        // ============================================================
+        const PUNTOS_POR_BALON_10KG = <?= (int)((new ConfiguracionModel())->getValor('puntos_por_balon_10kg') ?? 10) ?>;
+        let currentClient = null;
+        let currentPendingVentaId = null;
+        let detectorInstance = null;
+        let evidenciaBase64 = null;
+        let balonesVerificadosCount = 0;
+
+        function actualizarCalculoPV() {
+            const input = document.getElementById('pv-balones-cant');
+            if (!input) return;
+            const balones = Math.max(1, parseInt(input.value || 0, 10));
+            const puntos = balones * PUNTOS_POR_BALON_10KG;
+            const ptsBox = document.getElementById('pv-puntos-calc');
+            if (ptsBox) ptsBox.innerText = puntos;
+        }
+
+        async function setupPuntoDeVentaFlow(cliente) {
+            const normalSec = document.getElementById('normal-services-section');
+            if (normalSec) normalSec.style.display = 'none';
+
+            const pvSec = document.getElementById('pv-special-section');
+            if (pvSec) pvSec.style.display = 'block';
+
+            const factorInfo = document.getElementById('pv-factor-info');
+            if (factorInfo) factorInfo.innerText = `${PUNTOS_POR_BALON_10KG} pts / balón de 10kg`;
+
+            actualizarCalculoPV();
+
+            // Buscar si hay solicitudes pendientes del cliente
+            try {
+                const res = await fetch(baseUrl + 'scan/pendientes-pv?cliente_id=' + cliente.id);
+                const r = await res.json();
+                const solBox = document.getElementById('pv-solicitud-box');
+                const solTxt = document.getElementById('pv-solicitud-texto');
+
+                if (r.success && r.data && r.data.length > 0) {
+                    const pend = r.data[0];
+                    currentPendingVentaId = pend.id;
+                    const input = document.getElementById('pv-balones-cant');
+                    if (input) input.value = pend.balones_cantidad || 5;
+                    actualizarCalculoPV();
+
+                    if (solBox && solTxt) {
+                        solTxt.innerHTML = `El cliente registró la solicitud <b>#${pend.id}</b> por <b>${pend.balones_cantidad} balones de 10kg</b> (+${pend.puntos} pts) el ${pend.fecha}.`;
+                        solBox.style.display = 'block';
+                    }
+                } else {
+                    currentPendingVentaId = null;
+                    if (solBox) solBox.style.display = 'none';
+                }
+            } catch (err) {
+                console.error("Error buscando pendientes PV:", err);
+            }
+        }
+
+        function abrirDetectorBalones() {
+            const modal = document.getElementById('modal-evidencia-detector');
+            if (!modal) return;
+
+            const inputBalones = document.getElementById('pv-balones-cant');
+            const expected = Math.max(1, parseInt(inputBalones ? inputBalones.value : 5, 10));
+
+            modal.style.display = 'flex';
+
+            // Reset UI
+            document.getElementById('detector-source-picker').style.display = 'block';
+            document.getElementById('detector-canvas-container').style.display = 'none';
+            document.getElementById('detector-status-bar').style.display = 'none';
+            document.getElementById('btn-confirmar-verificacion').disabled = true;
+            document.getElementById('btn-confirmar-verificacion').style.opacity = '0.5';
+            document.getElementById('alert-check-ok').style.display = 'none';
+            document.getElementById('alert-check-warn').style.display = 'none';
+
+            const canvas = document.getElementById('balloon-detection-canvas');
+            if (!detectorInstance) {
+                detectorInstance = new BalloonDetector({
+                    canvas: canvas,
+                    expectedCount: expected,
+                    onCountChange: onBalloonCountUpdated
+                });
+            } else {
+                detectorInstance.setExpectedCount(expected);
+            }
+        }
+
+        function cerrarModalDetector() {
+            const modal = document.getElementById('modal-evidencia-detector');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function retomarFotoConductor() {
+            document.getElementById('detector-source-picker').style.display = 'block';
+            document.getElementById('detector-canvas-container').style.display = 'none';
+            document.getElementById('detector-status-bar').style.display = 'none';
+            document.getElementById('camera-file-input').value = '';
+            document.getElementById('camera-file-input').click();
+        }
+
+        async function procesarFotoConductor(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            Swal.fire({
+                title: 'Analizando Evidencia...',
+                html: '<p style="color:#64748b; font-size:0.85rem;">Ejecutando algoritmo de detección y recuento de balones...</p>',
+                allowOutsideClick: false,
+                didOpen: () => Swal.showLoading()
+            });
+
+            try {
+                await detectorInstance.loadImage(file);
+                Swal.close();
+
+                document.getElementById('detector-source-picker').style.display = 'none';
+                document.getElementById('detector-canvas-container').style.display = 'block';
+                document.getElementById('detector-status-bar').style.display = 'block';
+            } catch (err) {
+                Swal.fire({ icon: 'error', title: 'Error al procesar imagen', text: err.message });
+            }
+        }
+
+        function onBalloonCountUpdated(res) {
+            balonesVerificadosCount = res.count;
+            document.getElementById('txt-detectados').innerText = res.count;
+            document.getElementById('txt-esperados').innerText = res.expected;
+
+            const btnConfirm = document.getElementById('btn-confirmar-verificacion');
+            const alertOk = document.getElementById('alert-check-ok');
+            const alertWarn = document.getElementById('alert-check-warn');
+
+            if (res.isVerified) {
+                alertOk.style.display = 'block';
+                alertWarn.style.display = 'none';
+                btnConfirm.disabled = false;
+                btnConfirm.style.opacity = '1';
+                btnConfirm.style.cursor = 'pointer';
+            } else {
+                alertOk.style.display = 'none';
+                alertWarn.style.display = 'block';
+                document.getElementById('warn-detectados').innerText = res.count;
+                document.getElementById('warn-esperados').innerText = res.expected;
+                btnConfirm.disabled = true;
+                btnConfirm.style.opacity = '0.5';
+                btnConfirm.style.cursor = 'not-allowed';
+            }
+        }
+
+        function aplicarVerificacionAlTicket() {
+            if (!detectorInstance) return;
+            evidenciaBase64 = detectorInstance.getAnnotatedImage();
+
+            cerrarModalDetector();
+
+            // Mostrar el check verificado en el formulario
+            const statusBox = document.getElementById('pv-status-verificacion');
+            const badgeCount = document.getElementById('pv-badge-count');
+            if (statusBox && badgeCount) {
+                badgeCount.innerText = balonesVerificadosCount;
+                statusBox.style.display = 'block';
+            }
+
+            const txtBtn = document.getElementById('txt-btn-evidencia');
+            if (txtBtn) {
+                txtBtn.innerHTML = `✅ FOTO VERIFICADA (${balonesVerificadosCount} BALONES) — CAMBIAR`;
+            }
+
+            // Habilitar botón de aprobación final
+            const btnAprobar = document.getElementById('pv-btn-aprobar-entrega');
+            if (btnAprobar) {
+                btnAprobar.disabled = false;
+                btnAprobar.style.opacity = '1';
+                btnAprobar.style.cursor = 'pointer';
+            }
+        }
+
+        async function aprobarEntregaConductor() {
+            if (!currentClient) {
+                Swal.fire({ icon: 'warning', title: 'Atención', text: 'No hay cliente seleccionado.' });
+                return;
+            }
+
+            if (!evidenciaBase64) {
+                Swal.fire({ icon: 'warning', title: 'Evidencia Requerida', text: 'Debes tomar la foto y verificar los balones antes de aprobar.' });
+                return;
+            }
+
+            const inputBalones = document.getElementById('pv-balones-cant');
+            const balones = parseInt(inputBalones ? inputBalones.value : 5, 10);
+
+            const btn = document.getElementById('pv-btn-aprobar-entrega');
+            btn.disabled = true;
+            btn.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i> Aprobando puntos y guardando evidencia...";
+
+            const formData = new FormData();
+            formData.append('venta_id', currentPendingVentaId || 0);
+            formData.append('cliente_id', currentClient.id);
+            formData.append('balones_cantidad', balones);
+            formData.append('balones_verificados', balonesVerificadosCount || balones);
+            formData.append('foto_base64', evidenciaBase64);
+
+            try {
+                const res = await fetch(baseUrl + 'scan/aprobar-entrega-pv', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Puntos Aprobados!',
+                        html: `
+                            <div style="text-align: center; padding: 0.5rem 0;">
+                                <p style="font-size: 1.05rem; color: #1e293b; margin: 0 0 1rem 0;">
+                                    Se acreditaron <b>+${data.puntos} puntos</b> al Punto de Venta.<br>
+                                    <span style="color: #10b981; font-weight: 800; font-size: 0.95rem;">✅ # DE BALONES VERIFICADO (${data.balones_verificados} balones)</span>
+                                </p>
+                                <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid #e2e8f0;">
+                                    <button id="btn-modal-notificar-admin" onclick="notificarAdminDirecto(${data.venta_id})" 
+                                            style="background: #800000; color: #fff; border: none; padding: 0.85rem 1.8rem; border-radius: 14px; font-weight: 850; font-size: 0.9rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 8px 20px rgba(128,0,0,0.3);">
+                                        <i class='bx bx-envelope'></i> Notificar Admin por Correo
+                                    </button>
+                                    <p style="margin: 8px 0 0 0; font-size: 0.72rem; color: #94a3b8;">
+                                        Envía el reporte detallado con la evidencia a <b>jaimeelias.tacna.2016@gmail.com</b>
+                                    </p>
+                                </div>
+                            </div>
+                        `,
+                        showConfirmButton: true,
+                        confirmButtonText: 'Finalizar e Ir a Historial',
+                        confirmButtonColor: '#0f172a'
+                    }).then(() => {
+                        window.location.href = baseUrl + 'conductores/mi-historial';
+                    });
+                } else {
+                    Swal.fire({ icon: 'error', title: 'Error', text: data.message });
+                    btn.disabled = false;
+                    btn.innerHTML = "<i class='bx bx-check-shield'></i> APROBAR PUNTOS DE ENTREGA";
+                }
+            } catch (err) {
+                Swal.fire({ icon: 'error', title: 'Error de Conexión', text: 'No se pudo registrar la aprobación.' });
+                btn.disabled = false;
+                btn.innerHTML = "<i class='bx bx-check-shield'></i> APROBAR PUNTOS DE ENTREGA";
+            }
+        }
+
+        async function notificarAdminDirecto(ventaId) {
+            const btn = document.getElementById('btn-modal-notificar-admin');
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i> Enviando correo al admin...";
+            }
+
+            try {
+                const res = await fetch(baseUrl + 'conductores/notificar-admin', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ venta_id: ventaId })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    if (btn) {
+                        btn.style.background = '#10b981';
+                        btn.innerHTML = "<i class='bx bx-check'></i> ¡Correo Enviado al Administrador!";
+                    }
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 4000,
+                        timerProgressBar: true
+                    });
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Correo y foto de evidencia enviados a jaimeelias.tacna.2016@gmail.com'
+                    });
+                } else {
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.innerHTML = "<i class='bx bx-error'></i> Reintentar Envío de Correo";
+                    }
+                    Swal.fire({ icon: 'warning', title: 'Aviso de Correo', text: data.message });
+                }
+            } catch (err) {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = "<i class='bx bx-error'></i> Reintentar Envío de Correo";
+                }
+                Swal.fire({ icon: 'error', title: 'Error', text: 'No se pudo enviar la notificación.' });
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             if (autoScanToken) {
                 buscarCliente(autoScanToken);
             }
         });
     </script>
+
+    <!-- MODAL: DETECTOR Y RECUENTO DE BALONES (EVIDENCIA) -->
+    <div id="modal-evidencia-detector" class="scanner-overlay" style="display: none; align-items: center; justify-content: center; z-index: 999999; padding: 1rem; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);">
+        <div style="background: #fff; width: 100%; max-width: 680px; max-height: 90vh; border-radius: 28px; overflow-y: auto; box-shadow: 0 30px 80px rgba(0,0,0,0.5); display: flex; flex-direction: column;">
+            <!-- Header -->
+            <div style="padding: 1.25rem 1.8rem; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; background: #f8fafc;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="background: #800000; color: #fff; width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
+                        <i class='bx bx-camera'></i>
+                    </div>
+                    <div>
+                        <h3 style="margin: 0; font-size: 1.1rem; font-weight: 900; color: #0f172a;">Validación de Balones (Evidencia)</h3>
+                        <span style="font-size: 0.75rem; color: #64748b; font-weight: 600;">Algoritmo de Detección y Recuento Automático</span>
+                    </div>
+                </div>
+                <button onclick="cerrarModalDetector()" style="background: #e2e8f0; border: none; width: 34px; height: 34px; border-radius: 50%; color: #475569; cursor: pointer; font-size: 1.2rem;">
+                    <i class='bx bx-x'></i>
+                </button>
+            </div>
+
+            <!-- Body -->
+            <div style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem; align-items: center;">
+                <!-- Source selection / Take photo -->
+                <div id="detector-source-picker" style="width: 100%; text-align: center; padding: 2.5rem 1.5rem; background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 20px;">
+                    <i class='bx bx-camera' style="font-size: 3.5rem; color: #800000; margin-bottom: 0.8rem; display: inline-block;"></i>
+                    <h4 style="margin: 0 0 0.5rem 0; font-size: 1.1rem; font-weight: 800; color: #1e293b;">Captura o Sube la Foto de los Balones</h4>
+                    <p style="margin: 0 0 1.5rem 0; font-size: 0.82rem; color: #64748b;">Asegúrate de que los balones entregados se vean con claridad para el recuento.</p>
+                    <input type="file" id="camera-file-input" accept="image/*" capture="environment" style="display: none;" onchange="procesarFotoConductor(event)">
+                    <button type="button" onclick="document.getElementById('camera-file-input').click()" style="background: #800000; color: #fff; border: none; padding: 0.9rem 2rem; border-radius: 14px; font-weight: 800; font-size: 0.9rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 8px 20px rgba(128,0,0,0.25);">
+                        <i class='bx bx-camera'></i> Tomar / Seleccionar Foto
+                    </button>
+                </div>
+
+                <!-- Canvas Container -->
+                <div id="detector-canvas-container" style="display: none; width: 100%; text-align: center; position: relative;">
+                    <canvas id="balloon-detection-canvas" style="max-width: 100%; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); cursor: crosshair;"></canvas>
+                    <div style="font-size: 0.75rem; color: #64748b; margin-top: 6px; font-weight: 500;">
+                        💡 <i>Toca sobre la imagen para añadir o quitar un marcador si requieres ajustar manualmente.</i>
+                    </div>
+                </div>
+
+                <!-- Count & Alert Status -->
+                <div id="detector-status-bar" style="display: none; width: 100%;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; background: #f1f5f9; padding: 0.8rem 1.25rem; border-radius: 14px; margin-bottom: 0.8rem;">
+                        <span style="font-weight: 800; font-size: 0.85rem; color: #475569;">RECUENTO DEL ALGORITMO:</span>
+                        <span style="font-weight: 950; font-size: 1.1rem; color: #0f172a;">
+                            <span id="txt-detectados" style="color: #800000;">0</span> / <span id="txt-esperados">0</span> balones
+                        </span>
+                    </div>
+
+                    <!-- ALERTA SOLICITADA POR EL USUARIO: -->
+                    <div id="alert-check-ok" style="display: none; background: #ecfdf5; border: 2.5px solid #10b981; border-radius: 16px; padding: 1.25rem; text-align: center;">
+                        <div style="font-size: 1.35rem; font-weight: 950; color: #065f46; letter-spacing: -0.5px;">
+                            ✅ # DE BALONES VERIFICADO (CHECK)
+                        </div>
+                        <div style="font-size: 0.85rem; font-weight: 700; color: #047857; margin-top: 4px;">
+                            ¡La cantidad de balones coincide exactamente! Ya puedes proceder a aprobar los puntos.
+                        </div>
+                    </div>
+
+                    <div id="alert-check-warn" style="display: none; background: #fffbeb; border: 2px solid #f59e0b; border-radius: 16px; padding: 1rem; text-align: center;">
+                        <div style="font-size: 1rem; font-weight: 850; color: #92400e;">
+                            ⚠️ EL NÚMERO DE BALONES NO COINCIDE
+                        </div>
+                        <div style="font-size: 0.8rem; color: #b45309; margin-top: 3px;">
+                            Se detectaron <b id="warn-detectados">0</b> balones pero se esperan <b id="warn-esperados">0</b>. Toca sobre la foto para ajustar o vuelve a tomarla.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div style="padding: 1.25rem 1.8rem; border-top: 1px solid #e2e8f0; background: #fafbfc; display: flex; justify-content: space-between; align-items: center;">
+                <button type="button" onclick="retomarFotoConductor()" style="background: transparent; color: #64748b; border: 1.5px solid #cbd5e1; padding: 0.75rem 1.25rem; border-radius: 12px; font-weight: 700; font-size: 0.85rem; cursor: pointer;">
+                    <i class='bx bx-refresh'></i> Volver a Capturar
+                </button>
+                <button type="button" id="btn-confirmar-verificacion" disabled onclick="aplicarVerificacionAlTicket()" style="background: #10b981; color: #fff; border: none; padding: 0.85rem 1.8rem; border-radius: 14px; font-weight: 850; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 8px 20px rgba(16,185,129,0.3); opacity: 0.5;">
+                    <i class='bx bx-check-circle'></i> Usar Evidencia Verificada
+                </button>
+            </div>
+        </div>
+    </div>
     <script src="<?= BASE_URL ?>assets/js/session_check.js"></script>
 </body>
 </html>

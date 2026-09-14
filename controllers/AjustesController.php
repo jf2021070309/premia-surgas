@@ -19,12 +19,14 @@ class AjustesController {
         $premios     = $premioModel->getAll();
         $conductores = $userModel->getAllConductores();
         $montoPorPunto = $configModel->getValor('monto_por_punto') ?? 0.05;
+        $puntosPorBalon = $configModel->getValor('puntos_por_balon_10kg') ?? 10;
 
         $this->render('ajustes/index', [
-            'operaciones' => $operaciones,
-            'premios'     => $premios,
-            'conductores' => $conductores,
-            'montoPorPunto' => $montoPorPunto
+            'operaciones'    => $operaciones,
+            'premios'        => $premios,
+            'conductores'    => $conductores,
+            'montoPorPunto'  => $montoPorPunto,
+            'puntosPorBalon' => $puntosPorBalon
         ]);
     }
 
@@ -51,6 +53,32 @@ class AjustesController {
             ];
         }
         
+        header('Location: ' . BASE_URL . 'ajustes');
+        exit;
+    }
+
+    public function updatePuntosBalon(): void {
+        $this->requireAdmin();
+        $valor = (string) max(1, (int) ($_POST['puntos_por_balon_10kg'] ?? 10));
+        $configModel = new ConfiguracionModel();
+
+        if ($configModel->upsert('puntos_por_balon_10kg', $valor, 'Puntos otorgados a Puntos de Venta por cada balón de 10kg entregado')) {
+            $audit = new AuditoriaModel();
+            $audit->registrar($_SESSION['id_usuario'], 'ACTUALIZAR_CONFIG', "Actualizó puntos por balón 10kg a: $valor", 'AJUSTES');
+
+            $_SESSION['flash'] = [
+                'type' => 'success',
+                'title' => '¡Actualizado!',
+                'message' => "La regla de puntos por balón de 10kg ahora es de $valor puntos por cada balón."
+            ];
+        } else {
+            $_SESSION['flash'] = [
+                'type' => 'error',
+                'title' => 'Error',
+                'message' => 'No se pudo actualizar la configuración.'
+            ];
+        }
+
         header('Location: ' . BASE_URL . 'ajustes');
         exit;
     }

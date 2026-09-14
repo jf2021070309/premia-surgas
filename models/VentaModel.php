@@ -8,15 +8,25 @@ class VentaModel {
         $this->db = Database::getConnection();
     }
 
-    public function create(int $clienteId, int $conductorId, float $monto, int $puntos, ?string $detalle = null, array $items = [], string $estado = 'pendiente'): int {
+    public function create(int $clienteId, ?int $conductorId, float $monto, int $puntos, ?string $detalle = null, array $items = [], string $estado = 'pendiente', ?int $balonesCantidad = null, ?int $balonesVerificados = null, ?string $evidenciaFoto = null): int {
         try {
             $this->db->beginTransaction();
 
             $stmt = $this->db->prepare(
-                "INSERT INTO ventas (cliente_id, conductor_id, monto, puntos, detalle, estado)
-                 VALUES (?, ?, ?, ?, ?, ?)"
+                "INSERT INTO ventas (cliente_id, conductor_id, monto, puntos, balones_cantidad, balones_verificados, evidencia_foto, detalle, estado)
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
             );
-            $stmt->execute([$clienteId, $conductorId, $monto, $puntos, $detalle, $estado]);
+            $stmt->execute([
+                $clienteId,
+                $conductorId ?: null,
+                $monto,
+                $puntos,
+                $balonesCantidad,
+                $balonesVerificados,
+                $evidenciaFoto,
+                $detalle,
+                $estado
+            ]);
             $ventaId = (int) $this->db->lastInsertId();
 
             if (!empty($items)) {
@@ -43,6 +53,99 @@ class VentaModel {
             }
             throw $e;
         }
+    }
+
+    /**
+     * Registra una solicitud de puntos iniciada por un Punto de Venta (pendiente de verificación por conductor)
+     */
+    public function solicitarPuntosPV(int $clienteId, int $balones, int $puntos, string $detalle = ''): int {
+        $stmt = $this->db->prepare(
+            "INSERT INTO ventas (cliente_id, conductor_id, monto, puntos, balones_cantidad, detalle, estado, fecha)
+             VALUES (?, NULL, 0, ?, ?, ?, 'pendiente', NOW())"
+        );
+        $stmt->execute([
+            $clienteId,
+            $puntos,
+            $balones,
+            $detalle ?: "Solicitud de Puntos por $balones Balones de 10kg (+$puntos pts)"
+        ]);
+        return (int) $this->db->lastInsertId();
+    }
+
+    /**
+     * Obtiene solicitudes pendientes de puntos para clientes Punto de Venta
+     */
+    public function getPendientesPV(?int $clienteId = null): array {
+        $sql = "SELECT v.*, c.nombre as cliente_nombre, c.razon_social as cliente_razon_social, 
+                       c.dni as cliente_dni, c.ruc as cliente_ruc, c.celular as cliente_celular, 
+                       c.direccion as cliente_direccion, c.tipo_cliente
+                FROM ventas v
+                JOIN clientes c ON v.cliente_id = c.id
+                WHERE v.estado = 'pendiente' AND v.balones_cantidad IS NOT NULL";
+        $params = [];
+        if ($clienteId) {
+            $sql .= " AND v.cliente_id = ?";
+            $params[] = $clienteId;
+        }
+        $sql .= " ORDER BY v.fecha DESC";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Aprueba la entrega de balones tras verificación fotográfica y suma los puntos al cliente
+     */
+    public function aprobarEntregaPV(int $ventaId, int $conductorId, int $balonesVerificados, string $evidenciaFoto): bool {
+        try {
+            $this->db->beginTransaction();
+
+            $venta = $this->getById($ventaId);
+            if (!$venta || $venta['estado'] !== 'pendiente') {
+                throw new Exception("La operación no existe o ya no está pendiente.");
+            }
+
+            $puntos = (int) $venta['puntos'];
+            $clienteId = (int) $venta['cliente_id'];
+
+            // 1. Actualizar la venta con la evidencia y conductor que aprobó
+            $stmt = $this->db->prepare(
+                "UPDATE ventas 
+                 SET conductor_id = ?, 
+                     balones_verificados = ?, 
+                     evidencia_foto = ?, 
+                     estado = 'aprobado', 
+                     fecha_aprobacion = NOW()
+                 WHERE id = ?"
+            );
+            $stmt->execute([$conductorId, $balonesVerificados, $evidenciaFoto, $ventaId]);
+
+            // 2. Sumar puntos al cliente
+            $stmtUpd = $this->db->prepare("UPDATE clientes SET puntos = puntos + ? WHERE id = ?");
+            $stmtUpd->execute([$puntos, $clienteId]);
+
+            // 3. Evaluar incentivos
+            require_once __DIR__ . '/IncentivoModel.php';
+            $incentivoModel = new IncentivoModel();
+            $incentivoModel->evaluarMetas($clienteId);
+
+            $this->db->commit();
+            return true;
+        } catch (Exception $e) {
+            if ($this->db->inTransaction()) {
+                $this->db->rollBack();
+            }
+            error_log("Error en aprobarEntregaPV: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Marca la venta como notificada al admin por correo
+     */
+    public function marcarNotificadoAdmin(int $ventaId): bool {
+        $stmt = $this->db->prepare("UPDATE ventas SET notificado_admin = 1 WHERE id = ?");
+        return $stmt->execute([$ventaId]);
     }
 
     public function validar(int $id, string $estado, int $validadorId): bool {
@@ -87,7 +190,7 @@ class VentaModel {
             "SELECT v.*, c.nombre as cliente_nombre, c.dni as cliente_dni, c.celular as cliente_celular, u.nombre as conductor_nombre
              FROM ventas v
              JOIN clientes c ON v.cliente_id = c.id
-             JOIN usuarios u ON v.conductor_id = u.id
+             LEFT JOIN usuarios u ON v.conductor_id = u.id
              WHERE v.estado = 'pendiente'
              ORDER BY v.fecha DESC"
         );
@@ -109,9 +212,13 @@ class VentaModel {
 
     public function getById(int $id): ?array {
         $stmt = $this->db->prepare(
-            "SELECT v.*, c.nombre as cliente_nombre, c.celular as cliente_celular 
+            "SELECT v.*, c.nombre as cliente_nombre, c.razon_social as cliente_razon_social,
+                    c.dni as cliente_dni, c.ruc as cliente_ruc, c.celular as cliente_celular, 
+                    c.direccion as cliente_direccion, c.tipo_cliente,
+                    u.nombre as conductor_nombre
              FROM ventas v 
              JOIN clientes c ON v.cliente_id = c.id 
+             LEFT JOIN usuarios u ON v.conductor_id = u.id
              WHERE v.id = ?"
         );
         $stmt->execute([$id]);

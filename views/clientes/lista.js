@@ -4,7 +4,7 @@ createApp({
     data() {
         return {
             busqueda: '',
-            filterTipo: '',
+            filterTipo: 'Punto de Venta',
             filterDep: '',
             clientes: typeof CLIENTES !== 'undefined' ? CLIENTES : [],
             loading: false,
