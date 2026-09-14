@@ -79,8 +79,8 @@ define('SMS_GATEWAY_API_KEY', 'MY_SECRET_KEY_2024');
 
 // —— Configuración de Correo SMTP (Gmail) ——
 define('SMTP_HOST', 'smtp.gmail.com');
-define('SMTP_USER', 'surgas.tacna.26@gmail.com');
-define('SMTP_PASS', 'Surgas654321');
+define('SMTP_USER', 'radioxero26@gmail.com');
+define('SMTP_PASS', 'wrvjnuozukzhjfji');
 define('SMTP_PORT', 587);
 define('SMTP_SECURE', 'tls');
 
