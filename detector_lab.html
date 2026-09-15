@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratorio SAHI — Detección de Balones | PremiaSurgas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <!-- TensorFlow.js + COCO-SSD -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.21.0/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.3/dist/coco-ssd.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #800000;
+            --primary-dark: #5c0000;
+            --accent: #ea580c;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --dark: #0f172a;
+            --gray-sub: #64748b;
+            --bg: #f8fafc;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, sans-serif; }
+        body { background: var(--bg); color: var(--dark); min-height: 100vh; padding: 1.5rem; }
+
+        .header {
+            max-width: 1480px; margin: 0 auto 1.5rem auto;
+            display: flex; justify-content: space-between; align-items: center;
+            background: #fff; padding: 1.2rem 2rem; border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04); border: 1px solid #e2e8f0;
+        }
+        .brand-title { font-size: 1.35rem; font-weight: 900; color: var(--primary); display: flex; align-items: center; gap: 10px; }
+        .brand-subtitle { font-size: 0.78rem; color: var(--gray-sub); font-weight: 600; margin-top: 2px; }
+
+        .badge-sahi {
+            background: linear-gradient(135deg, #7c3aed, #2563eb);
+            color: #fff; padding: 6px 16px; border-radius: 20px;
+            font-size: 0.78rem; font-weight: 800; display: flex; align-items: center; gap: 6px;
+        }
+
+        .main-grid {
+            max-width: 1480px; margin: 0 auto;
+            display: grid; grid-template-columns: 360px 1fr; gap: 1.5rem; align-items: start;
+        }
+        @media (max-width: 1100px) { .main-grid { grid-template-columns: 1fr; } }
+
+        .card {
+            background: #fff; border-radius: 20px; border: 1px solid #e2e8f0;
+            padding: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+        }
+        .section-title {
+            font-size: 0.85rem; font-weight: 800; color: var(--dark);
+            text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1rem;
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        .model-status {
+            display: flex; align-items: center; gap: 10px; padding: 0.85rem 1.1rem;
+            border-radius: 14px; margin-bottom: 0.8rem; font-size: 0.82rem; font-weight: 700;
+            border: 1.5px solid; transition: all 0.3s;
+        }
+        .model-status.loading { background: #eff6ff; border-color: #93c5fd; color: #1d4ed8; }
+        .model-status.ready   { background: #ecfdf5; border-color: #6ee7b7; color: #065f46; }
+        .model-status.error   { background: #fef2f2; border-color: #fca5a5; color: #991b1b; }
+        .model-status.running { background: #fef3c7; border-color: #fbbf24; color: #92400e; }
+
+        .spinner {
+            width: 17px; height: 17px; border: 2.5px solid currentColor;
+            border-top-color: transparent; border-radius: 50%;
+            animation: spin 0.7s linear infinite; flex-shrink: 0;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .progress-bar-wrap { height: 4px; background: #e2e8f0; border-radius: 4px; overflow: hidden; margin: 0.4rem 0 0.8rem; }
+        .progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, #7c3aed, #2563eb); transition: width 0.3s; border-radius: 4px; }
+
+        .dropzone {
+            border: 2.5px dashed #cbd5e1; border-radius: 16px;
+            padding: 1.2rem 1rem; text-align: center; background: #f8fafc;
+            cursor: pointer; transition: all 0.2s; margin-bottom: 1rem;
+        }
+        .dropzone:hover, .dropzone.dragover { border-color: var(--primary); background: #fdf2f2; }
+        .dropzone i { font-size: 2.2rem; color: var(--primary); margin-bottom: 0.4rem; display: block; }
+
+        .sample-btn {
+            background: #f1f5f9; border: 1px solid #cbd5e1;
+            padding: 0.5rem 1rem; border-radius: 12px; font-size: 0.78rem;
+            font-weight: 700; color: var(--dark); cursor: pointer;
+            width: 100%; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 8px;
+            transition: all 0.2s; text-align: left;
+        }
+        .sample-btn:hover { background: #e2e8f0; border-color: var(--primary); }
+
+        .control-group { margin-bottom: 0.85rem; }
+        .control-label { display: flex; justify-content: space-between; font-size: 0.78rem; font-weight: 700; color: #475569; margin-bottom: 0.25rem; }
+        .control-slider { width: 100%; accent-color: var(--primary); cursor: pointer; }
+
+        /* Tile grid selector */
+        .tile-selector { display: flex; gap: 6px; flex-wrap: wrap; }
+        .tile-btn {
+            flex: 1; min-width: 60px; padding: 7px 6px; border-radius: 10px;
+            border: 1.5px solid #cbd5e1; background: #f8fafc;
+            font-size: 0.78rem; font-weight: 700; cursor: pointer; transition: all 0.2s; text-align: center;
+        }
+        .tile-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+        .tile-btn:hover:not(.active) { border-color: var(--primary); background: #fdf2f2; }
+
+        .stats-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+        .stat-box { background: #fff; border-radius: 16px; padding: 1.1rem; border: 1px solid #e2e8f0; text-align: center; }
+        .stat-value { font-size: 2.8rem; font-weight: 950; line-height: 1; margin: 0.25rem 0; }
+        .stat-label { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gray-sub); }
+
+        .canvas-wrapper {
+            position: relative; background: #0f172a; border-radius: 16px; overflow: hidden;
+            display: flex; justify-content: center; align-items: center; min-height: 500px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        #main-canvas { max-width: 100%; height: auto; display: block; cursor: crosshair; }
+
+        .canvas-placeholder {
+            position: absolute; color: #475569; text-align: center; pointer-events: none;
+        }
+        .canvas-placeholder i { font-size: 4rem; display: block; margin-bottom: 0.5rem; color: #334155; }
+
+        .det-list { max-height: 180px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; margin-top: 0.5rem; }
+        .det-item {
+            display: flex; align-items: center; gap: 8px; padding: 5px 10px;
+            background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px;
+            font-size: 0.77rem; font-weight: 700;
+        }
+        .det-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+        .det-conf { margin-left: auto; color: var(--gray-sub); font-weight: 600; }
+
+        /* SAHI tile debug overlay toggle */
+        .debug-badge {
+            font-size: 0.7rem; font-weight: 700; padding: 3px 10px; border-radius: 20px;
+            border: 1px solid #cbd5e1; cursor: pointer; user-select: none; transition: all 0.2s;
+        }
+        .debug-badge.on  { background: #7c3aed; color: #fff; border-color: #7c3aed; }
+        .debug-badge.off { background: #f1f5f9; color: #64748b; }
+
+        .viewer-container { display: flex; flex-direction: column; gap: 1rem; }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div>
+        <div class="brand-title">
+            <i class='bx bx-scan'></i> Laboratorio SAHI — Balones Apilados
+        </div>
+        <div class="brand-subtitle">
+            SAHI (Slicing Aided Hyper Inference) · COCO-SSD · Detecta balones en capas y grupos densos
+        </div>
+    </div>
+    <div class="badge-sahi">
+        <i class='bx bx-grid-alt'></i> SAHI · TF.js · COCO-SSD
+    </div>
+</header>
+
+<div class="main-grid">
+
+    <!-- Sidebar -->
+    <div style="display:flex;flex-direction:column;gap:1rem;">
+
+        <!-- Estado -->
+        <div class="card">
+            <div class="section-title"><i class='bx bx-chip'></i> Estado del Modelo</div>
+            <div class="model-status loading" id="model-status">
+                <div class="spinner" id="status-spinner"></div>
+                <span id="status-text">Cargando COCO-SSD…</span>
+            </div>
+            <div class="progress-bar-wrap"><div class="progress-bar" id="progress-bar"></div></div>
+            <p style="font-size:0.72rem;color:#94a3b8;font-weight:600;line-height:1.5;">
+                <b>SAHI</b> divide la imagen en tiles solapados, corre el modelo en cada tile y fusiona resultados con NMS. Mejora drásticamente la detección de objetos apilados.
+            </p>
+        </div>
+
+        <!-- Cargar imagen -->
+        <div class="card">
+            <div class="section-title"><i class='bx bx-image-add'></i> 1. Cargar Imagen</div>
+            <div class="dropzone" id="dropzone" onclick="document.getElementById('file-input').click()">
+                <i class='bx bx-cloud-upload'></i>
+                <strong style="font-size:0.88rem;color:#1e293b;display:block;">Sube o arrastra una foto</strong>
+                <span style="font-size:0.73rem;color:#64748b;">JPG, PNG — desde PC o celular</span>
+                <input type="file" id="file-input" accept="image/*" style="display:none;" onchange="handleFile(event)">
+            </div>
+            <div style="font-size:0.72rem;font-weight:800;color:#64748b;text-transform:uppercase;margin-bottom:0.4rem;">Fotos de Prueba:</div>
+            <button type="button" class="sample-btn" onclick="loadSample('assets/tests/balones_3_test.png')">
+                <i class='bx bx-cylinder' style="color:#ea580c;font-size:1.1rem;"></i>
+                <span>3 Balones (Marrón, Rojo, Plomo)</span>
+            </button>
+            <button type="button" class="sample-btn" onclick="loadSample('assets/tests/balones_test1.png')">
+                <i class='bx bx-cylinder' style="color:#800000;font-size:1.1rem;"></i>
+                <span>4 Balones — Fondo calamina</span>
+            </button>
+            <button type="button" class="sample-btn" onclick="loadSample('assets/tests/balones_test2.png')">
+                <i class='bx bx-tv' style="color:#0284c7;font-size:1.1rem;"></i>
+                <span>4 Balones — Captura pantalla</span>
+            </button>
+        </div>
+
+        <!-- Parámetros SAHI -->
+        <div class="card">
+            <div class="section-title"><i class='bx bx-grid-alt'></i> 2. Configuración SAHI</div>
+
+            <div class="control-group">
+                <div class="control-label"><span>Grid de tiles:</span></div>
+                <div class="tile-selector" id="tile-selector">
+                    <button class="tile-btn" data-grid="1x1" onclick="setGrid('1x1',this)">1×1<br><span style="font-size:0.65rem;font-weight:600;color:#94a3b8;">Sin tiles</span></button>
+                    <button class="tile-btn" data-grid="2x2" onclick="setGrid('2x2',this)">2×2<br><span style="font-size:0.65rem;font-weight:600;color:#94a3b8;">4 tiles</span></button>
+                    <button class="tile-btn active" data-grid="3x3" onclick="setGrid('3x3',this)">3×3<br><span style="font-size:0.65rem;font-weight:600;color:#94a3b8;">9 tiles</span></button>
+                    <button class="tile-btn" data-grid="4x4" onclick="setGrid('4x4',this)">4×4<br><span style="font-size:0.65rem;font-weight:600;color:#94a3b8;">16 tiles</span></button>
+                </div>
+                <p style="font-size:0.71rem;color:#94a3b8;margin-top:6px;line-height:1.4;">Más tiles = más detecciones en escenas densas. Más lento. Recomendado: <b>3×3</b>.</p>
+            </div>
+
+            <div class="control-group">
+                <div class="control-label">
+                    <span>Solapamiento entre tiles:</span>
+                    <b id="val-overlap">30%</b>
+                </div>
+                <input type="range" id="param-overlap" class="control-slider" min="10" max="50" value="30"
+                       oninput="overlapRatio=this.value/100; document.getElementById('val-overlap').textContent=this.value+'%';">
+                <span style="font-size:0.71rem;color:#94a3b8;">Mayor solapamiento = menos bordes perdidos.</span>
+            </div>
+
+            <div class="control-group">
+                <div class="control-label">
+                    <span>Confianza mínima:</span>
+                    <b id="val-conf">20%</b>
+                </div>
+                <input type="range" id="param-conf" class="control-slider" min="5" max="70" value="20"
+                       oninput="confThreshold=this.value/100; document.getElementById('val-conf').textContent=this.value+'%';">
+            </div>
+
+            <div class="control-group">
+                <div class="control-label">
+                    <span>IoU para NMS:</span>
+                    <b id="val-iou">40%</b>
+                </div>
+                <input type="range" id="param-iou" class="control-slider" min="15" max="70" value="40"
+                       oninput="iouThreshold=this.value/100; document.getElementById('val-iou').textContent=this.value+'%';">
+                <span style="font-size:0.71rem;color:#94a3b8;">Menor IoU = elimina más duplicados entre tiles.</span>
+            </div>
+
+            <button type="button" onclick="rerunIfImage()" style="background:var(--primary);color:#fff;border:none;padding:0.75rem;border-radius:12px;font-weight:800;font-size:0.85rem;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:0.5rem;">
+                <i class='bx bx-radar'></i> Ejecutar Detección SAHI
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Viewer -->
+    <div class="viewer-container">
+
+        <div class="stats-bar">
+            <div class="stat-box">
+                <div class="stat-label">Balones Detectados</div>
+                <div class="stat-value" id="stat-count" style="color:var(--primary);">—</div>
+                <div style="font-size:0.72rem;color:#64748b;font-weight:600;margin-top:3px;">Recuento SAHI final</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Tiles procesados</div>
+                <div class="stat-value" id="stat-tiles" style="color:#7c3aed;">—</div>
+                <div style="font-size:0.72rem;color:#64748b;font-weight:600;margin-top:3px;">Inferencias paralelas</div>
+            </div>
+            <div class="stat-box">
+                <div style="font-size:0.7rem;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;color:#64748b;margin-bottom:4px;">Tiempo total</div>
+                <div id="stat-fps" style="font-size:1.1rem;font-weight:900;color:#2563eb;">—</div>
+                <div style="height:1px;background:#e2e8f0;margin:6px 0;"></div>
+                <div id="stat-backend" style="font-size:0.71rem;color:#94a3b8;font-weight:700;">Backend: —</div>
+            </div>
+        </div>
+
+        <div class="card" style="padding:1rem;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.6rem;">
+                <span style="font-size:0.78rem;font-weight:700;color:#64748b;">💡 Haz clic en una caja para eliminarla</span>
+                <span class="debug-badge off" id="debug-toggle" onclick="toggleDebug()">🔵 Ver tiles</span>
+            </div>
+            <div class="canvas-wrapper">
+                <div class="canvas-placeholder" id="canvas-placeholder">
+                    <i class='bx bx-image-alt'></i>
+                    <span style="font-size:0.88rem;font-weight:700;">Carga una imagen para iniciar SAHI</span>
+                </div>
+                <canvas id="main-canvas"></canvas>
+            </div>
+        </div>
+
+        <div class="card" style="padding:1.2rem;">
+            <div class="section-title"><i class='bx bx-list-check'></i> Detecciones Individuales</div>
+            <div class="det-list" id="det-list">
+                <div style="font-size:0.8rem;color:#94a3b8;font-weight:600;text-align:center;padding:1rem 0;">Sin detecciones aún</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// SAHI — Slicing Aided Hyper Inference
+// COCO-SSD + TensorFlow.js · PremiaSurgas AI Lab
+// ═══════════════════════════════════════════════════════
+
+// ── Parámetros ────────────────────────────────────────
+let confThreshold = 0.20;
+let iouThreshold  = 0.40;
+let overlapRatio  = 0.30;
+let gridRows = 3, gridCols = 3;
+let showDebugTiles = false;
+
+// Clases COCO que mapeamos como balón de gas
+const BALLOON_CLASSES = new Set(['bottle', 'vase', 'fire hydrant']);
+const CLASS_COLOR = { 'bottle': '#ea580c', 'vase': '#0284c7', 'fire hydrant': '#7c3aed' };
+const DEFAULT_COLOR = '#10b981';
+
+// ── Estado ────────────────────────────────────────────
+let cocoModel    = null;
+let currentImage = null;
+let detections   = [];   // bboxes finales en coords originales
+let tileRects    = [];   // para debug visual
+let manualRemovals = new Set();
+
+// ── Cargar modelo ─────────────────────────────────────
+async function loadModel() {
+    const statusEl = document.getElementById('model-status');
+    const statusTxt = document.getElementById('status-text');
+    const spinner = document.getElementById('status-spinner');
+    const progressBar = document.getElementById('progress-bar');
+
+    try {
+        progressBar.style.width = '20%';
+        await tf.ready();
+        const backend = tf.getBackend();
+        document.getElementById('stat-backend').textContent = 'Backend: ' + backend.toUpperCase();
+        progressBar.style.width = '50%';
+        statusTxt.textContent = 'Cargando COCO-SSD Lite…';
+
+        cocoModel = await cocoSsd.load({ base: 'lite_mobilenet_v2' });
+
+        progressBar.style.width = '100%';
+        statusEl.className = 'model-status ready';
+        spinner.style.display = 'none';
+        statusTxt.innerHTML = '&#10003; Listo &mdash; COCO-SSD Lite + SAHI ' + gridRows + 'x' + gridCols;
+
+        loadSample('assets/tests/balones_3_test.png');
+    } catch (err) {
+        statusEl.className = 'model-status error';
+        spinner.style.display = 'none';
+        statusTxt.innerHTML = '&#10006; ' + err.message;
+        console.error(err);
+    }
+}
+
+// ── SAHI: Slicing Aided Hyper Inference ───────────────
+/**
+ * Divide imgEl en tiles solapados, corre COCO-SSD en cada uno,
+ * mapea bbox al espacio original, aplica NMS global.
+ */
+async function runSAHI(imgEl) {
+    if (!cocoModel) { alert('Modelo aún cargando.'); return; }
+
+    const statusEl = document.getElementById('model-status');
+    const statusTxt = document.getElementById('status-text');
+    statusEl.className = 'model-status running';
+    statusTxt.innerHTML = '<span class="spinner" style="width:14px;height:14px;border-width:2px;margin-right:8px;display:inline-block;vertical-align:middle;"></span> Ejecutando SAHI…';
+
+    const origW = imgEl.naturalWidth  || imgEl.width;
+    const origH = imgEl.naturalHeight || imgEl.height;
+
+    const t0 = performance.now();
+    const allRaw = [];
+    tileRects = [];
+
+    // ─── 1. Detectar en imagen completa (contexto global) ───
+    const fullDets = await cocoModel.detect(imgEl, 30, 0.10);
+    console.log('[SAHI] fullDets raw (todas las clases >= 10%):', fullDets);
+    fullDets.forEach(d => {
+        if (BALLOON_CLASSES.has(d.class) && d.score >= confThreshold * 0.7) {
+            allRaw.push({ class: d.class, score: d.score, bbox: [...d.bbox], fromFull: true });
+        }
+    });
+
+    // ─── 2. Tiles solapados ────────────────────────────────
+    const tileW = Math.ceil(origW / gridCols);
+    const tileH = Math.ceil(origH / gridRows);
+    const overlapX = Math.round(tileW * overlapRatio);
+    const overlapY = Math.round(tileH * overlapRatio);
+
+    const tileCanvas = document.createElement('canvas');
+    const tileCtx = tileCanvas.getContext('2d');
+
+    for (let row = 0; row < gridRows; row++) {
+        for (let col = 0; col < gridCols; col++) {
+            // Coordenadas con solapamiento
+            const x0 = Math.max(0, col * tileW - overlapX);
+            const y0 = Math.max(0, row * tileH - overlapY);
+            const x1 = Math.min(origW, (col + 1) * tileW + overlapX);
+            const y1 = Math.min(origH, (row + 1) * tileH + overlapY);
+            const tw = x1 - x0;
+            const th = y1 - y0;
+
+            tileRects.push({ x0, y0, x1, y1 });
+
+            tileCanvas.width  = tw;
+            tileCanvas.height = th;
+            tileCtx.drawImage(imgEl, x0, y0, tw, th, 0, 0, tw, th);
+
+            // Inferencia en este tile (usar umbral bajo 0.10 para ver todo)
+            const tileDets = await cocoModel.detect(tileCanvas, 20, 0.10);
+            if (tileDets.length > 0) {
+                console.log(`[Tile ${row},${col}] raw dets:`, tileDets);
+            }
+
+            tileDets.forEach(d => {
+                if (!BALLOON_CLASSES.has(d.class)) return;
+                if (d.score < confThreshold) return;
+
+                // Mapear bbox del tile a coordenadas originales
+                const bx = d.bbox[0] + x0;
+                const by = d.bbox[1] + y0;
+                const bw = d.bbox[2];
+                const bh = d.bbox[3];
+
+                // Filtrar cajas demasiado pequeñas o ridículas
+                if (bw < 20 || bh < 20) return;
+                if (bw > origW * 0.9 || bh > origH * 0.9) return;
+
+                allRaw.push({ class: d.class, score: d.score, bbox: [bx, by, bw, bh], fromTile: `${row},${col}` });
+            });
+        }
+    }
+
+    console.log('[SAHI] allRaw candidatos antes de NMS:', allRaw);
+    // ─── 3. NMS global sobre todas las detecciones ─────────
+    detections = nmsGlobal(allRaw, iouThreshold);
+    console.log('[SAHI] detections después de NMS:', detections);
+    manualRemovals.clear();
+
+    const t1 = performance.now();
+    const totalTiles = gridRows * gridCols + 1; // +1 por full-image
+    document.getElementById('stat-fps').textContent = (t1 - t0).toFixed(0) + ' ms';
+    document.getElementById('stat-tiles').textContent = totalTiles;
+
+    statusEl.className = 'model-status ready';
+    statusTxt.innerHTML = '&#10003; SAHI ' + gridRows + 'x' + gridCols + ' &mdash; ' + detections.length + ' detecciones tras NMS';
+
+    renderDetections(imgEl);
+}
+
+// ── NMS global con supresión por contenimiento ────────
+function iouBoxes(a, b) {
+    const ax1 = a.bbox[0], ay1 = a.bbox[1], ax2 = a.bbox[0]+a.bbox[2], ay2 = a.bbox[1]+a.bbox[3];
+    const bx1 = b.bbox[0], by1 = b.bbox[1], bx2 = b.bbox[0]+b.bbox[2], by2 = b.bbox[1]+b.bbox[3];
+    const ix1 = Math.max(ax1, bx1), iy1 = Math.max(ay1, by1);
+    const ix2 = Math.min(ax2, bx2), iy2 = Math.min(ay2, by2);
+    const inter = Math.max(0, ix2-ix1) * Math.max(0, iy2-iy1);
+    const ua = (ax2-ax1)*(ay2-ay1) + (bx2-bx1)*(by2-by1) - inter;
+    return { iou: inter / (ua + 1e-6), inter, areaA: (ax2-ax1)*(ay2-ay1), areaB: (bx2-bx1)*(by2-by1) };
+}
+
+function nmsGlobal(dets, iouThresh) {
+    // Ordenar por score desc
+    dets.sort((a, b) => b.score - a.score);
+    const keep = [];
+    const suppressed = new Set();
+
+    for (let i = 0; i < dets.length; i++) {
+        if (suppressed.has(i)) continue;
+        keep.push(dets[i]);
+        for (let j = i + 1; j < dets.length; j++) {
+            if (suppressed.has(j)) continue;
+            const { iou, inter, areaA, areaB } = iouBoxes(dets[i], dets[j]);
+
+            // 1. NMS clásico: solapamiento mutuo alto
+            if (iou > iouThresh) { suppressed.add(j); continue; }
+
+            // 2. Containment: la caja j está mayormente DENTRO de la caja i
+            //    Si ≥55% del área de j está cubierta por i → suprimir j
+            if (areaB > 0 && inter / areaB > 0.55) { suppressed.add(j); continue; }
+
+            // 3. Containment inverso: i está dentro de j (i tiene más confianza → suprimir j)
+            if (areaA > 0 && inter / areaA > 0.55) { suppressed.add(j); continue; }
+        }
+    }
+
+    // Ordenar de arriba-izquierda a abajo-derecha
+    keep.sort((a, b) => {
+        const rowA = Math.round(a.bbox[1] / 60);
+        const rowB = Math.round(b.bbox[1] / 60);
+        return rowA !== rowB ? rowA - rowB : a.bbox[0] - b.bbox[0];
+    });
+
+    return keep;
+}
+
+// ── Renderizado ───────────────────────────────────────
+function renderDetections(imgEl) {
+    const canvas = document.getElementById('main-canvas');
+    const ctx = canvas.getContext('2d');
+
+    const origW = imgEl.naturalWidth  || imgEl.width;
+    const origH = imgEl.naturalHeight || imgEl.height;
+    const maxW = 980;
+    const ds = Math.min(1, maxW / origW);
+    const dW = Math.round(origW * ds);
+    const dH = Math.round(origH * ds);
+
+    canvas.width  = dW;
+    canvas.height = dH;
+    ctx.drawImage(imgEl, 0, 0, dW, dH);
+
+    // Debug: dibujar tiles
+    if (showDebugTiles) {
+        tileRects.forEach(t => {
+            ctx.save();
+            ctx.strokeStyle = 'rgba(124,58,237,0.5)';
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([5, 4]);
+            ctx.strokeRect(t.x0*ds, t.y0*ds, (t.x1-t.x0)*ds, (t.y1-t.y0)*ds);
+            ctx.restore();
+        });
+    }
+
+    const visible = [];
+
+    detections.forEach((det, i) => {
+        if (manualRemovals.has(i)) return;
+        visible.push({ det, idx: i });
+
+        const color = CLASS_COLOR[det.class] || DEFAULT_COLOR;
+        const x1 = det.bbox[0] * ds;
+        const y1 = det.bbox[1] * ds;
+        const bw = det.bbox[2] * ds;
+        const bh = det.bbox[3] * ds;
+
+        ctx.save();
+
+        // Sombra suave para profundidad
+        ctx.shadowColor = 'rgba(0,0,0,0.35)';
+        ctx.shadowBlur = 6;
+
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2.8;
+        ctx.fillStyle = color + '22';
+        ctx.strokeRect(x1, y1, bw, bh);
+        ctx.fillRect(x1, y1, bw, bh);
+        ctx.shadowBlur = 0;
+
+        // Esquinas reforzadas
+        const cL = Math.min(12, bw * 0.25, bh * 0.25);
+        ctx.strokeStyle = '#fff'; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(x1, y1+cL); ctx.lineTo(x1, y1); ctx.lineTo(x1+cL, y1); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(x1+bw-cL, y1+bh); ctx.lineTo(x1+bw, y1+bh); ctx.lineTo(x1+bw, y1+bh-cL); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(x1, y1+bh-cL); ctx.lineTo(x1, y1+bh); ctx.lineTo(x1+cL, y1+bh); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(x1+bw-cL, y1); ctx.lineTo(x1+bw, y1); ctx.lineTo(x1+bw, y1+cL); ctx.stroke();
+
+        // Badge
+        const num = visible.length;
+        const confPct = (det.score * 100).toFixed(0) + '%';
+        const badgeTxt = '#' + num + '  ' + confPct;
+        ctx.font = 'bold 12px Inter, sans-serif';
+        const tW = ctx.measureText(badgeTxt).width + 16;
+        const bX = x1 + bw/2 - tW/2;
+        const bY = Math.max(2, y1 - 24);
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        if (ctx.roundRect) { ctx.roundRect(bX, bY, tW, 20, 4); } else { ctx.rect(bX, bY, tW, 20); }
+        ctx.fill();
+        ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText(badgeTxt, bX + tW/2, bY + 10);
+
+        ctx.restore();
+    });
+
+    // Banner
+    const banTxt = 'SAHI ' + gridRows + 'x' + gridCols + '  \u25ba  ' + visible.length + ' balon' + (visible.length!==1?'es':'') + ' detectado' + (visible.length!==1?'s':'');
+    ctx.save();
+    ctx.font = 'bold 12px Inter, sans-serif';
+    const bTW = ctx.measureText(banTxt).width + 24;
+    ctx.fillStyle = 'rgba(15,23,42,0.82)';
+    ctx.fillRect(10, dH-36, bTW, 26);
+    ctx.fillStyle = '#fff'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    ctx.fillText(banTxt, 22, dH-23);
+    ctx.restore();
+
+    document.getElementById('stat-count').textContent = visible.length;
+    document.getElementById('canvas-placeholder').style.display = 'none';
+    updateDetList(visible);
+}
+
+function updateDetList(items) {
+    const el = document.getElementById('det-list');
+    if (!items.length) {
+        el.innerHTML = '<div style="font-size:0.8rem;color:#94a3b8;font-weight:600;text-align:center;padding:1rem 0;">Sin detecciones &mdash; prueba bajar confianza o aumentar tiles</div>';
+        return;
+    }
+    el.innerHTML = items.map(({ det }, i) => {
+        const color = CLASS_COLOR[det.class] || DEFAULT_COLOR;
+        const fromInfo = det.fromFull ? '<span style="color:#10b981;font-size:0.68rem;">[full]</span>' : '<span style="color:#7c3aed;font-size:0.68rem;">[tile]</span>';
+        return '<div class="det-item">'
+            + '<div class="det-dot" style="background:' + color + ';"></div>'
+            + '<span>Balón #' + (i+1) + ' ' + fromInfo + ' <span style="color:#94a3b8;font-weight:600;">(' + det.class + ')</span></span>'
+            + '<span class="det-conf">' + (det.score*100).toFixed(1) + '%</span>'
+            + '</div>';
+    }).join('');
+}
+
+// ── Clic para eliminar ────────────────────────────────
+document.getElementById('main-canvas').addEventListener('click', function(e) {
+    if (!currentImage || !detections.length) return;
+    const rect = this.getBoundingClientRect();
+    const cx = (e.clientX - rect.left) * (this.width / rect.width);
+    const cy = (e.clientY - rect.top)  * (this.height / rect.height);
+    const origW = currentImage.naturalWidth || currentImage.width;
+    const ds = Math.min(1, 980 / origW);
+
+    detections.forEach((det, i) => {
+        if (manualRemovals.has(i)) return;
+        const x1=det.bbox[0]*ds, y1=det.bbox[1]*ds;
+        const x2=(det.bbox[0]+det.bbox[2])*ds, y2=(det.bbox[1]+det.bbox[3])*ds;
+        if (cx>=x1 && cx<=x2 && cy>=y1 && cy<=y2) manualRemovals.add(i);
+    });
+    renderDetections(currentImage);
+});
+
+// ── Cargar imagen ─────────────────────────────────────
+function loadSample(url) {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => { currentImage = img; runSAHI(img); };
+    img.onerror = () => console.warn('No disponible:', url);
+    img.src = url + '?nc=' + Date.now();
+}
+
+function handleFile(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+        const img = new Image();
+        img.onload = () => { currentImage = img; runSAHI(img); };
+        img.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+
+function rerunIfImage() { if (currentImage) runSAHI(currentImage); }
+
+// ── Grid selector ─────────────────────────────────────
+function setGrid(g, btn) {
+    document.querySelectorAll('.tile-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const [r, c] = g.split('x').map(Number);
+    gridRows = r; gridCols = c;
+}
+
+// ── Debug tiles ───────────────────────────────────────
+function toggleDebug() {
+    showDebugTiles = !showDebugTiles;
+    const el = document.getElementById('debug-toggle');
+    el.className = 'debug-badge ' + (showDebugTiles ? 'on' : 'off');
+    el.textContent = showDebugTiles ? '🔵 Ocultar tiles' : '🔵 Ver tiles';
+    if (currentImage) renderDetections(currentImage);
+}
+
+// ── Drag & Drop ───────────────────────────────────────
+const dz = document.getElementById('dropzone');
+dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('dragover'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
+dz.addEventListener('drop', e => {
+    e.preventDefault(); dz.classList.remove('dragover');
+    if (e.dataTransfer.files.length) handleFile({ target: { files: e.dataTransfer.files } });
+});
+
+// ── Init ──────────────────────────────────────────────
+loadModel();
+</script>
+</body>
+</html>

@@ -164,10 +164,11 @@ if (!($readonly ?? false)) {
         /* Layout superior del Perfil */
         .profile-header-layout {
             display: flex;
-            align-items: center;
+            flex-wrap: wrap; /* CORRECCIÓN: Permite que los elementos se envuelvan hacia abajo */
+            align-items: flex-start;
             justify-content: center;
-            gap: 3rem;
-            max-width: 1000px;
+            gap: 2.5rem;
+            max-width: 1040px;
             margin: 3rem auto;
             padding: 0 1.5rem;
         }
@@ -184,13 +185,13 @@ if (!($readonly ?? false)) {
         .profile-info-column {
             flex: 1;
             background: #fff;
-            border-radius: 18px;
+            border-radius: 24px;
             padding: 3rem;
-            /* Multi-layered shadow for better depth and visibility */
+            /* Sombras más modernas y sutiles */
             box-shadow: 
-                0 10px 20px rgba(0, 0, 0, 0.02),
-                0 30px 70px rgba(0, 0, 0, 0.07);
-            border: 1.5px solid #e2e8f0;
+                0 4px 6px -1px rgba(0, 0, 0, 0.05),
+                0 25px 50px -12px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(226, 232, 240, 0.6);
             min-width: 320px;
             position: relative;
         }
@@ -307,16 +308,17 @@ if (!($readonly ?? false)) {
             /* Forzar texto blanco dentro de la tarjeta */
         }
 
-        /* LADO FRONTAL: BLACK METALLIC */
+        /* LADO FRONTAL: MINIMALISTA Y ELEGANTE */
         .card-front {
-            background: #0a0a0a;
-            background-image:
-                radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 40%),
-                linear-gradient(45deg, #0a0a0a 0%, #1a1a1a 100%);
+            background: #111111;
+            background-image: linear-gradient(135deg, #181818 0%, #050505 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.05);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 1.8rem;
+            padding: 2rem;
+            overflow: hidden;
         }
 
         /* Efecto de Brillo Silver */
@@ -404,14 +406,15 @@ if (!($readonly ?? false)) {
         }
 
         .points-val {
-            font-size: 2.4rem;
-            font-weight: 800;
+            font-size: 2.6rem;
+            font-weight: 900;
             line-height: 1;
             display: block;
-            background: var(--card-silver);
+            background: linear-gradient(135deg, #F3C35C 0%, #D4AF37 50%, #F3C35C 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            text-shadow: 0 2px 10px rgba(212, 175, 55, 0.15);
         }
 
         .points-unit {
@@ -1961,18 +1964,18 @@ if (!($readonly ?? false)) {
                     </div>
 
                     <!-- Información del Cliente (Lado Derecho) -->
-                    <div class="profile-info-column" style="background: #fff; border-radius: 18px; border: 1.5px solid #e2e8f0; box-shadow: 0 20px 40px rgba(0,0,0,0.04); padding: 2.5rem !important;">
+                    <div class="profile-info-column" style="background: #ffffff; border-radius: 24px; border: 1px solid #f1f5f9; box-shadow: 0 10px 40px -10px rgba(0,0,0,0.05); padding: 2.5rem !important;">
                         
                         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2.5rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 1.5rem;">
                             <div>
-                                <h3 style="font-size: 1.25rem; font-weight: 850; color: var(--primary); margin: 0; letter-spacing: -0.5px;">
+                                <h3 style="font-size: 1.35rem; font-weight: 850; color: #0f172a; margin: 0; letter-spacing: -0.5px;">
                                     Información Detallada
                                 </h3>
-                                <p style="margin: 5px 0 0; font-size: 0.8rem; color: #64748b; font-weight: 500;">Datos del perfil y membresía</p>
+                                <p style="margin: 5px 0 0; font-size: 0.82rem; color: #64748b; font-weight: 500;">Datos del perfil y membresía</p>
                             </div>
                             <?php if (!($readonly ?? false)): ?>
                             <button onclick="openEditModal()" 
-                                style="background: transparent; color: #0f172a; border: 1.5px solid #e2e8f0; padding: 0.6rem 1.2rem; border-radius: 12px; display: flex; align-items: center; gap: 8px; cursor: pointer; transition: all 0.2s ease; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                                style="background: #f8fafc; color: #0f172a; border: 1px solid #e2e8f0; padding: 0.6rem 1.4rem; border-radius: 12px; display: flex; align-items: center; gap: 8px; cursor: pointer; transition: all 0.2s ease; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);" onmouseover="this.style.background='#f1f5f9'; this.style.borderColor='#cbd5e1';" onmouseout="this.style.background='#f8fafc'; this.style.borderColor='#e2e8f0';">
                                 <i class='bx bx-edit-alt' style="font-size: 1.1rem;"></i>
                                 Editar
                             </button>
@@ -2084,153 +2087,34 @@ if (!($readonly ?? false)) {
                             </div>
                         </div>
                     </div>
-
-                    <?php 
-                    $puntosPorBalon = (new ConfiguracionModel())->getValor('puntos_por_balon_10kg') ?? 10;
-                    if (($cliente['tipo_cliente'] ?? '') === 'Punto de Venta' && !($readonly ?? false)): 
-                    ?>
-                    <!-- CARD ESPECIAL: SOLICITUD DE PUNTOS POR BALONES (PUNTO DE VENTA) -->
-                    <div style="grid-column: 1 / -1; margin-top: 1.5rem; background: linear-gradient(135deg, #800000 0%, #4a0000 100%); border-radius: 20px; padding: 2rem; color: #fff; box-shadow: 0 15px 35px rgba(128,0,0,0.25); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem;">
-                        <div style="display: flex; align-items: center; gap: 1.25rem;">
-                            <div style="background: rgba(255,255,255,0.15); width: 64px; height: 64px; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; flex-shrink: 0;">
-                                <i class='bx bx-cylinder'></i>
-                            </div>
-                            <div>
-                                <div style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: rgba(255,255,255,0.8); margin-bottom: 2px;">
-                                    Módulo Punto de Venta
-                                </div>
-                                <h3 style="margin: 0; font-size: 1.4rem; font-weight: 900; letter-spacing: -0.5px;">
-                                    ¿Recibiste Balones de Gas (10kg)?
-                                </h3>
-                                <p style="margin: 5px 0 0; font-size: 0.88rem; color: rgba(255,255,255,0.85); font-weight: 500;">
-                                    Acumula <b><?= $puntosPorBalon ?> puntos</b> por cada balón entregado. El conductor validará los balones con fotografía.
-                                </p>
-                            </div>
-                        </div>
-                        <button onclick="openModalSolicitarPV()" style="background: #fff; color: #800000; border: none; padding: 0.95rem 2rem; border-radius: 14px; font-weight: 850; font-size: 0.92rem; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
-                            <i class='bx bx-plus-circle' style="font-size: 1.3rem;"></i> Solicitar Puntos
-                        </button>
-                    </div>
-
-                    <!-- MODAL: SOLICITAR PUNTOS PUNTO DE VENTA -->
-                    <div id="modal-solicitar-pv" class="modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.75); backdrop-filter: blur(8px); z-index: 99999; align-items: center; justify-content: center; padding: 1.5rem;">
-                        <div style="background: #fff; border-radius: 28px; width: 100%; max-width: 480px; padding: 2.5rem; box-shadow: 0 35px 80px rgba(0,0,0,0.3); animation: slideUp 0.3s cubic-bezier(0.16,1,0.3,1); position: relative;">
-                            <button onclick="closeModalSolicitarPV()" style="position: absolute; top: 1.5rem; right: 1.5rem; background: #f1f5f9; border: none; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 1.3rem; cursor: pointer;">
-                                <i class='bx bx-x'></i>
-                            </button>
-
-                            <div style="text-align: center; margin-bottom: 2rem;">
-                                <div style="width: 64px; height: 64px; background: #fdf2f2; color: #800000; border-radius: 20px; display: inline-flex; align-items: center; justify-content: center; font-size: 2.2rem; margin-bottom: 1rem;">
-                                    <i class='bx bx-cylinder'></i>
-                                </div>
-                                <h3 style="margin: 0; font-size: 1.4rem; font-weight: 900; color: #0f172a;">Solicitar Puntos</h3>
-                                <p style="margin: 6px 0 0; font-size: 0.82rem; color: #64748b; font-weight: 500;">Entrega de Balones de Gas 10kg</p>
-                            </div>
-
-                            <form id="form-solicitar-pv" onsubmit="enviarSolicitudPV(event)">
-                                <div style="margin-bottom: 1.5rem;">
-                                    <label style="display: block; font-size: 0.72rem; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.6rem;">
-                                        Cantidad de Balones (10kg)
-                                    </label>
-                                    <input type="number" id="pv-balones-input" min="1" max="500" value="5" required 
-                                           oninput="calcPuntosPV()"
-                                           style="width: 100%; border: 2px solid #e2e8f0; border-radius: 14px; padding: 0.9rem 1.2rem; font-size: 1.2rem; font-weight: 800; color: #0f172a; outline: none; box-sizing: border-box; text-align: center;">
-                                </div>
-
-                                <div style="background: #f8fafc; border: 1.5px dashed #cbd5e1; border-radius: 18px; padding: 1.25rem; text-align: center; margin-bottom: 1.5rem;">
-                                    <span style="font-size: 0.7rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 1px;">PUNTOS A RECIBIR</span>
-                                    <div style="font-size: 2rem; font-weight: 950; color: #16a34a; margin: 4px 0 2px;">
-                                        +<span id="pv-puntos-display">50</span> PTS
+                    
+                    <!-- NUEVA SECCIÓN: Actividad Reciente / Llenar Espacio -->
+                    <div style="width: 100%; margin-top: 1rem; background: #fff; border-radius: 20px; padding: 2rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); border: 1px solid #f1f5f9;">
+                        <h3 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0 0 1.5rem 0; display: flex; align-items: center; gap: 8px;">
+                            <i class='bx bx-history' style="color: #64748b;"></i> Actividad Reciente
+                        </h3>
+                        <div style="display: flex; flex-direction: column; gap: 1rem;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #f8fafc; border-radius: 12px; border: 1px solid #f1f5f9;">
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    <div style="width: 40px; height: 40px; border-radius: 10px; background: #ecfdf5; color: #10b981; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                                        <i class='bx bx-check-circle'></i>
                                     </div>
-                                    <span style="font-size: 0.75rem; color: #94a3b8;">(<?= $puntosPorBalon ?> puntos por cada balón)</span>
+                                    <div>
+                                        <div style="font-weight: 700; color: #0f172a; font-size: 0.9rem;">Bienvenido a PremiaSurgas</div>
+                                        <div style="font-size: 0.75rem; color: #64748b; margin-top: 2px;">Cuenta registrada exitosamente</div>
+                                    </div>
                                 </div>
-
-                                <div style="margin-bottom: 2rem;">
-                                    <label style="display: block; font-size: 0.72rem; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.6rem;">
-                                        Nota u Observación (Opcional)
-                                    </label>
-                                    <input type="text" id="pv-detalle-input" placeholder="Ej. Pedido de la mañana, factura 001..." 
-                                           style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.8rem 1rem; font-size: 0.9rem; color: #1e293b; outline: none; box-sizing: border-box;">
+                                <div style="font-size: 0.8rem; color: #94a3b8; font-weight: 600;">
+                                    <?= isset($cliente['fecha_creacion']) ? date('d/m/Y', strtotime($cliente['fecha_creacion'])) : 'Hoy' ?>
                                 </div>
-
-                                <button type="submit" id="btn-submit-pv" style="width: 100%; background: #800000; color: #fff; border: none; padding: 1.1rem; border-radius: 16px; font-weight: 850; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 10px 25px rgba(128,0,0,0.3); transition: all 0.2s;">
-                                    <i class='bx bx-send'></i> Enviar Solicitud al Conductor
-                                </button>
-                            </form>
+                            </div>
+                            <div style="text-align: center; padding: 1.5rem 0; color: #94a3b8; font-size: 0.85rem; font-weight: 500;">
+                                Aún no tienes más actividad registrada.<br>¡Comienza a acumular puntos!
+                            </div>
                         </div>
                     </div>
 
-                    <script>
-                        const PUNTOS_POR_BALON = <?= (int) $puntosPorBalon ?>;
-                        const CLIENTE_ID_PV = <?= (int) $cliente['id'] ?>;
 
-                        function openModalSolicitarPV() {
-                            const modal = document.getElementById('modal-solicitar-pv');
-                            if(modal) {
-                                modal.style.display = 'flex';
-                                calcPuntosPV();
-                            }
-                        }
-
-                        function closeModalSolicitarPV() {
-                            const modal = document.getElementById('modal-solicitar-pv');
-                            if(modal) modal.style.display = 'none';
-                        }
-
-                        function calcPuntosPV() {
-                            const input = document.getElementById('pv-balones-input');
-                            const val = Math.max(1, parseInt(input.value || 0, 10));
-                            document.getElementById('pv-puntos-display').innerText = val * PUNTOS_POR_BALON;
-                        }
-
-                        async function enviarSolicitudPV(e) {
-                            e.preventDefault();
-                            const balones = parseInt(document.getElementById('pv-balones-input').value, 10);
-                            const detalle = document.getElementById('pv-detalle-input').value.trim();
-                            const btn = document.getElementById('btn-submit-pv');
-
-                            if (!balones || balones <= 0) {
-                                Swal.fire({ icon: 'warning', title: 'Atención', text: 'Ingresa una cantidad válida de balones.' });
-                                return;
-                            }
-
-                            btn.disabled = true;
-                            btn.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i> Enviando solicitud...";
-
-                            try {
-                                const res = await fetch(BASE_URL + 'scan/solicitar-puntos-pv', {
-                                    method: 'POST',
-                                    headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({
-                                        cliente_id: CLIENTE_ID_PV,
-                                        balones: balones,
-                                        detalle: detalle
-                                    })
-                                });
-                                const data = await res.json();
-                                if (data.success) {
-                                    closeModalSolicitarPV();
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: '¡Solicitud Registrada!',
-                                        html: `<p style="color: #64748b; font-size: 0.95rem;">Tu solicitud por <b>${balones} balones</b> (+${data.puntos} pts) quedó en estado <b>Pendiente</b>.<br><br>El conductor validará los balones con fotografía para aprobar tus puntos.</p>`,
-                                        confirmButtonText: 'Aceptar',
-                                        confirmButtonColor: '#800000'
-                                    }).then(() => {
-                                        window.location.reload();
-                                    });
-                                } else {
-                                    Swal.fire({ icon: 'error', title: 'Error', text: data.message || 'No se pudo registrar la solicitud.' });
-                                }
-                            } catch (err) {
-                                Swal.fire({ icon: 'error', title: 'Error de Red', text: 'No se pudo comunicar con el servidor.' });
-                            } finally {
-                                btn.disabled = false;
-                                btn.innerHTML = "<i class='bx bx-send'></i> Enviar Solicitud al Conductor";
-                            }
-                        }
-                    </script>
-                    <?php endif; ?>
 
                 </div>
             </div>

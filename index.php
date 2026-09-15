@@ -118,9 +118,7 @@ $routes = [
     ['POST', 'scan/buscar',               'ScanController',   'buscar'],
     ['POST', 'scan/registrar',            'ScanController',   'registrar'],
     ['POST', 'scan/venta',                'ScanController',   'venta'],
-    ['POST', 'scan/solicitar-puntos-pv',  'ScanController',   'solicitarPuntosPV'],
     ['POST', 'scan/aprobar-entrega-pv',   'ScanController',   'aprobarEntregaPV'],
-    ['GET',  'scan/pendientes-pv',        'ScanController',   'getPendientesPV'],
     ['POST', 'conductores/notificar-admin','ConductorController', 'notificarAdmin'],
 
     // —— Tienda ——

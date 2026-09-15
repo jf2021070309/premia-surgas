@@ -393,78 +393,9 @@ class ScanController
         exit;
     }
 
-    /**
-     * POST /scan/solicitar-puntos-pv
-     * Permite a un cliente Punto de Venta solicitar puntos por balones de 10kg entregados
-     */
-    public function solicitarPuntosPV(): void
-    {
-        $this->requireAuth();
-        header('Content-Type: application/json');
 
-        $data = json_decode(file_get_contents('php://input'), true) ?? $_POST;
-        $clienteId = (int) ($data['cliente_id'] ?? ($_SESSION['id_cliente'] ?? $_SESSION['id_usuario']));
-        $balones = (int) ($data['balones'] ?? 0);
-        $detalle = trim($data['detalle'] ?? '');
 
-        if (!$clienteId || $balones <= 0) {
-            echo json_encode(['success' => false, 'message' => 'Indica una cantidad válida de balones (mínimo 1).']);
-            exit;
-        }
 
-        // Obtener factor configurado para balones de 10kg
-        $configModel = new ConfiguracionModel();
-        $puntosPorBalon = (int) ($configModel->getValor('puntos_por_balon_10kg') ?? 10);
-        $puntos = $balones * $puntosPorBalon;
-
-        $clienteModel = new ClienteModel();
-        $cliente = $clienteModel->findById($clienteId);
-
-        if (!$cliente) {
-            echo json_encode(['success' => false, 'message' => 'Cliente no encontrado.']);
-            exit;
-        }
-
-        $ventaModel = new VentaModel();
-        $id = $ventaModel->solicitarPuntosPV($clienteId, $balones, $puntos, $detalle);
-
-        if ($id) {
-            $audit = new AuditoriaModel();
-            $audit->registrar(
-                $_SESSION['id_usuario'],
-                'SOLICITUD_PUNTOS_PV',
-                "Punto de Venta {$cliente['nombre']} solicitó $puntos pts por $balones balones de 10kg",
-                'CLIENTES'
-            );
-
-            echo json_encode([
-                'success' => true,
-                'message' => "¡Solicitud enviada con éxito! Esperando validación del conductor por $balones balones ($puntos pts).",
-                'venta_id' => $id,
-                'balones' => $balones,
-                'puntos' => $puntos
-            ]);
-        } else {
-            echo json_encode(['success' => false, 'message' => 'No se pudo registrar la solicitud.']);
-        }
-        exit;
-    }
-
-    /**
-     * GET /scan/pendientes-pv
-     * Lista solicitudes pendientes de balones de Puntos de Venta
-     */
-    public function getPendientesPV(): void
-    {
-        header('Content-Type: application/json');
-        $clienteId = isset($_GET['cliente_id']) ? (int) $_GET['cliente_id'] : null;
-
-        $ventaModel = new VentaModel();
-        $pendientes = $ventaModel->getPendientesPV($clienteId);
-
-        echo json_encode(['success' => true, 'data' => $pendientes]);
-        exit;
-    }
 
     /**
      * POST /scan/aprobar-entrega-pv

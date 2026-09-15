@@ -1,37 +1,370 @@
 /**
  * assets/js/balloon-detector.js
- * Algoritmo de visión interactivo en cliente para recuento y verificación de balones de gas.
+ * Detector de balones de gas usando YOLOv8n via ONNX Runtime Web.
+ * Reemplaza el algoritmo heurístico de color anterior.
+ *
+ * Dependencia: onnxruntime-web debe estar cargado antes de este script.
+ * CDN: https://cdn.jsdelivr.net/npm/onnxruntime-web@1.18.0/dist/ort.min.js
  */
 
 window.BalloonDetector = class BalloonDetector {
+
+    /**
+     * @param {Object} options
+     * @param {HTMLCanvasElement} options.canvas          Canvas donde se dibuja el resultado
+     * @param {number}            [options.expectedCount] Cantidad esperada de balones (0 = libre)
+     * @param {Function}          [options.onCountChange] Callback(result) cuando cambia el conteo
+     * @param {number}            [options.confThreshold] Umbral de confianza YOLO (0-1, default 0.35)
+     * @param {number}            [options.iouThreshold]  IoU para NMS (0-1, default 0.45)
+     */
     constructor(options = {}) {
-        this.canvas = options.canvas;
-        this.ctx = this.canvas ? this.canvas.getContext('2d') : null;
+        this.canvas        = options.canvas;
+        this.ctx           = this.canvas ? this.canvas.getContext('2d') : null;
         this.expectedCount = options.expectedCount || 0;
         this.onCountChange = options.onCountChange || null;
-        this.markers = []; // { x, y, w, h, id }
-        this.image = null;
-        this.scale = 1;
+        this.confThreshold = options.confThreshold ?? 0.35;
+        this.iouThreshold  = options.iouThreshold  ?? 0.45;
+
+        this.markers     = [];  // { x1, y1, x2, y2, conf, label, id }
+        this.image       = null;
         this.isProcessing = false;
 
+        // IDs de clase COCO que mapeamos como "balón de gas"
+        // 39=bottle (más cercano), 75=vase, 10=fire hydrant
+        this._balloonClasses = new Set([39, 75, 10]);
+
+        this._session = null;
+        this._sessionLoading = null;
+        this._INPUT_SIZE = 640;
+
+        this._COCO_NAMES = [
+            'person','bicycle','car','motorcycle','airplane','bus','train','truck','boat',
+            'traffic light','fire hydrant','stop sign','parking meter','bench','bird','cat',
+            'dog','horse','sheep','cow','elephant','bear','zebra','giraffe','backpack',
+            'umbrella','handbag','tie','suitcase','frisbee','skis','snowboard','sports ball',
+            'kite','baseball bat','baseball glove','skateboard','surfboard','tennis racket',
+            'bottle','wine glass','cup','fork','knife','spoon','bowl','banana','apple',
+            'sandwich','orange','broccoli','carrot','hot dog','pizza','donut','cake','chair',
+            'couch','potted plant','bed','dining table','toilet','tv','laptop','mouse','remote',
+            'keyboard','cell phone','microwave','oven','toaster','sink','refrigerator','book',
+            'clock','vase','scissors','teddy bear','hair drier','toothbrush'
+        ];
+
         if (this.canvas) {
-            this.setupInteractivity();
+            this._setupInteractivity();
         }
+
+        // Pre-cargar el modelo al instanciar
+        this._ensureModel();
     }
+
+    // ──────────────────────────────────────────────────────
+    // API pública
+    // ──────────────────────────────────────────────────────
 
     setExpectedCount(count) {
         this.expectedCount = parseInt(count, 10) || 0;
-        this.emitCount();
+        this._emitCount();
     }
 
-    loadImage(imageSource) {
+    /**
+     * Carga una imagen (File, Blob o Data URL string) y ejecuta la detección YOLO.
+     * @returns {Promise<void>}
+     */
+    async loadImage(imageSource) {
+        const img = await this._loadImageEl(imageSource);
+        this.image = img;
+        await this.detectBalloons();
+    }
+
+    /**
+     * Re-ejecuta la detección sobre la imagen cargada actualmente.
+     * @returns {Promise<void>}
+     */
+    async detectBalloons() {
+        if (!this.image || this.isProcessing) return;
+        this.isProcessing = true;
+
+        try {
+            await this._ensureModel();
+            const origW = this.image.naturalWidth  || this.image.width;
+            const origH = this.image.naturalHeight || this.image.height;
+
+            const { tensor, scale, dx, dy } = this._imageToTensor(this.image);
+            const feeds = {};
+            feeds[this._session.inputNames[0]] = tensor;
+            const results = await this._session.run(feeds);
+
+            this.markers = this._parseOutput(
+                results[this._session.outputNames[0]],
+                scale, dx, dy, origW, origH
+            );
+
+            this._redraw();
+            this._emitCount();
+        } catch (err) {
+            console.error('[BalloonDetector] Error en detección YOLO:', err);
+        } finally {
+            this.isProcessing = false;
+        }
+    }
+
+    getAnnotatedImage() {
+        return this.canvas ? this.canvas.toDataURL('image/jpeg', 0.9) : null;
+    }
+
+    // ──────────────────────────────────────────────────────
+    // Internos: modelo
+    // ──────────────────────────────────────────────────────
+
+    async _ensureModel() {
+        if (this._session) return;
+        if (this._sessionLoading) return this._sessionLoading;
+
+        const MODEL_URL = (typeof BASE_URL !== 'undefined' ? BASE_URL : '/premia-surgas/')
+            + 'assets/models/yolov8n.onnx';
+
+        this._sessionLoading = (async () => {
+            try {
+                if (typeof ort === 'undefined') {
+                    throw new Error('ONNX Runtime Web no está cargado. Agrega el script de ort.min.js antes de balloon-detector.js.');
+                }
+                ort.env.wasm.numThreads = (navigator.hardwareConcurrency > 1) ? 4 : 1;
+                ort.env.wasm.simd = true;
+
+                const resp = await fetch(MODEL_URL);
+                if (!resp.ok) throw new Error('HTTP ' + resp.status + ' al descargar modelo YOLO');
+                const buf = await resp.arrayBuffer();
+
+                this._session = await ort.InferenceSession.create(buf, {
+                    executionProviders: ['webgl', 'wasm'],
+                    graphOptimizationLevel: 'all',
+                });
+            } catch (e) {
+                this._sessionLoading = null;
+                throw e;
+            }
+        })();
+
+        return this._sessionLoading;
+    }
+
+    // ──────────────────────────────────────────────────────
+    // Internos: preprocesado
+    // ──────────────────────────────────────────────────────
+
+    _imageToTensor(imgEl) {
+        const S = this._INPUT_SIZE;
+        const c = document.createElement('canvas');
+        c.width = S; c.height = S;
+        const ctx = c.getContext('2d');
+
+        const iw = imgEl.naturalWidth  || imgEl.width;
+        const ih = imgEl.naturalHeight || imgEl.height;
+        const scale = Math.min(S / iw, S / ih);
+        const nw = Math.round(iw * scale);
+        const nh = Math.round(ih * scale);
+        const dx = (S - nw) / 2;
+        const dy = (S - nh) / 2;
+
+        ctx.fillStyle = '#808080';
+        ctx.fillRect(0, 0, S, S);
+        ctx.drawImage(imgEl, dx, dy, nw, nh);
+
+        const { data } = ctx.getImageData(0, 0, S, S);
+        const f32 = new Float32Array(3 * S * S);
+        const area = S * S;
+
+        for (let i = 0; i < area; i++) {
+            f32[i]          = data[i * 4]     / 255;
+            f32[area + i]   = data[i * 4 + 1] / 255;
+            f32[area*2 + i] = data[i * 4 + 2] / 255;
+        }
+
+        return {
+            tensor: new ort.Tensor('float32', f32, [1, 3, S, S]),
+            scale, dx, dy
+        };
+    }
+
+    // ──────────────────────────────────────────────────────
+    // Internos: parseo de output [1, 84, 8400]
+    // ──────────────────────────────────────────────────────
+
+    _parseOutput(output, scale, dx, dy, origW, origH) {
+        const data = output.data;
+        const anchors = output.dims[2]; // 8400
+        const raw = [];
+
+        for (let a = 0; a < anchors; a++) {
+            const cx = data[0 * anchors + a];
+            const cy = data[1 * anchors + a];
+            const bw = data[2 * anchors + a];
+            const bh = data[3 * anchors + a];
+
+            let maxConf = 0, classId = -1;
+            for (let c = 0; c < 80; c++) {
+                const s = data[(4 + c) * anchors + a];
+                if (s > maxConf) { maxConf = s; classId = c; }
+            }
+
+            if (maxConf < this.confThreshold) continue;
+            if (!this._balloonClasses.has(classId)) continue;
+
+            const x1 = Math.max(0, (cx - bw/2 - dx) / scale);
+            const y1 = Math.max(0, (cy - bh/2 - dy) / scale);
+            const x2 = Math.min(origW, (cx + bw/2 - dx) / scale);
+            const y2 = Math.min(origH, (cy + bh/2 - dy) / scale);
+
+            if (x2 <= x1 || y2 <= y1) continue;
+
+            raw.push({
+                classId,
+                label: this._COCO_NAMES[classId] || ('cls_' + classId),
+                conf: maxConf, x1, y1, x2, y2
+            });
+        }
+
+        const kept = this._nms(raw, this.iouThreshold);
+        kept.sort((a, b) => a.x1 - b.x1);
+        return kept.map((d, i) => ({ ...d, id: i + 1 }));
+    }
+
+    _iou(a, b) {
+        const x1 = Math.max(a.x1, b.x1), y1 = Math.max(a.y1, b.y1);
+        const x2 = Math.min(a.x2, b.x2), y2 = Math.min(a.y2, b.y2);
+        const inter = Math.max(0, x2 - x1) * Math.max(0, y2 - y1);
+        const ua = (a.x2-a.x1)*(a.y2-a.y1) + (b.x2-b.x1)*(b.y2-b.y1) - inter;
+        return inter / (ua + 1e-6);
+    }
+
+    _nms(dets, iouThresh) {
+        dets.sort((a, b) => b.conf - a.conf);
+        const keep = [], supp = new Set();
+        for (let i = 0; i < dets.length; i++) {
+            if (supp.has(i)) continue;
+            keep.push(dets[i]);
+            for (let j = i + 1; j < dets.length; j++) {
+                if (!supp.has(j) && this._iou(dets[i], dets[j]) > iouThresh) supp.add(j);
+            }
+        }
+        return keep;
+    }
+
+    // ──────────────────────────────────────────────────────
+    // Internos: dibujo
+    // ──────────────────────────────────────────────────────
+
+    _redraw() {
+        if (!this.ctx || !this.image) return;
+
+        const origW = this.image.naturalWidth  || this.image.width;
+        const origH = this.image.naturalHeight || this.image.height;
+        const maxW  = 800;
+        const ds    = Math.min(1, maxW / origW);
+        const dW    = Math.round(origW * ds);
+        const dH    = Math.round(origH * ds);
+
+        this.canvas.width  = dW;
+        this.canvas.height = dH;
+        this.ctx.drawImage(this.image, 0, 0, dW, dH);
+
+        const COLORS = { 39: '#ea580c', 10: '#7c3aed', 75: '#0284c7' };
+        const isVerified = this.expectedCount > 0 && this.markers.length === this.expectedCount;
+        const verColor   = isVerified ? '#10b981' : '#f59e0b';
+
+        this.markers.forEach((m, idx) => {
+            const color = this.expectedCount > 0
+                ? verColor
+                : (COLORS[m.classId] || '#10b981');
+
+            const x1 = m.x1 * ds, y1 = m.y1 * ds;
+            const bw = (m.x2 - m.x1) * ds;
+            const bh = (m.y2 - m.y1) * ds;
+
+            this.ctx.save();
+            this.ctx.strokeStyle = color;
+            this.ctx.lineWidth = 3;
+            this.ctx.fillStyle = color + '28';
+            this.ctx.strokeRect(x1, y1, bw, bh);
+            this.ctx.fillRect(x1, y1, bw, bh);
+
+            // Esquinas blancas
+            const cL = Math.min(14, bw * 0.22, bh * 0.22);
+            this.ctx.strokeStyle = '#fff'; this.ctx.lineWidth = 2.5;
+            this.ctx.beginPath(); this.ctx.moveTo(x1, y1+cL); this.ctx.lineTo(x1, y1); this.ctx.lineTo(x1+cL, y1); this.ctx.stroke();
+            this.ctx.beginPath(); this.ctx.moveTo(x1+bw-cL, y1+bh); this.ctx.lineTo(x1+bw, y1+bh); this.ctx.lineTo(x1+bw, y1+bh-cL); this.ctx.stroke();
+
+            // Badge
+            const num = idx + 1;
+            const badgeW = 60, badgeH = 26;
+            const bX = x1 + bw/2 - badgeW/2;
+            const bY = Math.max(5, y1 - badgeH - 4);
+
+            this.ctx.fillStyle = color;
+            this.ctx.beginPath();
+            if (this.ctx.roundRect) { this.ctx.roundRect(bX, bY, badgeW, badgeH, 6); }
+            else { this.ctx.rect(bX, bY, badgeW, badgeH); }
+            this.ctx.fill();
+
+            this.ctx.fillStyle = '#fff';
+            this.ctx.font = 'bold 13px Inter, sans-serif';
+            this.ctx.textAlign = 'center';
+            this.ctx.textBaseline = 'middle';
+            this.ctx.fillText('Balon #' + num, bX + badgeW/2, bY + badgeH/2);
+
+            this.ctx.restore();
+        });
+
+        // Banner inferior
+        this.ctx.save();
+        const bannerTxt = 'YOLOv8  ' + this.markers.length + ' balon' + (this.markers.length !== 1 ? 'es' : '')
+            + (this.expectedCount > 0 ? '  (Esperados: ' + this.expectedCount + ')' : '');
+        this.ctx.font = 'bold 12px Inter, sans-serif';
+        const tW = this.ctx.measureText(bannerTxt).width + 24;
+        this.ctx.fillStyle = 'rgba(15,23,42,0.78)';
+        this.ctx.fillRect(10, dH - 35, tW, 26);
+        this.ctx.fillStyle = '#fff'; this.ctx.textAlign = 'left'; this.ctx.textBaseline = 'middle';
+        this.ctx.fillText(bannerTxt, 22, dH - 22);
+        this.ctx.restore();
+    }
+
+    // ──────────────────────────────────────────────────────
+    // Internos: interactividad
+    // ──────────────────────────────────────────────────────
+
+    _setupInteractivity() {
+        this.canvas.addEventListener('click', (e) => {
+            if (!this.image || !this.markers.length) return;
+
+            const rect = this.canvas.getBoundingClientRect();
+            const cx = (e.clientX - rect.left) * (this.canvas.width / rect.width);
+            const cy = (e.clientY - rect.top)  * (this.canvas.height / rect.height);
+
+            const origW = this.image.naturalWidth || this.image.width;
+            const ds = Math.min(1, 800 / origW);
+
+            const idx = this.markers.findIndex(m =>
+                cx >= m.x1*ds && cx <= m.x2*ds && cy >= m.y1*ds && cy <= m.y2*ds
+            );
+
+            if (idx >= 0) {
+                this.markers.splice(idx, 1);
+                this.markers.forEach((m, i) => { m.id = i + 1; });
+                this._redraw();
+                this._emitCount();
+            }
+        });
+    }
+
+    // ──────────────────────────────────────────────────────
+    // Internos: utilidades
+    // ──────────────────────────────────────────────────────
+
+    _loadImageEl(imageSource) {
         return new Promise((resolve, reject) => {
             const img = new Image();
-            img.onload = () => {
-                this.image = img;
-                this.detectBalloons();
-                resolve();
-            };
+            img.onload = () => resolve(img);
             img.onerror = reject;
 
             if (typeof imageSource === 'string') {
@@ -42,335 +375,23 @@ window.BalloonDetector = class BalloonDetector {
                 reader.onerror = reject;
                 reader.readAsDataURL(imageSource);
             } else {
-                reject(new Error("Formato de imagen inválido"));
+                reject(new Error('Formato de imagen inválido'));
             }
         });
     }
 
-    setupInteractivity() {
-        this.canvas.addEventListener('click', (e) => {
-            if (!this.image) return;
-
-            const rect = this.canvas.getBoundingClientRect();
-            const clickX = (e.clientX - rect.left) * (this.canvas.width / rect.width);
-            const clickY = (e.clientY - rect.top) * (this.canvas.height / rect.height);
-
-            // Verificar si hizo clic dentro de un marcador existente para eliminarlo
-            const removeIndex = this.markers.findIndex(m => {
-                return clickX >= m.x && clickX <= (m.x + m.w) && clickY >= m.y && clickY <= (m.y + m.h);
-            });
-
-            if (removeIndex >= 0) {
-                this.markers.splice(removeIndex, 1);
-            } else {
-                // Agregar nuevo marcador centrado en el clic
-                const defaultW = Math.max(35, Math.round(this.canvas.width * 0.15));
-                const defaultH = Math.round(defaultW * 1.65);
-                this.markers.push({
-                    x: Math.max(5, Math.round(clickX - defaultW / 2)),
-                    y: Math.max(10, Math.round(clickY - defaultH / 2)),
-                    w: defaultW,
-                    h: defaultH,
-                    id: Date.now()
-                });
-            }
-
-            // Ordenar de izquierda a derecha y re-numerar
-            this.markers.sort((a, b) => a.x - b.x);
-            this.markers.forEach((m, idx) => { m.id = idx + 1; });
-
-            this.redraw();
-            this.emitCount();
-        });
-    }
-
-    detectBalloons() {
-        if (!this.image) return;
-        this.isProcessing = true;
-
-        // Ajustar resolución de trabajo
-        const maxWidth = 800;
-        let w = this.image.naturalWidth || this.image.width;
-        let h = this.image.naturalHeight || this.image.height;
-
-        if (w > maxWidth) {
-            h = Math.round((h * maxWidth) / w);
-            w = maxWidth;
-        }
-
-        this.canvas.width = w;
-        this.canvas.height = h;
-
-        // Extraer mapa de píxeles
-        const tempCanvas = document.createElement('canvas');
-        tempCanvas.width = w;
-        tempCanvas.height = h;
-        const tempCtx = tempCanvas.getContext('2d');
-        tempCtx.drawImage(this.image, 0, 0, w, h);
-
-        const imgData = tempCtx.getImageData(0, 0, w, h);
-        const data = imgData.data;
-
-        // ══════════════════════════════════════════════════════════════
-        // ALGORITMO DE DETECCIÓN REAL DE BALONES DE GAS (10KG)
-        // ══════════════════════════════════════════════════════════════
-        // Zona vertical donde se asientan los balones (excluyendo el techo/pared alta)
-        const yTopSearch = Math.floor(h * 0.20);
-        const yBottomSearch = Math.floor(h * 0.92);
-        const searchHeight = yBottomSearch - yTopSearch;
-
-        // Helper para evaluar si un píxel corresponde a pintura de balón de gas
-        function isCylinderPixel(r, g, b) {
-            const maxC = Math.max(r, g, b);
-            const minC = Math.min(r, g, b);
-            const chroma = maxC - minC;
-
-            // 1. Balón Morado / Violeta (Surgas / Solgas): R y B dominan sobre G
-            const isPurple = (r > g + 10) && (b > g + 6) && (r > 35 || b > 35);
-            // 2. Balón Rojo / Vino (Lima Gas): R dominante
-            const isRed = (r > g + 20) && (r > b + 20) && (r > 55);
-            // 3. Balón Celeste / Turquesa (Zeta Gas): B y G dominan sobre R
-            const isCyan = (b > r + 10) && (g > r + 5) && (b > 60);
-            // 4. Balón Amarillo / Naranja:
-            const isYellow = (r > b + 25) && (g > b + 15);
-            // 5. Saturación general de pintura vs pared gris o cal
-            const isSaturated = chroma > 22 && maxC > 45;
-
-            return (isPurple || isRed || isCyan || isYellow || isSaturated);
-        }
-
-        // Analizar densidad de presencia cilíndrica por columna horizontal X
-        const stepX = 2; // muestreo cada 2px
-        const numCols = Math.floor(w / stepX);
-        const colScores = new Float32Array(numCols);
-        const colBrightness = new Float32Array(numCols);
-        const colTops = new Int32Array(numCols);
-        const colBottoms = new Int32Array(numCols);
-
-        for (let c = 0; c < numCols; c++) {
-            const x = c * stepX;
-            let matchCount = 0;
-            let sumLum = 0;
-            let firstY = -1;
-            let lastY = -1;
-
-            for (let y = yTopSearch; y < yBottomSearch; y += 3) {
-                const idx = (y * w + x) * 4;
-                const r = data[idx];
-                const g = data[idx + 1];
-                const b = data[idx + 2];
-                const lum = 0.299 * r + 0.587 * g + 0.114 * b;
-                sumLum += lum;
-
-                if (isCylinderPixel(r, g, b)) {
-                    matchCount++;
-                    if (firstY === -1) firstY = y;
-                    lastY = y;
-                }
-            }
-
-            const totalSamples = Math.floor(searchHeight / 3);
-            colScores[c] = matchCount / Math.max(1, totalSamples);
-            colBrightness[c] = sumLum / totalSamples;
-            colTops[c] = firstY > -1 ? firstY : Math.floor(h * 0.32);
-            colBottoms[c] = lastY > -1 ? lastY : Math.floor(h * 0.88);
-        }
-
-        // Segmentar regiones continuas con presencia de balones
-        const THRESHOLD = 0.20;
-        const rawSegments = [];
-        let inSeg = false;
-        let startCol = 0;
-
-        for (let c = 0; c < numCols; c++) {
-            const hasBalon = colScores[c] >= THRESHOLD;
-            if (hasBalon && !inSeg) {
-                inSeg = true;
-                startCol = c;
-            } else if (!hasBalon && inSeg) {
-                inSeg = false;
-                rawSegments.push({ start: startCol, end: c });
-            }
-        }
-        if (inSeg) {
-            rawSegments.push({ start: startCol, end: numCols - 1 });
-        }
-
-        // Ancho típico de un balón de 10kg en el encuadre (en columnas)
-        const minCylCols = Math.floor((w * 0.08) / stepX);
-        const typicalCylCols = Math.floor((w * 0.16) / stepX);
-        const maxSingleCylCols = Math.floor((w * 0.24) / stepX);
-
-        const cylinderSegments = [];
-
-        rawSegments.forEach(seg => {
-            const segCols = seg.end - seg.start;
-            if (segCols < minCylCols) {
-                // Demasiado angosto para ser un balón completo (ruido o reflejo)
-                return;
-            }
-
-            // Si el bloque es ancho (> maxSingleCylCols), contiene balones contiguos pegados
-            if (segCols > maxSingleCylCols) {
-                // Determinar cuántos balones caben físicamente en este bloque
-                const numBalones = Math.max(2, Math.round(segCols / typicalCylCols));
-                const partWidth = Math.floor(segCols / numBalones);
-
-                for (let k = 0; k < numBalones; k++) {
-                    const sStart = seg.start + k * partWidth;
-                    const sEnd = (k === numBalones - 1) ? seg.end : (sStart + partWidth);
-                    cylinderSegments.push({ start: sStart, end: sEnd });
-                }
-            } else {
-                cylinderSegments.push(seg);
-            }
-        });
-
-        // Crear cajas delimitadoras reales (SIN inventar ni forzar)
-        this.markers = [];
-
-        cylinderSegments.forEach((seg, i) => {
-            const x1 = seg.start * stepX;
-            const x2 = seg.end * stepX;
-            const boxW = Math.max(30, x2 - x1);
-
-            let sumT = 0, sumB = 0, cnt = 0;
-            for (let c = seg.start; c <= seg.end; c++) {
-                sumT += colTops[c];
-                sumB += colBottoms[c];
-                cnt++;
-            }
-            const avgT = Math.floor(sumT / Math.max(1, cnt));
-            const avgB = Math.floor(sumB / Math.max(1, cnt));
-
-            // Proporción cilíndrica de balón (altura aprox 1.5 a 1.9 veces el ancho)
-            let boxH = avgB - avgT;
-            const targetH = Math.round(boxW * 1.65);
-            if (boxH < targetH * 0.8) boxH = targetH;
-
-            let finalY = Math.max(10, avgT - Math.round(boxH * 0.1));
-            let finalH = Math.min(h - finalY - 8, boxH);
-
-            this.markers.push({
-                x: Math.max(5, x1),
-                y: finalY,
-                w: boxW,
-                h: finalH,
-                id: i + 1
-            });
-        });
-
-        // Ordenar de izquierda a derecha
-        this.markers.sort((a, b) => a.x - b.x);
-        this.markers.forEach((m, idx) => { m.id = idx + 1; });
-
-        // NOTA: No se fuerza this.expectedCount. Si la foto tiene 4 balones,
-        // se reportan exactamente 4 balones, alertando la discrepancia.
-
-        this.isProcessing = false;
-        this.redraw();
-        this.emitCount();
-    }
-
-    redraw() {
-        if (!this.ctx || !this.image) return;
-        const w = this.canvas.width;
-        const h = this.canvas.height;
-
-        // Limpiar y dibujar la foto
-        this.ctx.clearRect(0, 0, w, h);
-        this.ctx.drawImage(this.image, 0, 0, w, h);
-
-        // Dibujar cada marcador de balón detectado
-        this.markers.forEach((m, idx) => {
-            const num = idx + 1;
-            const isMatch = this.expectedCount > 0 && this.markers.length === this.expectedCount;
-            const strokeColor = isMatch ? '#10b981' : '#f59e0b'; // Verde si coincide, ámbar de advertencia si no
-            const fillColor = isMatch ? 'rgba(16, 185, 129, 0.18)' : 'rgba(245, 158, 11, 0.18)';
-
-            // Caja delimitadora con bordes redondeados
-            this.ctx.save();
-            this.ctx.strokeStyle = strokeColor;
-            this.ctx.lineWidth = 3.5;
-            this.ctx.fillStyle = fillColor;
-
-            // Dibujar rectángulo
-            this.ctx.strokeRect(m.x, m.y, m.w, m.h);
-            this.ctx.fillRect(m.x, m.y, m.w, m.h);
-
-            // Esquinas reforzadas
-            const cLen = Math.min(15, m.w * 0.25);
-            this.ctx.strokeStyle = '#ffffff';
-            this.ctx.lineWidth = 2.5;
-            // TL
-            this.ctx.beginPath();
-            this.ctx.moveTo(m.x, m.y + cLen);
-            this.ctx.lineTo(m.x, m.y);
-            this.ctx.lineTo(m.x + cLen, m.y);
-            this.ctx.stroke();
-            // BR
-            this.ctx.beginPath();
-            this.ctx.moveTo(m.x + m.w - cLen, m.y + m.h);
-            this.ctx.lineTo(m.x + m.w, m.y + m.h);
-            this.ctx.lineTo(m.x + m.w, m.y + m.h - cLen);
-            this.ctx.stroke();
-
-            // Etiqueta numerada con ícono
-            const badgeW = 60;
-            const badgeH = 26;
-            const badgeX = m.x + (m.w / 2) - (badgeW / 2);
-            const badgeY = Math.max(5, m.y - badgeH - 4);
-
-            this.ctx.fillStyle = strokeColor;
-            this.ctx.beginPath();
-            if (this.ctx.roundRect) {
-                this.ctx.roundRect(badgeX, badgeY, badgeW, badgeH, 6);
-            } else {
-                this.ctx.rect(badgeX, badgeY, badgeW, badgeH);
-            }
-            this.ctx.fill();
-
-            // Texto de número de balón
-            this.ctx.fillStyle = '#ffffff';
-            this.ctx.font = 'bold 13px Inter, sans-serif';
-            this.ctx.textAlign = 'center';
-            this.ctx.textBaseline = 'middle';
-            this.ctx.fillText(`Balón #${num}`, badgeX + (badgeW / 2), badgeY + (badgeH / 2));
-
-            this.ctx.restore();
-        });
-
-        // Banner informativo flotante dentro del canvas
-        this.ctx.save();
-        const bannerText = `Recuento: ${this.markers.length} balones ${this.expectedCount > 0 ? '(Esperados: ' + this.expectedCount + ')' : ''}`;
-        this.ctx.font = 'bold 12px Inter, sans-serif';
-        const tWidth = this.ctx.measureText(bannerText).width;
-
-        this.ctx.fillStyle = 'rgba(15, 23, 42, 0.75)';
-        this.ctx.fillRect(10, h - 35, tWidth + 24, 26);
-        this.ctx.fillStyle = '#ffffff';
-        this.ctx.textAlign = 'left';
-        this.ctx.textBaseline = 'middle';
-        this.ctx.fillText(bannerText, 22, h - 22);
-        this.ctx.restore();
-    }
-
-    emitCount() {
+    _emitCount() {
         const count = this.markers.length;
         const isVerified = this.expectedCount > 0 && count === this.expectedCount;
 
         if (typeof this.onCountChange === 'function') {
             this.onCountChange({
-                count: count,
+                count,
                 expected: this.expectedCount,
-                isVerified: isVerified,
+                isVerified,
                 alertText: isVerified ? '# DE BALONES VERIFICADO (CHECK)' : null,
-                dataUrl: this.canvas.toDataURL('image/jpeg', 0.9)
+                dataUrl: this.canvas ? this.canvas.toDataURL('image/jpeg', 0.9) : null,
             });
         }
-    }
-
-    getAnnotatedImage() {
-        return this.canvas ? this.canvas.toDataURL('image/jpeg', 0.9) : null;
     }
 };

@@ -7,6 +7,8 @@
     <link rel="icon" type="image/png" href="<?= BASE_URL ?>assets/premios/icono.png">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- ONNX Runtime Web v1.20.1 — requerido por BalloonDetector (YOLOv8) -->
+    <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.20.1/dist/ort.min.js"></script>
     <script src="<?= BASE_URL ?>assets/js/balloon-detector.js?v=<?= file_exists(__DIR__ . '/../../assets/js/balloon-detector.js') ? filemtime(__DIR__ . '/../../assets/js/balloon-detector.js') : time() ?>"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-layout.css">
@@ -687,15 +689,6 @@
                                         </span>
                                     </div>
 
-                                    <!-- Solicitud pendiente del cliente si existe -->
-                                    <div id="pv-solicitud-box" style="display: none; background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 16px; padding: 1rem 1.25rem; margin-bottom: 1.25rem;">
-                                        <div style="display: flex; align-items: center; gap: 8px; color: #1e40af; font-size: 0.88rem; font-weight: 800;">
-                                            <i class='bx bx-bell' style="font-size: 1.2rem;"></i> Solicitud Pendiente Registrada
-                                        </div>
-                                        <p id="pv-solicitud-texto" style="margin: 4px 0 0; color: #1d4ed8; font-size: 0.84rem; font-weight: 600;">
-                                            El cliente solicitó puntos por balones.
-                                        </p>
-                                    </div>
 
                                     <!-- Input de Balones y Puntos Calculados -->
                                     <div style="background: #fff; border: 1.5px solid #fed7d7; border-radius: 18px; padding: 1.25rem 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
@@ -1287,32 +1280,6 @@
             if (factorInfo) factorInfo.innerText = `${PUNTOS_POR_BALON_10KG} pts / balón de 10kg`;
 
             actualizarCalculoPV();
-
-            // Buscar si hay solicitudes pendientes del cliente
-            try {
-                const res = await fetch(baseUrl + 'scan/pendientes-pv?cliente_id=' + cliente.id);
-                const r = await res.json();
-                const solBox = document.getElementById('pv-solicitud-box');
-                const solTxt = document.getElementById('pv-solicitud-texto');
-
-                if (r.success && r.data && r.data.length > 0) {
-                    const pend = r.data[0];
-                    currentPendingVentaId = pend.id;
-                    const input = document.getElementById('pv-balones-cant');
-                    if (input) input.value = pend.balones_cantidad || 5;
-                    actualizarCalculoPV();
-
-                    if (solBox && solTxt) {
-                        solTxt.innerHTML = `El cliente registró la solicitud <b>#${pend.id}</b> por <b>${pend.balones_cantidad} balones de 10kg</b> (+${pend.puntos} pts) el ${pend.fecha}.`;
-                        solBox.style.display = 'block';
-                    }
-                } else {
-                    currentPendingVentaId = null;
-                    if (solBox) solBox.style.display = 'none';
-                }
-            } catch (err) {
-                console.error("Error buscando pendientes PV:", err);
-            }
         }
 
         function abrirDetectorBalones() {
