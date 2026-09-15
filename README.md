@@ -29,6 +29,7 @@
   - [Configuración General](#13--configuración-general)
   - [Código QR del Cliente](#14--código-qr-del-cliente)
   - [Notificaciones en Tiempo Real](#15--notificaciones-en-tiempo-real)
+  - [Módulo de Visión Artificial (Detección de Balones)](#16--módulo-de-visión-artificial-detección-de-balones)
 - [Stack Tecnológico](#-stack-tecnológico)
 - [Estructura del Proyecto](#-estructura-del-proyecto)
 - [Despliegue](#-despliegue)
@@ -243,6 +244,15 @@ View (PHP + Vue.js 3 + Chart.js)
 - **Badge en la campana** del header mostrando cantidad de pendientes
 - **Auto-actualización** del contador sin recargar la página
 
+### 16. 🤖 Módulo de Visión Artificial (Detección de Balones)
+
+- **Inferencia 100% Client-Side** — Detección automática de balones de gas desde el navegador sin consumir cómputo en el servidor.
+- **Motor Neuronal** — TensorFlow.js + COCO-SSD (`lite_mobilenet_v2`).
+- **Técnica SAHI (Slicing Aided Hyper Inference)** — Cuadrícula de tiles solapados ($3\times3$) para mejorar el conteo en escenas densas o balones apilados.
+- **Fusión NMS Híbrida** — Supresión de solapamientos clásicos (IoU) combinada con supresión por contenimiento (evita que sub-detecciones de tiles generen balones fantasma duplicados).
+- **Laboratorio Interactivo** — Accesible en [`detector_lab.html`](file:///c:/xampp/htdocs/premia-surgas/detector_lab.html) para pruebas de fotos con sliders de parámetros en vivo.
+- **Documentación Completa**: Consulta [README_DETECTOR.md](file:///c:/xampp/htdocs/premia-surgas/README_DETECTOR.md) para detalles matemáticos, causas de fallas y plan de migración a YOLOv8 personalizado.
+
 ---
 
 ## 🛠 Stack Tecnológico
@@ -253,6 +263,7 @@ View (PHP + Vue.js 3 + Chart.js)
 | **Base de Datos** | MariaDB 10.4 / MySQL |
 | **Frontend** | HTML5, CSS3 (Vanilla), JavaScript ES6+ |
 | **Reactivo** | Vue.js 3 (CDN) — para modales y componentes interactivos |
+| **Visión Artificial / IA** | TensorFlow.js + COCO-SSD Lite (`lite_mobilenet_v2`) + SAHI |
 | **Gráficos** | Chart.js — barras, donut, líneas |
 | **Iconos** | Boxicons |
 | **Tipografía** | Inter (Google Fonts) |
