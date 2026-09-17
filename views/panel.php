@@ -669,12 +669,11 @@
                                     <div style="font-size: 0.8rem; font-weight: 600; opacity: 0.8;">Total de puntos acumulados</div>
                                 </div>
 
-                                <!-- Clientes Atendidos -->
-                                <div class="anim-card banner-card-wine" style="animation-delay: 0.4s; border-radius: 16px; padding: 1.5rem; color: white; display: flex; flex-direction: column; justify-content: space-between; min-height: 130px;">
-                                    <div style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem; opacity: 0.9;">Clientes Atendidos</div>
-                                    <div class="dash-card-number-conductor" data-value="<?= $metricas_adicionales['total_clientes_propios'] ?>" style="font-size: 3.2rem; font-weight: 900; line-height: 1; margin-bottom: 0.5rem;">0</div>
-                                    <div style="font-size: 0.8rem; font-weight: 600; opacity: 0.8;">Base de datos personal</div>
-                                </div>
+                                <!-- Asignar Puntos Action -->
+                                <a href="<?= BASE_URL ?>scan" class="anim-card" style="animation-delay: 0.4s; border-radius: 16px; padding: 1.5rem; color: white; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 130px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); text-decoration: none; box-shadow: 0 10px 20px rgba(16, 185, 129, 0.25);">
+                                    <i class='bx bx-qr-scan' style="font-size: 3.2rem; margin-bottom: 0.5rem;"></i>
+                                    <div style="font-size: 1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; text-align: center;">Asignar Puntos a P.V.</div>
+                                </a>
 
                             </div>
                         </div>
@@ -800,14 +799,11 @@
                                     <div style="font-size: 0.78rem; font-weight: 600; opacity: 0.85;">Total balones verificados</div>
                                 </div>
 
-                                <!-- Entregas Validadas -->
-                                <div class="anim-card" style="border-radius: 16px; padding: 1.4rem; color: white; display: flex; flex-direction: column; justify-content: space-between; min-height: 125px; background: linear-gradient(135deg, #334155 0%, #1e293b 100%);">
-                                    <div style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9;">Entregas Validadas</div>
-                                    <div style="font-size: 2.8rem; font-weight: 950; line-height: 1; margin: 0.3rem 0;">
-                                        <?= number_format($metricas_adicionales['entregas_validadas'] ?? 0) ?>
-                                    </div>
-                                    <div style="font-size: 0.78rem; font-weight: 600; opacity: 0.85;">Despachos con foto y conteo</div>
-                                </div>
+                                <!-- Mostrar QR Action -->
+                                <a href="javascript:document.getElementById('seccion-qr-pv').scrollIntoView({behavior:'smooth'})" class="anim-card" style="animation-delay: 0.4s; border-radius: 16px; padding: 1.4rem; color: white; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 125px; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); text-decoration: none; box-shadow: 0 10px 20px rgba(59, 130, 246, 0.25);">
+                                    <i class='bx bx-qr' style="font-size: 3.2rem; margin-bottom: 0.5rem;"></i>
+                                    <div style="font-size: 1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; text-align: center;">Mostrar Mi QR</div>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -815,7 +811,7 @@
                     <!-- ══════════════════════════════════════════════════════════════ 
                          SECCIÓN CENTRAL: MI CÓDIGO QR Y SOLICITAR PUNTOS
                          ══════════════════════════════════════════════════════════════ -->
-                    <div style="display: flex; justify-content: center; margin-bottom: 2.5rem;">
+                    <div id="seccion-qr-pv" style="display: flex; justify-content: center; margin-bottom: 2.5rem;">
                         
                         <!-- CARD 1: CÓDIGO QR OFICIAL DEL PUNTO DE VENTA -->
                         <div style="background: #fff; border: 2.5px solid #800000; border-radius: 20px; padding: 2rem; box-shadow: 0 10px 30px rgba(128,0,0,0.06); display: flex; flex-direction: column; justify-content: space-between; text-align: center; max-width: 500px; width: 100%;">

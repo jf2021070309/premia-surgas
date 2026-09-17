@@ -60,9 +60,9 @@ class EmailService {
 
             // Remitente y Destinatario
             $remitenteEmail = $smtpUser ?: 'notificaciones@surgas.com.pe';
-            $mail->setFrom($remitenteEmail, 'Premia Surgas — Sistema de Puntos');
-            $mail->addAddress($destinatario, 'Administración PremiaSurgas');
-            $mail->addReplyTo($remitenteEmail, 'Premia Surgas');
+            $mail->setFrom($remitenteEmail, 'Surgas — Sistema de Puntos');
+            $mail->addAddress($destinatario, 'Administración Surgas');
+            $mail->addReplyTo($remitenteEmail, 'Surgas');
 
             // Adjuntar y Embeber Evidencia Fotográfica si existe
             $fotoRuta = $datos['evidencia_ruta'] ?? '';
@@ -77,9 +77,11 @@ class EmailService {
 
             // Asunto
             $clienteNombre = $datos['cliente_nombre'] ?? 'Punto de Venta';
+            $clienteRazon = $datos['cliente_razon_social'] ?? '—';
+            $nombreParaAsunto = $clienteRazon !== '—' && !empty($clienteRazon) ? $clienteRazon : $clienteNombre;
             $puntos = $datos['puntos'] ?? 0;
             $balones = $datos['balones_cantidad'] ?? 0;
-            $mail->Subject = "🔥 [PremiaSurgas] Entrega de Balones Verificada — $clienteNombre (+$puntos pts)";
+            $mail->Subject = "Asignacion de Puntos a P.V. (+$puntos)";
 
             // Cuerpo HTML
             $conductorNombre = $datos['conductor_nombre'] ?? 'Conductor no especificado';
@@ -108,7 +110,7 @@ class EmailService {
               <table align='center' border='0' cellpadding='0' cellspacing='0' width='100%' style='max-width: 620px; background: #ffffff; border-radius: 20px; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.06); border: 1px solid #e2e8f0;'>
                 <tr>
                   <td style='background: #800000; padding: 30px 35px; text-align: center;'>
-                    <h1 style='color: #ffffff; margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.5px;'>PREMIA SURGAS</h1>
+                    <h1 style='color: #ffffff; margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.5px;'>SURGAS</h1>
                     <p style='color: rgba(255,255,255,0.85); margin: 6px 0 0 0; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px;'>Validación de Entrega — Punto de Venta</p>
                   </td>
                 </tr>
@@ -128,16 +130,12 @@ class EmailService {
                         <td style='padding: 10px 0; color: #0f172a; font-weight: 700;'>#$ventaId</td>
                       </tr>
                       <tr style='border-bottom: 1px solid #f1f5f9;'>
-                        <td style='padding: 10px 0; color: #64748b; font-weight: 600;'>Punto de Venta:</td>
+                        <td style='padding: 10px 0; color: #64748b; font-weight: 600;'>Nombre del Cliente:</td>
                         <td style='padding: 10px 0; color: #0f172a; font-weight: 700;'>$clienteNombre</td>
                       </tr>
                       <tr style='border-bottom: 1px solid #f1f5f9;'>
-                        <td style='padding: 10px 0; color: #64748b; font-weight: 600;'>RUC / DNI:</td>
-                        <td style='padding: 10px 0; color: #0f172a; font-weight: 600;'>$clienteDoc</td>
-                      </tr>
-                      <tr style='border-bottom: 1px solid #f1f5f9;'>
-                        <td style='padding: 10px 0; color: #64748b; font-weight: 600;'>Dirección / Celular:</td>
-                        <td style='padding: 10px 0; color: #0f172a; font-weight: 500;'>$clienteDir | 📞 $clienteCel</td>
+                        <td style='padding: 10px 0; color: #64748b; font-weight: 600;'>Razón Social:</td>
+                        <td style='padding: 10px 0; color: #0f172a; font-weight: 700;'>$clienteRazon</td>
                       </tr>
                       <tr style='border-bottom: 1px solid #f1f5f9;'>
                         <td style='padding: 10px 0; color: #64748b; font-weight: 600;'>Conductor Responsable:</td>
@@ -160,7 +158,7 @@ class EmailService {
                     $imgHtml
 
                     <div style='text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0; font-size: 12px; color: #94a3b8;'>
-                      Este correo es una notificación automática generada por el sistema Premia Surgas.<br>
+                      Este correo es una notificación automática generada por el sistema Surgas.<br>
                       Para revisar el registro completo, ingresa al panel administrativo.
                     </div>
                   </td>
@@ -172,7 +170,7 @@ class EmailService {
 
             $mail->isHTML(true);
             $mail->Body    = $html;
-            $mail->AltBody = "PremiaSurgas: Entrega Verificada. Punto de Venta: $clienteNombre, Balones 10kg: $balones (Verificados: $balonesVerificados), Puntos: +$puntos pts, Conductor: $conductorNombre, Fecha: $fecha.";
+            $mail->AltBody = "Surgas: Entrega Verificada. Punto de Venta: $clienteNombre, Balones 10kg: $balones (Verificados: $balonesVerificados), Puntos: +$puntos pts, Conductor: $conductorNombre, Fecha: $fecha.";
 
             $mail->send();
             return ['success' => true, 'message' => 'Correo de notificación enviado exitosamente a ' . $destinatario];

@@ -207,7 +207,8 @@ class ConductorController
 
         $datosNotificacion = [
             'id'                  => $venta['id'],
-            'cliente_nombre'      => $venta['razon_social'] ?: $venta['cliente_nombre'],
+            'cliente_nombre'      => $venta['cliente_nombre'] ?? '—',
+            'cliente_razon_social'=> $venta['razon_social'] ?? '—',
             'cliente_doc'         => $venta['ruc'] ?: ($venta['dni'] ?: '—'),
             'cliente_direccion'   => $venta['direccion'] ?? '—',
             'cliente_celular'     => $venta['celular'] ?? '—',
