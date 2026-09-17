@@ -641,7 +641,11 @@
                             <!-- Header Text -->
                             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                                 <div class="anim-welcome" style="animation-delay: 0.1s;">
-                                    <h2 class="b-title">Bienvenido, <?= explode(' ', $_SESSION['nombre_usuario'])[0] ?></h2>
+                                    <?php 
+                                    $nombreCond = $_SESSION['nombre_usuario'];
+                                    $nombreCondLimitado = strlen($nombreCond) > 20 ? substr($nombreCond, 0, 20) . '...' : $nombreCond;
+                                    ?>
+                                    <h2 class="b-title">Bienvenido, <?= htmlspecialchars($nombreCondLimitado) ?></h2>
                                     <p class="b-subtitle">Resumen Operativo <span class="b-dot">•</span> <span class="b-brand">PREMIASURGAS</span></p>
                                 </div>
                             </div>
@@ -762,8 +766,12 @@
                                         1 Balón 10kg = <?= $puntosPorBalon ?? 10 ?> pts
                                     </span>
                                 </div>
+                                <?php 
+                                    $nombrePV = $clientePV['razon_social'] ?? $clientePV['nombre'] ?? $_SESSION['nombre_usuario'];
+                                    $nombrePVLimitado = strlen($nombrePV) > 25 ? substr($nombrePV, 0, 25) . '...' : $nombrePV;
+                                ?>
                                 <h2 style="margin: 0; font-size: 1.8rem; font-weight: 950; color: #1e293b; line-height: 1.2;">
-                                    <?= htmlspecialchars($clientePV['razon_social'] ?? $clientePV['nombre'] ?? $_SESSION['nombre_usuario']) ?>
+                                    <?= htmlspecialchars($nombrePVLimitado) ?>
                                 </h2>
                                 <p style="margin: 0.3rem 0 0 0; font-size: 0.85rem; color: #64748b;">
                                     RUC / Identificador: <strong style="color: #0f172a;"><?= htmlspecialchars($clientePV['ruc'] ?? $clientePV['dni'] ?? $_SESSION['usuario']) ?></strong>

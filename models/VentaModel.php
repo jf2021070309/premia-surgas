@@ -96,7 +96,7 @@ class VentaModel {
     /**
      * Aprueba la entrega de balones tras verificación fotográfica y suma los puntos al cliente
      */
-    public function aprobarEntregaPV(int $ventaId, int $conductorId, int $balonesVerificados, string $evidenciaFoto): bool {
+    public function aprobarEntregaPV(int $ventaId, int $conductorId, int $balonesVerificados, ?string $evidenciaFoto): bool {
         try {
             $this->db->beginTransaction();
 

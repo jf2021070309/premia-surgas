@@ -6,6 +6,11 @@ $pageIcon     = $pageIcon     ?? ($pageTitle === 'Mi Perfil' ? 'bx-user-circle' 
 // Nombre del usuario de sesión
 $isGuestHeader = !isset($_SESSION['rol']);
 $adminName = $_SESSION['nombre_usuario'] ?? $_SESSION['nombre_cliente'] ?? $_SESSION['usuario'] ?? ($isGuestHeader ? 'Invitado' : 'Usuario');
+
+// Limite de caracteres para el nombre
+$limiteCaracteres = 15;
+$nombreMostrarHeader = strlen($adminName) > $limiteCaracteres ? substr($adminName, 0, $limiteCaracteres) . '...' : $adminName;
+
 $rawRole   = $_SESSION['rol'] ?? ($isGuestHeader ? 'invitado' : 'admin');
 
 // Mapeo de roles para visualización elegante
@@ -56,7 +61,7 @@ $adminInitial = strtoupper(substr($adminName, 0, 1));
 
             <div class="admin-pill-text">
                 <span class="admin-pill-role"><?= $displayRole ?></span>
-                <span class="admin-pill-name"><?= htmlspecialchars($adminName) ?></span>
+                <span class="admin-pill-name"><?= htmlspecialchars($nombreMostrarHeader) ?></span>
             </div>
 
             <div class="nav-divider"></div>

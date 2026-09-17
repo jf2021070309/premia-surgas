@@ -451,10 +451,7 @@ class ScanController
             }
         }
 
-        if (!$fotoRelPath) {
-            echo json_encode(['success' => false, 'message' => 'Es obligatorio adjuntar la foto de evidencia de los balones.']);
-            exit;
-        }
+
 
         $ventaModel = new VentaModel();
 
@@ -491,12 +488,26 @@ class ScanController
             $puntos = $venta['puntos'] ?? 0;
 
             $audit = new AuditoriaModel();
+            $conEvidencia = $fotoRelPath ? "con evidencia fotográfica" : "sin evidencia fotográfica";
             $audit->registrar(
                 $_SESSION['id_usuario'],
                 'APROBAR_ENTREGA_PV',
-                "Conductor {$_SESSION['nombre_usuario']} aprobó entrega de $balonesVerificados balones (+$puntos pts) a $clienteNombre con evidencia fotográfica",
+                "Conductor {$_SESSION['nombre_usuario']} aprobó entrega de $balonesVerificados balones (+$puntos pts) a $clienteNombre $conEvidencia",
                 'RECARGAS'
             );
+
+            // Notificar al dueño por correo electrónico
+            require_once __DIR__ . '/../helpers/EmailService.php';
+            $datosNotificacion = [
+                'id' => $ventaId,
+                'cliente_nombre' => $clienteNombre,
+                'conductor_nombre' => $_SESSION['nombre_usuario'],
+                'puntos' => $puntos,
+                'balones_verificados' => $balonesVerificados,
+                'evidencia_ruta' => $fotoRelPath ? (__DIR__ . '/../' . $fotoRelPath) : ''
+            ];
+            EmailService::notificarAdminEvidencia($datosNotificacion, 'andresebast16@gmail.com');
+
 
             echo json_encode([
                 'success' => true,
