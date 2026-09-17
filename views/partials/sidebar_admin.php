@@ -170,11 +170,6 @@ if (!function_exists('isActiveLink')) {
 
             <div class="menu-label">Operaciones</div>
             <?php if ($sidebarRole === 'afiliado'): ?>
-                <a href="<?= BASE_URL ?>afiliados/solicitar-puntos"
-                    class="sidebar-item <?= isActiveLink('afiliados/solicitar-puntos', $current_url) ?>">
-                    <i class='bx bx-cube-alt'></i>
-                    <span>Solicitar Puntos</span>
-                </a>
                 <a href="<?= BASE_URL ?>afiliados/mi-historial"
                     class="sidebar-item <?= isActiveLink('afiliados/mi-historial', $current_url) ?>">
                     <i class='bx bx-history'></i>
