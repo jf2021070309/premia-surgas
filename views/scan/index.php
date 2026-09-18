@@ -696,7 +696,7 @@
                                             <label style="display: block; font-size: 0.72rem; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">
                                                 Nro de Balones de 10kg
                                             </label>
-                                            <input type="number" id="pv-balones-cant" min="1" max="500" value="5" oninput="actualizarCalculoPV()" style="width: 140px; height: 55px; border: 2.5px solid #e2e8f0; border-radius: 16px; font-size: 1.6rem; font-weight: 900; text-align: center; color: #0f172a; outline: none; background: #f8fafc; transition: all 0.3s;" onfocus="this.style.borderColor='#800000';" onblur="this.style.borderColor='#e2e8f0';">
+                                            <input type="number" id="pv-balones-cant" min="1" max="50" value="1" oninput="actualizarCalculoPV()" style="width: 140px; height: 55px; border: 2.5px solid #e2e8f0; border-radius: 16px; font-size: 1.6rem; font-weight: 900; text-align: center; color: #0f172a; outline: none; background: #f8fafc; transition: all 0.3s;" onfocus="this.style.borderColor='#800000';" onblur="this.style.borderColor='#e2e8f0';">
                                         </div>
                                         <div>
                                             <span style="font-size: 0.75rem; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 1px;">PUNTOS A ASIGNAR</span>
@@ -1291,7 +1291,18 @@
         function actualizarCalculoPV() {
             const input = document.getElementById('pv-balones-cant');
             if (!input) return;
-            const balones = Math.max(1, parseInt(input.value || 0, 10));
+            
+            // Forzar límites en tiempo real
+            let val = parseInt(input.value, 10);
+            if (isNaN(val) || val < 1) val = 1;
+            if (val > 50) val = 50;
+            
+            // Solo reescribir si cambió (para no interferir mientras tipea si está validando)
+            if (input.value !== val.toString() && input.value !== "") {
+                input.value = val;
+            }
+
+            const balones = val;
             const puntos = balones * PUNTOS_POR_BALON_10KG;
             const ptsBox = document.getElementById('pv-puntos-calc');
             if (ptsBox) ptsBox.innerText = puntos;
