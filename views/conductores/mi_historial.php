@@ -280,8 +280,46 @@
             .history-summary h2 { font-size: 1.4rem !important; }
             .sum-val { font-size: 1.8rem; }
             
-            .history-card { grid-template-columns: 1fr 1fr; gap: 1.5rem; padding: 1.5rem; }
-            .col-detail { grid-column: span 2; max-width: 100%; }
+            .history-card { 
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1.25rem; 
+            }
+            .col-time { 
+                text-align: left;
+                border-right: none;
+                border-bottom: 1.5px solid var(--border-light);
+                padding-right: 0;
+                padding-bottom: 0.75rem;
+                display: flex;
+                align-items: baseline;
+                gap: 0.5rem;
+            }
+            .col-main {
+                border-bottom: 1px dashed var(--border-light);
+                padding-bottom: 0.75rem;
+            }
+            .col-detail { 
+                width: 100%; 
+            }
+            .col-pts {
+                border-top: 1.5px solid var(--border-light);
+                padding-top: 1rem;
+                text-align: left;
+                align-items: center;
+                flex-direction: row;
+                justify-content: space-between;
+                flex-wrap: wrap;
+            }
+            .col-pts .pts-value {
+                font-size: 1.4rem;
+            }
+            .col-pts .pts-label {
+                margin-top: 0;
+                margin-left: 0.5rem;
+            }
+            
             .filter-bar { flex-direction: column; align-items: stretch; }
             .timeline-header { display: none; }
         }

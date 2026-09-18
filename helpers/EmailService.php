@@ -203,4 +203,50 @@ class EmailService {
             return ['success' => false, 'message' => 'No se pudo enviar el correo: ' . $mail->ErrorInfo];
         }
     }
+
+    /**
+     * Envía el reporte diario en formato HTML al administrador.
+     */
+    public static function enviarReporteDiario(string $html, string $fecha, string $destinatario = 'jaimeelias.tacna.2016@gmail.com'): array {
+        $mail = new PHPMailer(true);
+
+        try {
+            $mail->CharSet = 'UTF-8';
+
+            $smtpHost = defined('SMTP_HOST') ? SMTP_HOST : getenv('SMTP_HOST');
+            $smtpUser = defined('SMTP_USER') ? SMTP_USER : getenv('SMTP_USER');
+            $smtpPass = defined('SMTP_PASS') ? SMTP_PASS : getenv('SMTP_PASS');
+            $smtpPort = defined('SMTP_PORT') ? SMTP_PORT : (getenv('SMTP_PORT') ?: 587);
+            $smtpSecure = defined('SMTP_SECURE') ? SMTP_SECURE : (getenv('SMTP_SECURE') ?: PHPMailer::ENCRYPTION_STARTTLS);
+
+            if ($smtpHost && $smtpUser && $smtpPass) {
+                $mail->isSMTP();
+                $mail->Host       = $smtpHost;
+                $mail->SMTPAuth   = true;
+                $mail->Username   = $smtpUser;
+                $mail->Password   = $smtpPass;
+                $mail->SMTPSecure = $smtpSecure;
+                $mail->Port       = (int) $smtpPort;
+            } else {
+                $mail->isMail();
+            }
+
+            $remitenteEmail = $smtpUser ?: 'notificaciones@surgas.com.pe';
+            $mail->setFrom($remitenteEmail, 'Surgas — Reportes Automáticos');
+            $mail->addAddress($destinatario, 'Administración Surgas');
+            $mail->addReplyTo($remitenteEmail, 'Surgas');
+
+            $mail->Subject = "Reporte Diario de Conductores - " . date('d/m/Y', strtotime($fecha));
+
+            $mail->isHTML(true);
+            $mail->Body    = $html;
+            $mail->AltBody = "Reporte diario de conductores del " . date('d/m/Y', strtotime($fecha)) . ". Por favor, visualice este correo en un cliente que soporte HTML.";
+
+            $mail->send();
+            return ['success' => true, 'message' => 'Reporte enviado exitosamente.'];
+        } catch (Exception $e) {
+            error_log("Error enviando reporte diario: " . $mail->ErrorInfo);
+            return ['success' => false, 'message' => 'Error: ' . $mail->ErrorInfo];
+        }
+    }
 }

@@ -1395,20 +1395,24 @@
                 const data = await res.json();
 
                 if (data.success) {
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: 'bottom-center',
-                        showConfirmButton: false,
-                        timer: 2500,
-                        timerProgressBar: true
-                    });
-                    Toast.fire({
+                    Swal.fire({
                         icon: 'success',
-                        title: 'Puntos entregados ✔️✔️'
+                        title: '¡Puntos Asignados!',
+                        text: 'La operación se registró correctamente.',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        timerProgressBar: true
                     }).then(() => {
-                        window.location.href = baseUrl + 'conductores/mi-historial';
+                        window.location.href = baseUrl + 'panel';
                     });
-                    notificarAdminDirecto(data.venta_id);
+                    
+                    // Notificar en segundo plano silenciosamente
+                    fetch(baseUrl + 'conductores/notificar-admin', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ venta_id: data.venta_id })
+                    }).catch(e => console.error("Error silently notifying admin", e));
+                    
                 } else {
                     Swal.fire({ icon: 'error', title: 'Error', text: data.message });
                     btn.disabled = false;

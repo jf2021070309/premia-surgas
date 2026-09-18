@@ -44,4 +44,26 @@ class ReporteController {
         echo json_encode($model->getAll(500));
         exit;
     }
+
+    public function diarioConductores(): void {
+        $fecha = $_GET['fecha'] ?? date('Y-m-d');
+        
+        $model = new ReporteModel();
+        $registros = $model->getReporteDiarioConductores($fecha);
+        
+        // Agrupar los registros por nombre del conductor
+        $agrupadoPorConductor = [];
+        $totalPuntosDia = 0;
+        
+        foreach ($registros as $row) {
+            $conductor = $row['conductor_nombre'] ?: 'Desconocido';
+            if (!isset($agrupadoPorConductor[$conductor])) {
+                $agrupadoPorConductor[$conductor] = [];
+            }
+            $agrupadoPorConductor[$conductor][] = $row;
+            $totalPuntosDia += (int)$row['puntos'];
+        }
+
+        require_once __DIR__ . '/../views/reportes/diario_conductores.php';
+    }
 }

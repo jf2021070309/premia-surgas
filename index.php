@@ -132,6 +132,7 @@ $routes = [
     ['GET',  'reportes',          'ReporteController', 'index'],
     ['GET',  'reporte/auditoria', 'ReporteController', 'auditoria'],
     ['GET',  'reporte/getAuditLogsJson', 'ReporteController', 'getAuditLogsJson'],
+    ['GET',  'reporte/diario-conductores', 'ReporteController', 'diarioConductores'],
 
     // —— Gestión de Canjes (Admin) ——
     ['GET',  'canjes-admin',            'CanjeAdminController', 'index'],

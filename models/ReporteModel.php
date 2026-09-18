@@ -77,4 +77,26 @@ class ReporteModel {
                 ORDER BY dia ASC";
         return $this->db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function getReporteDiarioConductores(string $fecha): array {
+        $sql = "SELECT 
+                    v.id as venta_id,
+                    v.fecha,
+                    v.puntos,
+                    v.balones_cantidad,
+                    v.evidencia_foto,
+                    v.estado,
+                    c.nombre as cliente_nombre,
+                    c.razon_social,
+                    c.dni as cliente_dni,
+                    u.nombre as conductor_nombre
+                FROM ventas v
+                JOIN clientes c ON v.cliente_id = c.id
+                JOIN usuarios u ON v.conductor_id = u.id
+                WHERE DATE(v.fecha) = ? AND v.estado = 'aprobado'
+                ORDER BY u.nombre ASC, v.fecha DESC";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$fecha]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

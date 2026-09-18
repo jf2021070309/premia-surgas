@@ -52,7 +52,12 @@
                 <a href="<?= BASE_URL ?>panel" class="text-white text-decoration-none me-3">←</a>
                 <span class="fw-bold">Reportes de Fidelización</span>
             </div>
-            <div class="small opacity-75">Actualizado: <?= date('d/m H:i') ?></div>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <a href="<?= BASE_URL ?>reporte/diario-conductores" target="_blank" class="btn btn-sm btn-light fw-bold" style="border-radius: 8px;">
+                    <i class='bx bx-printer'></i> Reporte Conductores
+                </a>
+                <div class="small opacity-75 d-none d-md-block">Actualizado: <?= date('d/m H:i') ?></div>
+            </div>
         </div>
 
         <!-- Mini Stats -->
