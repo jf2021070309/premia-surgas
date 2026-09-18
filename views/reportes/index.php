@@ -12,7 +12,9 @@
     <style>
         /* Ajustes específicos para el layout de reportes dentro del admin-layout */
         .premium-container.reportes-container {
+            padding: 1.5rem 2rem;
             display: flex; flex-direction: column; height: calc(100vh - 80px); gap: 1rem; overflow: hidden; padding-bottom: 1rem;
+            box-sizing: border-box;
         }
         
         .topbar-compact { 
