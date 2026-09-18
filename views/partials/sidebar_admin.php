@@ -195,6 +195,12 @@ if (!function_exists('isActiveLink')) {
             <?php endif; ?>
 
             <?php if ($sidebarRole === 'admin'): ?>
+                <div class="menu-label">Reportes y Estadísticas</div>
+                <a href="<?= BASE_URL ?>reportes" class="sidebar-item <?= isActiveLink('reportes', $current_url) ?>">
+                    <i class='bx bx-pie-chart-alt-2'></i>
+                    <span>Dashboard de Reportes</span>
+                </a>
+
                 <div class="menu-label">Mantenimiento</div>
                 <a href="<?= BASE_URL ?>ajustes" class="sidebar-item <?= isActiveLink('ajustes', $current_url) ?>">
                     <i class='bx bx-cog'></i>
