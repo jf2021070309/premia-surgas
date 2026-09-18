@@ -122,12 +122,8 @@ class EmailService {
                 </tr>
                 <tr>
                   <td style='padding: 40px 35px;'>
-                    <div style='background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 16px; padding: 18px 20px; margin-bottom: 30px; display: flex; align-items: center; justify-content: center; text-align: center;'>
-                      <div>
-                        <div style='font-size: 24px; margin-bottom: 6px;'>✅</div>
-                        <strong style='color: #166534; font-size: 15px; display: block; margin-bottom: 4px;'>ENTREGA VERIFICADA CON ÉXITO</strong>
-                        <p style='margin: 0; color: #15803d; font-size: 13px; max-width: 400px; margin: 0 auto;'>La entrega ha sido confirmada por el conductor y los puntos han sido asignados exitosamente.</p>
-                      </div>
+                    <div style='background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 12px 15px; margin-bottom: 25px; text-align: center;'>
+                      <strong style='color: #166534; font-size: 14px;'>✅ PUNTOS ASIGNADOS CORRECTAMENTE</strong>
                     </div>
 
                     <table width='100%' style='border-collapse: collapse; font-size: 14.5px; margin-bottom: 30px; background: #f8fafc; border-radius: 16px; overflow: hidden; border: 1px solid #e2e8f0;'>
