@@ -708,7 +708,7 @@
 
                                     <!-- Botón Adjuntar Evidencia -->
                                     <div style="margin-bottom: 1.25rem;">
-                                        <input type="file" id="evidencia-input" accept="image/*" capture="environment" style="display: none;" onchange="previewEvidencia(event)">
+                                        <input type="file" id="evidencia-input" accept="image/*" capture="camera" style="display: none;" onchange="previewEvidencia(event)">
                                         <button type="button" onclick="document.getElementById('evidencia-input').click()" style="width: 100%; background: #800000; color: #fff; border: none; padding: 1.1rem 1.5rem; border-radius: 16px; font-weight: 850; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 10px 25px rgba(128,0,0,0.25); transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
                                             <i class='bx bx-camera' style="font-size: 1.4rem;"></i>
                                             <span id="txt-btn-evidencia">TOMAR FOTO DE EVIDENCIA</span>
