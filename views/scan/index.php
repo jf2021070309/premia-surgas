@@ -1302,18 +1302,46 @@
             if (!file) return;
             const reader = new FileReader();
             reader.onload = function(e) {
-                evidenciaBase64 = e.target.result;
-                document.getElementById('evidencia-preview-container').style.display = 'block';
-                document.getElementById('evidencia-preview-img').src = evidenciaBase64;
-                
-                const btnAprobar = document.getElementById('pv-btn-aprobar-entrega');
-                if (btnAprobar) {
-                    btnAprobar.disabled = false;
-                    btnAprobar.style.opacity = '1';
-                    btnAprobar.style.cursor = 'pointer';
-                }
-                const txtBtn = document.getElementById('txt-btn-evidencia');
-                if (txtBtn) txtBtn.innerText = "CAMBIAR FOTO";
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 800;
+                    const MAX_HEIGHT = 800;
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > height) {
+                        if (width > MAX_WIDTH) {
+                            height *= MAX_WIDTH / width;
+                            width = MAX_WIDTH;
+                        }
+                    } else {
+                        if (height > MAX_HEIGHT) {
+                            width *= MAX_HEIGHT / height;
+                            height = MAX_HEIGHT;
+                        }
+                    }
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    // Comprimir a JPEG con 70% de calidad para reducir peso drásticamente
+                    evidenciaBase64 = canvas.toDataURL('image/jpeg', 0.7);
+                    
+                    document.getElementById('evidencia-preview-container').style.display = 'block';
+                    document.getElementById('evidencia-preview-img').src = evidenciaBase64;
+                    
+                    const btnAprobar = document.getElementById('pv-btn-aprobar-entrega');
+                    if (btnAprobar) {
+                        btnAprobar.disabled = false;
+                        btnAprobar.style.opacity = '1';
+                        btnAprobar.style.cursor = 'pointer';
+                    }
+                    const txtBtn = document.getElementById('txt-btn-evidencia');
+                    if (txtBtn) txtBtn.innerText = "CAMBIAR FOTO";
+                };
+                img.src = e.target.result;
             };
             reader.readAsDataURL(file);
         }
