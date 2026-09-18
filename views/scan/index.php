@@ -646,7 +646,7 @@
                             <div class="elite-card-main" style="flex: 1; padding: 2.5rem; background: #fff; display: flex; flex-direction: column; gap: 2rem;">
                                 <!-- Perfil del Cliente Rediseñado - Edición Pure -->
                                 <!-- Perfil del Cliente - Micro-Identidad de Élite -->
-                                <div style="display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 3rem; padding: 0.5rem 0; gap: 1.25rem;">
+                                <div style="display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 1rem; padding: 0.5rem 0; gap: 1.25rem;">
                                     
                                     <div style="position: relative;">
                                         <div style="width: 80px; height: 80px; border-radius: 20px; background: #fff; display: flex; align-items: center; justify-content: center; border: 1.5px solid #000; box-shadow: 8px 8px 0px rgba(0,0,0,0.03);">
