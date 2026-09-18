@@ -722,7 +722,7 @@
                                     <div>
                                         <button type="button" id="pv-btn-aprobar-entrega" disabled onclick="aprobarEntregaConductor()" style="width: 100%; background: #10b981; color: #fff; border: none; padding: 1.2rem; border-radius: 16px; font-weight: 900; font-size: 1rem; cursor: not-allowed; opacity: 0.45; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 10px 25px rgba(16,185,129,0.3); transition: all 0.2s;">
                                             <i class='bx bx-check-shield' style="font-size: 1.4rem;"></i>
-                                            <span>APROBAR PUNTOS DE ENTREGA</span>
+                                            <span>ASIGNAR PUNTOS</span>
                                         </button>
                                     </div>
                                 </div>
