@@ -4,19 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reportes — PremiaSurgas</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin-layout.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        html, body { height: 100%; overflow: hidden; background: #f0f2f5; font-family: 'Outfit', sans-serif; }
-        .main-wrapper { display: flex; flex-direction: column; height: 100vh; padding: 1rem; gap: 1rem; }
+        /* Ajustes específicos para el layout de reportes dentro del admin-layout */
+        .premium-container.reportes-container {
+            display: flex; flex-direction: column; height: calc(100vh - 80px); gap: 1rem; overflow: hidden; padding-bottom: 1rem;
+        }
         
         .topbar-compact { 
             background: #2d3436; color: white; border-radius: 1rem; padding: 0.6rem 1.2rem;
-            display: flex; justify-content: space-between; align-items: center;
+            display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;
         }
 
-        .stat-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+        .stat-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; flex-shrink: 0; }
         .stat-card-mini { 
             background: white; border-radius: 1rem; padding: 0.8rem 1.2rem; border: none;
             display: flex; align-items: center; gap: 1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
@@ -26,7 +30,7 @@
             align-items: center; justify-content: center; font-size: 1.2rem;
         }
 
-        .dashboard-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 1rem; flex-grow: 1; overflow: hidden; }
+        .dashboard-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 1rem; flex-grow: 1; overflow: hidden; min-height: 0; }
         
         .rpt-card { 
             background: white; border-radius: 1.5rem; display: flex; flex-direction: column; overflow: hidden;
@@ -42,27 +46,41 @@
 
         .prize-row { display: flex; align-items: center; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid #f8f9fa; }
         .prize-row:last-child { border: none; }
+        
+        @media (max-width: 900px) {
+            .premium-container.reportes-container { height: auto; overflow: visible; }
+            .dashboard-grid { grid-template-columns: 1fr; overflow: visible; }
+            .stat-bar { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
+    <div id="app">
+        <?php include __DIR__ . '/../partials/sidebar_admin.php'; ?>
 
-    <div class="main-wrapper">
-        <div class="topbar-compact shadow-sm">
-            <div>
-                <a href="<?= BASE_URL ?>panel" class="text-white text-decoration-none me-3">←</a>
-                <span class="fw-bold">Reportes de Fidelización</span>
-            </div>
-            <div style="display: flex; gap: 1rem; align-items: center;">
-                <a href="<?= BASE_URL ?>reporte/diario-conductores" target="_blank" class="btn btn-sm btn-light fw-bold" style="border-radius: 8px;">
-                    <i class='bx bx-printer'></i> Reporte Conductores
-                </a>
-                <div class="small opacity-75 d-none d-md-block">Actualizado: <?= date('d/m H:i') ?></div>
-            </div>
-        </div>
+        <div class="admin-layout">
+            <?php 
+                $pageTitle = 'Reportes';
+                $pageSubtitle = 'Reportes de Fidelización';
+                include __DIR__ . '/../partials/header_admin.php'; 
+            ?>
+            
+            <div class="premium-container reportes-container">
+                <div class="topbar-compact shadow-sm">
+                    <div>
+                        <span class="fw-bold">Reportes de Fidelización</span>
+                    </div>
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <a href="<?= BASE_URL ?>reporte/diario-conductores" target="_blank" class="btn btn-sm btn-light fw-bold" style="border-radius: 8px;">
+                            <i class='bx bx-printer'></i> Reporte Conductores
+                        </a>
+                        <div class="small opacity-75 d-none d-md-block">Actualizado: <?= date('d/m H:i') ?></div>
+                    </div>
+                </div>
 
-        <!-- Mini Stats -->
-        <div class="stat-bar">
-            <div class="stat-card-mini">
+                <!-- Mini Stats -->
+                <div class="stat-bar">
+                    <div class="stat-card-mini">
                 <div class="stat-icon-box" style="background: #dcfce7; color: #166534;">🌟</div>
                 <div>
                     <div class="small text-muted fw-bold" style="font-size: 0.7rem;">PUNTOS EMITIDOS</div>
@@ -223,5 +241,8 @@
         }
     });
     </script>
+        </div>
+    </div>
+</div>
 </body>
 </html>
