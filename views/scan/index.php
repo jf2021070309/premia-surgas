@@ -660,15 +660,25 @@
                                         <div style="margin-bottom: 0.4rem;">
                                             <span style="font-size: 0.65rem; font-weight: 950; color: #000; text-transform: uppercase; letter-spacing: 5px; opacity: 0.3;">Beneficiario Registrado</span>
                                         </div>
-                                        <b id="res-name" style="display: block; font-size: 1.8rem; font-weight: 950; color: #000; letter-spacing: -0.05em; margin-bottom: 10px; line-height: 1;">— — —</b>
-                                        <div style="display: flex; align-items: center; justify-content: center; gap: 1.5rem;">
-                                            <div style="display: flex; align-items: center; gap: 0.6rem;">
+                                        <b id="res-name" style="display: block; font-size: 1.45rem; font-weight: 950; color: #000; letter-spacing: -0.03em; margin-bottom: 15px; line-height: 1.2; text-wrap: balance; max-width: 95%; margin-left: auto; margin-right: auto;">— — —</b>
+                                        <div id="res-info-container" style="display: flex; align-items: center; justify-content: center; gap: 0.8rem; flex-wrap: wrap;">
+                                            
+                                            <div id="res-doc-wrapper" style="display: flex; align-items: center; gap: 0.4rem;">
                                                 <i class='bx bx-id-card' style="font-size: 1.1rem; color: #000; opacity: 0.7;"></i>
-                                                <span id="res-phone" style="font-size: 0.9rem; color: #000; font-weight: 800; font-family: 'Roboto Mono', monospace; letter-spacing: 0.5px;">00000000</span>
+                                                <span id="res-doc" style="font-size: 0.9rem; color: #000; font-weight: 800; font-family: 'Roboto Mono', monospace; letter-spacing: 0.5px;"></span>
                                             </div>
-                                            <div style="width: 1px; height: 14px; background: #000; opacity: 0.1;"></div>
+                                            
+                                            <div id="res-sep-1" style="width: 4px; height: 4px; border-radius: 50%; background: #000; opacity: 0.15;"></div>
+                                            
+                                            <div id="res-phone-wrapper" style="display: flex; align-items: center; gap: 0.4rem;">
+                                                <i class='bx bx-phone' style="font-size: 1.1rem; color: #000; opacity: 0.7;"></i>
+                                                <span id="res-phone" style="font-size: 0.9rem; color: #000; font-weight: 800; font-family: 'Roboto Mono', monospace; letter-spacing: 0.5px;"></span>
+                                            </div>
+                                            
+                                            <div id="res-sep-2" style="width: 4px; height: 4px; border-radius: 50%; background: #000; opacity: 0.15;"></div>
+                                            
                                             <div style="display: flex; align-items: center; gap: 0.4rem;">
-                                                <span style="font-size: 0.75rem; font-weight: 900; color: #22c55e; text-transform: uppercase; letter-spacing: 1.5px;">Estatus Activo</span>
+                                                <span style="font-size: 0.75rem; font-weight: 900; color: #22c55e; text-transform: uppercase; letter-spacing: 1px;">Estatus Activo</span>
                                             </div>
                                         </div>
                                     </div>
@@ -681,16 +691,16 @@
                                 <div id="pv-special-section" style="display: none; background: #fff; border: 2.5px solid #e2e8f0; border-radius: 24px; padding: 2rem; margin-bottom: 0.5rem;">
                                     
                                     <!-- Input de Balones y Puntos Calculados -->
-                                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
+                                    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.25rem; margin-bottom: 2rem; text-align: center;">
                                         <div>
-                                            <label style="display: block; font-size: 0.72rem; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;">
+                                            <label style="display: block; font-size: 0.72rem; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">
                                                 Nro de Balones de 10kg
                                             </label>
-                                            <input type="number" id="pv-balones-cant" min="1" max="500" value="5" oninput="actualizarCalculoPV()" style="width: 120px; height: 50px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1.3rem; font-weight: 900; text-align: center; color: #0f172a; outline: none;">
+                                            <input type="number" id="pv-balones-cant" min="1" max="500" value="5" oninput="actualizarCalculoPV()" style="width: 140px; height: 55px; border: 2.5px solid #e2e8f0; border-radius: 16px; font-size: 1.6rem; font-weight: 900; text-align: center; color: #0f172a; outline: none; background: #f8fafc; transition: all 0.3s;" onfocus="this.style.borderColor='#800000';" onblur="this.style.borderColor='#e2e8f0';">
                                         </div>
-                                        <div style="text-align: right;">
-                                            <span style="font-size: 0.7rem; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 1px;">PUNTOS A ASIGNAR</span>
-                                            <div style="font-size: 1.9rem; font-weight: 950; color: #16a34a; line-height: 1.1;">
+                                        <div>
+                                            <span style="font-size: 0.75rem; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 1px;">PUNTOS A ASIGNAR</span>
+                                            <div style="font-size: 2.4rem; font-weight: 950; color: #16a34a; line-height: 1; margin-top: 6px;">
                                                 +<span id="pv-puntos-calc">50</span> PTS
                                             </div>
                                         </div>
@@ -997,7 +1007,36 @@
 
                     const clientName = data.cliente.razon_social ? (data.cliente.razon_social + ' (' + data.cliente.nombre + ')') : data.cliente.nombre;
                     document.getElementById('res-name').innerText = clientName;
-                    document.getElementById('res-phone').innerText = (data.cliente.ruc || data.cliente.dni || '') + (data.cliente.celular ? ' • ' + data.cliente.celular : '');
+                    
+                    const docStr = data.cliente.ruc || data.cliente.dni || '';
+                    const celStr = data.cliente.celular || '';
+                    
+                    const docWrapper = document.getElementById('res-doc-wrapper');
+                    const sep1 = document.getElementById('res-sep-1');
+                    if (docStr) {
+                        document.getElementById('res-doc').innerText = docStr;
+                        docWrapper.style.display = 'flex';
+                        sep1.style.display = 'block';
+                    } else {
+                        docWrapper.style.display = 'none';
+                        sep1.style.display = 'none';
+                    }
+                    
+                    const celWrapper = document.getElementById('res-phone-wrapper');
+                    const sep2 = document.getElementById('res-sep-2');
+                    if (celStr) {
+                        document.getElementById('res-phone').innerText = celStr;
+                        celWrapper.style.display = 'flex';
+                        sep2.style.display = 'block';
+                    } else {
+                        celWrapper.style.display = 'none';
+                        sep2.style.display = 'none';
+                    }
+                    
+                    // If both are missing, remove the second separator anyway
+                    if (!docStr || !celStr) {
+                        sep1.style.display = 'none';
+                    }
                     document.getElementById('client-id').value = data.cliente.id;
                     if (document.getElementById('client-tipo')) {
                         document.getElementById('client-tipo').value = data.cliente.tipo_cliente || 'Normal';

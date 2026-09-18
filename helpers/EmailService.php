@@ -92,12 +92,18 @@ class EmailService {
             $balonesVerificados = $datos['balones_verificados'] ?? $balones;
             $ventaId = $datos['id'] ?? '—';
 
+            $razonSocialHtml = ($clienteRazon !== '—' && !empty($clienteRazon)) ? "
+                      <tr style='border-bottom: 1px solid #e2e8f0;'>
+                        <td style='padding: 12px 15px; color: #64748b; font-weight: 600;'>Razón Social:</td>
+                        <td style='padding: 12px 15px; color: #0f172a; font-weight: 700; text-align: right;'>$clienteRazon</td>
+                      </tr>" : "";
+
             $imgHtml = $tieneFoto
-                ? "<div style='text-align: center; margin: 25px 0;'>
-                     <p style='font-size: 13px; font-weight: 700; color: #475569; text-transform: uppercase; margin-bottom: 8px;'>📸 Evidencia Fotográfica Capturada por Conductor:</p>
-                     <img src='cid:$cidEvidencia' alt='Evidencia Fotográfica' style='max-width: 100%; max-height: 480px; border-radius: 14px; border: 2px solid #e2e8f0; box-shadow: 0 10px 25px rgba(0,0,0,0.08); display: inline-block;' />
+                ? "<div style='text-align: center; margin: 30px auto;'>
+                     <p style='font-size: 13px; font-weight: 700; color: #475569; text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.5px;'>📸 Evidencia Fotográfica Capturada por Conductor:</p>
+                     <img src='cid:$cidEvidencia' alt='Evidencia Fotográfica' style='max-width: 100%; max-height: 480px; border-radius: 14px; border: 3px solid #f1f5f9; box-shadow: 0 10px 25px rgba(0,0,0,0.08); display: inline-block;' />
                    </div>"
-                : "<div style='background: #fef2f2; border: 1px dashed #f87171; padding: 15px; border-radius: 10px; color: #991b1b; text-align: center;'>No se adjuntó archivo físico de evidencia.</div>";
+                : "<div style='background: #fef2f2; border: 1px dashed #f87171; padding: 15px; border-radius: 10px; color: #991b1b; text-align: center; margin-top: 20px;'>No se adjuntó archivo físico de evidencia.</div>";
 
             $html = "
             <!DOCTYPE html>
@@ -106,58 +112,55 @@ class EmailService {
               <meta charset='UTF-8'>
               <title>Notificación de Entrega y Validación</title>
             </head>
-            <body style='font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif; background-color: #f1f5f9; margin: 0; padding: 30px 15px;'>
-              <table align='center' border='0' cellpadding='0' cellspacing='0' width='100%' style='max-width: 620px; background: #ffffff; border-radius: 20px; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.06); border: 1px solid #e2e8f0;'>
+            <body style='font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif; background-color: #f8fafc; margin: 0; padding: 40px 15px;'>
+              <table align='center' border='0' cellpadding='0' cellspacing='0' width='100%' style='max-width: 620px; background: #ffffff; border-radius: 24px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.04); border: 1px solid #e2e8f0;'>
                 <tr>
-                  <td style='background: #800000; padding: 30px 35px; text-align: center;'>
-                    <h1 style='color: #ffffff; margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.5px;'>SURGAS</h1>
-                    <p style='color: rgba(255,255,255,0.85); margin: 6px 0 0 0; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px;'>Validación de Entrega — Punto de Venta</p>
+                  <td style='background: #800000; padding: 35px 35px; text-align: center;'>
+                    <h1 style='color: #ffffff; margin: 0; font-size: 26px; font-weight: 900; letter-spacing: -0.5px;'>SURGAS</h1>
+                    <p style='color: rgba(255,255,255,0.85); margin: 8px 0 0 0; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px;'>Validación de Entrega — Punto de Venta</p>
                   </td>
                 </tr>
                 <tr>
-                  <td style='padding: 35px;'>
-                    <div style='background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 15px 20px; margin-bottom: 25px; display: flex; align-items: center;'>
-                      <span style='font-size: 20px; margin-right: 10px;'>✅</span>
+                  <td style='padding: 40px 35px;'>
+                    <div style='background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 16px; padding: 18px 20px; margin-bottom: 30px; display: flex; align-items: center; justify-content: center; text-align: center;'>
                       <div>
-                        <strong style='color: #166534; font-size: 14px;'># DE BALONES VERIFICADO (CHECK)</strong>
-                        <p style='margin: 2px 0 0 0; color: #15803d; font-size: 13px;'>La entrega ha sido confirmada por el conductor y los puntos han sido asignados exitosamente.</p>
+                        <div style='font-size: 24px; margin-bottom: 6px;'>✅</div>
+                        <strong style='color: #166534; font-size: 15px; display: block; margin-bottom: 4px;'>ENTREGA VERIFICADA CON ÉXITO</strong>
+                        <p style='margin: 0; color: #15803d; font-size: 13px; max-width: 400px; margin: 0 auto;'>La entrega ha sido confirmada por el conductor y los puntos han sido asignados exitosamente.</p>
                       </div>
                     </div>
 
-                    <table width='100%' style='border-collapse: collapse; font-size: 14px; margin-bottom: 25px;'>
-                      <tr style='border-bottom: 1px solid #f1f5f9;'>
-                        <td style='padding: 10px 0; color: #64748b; font-weight: 600; width: 40%;'>ID de Operación:</td>
-                        <td style='padding: 10px 0; color: #0f172a; font-weight: 700;'>#$ventaId</td>
+                    <table width='100%' style='border-collapse: collapse; font-size: 14.5px; margin-bottom: 30px; background: #f8fafc; border-radius: 16px; overflow: hidden; border: 1px solid #e2e8f0;'>
+                      <tr style='border-bottom: 1px solid #e2e8f0;'>
+                        <td style='padding: 14px 15px; color: #64748b; font-weight: 600; width: 45%;'>ID de Operación:</td>
+                        <td style='padding: 14px 15px; color: #0f172a; font-weight: 800; text-align: right;'>#$ventaId</td>
                       </tr>
-                      <tr style='border-bottom: 1px solid #f1f5f9;'>
-                        <td style='padding: 10px 0; color: #64748b; font-weight: 600;'>Nombre del Cliente:</td>
-                        <td style='padding: 10px 0; color: #0f172a; font-weight: 700;'>$clienteNombre</td>
+                      <tr style='border-bottom: 1px solid #e2e8f0;'>
+                        <td style='padding: 14px 15px; color: #64748b; font-weight: 600;'>Nombre del Cliente:</td>
+                        <td style='padding: 14px 15px; color: #0f172a; font-weight: 700; text-align: right;'>$clienteNombre</td>
                       </tr>
-                      <tr style='border-bottom: 1px solid #f1f5f9;'>
-                        <td style='padding: 10px 0; color: #64748b; font-weight: 600;'>Razón Social:</td>
-                        <td style='padding: 10px 0; color: #0f172a; font-weight: 700;'>$clienteRazon</td>
+                      $razonSocialHtml
+                      <tr style='border-bottom: 1px solid #e2e8f0;'>
+                        <td style='padding: 14px 15px; color: #64748b; font-weight: 600;'>Conductor Responsable:</td>
+                        <td style='padding: 14px 15px; color: #800000; font-weight: 800; text-align: right;'>$conductorNombre</td>
                       </tr>
-                      <tr style='border-bottom: 1px solid #f1f5f9;'>
-                        <td style='padding: 10px 0; color: #64748b; font-weight: 600;'>Conductor Responsable:</td>
-                        <td style='padding: 10px 0; color: #800000; font-weight: 700;'>$conductorNombre</td>
+                      <tr style='border-bottom: 1px solid #e2e8f0;'>
+                        <td style='padding: 14px 15px; color: #64748b; font-weight: 600;'>Balones de 10kg:</td>
+                        <td style='padding: 14px 15px; color: #0f172a; font-weight: 800; font-size: 15px; text-align: right;'>$balones balones (Verif: $balonesVerificados)</td>
                       </tr>
-                      <tr style='border-bottom: 1px solid #f1f5f9;'>
-                        <td style='padding: 10px 0; color: #64748b; font-weight: 600;'>Balones de 10kg:</td>
-                        <td style='padding: 10px 0; color: #0f172a; font-weight: 800; font-size: 15px;'>$balones balones (Verificados: $balonesVerificados)</td>
-                      </tr>
-                      <tr style='border-bottom: 1px solid #f1f5f9;'>
-                        <td style='padding: 10px 0; color: #64748b; font-weight: 600;'>Puntos Otorgados:</td>
-                        <td style='padding: 10px 0; color: #16a34a; font-weight: 900; font-size: 18px;'>+$puntos PTS</td>
+                      <tr style='border-bottom: 1px solid #e2e8f0;'>
+                        <td style='padding: 14px 15px; color: #64748b; font-weight: 600;'>Puntos Otorgados:</td>
+                        <td style='padding: 14px 15px; color: #16a34a; font-weight: 900; font-size: 19px; text-align: right;'>+$puntos PTS</td>
                       </tr>
                       <tr>
-                        <td style='padding: 10px 0; color: #64748b; font-weight: 600;'>Fecha de Operación:</td>
-                        <td style='padding: 10px 0; color: #475569; font-weight: 500;'>$fecha</td>
+                        <td style='padding: 14px 15px; color: #64748b; font-weight: 600;'>Fecha de Operación:</td>
+                        <td style='padding: 14px 15px; color: #475569; font-weight: 500; font-size: 13.5px; text-align: right;'>$fecha</td>
                       </tr>
                     </table>
 
                     $imgHtml
 
-                    <div style='text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0; font-size: 12px; color: #94a3b8;'>
+                    <div style='text-align: center; margin-top: 40px; padding-top: 25px; border-top: 1px solid #e2e8f0; font-size: 12.5px; color: #94a3b8; line-height: 1.5;'>
                       Este correo es una notificación automática generada por el sistema Surgas.<br>
                       Para revisar el registro completo, ingresa al panel administrativo.
                     </div>
